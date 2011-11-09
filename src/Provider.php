@@ -1,15 +1,18 @@
 <?php
 /**
- * BEAR.Resource;
+ * BEAR.Resource
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
 namespace BEAR\Resource;
 
 /**
- * Generic package exception.
+ * Interface for resource adapter provider.
  *
  * @package BEAR.Resource
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
  */
-class Exception extends \Exception {}
+interface Provider
+{
+    public function get($path);
+}

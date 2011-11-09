@@ -1,6 +1,6 @@
 <?php
 
-namespace BEAR\Resource\Mock;
+namespace testworld\ResourceObject;
 
 use BEAR\Resource\Object as ResourceObject,
     BEAR\Resource\AbstractObject;
