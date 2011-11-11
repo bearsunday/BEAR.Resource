@@ -7,7 +7,7 @@
 namespace BEAR\Resource\Exception;
 
 /**
- * Invalid method
+ * Invalid host
  *
  * @package BEAR.Resource
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>

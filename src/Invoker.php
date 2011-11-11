@@ -6,13 +6,13 @@
  */
 namespace BEAR\Resource;
 
-use Ray\Di\InjectorInterface,
-    Ray\Di\ConfigInterface,
-    Ray\Di\ProviderInterface,
-    Ray\Di\Injector;
+use Ray\Aop\Weave;
+
+use Ray\Di\ConfigInterface,
+    Ray\Di\ProviderInterface;
 
 /**
- * Invoker
+ * Resource request invoker
  *
  * @package BEAR.Resource
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
@@ -28,22 +28,28 @@ class Invoker implements Invoke
      *
      * @Inject
      */
-    public function __construct(InjectorInterface $injector)
+    public function __construct(ConfigInterface $config)
     {
-        $this->config = $injector->getContainer()->getForge()->getConfig();
+        $this->config = $config;
     }
 
     public function invoke(Request $request)
     {
-        $methodName = "on{$request->method}";
-        if (method_exists($request->ro, $methodName) !== true) {
-            throw new Exception\InvalidMethod($request->method);
+        $method = 'on' . ucfirst($request->method);
+        if ($request->ro instanceof Weave) {
+            $weave = $request->ro;
+            return $weave(array($this, 'getParams'), $method, $request->query);
         }
-        $params = $this->getParams($request->ro, $methodName, $request->query);
-        try {
-            $result = call_user_func_array(array($request->ro, $methodName), $params);
-        } catch (\Exception $e) {
 
+        if (method_exists($request->ro, $method) !== true) {
+            throw new Exception\InvalidMethod(get_class($request->ro) . "::$method()");
+        }
+        $params = $this->getParams($request->ro, $method, $request->query);
+        try {
+            $result = call_user_func_array(array($request->ro, $method), $params);
+        } catch (\Exception $e) {
+            // @todo implements "Exception signal"
+            throw new $e;
         }
         return $result;
     }
@@ -58,9 +64,12 @@ class Invoker implements Invoke
      *
      * @return array
      */
-    private function getParams($object, $method, array $args)
+    public function getParams($object, $method, array $args)
     {
         $parameters = $this->config->getMethodReflect($object, $method)->getParameters();
+        if ($parameters === array()) {
+            return array();
+        }
         foreach($parameters as $parameter) {
             if (isset($args[$parameter->name])) {
                 $params[] = $args[$parameter->name];

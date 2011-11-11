@@ -25,6 +25,7 @@ require_once __DIR__ . '/src/Factory.php';
 require_once __DIR__ . '/src/Invoker.php';
 // resource adapter
 require_once __DIR__ . '/src/Adapter/App.php';
+require_once __DIR__ . '/src/Adapter/Page.php';
 
 require_once __DIR__ . '/src/Code.php';
 

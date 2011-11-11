@@ -6,8 +6,9 @@
  */
 namespace BEAR\Resource;
 
+
 /**
- * Resource object interface
+ * Interface for resource object
  *
  * @package BEAR.Resource
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>

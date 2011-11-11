@@ -26,8 +26,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                                 'prov' => '\BEAR\Resource\Mock\Prov'
         );
         $injector = new Injector(new Container(new Forge(new Config(new Annotation))), new EmptyModule);
-
-        $injector = new Injector(new Container(new Forge(new Config(new Annotation()))), new EmptyModule());
         $namespace = ['self' => 'testworld'];
         $resourceAdapters = array(
                 'app' => new \BEAR\Resource\Adapter\App($injector, $namespace),
@@ -38,7 +36,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         }
         );
         $factory = new Factory($injector, $resourceAdapters);
-        $this->resource = new Client($factory, new Invoker($injector));
+        $this->resource = new Client($factory, new Invoker(new Config));
         $this->user = $factory->newInstance('app://self/user');
         $this->nop = $factory->newInstance('nop://self/dummy');
         $this->query = array(

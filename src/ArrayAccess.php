@@ -7,7 +7,7 @@
 namespace BEAR\Resource;
 
 /**
- * Array access trait for resource body
+ * Trait for array access
  *
  * @package BEAR.Resource
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>

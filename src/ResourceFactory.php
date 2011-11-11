@@ -9,10 +9,11 @@ namespace BEAR\Resource;
 use BEAR\Resource\Object as ResourceObject;
 
 /**
- * Resource factory interface
+ * Interface for resource factory
  *
  * @package BEAR.Resource
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
+ * @ImplementedBy("BEAR\Resource\Factory")
  */
 interface ResourceFactory
 {

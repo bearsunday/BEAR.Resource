@@ -7,7 +7,7 @@
 namespace BEAR\Resource;
 
 /**
- * Resource Object Code
+ * Abstract resource bbject
  *
  * @package BEAR.Resource
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>

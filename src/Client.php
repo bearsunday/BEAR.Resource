@@ -9,7 +9,7 @@ namespace BEAR\Resource;
 use BEAR\Resource\Object as ResourceObject;
 
 /**
- * Resource Client
+ * Resource client
  *
  * @package BEAR.Resource
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
@@ -53,7 +53,7 @@ class Client implements Resource
      * @param ResourceObject $ro
      * @return \BEAR\Resource\Client
      */
-    public function object(ResourceObject $ro)
+    public function object($ro)
     {
         $this->request->ro = $ro;
         return $this;

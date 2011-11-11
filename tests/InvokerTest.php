@@ -24,7 +24,8 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $schemeAdapters = array('nop' => '\BEAR\Resource\Adapter\Nop', 'prov' => '\BEAR\Resource\Mock\Prov');
-        $injector = new Injector(new Container(new Forge(new Config(new Annotation()))), new EmptyModule());
+        $injector = new Injector(new Container(new Forge(new Config(new Annotation))), new EmptyModule());
+        $config = new Config;
         $factory = new Factory($injector, $schemeAdapters);
         //         $factory->newInstance('nop://');
         $resource = new User();
@@ -33,7 +34,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->request->method = 'get';
         $this->request->ro = $resource;
         $this->request->query = array('id' => 1);
-        $this->invoker = new Invoker($injector);
+        $this->invoker = new Invoker($config);
     }
 
     public function test_Invoke()

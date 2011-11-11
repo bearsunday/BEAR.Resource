@@ -9,10 +9,12 @@ namespace BEAR\Resource;
 use BEAR\Resource\Object as ResourceObject;
 
 /**
- * Resource client interface
+ * Interface for resource client
  *
  * @package BEAR.Resource
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
+ *
+ * @ImplementedBy("\BEAR\Resource\Client")
  */
 interface Resource
 {
@@ -31,7 +33,7 @@ interface Resource
      *
      * @param ResourceObject $ro
      */
-    public function object(ResourceObject $ro);
+    public function object($ro);
 
     /**
      * Set resource object created by URI.

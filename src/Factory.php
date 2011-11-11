@@ -7,7 +7,7 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Object as ResourceObject,
-    Ray\Di\Injector;
+    Ray\Di\InjectorInterface;
 
 /**
  * Resource object factory.
@@ -33,9 +33,9 @@ class Factory implements ResourceFactory
      * @param array $schemaAdapters
      *
      * @Inject
-     * @Named("injector=inector,resourceAdapters=resourceAdapters)
+     * @Named("resourceAdapters=ResourceAdapters")
      */
-    public function __construct(Injector $injector, array $resourceAdapters)
+    public function __construct(InjectorInterface $injector, array $resourceAdapters)
     {
         $this->injector = $injector;
         $this->resourceAdapters = $resourceAdapters;
