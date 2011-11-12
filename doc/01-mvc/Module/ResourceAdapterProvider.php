@@ -10,7 +10,6 @@ use Ray\Di\InjectorInterface,
  */
 class ResourceAdaptersProvider implements ProviderInterface
 {
-
     /**
      * @param InjectorInterface $injector
      *

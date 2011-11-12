@@ -23,7 +23,7 @@ class Hello extends Page
     protected $greeting;
 
     /**
-     * @param Resource       $resource
+     * @param Resource@$resource@Resource Client
      *
      * @Inject
      */

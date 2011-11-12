@@ -11,43 +11,12 @@ use BEAR\Resource\Object as ResourceObject,
 class HelloAop extends Hello
 {
     /**
-     * HTTP headers
-     *
-     * @var array
-     */
-    public $headers = ['Content-Type: text/html; charset=UTF-8'];
-
-    /**
-     * @var ResourceObject
-     */
-    protected $greeting;
-
-    /**
-     * @param Resource       $resource
+     * @param Resource $resource
      *
      * @Inject
      */
     public function __construct(Resource $resource){
         $this->resource = $resource;
         $this->greeting = $resource->newInstance('app://self/greeting/aop');
-    }
-
-    /**
-     * @param string $lang laungauage
-     *
-     * @return ResourceObject
-     */
-    public function onGet($lang)
-    {
-        $this['greeting'] = $this->resource->get->object($this->greeting)->withQuery(['lang' => $lang])->eager->request();
-        return $this;
-    }
-
-    /**
-     * @Provide("lang")
-     */
-    public function provideLang()
-    {
-        return 'en'; // return $_GET['lang'];
     }
 }
