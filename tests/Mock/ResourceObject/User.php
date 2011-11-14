@@ -36,7 +36,7 @@ class User extends AbstractObject
     }
 
     /**
-     * @Provide("id")
+     * @Provides("id")
      */
     public function provideId()
     {

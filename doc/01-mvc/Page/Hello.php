@@ -23,7 +23,7 @@ class Hello extends Page
     protected $greeting;
 
     /**
-     * @param Resource@$resource@Resource Client
+     * @param Resourceï¿½@$resourceï¿½@Resource Client
      *
      * @Inject
      */
@@ -44,7 +44,7 @@ class Hello extends Page
     }
 
     /**
-     * @Provide("lang")
+     * @Provides("lang")
      */
     public function provideLang()
     {

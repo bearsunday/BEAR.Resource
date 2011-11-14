@@ -18,7 +18,7 @@ class Entry extends AbstractObject
     }
 
     /**
-     * @Provide
+     * @Provides
      */
     public function provideId()
     {

@@ -18,7 +18,7 @@ class Comment extends AbstractObject
     }
 
     /**
-     * @Provide
+     * @Provides
      */
     public function provideId()
     {

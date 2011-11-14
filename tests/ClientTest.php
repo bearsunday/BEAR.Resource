@@ -36,7 +36,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         }
         );
         $factory = new Factory($injector, $resourceAdapters);
-        $this->resource = new Client($factory, new Invoker(new Config));
+        $this->resource = new Client($factory, new Invoker(new Config), new Request);
         $this->user = $factory->newInstance('app://self/user');
         $this->nop = $factory->newInstance('nop://self/dummy');
         $this->query = array(
