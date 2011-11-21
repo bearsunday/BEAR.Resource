@@ -40,4 +40,4 @@ require_once __DIR__ . '/src/Exception/InvalidRequest.php';
 require_once __DIR__ . '/src/Exception/InvalidLink.php';
 
 // constants
-require_once __DIR__ . '/src/CODE.php';
+require_once __DIR__ . '/src/Code.php';

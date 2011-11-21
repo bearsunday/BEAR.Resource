@@ -12,7 +12,7 @@ namespace BEAR\Resource;
  * @package BEAR.Resource
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
  */
-class CODE
+class Code
 {
     const OK = 200;
     const BAD_REQUEST = 400;

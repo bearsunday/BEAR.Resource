@@ -100,9 +100,9 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
 
     public function test_Code()
     {
-        $this->assertSame(CODE::OK, 200);
-        $this->assertSame(CODE::BAD_REQUEST, 400);
-        $this->assertSame(CODE::ERROR, 500);
+        $this->assertSame(Code::OK, 200);
+        $this->assertSame(Code::BAD_REQUEST, 400);
+        $this->assertSame(Code::ERROR, 500);
     }
 }
 
