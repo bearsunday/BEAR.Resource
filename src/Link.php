@@ -8,6 +8,12 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Object as ResourceObject;
 
+/**
+ * The value of a link constant
+ *
+ * @package BEAR.Resource
+ * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
+ */
 class Link
 {
     const SELF_LINK = 'self';

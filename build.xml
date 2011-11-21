@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-/php
 <project name="BEAR.Resource" default="build" basedir=".">
  <property name="source" value="src"/>
 
@@ -47,7 +46,7 @@
   <exec executable="phpmd">
    <arg line="${source}
               xml
-              codesize,design,naming,unusedcode
+              ${basedir}/phpmd.xml
               --reportfile ${basedir}/build/logs/pmd.xml" />
   </exec>
  </target>
