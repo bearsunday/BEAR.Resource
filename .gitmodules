@@ -1,6 +1,6 @@
 [submodule "vendors/Ray.Di"]
 	path = vendors/Ray.Di
-	url = git@github.com:koriym/Ray.Di.git
+	url = git://github.com/koriym/Ray.Di.git
 [submodule "vendors/Ray.Aop"]
 	path = vendors/Ray.Aop
-	url = git@github.com:koriym/Ray.Aop.git
+	url = git://github.com/koriym/Ray.Aop.git

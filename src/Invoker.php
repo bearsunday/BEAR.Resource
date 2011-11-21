@@ -21,6 +21,9 @@ use Ray\Di\ConfigInterface,
  */
 class Invoker implements Invoke
 {
+
+    const ANNOTATION_PROVIDES = 'Provides';
+
     /**
      * Constructor
      *
@@ -28,11 +31,16 @@ class Invoker implements Invoke
      *
      * @Inject
      */
-    public function __construct(ConfigInterface $config)
+    public function __construct(ConfigInterface $config, Linkable $linker)
     {
         $this->config = $config;
+        $this->linker = $linker;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see BEAR\Resource.Invoke::invoke()
+     */
     public function invoke(Request $request)
     {
         $method = 'on' . ucfirst($request->method);
@@ -42,16 +50,33 @@ class Invoker implements Invoke
         }
 
         if (method_exists($request->ro, $method) !== true) {
-            throw new Exception\InvalidMethod(get_class($request->ro) . "::$method()");
+            throw new \BadMethodCallException(get_class($request->ro) . "::$method()");
         }
         $params = $this->getParams($request->ro, $method, $request->query);
         try {
             $result = call_user_func_array(array($request->ro, $method), $params);
         } catch (\Exception $e) {
             // @todo implements "Exception signal"
-            throw new $e;
+        }
+        // link
+        if ($request->links) {
+            $result = $this->linker->invoke($request->ro, $request->links, $result);
         }
         return $result;
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see BEAR\Resource.Invoke::invokeTraversal()
+     */
+    public function invokeTraversal(\Traversable $requests)
+    {
+        foreach ($requests as &$element) {
+            if ($element instanceof Request || is_callable($element)) {
+                $element = $element();
+            }
+        }
+        return $requests;
     }
 
     /**
@@ -70,34 +95,32 @@ class Invoker implements Invoke
         if ($parameters === array()) {
             return array();
         }
-        foreach($parameters as $parameter) {
+        foreach ($parameters as $parameter) {
             if (isset($args[$parameter->name])) {
                 $params[] = $args[$parameter->name];
             } elseif ($parameter->isDefaultValueAvailable() === true) {
                 $params[] = $parameter->getDefaultValue();
             } else {
                 $provides = $this->config->fetch(get_class($object));
-                if (!isset($provides[2]['user']['Provide'])) {
-                    goto error;
+                if (!isset($provides[2]['user'][self::ANNOTATION_PROVIDES])) {
+                    throw new Exception\InvalidParameter($parameter->name);
                 }
-                $provides = $provides[2]['user']['Provide'];
+                $provides = $provides[2]['user'][self::ANNOTATION_PROVIDES];
                 if (isset($provides[$parameter->name])) {
                     $method = $provides[$parameter->name];
-                } elseif (isset($provides[""])){
+                } elseif (isset($provides[""])) {
                     $method = $provides[''];
                     $result = call_user_func(array($object, $method));
                     if (!isset($result[$parameter->name])) {
-                        goto error;
+                        throw new Exception\InvalidParameter($parameter->name);
                     }
                     $params[] = $result[$parameter->name];
                 } else {
-                    goto error;
+                    throw new Exception\InvalidParameter($parameter->name);
                 }
                 $params[] = call_user_func(array($object, $method));
             }
         }
         return $params;
-error:
-    throw new Exception\InvalidParameter($parameter->name);
     }
 }

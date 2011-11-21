@@ -1,11 +1,11 @@
 <?php
-namespace helloworld\Interceptor;
+namespace testworld\Interceptor;
 
 use Ray\Aop\MethodInterceptor,
     Ray\Aop\MethodInvocation;
 
 /**
- * @Log Interceptor
+ * Log Interceptor
  *
  */
 class Log implements MethodInterceptor
@@ -15,8 +15,8 @@ class Log implements MethodInterceptor
         $result = $invocation->proceed();
         $class = get_class($invocation->getThis());
         $input = $invocation->getArguments();
-        $input = json_encode($input);
-        echo "[Log] target = $class, input = $input, result = $result\n";
+        $input = print_r($input, true);
+        $result .= "[Log] target = $class, input = $input, result = $result";
         return $result;
     }
 }

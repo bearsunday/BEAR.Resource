@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+/php
 <project name="BEAR.Resource" default="build" basedir=".">
  <property name="source" value="src"/>
 
@@ -68,7 +68,7 @@
   <exec executable="phpcs" output="/dev/null">
    <arg line="--report=checkstyle
               --report-file=${basedir}/build/logs/checkstyle.xml
-              --standard=PEAR
+              --standard=modernphp
               ${source}" />
   </exec>
  </target>

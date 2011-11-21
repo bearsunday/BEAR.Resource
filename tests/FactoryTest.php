@@ -15,9 +15,10 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $injector = new Injector(new Container(new Forge(new Config(new Annotation()))), new EmptyModule());
-        $namespace = ['self' => 'testworld'];
+        $namespace = array('self' => 'testworld');
         $resourceAdapters = array(
             'app' => new \BEAR\Resource\Adapter\App($injector, $namespace),
+            'page' => new \BEAR\Resource\Adapter\Page($injector, $namespace),
             'nop' => new \BEAR\Resource\Adapter\Nop,
             'prov' => new \BEAR\Resource\Adapter\Prov,
             'provc' => function() {return new \BEAR\Resource\Adapter\Prov;}
@@ -40,12 +41,6 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $instance = $this->factory->newInstance('prov://self/path/to/dummy');
         $this->assertInstanceOf('\stdClass', $instance);
-    }
-
-    public function test_newInstanceApp()
-    {
-        $instance = $this->factory->newInstance('app://self/news');
-        $this->assertInstanceOf('testworld\ResourceObject\news', $instance);
     }
 
     /**
@@ -71,4 +66,17 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         throw new Exception\Factory();
     }
+    
+    public function test_newInstanceApp()
+    {
+        $instance = $this->factory->newInstance('app://self/news');
+        $this->assertInstanceOf('testworld\ResourceObject\news', $instance);
+    }
+
+    public function test_newInstancePage()
+    {
+        $instance = $this->factory->newInstance('page://self/news');
+        $this->assertInstanceOf('testworld\Page\news', $instance);
+    }
+
 }

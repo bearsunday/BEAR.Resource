@@ -17,6 +17,23 @@ namespace BEAR\Resource;
 class Request
 {
     /**
+     * Scheme when no URI given
+     * 
+     * @var string
+     */
+    const SCHEME_OBJECT = 'object';
+    
+    /**
+     * @param Invoker $invoker
+     *
+     * @Inject
+     */
+    public function __construct(Invoke $invoker)
+    {
+        $this->invoker = $invoker;
+    }
+
+    /**
      * URI
      *
      * @var string
@@ -52,6 +69,27 @@ class Request
      */
     public $in;
 
+
+    /**
+     * Links
+     *
+     * @var array
+     */
+    public $links = array();
+
+    /**
+     * Invoke resource request
+     *
+     * @param array $query
+     */
+    public function __invoke(array $query = null)
+    {
+        if (!is_null($query)) {
+            $this->query = array_merge($this->query, $query);
+        }
+        return $this->invoker->invoke($this);
+    }
+
     /**
      *
      * @return string
@@ -59,6 +97,17 @@ class Request
     public function __toString()
     {
         $query = http_build_query($this->query, '&');
-        return "{$this->method} {$this->ro->uri}" . ($query ? '?' :  '') . $query;
+        if (isset($this->ro->uri) === false) {
+            $uri = self::SCHEME_OBJECT . '://' . str_replace('\\', '/', get_class($this->ro));
+        } else {
+            $uri = $this->ro->uri;
+        }
+        $queryString = "{$this->method} {$uri}" . ($query ? '?' :  '') . $query;
+        $linkString = '';
+        foreach ($this->links as $link) {
+            $linkString .= ", link {$link->type}:{$link->key}";
+        }
+        $string = $queryString . $linkString;
+        return $string;
     }
 }

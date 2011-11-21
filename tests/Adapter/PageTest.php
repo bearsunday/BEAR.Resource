@@ -15,7 +15,7 @@ BEAR\Resource\Mock\User;
 /**
  * Test class for PHP.Skelton.
  */
-class ClientTest extends \PHPUnit_Framework_TestCase
+class PageTest extends \PHPUnit_Framework_TestCase
 {
     protected $skelton;
 
@@ -29,7 +29,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $namespace = array('self' => 'testworld');
         $resourceAdapters = array(
                 'app' => new \BEAR\Resource\Adapter\App($injector, $namespace),
-                'page' => new \BEAR\Resource\Adapter\Page($injector, $namespace),
                 'nop' => new \BEAR\Resource\Adapter\Nop,
                 'prov' => new \BEAR\Resource\Adapter\Prov,
                 'provc' => function() {

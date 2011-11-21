@@ -24,4 +24,14 @@ interface Invoke
      * @return mixed
      */
     public function invoke(Request $request);
+    
+    /**
+     * Invoke traversal
+     * 
+     * invoke callable 
+     * 
+     * @param \Traversable $requests
+     */
+    public function invokeTraversal(\Traversable $requests);
+    
 }

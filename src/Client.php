@@ -26,20 +26,23 @@ class Client implements Resource
     /**
      * Constructor
      *
-     * @param factory $factory
-     * @param Invoke  $request
+     * @param Factory $factory resource object factory.
+     * @param Invoke  $invoker resource object invoker
+     * @param Request $request resource request
      *
      * @Inject
      */
-    public function __construct(Factory $factory, Invoke $invoker)
+    public function __construct(Factory $factory, Invoke $invoker, Request $request)
     {
         $this->factory = $factory;
         $this->invoker = $invoker;
+        $this->newRequest = $request;
     }
 
     /**
      * (non-PHPdoc)
      * @see BEAR\Resource.Resource::newInstance()
+     * @return Client
      */
     public function newInstance($uri, array $query = array())
     {
@@ -51,7 +54,7 @@ class Client implements Resource
      * Set resource objcet
      *
      * @param ResourceObject $ro
-     * @return \BEAR\Resource\Client
+     * @return Client
      */
     public function object($ro)
     {
@@ -62,7 +65,7 @@ class Client implements Resource
     /**
      * (non-PHPdoc)
      * @see BEAR\Resource.Resource::uri()
-     * @return \BEAR\Resource\Client
+     * @return Client
      */
     public function uri($uri)
     {
@@ -73,11 +76,38 @@ class Client implements Resource
     /**
      * (non-PHPdoc)
      * @see BEAR\Resource.Resource::withQuery()
-     * @return \BEAR\Resource\Client
+     * @return Client
      */
     public function withQuery(array $query)
     {
         $this->request->query = $query;
+        return $this;
+    }
+
+    public function linkSelf($linkKey)
+    {
+        $link = new Link();
+        $link->key = $linkKey;
+        $link->type = Link::SELF_LINK;
+        $this->request->links[] = $link;
+        return $this;
+    }
+
+    public function linkNew($linkKey)
+    {
+        $link = new Link();
+        $link->key = $linkKey;
+        $link->type = Link::NEW_LINK;
+        $this->request->links[] = $link;
+        return $this;
+    }
+
+    public function linkCrawl($linkKey)
+    {
+        $link = new Link();
+        $link->key = $linkKey;
+        $link->type = Link::CRAWL_LINK;
+        $this->request->links[] = $link;
         return $this;
     }
 
@@ -120,7 +150,7 @@ class Client implements Resource
             case 'put':
             case 'delete':
             case 'head':
-                $this->request = new Request();
+                $this->request = clone $this->newRequest;
                 $this->request->method = $name;
                 return $this;
             case 'lazy':

@@ -1,6 +1,6 @@
 <?php
 
-namespace BEAR\Framework;
+namespace BEAR\Resource\Mock;
 
 use Ray\Di\AbstractModule,
     Ray\Di\InjectorInterface;
@@ -8,7 +8,7 @@ use Ray\Di\AbstractModule,
 /**
  * Framework default module
  */
-class FrameworkModule extends AbstractModule
+class MockModule extends AbstractModule
 {
     public function __construct(InjectorInterface $injector){
         $this->injector = $injector;
@@ -21,6 +21,5 @@ class FrameworkModule extends AbstractModule
         $this->bind('Ray\Di\ConfigInterface')->toInstance($this->injector->getContainer()->getForge()->getConfig());
         $this->bind('BEAR\Resource\Resource')->to('BEAR\Resource\Client');
         $this->bind('BEAR\Resource\Invoke')->to('BEAR\Resource\Invoker');
-        $this->bind('BEAR\Resource\Linkable')->to('BEAR\Resource\Linker');
     }
 }

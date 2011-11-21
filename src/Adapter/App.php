@@ -9,7 +9,8 @@ namespace BEAR\Resource\Adapter;
 use Ray\Di\InjectorInterface,
     BEAR\Resource\Object as ResourceObject,
     BEAR\Resource\Provider,
-    BEAR\Resource\Exception;
+    BEAR\Resource\Exception,
+    BEAR\Resource\Linkable;
 
 /**
  * App resource (app:://self/path/to/resource)
@@ -49,6 +50,8 @@ class App implements ResourceObject, Provider
     /**
      * (non-PHPdoc)
      * @see BEAR\Resource.Provider::get()
+     * @throws Exception\InvalidHost
+     * @return object;
      */
     public function get($uri)
     {

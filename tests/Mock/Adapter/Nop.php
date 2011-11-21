@@ -9,8 +9,8 @@ class Nop implements ResourceObject
     public function __construct()
     {}
 
-    public function __call($name, $args)
+    public function onGet($a, $b)
     {
-        return array($name, $args);
+        return array($a, $b);
     }
 }

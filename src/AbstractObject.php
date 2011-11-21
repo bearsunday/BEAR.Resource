@@ -16,6 +16,8 @@ abstract class AbstractObject implements Object, \ArrayAccess, \Countable, \Iter
 {
     use ArrayAccess;
 
+    // use ArrayAccess;
+
     /**
      * Resource code
      *
