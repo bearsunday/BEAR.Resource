@@ -20,11 +20,9 @@ interface ResourceFactory
     /**
      * Return new resource object instance
      *
-     * @param string $uri
-     * @param array  $defaultQuery
+     * @param string $uri resource URI
      *
      * @return \BEAR\Resource\Object;
      */
-    public function newInstance($uri, $defaultQuery = array());
+    public function newInstance($uri);
 }
-

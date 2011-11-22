@@ -12,4 +12,6 @@ namespace BEAR\Resource\Exception;
  * @package BEAR.Resource
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
  */
-class Factory extends \BEAR\Resource\Exception {}
+class Factory extends \BEAR\Resource\Exception
+{
+}

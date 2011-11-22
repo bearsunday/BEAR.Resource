@@ -15,23 +15,23 @@ namespace BEAR\Resource;
  *
  * @ImplementedBy("BEAR\Resource\Inboker")
  */
-interface Invoke
+interface Invokable
 {
     /**
-     * Invoke resource request
+     * Invokable resource request
      *
      * @param Request $request
      * @return mixed
      */
     public function invoke(Request $request);
-    
+
     /**
-     * Invoke traversal
-     * 
-     * invoke callable 
-     * 
+     * Invokable traversal
+     *
+     * invoke callable
+     *
      * @param \Traversable $requests
      */
     public function invokeTraversal(\Traversable $requests);
-    
+
 }

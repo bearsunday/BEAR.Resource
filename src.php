@@ -8,7 +8,7 @@ require_once __DIR__ . '/vendors/Ray.Di/src.php';
 require_once __DIR__ . '/src/Provider.php';
 require_once __DIR__ . '/src/Resource.php';
 require_once __DIR__ . '/src/Object.php';
-require_once __DIR__ . '/src/Invoke.php';
+require_once __DIR__ . '/src/Invokable.php';
 require_once __DIR__ . '/src/Link.php';
 require_once __DIR__ . '/src/Linkable.php';
 

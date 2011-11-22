@@ -28,8 +28,12 @@ class Page extends App
      */
     public $config = array(self::CONFIG_RO_FOLDER => 'Page');
 
-
     /**
+     * Constructor
+     * 
+     * @param InjectorInterface $injector
+     * @param array             $namespace [$scheme => $namespace][]
+     * 
      * @Inject
      * @Named("path=ro_path,namespace=ro_namespace");
      */

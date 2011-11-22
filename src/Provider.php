@@ -14,5 +14,10 @@ namespace BEAR\Resource;
  */
 interface Provider
 {
+    /**
+     * Get resource adapter
+     *
+     * @param string $path
+     */
     public function get($path);
 }

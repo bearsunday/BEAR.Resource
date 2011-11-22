@@ -17,18 +17,18 @@ namespace BEAR\Resource;
 class Request
 {
     /**
-     * Scheme when no URI given
-     * 
+     * object URI scheme
+     *
      * @var string
      */
     const SCHEME_OBJECT = 'object';
-    
+
     /**
-     * @param Invoker $invoker
+     * @param Invokable $invoker
      *
      * @Inject
      */
-    public function __construct(Invoke $invoker)
+    public function __construct(Invokable $invoker)
     {
         $this->invoker = $invoker;
     }
@@ -48,16 +48,22 @@ class Request
     public $ro;
 
     /**
+     * Method
+     *
      * @var string
      */
     public $method = '';
 
     /**
+     * Query
+     *
      * @var array
      */
     public $query = array();
 
     /**
+     * Options
+     *
      * @var array
      */
     public $options = array();
@@ -78,7 +84,7 @@ class Request
     public $links = array();
 
     /**
-     * Invoke resource request
+     * Invokable resource request
      *
      * @param array $query
      */

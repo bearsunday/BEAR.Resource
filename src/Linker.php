@@ -2,7 +2,7 @@
 /**
  * BEAR.Resource
  *
- * @license  http://opensource.org/licenses/bsd-license.php BSD
+ * @license http://opensource.org/licenses/bsd-license.php BSD
  */
 namespace BEAR\Resource;
 
@@ -16,15 +16,12 @@ use BEAR\Resource\Object as ResourceObject;
  *
  * @Scope("singleton")
  */
-class Linker implements linkable
+class Linker implements Linkable
 {
-    public function __construct()
-    {
-    }
-
     /**
      * (non-PHPdoc)
      * @see BEAR\Resource.Linkable::invoke()
+     * @throws Exception
      */
     public function invoke(ResourceObject $ro, array $links, $sourceValue)
     {
@@ -36,7 +33,7 @@ class Linker implements linkable
         foreach ($links as $link) {
             $cnt = $q->count();
             if ($cnt !== 0) {
-                for ($i = 0; $i < $cnt ; $i++) {
+                for ($i = 0; $i < $cnt; $i++) {
                     list($item, $ro) = $q->dequeue();
                     $request = $this->callLinkMethod($ro, $link->key, (array)$item);
                     if (!($request instanceof Request)) {
@@ -69,13 +66,6 @@ class Linker implements linkable
             $ro = $request->ro;
             $requestResult = $request();
             switch ($link->type) {
-                case LINK::SELF_LINK:
-                    $refValue = $requestResult;
-                    break;
-                case LINK::CRAWL_LINK:
-                    $refValue[$link->key] = $requestResult;
-                    $refValue = &$requestResult;
-                    break;
                 case LINK::NEW_LINK:
                     if (!$hasTargeted) {
                         $sourceValue = array($sourceValue, $requestResult);
@@ -84,13 +74,22 @@ class Linker implements linkable
                         $sourceValue[] = $requestResult;
                     }
                     $refValue = &$requestResult;
+                    break;
+                case LINK::CRAWL_LINK:
+                    $refValue[$link->key] = $requestResult;
+                    $refValue = &$requestResult;
+                    break;
+                case LINK::SELF_LINK:
+                default:
+                    $refValue = $requestResult;
+                    break;
             }
         }
         array_walk_recursive(
             $sourceValue,
             function(&$in) {
-            if ($in instanceof \ArrayObject) {
-                    $in = (array)$in;
+                if ($in instanceof \ArrayObject) {
+                        $in = (array)$in;
                 }
             }
         );
@@ -98,13 +97,14 @@ class Linker implements linkable
     }
 
     /**
+     * Call link method
      *
-     * @param unknown_type $object
-     * @param unknown_type $link
-     * @param unknown_type $input
+     * @param mixed  $ro
+     * @param string $linkKey
+     * @param mixed  $input
+     *
+     * @return mixed
      * @throws \BadMethodCallException
-     *
-     * @return Request
      */
     private function callLinkMethod($ro, $linkKey, $input)
     {
@@ -119,8 +119,9 @@ class Linker implements linkable
     /**
      * Is data list ?
      *
-     * @param array $list
-     * @return bool
+     * @param mixed $list
+     *
+     * @return boolean
      */
     private function isList($list)
     {

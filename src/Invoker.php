@@ -19,7 +19,7 @@ use Ray\Di\ConfigInterface,
  *
  * @Scope("singleton")
  */
-class Invoker implements Invoke
+class Invoker implements Invokable
 {
 
     const ANNOTATION_PROVIDES = 'Provides';
@@ -39,7 +39,8 @@ class Invoker implements Invoke
 
     /**
      * (non-PHPdoc)
-     * @see BEAR\Resource.Invoke::invoke()
+     * @see BEAR\Resource.Invokable::invoke()
+     * @throws \BadMethodCallException
      */
     public function invoke(Request $request)
     {
@@ -67,7 +68,7 @@ class Invoker implements Invoke
 
     /**
      * (non-PHPdoc)
-     * @see BEAR\Resource.Invoke::invokeTraversal()
+     * @see BEAR\Resource.Invokable::invokeTraversal()
      */
     public function invokeTraversal(\Traversable $requests)
     {
@@ -85,9 +86,9 @@ class Invoker implements Invoke
      * @param object $object
      * @param string $method
      * @param array $args
-     * @throws \InvalidArgumentException
      *
      * @return array
+     * @throws Exception\InvalidParameter
      */
     public function getParams($object, $method, array $args)
     {

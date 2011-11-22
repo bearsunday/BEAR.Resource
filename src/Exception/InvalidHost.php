@@ -12,4 +12,6 @@ namespace BEAR\Resource\Exception;
  * @package BEAR.Resource
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
  */
-class InvalidHost extends \BEAR\Resource\Exception {}
+class InvalidHost extends \BEAR\Resource\Exception
+{
+}

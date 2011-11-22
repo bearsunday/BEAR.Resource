@@ -15,7 +15,7 @@ class Hello extends Page
      *
      * @var array
      */
-    public $headers = ['Content-Type: text/html; charset=UTF-8'];
+    public $headers = array('Content-Type: text/html; charset=UTF-8');
 
     /**
      * @var ResourceObject
@@ -23,7 +23,14 @@ class Hello extends Page
     protected $greeting;
 
     /**
-     * @param Resource�@$resource�@Resource Client
+     * Resource
+     *
+     * @var Client
+     */
+    protected $resource;
+
+    /**
+     * @param Resource $resource Resource Client
      *
      * @Inject
      */

@@ -20,6 +20,6 @@ class MockModule extends AbstractModule
         $this->bind('Ray\Di\InjectorInterface')->toInstance($this->injector);
         $this->bind('Ray\Di\ConfigInterface')->toInstance($this->injector->getContainer()->getForge()->getConfig());
         $this->bind('BEAR\Resource\Resource')->to('BEAR\Resource\Client');
-        $this->bind('BEAR\Resource\Invoke')->to('BEAR\Resource\Invoker');
+        $this->bind('BEAR\Resource\Invokable')->to('BEAR\Resource\Invoker');
     }
 }

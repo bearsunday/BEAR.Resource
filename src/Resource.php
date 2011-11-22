@@ -22,16 +22,17 @@ interface Resource
      * Return new resource object instance
      *
      * @param string $uri
-     * @param array $query named parameter query
      *
-     * @return BEAR\Resource\Object
+     * @return ResourceObject
      */
-    public function newInstance($uri, array $query = array());
+    public function newInstance($uri);
 
     /**
      * Set resource object
      *
-     * @param ResourceObject $ro
+     * @paramResourceObject $ro
+     *
+     * @return Resource
      */
     public function object($ro);
 
@@ -39,6 +40,8 @@ interface Resource
      * Set resource object created by URI.
      *
      * @param string $uri
+     *
+     * @return Resource
      */
     public function uri($uri);
 
@@ -46,6 +49,7 @@ interface Resource
      * Set named parameter query
      *
      * @param array $query
+     * @return Resource
      */
     public function withQuery(array $query);
 
@@ -55,4 +59,41 @@ interface Resource
      * @return mixed ( | Request)
      */
     public function request();
+
+    /**
+     * Link self
+     *
+     * @param string $linkKey
+     *
+     * @return mixed
+     */
+    public function linkSelf($linkKey);
+
+    /**
+     * Link new
+     *
+     * @param string $linkKey
+     *
+     * @return mixed
+     */
+    public function linkNew($linkKey);
+
+    /**
+     * Link crawl
+     *
+     * @param string $linkKey
+     *
+     * @return mixed
+     */
+    public function linkCrawl($linkKey);
+
+    /**
+     * Set options parameter
+     *
+     * @param string $name
+     *
+     * @return Client
+     */
+     public function __get($name);
+
 }

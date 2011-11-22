@@ -29,8 +29,8 @@ class Factory implements ResourceFactory
     /**
      * Construcotr
      *
-     * @param Injector $injector
-     * @param array $schemaAdapters
+     * @param InjectorInterface $injector
+     * @param array             $resourceAdapters
      *
      * @Inject
      * @Named("resourceAdapters=ResourceAdapters")
@@ -44,11 +44,11 @@ class Factory implements ResourceFactory
     /**
      * (non-PHPdoc)
      * @see BEAR\Resource.ResourceFactory::newInstance()
+     * @throws Exception\InvalidScheme
      */
-    public function newInstance($uri, $defaultQuery = array())
+    public function newInstance($uri)
     {
-        $parsedUrl = parse_url($uri);
-        $scheme = $parsedUrl['scheme'];
+        $scheme = parse_url($uri)['scheme'];
         if (!isset($this->resourceAdapters[$scheme])) {
             throw new Exception\InvalidScheme($scheme);
         }

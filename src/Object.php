@@ -14,4 +14,5 @@ namespace BEAR\Resource;
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
  */
 interface Object
-{}
+{
+}

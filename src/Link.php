@@ -20,6 +20,17 @@ class Link
     const NEW_LINK = 'new';
     const CRAWL_LINK = 'crawl';
 
+    /**
+     * Link key
+     *
+     * @var string
+     */
     public $key;
+
+    /**
+     * Link type
+     *
+     * @var string
+     */
     public $type;
 }

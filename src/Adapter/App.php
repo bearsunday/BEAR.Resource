@@ -38,6 +38,11 @@ class App implements ResourceObject, Provider
 
 
     /**
+     * Constructor
+     * 
+     * @param InjectorInterface $injector
+     * @param array             $namespace [$scheme => $namespace][]
+     * 
      * @Inject
      * @Named("path=ro_path,namespace=ro_namespace");
      */
@@ -49,9 +54,10 @@ class App implements ResourceObject, Provider
 
     /**
      * (non-PHPdoc)
-     * @see BEAR\Resource.Provider::get()
+     * 
+     * @see    BEAR\Resource.Provider::get()
+     * @return object
      * @throws Exception\InvalidHost
-     * @return object;
      */
     public function get($uri)
     {

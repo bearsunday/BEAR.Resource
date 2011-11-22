@@ -12,4 +12,6 @@ namespace BEAR\Resource\Exception;
  * @package BEAR.Resource
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
  */
-class InvalidParameter extends \BEAR\Resource\Exception {}
+class InvalidParameter extends \BEAR\Resource\Exception
+{
+}

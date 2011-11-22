@@ -12,4 +12,6 @@ namespace BEAR\Resource;
  * @package BEAR.Resource
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
  */
-class Exception extends \Exception {}
+class Exception extends \Exception
+{
+}

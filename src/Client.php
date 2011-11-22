@@ -2,7 +2,7 @@
 /**
  * BEAR.Resource
  *
- * @license  http://opensource.org/licenses/bsd-license.php BSD
+ * @license http://opensource.org/licenses/bsd-license.php BSD
  */
 namespace BEAR\Resource;
 
@@ -19,6 +19,22 @@ use BEAR\Resource\Object as ResourceObject;
 class Client implements Resource
 {
     /**
+     * Resource factory
+     *
+     * @var Factory
+     */
+    private $factory;
+
+    /**
+     * Resource request invoker
+     *
+     * @var Invoker
+     */
+    private $invoker;
+
+    /**
+     * Resource request
+     *
      * @var Request
      */
     private $request;
@@ -27,12 +43,12 @@ class Client implements Resource
      * Constructor
      *
      * @param Factory $factory resource object factory.
-     * @param Invoke  $invoker resource object invoker
+     * @param Invokable  $invoker resource request invoker
      * @param Request $request resource request
      *
      * @Inject
      */
-    public function __construct(Factory $factory, Invoke $invoker, Request $request)
+    public function __construct(Factory $factory, Invokable $invoker, Request $request)
     {
         $this->factory = $factory;
         $this->invoker = $invoker;
@@ -42,19 +58,16 @@ class Client implements Resource
     /**
      * (non-PHPdoc)
      * @see BEAR\Resource.Resource::newInstance()
-     * @return Client
      */
-    public function newInstance($uri, array $query = array())
+    public function newInstance($uri)
     {
-        $instance = $this->factory->newInstance($uri, $query);
+        $instance = $this->factory->newInstance($uri);
         return $instance;
     }
 
     /**
-     * Set resource objcet
-     *
-     * @param ResourceObject $ro
-     * @return Client
+     * (non-PHPdoc)
+     * @see BEAR\Resource.Resource::object()
      */
     public function object($ro)
     {
@@ -65,7 +78,6 @@ class Client implements Resource
     /**
      * (non-PHPdoc)
      * @see BEAR\Resource.Resource::uri()
-     * @return Client
      */
     public function uri($uri)
     {
@@ -76,7 +88,6 @@ class Client implements Resource
     /**
      * (non-PHPdoc)
      * @see BEAR\Resource.Resource::withQuery()
-     * @return Client
      */
     public function withQuery(array $query)
     {
@@ -84,6 +95,10 @@ class Client implements Resource
         return $this;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see BEAR\Resource.Resource::linkSelf()
+     */
     public function linkSelf($linkKey)
     {
         $link = new Link();
@@ -93,6 +108,10 @@ class Client implements Resource
         return $this;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see BEAR\Resource.Resource::linkNew()
+     */
     public function linkNew($linkKey)
     {
         $link = new Link();
@@ -102,6 +121,10 @@ class Client implements Resource
         return $this;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see BEAR\Resource.Resource::linkCrawl()
+     */
     public function linkCrawl($linkKey)
     {
         $link = new Link();
@@ -114,7 +137,6 @@ class Client implements Resource
     /**
      * (non-PHPdoc)
      * @see BEAR\Resource.Resource::request()
-     * @return \BEAR\Resource\Client
      */
     public function request()
     {
@@ -125,22 +147,9 @@ class Client implements Resource
     }
 
     /**
-     * Return requeset string
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return (string)$this->request;
-    }
-
-    /**
-     * Set options parameter
-     *
-     * @param string $attribute
-     *
-     * @return \BEAR\Resource\Client
-     * @throw  \BEAR\Resource\Exception\InvalidParameter
+     * (non-PHPdoc)
+     * @see BEAR\Resource.Resource::__get($name)
+     * @throws Exception\InvalidRequest
      */
     public function __get($name)
     {
@@ -165,4 +174,15 @@ class Client implements Resource
                 throw new Exception\InvalidRequest($name);
         }
     }
+
+    /**
+     * Return requeset string
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->request;
+    }
+
 }

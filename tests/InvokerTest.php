@@ -40,14 +40,14 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->request->query = array('id' => 1);
     }
 
-    public function test_Invoke()
+    public function test_Invokable()
     {
         $actual = $this->invoker->invoke($this->request);
         $expected = array('id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12);
         $this->assertSame($actual, $expected);
     }
 
-    public function test_InvokeWithNoPrams()
+    public function test_InvokableWithNoPrams()
     {
         $this->request->query = array();
         $this->request->method = 'delete';
@@ -56,7 +56,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($actual, $expected);
     }
 
-    public function test_InvokeMissingParam()
+    public function test_InvokableMissingParam()
     {
         $this->request->query = array();
         $actual = $this->invoker->invoke($this->request);
@@ -64,7 +64,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($actual, $expected);
     }
 
-    public function test_InvokeDefaultParam()
+    public function test_InvokableDefaultParam()
     {
         $this->request->query = array();
         $this->request->method = 'post';
@@ -77,7 +77,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException BEAR\Resource\Exception\InvalidParameter
      */
-    public function test_InvokeDefaultParamWithNoProvider()
+    public function test_InvokableDefaultParamWithNoProvider()
     {
         $this->request->query = array();
         $this->request->method = 'put';
@@ -88,7 +88,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException BEAR\Resource\Exception\InvalidParameter
      */
-    public function test_InvokeWithNoProvider()
+    public function test_InvokableWithNoProvider()
     {
         $this->request->ro = new Mock\Blog;
         $this->request->query = array();
@@ -96,7 +96,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $actual = $this->invoker->invoke($this->request);
     }
 
-    public function test_InvokeWithUnspecificProvider()
+    public function test_InvokableWithUnspecificProvider()
     {
         $this->request->ro = new Mock\Entry;
         $this->request->query = array();
@@ -108,7 +108,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException BEAR\Resource\Exception\InvalidParameter
      */
-    public function test_InvokeWithUnspecificProviderButNoResult()
+    public function test_InvokableWithUnspecificProviderButNoResult()
     {
         $this->request->ro = new Mock\Comment;
         $this->request->query = array();
@@ -120,7 +120,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException BadMethodCallException
      */
-    public function test_InvokeInvalidMethod()
+    public function test_InvokableInvalidMethod()
     {
         $this->request->method = 'InvalidMethod';
         $actual = $this->invoker->invoke($this->request);
@@ -155,7 +155,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function test_InvokeLink()
+    public function test_InvokableLink()
     {
 
         $ro = new Mock\Link;

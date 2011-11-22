@@ -68,6 +68,7 @@
    <arg line="--report=checkstyle
               --report-file=${basedir}/build/logs/checkstyle.xml
               --standard=modernphp
+              --ignore=ArrayAccess.php
               ${source}" />
   </exec>
  </target>

@@ -14,9 +14,6 @@ namespace BEAR\Resource;
  */
 abstract class AbstractObject implements Object, \ArrayAccess, \Countable, \IteratorAggregate
 {
-    /**
-     * Array access trait for resource body
-     */
     use ArrayAccess;
 
     /**
