@@ -46,7 +46,7 @@
   <exec executable="phpmd">
    <arg line="${source}
               xml
-              ${basedir}/phpmd.xml
+              /usr/local/phpmd/phpmd.xml
               --reportfile ${basedir}/build/logs/pmd.xml" />
   </exec>
  </target>
