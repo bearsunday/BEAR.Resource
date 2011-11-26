@@ -3,6 +3,8 @@
 
 require_once dirname(__DIR__) . '/src.php';
 require_once dirname(__DIR__) . '/vendors/Ray.Aop/src.php';
+require_once dirname(__DIR__) . '/vendors/Ray.Di/src.php';
+
 
 require_once __DIR__ . '/Mock/Blog.php';
 require_once __DIR__ . '/Mock/Entry.php';

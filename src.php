@@ -2,8 +2,6 @@
 
 namespace PHP\Resource;
 
-require_once __DIR__ . '/vendors/Ray.Di/src.php';
-
 // interface
 require_once __DIR__ . '/src/Provider.php';
 require_once __DIR__ . '/src/Resource.php';
