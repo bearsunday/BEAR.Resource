@@ -172,7 +172,7 @@ class Client implements Resource
                 $this->request->options[$name] = true;
                 return $this;
             default:
-                throw new Exception\InvalidRequest($name);
+                throw new Exception\BadRequest($name, 400);
         }
     }
 

@@ -36,6 +36,8 @@ require_once __DIR__ . '/src/Exception/InvalidHost.php';
 require_once __DIR__ . '/src/Exception/InvalidScheme.php';
 require_once __DIR__ . '/src/Exception/InvalidRequest.php';
 require_once __DIR__ . '/src/Exception/InvalidLink.php';
+require_once __DIR__ . '/src/Exception/BadRequest.php';
+require_once __DIR__ . '/src/Exception/MethodNotAllowed.php';
 
 // constants
 require_once __DIR__ . '/src/Code.php';

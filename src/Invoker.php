@@ -40,7 +40,7 @@ class Invoker implements Invokable
     /**
      * (non-PHPdoc)
      * @see BEAR\Resource.Invokable::invoke()
-     * @throws \BadMethodCallException
+     * @throws Exception\InvalidRequest
      */
     public function invoke(Request $request)
     {
@@ -51,7 +51,7 @@ class Invoker implements Invokable
         }
 
         if (method_exists($request->ro, $method) !== true) {
-            throw new \BadMethodCallException(get_class($request->ro) . "::$method()");
+            throw new Exception\MethodNotAllowed(get_class($request->ro) . "::$method()", 405);
         }
         $params = $this->getParams($request->ro, $method, $request->query);
         try {
