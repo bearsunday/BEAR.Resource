@@ -21,7 +21,7 @@ abstract class AbstractObject implements Object, \ArrayAccess, \Countable, \Iter
      *
      * @var int
      */
-    public $code;
+    public $code = 200;
 
     /**
      * Resource header
