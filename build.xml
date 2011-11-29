@@ -73,8 +73,8 @@
   </exec>
  </target>
 
- <target name="phpdoc" description="Generate API documentation using PHPDocumentor">
-  <exec executable="phpdoc">
+ <target name="phpdoc" description="Generate API documentation using Docblox">
+  <exec executable="docblox">
    <arg line="-d ${source} -t ${basedir}/build/api" />
   </exec>
  </target>

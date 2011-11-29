@@ -2,6 +2,7 @@
 /**
  * BEAR.Resource
  *
+ * @package BEAR.Resource
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
 namespace BEAR\Resource;
@@ -14,8 +15,25 @@ namespace BEAR\Resource;
  */
 class Code
 {
+    /**
+     * 200 OK
+     *
+     * @var int
+     */
     const OK = 200;
+
+    /**
+     * 400 Bad Request - Client Error
+     *
+     * @var int
+     */
     const BAD_REQUEST = 400;
+
+    /**
+     * 500 Resource Error
+     *
+     * @var int
+     */
     const ERROR = 500;
 
     /**

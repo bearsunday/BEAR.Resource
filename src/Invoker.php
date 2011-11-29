@@ -2,6 +2,7 @@
 /**
  * BEAR.Resource
  *
+ * @package BEAR.Resource
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
 namespace BEAR\Resource;
@@ -22,6 +23,11 @@ use Ray\Di\ConfigInterface,
 class Invoker implements Invokable
 {
 
+    /**
+     * Provider annotation
+     *
+     * @var string
+     */
     const ANNOTATION_PROVIDES = 'Provides';
 
     /**

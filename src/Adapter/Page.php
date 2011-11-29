@@ -2,6 +2,7 @@
 /**
  * BEAR.Resource
  *
+ * @package BEAR.Resource
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
 namespace BEAR\Resource\Adapter;
@@ -30,10 +31,10 @@ class Page extends App
 
     /**
      * Constructor
-     * 
+     *
      * @param InjectorInterface $injector
      * @param array             $namespace [$scheme => $namespace][]
-     * 
+     *
      * @Inject
      * @Named("path=ro_path,namespace=ro_namespace");
      */

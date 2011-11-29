@@ -2,6 +2,7 @@
 /**
  * BEAR.Resource
  *
+ * @package BEAR.Resource
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
 namespace BEAR\Resource;
@@ -24,6 +25,8 @@ class Request
     const SCHEME_OBJECT = 'object';
 
     /**
+     * Constructor
+     *
      * @param Invokable $invoker
      *
      * @Inject
@@ -97,6 +100,7 @@ class Request
     }
 
     /**
+     * To String
      *
      * @return string
      */
