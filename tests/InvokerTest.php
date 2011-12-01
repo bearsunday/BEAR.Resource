@@ -2,19 +2,18 @@
 
 namespace BEAR\Resource;
 
-use Ray\Aop\Weaver,
-    Ray\Aop\Bind;
-
-use BEAR\Resource\Mock\User,
-    BEAR\Resource\Invoker;
-
 use Ray\Di\Annotation,
-    Ray\Di\Config,
-    Ray\Di\Forge,
-    Ray\Di\Container,
-    Ray\Di\Manager,
-    Ray\Di\Injector,
-    Ray\Di\EmptyModule;
+Ray\Di\Config,
+Ray\Di\Forge,
+Ray\Di\Container,
+Ray\Di\Manager,
+Ray\Di\Injector,
+Ray\Di\EmptyModule;
+
+use Ray\Aop\Weaver,
+Ray\Aop\Bind;
+
+use BEAR\Resource\Mock\User;
 
 /**
  * Test class for PHP.Skelton.
@@ -118,7 +117,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BadMethodCallException
+     * @expectedException BEAR\Resource\Exception\MethodNotAllowed
      */
     public function test_InvokableInvalidMethod()
     {
@@ -160,8 +159,8 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
 
         $ro = new Mock\Link;
         $this->request->ro = $ro;
-        $link = new Link;
-        $link->type = Link::SELF_LINK;
+        $link = new LinkType;
+        $link->type = LinkType::SELF_LINK;
         $link->key = 'View';
         $links = array($link);
         $this->request->links = $links;
@@ -171,4 +170,26 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($actual, $expected);
     }
 
+    public function test_OptionsMethod()
+    {
+        $this->request->method = Invoker::OPTIONS;
+        $response = $this->invoker->invoke($this->request);
+        $actual = $response['allows'];
+        $expected = array('Get', 'Post', 'Put', 'Delete');
+        asort($actual);
+        asort($expected);
+        $this->assertSame($actual, $expected);
+    }
+
+    public function test_OptionsMethod2()
+    {
+        $this->request->method = Invoker::OPTIONS;
+        $this->request->ro = new  \testworld\ResourceObject\RestBucks\Order;
+        $response = $this->invoker->invoke($this->request);
+        $actual = $response['allows'];
+        $expected = array('Get', 'Post');
+        asort($actual);
+        asort($expected);
+        $this->assertSame($actual, $expected);
+    }
 }

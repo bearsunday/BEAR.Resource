@@ -12,6 +12,8 @@ use Ray\Aop\Weave;
 use Ray\Di\ConfigInterface,
     Ray\Di\ProviderInterface;
 
+use BEAR\Resource\Object as ResourceObject;
+
 /**
  * Resource request invoker
  *
@@ -22,6 +24,12 @@ use Ray\Di\ConfigInterface,
  */
 class Invoker implements Invokable
 {
+    /**
+     * Method OPTIONS
+     *
+     * @var string
+     */
+    const OPTIONS = 'options';
 
     /**
      * Provider annotation
@@ -57,6 +65,9 @@ class Invoker implements Invokable
         }
 
         if (method_exists($request->ro, $method) !== true) {
+            if ($request->method === self::OPTIONS) {
+                return $this->getOptions($request->ro);
+            }
             throw new Exception\MethodNotAllowed(get_class($request->ro) . "::$method()", 405);
         }
         $params = $this->getParams($request->ro, $method, $request->query);
@@ -64,6 +75,7 @@ class Invoker implements Invokable
             $result = call_user_func_array(array($request->ro, $method), $params);
         } catch (\Exception $e) {
             // @todo implements "Exception signal"
+            throw $e;
         }
         // link
         if ($request->links) {
@@ -129,5 +141,38 @@ class Invoker implements Invokable
             }
         }
         return $params;
+    }
+
+    /**
+     * Return available resource request method
+     *
+     * @param ResourceObject $ro
+     *
+     * @return array
+     */
+    private function getOptions(ResourceObject $ro)
+    {
+        $ref = new \ReflectionClass($ro);
+        $methods = $ref->getMethods();
+        $allows = array();
+        foreach ($methods as $method) {
+            $isRequestMethod = (substr($method->name, 0, 2) === 'on')
+            && (substr($method->name, 0, 6) !== 'onLink');
+            if ($isRequestMethod) {
+                $allows[] = substr($method->name, 2);
+            }
+        }
+        $params = array();
+        foreach ($allows as $follow) {
+            $paramArray = array();
+            $refMethod = new \ReflectionMethod($ro, 'on' . $follow);
+            $parameters = $refMethod->getParameters();
+            foreach ($parameters as $parameter) {
+                $paramArray[] = (string)$parameter;
+            }
+            $params = array($follow => implode(',', $paramArray));
+        }
+        $result = array('allows' => $allows, 'params' => $params);
+        return $result;
     }
 }

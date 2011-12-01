@@ -11,7 +11,7 @@ Ray\Di\Injector,
 Ray\Di\EmptyModule;
 
 use BEAR\Resource\Request\Method,
-BEAR\Resource\Adapter\Nop;
+    BEAR\Resource\Adapter\Nop;
 
 /**
  * Test class for PHP.Skelton.
@@ -40,18 +40,18 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     public function test_linkException()
     {
         $ro = new Mock\Link;
-        $link = new Link;
-        $link->type = Link::SELF_LINK;
+        $link = new LinkType;
+        $link->type = LinkType::SELF_LINK;
         $link->key = 'UNAVAILABLE';
         $links = array($link);
         $result = $this->linker->invoke($ro, $links, $ro->onGet(1));
     }
-    
+
     public function test_link()
     {
         $ro = new Mock\Link;
-        $link = new Link;
-        $link->type = Link::SELF_LINK;
+        $link = new LinkType;
+        $link->type = LinkType::SELF_LINK;
         $link->key = 'View';
         $links = array($link);
         $result = $this->linker->invoke($ro, $links, $ro->onGet(1));
@@ -63,8 +63,8 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     {
         $ro = new \testworld\ResourceObject\User;
         $ro->setResource($this->resource);
-        $link = new Link;
-        $link->type = Link::SELF_LINK;
+        $link = new LinkType;
+        $link->type = LinkType::SELF_LINK;
         $link->key = 'Blog';
         $links = array($link);
         $result = $this->linker->invoke($ro, $links, $ro->onGet(1));
@@ -81,8 +81,8 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     {
         $ro = new \testworld\ResourceObject\User;
         $ro->setResource($this->resource);
-        $link = new Link;
-        $link->type = Link::NEW_LINK;
+        $link = new LinkType;
+        $link->type = LinkType::NEW_LINK;
         $link->key = 'Blog';
         $links = array($link);
         $result = $this->linker->invoke($ro, $links, $ro->onGet(1));
@@ -97,8 +97,8 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     {
         $ro = new \testworld\ResourceObject\User;
         $ro->setResource($this->resource);
-        $link = new Link;
-        $link->type = Link::CRAWL_LINK;
+        $link = new LinkType;
+        $link->type = LinkType::CRAWL_LINK;
         $link->key = 'Blog';
         $links = array($link);
         $result = $ro->onGet(1);
@@ -123,12 +123,12 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $ro = new \testworld\ResourceObject\User;
         $ro->setResource($this->resource);
         $links = array();
-        $link = new Link;
-        $link->type = Link::SELF_LINK;
+        $link = new LinkType;
+        $link->type = LinkType::SELF_LINK;
         $link->key = 'Blog';
         $links[] = $link;
-        $link = new Link;
-        $link->type = Link::SELF_LINK;
+        $link = new LinkType;
+        $link->type = LinkType::SELF_LINK;
         $link->key = 'Inviter';
         $links[] = $link;
         $result = $this->linker->invoke($ro, $links, $ro->onGet(1));
@@ -141,12 +141,12 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $ro = new \testworld\ResourceObject\User;
         $ro->setResource($this->resource);
         $links = array();
-        $link = new Link;
-        $link->type = Link::SELF_LINK;
+        $link = new LinkType;
+        $link->type = LinkType::SELF_LINK;
         $link->key = 'Blog';
         $links[] = $link;
-        $link = new Link;
-        $link->type = Link::NEW_LINK;
+        $link = new LinkType;
+        $link->type = LinkType::NEW_LINK;
         $link->key = 'Inviter';
         $links[] = $link;
         $result = $this->linker->invoke($ro, $links, $ro->onGet(1));
@@ -162,12 +162,12 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $ro = new \testworld\ResourceObject\User;
         $ro->setResource($this->resource);
         $links = array();
-        $link = new Link;
-        $link->type = Link::NEW_LINK;
+        $link = new LinkType;
+        $link->type = LinkType::NEW_LINK;
         $link->key = 'Blog';
         $links[] = $link;
-        $link = new Link;
-        $link->type = Link::NEW_LINK;
+        $link = new LinkType;
+        $link->type = LinkType::NEW_LINK;
         $link->key = 'Inviter';
         $links[] = $link;
         $result =  $ro->onGet(1);
@@ -185,12 +185,12 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $ro = new \testworld\ResourceObject\User;
         $ro->setResource($this->resource);
         $links = array();
-        $link = new Link;
-        $link->type = Link::NEW_LINK;
+        $link = new LinkType;
+        $link->type = LinkType::NEW_LINK;
         $link->key = 'Blog';
         $links[] = $link;
-        $link = new Link;
-        $link->type = Link::SELF_LINK;
+        $link = new LinkType;
+        $link->type = LinkType::SELF_LINK;
         $link->key = 'Inviter';
         $links[] = $link;
         $result = $this->linker->invoke($ro, $links, $ro->onGet(1));
@@ -204,8 +204,8 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     public function test_ListGraph()
     {
         $ro = new \testworld\ResourceObject\User\Entry;
-        $link = new Link;
-        $link->type = Link::CRAWL_LINK;
+        $link = new LinkType;
+        $link->type = LinkType::CRAWL_LINK;
         $link->key = 'Comment';
         $links = array($link);
         $result = $ro->onGet(1);
@@ -248,12 +248,12 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     {
         $ro = new \testworld\ResourceObject\User\Entry;
         $links = array();
-        $link = new Link;
-        $link->type = Link::CRAWL_LINK;
+        $link = new LinkType;
+        $link->type = LinkType::CRAWL_LINK;
         $link->key = 'Comment';
         $links[] = $link;
-        $link = new Link;
-        $link->type = Link::CRAWL_LINK;
+        $link = new LinkType;
+        $link->type = LinkType::CRAWL_LINK;
         $link->key = 'ThumbsUp';
         $links[] = $link;
         $result = $this->linker->invoke($ro, $links, $ro->onGet(1));
@@ -312,12 +312,12 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     {
         $ro = new \testworld\ResourceObject\User\Entry;
         $links = array();
-        $link = new Link;
-        $link->type = Link::CRAWL_LINK;
+        $link = new LinkType;
+        $link->type = LinkType::CRAWL_LINK;
         $link->key = 'Comment';
         $links[] = $link;
-        $link = new Link;
-        $link->type = Link::CRAWL_LINK;
+        $link = new LinkType;
+        $link->type = LinkType::CRAWL_LINK;
         $link->key = 'Point';
         $links[] = $link;
         $result = $this->linker->invoke($ro, $links, $ro->onGet(1));

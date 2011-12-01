@@ -38,6 +38,11 @@ class Blog extends AbstractObject
         12 => array('id' => 12, 'name' => "Aramis blog", 'inviter' => 2)
     );
 
+    public function onPost()
+    {
+        throw new \RuntimeException('Service temporary shutdown.');
+    }
+
     /**
      * @param id
      *

@@ -104,7 +104,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\InvalidRequest
+     * @expectedException BEAR\Resource\Exception\BadRequest
      */
     public function test_postInvalidOption()
     {
@@ -191,8 +191,24 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $actual = $this->resource->get->object($ro)->withQuery(array('id' => 1))->linkSelf('View')->eager->request();
         $expected = '<html>bear1</html>';
         $this->assertSame($expected, $actual);
-        //         $expected = "post user[1 default_name 99]";
-//         $this->assertSame($expected, $actual);
     }
 
+    /**
+     * @expectedException BEAR\Resource\Exception\InvalidUri
+     */
+    public function testInvalidUri()
+    {
+        $query = array();
+        $request = $this->resource->get->uri($this->nop)->withQuery($query)->request();
+        $this->assertInstanceOf('\BEAR\Resource\Request', $request);
+    }
+
+    /**
+     * @expectedException RuntimeException
+     */
+    public function testServiceError()
+    {
+        $query = array();
+        $request = $this->resource->post->uri('app://self/blog')->eager->request();
+    }
 }

@@ -104,5 +104,20 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(Code::BAD_REQUEST, 400);
         $this->assertSame(Code::ERROR, 500);
     }
+
+    public function test_toString()
+    {
+        $this->resource->headers['X-TEST'] = __FUNCTION__;
+        $str = (string)$this->resource;
+        $this->assertTrue(is_string($str));
+    }
+
+    public function test_toStringScalaraBody()
+    {
+        $this->resource->headers['X-TEST'] = __FUNCTION__;
+        $this->resource->body = 'OK';
+        $str = (string)$this->resource;
+        $this->assertTrue(is_string($str));
+    }
 }
 

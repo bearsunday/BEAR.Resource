@@ -7,8 +7,9 @@ require_once __DIR__ . '/src/Provider.php';
 require_once __DIR__ . '/src/Resource.php';
 require_once __DIR__ . '/src/Object.php';
 require_once __DIR__ . '/src/Invokable.php';
-require_once __DIR__ . '/src/Link.php';
+require_once __DIR__ . '/src/Uri.php';
 require_once __DIR__ . '/src/Linkable.php';
+require_once __DIR__ . '/src/LinkType.php';
 
 // trait
 require_once __DIR__ . '/src/ArrayAccess.php';
@@ -25,6 +26,7 @@ require_once __DIR__ . '/src/Factory.php';
 require_once __DIR__ . '/src/Invoker.php';
 require_once __DIR__ . '/src/Linker.php';
 require_once __DIR__ . '/src/Adapter/App.php';
+require_once __DIR__ . '/src/Adapter/App/Link.php';
 require_once __DIR__ . '/src/Adapter/Page.php';
 
 // exception
@@ -36,6 +38,7 @@ require_once __DIR__ . '/src/Exception/InvalidHost.php';
 require_once __DIR__ . '/src/Exception/InvalidScheme.php';
 require_once __DIR__ . '/src/Exception/InvalidRequest.php';
 require_once __DIR__ . '/src/Exception/InvalidLink.php';
+require_once __DIR__ . '/src/Exception/InvalidUri.php';
 require_once __DIR__ . '/src/Exception/BadRequest.php';
 require_once __DIR__ . '/src/Exception/MethodNotAllowed.php';
 

@@ -2,7 +2,6 @@
 /**
  * BEAR.Resource
  *
- * @package BEAR.Resource
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
 namespace BEAR\Resource;
@@ -17,25 +16,8 @@ use BEAR\Resource\Object as ResourceObject;
  */
 class Link
 {
-    /**
-     * Self link
-     *
-     * @var string
-     */
     const SELF_LINK = 'self';
-
-    /**
-     * New link
-     *
-     * @var string
-     */
     const NEW_LINK = 'new';
-
-    /**
-     * Crawl link
-     *
-     * @var string
-     */
     const CRAWL_LINK = 'crawl';
 
     /**

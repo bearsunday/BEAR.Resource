@@ -7,7 +7,8 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Object as ResourceObject;
+use BEAR\Resource\Object as ResourceObject,
+    BEAR\Resource\Adapter\App\Link as LikType;
 
 /**
  * Resource client
@@ -83,8 +84,16 @@ class Client implements Resource
      */
     public function uri($uri)
     {
-        $this->request->ro = $this->newInstance($uri);
-        return $this;
+        if (is_string($uri)) {
+            $this->request->ro = $this->newInstance($uri);
+            return $this;
+        }
+        if ($uri instanceof Uri) {
+            $this->request->ro = $this->newInstance($uri->uri);
+            $this->withQuery($uri->query);
+            return $this;
+        }
+        throw new Exception\InvalidUri;
     }
 
     /**
@@ -99,13 +108,23 @@ class Client implements Resource
 
     /**
      * (non-PHPdoc)
+     * @see BEAR\Resource.Resource::addQuery()
+     */
+    public function addQuery(array $query)
+    {
+        $this->request->query = array_merge($this->request->query, $query);
+        return $this;
+    }
+
+    /**
+     * (non-PHPdoc)
      * @see BEAR\Resource.Resource::linkSelf()
      */
     public function linkSelf($linkKey)
     {
-        $link = new Link();
+        $link = new LikType;
         $link->key = $linkKey;
-        $link->type = Link::SELF_LINK;
+        $link->type = LikType::SELF_LINK;
         $this->request->links[] = $link;
         return $this;
     }
@@ -116,9 +135,9 @@ class Client implements Resource
      */
     public function linkNew($linkKey)
     {
-        $link = new Link();
+        $link = new LikType;
         $link->key = $linkKey;
-        $link->type = Link::NEW_LINK;
+        $link->type = LikType::NEW_LINK;
         $this->request->links[] = $link;
         return $this;
     }
@@ -129,9 +148,9 @@ class Client implements Resource
      */
     public function linkCrawl($linkKey)
     {
-        $link = new Link();
+        $link = new LikType;
         $link->key = $linkKey;
-        $link->type = Link::CRAWL_LINK;
+        $link->type = LikType::CRAWL_LINK;
         $this->request->links[] = $link;
         return $this;
     }
@@ -161,6 +180,7 @@ class Client implements Resource
             case 'put':
             case 'delete':
             case 'head':
+            case 'options':
                 $this->request = clone $this->newRequest;
                 $this->request->method = $name;
                 return $this;

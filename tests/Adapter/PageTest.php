@@ -103,7 +103,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\InvalidRequest
+     * @expectedException BEAR\Resource\Exception\BadRequest
      */
     public function test_postInvalidOption()
     {

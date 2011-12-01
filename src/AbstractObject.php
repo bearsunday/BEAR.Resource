@@ -17,6 +17,8 @@ abstract class AbstractObject implements Object, \ArrayAccess, \Countable, \Iter
 {
     use ArrayAccess;
 
+    public $uri = '';
+
     /**
      * Resource code
      *
@@ -36,7 +38,7 @@ abstract class AbstractObject implements Object, \ArrayAccess, \Countable, \Iter
      *
      * @var mixed
      */
-    public $body = array();
+    public $body;
 
     /**
      * Constructor
@@ -44,5 +46,28 @@ abstract class AbstractObject implements Object, \ArrayAccess, \Countable, \Iter
     public function __construct()
     {
         $this->body = new \ArrayObject;
+    }
+
+    /**
+     * Return resource object string.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        $code = new Code;
+        $string = '[STATUS]' . $this->code . ' ' . $code->statusText[$this->code] . PHP_EOL;
+        foreach ($this->headers as $key => $header) {
+            $key = ($key) ? "{$key}: " : '';
+            $string .= "[HEADER]{$key}{$header}" . PHP_EOL;
+        }
+        if (is_array($this->body) || $this->body instanceof \Traversable) {
+            foreach ($this->body as $key => $body) {
+                $string .= "[BODY]{$key}{$body}" . PHP_EOL;
+            }
+        } else {
+            $string .= '[BODY]' . var_export($this->body, true) . PHP_EOL;
+        }
+        return $string . PHP_EOL;
     }
 }
