@@ -14,7 +14,7 @@ use BEAR\Resource\Request\Method,
     BEAR\Resource\Adapter\Nop;
 
 /**
- * Test class for PHP.Skelton.
+ * Test class for BEAR.Resource.
  */
 class LinkerTest extends \PHPUnit_Framework_TestCase
 {

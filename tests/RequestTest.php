@@ -7,7 +7,7 @@ use BEAR\Resource\Request\Method,
     Ray\Di\Config;
 
 /**
- * Test class for PHP.Skelton.
+ * Test class for BEAR.Resource.
  */
 class RequestTest extends \PHPUnit_Framework_TestCase
 {

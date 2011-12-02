@@ -13,7 +13,7 @@ BEAR\Resource\Builder,
 BEAR\Resource\Mock\User;
 
 /**
- * Test class for PHP.Skelton.
+ * Test class for BEAR.Resource.
  */
 class ClientTest extends \PHPUnit_Framework_TestCase
 {

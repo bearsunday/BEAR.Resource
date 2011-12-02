@@ -5,7 +5,7 @@ namespace BEAR\Resource;
 use Ray\Di\Annotation, Ray\Di\Config, Ray\Di\Forge, Ray\Di\Container, Ray\Di\Manager, Ray\Di\Injector, Ray\Di\EmptyModule, BEAR\Resource\factory;
 
 /**
- * Test class for PHP.Skelton.
+ * Test class for BEAR.Resource.
  */
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {

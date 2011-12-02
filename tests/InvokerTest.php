@@ -16,7 +16,7 @@ Ray\Aop\Bind;
 use BEAR\Resource\Mock\User;
 
 /**
- * Test class for PHP.Skelton.
+ * Test class for BEAR.Resource.
  */
 class InvokerTest extends \PHPUnit_Framework_TestCase
 {

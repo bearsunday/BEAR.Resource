@@ -3,7 +3,7 @@
 namespace BEAR\Resource;
 
 /**
- * Test class for PHP.Skelton.
+ * Test class for BEAR.Resource.
  */
 class ObjectTest extends \PHPUnit_Framework_TestCase
 {
