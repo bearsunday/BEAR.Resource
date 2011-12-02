@@ -49,7 +49,8 @@ class Factory implements ResourceFactory
      */
     public function newInstance($uri)
     {
-        $scheme = parse_url($uri)['scheme'];
+        $parsedUrl = parse_url($uri);
+        $scheme = $parsedUrl['scheme'];
         if (!isset($this->resourceAdapters[$scheme])) {
             throw new Exception\InvalidScheme($scheme);
         }
