@@ -18,7 +18,7 @@ interface Provider
     /**
      * Get resource adapter
      *
-     * @param string $path
+     * @param string $uri
      */
-    public function get($path);
+    public function get($uri);
 }
