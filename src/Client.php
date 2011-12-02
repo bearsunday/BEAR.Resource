@@ -190,6 +190,7 @@ class Client implements Resource
                 return $this;
             case 'poe':
             case 'csrf':
+            case 'async':
                 $this->request->options[$name] = true;
                 return $this;
             default:

@@ -17,8 +17,6 @@ BEAR\Resource\Mock\User;
  */
 class PageTest extends \PHPUnit_Framework_TestCase
 {
-    protected $skelton;
-
     protected function setUp()
     {
         parent::setUp();

@@ -211,4 +211,14 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $query = array();
         $request = $this->resource->post->uri('app://self/blog')->eager->request();
     }
+
+    public function testAsyncHttp()
+    {
+        $query = array();
+        $request = $this->resource
+        ->post->uri('http://news.google.com/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss')->async->request()
+        ->post->uri('http://news.google.com/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss')->async->request()
+        ->post->uri('http://news.google.com/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss')->async->request()
+        ->post->uri('http://news.google.com/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss')->request();
+    }
 }

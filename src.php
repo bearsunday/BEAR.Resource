@@ -28,6 +28,9 @@ require_once __DIR__ . '/src/Linker.php';
 require_once __DIR__ . '/src/Adapter/App.php';
 require_once __DIR__ . '/src/Adapter/App/Link.php';
 require_once __DIR__ . '/src/Adapter/Page.php';
+require_once __DIR__ . '/src/Adapter/Http.php';
+require_once __DIR__ . '/src/Adapter/Http/HttpClient.php';
+require_once __DIR__ . '/src/Adapter/Http/Guzzle.php';
 
 // exception
 require_once __DIR__ . '/src/Exception.php';

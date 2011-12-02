@@ -15,7 +15,8 @@ $injector = new Injector(new Container(new Forge(new Config(new Annotation))), n
 $namespace = array('self' => 'testworld');
 $resourceAdapters = array(
                 'app' => new \BEAR\Resource\Adapter\App($injector, $namespace),
-                'page' => new \BEAR\Resource\Adapter\Page($injector, $namespace)
+                'page' => new \BEAR\Resource\Adapter\Page($injector, $namespace),
+                'http' => new \BEAR\Resource\Adapter\Http
 );
 $factory = new Factory($injector, $resourceAdapters);
 $invoker = new Invoker(new Config, new Linker);

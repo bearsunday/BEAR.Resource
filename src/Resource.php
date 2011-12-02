@@ -87,14 +87,4 @@ interface Resource
      * @return mixed
      */
     public function linkCrawl($linkKey);
-
-    /**
-     * Set options parameter
-     *
-     * @param string $name
-     *
-     * @return Client
-     */
-     public function __get($name);
-
 }
