@@ -43,6 +43,13 @@ class Client implements Resource
     private $request;
 
     /**
+     * Requests
+     * 
+     * @var \SplObjectStorage
+     */
+    private $requests;
+    
+    /**
      * Constructor
      *
      * @param Factory $factory resource object factory.
@@ -56,6 +63,7 @@ class Client implements Resource
         $this->factory = $factory;
         $this->invoker = $invoker;
         $this->newRequest = $request;
+        $this->requests = new \SplObjectStorage;
     }
 
     /**
@@ -161,8 +169,21 @@ class Client implements Resource
      */
     public function request()
     {
+        if (isset($this->request->options['sync'])) {
+            $this->requests->attach($this->request);
+            $this->request = clone $this->newRequest;
+            return $this;
+        }
         if ($this->request->in === 'eager') {
-            return $this->invoker->invoke($this->request);
+            if ($this->requests->count() === 0) {
+                return $this->invoker->invoke($this->request);
+            } else {
+                $this->requests->attach($this->request);
+                return $this->invoker->invokeSync($this->requests);
+            }
+        }
+        if ($this->requests->count() > 0) {
+            return $this->requests;
         }
         return $this->request;
     }
@@ -190,7 +211,7 @@ class Client implements Resource
                 return $this;
             case 'poe':
             case 'csrf':
-            case 'async':
+            case 'sync':
                 $this->request->options[$name] = true;
                 return $this;
             default:

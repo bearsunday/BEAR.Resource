@@ -11,11 +11,13 @@ use Ray\Di\InjectorInterface,
     BEAR\Resource\Object as ResourceObject,
     BEAR\Resource\Provider,
     BEAR\Resource\Exception,
-    BEAR\Resource\Linkable;
+    BEAR\Resource\Linkable,
+    BEAR\Resource\Request;
 
 use Guzzle\Service\Client as GuzzleClient,
     Guzzle\Common\Cache\DoctrineCacheAdapter,
-    Guzzle\Http\Plugin\CachePlugin;
+    Guzzle\Http\Plugin\CachePlugin,
+    Guzzle\Http\Message\RequestInterface;
 
 use Doctrine\Common\Cache\ApcCache,
     Doctrine\Common\Cache\ArrayCache;
@@ -30,9 +32,18 @@ use Doctrine\Common\Cache\ApcCache,
  */
 class Guzzle implements ResourceObject, HttpClient
 {
+    /**
+     * HTTP Response
+     * 
+     * @var RequestInterface
+     */
+    private $response;
 
-    public $response;
-
+    /**
+     * @var GuzzleClient
+     */
+    private $guzzle;
+    
     public function __construct(GuzzleClient $guzzle)
     {
         $this->guzzle = $guzzle;
@@ -51,7 +62,8 @@ class Guzzle implements ResourceObject, HttpClient
     public function onGet()
     {
         $this->response = $response = $this->guzzle->get()->send();
-        $this->setResponse();
+        list($this->code, $this->headers, $this->body) = $this->parseResponse($this->response);
+
         return $this;
     }
 
@@ -64,7 +76,8 @@ class Guzzle implements ResourceObject, HttpClient
     public function onPost()
     {
         $this->response = $response = $this->guzzle->post()->send();
-        $this->setResponse();
+        list($this->code, $this->headers, $this->body) = $this->parseResponse($this->response);
+
         return $this;
     }
 
@@ -77,7 +90,8 @@ class Guzzle implements ResourceObject, HttpClient
     public function onPut()
     {
         $this->response = $response = $this->guzzle->put()->send();
-        $this->setResponse();
+        list($this->code, $this->headers, $this->body) = $this->parseResponse($this->response);
+
         return $this;
     }
 
@@ -90,7 +104,7 @@ class Guzzle implements ResourceObject, HttpClient
     public function onDelete()
     {
         $this->response = $response = $this->guzzle->delete()->send();
-        $this->setResponse();
+        list($this->code, $this->headers, $this->body) = $this->parseResponse($this->response);
         return $this;
     }
 
@@ -103,7 +117,7 @@ class Guzzle implements ResourceObject, HttpClient
     public function onHead()
     {
         $this->response = $response = $this->guzzle->head()->send();
-        $this->setResponse();
+        list($this->code, $this->headers, $this->body) = $this->parseResponse($this->response);
         return $this;
     }
 
@@ -116,25 +130,42 @@ class Guzzle implements ResourceObject, HttpClient
     public function onOptions()
     {
         $this->response = $response = $this->guzzle->options()->send();
-        $this->setResponse();
+        list($this->code, $this->headers, $this->body) = $this->parseResponse($this->response);
         return $this;
     }
 
-    protected function setResponse()
+    protected function parseResponse(\Guzzle\Http\Message\Response $response)
     {
         /* @var $response \Guzzle\Http\Message\RequestInterface */
-        $this->code = $this->response->getStatusCode();
-        $headers = $this->response->getHeaders();
-        /* @var $headers \Guzzle\Common\Collection */
-        $this->headers = $headers->getAll();
-        $body = $this->response->getBody(true);
-        $format = strpos($headers['Content-Type'], -3, 3);
+        $code = $response->getStatusCode();
+        $headers = $response->getHeaders()->getAll();
+        $body = $response->getBody(true);
         if (strpos($headers['Content-Type'], 'xml') !== false) {
-            $this->body = new \SimpleXMLElement($body);
+            $body = new \SimpleXMLElement($body);
         } elseif (strpos($headers['Content-Type'], 'json') !== false) {
-            $this->body = json_decode($body);
-        } else {
-            $this->body = $body;
+            $body = json_decode($body);
         }
+        return array($code, $headers, $body);
+    }
+
+    public function onSync(Request $request, \ArrayObject $syncData)
+    {
+        $syncData[] = $request;
+    }
+
+    public function onFinalSync(Request $request, \ArrayObject $syncData)
+    {
+        $batch = array();
+        foreach ($syncData as $request) {
+            $method = $request->method;
+            $batch[] = $this->guzzle->$method($request->ro->uri);
+        }
+        $this->body = array();
+        $responses = $this->guzzle->batch($batch);
+        foreach ($responses as $response) {
+            list($code, $headers, $body) = $this->parseResponse($response);
+            $this->body[] = $body;
+        }
+        return $this;
     }
 }

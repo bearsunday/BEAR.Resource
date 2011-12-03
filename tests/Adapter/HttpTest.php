@@ -26,17 +26,6 @@ class HttpAdapterTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         //         $this->resource =  require dirname(__DIR__) . '/scripts/instance.php';
-        $base = dirname(dirname(__DIR__));
-        require_once $base . '/vendors/Guzzle/vendor/Symfony/Component/ClassLoader/UniversalClassLoader.php';
-        $classLoader = new \Symfony\Component\ClassLoader\UniversalClassLoader();
-        $classLoader->registerNamespaces(array(
-            'Guzzle\Tests' => __DIR__,
-            'Guzzle' => $base . '/vendors/Guzzle/src',
-            'Doctrine' => $base . '/vendors/Guzzle/vendor/Doctrine/lib',
-            'Monolog' => $base . '/vendors/Guzzle/vendor/Monolog/src'
-        ));
-        $classLoader->registerPrefix('Zend_', $base . '/vendors/Guzzle/vendor');
-        $classLoader->register();
 
         $injector = new Injector(new Container(new Forge(new Config(new Annotation))), new EmptyModule);
         $resourceAdapters = array(

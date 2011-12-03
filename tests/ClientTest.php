@@ -33,8 +33,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                 'nop' => new \BEAR\Resource\Adapter\Nop,
                 'prov' => new \BEAR\Resource\Adapter\Prov,
                 'provc' => function() {
-                return new \BEAR\Resource\Adapter\Prov;
-        }
+                    return new \BEAR\Resource\Adapter\Prov;
+                },
+                'http' => new \BEAR\Resource\Adapter\Http
         );
         $factory = new Factory($injector, $resourceAdapters);
         $invoker = new Invoker(new Config, new Linker);
@@ -212,13 +213,13 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $request = $this->resource->post->uri('app://self/blog')->eager->request();
     }
 
-    public function testAsyncHttp()
+    public function testsyncHttp()
     {
         $query = array();
-        $request = $this->resource
-        ->post->uri('http://news.google.com/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss')->async->request()
-        ->post->uri('http://news.google.com/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss')->async->request()
-        ->post->uri('http://news.google.com/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss')->async->request()
-        ->post->uri('http://news.google.com/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss')->request();
+        $response = $this->resource
+        ->get->uri('http://news.google.com/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss')->sync->request()
+        ->get->uri('http://phpspot.org/blog/index.xml')->eager->sync->request()
+        ->get->uri('http://rss.excite.co.jp/rss/excite/odd')->eager->request();
+        $this->assertTrue(isset($response->body[0]->channel));
     }
 }

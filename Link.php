@@ -7,7 +7,6 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Object as ResourceObject;
-
 /**
  * The value of a link constant
  *
