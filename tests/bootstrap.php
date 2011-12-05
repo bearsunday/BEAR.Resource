@@ -2,8 +2,8 @@
 // bootstrap for test
 
 require_once dirname(__DIR__) . '/src.php';
-require_once dirname(__DIR__) . '/vendors/Ray.Aop/src.php';
-require_once dirname(__DIR__) . '/vendors/Ray.Di/src.php';
+require_once dirname(__DIR__) . '/vendor/Ray.Aop/src.php';
+require_once dirname(__DIR__) . '/vendor/Ray.Di/src.php';
 
 require_once __DIR__ . '/Mock/Blog.php';
 require_once __DIR__ . '/Mock/Entry.php';
@@ -29,13 +29,13 @@ require_once __DIR__ . '/Mock/Interceptor/Log.php';
 require_once __DIR__ . '/Mock/MockModule.php';
 
 $base = (dirname(__DIR__));
-require_once $base . '/vendors/Guzzle/vendor/Symfony/Component/ClassLoader/UniversalClassLoader.php';
+require_once $base . '/vendor/Symfony/Component/ClassLoader/UniversalClassLoader.php';
 $classLoader = new \Symfony\Component\ClassLoader\UniversalClassLoader();
 $classLoader->registerNamespaces(array(
             'Guzzle\Tests' => __DIR__,
-            'Guzzle' => $base . '/vendors/Guzzle/src',
-            'Doctrine' => $base . '/vendors/Guzzle/vendor/Doctrine/lib',
-            'Monolog' => $base . '/vendors/Guzzle/vendor/Monolog/src'
+            'Guzzle' => $base . '/vendor/Guzzle/src',
+            'Doctrine' => $base . '/vendor/Doctrine/lib',
+            'Monolog' => $base . '/vendor/Monolog/src'
 ));
-$classLoader->registerPrefix('Zend_', $base . '/vendors/Guzzle/vendor');
+$classLoader->registerPrefix('Zend_', $base . '/vendor');
 $classLoader->register();

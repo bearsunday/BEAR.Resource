@@ -1,9 +1,21 @@
-[submodule "vendors/Ray.Di"]
-	path = vendors/Ray.Di
+[submodule "vendor/Ray.Di"]
+	path = vendor/Ray.Di
 	url = git://github.com/koriym/Ray.Di.git
-[submodule "vendors/Ray.Aop"]
-	path = vendors/Ray.Aop
+[submodule "vendor/Ray.Aop"]
+	path = vendor/Ray.Aop
 	url = git://github.com/koriym/Ray.Aop.git
-[submodule "vendors/Guzzle"]
-	path = vendors/Guzzle
+[submodule "vendor/Guzzle"]
+	path = vendor/Guzzle
 	url = git://github.com/guzzle/guzzle.git
+[submodule "vendor/Symfony/Component/ClassLoader"]
+	path = vendor/Symfony/Component/ClassLoader
+	url = git://github.com/symfony/ClassLoader.git
+[submodule "vendor/Doctorine"]
+	path = vendor/Doctorine
+	url = https://github.com/doctrine/common
+[submodule "vendor/Monolog"]
+	path = vendor/Monolog
+	url = https://github.com/Seldaek/monolog.git
+[submodule "vendor/Doctrine"]
+	path = vendor/Doctrine
+	url = https://github.com/doctrine/common
