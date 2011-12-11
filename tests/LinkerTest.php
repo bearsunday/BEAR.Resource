@@ -11,7 +11,7 @@ Ray\Di\Injector,
 Ray\Di\EmptyModule;
 
 use BEAR\Resource\Request\Method,
-    BEAR\Resource\Adapter\Nop;
+BEAR\Resource\Adapter\Nop;
 
 /**
  * Test class for BEAR.Resource.
@@ -26,7 +26,10 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->linker = new Linker;
         $injector = new Injector(new Container(new Forge(new Config(new Annotation))), new EmptyModule);
         $invoker = new Invoker(new Config, new Linker);
-        $this->resource = new Client(new Factory($injector, array('app' => new \BEAR\Resource\Adapter\App($injector, array('self' => 'testworld')))), $invoker, new Request($invoker));
+        $scheme = new SchemeCollection;
+        $scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject'));
+        $factory = new Factory($scheme);
+        $this->resource = new Client( $factory, $invoker, new Request($invoker));
     }
 
     public function test_New()

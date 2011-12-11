@@ -15,15 +15,12 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $injector = new Injector(new Container(new Forge(new Config(new Annotation()))), new EmptyModule());
-        $namespace = array('self' => 'testworld');
-        $resourceAdapters = array(
-            'app' => new \BEAR\Resource\Adapter\App($injector, $namespace),
-            'page' => new \BEAR\Resource\Adapter\Page($injector, $namespace),
-            'nop' => new \BEAR\Resource\Adapter\Nop,
-            'prov' => new \BEAR\Resource\Adapter\Prov,
-            'provc' => function() {return new \BEAR\Resource\Adapter\Prov;}
-        );
-        $this->factory = new Factory($injector, $resourceAdapters);
+        $scheme = new SchemeCollection;
+        $scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject'));
+        $scheme->scheme('page')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'Page'));
+        $scheme->scheme('nop')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Nop);
+        $scheme->scheme('prov')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Prov);
+        $this->factory = new Factory($scheme);
     }
 
     public function test_Newfactory()
@@ -52,7 +49,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\InvalidHost
+     * @expectedException BEAR\Resource\Exception\InvalidScheme
      */
     public function test_newInstanceInvalidSchemes()
     {
@@ -66,7 +63,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         throw new Exception\Factory();
     }
-    
+
     public function test_newInstanceApp()
     {
         $instance = $this->factory->newInstance('app://self/news');

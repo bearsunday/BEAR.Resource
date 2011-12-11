@@ -19,38 +19,48 @@ use Ray\Di\InjectorInterface,
  * @package BEAR.Resource
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
  *
- * @Scope("singleton")
+ * @Scope("prototype")
  */
 class App implements ResourceObject, Provider
 {
     /**
-     * Config key for 'ResourceObject'
+     * Application dependency injector
      *
-     * @var string
+     * @var Injector
      */
-    const CONFIG_RO_FOLDER = 'ro_folder';
+    private $injector;
 
     /**
-     * Class config
+     * Resource adapter namespace
      *
      * @var array
      */
-    public $config = array(self::CONFIG_RO_FOLDER => 'ResourceObject');
+    private $namespace;
 
+    /**
+     * Resource adapter path
+     *
+     * @var array
+     */
+    private $path;
 
     /**
      * Constructor
      *
-     * @param InjectorInterface $injector
-     * @param array             $namespace [$scheme => $namespace][]
+     * @param InjectorInterface $injector  Application dependency injector
+     * @param string            $namespace Resource adapter namespace
+     * @param string		    $path      Resource adapter path
      *
      * @Inject
-     * @Named("path=ro_path,namespace=ro_namespace");
      */
-    public function __construct(InjectorInterface $injector, array $namespace)
-    {
+    public function __construct(
+        InjectorInterface $injector,
+        $namespace,
+        $path
+    ){
         $this->injector = $injector;
         $this->namespace = $namespace;
+        $this->path = $path;
     }
 
     /**
@@ -65,10 +75,7 @@ class App implements ResourceObject, Provider
         $parsedUrl = parse_url($uri);
         $path = str_replace('/', '\\', $parsedUrl['path']);
         $host = $parsedUrl['host'];
-        if (!isset($this->namespace[$host])) {
-            throw new Exception\InvalidHost($host);
-        }
-        $className = "{$this->namespace[$host]}\\{$this->config[self::CONFIG_RO_FOLDER]}{$path}";
+        $className = "{$this->namespace}\\{$this->path}{$path}";
         $instance = $this->injector->getInstance($className);
         return $instance;
     }

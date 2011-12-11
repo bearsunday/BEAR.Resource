@@ -44,11 +44,11 @@ class Client implements Resource
 
     /**
      * Requests
-     * 
+     *
      * @var \SplObjectStorage
      */
     private $requests;
-    
+
     /**
      * Constructor
      *

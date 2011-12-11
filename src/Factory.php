@@ -21,25 +21,23 @@ use BEAR\Resource\Object as ResourceObject,
 class Factory implements ResourceFactory
 {
     /**
-     * Resource adapter
+     * Resource adapter biding config
      *
-     * @var array
+     * @var Scheme
      */
-    private $resourceAdapters = array();
+    private $scheme = array();
 
     /**
      * Construcotr
      *
      * @param InjectorInterface $injector
-     * @param array             $resourceAdapters
+     * @param Scheme            $scheme
      *
      * @Inject
-     * @Named("resourceAdapters=ResourceAdapters")
      */
-    public function __construct(InjectorInterface $injector, array $resourceAdapters)
+    public function __construct(SchemeCollection $scheme)
     {
-        $this->injector = $injector;
-        $this->resourceAdapters = $resourceAdapters;
+        $this->scheme = $scheme;
     }
 
     /**
@@ -50,11 +48,21 @@ class Factory implements ResourceFactory
     public function newInstance($uri)
     {
         $parsedUrl = parse_url($uri);
-        $scheme = $parsedUrl['scheme'];
-        if (!isset($this->resourceAdapters[$scheme])) {
-            throw new Exception\InvalidScheme($scheme);
+        if (!(isset($parsedUrl['scheme']) && isset($parsedUrl['scheme']))) {
+            throw new Exception\InvalidUri;
         }
-        $adapter = $this->resourceAdapters[$scheme];
+        $scheme = $parsedUrl['scheme'];
+        $host = $parsedUrl['host'];
+        if (!isset($this->scheme[$scheme])) {
+            throw new Exception\InvalidScheme($uri);
+        }
+        if (!isset($this->scheme[$scheme][$host])) {
+            if (!(isset($this->scheme[$scheme]['*']))) {
+                throw new Exception\InvalidScheme($uri);
+            }
+            $host = '*';
+        }
+        $adapter = $this->scheme[$scheme][$host];
         if ($adapter instanceof Provider) {
             $adapter = $adapter->get($uri);
         }

@@ -26,11 +26,13 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $config = new Config(new Annotation);
+        $scheme = new SchemeCollection;
+        $scheme->scheme('nop')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Nop);
+        $scheme->scheme('prov')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Prov);
+        $factory = new Factory($scheme);
         $schemeAdapters = array('nop' => '\BEAR\Resource\Adapter\Nop', 'prov' => '\BEAR\Resource\Mock\Prov');
         $injector = new Injector(new Container(new Forge($config)), new EmptyModule());
         $this->invoker = new Invoker($config, new Linker);
-
-        $factory = new Factory($injector, $schemeAdapters);
         $resource = new \testworld\ResourceObject\User;
         $resource->uri = 'dummy://self/User';
         $this->request = new Request($this->invoker);

@@ -18,7 +18,7 @@ use Ray\Di\InjectorInterface,
  * @package BEAR.Resource
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
  *
- * @Scope("singleton")
+ * @Scope("prototype")
  */
 class Page extends App
 {
@@ -28,19 +28,4 @@ class Page extends App
      * @var array
      */
     public $config = array(self::CONFIG_RO_FOLDER => 'Page');
-
-    /**
-     * Constructor
-     *
-     * @param InjectorInterface $injector
-     * @param array             $namespace [$scheme => $namespace][]
-     *
-     * @Inject
-     * @Named("path=ro_path,namespace=ro_namespace");
-     */
-    public function __construct(InjectorInterface $injector, array $namespace)
-    {
-        $this->injector = $injector;
-        $this->namespace = $namespace;
-    }
 }

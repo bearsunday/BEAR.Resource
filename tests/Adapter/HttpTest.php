@@ -25,15 +25,10 @@ class HttpAdapterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        //         $this->resource =  require dirname(__DIR__) . '/scripts/instance.php';
-
         $injector = new Injector(new Container(new Forge(new Config(new Annotation))), new EmptyModule);
-        $resourceAdapters = array(
-        	'http' => new \BEAR\Resource\Adapter\Http
-        );
-        $this->factory = new Factory($injector, $resourceAdapters);
-        //$invoker = new Invoker(new Config, new Linker);
-        //$this->resource = new Client($this->factory, $invoker, new Request($invoker));
+        $scheme = new SchemeCollection;
+        $scheme->scheme('http')->host('*')->toAdapter(new \BEAR\Resource\Adapter\Http);
+        $this->factory = new Factory($scheme);
         $this->httpAdapter = $this->factory->newInstance('http://news.google.com/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss');
     }
 

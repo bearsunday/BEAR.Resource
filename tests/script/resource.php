@@ -6,7 +6,8 @@ use BEAR\Resource\Object as ResourceObject,
     BEAR\Resource\Invoker,
     BEAR\Resource\Linker,
     BEAR\Resource\Client,
-    BEAR\Resource\Request;
+    BEAR\Resource\Request,
+    BEAR\Resource\SchemeCollection;
 
 use Ray\Di\Annotation,
     Ray\Di\Config,
@@ -18,10 +19,9 @@ use Ray\Di\Annotation,
 
 $injector = new Injector(new Container(new Forge(new Config(new Annotation))), new EmptyModule);
 $namespace = array('self' => 'testworld');
-$resourceAdapters = array(
-                'app' => new \BEAR\Resource\Adapter\App($injector, $namespace),
-);
-$factory = new Factory($injector, $resourceAdapters);
+$scheme = new SchemeCollection;
+$scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject'));
+$factory = new Factory($scheme);
 $invoker = new Invoker(new Config, new Linker);
 $resource = new Client($factory, $invoker, new Request($invoker));
 return $resource;
