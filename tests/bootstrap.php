@@ -30,7 +30,7 @@ require_once __DIR__ . '/Mock/MockModule.php';
 
 $base = (dirname(__DIR__));
 require_once $base . '/vendor/Symfony/Component/ClassLoader/UniversalClassLoader.php';
-$classLoader = new \Symfony\Component\ClassLoader\UniversalClassLoader();
+$classLoader = new \Symfony\Component\ClassLoader\UniversalClassLoader;
 $classLoader->registerNamespaces(array(
             'Guzzle\Tests' => __DIR__,
             'Guzzle' => $base . '/vendor/Guzzle/src',

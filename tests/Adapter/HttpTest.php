@@ -51,12 +51,49 @@ class HttpAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($ro->headers['Content-Type'], 'application/xml; charset=UTF-8');
     }
 
+    /**
+     * @covers BEAR\Resource\Adapter\Http\Guzzle
+     */
     public function testGetBody()
     {
         $ro = $this->httpAdapter->onGet();
         $actual = (string)($ro->body->channel->title[0]);
         $expected = 'Top Stories - Google News';
         $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @expectedException Guzzle\Http\Message\BadResponseException
+     * @covers BEAR\Resource\Adapter\Http\Guzzle::onPut
+     */
+    public function testPut()
+    {
+        $ro = $this->httpAdapter->onPut();
+    }
+
+    /**
+     * @expectedException Guzzle\Http\Message\BadResponseException
+     */
+    public function testDelete()
+    {
+        $ro = $this->httpAdapter->onDelete();
+    }
+
+    /**
+     */
+    public function testHead()
+    {
+        $ro = $this->httpAdapter->onHead();
+        $expected = 'application/xml; charset=UTF-8';
+        $this->assertSame($expected, $ro->headers['Content-Type']);
+    }
+
+    /**
+     * @expectedException Guzzle\Http\Message\BadResponseException
+     */
+    public function testOptions()
+    {
+        $ro = $this->httpAdapter->onOptions();
     }
 
     /**
@@ -71,12 +108,10 @@ class HttpAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual);
     }
 
-
-    /**
-     * @expectedException BEAR\Resource\Exception
-     */
-    //     public function test_Exception()
-    //     {
-    //         throw new Exception;
-    //     }
+    public function testJson()
+    {
+        $this->httpAdapter = $this->factory->newInstance('http://www.bear-project.net/test/json.php');
+        $ro = $this->httpAdapter->onGet();
+        $this->assertInstanceOf('BEAR\Resource\Adapter\Http\Guzzle', $ro);
     }
+}

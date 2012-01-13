@@ -17,7 +17,8 @@ use Ray\Di\InjectorInterface,
 use Guzzle\Service\Client as GuzzleClient,
     Guzzle\Common\Cache\DoctrineCacheAdapter,
     Guzzle\Http\Plugin\CachePlugin,
-    Guzzle\Http\Message\RequestInterface;
+    Guzzle\Http\Message\RequestInterface,
+    Guzzle\Http\Message\Response;
 
 use Doctrine\Common\Cache\ApcCache,
     Doctrine\Common\Cache\ArrayCache;
@@ -34,7 +35,7 @@ class Guzzle implements ResourceObject, HttpClient
 {
     /**
      * HTTP Response
-     * 
+     *
      * @var RequestInterface
      */
     private $response;
@@ -43,7 +44,7 @@ class Guzzle implements ResourceObject, HttpClient
      * @var GuzzleClient
      */
     private $guzzle;
-    
+
     public function __construct(GuzzleClient $guzzle)
     {
         $this->guzzle = $guzzle;
@@ -54,10 +55,8 @@ class Guzzle implements ResourceObject, HttpClient
     }
 
     /**
-     * Get
-     *
-     * @return mixed
-     * @Get
+     * (non-PHPdoc)
+     * @see BEAR\Resource\Adapter\Http.HttpClient::onGet()
      */
     public function onGet()
     {
@@ -68,10 +67,8 @@ class Guzzle implements ResourceObject, HttpClient
     }
 
     /**
-     * Post
-     *
-     * @return mixed
-     * @Post
+     * (non-PHPdoc)
+     * @see BEAR\Resource\Adapter\Http.HttpClient::onPost()
      */
     public function onPost()
     {
@@ -82,10 +79,8 @@ class Guzzle implements ResourceObject, HttpClient
     }
 
     /**
-     * Put
-     *
-     * @return mixed
-     * @Put
+     * (non-PHPdoc)
+     * @see BEAR\Resource\Adapter\Http.HttpClient::onPut()
      */
     public function onPut()
     {
@@ -96,10 +91,8 @@ class Guzzle implements ResourceObject, HttpClient
     }
 
     /**
-     * Delete
-     *
-     * @return mixed
-     * @Delete
+     * (non-PHPdoc)
+     * @see BEAR\Resource\Adapter\Http.HttpClient::onDelete()
      */
     public function onDelete()
     {
@@ -109,10 +102,8 @@ class Guzzle implements ResourceObject, HttpClient
     }
 
     /**
-     * Head
-     *
-     * @return mixed
-     * @Get
+     * (non-PHPdoc)
+     * @see BEAR\Resource\Adapter\Http.HttpClient::onHead()
      */
     public function onHead()
     {
@@ -122,10 +113,8 @@ class Guzzle implements ResourceObject, HttpClient
     }
 
     /**
-     * Options
-     *
-     * @return mixed
-     * @Get
+     * (non-PHPdoc)
+     * @see BEAR\Resource\Adapter\Http.HttpClient::onOptions()
      */
     public function onOptions()
     {
@@ -134,13 +123,18 @@ class Guzzle implements ResourceObject, HttpClient
         return $this;
     }
 
-    protected function parseResponse(\Guzzle\Http\Message\Response $response)
+    /**
+     * Parse HTTP response
+     *
+     * @param Response $response
+     */
+    protected function parseResponse(Response $response)
     {
         /* @var $response \Guzzle\Http\Message\RequestInterface */
         $code = $response->getStatusCode();
         $headers = $response->getHeaders()->getAll();
         $body = $response->getBody(true);
-        if (strpos($headers['Content-Type'], 'xml') !== false) {
+        if (strpos($headers['Content-Type'], 'xml') !== false && $body) {
             $body = new \SimpleXMLElement($body);
         } elseif (strpos($headers['Content-Type'], 'json') !== false) {
             $body = json_decode($body);
@@ -148,11 +142,27 @@ class Guzzle implements ResourceObject, HttpClient
         return array($code, $headers, $body);
     }
 
+    /**
+     * Continue Sync
+     *
+     * @param Request $request
+     * @param \ArrayObject $syncData
+     *
+     * @return void
+     */
     public function onSync(Request $request, \ArrayObject $syncData)
     {
         $syncData[] = $request;
     }
 
+    /**
+     * Finalise sync
+     *
+     * @param Request $request
+     * @param \ArrayObject $syncData
+     *
+     * @return \BEAR\Resource\Adapter\Http\Guzzle
+     */
     public function onFinalSync(Request $request, \ArrayObject $syncData)
     {
         $batch = array();

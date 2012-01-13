@@ -10,7 +10,7 @@ namespace BEAR\Resource;
 use Ray\Aop\Weave;
 
 use Ray\Di\ConfigInterface,
-    Ray\Di\ProviderInterface;
+Ray\Di\ProviderInterface;
 
 use BEAR\Resource\Object as ResourceObject;
 
@@ -175,25 +175,25 @@ class Invoker implements Invokable
         $result = array('allows' => $allows, 'params' => $params);
         return $result;
     }
-    
+
+    /**
+     * (non-PHPdoc)
+     * @see BEAR\Resource.Invokable::invokeSync()
+     */
     public function invokeSync(\SplObjectStorage $requests)
     {
         $requests->rewind();
         $data = new \ArrayObject();
-        while($requests->valid()) {            
+        while($requests->valid()) {
             // each sync request method call.
             $request = $requests->current();
             if (method_exists($request->ro, 'onSync')) {
                 call_user_func(array($request->ro, 'onSync'), $request, $data);
             }
             $requests->next();
-            //onFinalSync summaraize all sync request data.
-            if (!($requests->valid())) {
-                if (method_exists($request->ro, 'onFinalSync')) {
-                    $result = call_user_func(array($request->ro, 'onFinalSync'), $request, $data);
-                    return $result;
-                }
-            }
         }
+        //onFinalSync summaraize all sync request data.
+        $result = call_user_func(array($request->ro, 'onFinalSync'), $request, $data);
+        return $result;
     }
 }

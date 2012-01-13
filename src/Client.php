@@ -182,9 +182,6 @@ class Client implements Resource
                 return $this->invoker->invokeSync($this->requests);
             }
         }
-        if ($this->requests->count() > 0) {
-            return $this->requests;
-        }
         return $this->request;
     }
 

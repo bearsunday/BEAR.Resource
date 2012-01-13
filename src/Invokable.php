@@ -35,4 +35,13 @@ interface Invokable
      */
     public function invokeTraversal(\Traversable $requests);
 
+    /**
+     * Invoke Sync
+     *
+     * @param \SplObjectStorage $requests
+     *
+     * @return mixed
+     */
+    public function invokeSync(\SplObjectStorage $requests);
+
 }

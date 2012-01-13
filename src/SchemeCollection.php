@@ -73,13 +73,4 @@ class SchemeCollection implements \ArrayAccess
         $this->scheme = $this->host = null;
         return $this;
     }
-
-    public function __toString()
-    {
-        $body = &$this->body;
-        array_walk_recursive($body, function($value) {
-            return is_object($value) ? get_class($value) : $value;
-        });
-        return print_r( $this->body, true);
-    }
 }
