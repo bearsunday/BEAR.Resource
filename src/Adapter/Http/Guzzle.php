@@ -51,7 +51,7 @@ class Guzzle implements ResourceObject, HttpClient
         $cacheAdapter = (function_exists('apc_cache_info')) ? 'Doctrine\Common\Cache\ApcCache' : 'Doctrine\Common\Cache\ArrayCache';
         $adapter = new DoctrineCacheAdapter(new $cacheAdapter());
         $cache = new CachePlugin($adapter, true);
-        $this->guzzle->getEventManager()->attach($cache);
+        $this->guzzle->getEventDispatcher()->addSubscriber($cache);
     }
 
     /**
@@ -171,7 +171,7 @@ class Guzzle implements ResourceObject, HttpClient
             $batch[] = $this->guzzle->$method($request->ro->uri);
         }
         $this->body = array();
-        $responses = $this->guzzle->batch($batch);
+        $responses = $this->guzzle->send($batch);
         foreach ($responses as $response) {
             list($code, $headers, $body) = $this->parseResponse($response);
             $this->body[] = $body;

@@ -32,10 +32,10 @@ $base = (dirname(__DIR__));
 require_once $base . '/vendor/Symfony/Component/ClassLoader/UniversalClassLoader.php';
 $classLoader = new \Symfony\Component\ClassLoader\UniversalClassLoader;
 $classLoader->registerNamespaces(array(
-            'Guzzle\Tests' => __DIR__,
             'Guzzle' => $base . '/vendor/Guzzle/src',
             'Doctrine' => $base . '/vendor/Doctrine/lib',
-            'Monolog' => $base . '/vendor/Monolog/src'
+            'Monolog' => $base . '/vendor/Monolog/src',
+            'Symfony' => $base . '/vendor'
 ));
 $classLoader->registerPrefix('Zend_', $base . '/vendor');
 $classLoader->register();
