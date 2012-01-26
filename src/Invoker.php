@@ -120,9 +120,12 @@ class Invoker implements Invokable
             } elseif ($parameter->isDefaultValueAvailable() === true) {
                 $params[] = $parameter->getDefaultValue();
             } else {
+                $class = $parameter->getDeclaringFunction()->class;
+                $method = $parameter->getDeclaringFunction()->name;
+                $msg = '$' . "{$parameter->name} in {$class}::{$method}()";
                 $provides = $this->config->fetch(get_class($object));
                 if (!isset($provides[2]['user'][self::ANNOTATION_PROVIDES])) {
-                    throw new Exception\InvalidParameter($parameter->name);
+                    throw new Exception\InvalidParameter($msg);
                 }
                 $provides = $provides[2]['user'][self::ANNOTATION_PROVIDES];
                 if (isset($provides[$parameter->name])) {
@@ -131,11 +134,11 @@ class Invoker implements Invokable
                     $method = $provides[''];
                     $result = call_user_func(array($object, $method));
                     if (!isset($result[$parameter->name])) {
-                        throw new Exception\InvalidParameter($parameter->name);
+                        throw new Exception\InvalidParameter($msg);
                     }
                     $params[] = $result[$parameter->name];
                 } else {
-                    throw new Exception\InvalidParameter($parameter->name);
+                    throw new Exception\InvalidParameter($msg);
                 }
                 $params[] = call_user_func(array($object, $method));
             }
