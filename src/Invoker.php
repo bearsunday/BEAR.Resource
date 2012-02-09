@@ -25,6 +25,17 @@ use BEAR\Resource\Object as ResourceObject;
 class Invoker implements Invokable
 {
     /**
+     * Config
+     * 
+     * @var Ray\Di\Config
+     */
+    private $config;
+    
+    /**
+     * @var BEAR\Resource\Linker
+     */
+    private $linker;
+    /**
      * Method OPTIONS
      *
      * @var string
@@ -110,7 +121,7 @@ class Invoker implements Invokable
      */
     public function getParams($object, $method, array $args)
     {
-        $parameters = $this->config->getMethodReflect($object, $method)->getParameters();
+        $parameters = (new \ReflectionMethod($object, $method))->getParameters();
         if ($parameters === array()) {
             return array();
         }
