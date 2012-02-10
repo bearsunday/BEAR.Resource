@@ -21,13 +21,13 @@ class PageTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $injector = new Injector(new Container(new Forge(new Config(new Annotation))), new EmptyModule);
+        $injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition)))), new EmptyModule);
         $scheme = new SchemeCollection;
         $scheme->scheme('nop')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Nop);
         $scheme->scheme('prov')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Prov);
         $scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject'));
         $factory = new Factory($scheme);
-        $invoker = new Invoker(new Config, new Linker);
+        $invoker = new Invoker(new Config(new Annotation(new Definition)), new Linker);
         $this->resource = new Client($factory, $invoker, new Request($invoker));
         $this->user = $factory->newInstance('app://self/user');
         $this->nop = $factory->newInstance('nop://self/dummy');

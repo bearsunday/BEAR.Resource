@@ -2,6 +2,8 @@
 
 namespace BEAR\Resource;
 
+use Ray\Di\Definition;
+
 use Ray\Di\Annotation,
 Ray\Di\Config,
 Ray\Di\Forge,
@@ -25,7 +27,7 @@ class HttpAdapterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $injector = new Injector(new Container(new Forge(new Config(new Annotation))), new EmptyModule);
+        $injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition)))), new EmptyModule);
         $scheme = new SchemeCollection;
         $scheme->scheme('http')->host('*')->toAdapter(new \BEAR\Resource\Adapter\Http);
         $this->factory = new Factory($scheme);

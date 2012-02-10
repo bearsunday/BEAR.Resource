@@ -3,8 +3,10 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Request\Method,
-    BEAR\Resource\Adapter\Nop,
-    Ray\Di\Config;
+    BEAR\Resource\Adapter\Nop;
+use Ray\Di\Config,
+    Ray\Di\Annotation,
+    Ray\Di\Definition;
 
 /**
  * Test class for BEAR.Resource.
@@ -16,7 +18,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->request = new Request(new Invoker(new Config, new Linker));
+        $this->request = new Request(new Invoker(new Config(new Annotation(new Definition)), new Linker));
     }
 
     public function test_New()
@@ -59,7 +61,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\BEAR\Resource\Request', $this->request);
         $this->assertSame($expected, $actual);
     }
-    
+
     public function test__NoUriGivenSchemeIsObject()
     {
         $this->request->method = 'get';

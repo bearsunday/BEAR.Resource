@@ -25,7 +25,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $config = new Config(new Annotation);
+        $config = new Config(new Annotation(new Definition));
         $scheme = new SchemeCollection;
         $scheme->scheme('nop')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Nop);
         $scheme->scheme('prov')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Prov);

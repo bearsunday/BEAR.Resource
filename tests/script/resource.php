@@ -17,11 +17,11 @@ use Ray\Di\Annotation,
     Ray\Di\Injector,
     Ray\Di\EmptyModule;
 
-$injector = new Injector(new Container(new Forge(new Config(new Annotation))), new EmptyModule);
+$injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition)))), new EmptyModule);
 $namespace = array('self' => 'testworld');
 $scheme = new SchemeCollection;
 $scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject'));
 $factory = new Factory($scheme);
-$invoker = new Invoker(new Config, new Linker);
+$invoker = new Invoker(new Config(new Annotation(new Definition)), new Linker);
 $resource = new Client($factory, $invoker, new Request($invoker));
 return $resource;

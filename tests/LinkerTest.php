@@ -24,8 +24,8 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->linker = new Linker;
-        $injector = new Injector(new Container(new Forge(new Config(new Annotation))), new EmptyModule);
-        $invoker = new Invoker(new Config, new Linker);
+        $injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition)))), new EmptyModule);
+        $invoker = new Invoker(new Config(new Annotation(new Definition)), new Linker);
         $scheme = new SchemeCollection;
         $scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject'));
         $factory = new Factory($scheme);
