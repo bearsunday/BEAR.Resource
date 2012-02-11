@@ -7,12 +7,23 @@
  */
 namespace BEAR\Resource;
 
-use Ray\Aop\Weave;
+use Aura\Signal\Exception as AuraException;
+use MyProject\Proxies\__CG__\OtherProject\Proxies\__CG__\stdClass;
 
+use Ray\Aop\Weave,
+    Ray\Aop\ReflectiveMethodInvocation;
 use Ray\Di\ConfigInterface,
-Ray\Di\ProviderInterface;
-
+    Ray\Di\ProviderInterface,
+    Ray\Di\Annotation,
+    Ray\Di\Definition;
 use BEAR\Resource\Object as ResourceObject;
+use Aura\Signal\Manager as Signal;
+use ReflectionParameter;
+
+final class Result
+{
+    public $value;
+}
 
 /**
  * Resource request invoker
@@ -26,15 +37,21 @@ class Invoker implements Invokable
 {
     /**
      * Config
-     * 
+     *
      * @var Ray\Di\Config
      */
     private $config;
-    
+
     /**
      * @var BEAR\Resource\Linker
      */
     private $linker;
+
+    /**
+     * @var Aura\Signal\Manager
+     */
+    private $signal;
+
     /**
      * Method OPTIONS
      *
@@ -49,6 +66,9 @@ class Invoker implements Invokable
      */
     const ANNOTATION_PROVIDES = 'Provides';
 
+
+    const SIGNAL_ARGUMENT = 'argument';
+
     /**
      * Constructor
      *
@@ -56,10 +76,11 @@ class Invoker implements Invokable
      *
      * @Inject
      */
-    public function __construct(ConfigInterface $config, Linkable $linker)
+    public function __construct(ConfigInterface $config, Linkable $linker, Signal $signal)
     {
         $this->config = $config;
         $this->linker = $linker;
+        $this->signal = $signal;
     }
 
     /**
@@ -131,30 +152,58 @@ class Invoker implements Invokable
             } elseif ($parameter->isDefaultValueAvailable() === true) {
                 $params[] = $parameter->getDefaultValue();
             } else {
-                $class = $parameter->getDeclaringFunction()->class;
-                $method = $parameter->getDeclaringFunction()->name;
-                $msg = '$' . "{$parameter->name} in {$class}::{$method}()";
-                $provides = $this->config->fetch(get_class($object));
-                if (!isset($provides[2]['user'][self::ANNOTATION_PROVIDES])) {
-                    throw new Exception\InvalidParameter($msg);
+                try {
+                    $params[] = $this->getArgumentBySignal($parameter, $object, $method, $args);
+                } catch (\Exception $e) {
+                    throw $e;
                 }
-                $provides = $provides[2]['user'][self::ANNOTATION_PROVIDES];
-                if (isset($provides[$parameter->name])) {
-                    $method = $provides[$parameter->name];
-                } elseif (isset($provides[""])) {
-                    $method = $provides[''];
-                    $result = call_user_func(array($object, $method));
-                    if (!isset($result[$parameter->name])) {
-                        throw new Exception\InvalidParameter($msg);
-                    }
-                    $params[] = $result[$parameter->name];
-                } else {
-                    throw new Exception\InvalidParameter($msg);
-                }
-                $params[] = call_user_func(array($object, $method));
             }
         }
         return $params;
+    }
+
+    /**
+     * Return argument from providver or signal handler
+     *
+     * Thie method called when client and service object both has no argument
+     *
+     * @param array $definition
+     * @param object $object
+     * @param string $method
+     * @param array $args
+     * @throws Exception\InvalidParameter
+     */
+    private function getArgumentBySignal(ReflectionParameter $parameter, $object, $method, array $args)
+    {
+//         $definition = $this->config->getDefinition(get_class($object));
+        list($dummy, $dummy, $definition) = $this->config->fetch(get_class($object));
+        unset($dummy);
+        $signalAannotations = $definition->getUserAnnotationByMethod($method)['ArgSignal'];
+        $signalAannotations = $signalAannotations ?: [];
+        $signalIds = ['Provides'];
+        foreach ($signalAannotations as $annotation) {
+            if ($annotation instanceof \BEAR\Resource\Annotation\ArgSignal) {
+                $signalIds[] = $annotation->value;
+            }
+        }
+        $return = new Result;
+        foreach ($signalIds as $signalId) {
+            $results = $this->signal->send(
+                    $this,
+                    self::SIGNAL_ARGUMENT . $signalId,
+                    $return, $parameter, new ReflectiveMethodInvocation([$object, $method], $args, $signalAannotations), $definition
+            );
+        }
+        $isStoped = $results->isStopped();
+        $result = $results->getLast();
+        if ($isStoped === false || is_null($result)) {
+            goto PARAMETER_NOT_PROVIDED;
+        }
+PARAMETER_PROVIDED:
+        return $return->value;
+PARAMETER_NOT_PROVIDED:
+        $msg = '$' . "{$parameter->name} in " . get_class($object) . '::' . $method;
+        throw new Exception\InvalidParameter($msg);
     }
 
     /**
@@ -209,5 +258,56 @@ class Invoker implements Invokable
         //onFinalSync summaraize all sync request data.
         $result = call_user_func(array($request->ro, 'onFinalSync'), $request, $data);
         return $result;
+    }
+
+    /**
+     * Return signal manager
+     *
+     * @return \Aura\Signal\Manager
+     */
+    public function getSignal()
+    {
+        return $this->signal;
+    }
+
+    /**
+     * Return provide annotation handler
+     *
+     * @return \Closure
+     */
+    public function getProvidesClosure()
+    {
+        return function (
+                $return,
+                \ReflectionParameter $parameter,
+                ReflectiveMethodInvocation $invovation,
+                Definition $definition
+        ) {
+            $class = $parameter->getDeclaringFunction()->class;
+            $method = $parameter->getDeclaringFunction()->name;
+            $msg = '$' . "{$parameter->name} in {$class}::{$method}()";
+            /** @var Ray\Di\Definition $definition */
+            $provideMethods = $definition->getUserAnnotationMethodName('Provides');
+            if (is_null($provideMethods)) {
+                goto PROVIDE_FAILD;
+            }
+            $parameterMethod = [];
+            foreach ($provideMethods as $provideMethod) {
+                $annotation = $definition->getUserAnnotationByMethod($provideMethod)['Provides'][0];
+                $parameterMethod[$annotation->value] = $provideMethod;
+            }
+            $hasMethod = isset($parameterMethod[$parameter->name]);
+            if ($hasMethod === false) {
+                goto PROVIDE_FAILD;
+            }
+            $providesMethod = $parameterMethod[$parameter->name];
+            $object = $invovation->getThis();
+            $f = [$object, $providesMethod];
+            $providedValue = $f();
+            $return->value = $providedValue;
+            return \Aura\Signal\Manager::STOP;
+PROVIDE_FAILD:
+            return null;
+        };
     }
 }

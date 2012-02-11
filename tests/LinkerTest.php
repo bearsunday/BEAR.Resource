@@ -2,13 +2,14 @@
 
 namespace BEAR\Resource;
 
-use Ray\Di\Annotation,
-Ray\Di\Config,
-Ray\Di\Forge,
-Ray\Di\Container,
-Ray\Di\Manager,
-Ray\Di\Injector,
-Ray\Di\EmptyModule;
+use Ray\Di\Definition,
+    Ray\Di\Annotation,
+    Ray\Di\Config,
+    Ray\Di\Forge,
+    Ray\Di\Container,
+    Ray\Di\Manager,
+    Ray\Di\Injector,
+    Ray\Di\EmptyModule;
 
 use BEAR\Resource\Request\Method,
 BEAR\Resource\Adapter\Nop;
@@ -25,7 +26,8 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $this->linker = new Linker;
         $injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition)))), new EmptyModule);
-        $invoker = new Invoker(new Config(new Annotation(new Definition)), new Linker);
+        $signal = require dirname(__DIR__) . '/vendor/Aura.Signal/scripts/instance.php';
+        $invoker = new Invoker(new Config(new Annotation(new Definition)), new Linker, $signal);
         $scheme = new SchemeCollection;
         $scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject'));
         $factory = new Factory($scheme);

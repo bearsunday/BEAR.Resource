@@ -187,6 +187,19 @@ class Client implements Resource
 
     /**
      * (non-PHPdoc)
+     * @see BEAR\Resource.Resource::attachArgProvider()
+     */
+    public function attachArgProvider($signal, Callable $argProvider)
+    {
+        $this->invoker->getSignal()->handler(
+                '\BEAR\Resource\Invoker',
+                \BEAR\Resource\Invoker::SIGNAL_ARGUMENT . $signal,
+                $argProvider
+        );
+    }
+
+    /**
+     * (non-PHPdoc)
      * @see BEAR\Resource.Resource::__get($name)
      * @throws Exception\InvalidRequest
      */

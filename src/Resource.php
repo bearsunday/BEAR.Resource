@@ -86,4 +86,14 @@ interface Resource
      * @return mixed
      */
     public function linkCrawl($linkKey);
+
+    /**
+     * Attach argument provider
+     *
+     * @param string   $signal
+     * @param Callable $argProvider
+     *
+     * @return void
+     */
+    public function attachArgProvider($signal, Callable $argProvider);
 }

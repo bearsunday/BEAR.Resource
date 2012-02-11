@@ -6,6 +6,12 @@ use BEAR\Resource\Object as ResourceObject,
     BEAR\Resource\AbstractObject,
     BEAR\Resource\Resource;
 
+use BEAR\Resource\Annotation\Provides,
+    BEAR\Resource\Annotation\ArgSignal;
+
+/**
+ * @Scope("singleton")
+ */
 class User extends AbstractObject
 {
     public function setResource(Resource $resource)
@@ -38,14 +44,25 @@ class User extends AbstractObject
         return "post user[{$id} {$name} {$age}]";
     }
 
+    /**
+     * @param unknown_type $noprovide
+     *
+     */
     public function onPut($noprovide)
     {
-        return "put user[{$id} {$name} {$age}]";
+        //return "put user[{$id} {$name} {$age}]";
+        return "$noprovide";
     }
 
-    public function onDelete()
+    /**
+     * @ArgSignal("login_id")
+     *
+     * @return string
+     */
+    public function onDelete($delete_id)
     {
-        return "deleted";
+
+        return "{$delete_id} deleted";
     }
 
     public function onLinkBlog(array $user)
@@ -53,11 +70,20 @@ class User extends AbstractObject
         return $this->resource
         ->get->uri('app://self/Blog')->withQuery(['id' => $user['blog_id']])->request();
     }
+
     /**
      * @Provides("id")
      */
     public function provideId()
     {
         return 1;
+    }
+
+    /**
+     * @Provides("name")
+     */
+    public function provideName()
+    {
+        return "koriym";
     }
 }

@@ -22,3 +22,6 @@
 [submodule "vendor/Symfony/Component/EventDispatcher"]
 	path = vendor/Symfony/Component/EventDispatcher
 	url = https://github.com/symfony/EventDispatcher.git
+[submodule "vendor/Aura.Signal"]
+	path = vendor/Aura.Signal
+	url = https://github.com/auraphp/Aura.Signal.git

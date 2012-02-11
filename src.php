@@ -33,6 +33,10 @@ require_once __DIR__ . '/src/Adapter/Http.php';
 require_once __DIR__ . '/src/Adapter/Http/HttpClient.php';
 require_once __DIR__ . '/src/Adapter/Http/Guzzle.php';
 
+require_once __DIR__ . '/src/Annotation/Signal.php';
+require_once __DIR__ . '/src/Annotation/ArgSignal.php';
+require_once __DIR__ . '/src/Annotation/Provides.php';
+
 // exception
 require_once __DIR__ . '/src/Exception.php';
 require_once __DIR__ . '/src/Exception/Factory.php';

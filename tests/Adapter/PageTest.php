@@ -2,15 +2,17 @@
 
 namespace BEAR\Resource;
 
-use Ray\Di\Annotation,
-Ray\Di\Config,
-Ray\Di\Forge,
-Ray\Di\Container,
-Ray\Di\Manager,
-Ray\Di\Injector,
-Ray\Di\EmptyModule,
-BEAR\Resource\Builder,
-BEAR\Resource\Mock\User;
+use Ray\Di\Definition,
+    Ray\Di\Annotation,
+    Ray\Di\Config,
+    Ray\Di\Forge,
+    Ray\Di\Container,
+    Ray\Di\Manager,
+    Ray\Di\Injector,
+    Ray\Di\EmptyModule;
+use BEAR\Resource\Builder,
+    BEAR\Resource\Mock\User;
+use Aura\Signal\Manager as Signal;
 
 /**
  * Test class for BEAR.Resource.
@@ -27,7 +29,8 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $scheme->scheme('prov')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Prov);
         $scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject'));
         $factory = new Factory($scheme);
-        $invoker = new Invoker(new Config(new Annotation(new Definition)), new Linker);
+        $this->signal = require dirname(dirname(__DIR__)) . '/vendor/Aura.Signal/scripts/instance.php';
+        $invoker = new Invoker(new Config(new Annotation(new Definition)), new Linker, $this->signal);
         $this->resource = new Client($factory, $invoker, new Request($invoker));
         $this->user = $factory->newInstance('app://self/user');
         $this->nop = $factory->newInstance('nop://self/dummy');

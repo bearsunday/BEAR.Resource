@@ -2,17 +2,20 @@
 
 namespace BEAR\Resource;
 
-use Ray\Di\Annotation,
-Ray\Di\Config,
-Ray\Di\Forge,
-Ray\Di\Container,
-Ray\Di\Manager,
-Ray\Di\Injector,
-Ray\Di\EmptyModule;
+use Doctrine\Common\Util\Debug;
+
+use Ray\Di\Definition,
+    Ray\Di\Annotation,
+    Ray\Di\Config,
+    Ray\Di\Forge,
+    Ray\Di\Container,
+    Ray\Di\Manager,
+    Ray\Di\Injector,
+    Ray\Di\EmptyModule;
 
 use Ray\Aop\Weaver,
-Ray\Aop\Bind;
-
+    Ray\Aop\Bind,
+    Ray\Aop\ReflectiveMethodInvocation;
 use BEAR\Resource\Mock\User;
 
 /**
@@ -20,19 +23,46 @@ use BEAR\Resource\Mock\User;
  */
 class InvokerTest extends \PHPUnit_Framework_TestCase
 {
+    protected $signal;
     protected $invoker;
 
     protected function setUp()
     {
         parent::setUp();
-        $config = new Config(new Annotation(new Definition));
+        restore_error_handler();
+        $additonalAnnotation = [
+            'provides' => 'BEAR\Resource\Annotation\Provides',
+            'signal' => 'BEAR\Resource\Annotation\Signal',
+            'argsignal' => 'BEAR\Resource\Annotation\ArgSignal'
+        ];
+        $signalProvider = function (
+            $return,
+            \ReflectionParameter $parameter,
+            ReflectiveMethodInvocation $invovation,
+            Definition $definition
+        ) {
+            $return->value = 1;
+            return \Aura\Signal\Manager::STOP;
+        };
+        $config = new Config(new Annotation(new Definition, $additonalAnnotation));
         $scheme = new SchemeCollection;
         $scheme->scheme('nop')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Nop);
         $scheme->scheme('prov')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Prov);
         $factory = new Factory($scheme);
         $schemeAdapters = array('nop' => '\BEAR\Resource\Adapter\Nop', 'prov' => '\BEAR\Resource\Mock\Prov');
-        $injector = new Injector(new Container(new Forge($config)), new EmptyModule());
-        $this->invoker = new Invoker($config, new Linker);
+        $injector = new Injector(new Container(new Forge($config)), new EmptyModule);
+        $this->signal = require dirname(__DIR__) . '/vendor/Aura.Signal/scripts/instance.php';
+        $this->invoker = new Invoker($config, new Linker, $this->signal);
+        $this->invoker->getSignal()->handler(
+                '\BEAR\Resource\Invoker',
+                \BEAR\Resource\Invoker::SIGNAL_ARGUMENT . 'Provides',
+                $this->invoker->getProvidesClosure()
+        );
+        $this->invoker->getSignal()->handler(
+                '\BEAR\Resource\Invoker',
+                \BEAR\Resource\Invoker::SIGNAL_ARGUMENT . 'login_id',
+                $signalProvider
+        );
         $resource = new \testworld\ResourceObject\User;
         $resource->uri = 'dummy://self/User';
         $this->request = new Request($this->invoker);
@@ -53,13 +83,13 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->request->query = array();
         $this->request->method = 'delete';
         $actual = $this->invoker->invoke($this->request);
-        $expected = 'deleted';
+        $expected = '1 deleted';
         $this->assertSame($actual, $expected);
     }
 
     public function test_InvokableMissingParam()
     {
-        $this->request->query = array();
+        $this->request->query = [];
         $actual = $this->invoker->invoke($this->request);
         $expected = array('id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12);
         $this->assertSame($actual, $expected);
@@ -97,14 +127,15 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $actual = $this->invoker->invoke($this->request);
     }
 
-    public function test_InvokableWithUnspecificProvider()
-    {
-        $this->request->ro = new Mock\Entry;
-        $this->request->query = array();
-        $this->request->method = 'get';
-        $actual = $this->invoker->invoke($this->request);
-        $this->assertSame('entry1', $actual);
-    }
+    // deprecated for @Provides any support.
+//     public function test_InvokableWithUnspecificProvider()
+//     {
+//         $this->request->ro = new Mock\Entry;
+//         $this->request->query = array();
+//         $this->request->method = 'get';
+//         $actual = $this->invoker->invoke($this->request);
+//         $this->assertSame('entry1', $actual);
+//     }
 
     /**
      * @expectedException BEAR\Resource\Exception\InvalidParameter

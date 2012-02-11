@@ -2,7 +2,8 @@
 
 namespace BEAR\Resource;
 
-use Ray\Di\Annotation,
+use Ray\Di\Definition,
+    Ray\Di\Annotation,
     Ray\Di\Config,
     Ray\Di\Forge,
     Ray\Di\Container,
@@ -11,6 +12,9 @@ use Ray\Di\Annotation,
     Ray\Di\EmptyModule,
     BEAR\Resource\Builder,
     BEAR\Resource\Mock\User;
+use Ray\Aop\ReflectiveMethodInvocation;
+
+
 
 /**
  * Test class for BEAR.Resource.
@@ -19,9 +23,28 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 {
     protected $skelton;
 
+    /**
+     * @var Aura\Signal\Manager
+     */
+    protected $singnal;
+
     protected function setUp()
     {
         parent::setUp();
+        $additonalAnnotation = [
+            'provides' => 'BEAR\Resource\Annotation\Provides',
+            'signal' => 'BEAR\Resource\Annotation\Signal',
+            'argsignal' => 'BEAR\Resource\Annotation\ArgSignal'
+        ];
+        $signalProvider = function (
+                $return,
+                \ReflectionParameter $parameter,
+                ReflectiveMethodInvocation $invovation,
+                Definition $definition
+        ) {
+            $return->value = 1;
+            return \Aura\Signal\Manager::STOP;
+        };
         $injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition)))), new EmptyModule);
         $scheme = new SchemeCollection;
         $scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject'));
@@ -31,8 +54,11 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $scheme->scheme('http')->host('*')->toAdapter(new \BEAR\Resource\Adapter\Http);
         $this->factory = new Factory($scheme);
         $factory = new Factory($scheme);
-        $invoker = new Invoker(new Config(new Annotation(new Definition)), new Linker);
+        $this->signal = require dirname(__DIR__) . '/vendor/Aura.Signal/scripts/instance.php';
+        $invoker = new Invoker(new Config(new Annotation(new Definition), $additonalAnnotation), new Linker, $this->signal);
         $this->resource = new Client($factory, $invoker, new Request($invoker));
+        $this->resource->attachArgProvider('Provides', $invoker->getProvidesClosure());
+        $this->resource->attachArgProvider('login_id', $signalProvider);
         $this->user = $factory->newInstance('app://self/user');
         $this->nop = $factory->newInstance('nop://self/dummy');
         $this->query = array(
@@ -214,5 +240,11 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         ->get->uri('http://phpspot.org/blog/index.xml')->eager->sync->request()
         ->get->uri('http://rss.excite.co.jp/rss/excite/odd')->eager->request();
         $this->assertTrue(isset($response->body[0]->channel));
+    }
+
+    public function testParameterProvidedBySignal()
+    {
+        $actual = $this->resource->delete->object($this->user)->withQuery([])->eager->request();
+        $this->assertSame($actual, "1 deleted");
     }
 }

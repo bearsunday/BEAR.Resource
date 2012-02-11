@@ -18,7 +18,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->request = new Request(new Invoker(new Config(new Annotation(new Definition)), new Linker));
+        $signal = require dirname(__DIR__) . '/vendor/Aura.Signal/scripts/instance.php';
+        $this->request = new Request(new Invoker(new Config(new Annotation(new Definition)), new Linker, $signal));
     }
 
     public function test_New()
