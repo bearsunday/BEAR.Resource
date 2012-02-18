@@ -29,12 +29,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        restore_error_handler();
-        $additonalAnnotation = [
-            'provides' => 'BEAR\Resource\Annotation\Provides',
-            'signal' => 'BEAR\Resource\Annotation\Signal',
-            'argsignal' => 'BEAR\Resource\Annotation\ArgSignal'
-        ];
+        $additionalAnnotations = require __DIR__ . '/scripts/additionalAnnotations.php';
         $signalProvider = function (
             $return,
             \ReflectionParameter $parameter,
@@ -44,7 +39,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
             $return->value = 1;
             return \Aura\Signal\Manager::STOP;
         };
-        $config = new Config(new Annotation(new Definition, $additonalAnnotation));
+        $config = new Config(new Annotation(new Definition, $additonalAnnotations));
         $scheme = new SchemeCollection;
         $scheme->scheme('nop')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Nop);
         $scheme->scheme('prov')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Prov);
@@ -223,6 +218,14 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $expected = array('Get', 'Post');
         asort($actual);
         asort($expected);
+        $this->assertSame($actual, $expected);
+    }
+
+    public function test_annotationMethod()
+    {
+        $this->request->ro = new \testworld\ResourceObject\MethodAnnotation;
+        $actual = $this->invoker->invoke($this->request);
+        $expected = 'get 1';
         $this->assertSame($actual, $expected);
     }
 }

@@ -84,18 +84,37 @@ class Invoker implements Invokable
     }
 
     /**
+     * Return config
+     *
+     * @return \Ray\Di\Config
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
      * (non-PHPdoc)
      * @see BEAR\Resource.Invokable::invoke()
      * @throws Exception\InvalidRequest
      */
     public function invoke(Request $request)
     {
-        $method = 'on' . ucfirst($request->method);
+        /** @todo change magic number 2 to 'definition' */
+        $definition = $this->config->fetch(get_class($request->ro))[2];
+        $requestMethod = ucfirst($request->method);
+        // annotation based request method (@Get) > name based request method (onGet)
+        $hasAnnotationMethod = isset($definition[Definition::BY_NAME]) && isset($definition[Definition::BY_NAME][$requestMethod][0]);
+        if ($hasAnnotationMethod === true) {
+            $method = $definition[Definition::BY_NAME][$requestMethod][0];
+            $methodAnnotation = $definition[Definition::BY_METHOD][$method][$requestMethod][0];
+        } else {
+            $method = 'on' . $requestMethod;
+        }
         if ($request->ro instanceof Weave) {
             $weave = $request->ro;
             return $weave(array($this, 'getParams'), $method, $request->query);
         }
-
         if (method_exists($request->ro, $method) !== true) {
             if ($request->method === self::OPTIONS) {
                 return $this->getOptions($request->ro);
@@ -175,9 +194,8 @@ class Invoker implements Invokable
      */
     private function getArgumentBySignal(ReflectionParameter $parameter, $object, $method, array $args)
     {
-//         $definition = $this->config->getDefinition(get_class($object));
-        list($dummy, $dummy, $definition) = $this->config->fetch(get_class($object));
-        unset($dummy);
+        /** @todo rm magic number 2 = definition */
+        $definition = $this->config->fetch(get_class($object))[2];
         $signalAannotations = $definition->getUserAnnotationByMethod($method)['ArgSignal'];
         $signalAannotations = $signalAannotations ?: [];
         $signalIds = ['Provides'];

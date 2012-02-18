@@ -8,7 +8,7 @@
 namespace BEAR\Resource;
 
 /**
- * Abstract resource bbject
+ * Abstract resource object
  *
  * @package BEAR.Resource
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
@@ -17,6 +17,11 @@ abstract class AbstractObject implements Object, \ArrayAccess, \Countable, \Iter
 {
     use ArrayAccess;
 
+    /**
+     * URI
+     *
+     * @var string
+     */
     public $uri = '';
 
     /**

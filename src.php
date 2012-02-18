@@ -2,6 +2,9 @@
 
 namespace PHP\Resource;
 
+use \Symfony\Component\ClassLoader\UniversalClassLoader;
+use \Doctrine\Common\Annotations\AnnotationRegistry;
+
 // interface
 require_once __DIR__ . '/src/BEAR/Resource/Provider.php';
 require_once __DIR__ . '/src/BEAR/Resource/Resource.php';
@@ -52,3 +55,16 @@ require_once __DIR__ . '/src/BEAR/Resource/Exception/MethodNotAllowed.php';
 
 // constants
 require_once __DIR__ . '/src/BEAR/Resource/Code.php';
+
+require_once __DIR__ . '/vendor/Symfony/Component/ClassLoader/UniversalClassLoader.php';
+$classLoader = new UniversalClassLoader;
+$classLoader->registerNamespaces(array(
+            'Guzzle' => __DIR__ . '/vendor/Guzzle/src',
+            'Doctrine' => __DIR__ . '/vendor/Doctrine/lib',
+            'Monolog' => __DIR__ . '/vendor/Monolog/src',
+            'Symfony' => __DIR__ . '/vendor'
+));
+$classLoader->registerPrefix('Zend_', __DIR__ . '/vendor');
+$classLoader->register();
+AnnotationRegistry::registerAutoloadNamespace('BEAR\Resource\Annotation', __DIR__ . '/src');
+
