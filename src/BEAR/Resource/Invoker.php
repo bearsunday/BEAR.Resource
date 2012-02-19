@@ -20,6 +20,13 @@ use BEAR\Resource\Object as ResourceObject;
 use Aura\Signal\Manager as Signal;
 use ReflectionParameter;
 
+/**
+ * conventional class for refference value.
+ *
+ * @see      http://stackoverflow.com/questions/295016/is-it-possible-to-pass-parameters-by-reference-using-call-user-func-array
+ * @see      http://d.hatena.ne.jp/sotarok/20090826/1251312215
+ * @internal only for Invoker
+ */
 final class Result
 {
     public $value;
@@ -67,7 +74,7 @@ class Invoker implements Invokable
     const ANNOTATION_PROVIDES = 'Provides';
 
 
-    const SIGNAL_ARGUMENT = 'argument';
+    const SIGNAL_PARAM = 'param';
 
     /**
      * Constructor
@@ -196,11 +203,11 @@ class Invoker implements Invokable
     {
         /** @todo rm magic number 2 = definition */
         $definition = $this->config->fetch(get_class($object))[2];
-        $signalAannotations = $definition->getUserAnnotationByMethod($method)['ArgSignal'];
+        $signalAannotations = $definition->getUserAnnotationByMethod($method)['ParamSignal'];
         $signalAannotations = $signalAannotations ?: [];
         $signalIds = ['Provides'];
         foreach ($signalAannotations as $annotation) {
-            if ($annotation instanceof \BEAR\Resource\Annotation\ArgSignal) {
+            if ($annotation instanceof \BEAR\Resource\Annotation\ParamSignal) {
                 $signalIds[] = $annotation->value;
             }
         }
@@ -208,7 +215,7 @@ class Invoker implements Invokable
         foreach ($signalIds as $signalId) {
             $results = $this->signal->send(
                     $this,
-                    self::SIGNAL_ARGUMENT . $signalId,
+                    self::SIGNAL_PARAM . $signalId,
                     $return, $parameter, new ReflectiveMethodInvocation([$object, $method], $args, $signalAannotations), $definition
             );
         }

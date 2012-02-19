@@ -95,5 +95,5 @@ interface Resource
      *
      * @return void
      */
-    public function attachArgProvider($signal, Callable $argProvider);
+    public function attachParamProvider($signal, Callable $argProvider);
 }

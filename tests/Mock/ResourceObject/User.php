@@ -7,7 +7,7 @@ use BEAR\Resource\Object as ResourceObject,
     BEAR\Resource\Resource;
 
 use BEAR\Resource\Annotation\Provides,
-    BEAR\Resource\Annotation\ArgSignal;
+    BEAR\Resource\Annotation\ParamSignal;
 
 /**
  * @Scope("singleton")
@@ -55,7 +55,7 @@ class User extends AbstractObject
     }
 
     /**
-     * @ArgSignal("login_id")
+     * @ParamSignal("login_id")
      *
      * @return string
      */

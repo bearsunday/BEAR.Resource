@@ -53,8 +53,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->signal = require dirname(__DIR__) . '/vendor/Aura.Signal/scripts/instance.php';
         $invoker = new Invoker(new Config(new Annotation(new Definition), $additonalAnnotations), new Linker, $this->signal);
         $this->resource = new Client($factory, $invoker, new Request($invoker));
-        $this->resource->attachArgProvider('Provides', $invoker->getProvidesClosure());
-        $this->resource->attachArgProvider('login_id', $signalProvider);
+        $this->resource->attachParamProvider('Provides', $invoker->getProvidesClosure());
+        $this->resource->attachParamProvider('login_id', $signalProvider);
         $this->user = $factory->newInstance('app://self/user');
         $this->nop = $factory->newInstance('nop://self/dummy');
         $this->query = array(

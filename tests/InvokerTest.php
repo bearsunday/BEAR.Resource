@@ -50,12 +50,12 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->invoker = new Invoker($config, new Linker, $this->signal);
         $this->invoker->getSignal()->handler(
                 '\BEAR\Resource\Invoker',
-                \BEAR\Resource\Invoker::SIGNAL_ARGUMENT . 'Provides',
+                \BEAR\Resource\Invoker::SIGNAL_PARAM . 'Provides',
                 $this->invoker->getProvidesClosure()
         );
         $this->invoker->getSignal()->handler(
                 '\BEAR\Resource\Invoker',
-                \BEAR\Resource\Invoker::SIGNAL_ARGUMENT . 'login_id',
+                \BEAR\Resource\Invoker::SIGNAL_PARAM . 'login_id',
                 $signalProvider
         );
         $resource = new \testworld\ResourceObject\User;

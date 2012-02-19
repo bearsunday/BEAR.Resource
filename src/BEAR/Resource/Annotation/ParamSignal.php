@@ -7,7 +7,7 @@
 namespace BEAR\Resource\Annotation;
 
 /**
- * ArgSignal
+ * ParamSignal
  *
  * @Annotation
  * @Target("METHOD")
@@ -15,7 +15,7 @@ namespace BEAR\Resource\Annotation;
  * @package    BEAR.Resource
  * @subpackage Annotation
  */
-final class ArgSignal
+final class ParamSignal
 {
     public $value;
 }

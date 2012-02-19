@@ -187,13 +187,13 @@ class Client implements Resource
 
     /**
      * (non-PHPdoc)
-     * @see BEAR\Resource.Resource::attachArgProvider()
+     * @see BEAR\Resource.Resource::attachParamProvider()
      */
-    public function attachArgProvider($signal, Callable $argProvider)
+    public function attachParamProvider($signal, Callable $argProvider)
     {
         $this->invoker->getSignal()->handler(
                 '\BEAR\Resource\Invoker',
-                \BEAR\Resource\Invoker::SIGNAL_ARGUMENT . $signal,
+                \BEAR\Resource\Invoker::SIGNAL_PARAM . $signal,
                 $argProvider
         );
     }

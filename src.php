@@ -37,7 +37,7 @@ require_once __DIR__ . '/src/BEAR/Resource/Adapter/Http/HttpClient.php';
 require_once __DIR__ . '/src/BEAR/Resource/Adapter/Http/Guzzle.php';
 
 require_once __DIR__ . '/src/BEAR/Resource/Annotation/Signal.php';
-require_once __DIR__ . '/src/BEAR/Resource/Annotation/ArgSignal.php';
+require_once __DIR__ . '/src/BEAR/Resource/Annotation/ParamSignal.php';
 require_once __DIR__ . '/src/BEAR/Resource/Annotation/Provides.php';
 
 // exception
