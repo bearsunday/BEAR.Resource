@@ -7,6 +7,8 @@
  */
 namespace BEAR\Resource;
 
+use Ray\Di\ConfigInterface;
+
 /**
  * Abstract resource object
  *
@@ -51,6 +53,10 @@ abstract class AbstractObject implements Object, \ArrayAccess, \Countable, \Iter
     public function __construct()
     {
         $this->body = new \ArrayObject;
+    }
+
+    public function __wakeup()
+    {
     }
 
     /**
