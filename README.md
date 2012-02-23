@@ -1,6 +1,6 @@
 BEAR.Resource, a REST framework for PHP.
 =============================
-[![Build Status](https://secure.travis-ci.org/koriym/BEAR.Sunday.png)](http://travis-ci.org/koriym/BEAR.Sunday)
+[![Build Status](https://secure.travis-ci.org/koriym/BEAR.Resource.png)](http://travis-ci.org/koriym/BEAR.git@github.com:koriym/BEAR.Resource.git)
 ## Install
     $ git clone git://github.com/koriym/BEAR.Resource.git
     $ cd BEAR.Resource
