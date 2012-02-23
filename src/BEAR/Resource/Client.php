@@ -9,6 +9,7 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Object as ResourceObject,
     BEAR\Resource\Adapter\App\Link as LikType;
+use Guzzle\Common\Cache\AbstractCacheAdapter as Cache;
 
 /**
  * Resource client
@@ -49,6 +50,14 @@ class Client implements Resource
      */
     private $requests;
 
+
+    /**
+     * Cache
+     *
+     * @var Guzzle\Common\Cache\CacheAdapterInterface
+     */
+    private $cache;
+
     /**
      * Constructor
      *
@@ -67,12 +76,37 @@ class Client implements Resource
     }
 
     /**
+     * Set cache adapter
+     *
+     * @param Cache $cache
+     *
+     * @Inject
+     */
+    public function setCacheAdapter(Cache $cache)
+    {
+        $this->cache = $cache;
+    }
+
+    /**
      * (non-PHPdoc)
      * @see BEAR\Resource.Resource::newInstance()
      */
     public function newInstance($uri)
     {
+        if ($this->cache instanceof Cache) {
+            $cached = $this->cache->fetch($uri);
+            if ($cached) {
+                return $cached;
+            }
+        }
         $instance = $this->factory->newInstance($uri);
+        if ($this->cache instanceof Cache) {
+            $this->cache->save($uri, $instance);
+        }
+//         $instance = unserialize(serialize($instance));
+        if (method_exists($instance, '__wakeup')) {
+            $instance->__wakeup();
+        }
         return $instance;
     }
 

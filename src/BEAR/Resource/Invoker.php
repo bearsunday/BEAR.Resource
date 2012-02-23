@@ -203,8 +203,8 @@ class Invoker implements Invokable
     {
         /** @todo rm magic number 2 = definition */
         $definition = $this->config->fetch(get_class($object))[2];
-        $signalAannotations = $definition->getUserAnnotationByMethod($method)['ParamSignal'];
-        $signalAannotations = $signalAannotations ?: [];
+        $userAnnotation = $definition->getUserAnnotationByMethod($method);
+        $signalAannotations = isset($userAnnotation['ParamSignal']) ? $userAnnotation['ParamSignal'] : [];
         $signalIds = ['Provides'];
         foreach ($signalAannotations as $annotation) {
             if ($annotation instanceof \BEAR\Resource\Annotation\ParamSignal) {
