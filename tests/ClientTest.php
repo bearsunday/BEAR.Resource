@@ -13,7 +13,7 @@ use Ray\Di\Definition,
     BEAR\Resource\Builder,
     BEAR\Resource\Mock\User;
 use Ray\Aop\ReflectiveMethodInvocation;
-
+use BEAR\Resource\SignalHandler\Provides;
 
 
 /**
@@ -32,15 +32,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $additionalAnnotations = require __DIR__ . '/scripts/additionalAnnotations.php';
-        $signalProvider = function (
-                $return,
-                \ReflectionParameter $parameter,
-                ReflectiveMethodInvocation $invovation,
-                Definition $definition
-        ) {
-            $return->value = 1;
-            return \Aura\Signal\Manager::STOP;
-        };
         $injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition)))), new EmptyModule);
         $scheme = new SchemeCollection;
         $scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject'));
@@ -51,10 +42,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->factory = new Factory($scheme);
         $factory = new Factory($scheme);
         $this->signal = require dirname(__DIR__) . '/vendor/Aura.Signal/scripts/instance.php';
-        $invoker = new Invoker(new Config(new Annotation(new Definition), $additonalAnnotations), new Linker, $this->signal);
-        $this->resource = new Client($factory, $invoker, new Request($invoker));
-        $this->resource->attachParamProvider('Provides', $invoker->getProvidesClosure());
-        $this->resource->attachParamProvider('login_id', $signalProvider);
+        $this->invoker = new Invoker(new Config(new Annotation(new Definition), $additonalAnnotations), new Linker, $this->signal);
+        $this->resource = new Client($factory, $this->invoker, new Request($this->invoker));
         $this->user = $factory->newInstance('app://self/user');
         $this->nop = $factory->newInstance('nop://self/dummy');
         $this->query = array(
@@ -238,8 +227,38 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(isset($response->body[0]->channel));
     }
 
-    public function testParameterProvidedBySignal()
+    public function testParameterProvidedBySignalClosure()
     {
+        $signalProvider = function (
+        $return,
+        \ReflectionParameter $parameter,
+        ReflectiveMethodInvocation $invovation,
+        Definition $definition
+        ) {
+            $return->value = 1;
+            return \Aura\Signal\Manager::STOP;
+        };
+
+        $this->resource->attachParamProvider('Provides', $this->invoker->getProvidesClosure());
+        $this->resource->attachParamProvider('login_id', $signalProvider);
+        $actual = $this->resource->delete->object($this->user)->withQuery([])->eager->request();
+        $this->assertSame($actual, "1 deleted");
+    }
+
+    public function testParameterProvidedBySignalWithInvokableObject()
+    {
+        $signalProvider = function (
+        $return,
+        \ReflectionParameter $parameter,
+        ReflectiveMethodInvocation $invovation,
+        Definition $definition
+        ) {
+            $return->value = 1;
+            return \Aura\Signal\Manager::STOP;
+        };
+
+        $this->resource->attachParamProvider('Provides', new Provides);
+        $this->resource->attachParamProvider('login_id', $signalProvider);
         $actual = $this->resource->delete->object($this->user)->withQuery([])->eager->request();
         $this->assertSame($actual, "1 deleted");
     }

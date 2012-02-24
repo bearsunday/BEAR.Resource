@@ -53,8 +53,13 @@ require_once __DIR__ . '/src/BEAR/Resource/Exception/InvalidUri.php';
 require_once __DIR__ . '/src/BEAR/Resource/Exception/BadRequest.php';
 require_once __DIR__ . '/src/BEAR/Resource/Exception/MethodNotAllowed.php';
 
+// signal handlers
+require_once __DIR__ . '/src/BEAR/Resource/SignalHandler/Handle.php';
+require_once __DIR__ . '/src/BEAR/Resource/SignalHandler/Provides.php';
+
 // constants
 require_once __DIR__ . '/src/BEAR/Resource/Code.php';
+
 
 require_once __DIR__ . '/vendor/Symfony/Component/ClassLoader/UniversalClassLoader.php';
 $classLoader = new UniversalClassLoader;
