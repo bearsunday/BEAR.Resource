@@ -5,17 +5,17 @@ namespace BEAR\Resource;
 use Doctrine\Common\Util\Debug;
 
 use Ray\Di\Definition,
-    Ray\Di\Annotation,
-    Ray\Di\Config,
-    Ray\Di\Forge,
-    Ray\Di\Container,
-    Ray\Di\Manager,
-    Ray\Di\Injector,
-    Ray\Di\EmptyModule;
+Ray\Di\Annotation,
+Ray\Di\Config,
+Ray\Di\Forge,
+Ray\Di\Container,
+Ray\Di\Manager,
+Ray\Di\Injector,
+Ray\Di\EmptyModule;
 
 use Ray\Aop\Weaver,
-    Ray\Aop\Bind,
-    Ray\Aop\ReflectiveMethodInvocation;
+Ray\Aop\Bind,
+Ray\Aop\ReflectiveMethodInvocation;
 use BEAR\Resource\Mock\User;
 
 /**
@@ -31,10 +31,10 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $additionalAnnotations = require __DIR__ . '/scripts/additionalAnnotations.php';
         $signalProvider = function (
-            $return,
-            \ReflectionParameter $parameter,
-            ReflectiveMethodInvocation $invovation,
-            Definition $definition
+                $return,
+                \ReflectionParameter $parameter,
+                ReflectiveMethodInvocation $invovation,
+                Definition $definition
         ) {
             $return->value = 1;
             return \Aura\Signal\Manager::STOP;
@@ -51,7 +51,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->invoker->getSignal()->handler(
                 '\BEAR\Resource\Invoker',
                 \BEAR\Resource\Invoker::SIGNAL_PARAM . 'Provides',
-                $this->invoker->getProvidesClosure()
+                new SignalHandler\Provides
         );
         $this->invoker->getSignal()->handler(
                 '\BEAR\Resource\Invoker',
@@ -123,14 +123,14 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     }
 
     // deprecated for @Provides any support.
-//     public function test_InvokableWithUnspecificProvider()
-//     {
-//         $this->request->ro = new Mock\Entry;
-//         $this->request->query = array();
-//         $this->request->method = 'get';
-//         $actual = $this->invoker->invoke($this->request);
-//         $this->assertSame('entry1', $actual);
-//     }
+    //     public function test_InvokableWithUnspecificProvider()
+    //     {
+    //         $this->request->ro = new Mock\Entry;
+    //         $this->request->query = array();
+    //         $this->request->method = 'get';
+    //         $actual = $this->invoker->invoke($this->request);
+    //         $this->assertSame('entry1', $actual);
+    //     }
 
     /**
      * @expectedException BEAR\Resource\Exception\InvalidParameter
@@ -174,11 +174,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->request->method = 'get';
         $this->request->query = array('id' => 1);
         $actual = $this->invoker->invoke($this->request);
-        $expected = "book id[1][Log] target = testworld\ResourceObject\Weave\Book, input = Array
-(
-    [0] => 1
-)
-, result = book id[1]";
+        $expected = "book id[1][Log] target = testworld\\ResourceObject\\Weave\\Book, input = Array\n(\n    [0] => 1\n)\n, result = book id[1]";
         $this->assertSame($expected, $actual);
     }
 
@@ -227,5 +223,11 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $actual = $this->invoker->invoke($this->request);
         $expected = 'get 1';
         $this->assertSame($actual, $expected);
+    }
+
+    public function test_getConfig()
+    {
+        $actual = $this->invoker->getConfig();
+        $this->assertInstanceOf('Ray\Di\Config', $actual);
     }
 }

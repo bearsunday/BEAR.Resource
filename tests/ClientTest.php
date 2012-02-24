@@ -14,7 +14,8 @@ use Ray\Di\Definition,
     BEAR\Resource\Mock\User;
 use Ray\Aop\ReflectiveMethodInvocation;
 use BEAR\Resource\SignalHandler\Provides;
-
+use Guzzle\Common\Cache\DoctrineCacheAdapter as CacheAdapter;
+use Doctrine\Common\Cache\ArrayCache as Cache;
 
 /**
  * Test class for BEAR.Resource.
@@ -238,8 +239,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             $return->value = 1;
             return \Aura\Signal\Manager::STOP;
         };
-
-        $this->resource->attachParamProvider('Provides', $this->invoker->getProvidesClosure());
         $this->resource->attachParamProvider('login_id', $signalProvider);
         $actual = $this->resource->delete->object($this->user)->withQuery([])->eager->request();
         $this->assertSame($actual, "1 deleted");
@@ -261,5 +260,14 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->resource->attachParamProvider('login_id', $signalProvider);
         $actual = $this->resource->delete->object($this->user)->withQuery([])->eager->request();
         $this->assertSame($actual, "1 deleted");
+    }
+
+    public function test_setCacheAdapter()
+    {
+        $cache = new CacheAdapter(new Cache);
+        $this->resource->setCacheAdapter($cache);
+        $instance1 = $this->resource->newInstance('nop://self/path/to/dummy');
+        $instance2 = $this->resource->newInstance('nop://self/path/to/dummy');
+        $this->assertSame($instance1, $instance2);
     }
 }

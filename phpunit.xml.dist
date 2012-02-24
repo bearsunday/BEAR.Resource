@@ -5,7 +5,9 @@
          backupStaticAttributes="false"
          strict="true"
          verbose="true"
-         colors="true">
+         colors="true"
+		 stopOnFailure="true"
+>
   <testsuites>
     <testsuite name="BEAR.Resource">
       <directory suffix="Test.php">tests</directory>
