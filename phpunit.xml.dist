@@ -6,7 +6,7 @@
          strict="true"
          verbose="true"
          colors="true"
-		 stopOnFailure="true"
+		 stopOnFailure="false"
 >
   <testsuites>
     <testsuite name="BEAR.Resource">

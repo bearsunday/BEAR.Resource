@@ -73,6 +73,8 @@ class App implements ResourceObject, Provider
     public function get($uri)
     {
         $parsedUrl = parse_url($uri);
+        $path = str_replace('/', ' ', $parsedUrl['path']);
+        $path = ucwords($path);
         $path = str_replace('/', '\\', $parsedUrl['path']);
         $host = $parsedUrl['host'];
         $className = "{$this->namespace}\\{$this->path}{$path}";
