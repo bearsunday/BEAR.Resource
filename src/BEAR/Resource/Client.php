@@ -94,14 +94,15 @@ class Client implements Resource
     public function newInstance($uri)
     {
         if ($this->cache instanceof Cache) {
-            $cached = $this->cache->fetch($uri);
+            $key = __METHOD__ . $uri;
+            $cached = $this->cache->fetch($key);
             if ($cached) {
                 return $cached;
             }
         }
         $instance = $this->factory->newInstance($uri);
         if ($this->cache instanceof Cache) {
-            $this->cache->save($uri, $instance);
+            $this->cache->save($key, $instance);
         }
 //         $instance = unserialize(serialize($instance));
         if (method_exists($instance, '__wakeup')) {

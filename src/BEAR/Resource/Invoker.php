@@ -107,17 +107,8 @@ class Invoker implements Invokable
      */
     public function invoke(Request $request)
     {
-        /** @todo change magic number 2 to 'definition' */
-        $definition = $this->config->fetch(get_class($request->ro))[2];
-        $requestMethod = ucfirst($request->method);
-        // annotation based request method (@Get) > name based request method (onGet)
-        $hasAnnotationMethod = isset($definition[Definition::BY_NAME]) && isset($definition[Definition::BY_NAME][$requestMethod][0]);
-        if ($hasAnnotationMethod === true) {
-            $method = $definition[Definition::BY_NAME][$requestMethod][0];
-            $methodAnnotation = $definition[Definition::BY_METHOD][$method][$requestMethod][0];
-        } else {
-            $method = 'on' . $requestMethod;
-        }
+        //$method = 'on' . $request->method;
+        $method = $this->getMethodByAnnotation($request);
         if ($request->ro instanceof Weave) {
             $weave = $request->ro;
             return $weave(array($this, 'getParams'), $method, $request->query);
@@ -140,6 +131,29 @@ class Invoker implements Invokable
             $result = $this->linker->invoke($request->ro, $request->links, $result);
         }
         return $result;
+    }
+
+    /**
+     * @todo not to get method name here, preare istead.
+     *
+     * @param Request $request
+     *
+     * @return string
+     */
+    private function getMethodByAnnotation(Request $request)
+    {
+        /** @todo change magic number 2 to 'definition' */
+        $definition = $this->config->fetch(get_class($request->ro))[2];
+        $requestMethod = ucfirst($request->method);
+        // annotation based request method (@Get) > name based request method (onGet)
+        $hasAnnotationMethod = isset($definition[Definition::BY_NAME]) && isset($definition[Definition::BY_NAME][$requestMethod][0]);
+        if ($hasAnnotationMethod === true) {
+            $method = $definition[Definition::BY_NAME][$requestMethod][0];
+            $methodAnnotation = $definition[Definition::BY_METHOD][$method][$requestMethod][0];
+        } else {
+            $method = 'on' . $requestMethod;
+        }
+        return $method;
     }
 
     /**
