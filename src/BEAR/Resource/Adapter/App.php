@@ -75,7 +75,7 @@ class App implements ResourceObject, Provider
         $parsedUrl = parse_url($uri);
         $path = str_replace('/', ' ', $parsedUrl['path']);
         $path = ucwords($path);
-        $path = str_replace('/', '\\', $parsedUrl['path']);
+        $path = str_replace(' ', '\\', $path);
         $host = $parsedUrl['host'];
         $className = "{$this->namespace}\\{$this->path}{$path}";
         $instance = $this->injector->getInstance($className);
