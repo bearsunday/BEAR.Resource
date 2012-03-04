@@ -18,7 +18,7 @@ class MockModule extends AbstractModule
     protected function configure()
     {
         $this->bind('Ray\Di\InjectorInterface')->toInstance($this->injector);
-        $this->bind('Ray\Di\ConfigInterface')->toInstance($this->injector->getContainer()->getForge()->getConfig());
+        $this->bind('Aura\Di\ConfigInterface')->toInstance($this->injector->getContainer()->getForge()->getConfig());
         $this->bind('BEAR\Resource\Resource')->to('BEAR\Resource\Client');
         $this->bind('BEAR\Resource\Invokable')->to('BEAR\Resource\Invoker');
     }

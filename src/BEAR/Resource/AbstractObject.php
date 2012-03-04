@@ -7,7 +7,7 @@
  */
 namespace BEAR\Resource;
 
-use Ray\Di\ConfigInterface;
+use Aura\Di\ConfigInterface;
 
 /**
  * Abstract resource object
