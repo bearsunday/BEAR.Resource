@@ -14,6 +14,10 @@ use BEAR\Resource\Annotation\Provides,
  */
 class User extends AbstractObject
 {
+    /**
+     *
+     * @param Resource $resource
+     */
     public function setResource(Resource $resource)
     {
         $this->resource = $resource;

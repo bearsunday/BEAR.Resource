@@ -210,7 +210,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException testworld\ResourceObject\Shutdown
      */
     public function testServiceError()
     {
