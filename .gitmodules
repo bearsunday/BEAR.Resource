@@ -25,3 +25,6 @@
 [submodule "vendor/Aura.Signal"]
 	path = vendor/Aura.Signal
 	url = https://github.com/auraphp/Aura.Signal.git
+[submodule "vendor/Aura.Di"]
+	path = vendor/Aura.Di
+	url = https://github.com/auraphp/Aura.Di.git
