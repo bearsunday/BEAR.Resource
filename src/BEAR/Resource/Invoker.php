@@ -12,7 +12,7 @@ use MyProject\Proxies\__CG__\OtherProject\Proxies\__CG__\stdClass;
 
 use Ray\Aop\Weave,
     Ray\Aop\ReflectiveMethodInvocation;
-use Ray\Di\ConfigInterface,
+use Aura\Di\ConfigInterface,
     Ray\Di\ProviderInterface,
     Ray\Di\Annotation,
     Ray\Di\Definition;

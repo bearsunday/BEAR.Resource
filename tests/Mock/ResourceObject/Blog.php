@@ -19,6 +19,8 @@ use Ray\Di\Annotation,
     Ray\Di\Injector,
     Ray\Di\EmptyModule;
 
+class Shutdown extends \RuntimeException{};
+
 class Blog extends AbstractObject
 {
 
@@ -40,7 +42,7 @@ class Blog extends AbstractObject
 
     public function onPost()
     {
-        throw new \RuntimeException('Service temporary shutdown.');
+        throw new Shutdown('Service temporary shutdown.');
     }
 
     /**

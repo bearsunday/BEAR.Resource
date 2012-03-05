@@ -29,6 +29,8 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
+        restore_exception_handler();
+        restore_error_handler();
         $additionalAnnotations = require __DIR__ . '/scripts/additionalAnnotations.php';
         $signalProvider = function (
                 $return,

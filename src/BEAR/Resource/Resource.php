@@ -15,6 +15,8 @@ use BEAR\Resource\Object as ResourceObject;
  * @package BEAR.Resource
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
  *
+ * @ImplementedBy("BEAR\Resource\Client")
+ *
  */
 interface Resource
 {
