@@ -1,6 +1,7 @@
 <?php
 require_once dirname(__DIR__) . '/src.php';
 require_once dirname(__DIR__) . '/vendor/Aura.Di/src.php';
+require_once dirname(__DIR__) . '/vendor/Aura.Di/src/Aura/Di/Exception/ContainerLocked.php';
 require_once dirname(__DIR__) . '/vendor/Aura.Signal/src.php';
 require_once dirname(__DIR__) . '/vendor/Ray.Aop/src.php';
 require_once dirname(__DIR__) . '/vendor/Ray.Di/src.php';
