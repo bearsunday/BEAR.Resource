@@ -1,6 +1,10 @@
 {
     "name": "BEAR/Resource",
     "description": "RESTful service layer framework",
+    "keywords": ["rest", "service layer"],
+    "homepage": "https://github.com/koriym/BEAR.Resource",
+    "version": "0.1.0",
+    "license": "BSD",
     "require": {
         "aura/di": "dev-master",
         "aura/signal": "dev-master",
