@@ -35,7 +35,7 @@ class RestBucksTest extends \PHPUnit_Framework_TestCase
         $scheme->scheme('prov')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Prov);
         $scheme->scheme('http')->host('*')->toAdapter(new \BEAR\Resource\Adapter\Http);
         $factory = new Factory($scheme);
-        $signal = require (dirname(__DIR__)) . '/vendor/Aura.Signal/scripts/instance.php';
+        $signal = require (dirname(__DIR__)) . '/vendor/Aura/Signal/scripts/instance.php';
         $invoker = new Invoker(new Config(new Annotation(new Definition)), new Linker, $signal);
         $this->resource = new Client($factory, $invoker, new Request($invoker));
         $this->user = $factory->newInstance('app://self/user');

@@ -54,3 +54,4 @@ require_once __DIR__ . '/src/BEAR/Resource/SignalHandler/Provides.php';
 
 // constants
 require_once __DIR__ . '/src/BEAR/Resource/Code.php';
+

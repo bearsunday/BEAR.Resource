@@ -1,0 +1,25 @@
+{
+    "name": "BEAR/Resource",
+    "description": "RESTful service layer framework",
+    "require": {
+        "aura/di": "dev-master",
+        "aura/signal": "dev-master",
+        "doctrine/common": "2.2-dev",
+        "guzzle/guzzle": "dev-master",
+        "ray/aop": "dev-master",
+        "ray/di": "dev-master"
+    },
+    "authors": [
+        {
+            "name": "Akihito Koriyama",
+            "email": "akihito.koriyama@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "BEAR\\Resource": "src/",
+            "Aura\\Di": "vendor/Aura/Di/src/",
+            "Aura\\Signal": "vendor/Aura/Signal/src/"
+        }
+    }
+}

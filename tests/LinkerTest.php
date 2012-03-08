@@ -26,7 +26,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $this->linker = new Linker;
         $injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition)))), new EmptyModule);
-        $signal = require dirname(__DIR__) . '/vendor/Aura.Signal/scripts/instance.php';
+        $signal = require dirname(__DIR__) . '/vendor/Aura/Signal/scripts/instance.php';
         $invoker = new Invoker(new Config(new Annotation(new Definition)), new Linker, $signal);
         $scheme = new SchemeCollection;
         $scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject'));

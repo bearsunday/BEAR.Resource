@@ -42,7 +42,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $scheme->scheme('http')->host('*')->toAdapter(new \BEAR\Resource\Adapter\Http);
         $this->factory = new Factory($scheme);
         $factory = new Factory($scheme);
-        $this->signal = require dirname(__DIR__) . '/vendor/Aura.Signal/scripts/instance.php';
+        $this->signal = require dirname(__DIR__) . '/vendor/Aura/Signal/scripts/instance.php';
         $this->invoker = new Invoker(new Config(new Annotation(new Definition), $additonalAnnotations), new Linker, $this->signal);
         $this->resource = new Client($factory, $this->invoker, new Request($this->invoker));
         $this->user = $factory->newInstance('app://self/user');
