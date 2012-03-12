@@ -7,8 +7,11 @@
  */
 namespace BEAR\Resource;
 
+use Aura\Autoload\Exception\NotReadable;
 use BEAR\Resource\Object as ResourceObject,
-    BEAR\Resource\Adapter\App\Link as LikType;
+    BEAR\Resource\Adapter\App\Link as LikType,
+    BEAR\Framework\Exception\ResourceNotFound;
+use Exception;
 use Guzzle\Common\Cache\AbstractCacheAdapter as Cache;
 
 /**
@@ -100,11 +103,16 @@ class Client implements Resource
                 return $cached;
             }
         }
-        $instance = $this->factory->newInstance($uri);
+        try {
+            $instance = $this->factory->newInstance($uri);
+        } catch (NotReadable $e) {
+            throw new ResourceNotFound($uri, 400, $e);
+        } catch (Exception $e) {
+            throw $e;
+        }
         if ($this->cache instanceof Cache) {
             $this->cache->save($key, $instance);
         }
-//         $instance = unserialize(serialize($instance));
         if (method_exists($instance, '__wakeup')) {
             $instance->__wakeup();
         }
