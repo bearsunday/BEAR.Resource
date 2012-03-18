@@ -25,7 +25,7 @@ interface Resource
      *
      * @param string $uri
      *
-     * @return ResourceObject
+     * @return self
      */
     public function newInstance($uri);
 

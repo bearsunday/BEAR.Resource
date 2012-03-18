@@ -11,7 +11,7 @@ use Ray\Aop\ReflectiveMethodInvocation;
 use Ray\Di\Definition;
 use ReflectionParameter;
 use Aura\Signal\Manager as Signal;
-
+use BEAR\Framework\Args;
 /**
  * [At]Provides parameter handler
  *
@@ -52,14 +52,28 @@ class Provides implements Handle
             $parameterMethod[$annotation->value] = $provideMethod;
         }
         $hasMethod = isset($parameterMethod[$parameter->name]);
-        if ($hasMethod === false) {
+        if ($hasMethod === true) {
+            $providesMethod = $parameterMethod[$parameter->name];
+            $object = $invovation->getThis();
+            $f = [$object, $providesMethod];
+            $providedValue = $f();
+            $return->value = $providedValue;
+            goto SUCCESS;
+        }
+        if (! isset($parameterMethod[''])) {
             goto PROVIDE_FAILD;
         }
-        $providesMethod = $parameterMethod[$parameter->name];
+        $providesMethod = $parameterMethod[''];
         $object = $invovation->getThis();
         $f = [$object, $providesMethod];
-        $providedValue = $f();
-        $return->value = $providedValue;
+        $args = new Args;
+        $f($args);
+        if (isset($args[$parameter->name])) {
+            $return->args = $args;
+            $return->value =$args[$parameter->name];
+            goto SUCCESS;
+        }
+        goto PROVIDE_FAILD;
 SUCCESS:
         return Signal::STOP;
 
