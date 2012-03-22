@@ -111,7 +111,13 @@ class Invoker implements Invokable
         $method = $this->getMethodByAnnotation($request);
         if ($request->ro instanceof Weave) {
             $weave = $request->ro;
-            return $weave(array($this, 'getParams'), $method, $request->query);
+            $result = $weave(array($this, 'getParams'), $method, $request->query);
+            if ($request->links) {
+                /** @todo */
+                $ro = $weave->___getObject();
+                $result = $this->linker->invoke($ro, $request->links, $result);
+            }
+            return $result;
         }
         if (method_exists($request->ro, $method) !== true) {
             if ($request->method === self::OPTIONS) {
@@ -127,6 +133,7 @@ class Invoker implements Invokable
             throw $e;
         }
         // link
+        completed:
         if ($request->links) {
             $result = $this->linker->invoke($request->ro, $request->links, $result);
         }
