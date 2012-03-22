@@ -30,6 +30,7 @@ use ReflectionParameter;
 final class Result
 {
     public $value;
+    public $args;
 }
 
 /**
@@ -193,14 +194,21 @@ class Invoker implements Invokable
         if ($parameters === array()) {
             return array();
         }
+        $providesArgs = [];
         foreach ($parameters as $parameter) {
             if (isset($args[$parameter->name])) {
                 $params[] = $args[$parameter->name];
             } elseif ($parameter->isDefaultValueAvailable() === true) {
                 $params[] = $parameter->getDefaultValue();
+            } elseif (isset($providesArgs[$parameter->name])) {
+                $params[] = $providesArgs[$parameter->name];
             } else {
                 try {
-                    $params[] = $this->getArgumentBySignal($parameter, $object, $method, $args);
+                    $result = $this->getArgumentBySignal($parameter, $object, $method, $args);
+                    if ($result->args) {
+                        $providesArgs = $result->args;
+                    }
+                    $params[] = $result->value;
                 } catch (\Exception $e) {
                     throw $e;
                 }
@@ -218,6 +226,8 @@ class Invoker implements Invokable
      * @param object $object
      * @param string $method
      * @param array $args
+     *
+     * @return mixed
      * @throws Exception\InvalidParameter
      */
     private function getArgumentBySignal(ReflectionParameter $parameter, $object, $method, array $args)
@@ -246,7 +256,7 @@ class Invoker implements Invokable
             goto PARAMETER_NOT_PROVIDED;
         }
 PARAMETER_PROVIDED:
-        return $return->value;
+        return $return;
 PARAMETER_NOT_PROVIDED:
         $msg = '$' . "{$parameter->name} in " . get_class($object) . '::' . $method;
         throw new Exception\InvalidParameter($msg);

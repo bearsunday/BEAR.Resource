@@ -13,6 +13,7 @@ namespace BEAR\Resource;
  * @package BEAR.Resource
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
  *
+ * @ImplementedBy("BEAR\Resource\Invoker")
  */
 interface Invokable
 {
