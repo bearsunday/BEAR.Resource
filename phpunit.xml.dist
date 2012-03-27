@@ -6,8 +6,8 @@
          strict="true"
          verbose="true"
          colors="true"
-		 stopOnFailure="false"
->
+         timeoutForSmallTests="5"
+         stopOnFailure="true">
   <testsuites>
     <testsuite name="BEAR.Resource">
       <directory suffix="Test.php">tests</directory>

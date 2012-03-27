@@ -7,6 +7,9 @@
  */
 namespace BEAR\Resource;
 
+use BEAR\Resource\Render;
+use Exception;
+
 /**
  * Interface for resource adapter provider.
  *
@@ -17,6 +20,13 @@ namespace BEAR\Resource;
  */
 class Request
 {
+    /**
+     * Renderer
+     *
+     * @var Render
+     */
+    private $render;
+
     /**
      * object URI scheme
      *
@@ -34,6 +44,18 @@ class Request
     public function __construct(Invokable $invoker)
     {
         $this->invoker = $invoker;
+    }
+
+    /**
+     * Set renderer
+     *
+     * @param Render $renderer
+     *
+     * @return void
+     */
+    public function setRenderer(Renderable $renderer)
+    {
+        $this->renderer = $renderer;
     }
 
     /**
@@ -87,6 +109,13 @@ class Request
     public $links = array();
 
     /**
+     * Renderer
+     *
+     * @var Rendaerable
+     */
+    private $renderer;
+
+    /**
      * Invokable resource request
      *
      * @param array $query
@@ -100,11 +129,31 @@ class Request
     }
 
     /**
-     * To String
+     * Render view
      *
      * @return string
      */
     public function __toString()
+    {
+        if (is_null($this->renderer)) {
+            $string = $this->toRequestString();
+            return $string;
+        }
+        try {
+            $data = $this->__invoke();
+            $string = $this->renderer->render($this, $data);
+            return $string;
+        } catch (Exception $e) {
+            return '';
+        }
+    }
+
+    /**
+     * To Request URI string
+     *
+     * @return string
+     */
+    private function toRequestString()
     {
         $query = http_build_query($this->query, '&');
         if (isset($this->ro->uri) === false) {

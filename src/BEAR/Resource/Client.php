@@ -14,6 +14,7 @@ use BEAR\Resource\Object as ResourceObject,
     BEAR\Framework\Exception\ResourceNotFound;
 use Guzzle\Common\Cache\AbstractCacheAdapter as Cache;
 
+
 /**
  * Resource client
  *
