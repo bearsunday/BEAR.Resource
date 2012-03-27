@@ -10,8 +10,8 @@ namespace BEAR\Resource;
 use Aura\Autoload\Exception\NotReadable;
 use BEAR\Resource\Object as ResourceObject,
     BEAR\Resource\Adapter\App\Link as LikType,
+    BEAR\Resource\Exception,
     BEAR\Framework\Exception\ResourceNotFound;
-use Exception;
 use Guzzle\Common\Cache\AbstractCacheAdapter as Cache;
 
 /**

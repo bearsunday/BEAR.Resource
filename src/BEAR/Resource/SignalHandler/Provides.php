@@ -11,7 +11,7 @@ use Ray\Aop\ReflectiveMethodInvocation;
 use Ray\Di\Definition;
 use ReflectionParameter;
 use Aura\Signal\Manager as Signal;
-use BEAR\Framework\Args;
+use BEAR\Resource\Args;
 /**
  * [At]Provides parameter handler
  *
@@ -67,7 +67,6 @@ class Provides implements Handle
         $object = $invovation->getThis();
         $f = [$object, $providesMethod];
         $args = new Args;
-        $f($args);
         if (isset($args[$parameter->name])) {
             $return->args = $args;
             $return->value =$args[$parameter->name];
