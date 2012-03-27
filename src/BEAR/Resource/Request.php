@@ -35,30 +35,6 @@ class Request
     const SCHEME_OBJECT = 'object';
 
     /**
-     * Constructor
-     *
-     * @param Invokable $invoker
-     *
-     * @Inject
-     */
-    public function __construct(Invokable $invoker)
-    {
-        $this->invoker = $invoker;
-    }
-
-    /**
-     * Set renderer
-     *
-     * @param Render $renderer
-     *
-     * @return void
-     */
-    public function setRenderer(Renderable $renderer)
-    {
-        $this->renderer = $renderer;
-    }
-
-    /**
      * URI
      *
      * @var string
@@ -114,6 +90,31 @@ class Request
      * @var Rendaerable
      */
     private $renderer;
+
+    /**
+     * Constructor
+     *
+     * @param Invokable $invoker
+     *
+     * @Inject
+     */
+    public function __construct(Invokable $invoker)
+    {
+        $this->invoker = $invoker;
+    }
+
+    /**
+     * Set renderer
+     *
+     * @param Render $renderer
+     *
+     * @return void
+     * @Inject
+     */
+    public function setRenderer(Renderable $renderer)
+    {
+        $this->renderer = $renderer;
+    }
 
     /**
      * Invokable resource request
