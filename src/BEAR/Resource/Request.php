@@ -106,7 +106,7 @@ class Request
     /**
      * Set renderer
      *
-     * @param Render $renderer
+     * @param Renderable $renderer
      *
      * @return void
      * @Inject

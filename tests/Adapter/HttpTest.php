@@ -74,28 +74,12 @@ class HttpAdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Guzzle\Http\Message\BadResponseException
-     */
-    public function testDelete()
-    {
-        $ro = $this->httpAdapter->onDelete();
-    }
-
-    /**
      */
     public function testHead()
     {
         $ro = $this->httpAdapter->onHead();
         $expected = 'application/xml; charset=UTF-8';
         $this->assertSame($expected, $ro->headers['Content-Type']);
-    }
-
-    /**
-     * @expectedException Guzzle\Http\Message\BadResponseException
-     */
-    public function testOptions()
-    {
-        $ro = $this->httpAdapter->onOptions();
     }
 
     /**
