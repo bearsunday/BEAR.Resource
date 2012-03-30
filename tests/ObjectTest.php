@@ -119,5 +119,19 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $str = (string)$this->resource;
         $this->assertTrue(is_string($str));
     }
+
+    public function test_toStringWithRenderer()
+    {
+        $renderer = new TestRenderer;
+        $this->resource->setRederer($renderer);
+        $result = (string)($this->resource);
+        $this->assertSame('{"0":"entry1","1":"entry2","2":"entry3"}', $result);
+    }
+
+    public function test_setRendererWithoutRenderer()
+    {
+        $result = (string)($this->resource);
+        $this->assertSame('BEAR\Resource\Mock\Entry#4305fd43e7337b2cb689326bf0e9c2e9', $result);
+    }
 }
 

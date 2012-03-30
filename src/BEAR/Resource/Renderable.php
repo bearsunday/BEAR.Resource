@@ -24,5 +24,5 @@ interface Renderable
      *
      * @return string
      */
-    public function render(Request $request, $data);
+    public function render(Object $resourceObject);
 }

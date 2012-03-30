@@ -24,6 +24,7 @@ require_once __DIR__ . '/src/BEAR/Resource/Factory.php';
 require_once __DIR__ . '/src/BEAR/Resource/Invoker.php';
 require_once __DIR__ . '/src/BEAR/Resource/Linker.php';
 require_once __DIR__ . '/src/BEAR/Resource/SchemeCollection.php';
+require_once __DIR__ . '/src/BEAR/Resource/Renderable.php';
 require_once __DIR__ . '/src/BEAR/Resource/Adapter/App.php';
 require_once __DIR__ . '/src/BEAR/Resource/Adapter/App/Link.php';
 require_once __DIR__ . '/src/BEAR/Resource/Adapter/Page.php';

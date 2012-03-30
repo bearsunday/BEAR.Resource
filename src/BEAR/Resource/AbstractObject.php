@@ -38,7 +38,7 @@ abstract class AbstractObject implements Object, \ArrayAccess, \Countable, \Iter
      *
      * @var array
      */
-    public $headers = array();
+    public $headers = [];
 
     /**
      * Resource body
@@ -46,6 +46,13 @@ abstract class AbstractObject implements Object, \ArrayAccess, \Countable, \Iter
      * @var mixed
      */
     public $body;
+
+    /**
+     * Renderer
+     *
+     * @var string
+     */
+    private $renderer = '';
 
     /**
      * Constructor
@@ -60,12 +67,25 @@ abstract class AbstractObject implements Object, \ArrayAccess, \Countable, \Iter
     }
 
     /**
+     * Set renderer
+     *
+     * @param Stringer $stringer
+     *
+     * @Inject(optional = true)
+     */
+    public function setRederer(Renderable $renderer)
+    {
+        $this->renderer = $renderer;
+    }
+
+    /**
      * Return resource object string.
      *
      * @return string
      */
     public function __toString()
     {
-        return get_class($this) . '#' . md5(serialize($this->body));
+        $string = ($this->renderer) ?  $this->renderer->render($this) : get_class($this) . '#' . md5(serialize($this->body));;
+        return $string;
     }
 }

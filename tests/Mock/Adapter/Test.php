@@ -6,13 +6,14 @@ use BEAR\Resource\AbstractObject;
 
 use BEAR\Resource\Object as ResourceObject;
 
-class Nop extends AbstractObject implements ResourceObject
+class Test extends AbstractObject implements ResourceObject
 {
     public function __construct()
     {}
 
     public function onGet($a, $b)
     {
-        return array($a, $b);
+        $this['posts'] = [$a, $b];
+        return $this;
     }
 }

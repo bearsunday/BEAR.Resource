@@ -3,7 +3,8 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Request\Method,
-    BEAR\Resource\Adapter\Nop;
+    BEAR\Resource\Adapter\Nop,
+    BEAR\Resource\Adapter\Test;
 use Ray\Di\Config,
     Ray\Di\Annotation,
     Ray\Di\Definition;
@@ -30,11 +31,11 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function test___toString()
     {
         $this->request->method = 'get';
-        $this->request->ro = new Nop;
-        $this->request->ro->uri = 'nop://self/path/to/resource';
-        $this->request->query = array('name' => 'koriym', 'age' => 25);
-        $actual = (string)$this->request;
-        $this->assertSame('get nop://self/path/to/resource?name=koriym&age=25', $actual);
+        $this->request->ro = new Test;
+        $this->request->ro->uri = 'test://self/path/to/resource';
+        $this->request->query = array('a' => 'koriym', 'b' => 25);
+        $actual = $this->request->toUri();
+        $this->assertSame('get test://self/path/to/resource?a=koriym&b=25', $actual);
     }
 
     public function test__invoke()
@@ -63,13 +64,20 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function test__NoUriGivenSchemeIsObject()
+    public function test__toStringWithRenderableResourceObject()
     {
         $this->request->method = 'get';
-        $this->request->ro = new Nop;
+        $this->request->ro = new Test;
+        $renderer = new TestRenderer;
+        $this->request->ro->setRederer($renderer);
+        $this->request->ro->uri = 'nop://self/path/to/resource';
         $this->request->query = array('a' => 'koriym', 'b' => 25);
-        $actual = (string)$this->request;
-        $expected = 'get object://BEAR/Resource/Adapter/Nop?a=koriym&b=25';
-        $this->assertSame($expected, $actual);
+        $request = $this->request;
+        $actual = $request(array('b' => 30));
+        $expected = array('koriym', 30);
+        $this->assertInstanceOf('\BEAR\Resource\Request', $this->request);
+        $request = $this->request;
+        $result = (string)$request;
+        $this->assertSame('{"posts":["koriym",30]}', $result);
     }
 }

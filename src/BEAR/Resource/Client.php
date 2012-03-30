@@ -280,7 +280,7 @@ class Client implements Resource
      */
     public function __toString()
     {
-        return (string)$this->request;
+        return $this->request->toUri();
     }
 
 }

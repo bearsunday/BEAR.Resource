@@ -38,6 +38,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject'));
         $scheme->scheme('page')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'Page'));
         $scheme->scheme('nop')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Nop);
+        $scheme->scheme('test')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Test);
         $scheme->scheme('prov')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Prov);
         $scheme->scheme('http')->host('*')->toAdapter(new \BEAR\Resource\Adapter\Http);
         $this->factory = new Factory($scheme);
@@ -52,7 +53,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             'name' => 'Ray',
             'age' => 43
         );
-
     }
 
     public function test_New()
@@ -92,21 +92,21 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     {
         $request = $this->resource->get->object($this->nop)->withQuery($this->query)->request();
         $expected = "get nop://self/dummy?id=10&name=Ray&age=43";
-        $this->assertSame($expected, (string)$request);
+        $this->assertSame($expected, $request->toUri());
     }
 
     public function test_post()
     {
         $request = $this->resource->post->object($this->nop)->withQuery($this->query)->request();
         $expected = "post nop://self/dummy?id=10&name=Ray&age=43";
-        $this->assertSame($expected, (string)$request);
+        $this->assertSame($expected, $request->toUri());
     }
 
     public function test_postPoeCsrf()
     {
         $request = $this->resource->post->object($this->nop)->withQuery($this->query)->poe->csrf->request();
         $expected = "post nop://self/dummy?id=10&name=Ray&age=43";
-        $this->assertSame($expected, (string)$request);
+        $this->assertSame($expected, $request->toUri());
     }
 
     /**
@@ -116,49 +116,49 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     {
         $request = $this->resource->post->object($this->nop)->withQuery($this->query)->poe->csrf->invalid_option_cause_exception->request();
         $expected = "post nop://self/dummy?id=10&name=Ray&age=43";
-        $this->assertSame($expected, (string)$request);
+        $this->assertSame($expected, $request->toUri());
     }
 
     public function test_put()
     {
         $request = $this->resource->put->object($this->nop)->withQuery($this->query)->request();
         $expected = "put nop://self/dummy?id=10&name=Ray&age=43";
-        $this->assertSame($expected, (string)$request);
+        $this->assertSame($expected, $request->toUri());
     }
 
     public function test_delete()
     {
         $request = $this->resource->delete->object($this->nop)->withQuery($this->query)->request();
         $expected = "delete nop://self/dummy?id=10&name=Ray&age=43";
-        $this->assertSame($expected, (string)$request);
+        $this->assertSame($expected, $request->toUri());
     }
 
     public function test_linkSelfString()
     {
         $request = $this->resource->get->object($this->nop)->withQuery($this->query)->linkSelf('dummyLink')->request();
         $expected = "get nop://self/dummy?id=10&name=Ray&age=43, link self:dummyLink";
-        $this->assertSame($expected, (string)$request);
+        $this->assertSame($expected, $request->toUri());
     }
 
     public function test_linkNewString()
     {
         $request = $this->resource->get->object($this->nop)->withQuery($this->query)->linkNew('dummyLink')->request();
         $expected = "get nop://self/dummy?id=10&name=Ray&age=43, link new:dummyLink";
-        $this->assertSame($expected, (string)$request);
+        $this->assertSame($expected, $request->toUri());
     }
 
     public function test_linkCrawlString()
     {
         $request = $this->resource->get->object($this->nop)->withQuery($this->query)->linkCrawl('dummyLink')->request();
         $expected = "get nop://self/dummy?id=10&name=Ray&age=43, link crawl:dummyLink";
-        $this->assertSame($expected, (string)$request);
+        $this->assertSame($expected, $request->toUri());
     }
 
     public function test_linkTwo()
     {
         $request = $this->resource->get->object($this->nop)->withQuery($this->query)->linkSelf('dummyLink')->linkSelf('dummyLink2')->request();
         $expected = "get nop://self/dummy?id=10&name=Ray&age=43, link self:dummyLink, link self:dummyLink2";
-        $this->assertSame($expected, (string)$request);
+        $this->assertSame($expected, $request->toUri());
     }
 
 
@@ -173,14 +173,14 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     {
         $request = $this->resource->get->uri('nop://self/dummy')->withQuery($this->query)->request();
         $expected = "get nop://self/dummy?id=10&name=Ray&age=43";
-        $this->assertSame($expected, (string)$request);
+        $this->assertSame($expected, $request->toUri());
     }
 
     public function test_eager()
     {
-        $request = $this->resource->get->uri('nop://self/dummy')->withQuery($this->query);
+        $client = $this->resource->get->uri('nop://self/dummy')->withQuery($this->query);
         $expected = "get nop://self/dummy?id=10&name=Ray&age=43";
-        $this->assertSame($expected, (string)$request);
+        $this->assertSame($expected, (string)$client);
     }
 
 
@@ -269,5 +269,23 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $instance1 = $this->resource->newInstance('nop://self/path/to/dummy');
         $instance2 = $this->resource->newInstance('nop://self/path/to/dummy');
         $this->assertSame($instance1, $instance2);
+    }
+
+    public function test_LazyReqeustResultAsString()
+    {
+        $additionalAnnotations = require __DIR__ . '/scripts/additionalAnnotations.php';
+        $injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition)))), new EmptyModule);
+        $scheme = new SchemeCollection;
+        $testAdapter = new \BEAR\Resource\Adapter\Test;
+        $testAdapter->setRederer(new TestRenderer);
+        $scheme->scheme('test')->host('self')->toAdapter($testAdapter);
+        $this->factory = new Factory($scheme);
+        $factory = new Factory($scheme);
+        $this->signal = require dirname(__DIR__) . '/vendor/Aura/Signal/scripts/instance.php';
+        $this->invoker = new Invoker(new Config(new Annotation(new Definition), $additonalAnnotations), new Linker, $this->signal);
+        $this->resource = new Client($factory, $this->invoker, new Request($this->invoker));
+        $request = $this->resource->get->uri('test://self/path/to/example')->withQuery(['a'=>1, 'b'=>2])->request();
+        $this->assertSame('{"posts":[1,2]}', (string)$request);
+        $this->assertSame(['posts' => [1, 2]], $request()->body);
     }
 }

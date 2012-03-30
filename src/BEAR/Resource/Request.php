@@ -92,6 +92,13 @@ class Request
     private $renderer;
 
     /**
+     * Request Result
+     *
+     * @var Object
+     */
+    private $result;
+
+    /**
      * Constructor
      *
      * @param Invokable $invoker
@@ -101,19 +108,6 @@ class Request
     public function __construct(Invokable $invoker)
     {
         $this->invoker = $invoker;
-    }
-
-    /**
-     * Set renderer
-     *
-     * @param Renderable $renderer
-     *
-     * @return void
-     * @Inject
-     */
-    public function setRenderer(Renderable $renderer)
-    {
-        $this->renderer = $renderer;
     }
 
     /**
@@ -136,17 +130,23 @@ class Request
      */
     public function __toString()
     {
-        if (is_null($this->renderer)) {
-            $string = $this->toRequestString();
-            return $string;
-        }
         try {
-            $data = $this->__invoke();
-            $string = $this->renderer->render($this, $data);
-            return $string;
+            if (is_null($this->result)) {
+                $this->result = $this->__invoke();
+            }
+            if (is_string($this->result)) {
+                return $this->result;
+            }
+            if (method_exists($this->result, '__toString')) {
+                return (string)$this->result;
+            }
+            if ($this->result instanceof Object && is_string($this->result->body)) {
+                return $this->result->body;
+            }
         } catch (Exception $e) {
             return '';
         }
+        return '';
     }
 
     /**
@@ -154,7 +154,7 @@ class Request
      *
      * @return string
      */
-    private function toRequestString()
+    public function toUri()
     {
         $query = http_build_query($this->query, '&');
         if (isset($this->ro->uri) === false) {

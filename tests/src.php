@@ -6,6 +6,7 @@ require_once __DIR__ . '/Mock/Comment.php';
 
 require_once __DIR__ . '/Mock/Adapter/Nop.php';
 require_once __DIR__ . '/Mock/Adapter/Prov.php';
+require_once __DIR__ . '/Mock/Adapter/Test.php';
 
 require_once __DIR__ . '/Mock/ResourceObject/News.php';
 require_once __DIR__ . '/Mock/ResourceObject/User.php';
@@ -23,4 +24,4 @@ require_once __DIR__ . '/Mock/ResourceObject/MethodAnnotation.php';
 require_once __DIR__ . '/Mock/Page/News.php';
 require_once __DIR__ . '/Mock/Interceptor/Log.php';
 require_once __DIR__ . '/Mock/MockModule.php';
-require_once __DIR__ . '/Mock/JsonRenderer.php';
+require_once __DIR__ . '/Mock/TestRenderer.php';
