@@ -7,8 +7,6 @@
  */
 namespace BEAR\Resource;
 
-use Aura\Di\ConfigInterface;
-
 /**
  * Abstract resource object
  *
@@ -48,6 +46,13 @@ abstract class AbstractObject implements Object, \ArrayAccess, \Countable, \Iter
     public $body;
 
     /**
+     * Resource representation
+     *
+     * @var string
+     */
+    public $representation;
+
+    /**
      * Renderer
      *
      * @var string
@@ -79,13 +84,33 @@ abstract class AbstractObject implements Object, \ArrayAccess, \Countable, \Iter
     }
 
     /**
-     * Return resource object string.
+     * Transfer
+     *
+     * Transfer representational state
+     */
+    public function send()
+    {
+        $this->sender->send($this);
+    }
+
+    /**
+     * Return representational string
+     *
+     * Return object hash if representation renderer is not set.
      *
      * @return string
      */
     public function __toString()
     {
-        $string = ($this->renderer) ?  $this->renderer->render($this) : get_class($this) . '#' . md5(serialize($this->body));;
+        if ($this->renderer) {
+            if (is_null($this->representation)) {
+                $this->representation = $this->renderer->render($this);
+            }
+            $string = $this->representation;
+        } else {
+            $string = get_class($this) . '#' . md5(serialize($this->body));
+        }
         return $string;
     }
+
 }

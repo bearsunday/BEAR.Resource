@@ -100,7 +100,6 @@ trait ArrayAccess
         return $this->body->asort();
     }
 
-
     /**
      * Get array iterator
      *
