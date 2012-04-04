@@ -7,21 +7,21 @@
  */
 namespace BEAR\Resource\Adapter\Http;
 
-use Ray\Di\InjectorInterface,
-    BEAR\Resource\Object as ResourceObject,
-    BEAR\Resource\Provider,
-    BEAR\Resource\Exception,
-    BEAR\Resource\Linkable,
-    BEAR\Resource\Request;
+use Ray\Di\InjectorInterface;
+use BEAR\Resource\Object as ResourceObject;
+use BEAR\Resource\Provider;
+use BEAR\Resource\Exception;
+use BEAR\Resource\Linkable;
+use BEAR\Resource\Request;
 
-use Guzzle\Service\Client as GuzzleClient,
-    Guzzle\Common\Cache\DoctrineCacheAdapter,
-    Guzzle\Http\Plugin\CachePlugin,
-    Guzzle\Http\Message\RequestInterface,
-    Guzzle\Http\Message\Response;
+use Guzzle\Service\Client as GuzzleClient;
+use Guzzle\Common\Cache\DoctrineCacheAdapter;
+use Guzzle\Http\Plugin\CachePlugin;
+use Guzzle\Http\Message\RequestInterface;
+use Guzzle\Http\Message\Response;
 
-use Doctrine\Common\Cache\ApcCache,
-    Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\Cache\ApcCache;
+use Doctrine\Common\Cache\ArrayCache;
 
 /**
  * App resource (app:://self/path/to/resource)

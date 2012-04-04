@@ -7,11 +7,11 @@
  */
 namespace BEAR\Resource\Adapter;
 
-use Ray\Di\InjectorInterface,
-    BEAR\Resource\Object as ResourceObject,
-    BEAR\Resource\Provider,
-    BEAR\Resource\Exception,
-    BEAR\Resource\Linkable;
+use Ray\Di\InjectorInterface;
+use BEAR\Resource\Object as ResourceObject;
+use BEAR\Resource\Provider;
+use BEAR\Resource\Exception;
+use BEAR\Resource\Linkable;
 
 /**
  * App resource (app:://self/path/to/resource)

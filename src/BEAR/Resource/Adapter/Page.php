@@ -7,10 +7,10 @@
  */
 namespace BEAR\Resource\Adapter;
 
-use Ray\Di\InjectorInterface,
-    BEAR\Resource\Object as ResourceObject,
-    BEAR\Resource\Provider,
-    BEAR\Resource\Exception;
+use Ray\Di\InjectorInterface;
+use BEAR\Resource\Object as ResourceObject;
+use BEAR\Resource\Provider;
+use BEAR\Resource\Exception;
 
 /**
  * Page resource (page:://self/path/to/resource)

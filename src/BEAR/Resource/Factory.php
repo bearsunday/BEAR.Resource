@@ -7,8 +7,8 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Object as ResourceObject,
-    Ray\Di\InjectorInterface;
+use BEAR\Resource\Object as ResourceObject;
+use Ray\Di\InjectorInterface;
 
 /**
  * Resource object factory.

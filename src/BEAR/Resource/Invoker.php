@@ -10,12 +10,12 @@ namespace BEAR\Resource;
 use Aura\Signal\Exception as AuraException;
 use MyProject\Proxies\__CG__\OtherProject\Proxies\__CG__\stdClass;
 
-use Ray\Aop\Weave,
-    Ray\Aop\ReflectiveMethodInvocation;
-use Aura\Di\ConfigInterface,
-    Ray\Di\ProviderInterface,
-    Ray\Di\Annotation,
-    Ray\Di\Definition;
+use Ray\Aop\Weave;
+use Ray\Aop\ReflectiveMethodInvocation;
+use Aura\Di\ConfigInterface;
+use Ray\Di\ProviderInterface;
+use Ray\Di\Annotation;
+use Ray\Di\Definition;
 use BEAR\Resource\Object as ResourceObject;
 use Aura\Signal\Manager as Signal;
 use ReflectionParameter;

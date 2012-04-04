@@ -7,8 +7,8 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Object as ResourceObject,
-    BEAR\Resource\Adapter\App\Link;
+use BEAR\Resource\Object as ResourceObject;
+use BEAR\Resource\Adapter\App\Link;
 
 /**
  * Resource linker

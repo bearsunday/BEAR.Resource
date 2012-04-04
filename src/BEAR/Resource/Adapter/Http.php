@@ -7,9 +7,9 @@
  */
 namespace BEAR\Resource\Adapter;
 
-use BEAR\Resource\Object as ResourceObject,
-    BEAR\Resource\Provider,
-    BEAR\Resource\Adapter\Http\Guzzle;
+use BEAR\Resource\Object as ResourceObject;
+use BEAR\Resource\Provider;
+use BEAR\Resource\Adapter\Http\Guzzle;
 
 use Guzzle\Service\Client as GuzzleClient;
 
