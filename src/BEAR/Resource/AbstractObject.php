@@ -102,6 +102,9 @@ abstract class AbstractObject implements Object, \ArrayAccess, \Countable, \Iter
      */
     public function __toString()
     {
+        if (! $this->renderer) {
+            return '';
+        }
         if ($this->renderer) {
             if (is_null($this->representation)) {
                 try {
