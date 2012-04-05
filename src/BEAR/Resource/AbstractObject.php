@@ -104,13 +104,17 @@ abstract class AbstractObject implements Object, \ArrayAccess, \Countable, \Iter
     {
         if ($this->renderer) {
             if (is_null($this->representation)) {
-                $this->representation = $this->renderer->render($this);
+                try {
+                    $this->representation = $this->renderer->render($this);
+                } catch (\Exception $e) {
+                    error_log((string)$e);
+                    return '';
+                }
+                $string = $this->representation;
+            } else {
+                $string = get_class($this) . '#' . md5(serialize($this->body));
             }
-            $string = $this->representation;
-        } else {
-            $string = get_class($this) . '#' . md5(serialize($this->body));
+            return $string;
         }
-        return $string;
     }
-
 }
