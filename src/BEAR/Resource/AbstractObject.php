@@ -110,8 +110,8 @@ abstract class AbstractObject implements Object, \ArrayAccess, \Countable, \Iter
                 try {
                     $this->representation = $this->renderer->render($this);
                 } catch (\Exception $e) {
+                    $this->representation = '';
                     error_log((string)$e);
-                    return '';
                 }
                 $string = $this->representation;
             } else {
