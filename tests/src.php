@@ -8,8 +8,10 @@ require_once __DIR__ . '/Mock/Adapter/Nop.php';
 require_once __DIR__ . '/Mock/Adapter/Prov.php';
 require_once __DIR__ . '/Mock/Adapter/Test.php';
 
+require_once __DIR__ . '/Mock/ResourceObject/Index.php';
 require_once __DIR__ . '/Mock/ResourceObject/News.php';
 require_once __DIR__ . '/Mock/ResourceObject/User.php';
+require_once __DIR__ . '/Mock/ResourceObject/User/Index.php';
 require_once __DIR__ . '/Mock/ResourceObject/Link.php';
 require_once __DIR__ . '/Mock/ResourceObject/Blog.php';
 require_once __DIR__ . '/Mock/ResourceObject/User/Entry.php';

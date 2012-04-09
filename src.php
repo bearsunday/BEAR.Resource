@@ -48,6 +48,7 @@ require_once __DIR__ . '/src/BEAR/Resource/Exception/InvalidLink.php';
 require_once __DIR__ . '/src/BEAR/Resource/Exception/InvalidUri.php';
 require_once __DIR__ . '/src/BEAR/Resource/Exception/BadRequest.php';
 require_once __DIR__ . '/src/BEAR/Resource/Exception/MethodNotAllowed.php';
+require_once __DIR__ . '/src/BEAR/Resource/Exception/ResourceNotFound.php';
 
 // signal handlers
 require_once __DIR__ . '/src/BEAR/Resource/SignalHandler/Handle.php';

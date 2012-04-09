@@ -288,4 +288,16 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('{"posts":[1,2]}', (string)$request);
         $this->assertSame(['posts' => [1, 2]], $request()->body);
     }
+
+    public function test_IndexIsDefaultIfUriEndsWithSlash()
+    {
+        $user = $this->resource->newInstance('app://self/user/');
+        $this->assertSame($user->class, 'testworld\ResourceObject\User\Index');
+    }
+
+    public function test_IndexIsDefaultIfUriEndsWithSlashInRoot()
+    {
+        $user = $this->resource->newInstance('app://self/');
+        $this->assertSame($user->class, 'testworld\ResourceObject\Index');
+    }
 }

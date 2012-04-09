@@ -11,9 +11,9 @@ use Aura\Autoload\Exception\NotReadable;
 use BEAR\Resource\Object as ResourceObject;
 use BEAR\Resource\Adapter\App\Link as LikType;
 use BEAR\Resource\Exception;
-use BEAR\Framework\Exception\ResourceNotFound;
+use BEAR\Resource\Exception\ResourceNotFound;
 use Guzzle\Common\Cache\AbstractCacheAdapter as Cache;
-
+use ReflectionException;
 
 /**
  * Resource client
@@ -97,6 +97,9 @@ class Client implements Resource
      */
     public function newInstance($uri)
     {
+        if (substr($uri, -1) === '/') {
+            $uri .= 'index';
+        }
         if ($this->cache instanceof Cache) {
             $key = __METHOD__ . $uri;
             $cached = $this->cache->fetch($key);
@@ -108,8 +111,8 @@ class Client implements Resource
             $instance = $this->factory->newInstance($uri);
         } catch (NotReadable $e) {
             throw new ResourceNotFound($uri, 400, $e);
-        } catch (Exception $e) {
-            throw $e;
+        } catch (ReflectionException $e) {
+            throw new ResourceNotFound($uri, 400, $e);
         }
         if ($this->cache instanceof Cache) {
             $this->cache->save($key, $instance);
@@ -236,9 +239,9 @@ class Client implements Resource
     public function attachParamProvider($signal, Callable $argProvider)
     {
         $this->invoker->getSignal()->handler(
-                '\BEAR\Resource\Invoker',
-                \BEAR\Resource\Invoker::SIGNAL_PARAM . $signal,
-                $argProvider
+            '\BEAR\Resource\Invoker',
+            \BEAR\Resource\Invoker::SIGNAL_PARAM . $signal,
+            $argProvider
         );
     }
 
