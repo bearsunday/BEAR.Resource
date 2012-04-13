@@ -21,7 +21,7 @@ use BEAR\Resource\Linkable;
  *
  * @Scope("prototype")
  */
-class App implements ResourceObject, Provider
+class App implements ResourceObject, Provider, Adapter
 {
     /**
      * Application dependency injector

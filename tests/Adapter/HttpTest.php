@@ -20,7 +20,7 @@ use Guzzle\Service\Client as GuzzleClient;
 /**
  * Test class for BEAR.Resource.
  */
-class HttpAdapterTest extends \PHPUnit_Framework_TestCase
+class HttpTest extends \PHPUnit_Framework_TestCase
 {
     protected $skelton;
 
@@ -62,15 +62,6 @@ class HttpAdapterTest extends \PHPUnit_Framework_TestCase
         $actual = (string)($ro->body->channel->title[0]);
         $expected = 'Top Stories - Google News';
         $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @expectedException Guzzle\Http\Message\BadResponseException
-     * @covers BEAR\Resource\Adapter\Http\Guzzle::onPut
-     */
-    public function testPut()
-    {
-        $ro = $this->httpAdapter->onPut();
     }
 
     /**

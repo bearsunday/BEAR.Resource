@@ -22,7 +22,7 @@ use Guzzle\Service\Client as GuzzleClient;
  *
  * @Scope("singleton")
  */
-class Http implements ResourceObject, Provider
+class Http implements ResourceObject, Provider, Adapter
 {
     /**
      * Constructor

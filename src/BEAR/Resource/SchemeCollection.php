@@ -7,6 +7,8 @@
  */
 namespace BEAR\Resource;
 
+use BEAR\Resource\Adapter\Adapter;
+
 /**
  * Resource scheme collection
  *
@@ -17,6 +19,11 @@ class SchemeCollection implements \ArrayAccess
 {
     use ArrayAccess;
 
+    /**
+     * SchemeCollection body
+     *
+     * @var array
+     */
     private $body;
 
     /**
@@ -54,7 +61,7 @@ class SchemeCollection implements \ArrayAccess
     /**
      * Set host
      *
-     * @param string $scheme
+     * @param string $host
      */
     public function host($host)
     {
@@ -65,9 +72,9 @@ class SchemeCollection implements \ArrayAccess
     /**
      * Set resource adapter
      *
-     * @param string $scheme
+     * @param Adapter $adapter
      */
-    public function toAdapter($adapter)
+    public function toAdapter(Adapter $adapter)
     {
         $this->body[$this->scheme][$this->host] = $adapter;
         $this->scheme = $this->host = null;
