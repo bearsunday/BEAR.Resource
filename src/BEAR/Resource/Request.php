@@ -120,7 +120,8 @@ class Request
         if (!is_null($query)) {
             $this->query = array_merge($this->query, $query);
         }
-        return $this->invoker->invoke($this);
+        $result = $this->invoker->invoke($this);
+        return $result;
     }
 
     /**

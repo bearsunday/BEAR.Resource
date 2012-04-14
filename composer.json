@@ -8,7 +8,7 @@
     "require": {
         "aura/di": "dev-master",
         "aura/signal": "dev-master",
-        "doctrine/common": "2.2-dev",
+        "doctrine/common": ">=2.2.0",
         "guzzle/guzzle": "dev-master",
         "ray/aop": "dev-master",
         "ray/di": "dev-master"

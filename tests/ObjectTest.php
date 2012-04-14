@@ -108,7 +108,6 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
     public function atest_toString()
     {
         $this->resource->headers['X-TEST'] = __FUNCTION__;
-        v($this->resource);
         $str = (string)$this->resource;
         $this->assertTrue(is_string($str));
     }

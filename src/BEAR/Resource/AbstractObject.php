@@ -74,7 +74,7 @@ abstract class AbstractObject implements Object, \ArrayAccess, \Countable, \Iter
     /**
      * Set renderer
      *
-     * @param Stringer $stringer
+     * @param Renderable $renderer
      *
      * @Inject(optional = true)
      */
