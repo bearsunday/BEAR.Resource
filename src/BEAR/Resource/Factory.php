@@ -9,6 +9,8 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Object as ResourceObject;
 use Ray\Di\InjectorInterface;
+use Ray\Di\Di\Inject;
+use Ray\Di\Di\Named;
 
 /**
  * Resource object factory.

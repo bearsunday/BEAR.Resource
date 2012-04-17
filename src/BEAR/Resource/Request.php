@@ -8,6 +8,8 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Render;
+use Ray\Di\Di\Inject;
+use Ray\Di\Di\Named;
 use Exception;
 
 /**

@@ -7,6 +7,9 @@
  */
 namespace BEAR\Resource;
 
+use Ray\Di\Di\Inject;
+use Ray\Di\Di\Named;
+
 /**
  * Abstract resource object
  *

@@ -14,6 +14,8 @@ use BEAR\Resource\Exception;
 use BEAR\Resource\Exception\ResourceNotFound;
 use Guzzle\Common\Cache\AbstractCacheAdapter as Cache;
 use ReflectionException;
+use Ray\Di\Di\Inject;
+use Ray\Di\Di\Named;
 
 /**
  * Resource client
