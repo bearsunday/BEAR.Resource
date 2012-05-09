@@ -166,7 +166,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     {
         $actual = $this->resource->post->object($this->user)->withQuery($this->query)->eager->request();
         $expected = "post user[10 Ray 43]";
-        $this->assertSame($expected, $actual);
+        $this->assertSame($expected, $actual->body);
     }
 
     public function test_uri()
@@ -188,7 +188,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     {
         $actual = $this->resource->post->object($this->user)->withQuery(array('id' => 1))->eager->request();
         $expected = "post user[1 default_name 99]";
-        $this->assertSame($expected, $actual);
+        $this->assertSame($expected, $actual->body);
     }
 
     public function testP()
@@ -196,7 +196,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $ro = new Mock\Link;
         $actual = $this->resource->get->object($ro)->withQuery(array('id' => 1))->linkSelf('View')->eager->request();
         $expected = '<html>bear1</html>';
-        $this->assertSame($expected, $actual);
+        $this->assertSame($expected, $actual->body);
     }
 
     /**
@@ -241,7 +241,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         };
         $this->resource->attachParamProvider('login_id', $signalProvider);
         $actual = $this->resource->delete->object($this->user)->withQuery([])->eager->request();
-        $this->assertSame($actual, "1 deleted");
+        $this->assertSame("1 deleted", $actual->body);
     }
 
     public function testParameterProvidedBySignalWithInvokableObject()
@@ -259,7 +259,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->resource->attachParamProvider('Provides', new Provides);
         $this->resource->attachParamProvider('login_id', $signalProvider);
         $actual = $this->resource->delete->object($this->user)->withQuery([])->eager->request();
-        $this->assertSame($actual, "1 deleted");
+        $this->assertSame("1 deleted", $actual->body);
     }
 
     public function test_setCacheAdapter()

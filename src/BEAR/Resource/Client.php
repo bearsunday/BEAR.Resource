@@ -225,11 +225,16 @@ class Client implements Resource
         }
         if ($this->request->in === 'eager') {
             if ($this->requests->count() === 0) {
-                return $this->invoker->invoke($this->request);
+                $result = $this->invoker->invoke($this->request);
             } else {
                 $this->requests->attach($this->request);
-                return $this->invoker->invokeSync($this->requests);
+                $result = $this->invoker->invokeSync($this->requests);
             }
+            if (!($result instanceof Object) && isset($this->request->ro)) {
+            	$this->request->ro->body = $result;
+            	$result = $this->request->ro;
+            }
+            return $result;
         }
         return $this->request;
     }

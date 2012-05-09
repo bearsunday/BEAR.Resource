@@ -153,7 +153,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     {
         $actual = $this->resource->post->object($this->user)->withQuery($this->query)->eager->request();
         $expected = "post user[10 Ray 43]";
-        $this->assertSame($expected, $actual);
+        $this->assertSame($expected, $actual->body);
     }
 
     public function test_uri()
@@ -175,7 +175,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     {
         $actual = $this->resource->post->object($this->user)->withQuery(array('id' => 1))->eager->request();
         $expected = "post user[1 default_name 99]";
-        $this->assertSame($expected, $actual);
+        $this->assertSame($expected, $actual->body);
     }
 
     public function testP()
@@ -183,9 +183,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $ro = new Mock\Link;
         $actual = $this->resource->get->object($ro)->withQuery(array('id' => 1))->linkSelf('View')->eager->request();
         $expected = '<html>bear1</html>';
-        $this->assertSame($expected, $actual);
-        //         $expected = "post user[1 default_name 99]";
-//         $this->assertSame($expected, $actual);
+        $this->assertSame($expected, $actual->body);
     }
 
 }

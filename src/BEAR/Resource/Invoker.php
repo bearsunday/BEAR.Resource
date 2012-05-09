@@ -7,6 +7,8 @@
  */
 namespace BEAR\Resource;
 
+use BEAR\Resource\Object;
+
 use Aura\Signal\Exception as AuraException;
 use MyProject\Proxies\__CG__\OtherProject\Proxies\__CG__\stdClass;
 

@@ -55,7 +55,7 @@ class RestBucksTest extends \PHPUnit_Framework_TestCase
 
     public function testOption()
     {
-        $options = $this->resource->options->uri('app://self/RestBucks/Menu')->eager->request();
+        $options = $this->resource->options->uri('app://self/RestBucks/Menu')->eager->request()->body;
         $allows = $options['allows'];
         asort($options['allows']);
         $expected = array('Get');
