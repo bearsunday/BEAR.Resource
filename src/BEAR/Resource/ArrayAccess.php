@@ -86,7 +86,7 @@ trait ArrayAccess
      */
     public function ksort()
     {
-        return $this->body->ksort();
+        return ksort($this->body);
     }
 
     /**
@@ -97,7 +97,7 @@ trait ArrayAccess
      */
     public function asort()
     {
-        return $this->body->asort();
+        return asort($this->body);
     }
 
     /**
