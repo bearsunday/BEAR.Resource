@@ -125,7 +125,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $renderer = new TestRenderer;
         $this->resource->setRederer($renderer);
         $result = (string)($this->resource);
-        $this->assertSame('{"0":"entry1","1":"entry2","2":"entry3"}', $result);
+        $this->assertSame('["entry1","entry2","entry3"]', $result);
     }
 
     public function test_setRendererWithoutRenderer()

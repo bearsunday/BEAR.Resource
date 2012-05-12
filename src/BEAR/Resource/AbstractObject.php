@@ -53,7 +53,7 @@ abstract class AbstractObject implements Object, \ArrayAccess, \Countable, \Iter
      *
      * @var string
      */
-    public $representation;
+    public $view;
 
     /**
      * Renderer
@@ -108,14 +108,14 @@ abstract class AbstractObject implements Object, \ArrayAccess, \Countable, \Iter
             return '';
         }
         if ($this->renderer) {
-            if (is_null($this->representation)) {
+            if (is_null($this->view)) {
                 try {
-                    $this->representation = $this->renderer->render($this);
+                    $this->view = $this->renderer->render($this);
                 } catch (\Exception $e) {
-                    $this->representation = '';
+                    $this->view = '';
                     error_log((string)$e);
                 }
-                $string = $this->representation;
+                $string = $this->view;
             } else {
                 $string = get_class($this) . '#' . md5(serialize($this->body));
             }
