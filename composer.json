@@ -9,7 +9,7 @@
         "aura/di": "dev-master",
         "aura/signal": "dev-master",
         "doctrine/common": "2.2.*",
-        "guzzle/guzzle": "2.2.*",
+        "guzzle/guzzle": "2.5.*",
         "ray/aop": "dev-master",
         "ray/di": "dev-master"
     },
