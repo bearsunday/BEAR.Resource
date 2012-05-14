@@ -42,7 +42,8 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     public function testGetHeader()
     {
         $ro = $this->httpAdapter->onGet();
-        $this->assertSame($ro->headers['Content-Type'], 'application/xml; charset=UTF-8');
+//         var_dump($ro->headers['Content-Type']);
+        $this->assertSame($ro->headers['Content-Type'][0], 'application/xml; charset=UTF-8');
     }
 
     public function testGetHeaderRepeatWithCache()
@@ -50,7 +51,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         foreach(range(1,10) as $i) {
             $ro = $this->httpAdapter->onGet();
         }
-        $this->assertSame($ro->headers['Content-Type'], 'application/xml; charset=UTF-8');
+        $this->assertSame($ro->headers['Content-Type'][0], 'application/xml; charset=UTF-8');
     }
 
     /**
@@ -70,12 +71,12 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     {
         $ro = $this->httpAdapter->onHead();
         $expected = 'application/xml; charset=UTF-8';
-        $this->assertSame($expected, $ro->headers['Content-Type']);
+        $this->assertSame($expected, $ro->headers['Content-Type'][0]);
     }
 
     /**
      *
-     * @expectedException Guzzle\Http\Message\BadResponseException
+     * @expectedException Guzzle\Http\Exception\ClientErrorResponseException
      */
     public function test404()
     {
