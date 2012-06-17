@@ -19,7 +19,7 @@ use XHProfRuns_Default;
  *
  * @Scope("singleton")
  */
-class DevInvoker extends Invoker implements Invokable
+class DevInvoker extends Invoker implements InvokerInterface
 {
     const HEADER_INTERCEPTORS = 'x-interceptors';
     const HEADER_EXECUTION_TIME = 'x-execution-time';
@@ -30,13 +30,12 @@ class DevInvoker extends Invoker implements Invokable
 
     /**
      * (non-PHPdoc)
-     * @see BEAR\Resource.Invokable::invoke()
+     * @see BEAR\Resource.InvokerInterface::invoke()
      * @throws Exception\InvalidRequest
      */
     public function invoke(Request $request)
     {
         $method = 'on' . ucfirst($request->method);
-//         $method = $this->getMethodByAnnotation($request);
         $ro = ($request->ro instanceof Weave) ? $request->ro->___getObject() : $request->ro;
         // before process
         if ($request->ro instanceof Weave) {

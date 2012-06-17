@@ -244,7 +244,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertSame("1 deleted", $actual->body);
     }
 
-    public function testParameterProvidedBySignalWithInvokableObject()
+    public function testParameterProvidedBySignalWithInvokerInterfaceObject()
     {
         $signalProvider = function (
         $return,

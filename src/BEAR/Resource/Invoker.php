@@ -32,7 +32,7 @@ use ReflectionParameter;
  *
  * @Scope("singleton")
  */
-class Invoker implements Invokable
+class Invoker implements InvokerInterface
 {
     /**
      * Config
@@ -75,7 +75,7 @@ class Invoker implements Invokable
      *
      * @Inject
      */
-    public function __construct(ConfigInterface $config, Linkable $linker, Signal $signal)
+    public function __construct(ConfigInterface $config, LinkerInterface $linker, Signal $signal)
     {
         $this->config = $config;
         $this->linker = $linker;
@@ -94,7 +94,7 @@ class Invoker implements Invokable
 
     /**
      * (non-PHPdoc)
-     * @see BEAR\Resource.Invokable::invoke()
+     * @see BEAR\Resource.InvokerInterface::invoke()
      * @throws Exception\InvalidRequest
      */
     public function invoke(Request $request)
@@ -133,7 +133,7 @@ class Invoker implements Invokable
 
     /**
      * (non-PHPdoc)
-     * @see BEAR\Resource.Invokable::invokeTraversal()
+     * @see BEAR\Resource.InvokerInterface::invokeTraversal()
      */
     public function invokeTraversal(\Traversable $requests)
     {
@@ -268,7 +268,7 @@ PARAMETER_NOT_PROVIDED:
 
     /**
      * (non-PHPdoc)
-     * @see BEAR\Resource.Invokable::invokeSync()
+     * @see BEAR\Resource.InvokerInterface::invokeSync()
      */
     public function invokeSync(\SplObjectStorage $requests)
     {

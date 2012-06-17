@@ -18,11 +18,11 @@ use BEAR\Resource\Adapter\App\Link;
  *
  * @Scope("singleton")
  */
-class Linker implements Linkable
+class Linker implements LinkerInterface
 {
     /**
      * (non-PHPdoc)
-     * @see BEAR\Resource.Linkable::invoke()
+     * @see BEAR\Resource.LinkerInterface::invoke()
      * @throws Exception
      */
     public function invoke(ResourceObject $ro, array $links, $sourceValue)

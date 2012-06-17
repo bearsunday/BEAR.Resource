@@ -70,12 +70,12 @@ class Client implements Resource
      * Constructor
      *
      * @param Factory $factory resource object factory.
-     * @param Invokable  $invoker resource request invoker
+     * @param InvokerInterface  $invoker resource request invoker
      * @param Request $request resource request
      *
      * @Inject
      */
-    public function __construct(Factory $factory, Invokable $invoker, Request $request)
+    public function __construct(Factory $factory, InvokerInterface $invoker, Request $request)
     {
         $this->factory = $factory;
         $this->invoker = $invoker;

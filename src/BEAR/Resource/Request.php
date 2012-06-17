@@ -103,17 +103,17 @@ class Request
     /**
      * Constructor
      *
-     * @param Invokable $invoker
+     * @param InvokerInterface $invoker
      *
      * @Inject
      */
-    public function __construct(Invokable $invoker)
+    public function __construct(InvokerInterface $invoker)
     {
         $this->invoker = $invoker;
     }
 
     /**
-     * Invokable resource request
+     * InvokerInterface resource request
      *
      * @param array $query
      */

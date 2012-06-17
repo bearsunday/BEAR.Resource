@@ -76,11 +76,11 @@ abstract class AbstractObject implements Object, \ArrayAccess, \Countable, \Iter
     /**
      * Set renderer
      *
-     * @param Renderable $renderer
+     * @param RenderInterface $renderer
      *
      * @Inject(optional = true)
      */
-    public function setRederer(Renderable $renderer)
+    public function setRederer(RenderInterface $renderer)
     {
         $this->renderer = $renderer;
     }

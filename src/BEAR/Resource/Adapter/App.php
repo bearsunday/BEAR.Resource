@@ -9,7 +9,7 @@ namespace BEAR\Resource\Adapter;
 
 use BEAR\Resource\Object as ResourceObject;
 use BEAR\Resource\Provider;
-use BEAR\Resource\Linkable;
+use BEAR\Resource\LinkerInterface;
 use BEAR\Resource\Exception\ResourceNotFound;
 use Ray\Di\InjectorInterface;
 use Ray\Di\Di\Inject;
