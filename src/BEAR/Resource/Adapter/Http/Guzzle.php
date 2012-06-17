@@ -11,7 +11,7 @@ use Ray\Di\InjectorInterface;
 use BEAR\Resource\Object as ResourceObject;
 use BEAR\Resource\Provider;
 use BEAR\Resource\Exception;
-use BEAR\Resource\Linkable;
+use BEAR\Resource\LinkerInterface;
 use BEAR\Resource\Request;
 
 use Guzzle\Service\Client as GuzzleClient;

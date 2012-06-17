@@ -9,11 +9,13 @@ namespace BEAR\Resource\Adapter;
 
 use BEAR\Resource\Object as ResourceObject;
 use BEAR\Resource\Provider;
-use BEAR\Resource\Exception;
-use BEAR\Resource\Linkable;
+use BEAR\Resource\LinkerInterface;
+use BEAR\Resource\Exception\ResourceNotFound;
 use Ray\Di\InjectorInterface;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
+use RuntimeException;
+use Exception;
 
 /**
  * App resource (app:://self/path/to/resource)
@@ -60,6 +62,9 @@ class App implements ResourceObject, Provider, Adapter
         $namespace,
         $path
     ){
+        if (! is_string($namespace)) {
+            throw new RuntimeException('namespace not string');
+        }
         $this->injector = $injector;
         $this->namespace = $namespace;
         $this->path = $path;
@@ -80,7 +85,11 @@ class App implements ResourceObject, Provider, Adapter
         $path = str_replace(' ', '\\', $path);
         $host = $parsedUrl['host'];
         $className = "{$this->namespace}\\{$this->path}{$path}";
-        $instance = $this->injector->getInstance($className);
+        try {
+            $instance = $this->injector->getInstance($className);
+        } catch (Exception $e) {
+            throw new ResourceNotFound($uri, 400, $e);
+        }
         return $instance;
     }
 }

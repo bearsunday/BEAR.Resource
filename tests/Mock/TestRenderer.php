@@ -2,7 +2,7 @@
 
 namespace BEAR\Resource;
 
-class TestRenderer implements Renderable
+class TestRenderer implements RenderInterface
 {
     public function render(Object $resourceObject)
     {

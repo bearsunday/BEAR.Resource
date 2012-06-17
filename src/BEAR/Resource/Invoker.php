@@ -9,12 +9,12 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Object;
 
-use Aura\Signal\Exception as AuraException;
-use MyProject\Proxies\__CG__\OtherProject\Proxies\__CG__\stdClass;
 
 use Aura\Di\ConfigInterface;
 use Aura\Signal\Manager as Signal;
+use Aura\Signal\Exception as AuraException;
 use BEAR\Resource\Object as ResourceObject;
+use BEAR\Resource\Annotation\ParamSignal;
 use Ray\Aop\Weave;
 use Ray\Aop\ReflectiveMethodInvocation;
 use Ray\Di\ProviderInterface;
@@ -25,19 +25,6 @@ use Ray\Di\Di\Named;
 use ReflectionParameter;
 
 /**
- * conventional class for refference value.
- *
- * @see      http://stackoverflow.com/questions/295016/is-it-possible-to-pass-parameters-by-reference-using-call-user-func-array
- * @see      http://d.hatena.ne.jp/sotarok/20090826/1251312215
- * @internal only for Invoker
- */
-final class Result
-{
-    public $value;
-    public $args;
-}
-
-/**
  * Resource request invoker
  *
  * @package BEAR.Resource
@@ -45,7 +32,7 @@ final class Result
  *
  * @Scope("singleton")
  */
-class Invoker implements Invokable
+class Invoker implements InvokerInterface
 {
     /**
      * Config
@@ -88,7 +75,7 @@ class Invoker implements Invokable
      *
      * @Inject
      */
-    public function __construct(ConfigInterface $config, Linkable $linker, Signal $signal)
+    public function __construct(ConfigInterface $config, LinkerInterface $linker, Signal $signal)
     {
         $this->config = $config;
         $this->linker = $linker;
@@ -107,13 +94,12 @@ class Invoker implements Invokable
 
     /**
      * (non-PHPdoc)
-     * @see BEAR\Resource.Invokable::invoke()
+     * @see BEAR\Resource.InvokerInterface::invoke()
      * @throws Exception\InvalidRequest
      */
     public function invoke(Request $request)
     {
-        //$method = 'on' . $request->method;
-        $method = $this->getMethodByAnnotation($request);
+        $method = 'on' . ucfirst($request->method);
         if ($request->ro instanceof Weave) {
             $weave = $request->ro;
             $result = $weave(array($this, 'getParams'), $method, $request->query);
@@ -146,31 +132,8 @@ class Invoker implements Invokable
     }
 
     /**
-     * @todo not to get method name here, preare istead.
-     *
-     * @param Request $request
-     *
-     * @return string
-     */
-    private function getMethodByAnnotation(Request $request)
-    {
-        /** @todo change magic number 2 to 'definition' */
-        $definition = $this->config->fetch(get_class($request->ro))[2];
-        $requestMethod = ucfirst($request->method);
-        // annotation based request method (@Get) > name based request method (onGet)
-        $hasAnnotationMethod = isset($definition[Definition::BY_NAME]) && isset($definition[Definition::BY_NAME][$requestMethod][0]);
-        if ($hasAnnotationMethod === true) {
-            $method = $definition[Definition::BY_NAME][$requestMethod][0];
-            $methodAnnotation = $definition[Definition::BY_METHOD][$method][$requestMethod][0];
-        } else {
-            $method = 'on' . $requestMethod;
-        }
-        return $method;
-    }
-
-    /**
      * (non-PHPdoc)
-     * @see BEAR\Resource.Invokable::invokeTraversal()
+     * @see BEAR\Resource.InvokerInterface::invokeTraversal()
      */
     public function invokeTraversal(\Traversable $requests)
     {
@@ -242,7 +205,7 @@ class Invoker implements Invokable
         $signalAannotations = isset($userAnnotation['ParamSignal']) ? $userAnnotation['ParamSignal'] : [];
         $signalIds = ['Provides'];
         foreach ($signalAannotations as $annotation) {
-            if ($annotation instanceof \BEAR\Resource\Annotation\ParamSignal) {
+            if ($annotation instanceof ParamSignal) {
                 $signalIds[] = $annotation->value;
             }
         }
@@ -251,10 +214,14 @@ class Invoker implements Invokable
             $results = $this->signal->send(
                     $this,
                     self::SIGNAL_PARAM . $signalId,
-                    $return, $parameter, new ReflectiveMethodInvocation([$object, $method], $args, $signalAannotations), $definition
+                    $return,
+                    $parameter,
+                    new ReflectiveMethodInvocation([$object, $method], $args, $signalAannotations),
+                    $definition
             );
         }
         $isStoped = $results->isStopped();
+//             var_dump($signalAannotations);
         $result = $results->getLast();
         if ($isStoped === false || is_null($result)) {
             goto PARAMETER_NOT_PROVIDED;
@@ -273,7 +240,7 @@ PARAMETER_NOT_PROVIDED:
      *
      * @return array
      */
-    private function getOptions(ResourceObject $ro)
+    protected function getOptions(ResourceObject $ro)
     {
         $ref = new \ReflectionClass($ro);
         $methods = $ref->getMethods();
@@ -301,7 +268,7 @@ PARAMETER_NOT_PROVIDED:
 
     /**
      * (non-PHPdoc)
-     * @see BEAR\Resource.Invokable::invokeSync()
+     * @see BEAR\Resource.InvokerInterface::invokeSync()
      */
     public function invokeSync(\SplObjectStorage $requests)
     {

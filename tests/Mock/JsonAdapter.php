@@ -8,7 +8,7 @@ namespace BEAR\Resource\Mock;
  * @subpackage View
  * @author     Akihito Koriyama <akihito.koriyama@gmail.com>
  */
-class JsonAdapter implements Renderable
+class JsonAdapter implements RenderInterface
 {
     /**
      * Constructor

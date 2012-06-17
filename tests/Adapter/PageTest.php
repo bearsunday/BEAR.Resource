@@ -79,21 +79,21 @@ class PageTest extends \PHPUnit_Framework_TestCase
     {
         $request = $this->resource->get->object($this->nop)->withQuery($this->query)->request();
         $expected = "get nop://self/dummy?id=10&name=Ray&age=43";
-        $this->assertSame($expected, $request->toUri());
+        $this->assertSame($expected, $request->toUriWithMethod());
     }
 
     public function test_post()
     {
         $request = $this->resource->post->object($this->nop)->withQuery($this->query)->request();
         $expected = "post nop://self/dummy?id=10&name=Ray&age=43";
-        $this->assertSame($expected, $request->toUri());
+        $this->assertSame($expected, $request->toUriWithMethod());
     }
 
     public function test_postPoeCsrf()
     {
         $request = $this->resource->post->object($this->nop)->withQuery($this->query)->poe->csrf->request();
         $expected = "post nop://self/dummy?id=10&name=Ray&age=43";
-        $this->assertSame($expected, $request->toUri());
+        $this->assertSame($expected, $request->toUriWithMethod());
     }
 
     /**
@@ -103,49 +103,49 @@ class PageTest extends \PHPUnit_Framework_TestCase
     {
         $request = $this->resource->post->object($this->nop)->withQuery($this->query)->poe->csrf->invalid_option_cause_exception->request();
         $expected = "post nop://self/dummy?id=10&name=Ray&age=43";
-        $this->assertSame($expected, $request->toUri());
+        $this->assertSame($expected, $request->toUriWithMethod());
     }
 
     public function test_put()
     {
         $request = $this->resource->put->object($this->nop)->withQuery($this->query)->request();
         $expected = "put nop://self/dummy?id=10&name=Ray&age=43";
-        $this->assertSame($expected, $request->toUri());
+        $this->assertSame($expected, $request->toUriWithMethod());
     }
 
     public function test_delete()
     {
         $request = $this->resource->delete->object($this->nop)->withQuery($this->query)->request();
         $expected = "delete nop://self/dummy?id=10&name=Ray&age=43";
-        $this->assertSame($expected, $request->toUri());
+        $this->assertSame($expected, $request->toUriWithMethod());
     }
 
     public function test_linkSelfString()
     {
         $request = $this->resource->get->object($this->nop)->withQuery($this->query)->linkSelf('dummyLink')->request();
         $expected = "get nop://self/dummy?id=10&name=Ray&age=43, link self:dummyLink";
-        $this->assertSame($expected, $request->toUri());
+        $this->assertSame($expected, $request->toUriWithMethod());
     }
 
     public function test_linkNewString()
     {
         $request = $this->resource->get->object($this->nop)->withQuery($this->query)->linkNew('dummyLink')->request();
         $expected = "get nop://self/dummy?id=10&name=Ray&age=43, link new:dummyLink";
-        $this->assertSame($expected, $request->toUri());
+        $this->assertSame($expected, $request->toUriWithMethod());
     }
 
     public function test_linkCrawlString()
     {
         $request = $this->resource->get->object($this->nop)->withQuery($this->query)->linkCrawl('dummyLink')->request();
         $expected = "get nop://self/dummy?id=10&name=Ray&age=43, link crawl:dummyLink";
-        $this->assertSame($expected, $request->toUri());
+        $this->assertSame($expected, $request->toUriWithMethod());
     }
 
     public function test_linkTwo()
     {
         $request = $this->resource->get->object($this->nop)->withQuery($this->query)->linkSelf('dummyLink')->linkSelf('dummyLink2')->request();
         $expected = "get nop://self/dummy?id=10&name=Ray&age=43, link self:dummyLink, link self:dummyLink2";
-        $this->assertSame($expected, $request->toUri());
+        $this->assertSame($expected, $request->toUriWithMethod());
     }
 
 
@@ -160,13 +160,13 @@ class PageTest extends \PHPUnit_Framework_TestCase
     {
         $request = $this->resource->get->uri('nop://self/dummy')->withQuery($this->query)->request();
         $expected = "get nop://self/dummy?id=10&name=Ray&age=43";
-        $this->assertSame($expected, $request->toUri());
+        $this->assertSame($expected, $request->toUriWithMethod());
     }
 
     public function test_clientString()
     {
         $client = $this->resource->get->uri('nop://self/dummy')->withQuery($this->query);
-        $expected = "get nop://self/dummy?id=10&name=Ray&age=43";
+        $expected = "nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, (string)$client);
     }
 

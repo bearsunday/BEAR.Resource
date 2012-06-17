@@ -29,8 +29,6 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        restore_exception_handler();
-        restore_error_handler();
         $additionalAnnotations = require __DIR__ . '/scripts/additionalAnnotations.php';
         $signalProvider = function (
                 $return,
@@ -68,14 +66,14 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->request->query = array('id' => 1);
     }
 
-    public function test_Invokable()
+    public function test_Invoke()
     {
         $actual = $this->invoker->invoke($this->request);
         $expected = array('id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12);
         $this->assertSame($actual, $expected);
     }
 
-    public function test_InvokableWithNoPrams()
+    public function test_InvokerInterfaceWithNoPrams()
     {
         $this->request->query = array();
         $this->request->method = 'delete';
@@ -84,7 +82,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($actual, $expected);
     }
 
-    public function test_InvokableMissingParam()
+    public function test_InvokerInterfaceMissingParam()
     {
         $this->request->query = [];
         $actual = $this->invoker->invoke($this->request);
@@ -92,7 +90,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($actual, $expected);
     }
 
-    public function test_InvokableDefaultParam()
+    public function test_InvokerInterfaceDefaultParam()
     {
         $this->request->query = array();
         $this->request->method = 'post';
@@ -105,7 +103,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException BEAR\Resource\Exception\InvalidParameter
      */
-    public function test_InvokableDefaultParamWithNoProvider()
+    public function test_InvokerInterfaceDefaultParamWithNoProvider()
     {
         $this->request->query = array();
         $this->request->method = 'put';
@@ -116,7 +114,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException BEAR\Resource\Exception\InvalidParameter
      */
-    public function test_InvokableWithNoProvider()
+    public function test_InvokerInterfaceWithNoProvider()
     {
         $this->request->ro = new Mock\Blog;
         $this->request->query = array();
@@ -125,7 +123,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     }
 
     // deprecated for @Provides any support.
-    //     public function test_InvokableWithUnspecificProvider()
+    //     public function test_InvokerInterfaceWithUnspecificProvider()
     //     {
     //         $this->request->ro = new Mock\Entry;
     //         $this->request->query = array();
@@ -137,7 +135,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException BEAR\Resource\Exception\InvalidParameter
      */
-    public function test_InvokableWithUnspecificProviderButNoResult()
+    public function test_InvokerInterfaceWithUnspecificProviderButNoResult()
     {
         $this->request->ro = new Mock\Comment;
         $this->request->query = array();
@@ -149,12 +147,10 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException BEAR\Resource\Exception\MethodNotAllowed
      */
-    public function test_InvokableInvalidMethod()
+    public function test_InvokerInterfaceInvalidMethod()
     {
         $this->request->method = 'InvalidMethod';
         $actual = $this->invoker->invoke($this->request);
-        $expected = array('id' => 2, 'name' => 'Aramis', 'age' => 16);
-        $this->assertSame($expected, $actual);
     }
 
     public function test_invokeTraversal()
@@ -180,7 +176,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function test_InvokableLink()
+    public function test_InvokerInterfaceLink()
     {
 
         $ro = new Mock\Link;
@@ -216,14 +212,6 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $expected = array('Get', 'Post');
         asort($actual);
         asort($expected);
-        $this->assertSame($actual, $expected);
-    }
-
-    public function test_annotationMethod()
-    {
-        $this->request->ro = new \testworld\ResourceObject\MethodAnnotation;
-        $actual = $this->invoker->invoke($this->request);
-        $expected = 'get 1';
         $this->assertSame($actual, $expected);
     }
 

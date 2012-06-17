@@ -16,10 +16,10 @@ use BEAR\Resource\Object as ResourceObject;
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
  *
  */
-interface Linkable
+interface LinkerInterface
 {
     /**
-     * Invokable link
+     * InvokerInterface link
      *
      * @param ResourceObject $ro
      * @param array          $links

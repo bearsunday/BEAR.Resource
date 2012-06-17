@@ -42,7 +42,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     public function testGetHeader()
     {
         $ro = $this->httpAdapter->onGet();
-//         var_dump($ro->headers['Content-Type']);
         $this->assertSame($ro->headers['Content-Type'][0], 'application/xml; charset=UTF-8');
     }
 
