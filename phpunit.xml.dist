@@ -6,7 +6,7 @@
          strict="true"
          verbose="true"
          colors="true"
-         timeoutForSmallTests="5"
+         timeoutForSmallTests="60"
          stopOnFailure="true">
   <testsuites>
     <testsuite name="BEAR.Resource">
