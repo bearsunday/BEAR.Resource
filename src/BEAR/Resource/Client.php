@@ -12,6 +12,8 @@ use BEAR\Resource\Object as ResourceObject;
 use BEAR\Resource\Adapter\App\Link as LikType;
 use BEAR\Resource\Exception;
 use BEAR\Resource\Exception\ResourceNotFound;
+use BEAR\Resource\Exception\InvalidScheme;
+use BEAR\Resource\Exception\InvalidUri;
 use Guzzle\Common\Cache\AbstractCacheAdapter as Cache;
 use ReflectionException;
 use Ray\Di\Di\Inject;
@@ -109,13 +111,7 @@ class Client implements Resource
                 return $cached;
             }
         }
-        try {
-            $instance = $this->factory->newInstance($uri);
-        } catch (NotReadable $e) {
-            throw new ResourceNotFound($uri, 400, $e);
-        } catch (ReflectionException $e) {
-            throw new ResourceNotFound($uri, 400, $e);
-        }
+        $instance = $this->factory->newInstance($uri);
         if ($this->cache instanceof Cache) {
             $this->cache->save($key, $instance);
         }
@@ -231,8 +227,8 @@ class Client implements Resource
                 $result = $this->invoker->invokeSync($this->requests);
             }
             if (!($result instanceof Object) && isset($this->request->ro)) {
-            	$this->request->ro->body = $result;
-            	$result = $this->request->ro;
+                $this->request->ro->body = $result;
+                $result = $this->request->ro;
             }
             return $result;
         }
@@ -246,9 +242,9 @@ class Client implements Resource
     public function attachParamProvider($signal, Callable $argProvider)
     {
         $this->invoker->getSignal()->handler(
-            '\BEAR\Resource\Invoker',
-            \BEAR\Resource\Invoker::SIGNAL_PARAM . $signal,
-            $argProvider
+                '\BEAR\Resource\Invoker',
+                \BEAR\Resource\Invoker::SIGNAL_PARAM . $signal,
+                $argProvider
         );
     }
 

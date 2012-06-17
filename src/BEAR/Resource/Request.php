@@ -165,12 +165,22 @@ class Request
         } else {
             $uri = $this->ro->uri;
         }
-        $queryString = "{$this->method} {$uri}" . ($query ? '?' :  '') . $query;
+        $queryString = "{$uri}" . ($query ? '?' :  '') . $query;
         $linkString = '';
         foreach ($this->links as $link) {
             $linkString .= ", link {$link->type}:{$link->key}";
         }
         $string = $queryString . $linkString;
         return $string;
+    }
+    
+    /**
+     * To Request URI string with request method
+     *
+     * @return string
+     */
+    public function toUriWithMethod()
+    {
+        return "{$this->method} " . $this->toUri();
     }
 }

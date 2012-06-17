@@ -3,15 +3,31 @@
     "description": "RESTful service layer framework",
     "keywords": ["rest", "service layer"],
     "homepage": "https://github.com/koriym/BEAR.Resource",
-    "version": "0.2.0",
-    "license": "BSD",
+    "version": "0.2.1",
+    "license": "BSD-3-Clause",
+    "repositories": [
+        {
+            "type":"package",
+            "package": {
+                "name": "xhprof/xhprof",
+                "version": "0.9.2",
+                "target-dir": "xhprof",
+                "dist": {
+                    "url": "http://pecl.php.net/get/xhprof-0.9.2.tgz",
+                    "type": "pear"
+                }
+            }
+        }
+    ],
     "require": {
+        "php": ">=5.4.0",
         "aura/di": "dev-master",
         "aura/signal": "dev-master",
-        "doctrine/common": "2.2.*",
+        "doctrine/common": "2.3.*",
         "guzzle/guzzle": "2.5.*",
-        "ray/aop": "dev-master",
-        "ray/di": "dev-master"
+        "ray/aop": ">=1.0.0",
+        "ray/di": ">=1.0.0",
+        "xhprof/xhprof": "0.9.2"
     },
     "authors": [
         {

@@ -15,9 +15,10 @@ require_once __DIR__ . '/src/BEAR/Resource/ArrayAccess.php';
 // abstract class
 require_once __DIR__ . '/src/BEAR/Resource/AbstractObject.php';
 
-// cocrete class
+// concrete class
 require_once __DIR__ . '/src/BEAR/Resource/Object.php';
 require_once __DIR__ . '/src/BEAR/Resource/Request.php';
+require_once __DIR__ . '/src/BEAR/Resource/Result.php';
 require_once __DIR__ . '/src/BEAR/Resource/Client.php';
 require_once __DIR__ . '/src/BEAR/Resource/ResourceFactory.php';
 require_once __DIR__ . '/src/BEAR/Resource/Factory.php';
@@ -56,4 +57,8 @@ require_once __DIR__ . '/src/BEAR/Resource/SignalHandler/Provides.php';
 
 // constants
 require_once __DIR__ . '/src/BEAR/Resource/Code.php';
+
+// vendor class
+require_once __DIR__ . '/vendor/xhprof/xhprof/xhprof/xhprof_lib/utils/xhprof_lib.php';
+require_once __DIR__ . '/vendor/xhprof/xhprof/xhprof/xhprof_lib/utils/xhprof_runs.php';
 

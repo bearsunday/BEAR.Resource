@@ -29,8 +29,6 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        restore_exception_handler();
-        restore_error_handler();
         $additionalAnnotations = require __DIR__ . '/scripts/additionalAnnotations.php';
         $signalProvider = function (
                 $return,
@@ -68,7 +66,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->request->query = array('id' => 1);
     }
 
-    public function test_Invokable()
+    public function test_Invoke()
     {
         $actual = $this->invoker->invoke($this->request);
         $expected = array('id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12);
@@ -153,8 +151,6 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     {
         $this->request->method = 'InvalidMethod';
         $actual = $this->invoker->invoke($this->request);
-        $expected = array('id' => 2, 'name' => 'Aramis', 'age' => 16);
-        $this->assertSame($expected, $actual);
     }
 
     public function test_invokeTraversal()
@@ -216,14 +212,6 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $expected = array('Get', 'Post');
         asort($actual);
         asort($expected);
-        $this->assertSame($actual, $expected);
-    }
-
-    public function test_annotationMethod()
-    {
-        $this->request->ro = new \testworld\ResourceObject\MethodAnnotation;
-        $actual = $this->invoker->invoke($this->request);
-        $expected = 'get 1';
         $this->assertSame($actual, $expected);
     }
 

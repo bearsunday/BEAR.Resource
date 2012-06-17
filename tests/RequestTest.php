@@ -28,14 +28,24 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\BEAR\Resource\Request', $this->request);
     }
 
-    public function test___toString()
+    public function test_toUriWithMethod()
+    {
+        $this->request->method = 'get';
+        $this->request->ro = new Test;
+        $this->request->ro->uri = 'test://self/path/to/resource';
+        $this->request->query = array('a' => 'koriym', 'b' => 25);
+        $actual = $this->request->toUriWithMethod();
+        $this->assertSame('get test://self/path/to/resource?a=koriym&b=25', $actual);
+    }
+    
+    public function test_toUri()
     {
         $this->request->method = 'get';
         $this->request->ro = new Test;
         $this->request->ro->uri = 'test://self/path/to/resource';
         $this->request->query = array('a' => 'koriym', 'b' => 25);
         $actual = $this->request->toUri();
-        $this->assertSame('get test://self/path/to/resource?a=koriym&b=25', $actual);
+        $this->assertSame('test://self/path/to/resource?a=koriym&b=25', $actual);
     }
 
     public function test__invoke()
