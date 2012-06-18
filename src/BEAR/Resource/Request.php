@@ -62,14 +62,14 @@ class Request
      *
      * @var array
      */
-    public $query = array();
+    public $query = [];
 
     /**
      * Options
      *
      * @var array
      */
-    public $options = array();
+    public $options = [];
 
     /**
      * Request option (eager or lazy)
@@ -84,7 +84,7 @@ class Request
      *
      * @var array
      */
-    public $links = array();
+    public $links = [];
 
     /**
      * Renderer

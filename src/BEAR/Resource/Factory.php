@@ -20,14 +20,14 @@ use Ray\Di\Di\Named;
  *
  * @Scope("singleton")
  */
-class Factory implements ResourceFactory
+class Factory implements FactoryInterface
 {
     /**
      * Resource adapter biding config
      *
      * @var Scheme
      */
-    private $scheme = array();
+    private $scheme = [];
 
     /**
      * Construcotr
@@ -44,7 +44,7 @@ class Factory implements ResourceFactory
 
     /**
      * (non-PHPdoc)
-     * @see BEAR\Resource.ResourceFactory::newInstance()
+     * @see BEAR\Resource.FactoryInterface::newInstance()
      * @throws Exception\InvalidScheme
      */
     public function newInstance($uri)

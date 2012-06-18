@@ -9,6 +9,8 @@ namespace BEAR\Resource;
 
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
+use Countable;
+use IteratorAggregate;
 
 /**
  * Abstract resource object
@@ -16,7 +18,7 @@ use Ray\Di\Di\Named;
  * @package BEAR.Resource
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
  */
-abstract class AbstractObject implements Object, \ArrayAccess, \Countable, \IteratorAggregate
+abstract class AbstractObject implements Object, \ArrayAccess, Countable, IteratorAggregate
 {
     use ArrayAccess;
 
@@ -76,11 +78,11 @@ abstract class AbstractObject implements Object, \ArrayAccess, \Countable, \Iter
     /**
      * Set renderer
      *
-     * @param RenderInterface $renderer
+     * @param Renderable $renderer
      *
      * @Inject(optional = true)
      */
-    public function setRederer(RenderInterface $renderer)
+    public function setRederer(Renderable $renderer)
     {
         $this->renderer = $renderer;
     }

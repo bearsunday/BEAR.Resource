@@ -20,5 +20,5 @@ $resourceAdapters = array(
 );
 $factory = new Factory($injector, $resourceAdapters);
 $invoker = new Invoker(new Config, new Linker);
-$resource = new Client($factory, $invoker, new Request($invoker));
+$resource = new Resource($factory, $invoker, new Request($invoker));
 return $resource;

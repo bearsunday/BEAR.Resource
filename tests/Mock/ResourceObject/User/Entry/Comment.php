@@ -4,11 +4,11 @@ namespace testworld\ResourceObject\User\Entry;
 
 use BEAR\Resource\Object as ResourceObject,
     BEAR\Resource\AbstractObject,
-    BEAR\Resource\Resource,
+    BEAR\Resource\ResourceInterface,
     BEAR\Resource\Factory,
     BEAR\Resource\Invoker,
     BEAR\Resource\Linker,
-    BEAR\Resource\Client,
+    BEAR\Resource\Resource,
     BEAR\Resource\Request;
 
 
@@ -16,9 +16,9 @@ class Comment extends AbstractObject
 {
 
     /**
-     * @param Resource $resource
+     * @param ResourceInterface $resource
      */
-    public function __construct(Resource $resource = null)
+    public function __construct(ResourceInterface $resource = null)
     {
         if (is_null($resource)) {
             $resurce = include dirname(dirname(dirname(dirname(__DIR__)))) . '/script/resource.php';

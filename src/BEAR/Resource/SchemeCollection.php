@@ -8,6 +8,7 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Adapter\Adapter;
+use ArrayObject;
 
 /**
  * Resource scheme collection
@@ -15,10 +16,8 @@ use BEAR\Resource\Adapter\Adapter;
  * @package BEAR.Resource
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
  */
-class SchemeCollection implements \ArrayAccess
+class SchemeCollection extends ArrayObject
 {
-    use ArrayAccess;
-
     /**
      * SchemeCollection body
      *
@@ -39,13 +38,6 @@ class SchemeCollection implements \ArrayAccess
      * @var string
      */
     private $host;
-
-    /**
-     * Temporary container
-     *
-     * @var string
-     */
-    private $container = array();
 
     /**
      * Set scheme
@@ -76,7 +68,7 @@ class SchemeCollection implements \ArrayAccess
      */
     public function toAdapter(Adapter $adapter)
     {
-        $this->body[$this->scheme][$this->host] = $adapter;
+        $this[$this->scheme][$this->host] = $adapter;
         $this->scheme = $this->host = null;
         return $this;
     }

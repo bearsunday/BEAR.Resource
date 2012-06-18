@@ -31,7 +31,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $scheme = new SchemeCollection;
         $scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject'));
         $factory = new Factory($scheme);
-        $this->resource = new Client( $factory, $invoker, new Request($invoker));
+        $this->resource = new Resource( $factory, $invoker, new Request($invoker));
     }
 
     public function test_New()

@@ -18,7 +18,7 @@ namespace BEAR\Resource;
 interface InvokerInterface
 {
     /**
-     * InvokerInterface resource request
+     * Invoke resource request
      *
      * @param Request $request
      * @return mixed
@@ -26,7 +26,7 @@ interface InvokerInterface
     public function invoke(Request $request);
 
     /**
-     * InvokerInterface traversal
+     * Invoke traversal
      *
      * invoke callable
      *

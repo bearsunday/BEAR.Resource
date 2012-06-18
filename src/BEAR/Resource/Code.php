@@ -13,7 +13,7 @@ namespace BEAR\Resource;
  * @package BEAR.Resource
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
  */
-class Code
+final class Code
 {
     /**
      * 200 OK
@@ -50,7 +50,7 @@ class Code
  	 * @see http://www.iana.org/assignments/http-status-codes
      * @var array
      */
-    public $statusText = array(
+    public $statusText = [
             '100' => 'Continue',
             '101' => 'Switching Protocols',
             '102' => 'Processing',
@@ -108,5 +108,5 @@ class Code
             // 509       Unassigned]
     		'510' => 'Not Extended',
             // 511-599   Unassigned
-    );
+    ];
 }

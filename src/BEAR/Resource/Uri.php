@@ -7,15 +7,13 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Object as ResourceObject;
-
 /**
  * URI
  *
  * @package BEAR.Resource
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
  */
-class Uri
+final class Uri
 {
     /**
      * URI ($schema://$host/$path)
@@ -31,6 +29,12 @@ class Uri
      */
     public $query;
 
+    /**
+     * Constructor
+     * 
+     * @param string $uri
+     * @param array  $query
+     */
     public function __construct($uri, array $query)
     {
         $this->uri = $uri;

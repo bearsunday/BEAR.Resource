@@ -7,22 +7,22 @@
  */
 namespace BEAR\Resource;
 
+use BEAR\Resource\Object as ResourceObject;
+
 /**
- * Interface for render view
+ * Interface for resource factory
  *
  * @package BEAR.Resource
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
- *
  */
-interface RenderInterface
+interface FactoryInterface
 {
     /**
-     * Render
+     * Return new resource object instance
      *
-     * @param Request $request
-     * @param array   $data
+     * @param string $uri resource URI
      *
-     * @return string
+     * @return \BEAR\Resource\Object;
      */
-    public function render(Object $resourceObject);
+    public function newInstance($uri);
 }

@@ -45,7 +45,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $factory = new Factory($scheme);
         $this->signal = require dirname(__DIR__) . '/vendor/Aura/Signal/scripts/instance.php';
         $this->invoker = new Invoker(new Config(new Annotation(new Definition), $additonalAnnotations), new Linker, $this->signal);
-        $this->resource = new Client($factory, $this->invoker, new Request($this->invoker));
+        $this->resource = new Resource($factory, $this->invoker, new Request($this->invoker));
         $this->user = $factory->newInstance('app://self/user');
         $this->nop = $factory->newInstance('nop://self/dummy');
         $this->query = array(
@@ -57,7 +57,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function test_New()
     {
-        $this->assertInstanceOf('\BEAR\Resource\Client', $this->resource);
+        $this->assertInstanceOf('\BEAR\Resource\Resource', $this->resource);
     }
 
     /**
@@ -283,7 +283,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $factory = new Factory($scheme);
         $this->signal = require dirname(__DIR__) . '/vendor/Aura/Signal/scripts/instance.php';
         $this->invoker = new Invoker(new Config(new Annotation(new Definition), $additonalAnnotations), new Linker, $this->signal);
-        $this->resource = new Client($factory, $this->invoker, new Request($this->invoker));
+        $this->resource = new Resource($factory, $this->invoker, new Request($this->invoker));
         $request = $this->resource->get->uri('test://self/path/to/example')->withQuery(['a'=>1, 'b'=>2])->request();
         $this->assertSame('{"posts":[1,2]}', (string)$request);
         $this->assertSame(['posts' => [1, 2]], $request()->body);

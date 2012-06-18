@@ -4,7 +4,7 @@ namespace testworld\ResourceObject;
 
 use BEAR\Resource\Object as ResourceObject,
     BEAR\Resource\AbstractObject,
-    BEAR\Resource\Resource;
+    BEAR\Resource\ResourceInterface;
 
 use BEAR\Resource\Annotation\Provides,
     BEAR\Resource\Annotation\ParamSignal;
@@ -16,9 +16,9 @@ class User extends AbstractObject
 {
     /**
      *
-     * @param Resource $resource
+     * @param ResourceInterface $resource
      */
-    public function setResource(Resource $resource)
+    public function setResource(ResourceInterface $resource)
     {
         $this->resource = $resource;
     }

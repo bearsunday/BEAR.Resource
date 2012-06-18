@@ -11,9 +11,9 @@ class Entry extends AbstractObject
 {
 
     /**
-     * @param Resource $resource
+     * @param ResourceInterface $resource
      */
-    public function __construct(Resource $resource = null)
+    public function __construct(ResourceInterface $resource = null)
     {
         if (is_null($resource)) {
             $resurce = include dirname(dirname(dirname(__DIR__))) . '/script/resource.php';

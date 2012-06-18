@@ -7,6 +7,9 @@
  */
 namespace BEAR\Resource;
 
+use ArrayIterator;
+use Traversable;
+
 /**
  * Trait for array access
  *
@@ -107,8 +110,8 @@ trait ArrayAccess
      */
     public function getIterator()
     {
-        return ((is_array($this->body) || $this->body instanceof \Traversable)
-        ?  new \ArrayIterator($this->body)
-        :  new \ArrayIterator(array()));
+        return ((is_array($this->body) || $this->body instanceof Traversable)
+        ?  new ArrayIterator($this->body)
+        :  new ArrayIterator([]));
     }
 }

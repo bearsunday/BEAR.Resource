@@ -4,11 +4,11 @@ namespace testworld\ResourceObject\Entry\Comment;
 
 use BEAR\Resource\Object as ResourceObject,
     BEAR\Resource\AbstractObject,
-    BEAR\Resource\Resource,
+    BEAR\Resource\ResourceInterface,
     BEAR\Resource\Factory,
     BEAR\Resource\Invoker,
     BEAR\Resource\Linker,
-    BEAR\Resource\Client,
+    BEAR\Resource\Resource,
     BEAR\Resource\Request;
 
 

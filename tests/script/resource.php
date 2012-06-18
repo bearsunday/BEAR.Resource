@@ -1,11 +1,11 @@
 <?php
 use BEAR\Resource\Object as ResourceObject,
     BEAR\Resource\AbstractObject,
-    BEAR\Resource\Resource,
+    BEAR\Resource\ResourceInterface,
     BEAR\Resource\Factory,
     BEAR\Resource\Invoker,
     BEAR\Resource\Linker,
-    BEAR\Resource\Client,
+    BEAR\Resource\Resource,
     BEAR\Resource\Request,
     BEAR\Resource\SchemeCollection;
 
@@ -25,5 +25,5 @@ $scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($
 $factory = new Factory($scheme);
 $signal = require dirname(dirname(__DIR__)) . '/vendor/Aura/Signal/scripts/instance.php';
 $invoker = new Invoker(new Config(new Annotation(new Definition)), new Linker, $signal);
-$resource = new Client($factory, $invoker, new Request($invoker));
+$resource = new Resource($factory, $invoker, new Request($invoker));
 return $resource;

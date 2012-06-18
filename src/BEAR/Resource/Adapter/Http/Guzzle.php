@@ -165,12 +165,12 @@ class Guzzle implements ResourceObject, HttpClient
      */
     public function onFinalSync(Request $request, \ArrayObject $syncData)
     {
-        $batch = array();
+        $batch = [];
         foreach ($syncData as $request) {
             $method = $request->method;
             $batch[] = $this->guzzle->$method($request->ro->uri);
         }
-        $this->body = array();
+        $this->body = [];
         $responses = $this->guzzle->send($batch);
         foreach ($responses as $response) {
             list($code, $headers, $body) = $this->parseResponse($response);

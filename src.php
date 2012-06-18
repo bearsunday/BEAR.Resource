@@ -2,7 +2,7 @@
 
 // interface
 require_once __DIR__ . '/src/BEAR/Resource/Provider.php';
-require_once __DIR__ . '/src/BEAR/Resource/Resource.php';
+require_once __DIR__ . '/src/BEAR/Resource/ResourceInterface.php';
 require_once __DIR__ . '/src/BEAR/Resource/Object.php';
 require_once __DIR__ . '/src/BEAR/Resource/InvokerInterface.php';
 require_once __DIR__ . '/src/BEAR/Resource/Uri.php';
@@ -19,13 +19,13 @@ require_once __DIR__ . '/src/BEAR/Resource/AbstractObject.php';
 require_once __DIR__ . '/src/BEAR/Resource/Object.php';
 require_once __DIR__ . '/src/BEAR/Resource/Request.php';
 require_once __DIR__ . '/src/BEAR/Resource/Result.php';
-require_once __DIR__ . '/src/BEAR/Resource/Client.php';
-require_once __DIR__ . '/src/BEAR/Resource/ResourceFactory.php';
+require_once __DIR__ . '/src/BEAR/Resource/Resource.php';
+require_once __DIR__ . '/src/BEAR/Resource/FactoryInterface.php';
 require_once __DIR__ . '/src/BEAR/Resource/Factory.php';
 require_once __DIR__ . '/src/BEAR/Resource/Invoker.php';
 require_once __DIR__ . '/src/BEAR/Resource/Linker.php';
 require_once __DIR__ . '/src/BEAR/Resource/SchemeCollection.php';
-require_once __DIR__ . '/src/BEAR/Resource/RenderInterface.php';
+require_once __DIR__ . '/src/BEAR/Resource/Renderable.php';
 require_once __DIR__ . '/src/BEAR/Resource/Adapter/App.php';
 require_once __DIR__ . '/src/BEAR/Resource/Adapter/App/Link.php';
 require_once __DIR__ . '/src/BEAR/Resource/Adapter/Page.php';

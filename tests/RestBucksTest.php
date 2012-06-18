@@ -37,7 +37,7 @@ class RestBucksTest extends \PHPUnit_Framework_TestCase
         $factory = new Factory($scheme);
         $signal = require (dirname(__DIR__)) . '/vendor/Aura/Signal/scripts/instance.php';
         $invoker = new Invoker(new Config(new Annotation(new Definition)), new Linker, $signal);
-        $this->resource = new Client($factory, $invoker, new Request($invoker));
+        $this->resource = new Resource($factory, $invoker, new Request($invoker));
         $this->user = $factory->newInstance('app://self/user');
         $this->nop = $factory->newInstance('nop://self/dummy');
         $this->query = array(
@@ -50,7 +50,7 @@ class RestBucksTest extends \PHPUnit_Framework_TestCase
 
     public function test_New()
     {
-        $this->assertInstanceOf('\BEAR\Resource\Client', $this->resource);
+        $this->assertInstanceOf('\BEAR\Resource\Resource', $this->resource);
     }
 
     public function testOption()

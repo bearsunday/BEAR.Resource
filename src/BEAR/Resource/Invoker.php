@@ -158,8 +158,8 @@ class Invoker implements InvokerInterface
     public function getParams($object, $method, array $args)
     {
         $parameters = (new \ReflectionMethod($object, $method))->getParameters();
-        if ($parameters === array()) {
-            return array();
+        if ($parameters === []) {
+            return [];
         }
         $providesArgs = [];
         foreach ($parameters as $parameter) {
@@ -244,7 +244,7 @@ PARAMETER_NOT_PROVIDED:
     {
         $ref = new \ReflectionClass($ro);
         $methods = $ref->getMethods();
-        $allows = array();
+        $allows = [];
         foreach ($methods as $method) {
             $isRequestMethod = (substr($method->name, 0, 2) === 'on')
             && (substr($method->name, 0, 6) !== 'onLink');
@@ -252,9 +252,9 @@ PARAMETER_NOT_PROVIDED:
                 $allows[] = substr($method->name, 2);
             }
         }
-        $params = array();
+        $params = [];
         foreach ($allows as $follow) {
-            $paramArray = array();
+            $paramArray = [];
             $refMethod = new \ReflectionMethod($ro, 'on' . $follow);
             $parameters = $refMethod->getParameters();
             foreach ($parameters as $parameter) {
