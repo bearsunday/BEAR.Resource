@@ -20,7 +20,7 @@ use Exception;
  *
  * @Scope("prototype")
  */
-class Request
+final class Request implements Requestable
 {
     /**
      * Renderer
@@ -101,9 +101,8 @@ class Request
     private $result;
 
     /**
-     * Constructor
-     *
-     * @param InvokerInterface $invoker
+     * (non-PHPdoc)
+     * @see BEAR\Resource.Requestable::__construct()
      *
      * @Inject
      */
@@ -113,9 +112,8 @@ class Request
     }
 
     /**
-     * InvokerInterface resource request
-     *
-     * @param array $query
+     * (non-PHPdoc)
+     * @see BEAR\Resource.Requestable::__invoke()
      */
     public function __invoke(array $query = null)
     {
@@ -159,12 +157,8 @@ class Request
      */
     public function toUri()
     {
-        $query = http_build_query($this->query, '&');
-        if (isset($this->ro->uri) === false) {
-            $uri = self::SCHEME_OBJECT . '://' . str_replace('\\', '/', get_class($this->ro));
-        } else {
-            $uri = $this->ro->uri;
-        }
+        $query = http_build_query($this->query, null, '&', PHP_QUERY_RFC3986);
+        $uri = $this->ro->uri;
         $queryString = "{$uri}" . ($query ? '?' :  '') . $query;
         $linkString = '';
         foreach ($this->links as $link) {
@@ -173,7 +167,7 @@ class Request
         $string = $queryString . $linkString;
         return $string;
     }
-    
+
     /**
      * To Request URI string with request method
      *
