@@ -82,7 +82,7 @@ abstract class AbstractObject implements Object, \ArrayAccess, Countable, Iterat
      *
      * @Inject(optional = true)
      */
-    public function setRederer(Renderable $renderer)
+    public function setRenderer(Renderable $renderer)
     {
         $this->renderer = $renderer;
     }

@@ -79,7 +79,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->request->method = 'get';
         $this->request->ro = new Test;
         $renderer = new TestRenderer;
-        $this->request->ro->setRederer($renderer);
+        $this->request->ro->setRenderer($renderer);
         $this->request->ro->uri = 'nop://self/path/to/resource';
         $this->request->query = array('a' => 'koriym', 'b' => 25);
         $request = $this->request;

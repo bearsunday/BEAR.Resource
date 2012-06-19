@@ -277,7 +277,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition)))), new EmptyModule);
         $scheme = new SchemeCollection;
         $testAdapter = new \BEAR\Resource\Adapter\Test;
-        $testAdapter->setRederer(new TestRenderer);
+        $testAdapter->setRenderer(new TestRenderer);
         $scheme->scheme('test')->host('self')->toAdapter($testAdapter);
         $this->factory = new Factory($scheme);
         $factory = new Factory($scheme);

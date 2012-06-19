@@ -123,7 +123,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
     public function test_toStringWithRenderer()
     {
         $renderer = new TestRenderer;
-        $this->resource->setRederer($renderer);
+        $this->resource->setRenderer($renderer);
         $result = (string)($this->resource);
         $this->assertSame('["entry1","entry2","entry3"]', $result);
     }
