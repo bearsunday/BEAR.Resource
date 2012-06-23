@@ -20,6 +20,8 @@ use Ray\Aop\Weaver,
 Ray\Aop\Bind,
 Ray\Aop\ReflectiveMethodInvocation;
 use BEAR\Resource\Mock\User;
+use Doctrine\Common\Annotations\AnnotationReader as Reader;
+
 
 /**
  * Test class for BEAR.Resource.
@@ -51,7 +53,7 @@ class DevInvokerTest extends InvokerTest
         $schemeAdapters = array('nop' => '\BEAR\Resource\Adapter\Nop', 'prov' => '\BEAR\Resource\Mock\Prov');
         $injector = new Injector(new Container(new Forge($config)), new EmptyModule);
         $this->signal = require dirname(__DIR__) . '/vendor/Aura/Signal/scripts/instance.php';
-        $this->invoker = new DevInvoker($config, new Linker, $this->signal);
+        $this->invoker = new DevInvoker($config, new Linker(new Reader), $this->signal);
         $this->invoker->getSignal()->handler(
                 '\BEAR\Resource\Invoker',
                 \BEAR\Resource\Invoker::SIGNAL_PARAM . 'Provides',

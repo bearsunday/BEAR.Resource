@@ -36,6 +36,7 @@ require_once __DIR__ . '/src/BEAR/Resource/Adapter/Http/Guzzle.php';
 require_once __DIR__ . '/src/BEAR/Resource/Annotation/Signal.php';
 require_once __DIR__ . '/src/BEAR/Resource/Annotation/ParamSignal.php';
 require_once __DIR__ . '/src/BEAR/Resource/Annotation/Provides.php';
+require_once __DIR__ . '/src/BEAR/Resource/Annotation/Link.php';
 
 // exception
 require_once __DIR__ . '/src/BEAR/Resource/Exception.php';
@@ -50,6 +51,7 @@ require_once __DIR__ . '/src/BEAR/Resource/Exception/InvalidUri.php';
 require_once __DIR__ . '/src/BEAR/Resource/Exception/BadRequest.php';
 require_once __DIR__ . '/src/BEAR/Resource/Exception/MethodNotAllowed.php';
 require_once __DIR__ . '/src/BEAR/Resource/Exception/ResourceNotFound.php';
+require_once __DIR__ . '/src/BEAR/Resource/Exception/BadLinkRequest.php';
 
 // signal handlers
 require_once __DIR__ . '/src/BEAR/Resource/SignalHandler/Handle.php';

@@ -13,6 +13,8 @@ use Ray\Di\Definition,
 
 use BEAR\Resource\Request\Method,
 BEAR\Resource\Adapter\Nop;
+use Doctrine\Common\Annotations\AnnotationReader as Reader;
+
 
 /**
  * Test class for BEAR.Resource.
@@ -24,10 +26,11 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->linker = new Linker;
+        $this->linker = new Linker(new Reader);
         $injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition)))), new EmptyModule);
         $signal = require dirname(__DIR__) . '/vendor/Aura/Signal/scripts/instance.php';
-        $invoker = new Invoker(new Config(new Annotation(new Definition)), new Linker, $signal);
+        $this->request = new Request(new Invoker(new Config(new Annotation(new Definition)), new Linker(new Reader), $signal));
+        $invoker = new Invoker(new Config(new Annotation(new Definition)), new Linker(new Reader), $signal);
         $scheme = new SchemeCollection;
         $scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject'));
         $factory = new Factory($scheme);
@@ -40,7 +43,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BadMethodCallException
+     * @expectedException BEAR\Resource\Exception\BadLinkRequest
      */
     public function test_linkException()
     {
@@ -49,7 +52,9 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $link->type = LinkType::SELF_LINK;
         $link->key = 'UNAVAILABLE';
         $links = array($link);
-        $result = $this->linker->invoke($ro, $links, $ro->onGet(1));
+        $this->request->links = $links;
+        $this->request->method = 'get';
+        $result = $this->linker->invoke($ro, $this->request, $ro->onGet(1));
     }
 
     public function test_link()
@@ -59,7 +64,9 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $link->type = LinkType::SELF_LINK;
         $link->key = 'View';
         $links = array($link);
-        $result = $this->linker->invoke($ro, $links, $ro->onGet(1));
+        $this->request->links = $links;
+        $this->request->method = 'get';
+        $result = $this->linker->invoke($ro, $this->request, $ro->onGet(1));
         $expected = '<html>bear1</html>';
         $this->assertSame($expected, $result);
     }
@@ -72,7 +79,9 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $link->type = LinkType::SELF_LINK;
         $link->key = 'Blog';
         $links = array($link);
-        $result = $this->linker->invoke($ro, $links, $ro->onGet(1));
+        $this->request->links = $links;
+        $this->request->method = 'get';
+        $result = $this->linker->invoke($ro, $this->request, $ro->onGet(1));
         //         $expected = '<html><html>bear1</html></html>';
         $expected =  array (
     'id' => 12,
@@ -90,7 +99,9 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $link->type = LinkType::NEW_LINK;
         $link->key = 'Blog';
         $links = array($link);
-        $result = $this->linker->invoke($ro, $links, $ro->onGet(1));
+        $this->request->links = $links;
+        $this->request->method = 'get';
+        $result = $this->linker->invoke($ro, $this->request, $ro->onGet(1));
         $expected = array (
         0 => array ( 'id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12),
         1 => array ( 'id' => 12, 'name' => 'Aramis blog', 'inviter' => 2)
@@ -107,7 +118,9 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $link->key = 'Blog';
         $links = array($link);
         $result = $ro->onGet(1);
-        $result = $this->linker->invoke($ro, $links, $result);
+        $this->request->links = $links;
+        $this->request->method = 'get';
+        $result = $this->linker->invoke($ro, $this->request, $result);
         $expected = array (
   'id' => 2,
   'name' => 'Aramis',
@@ -136,7 +149,9 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $link->type = LinkType::SELF_LINK;
         $link->key = 'Inviter';
         $links[] = $link;
-        $result = $this->linker->invoke($ro, $links, $ro->onGet(1));
+        $this->request->links = $links;
+        $this->request->method = 'get';
+        $result = $this->linker->invoke($ro, $this->request, $ro->onGet(1));
         $expected =  array('id' => 3, 'name' => 'Porthos', 'age' => 17, 'blog_id' => 0);
         $this->assertSame($expected, $result);
     }
@@ -154,7 +169,9 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $link->type = LinkType::NEW_LINK;
         $link->key = 'Inviter';
         $links[] = $link;
-        $result = $this->linker->invoke($ro, $links, $ro->onGet(1));
+        $this->request->links = $links;
+        $this->request->method = 'get';
+        $result = $this->linker->invoke($ro, $this->request, $ro->onGet(1));
         $expected = array(
         0 => array( 'id' => 12, 'name' => 'Aramis blog', 'inviter' => 2),
         1 => array( 'id' => 3, 'name' => 'Porthos', 'age' => 17, 'blog_id' => 0)
@@ -176,7 +193,9 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $link->key = 'Inviter';
         $links[] = $link;
         $result =  $ro->onGet(1);
-        $result = $this->linker->invoke($ro, $links, $result);
+        $this->request->links = $links;
+        $this->request->method = 'get';
+        $result = $this->linker->invoke($ro, $this->request, $result);
         $expected = array (
         array ( 'id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12 ),
         array ( 'id' => 12, 'name' => 'Aramis blog', 'inviter' => 2 ),
@@ -198,7 +217,9 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $link->type = LinkType::SELF_LINK;
         $link->key = 'Inviter';
         $links[] = $link;
-        $result = $this->linker->invoke($ro, $links, $ro->onGet(1));
+        $this->request->links = $links;
+        $this->request->method = 'get';
+        $result = $this->linker->invoke($ro, $this->request, $ro->onGet(1));
         $expected = array(
         0 => array( 'id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12),
         1 => array( 'id' => 12, 'name' => 'Aramis blog', 'inviter' => 2)
@@ -214,7 +235,9 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $link->key = 'Comment';
         $links = array($link);
         $result = $ro->onGet(1);
-        $result = $this->linker->invoke($ro, $links, $result);
+        $this->request->links = $links;
+        $this->request->method = 'get';
+        $result = $this->linker->invoke($ro, $this->request, $result);
         $expected = array (
         100 =>
         array (
@@ -261,7 +284,9 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $link->type = LinkType::CRAWL_LINK;
         $link->key = 'ThumbsUp';
         $links[] = $link;
-        $result = $this->linker->invoke($ro, $links, $ro->onGet(1));
+        $this->request->links = $links;
+        $this->request->method = 'get';
+        $result = $this->linker->invoke($ro, $this->request, $ro->onGet(1));
         $expected = array (
         100 =>
         array (
@@ -325,6 +350,8 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $link->type = LinkType::CRAWL_LINK;
         $link->key = 'Point';
         $links[] = $link;
-        $result = $this->linker->invoke($ro, $links, $ro->onGet(1));
+        $this->request->links = $links;
+        $this->request->method = 'get';
+        $result = $this->linker->invoke($ro, $this->request, $ro->onGet(1));
     }
 }

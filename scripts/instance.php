@@ -12,14 +12,17 @@ use Aura\Signal\Manager;
 use Aura\Signal\HandlerFactory;
 use Aura\Signal\ResultFactory;
 use Aura\Signal\ResultCollection;
+use Doctrine\Common\Annotations\AnnotationReader as Reader;
+
+require_once __DIR__ . '/instance/DefaultModule.php';
 
 $config = new Config(new Annotation(new Definition));
-$injector = new Injector(new Container(new Forge($config)), new EmptyModule);
+$injector = new Injector(new Container(new Forge($config)), new DefaultModule);
 $scheme = new SchemeCollection;
-$scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'App'));
+$scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'sandbox', 'App'));
 $invoker = new Invoker(
     $config,
-    new Linker,
+    new Linker(new Reader),
     new Manager(
     new HandlerFactory, new ResultFactory, new ResultCollection)
 );

@@ -13,6 +13,7 @@ use Ray\Di\Definition,
 use BEAR\Resource\Builder,
     BEAR\Resource\Mock\User;
 use Aura\Signal\Manager as Signal;
+use Doctrine\Common\Annotations\AnnotationReader as Reader;
 
 /**
  * Test class for BEAR.Resource.
@@ -30,7 +31,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject'));
         $factory = new Factory($scheme);
         $this->signal = require dirname(dirname(__DIR__)) . '/vendor/Aura/Signal/scripts/instance.php';
-        $invoker = new Invoker(new Config(new Annotation(new Definition)), new Linker, $this->signal);
+        $invoker = new Invoker(new Config(new Annotation(new Definition)), new Linker(new Reader), $this->signal);
         $this->resource = new Resource($factory, $invoker, new Request($invoker));
         $this->user = $factory->newInstance('app://self/user');
         $this->nop = $factory->newInstance('nop://self/dummy');

@@ -69,6 +69,16 @@ class Invoker implements InvokerInterface
     const SIGNAL_PARAM = 'param';
 
     /**
+     * Set resource client
+     * 
+     * @param ResourceInterface $resource
+     */
+    public function setResourceClient(ResourceInterface $resource)
+    {
+        $this->linker->setResource($resource);
+    }
+    
+    /**
      * Constructor
      *
      * @param ConfigInterface $config
@@ -106,7 +116,7 @@ class Invoker implements InvokerInterface
             if ($request->links) {
                 /** @todo */
                 $ro = $weave->___getObject();
-                $result = $this->linker->invoke($ro, $request->links, $result);
+                $result = $this->linker->invoke($ro, $request, $result);
             }
             return $result;
         }
@@ -126,11 +136,11 @@ class Invoker implements InvokerInterface
         // link
         completed:
         if ($request->links) {
-            $result = $this->linker->invoke($request->ro, $request->links, $result);
+            $result = $this->linker->invoke($request->ro, $request, $result);
         }
         return $result;
     }
-
+    
     /**
      * (non-PHPdoc)
      * @see BEAR\Resource.InvokerInterface::invokeTraversal()
@@ -221,7 +231,6 @@ class Invoker implements InvokerInterface
             );
         }
         $isStoped = $results->isStopped();
-//             var_dump($signalAannotations);
         $result = $results->getLast();
         if ($isStoped === false || is_null($result)) {
             goto PARAMETER_NOT_PROVIDED;

@@ -16,6 +16,7 @@ use Ray\Aop\ReflectiveMethodInvocation;
 use BEAR\Resource\SignalHandler\Provides;
 use Guzzle\Common\Cache\DoctrineCacheAdapter as CacheAdapter;
 use Doctrine\Common\Cache\ArrayCache as Cache;
+use Doctrine\Common\Annotations\AnnotationReader as Reader;
 
 /**
  * Test class for BEAR.Resource.
@@ -41,10 +42,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $scheme->scheme('test')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Test);
         $scheme->scheme('prov')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Prov);
         $scheme->scheme('http')->host('*')->toAdapter(new \BEAR\Resource\Adapter\Http);
-        $this->factory = new Factory($scheme);
         $factory = new Factory($scheme);
         $this->signal = require dirname(__DIR__) . '/vendor/Aura/Signal/scripts/instance.php';
-        $this->invoker = new Invoker(new Config(new Annotation(new Definition), $additonalAnnotations), new Linker, $this->signal);
+        $this->invoker = new Invoker(new Config(new Annotation(new Definition), $additonalAnnotations), new Linker(new Reader), $this->signal);
         $this->resource = new Resource($factory, $this->invoker, new Request($this->invoker));
         $this->user = $factory->newInstance('app://self/user');
         $this->nop = $factory->newInstance('nop://self/dummy');
@@ -282,7 +282,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->factory = new Factory($scheme);
         $factory = new Factory($scheme);
         $this->signal = require dirname(__DIR__) . '/vendor/Aura/Signal/scripts/instance.php';
-        $this->invoker = new Invoker(new Config(new Annotation(new Definition), $additonalAnnotations), new Linker, $this->signal);
+        $this->invoker = new Invoker(new Config(new Annotation(new Definition), $additonalAnnotations), new Linker(new Reader), $this->signal);
         $this->resource = new Resource($factory, $this->invoker, new Request($this->invoker));
         $request = $this->resource->get->uri('test://self/path/to/example')->withQuery(['a'=>1, 'b'=>2])->request();
         $this->assertSame('{"posts":[1,2]}', (string)$request);

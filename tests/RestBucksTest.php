@@ -12,6 +12,7 @@ use Ray\Di\Definition,
     Ray\Di\EmptyModule;
 use BEAR\Resource\Builder,
     BEAR\Resource\Mock\User;
+use Doctrine\Common\Annotations\AnnotationReader as Reader;
 
 /**
  * Test class for BEAR.Resource.
@@ -36,7 +37,7 @@ class RestBucksTest extends \PHPUnit_Framework_TestCase
         $scheme->scheme('http')->host('*')->toAdapter(new \BEAR\Resource\Adapter\Http);
         $factory = new Factory($scheme);
         $signal = require (dirname(__DIR__)) . '/vendor/Aura/Signal/scripts/instance.php';
-        $invoker = new Invoker(new Config(new Annotation(new Definition)), new Linker, $signal);
+        $invoker = new Invoker(new Config(new Annotation(new Definition)), new Linker(new Reader), $signal);
         $this->resource = new Resource($factory, $invoker, new Request($invoker));
         $this->user = $factory->newInstance('app://self/user');
         $this->nop = $factory->newInstance('nop://self/dummy');
@@ -65,7 +66,7 @@ class RestBucksTest extends \PHPUnit_Framework_TestCase
     public function tesMenuLinksOrder()
     {
         $menu = $this->resource->get->uri('app://self/RestBucks/Menu')->withQuery(array('drink' => 'latte'))->eager->request();
-        $orderUri = $menu->headers['rel=order'];
+        $orderUri = $menu->links['order'];
         $response = $this->resource->post->uri($orderUri)->addQuery(array('drink' => $menu['drink']))->eager->request();
         $expected = 201;
         $this->assertSame($expected, $response->code);

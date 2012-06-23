@@ -8,6 +8,7 @@ use BEAR\Resource\Request\Method,
 use Ray\Di\Config,
     Ray\Di\Annotation,
     Ray\Di\Definition;
+use Doctrine\Common\Annotations\AnnotationReader as Reader;
 
 /**
  * Test class for BEAR.Resource.
@@ -20,7 +21,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $signal = require dirname(__DIR__) . '/vendor/Aura/Signal/scripts/instance.php';
-        $this->request = new Request(new Invoker(new Config(new Annotation(new Definition)), new Linker, $signal));
+        $this->request = new Request(new Invoker(new Config(new Annotation(new Definition)), new Linker(new Reader), $signal));
     }
 
     public function test_New()

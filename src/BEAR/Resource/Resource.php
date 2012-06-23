@@ -7,6 +7,8 @@
  */
 namespace BEAR\Resource;
 
+use BEAR\Resource\Exception\BadRequest;
+
 use Aura\Autoload\Exception\NotReadable;
 use BEAR\Resource\Object as ResourceObject;
 use BEAR\Resource\Adapter\App\Link as LikType;
@@ -69,9 +71,9 @@ class Resource implements ResourceInterface
     /**
      * Constructor
      *
-     * @param Factory $factory resource object factory.
-     * @param InvokerInterface  $invoker resource request invoker
-     * @param Request $request resource request
+     * @param Factory          $factory resource object factory.
+     * @param InvokerInterface $invoker resource request invoker
+     * @param Request          $request resource request
      *
      * @Inject
      */
@@ -81,6 +83,7 @@ class Resource implements ResourceInterface
         $this->invoker = $invoker;
         $this->newRequest = $request;
         $this->requests = new \SplObjectStorage;
+        $this->invoker->setResourceClient($this);
     }
 
     /**
@@ -88,7 +91,7 @@ class Resource implements ResourceInterface
      *
      * @param Cache $cache
      *
-     * @Inject
+     * @Inject(optional = true)
      */
     public function setCacheAdapter(Cache $cache)
     {
@@ -138,7 +141,11 @@ class Resource implements ResourceInterface
     public function uri($uri)
     {
         if (is_string($uri)) {
+            if (! $this->request) {
+                throw new BadRequest('Request method needed before uri()');
+            }
             $this->request->ro = $this->newInstance($uri);
+            $this->request->uri = $uri;
             return $this;
         }
         if ($uri instanceof Uri) {

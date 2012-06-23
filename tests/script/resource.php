@@ -17,6 +17,7 @@ use Ray\Di\Definition,
     Ray\Di\Manager,
     Ray\Di\Injector,
     Ray\Di\EmptyModule;
+use Doctrine\Common\Annotations\AnnotationReader as Reader;
 
 $injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition)))), new EmptyModule);
 $namespace = array('self' => 'testworld');
@@ -24,6 +25,6 @@ $scheme = new SchemeCollection;
 $scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject'));
 $factory = new Factory($scheme);
 $signal = require dirname(dirname(__DIR__)) . '/vendor/Aura/Signal/scripts/instance.php';
-$invoker = new Invoker(new Config(new Annotation(new Definition)), new Linker, $signal);
+$invoker = new Invoker(new Config(new Annotation(new Definition)), new Linker(new Reader), $signal);
 $resource = new Resource($factory, $invoker, new Request($invoker));
 return $resource;

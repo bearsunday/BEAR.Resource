@@ -14,7 +14,8 @@ use BEAR\Resource\Object as ResourceObject;
  *
  * @package BEAR.Resource
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
- *
+ * 
+ * @ImplementedBy("BEAR\Resource\Linker")
  */
 interface LinkerInterface
 {
@@ -27,5 +28,5 @@ interface LinkerInterface
      *
      * @return mixed link result
      */
-    public function invoke(ResourceObject $ro, array $links, $linkValue);
+    public function invoke(ResourceObject $ro, Request $request, $linkValue);
 }
