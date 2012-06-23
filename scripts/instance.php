@@ -1,24 +1,27 @@
 <?php
 namespace BEAR\Resource;
 
-use Ray\Di\Annotation,
-    Ray\Di\Config,
-    Ray\Di\Forge,
-    Ray\Di\Container,
-    Ray\Di\Manager,
-    Ray\Di\Injector,
-    Ray\Di\EmptyModule,
-    BEAR\Resource\Builder,
-    BEAR\Resource\Mock\User;
+use Ray\Di\Definition;
+use Ray\Di\Annotation;
+use Ray\Di\Config;
+use Ray\Di\Forge;
+use Ray\Di\Container;
+use Ray\Di\Injector;
+use Ray\Di\EmptyModule;
+use Aura\Signal\Manager;
+use Aura\Signal\HandlerFactory;
+use Aura\Signal\ResultFactory;
+use Aura\Signal\ResultCollection;
 
-$injector = new Injector(new Container(new Forge(new Config(new Annotation))), new EmptyModule);
-$namespace = array('self' => 'testworld');
-$resourceAdapters = array(
-                'app' => new \BEAR\Resource\Adapter\App($injector, $namespace),
-                'page' => new \BEAR\Resource\Adapter\Page($injector, $namespace),
-                'http' => new \BEAR\Resource\Adapter\Http
+$config = new Config(new Annotation(new Definition));
+$injector = new Injector(new Container(new Forge($config)), new EmptyModule);
+$scheme = new SchemeCollection;
+$scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'App'));
+$invoker = new Invoker(
+    $config,
+    new Linker,
+    new Manager(
+    new HandlerFactory, new ResultFactory, new ResultCollection)
 );
-$factory = new Factory($injector, $resourceAdapters);
-$invoker = new Invoker(new Config, new Linker);
-$resource = new Resource($factory, $invoker, new Request($invoker));
+$resource = new Resource(new Factory($scheme), $invoker, new Request($invoker));
 return $resource;
