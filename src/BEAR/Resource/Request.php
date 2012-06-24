@@ -9,7 +9,6 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Render;
 use Ray\Di\Di\Inject;
-use Exception;
 
 /**
  * Interface for resource adapter provider.
@@ -130,24 +129,11 @@ final class Request implements Requestable
      */
     public function __toString()
     {
-        try {
-            if (is_null($this->result)) {
-                $this->result = $this->__invoke();
-            }
-            if (is_string($this->result)) {
-                return $this->result;
-            }
-            if (method_exists($this->result, '__toString')) {
-                return (string) $this->result;
-            }
-            if ($this->result instanceof Object && is_string($this->result->body)) {
-                return $this->result->body;
-            }
-        } catch (Exception $e) {
-            return '';
+        if (is_null($this->result)) {
+            $this->result = $this->__invoke();
         }
 
-        return '';
+        return (string) $this->result;
     }
 
     /**

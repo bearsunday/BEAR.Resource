@@ -16,7 +16,7 @@ use Traversable;
  * @package BEAR.Resource
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
  */
-trait ArrayAccess
+trait BodyArrayAccess
 {
     /**
      * Returns the body value at the specified index

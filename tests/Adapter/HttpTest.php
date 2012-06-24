@@ -52,7 +52,10 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers BEAR\Resource\Adapter\Http\Guzzle
+     * @covers BEAR\Resource\Adapter\Http\Guzzle::onPost
+     * @covers BEAR\Resource\Adapter\Http\Guzzle::onPut
+     * @covers BEAR\Resource\Adapter\Http\Guzzle::onDelete
+     * @covers BEAR\Resource\Adapter\Http\Guzzle::onDelete
      */
     public function testGetBody()
     {

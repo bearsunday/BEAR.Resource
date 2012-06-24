@@ -3,15 +3,15 @@
 namespace BEAR\Resource;
 
 use Ray\Di\Definition,
-    Ray\Di\Annotation,
-    Ray\Di\Config,
-    Ray\Di\Forge,
-    Ray\Di\Container,
-    Ray\Di\Manager,
-    Ray\Di\Injector,
-    Ray\Di\EmptyModule,
-    BEAR\Resource\Builder,
-    BEAR\Resource\Mock\User;
+Ray\Di\Annotation,
+Ray\Di\Config,
+Ray\Di\Forge,
+Ray\Di\Container,
+Ray\Di\Manager,
+Ray\Di\Injector,
+Ray\Di\EmptyModule,
+BEAR\Resource\Builder,
+BEAR\Resource\Mock\User;
 use Ray\Aop\ReflectiveMethodInvocation;
 use BEAR\Resource\SignalHandler\Provides;
 use Guzzle\Common\Cache\DoctrineCacheAdapter as CacheAdapter;
@@ -21,7 +21,7 @@ use Doctrine\Common\Annotations\AnnotationReader as Reader;
 /**
  * Test class for BEAR.Resource.
  */
-class ClientTest extends \PHPUnit_Framework_TestCase
+class ResourceTest extends \PHPUnit_Framework_TestCase
 {
     protected $skelton;
 
@@ -33,7 +33,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $additionalAnnotations = require __DIR__ . '/scripts/additionalAnnotations.php';
         $injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition)))), new EmptyModule);
         $scheme = new SchemeCollection;
         $scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject'));
@@ -44,14 +43,15 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $scheme->scheme('http')->host('*')->toAdapter(new \BEAR\Resource\Adapter\Http);
         $factory = new Factory($scheme);
         $this->signal = require dirname(__DIR__) . '/vendor/Aura/Signal/scripts/instance.php';
-        $this->invoker = new Invoker(new Config(new Annotation(new Definition), $additonalAnnotations), new Linker(new Reader), $this->signal);
+        $reader = new Reader;
+        $this->invoker = new Invoker(new Config(new Annotation(new Definition), $reader), new Linker($reader), $this->signal);
         $this->resource = new Resource($factory, $this->invoker, new Request($this->invoker));
         $this->user = $factory->newInstance('app://self/user');
         $this->nop = $factory->newInstance('nop://self/dummy');
         $this->query = array(
-            'id' => 10,
-            'name' => 'Ray',
-            'age' => 43
+                'id' => 10,
+                'name' => 'Ray',
+                'age' => 43
         );
     }
 
@@ -228,10 +228,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function testParameterProvidedBySignalClosure()
     {
         $signalProvider = function (
-        $return,
-        \ReflectionParameter $parameter,
-        ReflectiveMethodInvocation $invovation,
-        Definition $definition
+                $return,
+                \ReflectionParameter $parameter,
+                ReflectiveMethodInvocation $invovation,
+                Definition $definition
         ) {
             $return->value = 1;
 
@@ -245,10 +245,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function testParameterProvidedBySignalWithInvokerInterfaceObject()
     {
         $signalProvider = function (
-        $return,
-        \ReflectionParameter $parameter,
-        ReflectiveMethodInvocation $invovation,
-        Definition $definition
+                $return,
+                \ReflectionParameter $parameter,
+                ReflectiveMethodInvocation $invovation,
+                Definition $definition
         ) {
             $return->value = 1;
 
@@ -281,7 +281,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->factory = new Factory($scheme);
         $factory = new Factory($scheme);
         $this->signal = require dirname(__DIR__) . '/vendor/Aura/Signal/scripts/instance.php';
-        $this->invoker = new Invoker(new Config(new Annotation(new Definition), $additonalAnnotations), new Linker(new Reader), $this->signal);
+        $this->invoker = new Invoker(new Config(new Annotation(new Definition), new Reader), new Linker(new Reader), $this->signal);
         $this->resource = new Resource($factory, $this->invoker, new Request($this->invoker));
         $request = $this->resource->get->uri('test://self/path/to/example')->withQuery(['a'=>1, 'b'=>2])->request();
         $this->assertSame('{"posts":[1,2]}', (string) $request);
@@ -298,5 +298,13 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     {
         $user = $this->resource->newInstance('app://self/');
         $this->assertSame($user->class, 'testworld\ResourceObject\Index');
+    }
+
+    /**
+     * @expectedException BEAR\Resource\Exception\BadRequest
+     */
+    public function test_badRequest_noMethod()
+    {
+        $request = $this->resource->uri('nop://self/dummy')->withQuery($this->query)->request();
     }
 }

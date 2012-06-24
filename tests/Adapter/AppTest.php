@@ -31,6 +31,14 @@ namespace BEAR\Resource\Adapter {
             $this->namespace = 'testworld';
         }
 
+        /**
+         * @expectedException RuntimeException
+         */
+        public function test_NewInvalidNamespace()
+        {
+            $app = new AppAdapter($this->injector, [], '');
+        }
+
         public function test_New()
         {
             $path = 'Resource\App';

@@ -7,6 +7,7 @@ use BEAR\Resource\Object as ResourceObject,
     BEAR\Resource\Resource,
     BEAR\Resource\Uri;
 use BEAR\Resource\Annotation\Link;
+use Ray\Di\Di\Scope;
 
 /**
  * Order

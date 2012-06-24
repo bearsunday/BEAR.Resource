@@ -134,7 +134,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function test_SelfLinkSelf()
+    public function est_SelfLinkSelf()
     {
         $ro = new \testworld\ResourceObject\User;
         $ro->setResource($this->resource);

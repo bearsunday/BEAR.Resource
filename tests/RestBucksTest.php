@@ -63,6 +63,14 @@ class RestBucksTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $options['allows']);
     }
 
+    /**
+     * @expectedException BEAR\Resource\Exception\MethodNotAllowed
+     */
+    public function testOptionDelete()
+    {
+        $options = $this->resource->delete->uri('app://self/RestBucks/Menu')->eager->request()->body;
+    }
+
     public function tesMenuLinksOrder()
     {
         $menu = $this->resource->get->uri('app://self/RestBucks/Menu')->withQuery(array('drink' => 'latte'))->eager->request();

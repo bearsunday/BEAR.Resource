@@ -10,7 +10,7 @@ require_once __DIR__ . '/src/BEAR/Resource/LinkerInterface.php';
 require_once __DIR__ . '/src/BEAR/Resource/LinkType.php';
 
 // trait
-require_once __DIR__ . '/src/BEAR/Resource/ArrayAccess.php';
+require_once __DIR__ . '/src/BEAR/Resource/BodyArrayAccess.php';
 
 // abstract class
 require_once __DIR__ . '/src/BEAR/Resource/AbstractObject.php';

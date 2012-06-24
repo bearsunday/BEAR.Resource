@@ -111,9 +111,6 @@ class Resource implements ResourceInterface
         if ($this->cache instanceof Cache) {
             $this->cache->save($key, $instance);
         }
-        if (method_exists($instance, '__wakeup')) {
-            $instance->__wakeup();
-        }
 
         return $instance;
     }
@@ -137,7 +134,7 @@ class Resource implements ResourceInterface
     {
         if (is_string($uri)) {
             if (! $this->request) {
-                throw new BadRequest('Request method needed before uri()');
+                throw new BadRequest('Request method (get/put/post/delete/options) required before uri()');
             }
             $this->request->ro = $this->newInstance($uri);
             $this->request->uri = $uri;

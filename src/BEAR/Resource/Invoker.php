@@ -109,11 +109,6 @@ class Invoker implements InvokerInterface
         if ($request->ro instanceof Weave) {
             $weave = $request->ro;
             $result = $weave(array($this, 'getParams'), $method, $request->query);
-            if ($request->links) {
-                /** @todo */
-                $ro = $weave->___getObject();
-                $result = $this->linker->invoke($ro, $request, $result);
-            }
 
             return $result;
         }

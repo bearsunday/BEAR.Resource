@@ -133,4 +133,12 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $result = (string) ($this->resource);
         $this->assertSame('', $result);
     }
+
+    public function test_resourceHasView()
+    {
+        $view = 'i have view';
+        $this->resource->view = $view;
+        $result = (string) ($this->resource);
+        $this->assertSame($view, $result);
+    }
 }

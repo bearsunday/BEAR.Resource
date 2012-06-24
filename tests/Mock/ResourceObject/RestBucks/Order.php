@@ -6,6 +6,7 @@ use BEAR\Resource\Object as ResourceObject,
     BEAR\Resource\AbstractObject,
     BEAR\Resource\Resource,
     BEAR\Resource\Uri;
+use Ray\Di\Di\Scope;
 
 /**
  * Order

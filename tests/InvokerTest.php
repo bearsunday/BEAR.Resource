@@ -27,7 +27,6 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $additionalAnnotations = require __DIR__ . '/scripts/additionalAnnotations.php';
         $signalProvider = function (
                 $return,
                 \ReflectionParameter $parameter,
@@ -38,7 +37,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
 
             return \Aura\Signal\Manager::STOP;
         };
-        $config = new Config(new Annotation(new Definition, $additonalAnnotations));
+        $config = new Config(new Annotation(new Definition, new Reader));
         $scheme = new SchemeCollection;
         $scheme->scheme('nop')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Nop);
         $scheme->scheme('prov')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Prov);

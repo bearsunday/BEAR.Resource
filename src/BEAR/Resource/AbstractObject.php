@@ -8,8 +8,10 @@
 namespace BEAR\Resource;
 
 use Ray\Di\Di\Inject;
+use ArrayAccess;
 use Countable;
 use IteratorAggregate;
+use Exception;
 
 /**
  * Abstract resource object
@@ -17,9 +19,9 @@ use IteratorAggregate;
  * @package BEAR.Resource
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
  */
-abstract class AbstractObject implements Object, \ArrayAccess, Countable, IteratorAggregate
+abstract class AbstractObject implements Object, ArrayAccess, Countable, IteratorAggregate
 {
-    use ArrayAccess;
+    use BodyArrayAccess;
 
     /**
      * URI
@@ -64,17 +66,6 @@ abstract class AbstractObject implements Object, \ArrayAccess, Countable, Iterat
     private $renderer = '';
 
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-    }
-
-    public function __wakeup()
-    {
-    }
-
-    /**
      * Set renderer
      *
      * @param Renderable $renderer
@@ -87,16 +78,6 @@ abstract class AbstractObject implements Object, \ArrayAccess, Countable, Iterat
     }
 
     /**
-     * Transfer
-     *
-     * Transfer representational state
-     */
-    public function send()
-    {
-        $this->sender->send($this);
-    }
-
-    /**
      * Return representational string
      *
      * Return object hash if representation renderer is not set.
@@ -105,23 +86,20 @@ abstract class AbstractObject implements Object, \ArrayAccess, Countable, Iterat
      */
     public function __toString()
     {
-        if (! $this->renderer) {
-            return '';
+        if (! is_null($this->view)) {
+            return $this->view;
         }
-        if ($this->renderer) {
-            if (is_null($this->view)) {
-                try {
-                    $this->view = $this->renderer->render($this);
-                } catch (\Exception $e) {
-                    $this->view = '';
-                    error_log((string) $e);
-                }
-                $string = $this->view;
-            } else {
-                $string = get_class($this) . '#' . md5(serialize($this->body));
+        if ($this->renderer instanceof Renderable) {
+            try {
+                $this->view = $this->renderer->render($this);
+            } catch (Exception $e) {
+                $this->view = '';
+                error_log((string) $e);
             }
-
-            return $string;
+        } else {
+            $this->view = '';
         }
+
+        return $this->view;
     }
 }
