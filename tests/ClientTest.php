@@ -80,7 +80,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\stdClass', $instance);
     }
 
-
     public function testGetRequestByPost()
     {
         $query = array();
@@ -161,7 +160,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $request->toUriWithMethod());
     }
 
-
     public function testPostWithNoDefaultParameter()
     {
         $actual = $this->resource->post->object($this->user)->withQuery($this->query)->eager->request();
@@ -180,9 +178,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->resource->get->uri('nop://self/dummy')->withQuery($this->query);
         $expected = "nop://self/dummy?id=10&name=Ray&age=43";
-        $this->assertSame($expected, (string)$client);
+        $this->assertSame($expected, (string) $client);
     }
-
 
     public function testPutWithDefaultParameter()
     {
@@ -237,6 +234,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         Definition $definition
         ) {
             $return->value = 1;
+
             return \Aura\Signal\Manager::STOP;
         };
         $this->resource->attachParamProvider('login_id', $signalProvider);
@@ -253,6 +251,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         Definition $definition
         ) {
             $return->value = 1;
+
             return \Aura\Signal\Manager::STOP;
         };
 
@@ -285,7 +284,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->invoker = new Invoker(new Config(new Annotation(new Definition), $additonalAnnotations), new Linker(new Reader), $this->signal);
         $this->resource = new Resource($factory, $this->invoker, new Request($this->invoker));
         $request = $this->resource->get->uri('test://self/path/to/example')->withQuery(['a'=>1, 'b'=>2])->request();
-        $this->assertSame('{"posts":[1,2]}', (string)$request);
+        $this->assertSame('{"posts":[1,2]}', (string) $request);
         $this->assertSame(['posts' => [1, 2]], $request()->body);
     }
 

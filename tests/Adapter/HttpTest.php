@@ -15,8 +15,6 @@ Ray\Di\EmptyModule;
 use BEAR\Resource\Builder,
 BEAR\Resource\Mock\User;
 
-use Guzzle\Service\Client as GuzzleClient;
-
 /**
  * Test class for BEAR.Resource.
  */
@@ -47,7 +45,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
     public function testGetHeaderRepeatWithCache()
     {
-        foreach(range(1,10) as $i) {
+        foreach (range(1,10) as $i) {
             $ro = $this->httpAdapter->onGet();
         }
         $this->assertSame($ro->headers['Content-Type'][0], 'application/xml; charset=UTF-8');
@@ -59,7 +57,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     public function testGetBody()
     {
         $ro = $this->httpAdapter->onGet();
-        $actual = (string)($ro->body->channel->title[0]);
+        $actual = (string) ($ro->body->channel->title[0]);
         $expected = 'Top Stories - Google News';
         $this->assertSame($expected, $actual);
     }

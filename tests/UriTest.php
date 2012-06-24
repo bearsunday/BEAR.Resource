@@ -14,7 +14,6 @@ class UriTest extends \PHPUnit_Framework_TestCase
 
     public function test_offsetGet()
     {
-         $this->assertTrue(is_string((string)$this->uri));
+         $this->assertTrue(is_string((string) $this->uri));
     }
 }
-

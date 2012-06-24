@@ -7,7 +7,6 @@
  */
 namespace BEAR\Resource;
 
-
 /**
  * Resource object marker interface
  *

@@ -41,13 +41,13 @@ final class Code
      *
      * <pre>
      * - 1xx: Informational - Request received, continuing process
- 	 * - 2xx: Success - The action was successfully received, understood, and accepted
- 	 * - 3xx: Redirection - Further action must be taken in order to complete the request
- 	 * - 4xx: Client Error - The request contains bad syntax or cannot be fulfilled
- 	 * - 5xx: Server Error - The server failed to fulfill an apparently valid request
- 	 * </pre>
- 	 *
- 	 * @see http://www.iana.org/assignments/http-status-codes
+      * - 2xx: Success - The action was successfully received, understood, and accepted
+      * - 3xx: Redirection - Further action must be taken in order to complete the request
+      * - 4xx: Client Error - The request contains bad syntax or cannot be fulfilled
+      * - 5xx: Server Error - The server failed to fulfill an apparently valid request
+      * </pre>
+      *
+      * @see http://www.iana.org/assignments/http-status-codes
      * @var array
      */
     public $statusText = [
@@ -106,7 +106,7 @@ final class Code
             '507' => 'Insufficient Storage',
             '508' => 'Loop Detected',
             // 509       Unassigned]
-    		'510' => 'Not Extended',
+            '510' => 'Not Extended',
             // 511-599   Unassigned
     ];
 }

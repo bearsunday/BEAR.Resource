@@ -2,8 +2,6 @@
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Mock\MockModule;
-
 class ClientLinkTest extends \PHPUnit_Framework_TestCase
 {
     protected function setUp()

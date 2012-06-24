@@ -9,6 +9,8 @@ use BEAR\Resource\Object as ResourceObject,
 use BEAR\Resource\Annotation\Provides,
     BEAR\Resource\Annotation\ParamSignal;
 
+use Ray\Di\Di\Scope;
+
 /**
  * @Scope("singleton")
  */
@@ -39,9 +41,9 @@ class User extends AbstractObject
         if (!isset($this->users[$id])) {
             throw new \InvalidArgumentException($id);
         }
+
         return $this->users[$id];
     }
-
 
     public function onPost($id, $name='default_name', $age=99)
     {

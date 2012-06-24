@@ -9,17 +9,11 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\BadRequest;
 
-use Aura\Autoload\Exception\NotReadable;
-use BEAR\Resource\Object as ResourceObject;
 use BEAR\Resource\Adapter\App\Link as LikType;
 use BEAR\Resource\Exception;
-use BEAR\Resource\Exception\ResourceNotFound;
-use BEAR\Resource\Exception\InvalidScheme;
 use BEAR\Resource\Exception\InvalidUri;
 use Guzzle\Common\Cache\AbstractCacheAdapter as Cache;
-use ReflectionException;
 use Ray\Di\Di\Inject;
-use Ray\Di\Di\Named;
 
 /**
  * Resource client
@@ -59,7 +53,6 @@ class Resource implements ResourceInterface
      * @var \SplObjectStorage
      */
     private $requests;
-
 
     /**
      * Cache
@@ -121,6 +114,7 @@ class Resource implements ResourceInterface
         if (method_exists($instance, '__wakeup')) {
             $instance->__wakeup();
         }
+
         return $instance;
     }
 
@@ -131,6 +125,7 @@ class Resource implements ResourceInterface
     public function object($ro)
     {
         $this->request->ro = $ro;
+
         return $this;
     }
 
@@ -146,11 +141,13 @@ class Resource implements ResourceInterface
             }
             $this->request->ro = $this->newInstance($uri);
             $this->request->uri = $uri;
+
             return $this;
         }
         if ($uri instanceof Uri) {
             $this->request->ro = $this->newInstance($uri->uri);
             $this->withQuery($uri->query);
+
             return $this;
         }
         throw new Exception\InvalidUri;
@@ -163,6 +160,7 @@ class Resource implements ResourceInterface
     public function withQuery(array $query)
     {
         $this->request->query = $query;
+
         return $this;
     }
 
@@ -173,6 +171,7 @@ class Resource implements ResourceInterface
     public function addQuery(array $query)
     {
         $this->request->query = array_merge($this->request->query, $query);
+
         return $this;
     }
 
@@ -186,6 +185,7 @@ class Resource implements ResourceInterface
         $link->key = $linkKey;
         $link->type = LikType::SELF_LINK;
         $this->request->links[] = $link;
+
         return $this;
     }
 
@@ -199,6 +199,7 @@ class Resource implements ResourceInterface
         $link->key = $linkKey;
         $link->type = LikType::NEW_LINK;
         $this->request->links[] = $link;
+
         return $this;
     }
 
@@ -212,6 +213,7 @@ class Resource implements ResourceInterface
         $link->key = $linkKey;
         $link->type = LikType::CRAWL_LINK;
         $this->request->links[] = $link;
+
         return $this;
     }
 
@@ -224,6 +226,7 @@ class Resource implements ResourceInterface
         if (isset($this->request->options['sync'])) {
             $this->requests->attach($this->request);
             $this->request = clone $this->newRequest;
+
             return $this;
         }
         if ($this->request->in === 'eager') {
@@ -237,8 +240,10 @@ class Resource implements ResourceInterface
                 $this->request->ro->body = $result;
                 $result = $this->request->ro;
             }
+
             return $result;
         }
+
         return $this->request;
     }
 
@@ -271,15 +276,18 @@ class Resource implements ResourceInterface
             case 'options':
                 $this->request = clone $this->newRequest;
                 $this->request->method = $name;
+
                 return $this;
             case 'lazy':
             case 'eager':
                 $this->request->in = $name;
+
                 return $this;
             case 'poe':
             case 'csrf':
             case 'sync':
                 $this->request->options[$name] = true;
+
                 return $this;
             default:
                 throw new Exception\BadRequest($name, 400);

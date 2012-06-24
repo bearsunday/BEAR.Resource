@@ -17,6 +17,7 @@ class Log implements MethodInterceptor
         $input = $invocation->getArguments();
         $input = print_r($input, true);
         $result .= "[Log] target = $class, input = $input, result = $result";
+
         return $result;
     }
 }

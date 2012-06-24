@@ -7,8 +7,6 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Object as ResourceObject;
-
 /**
  * Interface for resource client
  *
@@ -50,7 +48,7 @@ interface ResourceInterface
     /**
      * Set named parameter query
      *
-     * @param array $query
+     * @param  array    $query
      * @return Resource
      */
     public function withQuery(array $query);

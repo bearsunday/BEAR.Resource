@@ -48,7 +48,7 @@ class DevInvoker extends Invoker implements InvokerInterface
             // no bind.
             $resource = $request->ro;
         }
-        
+
         // MethodNotAllowed
         if ((! $request->ro instanceof Weave) && method_exists($request->ro, $method) !== true) {
             if ($request->method === self::OPTIONS) {
@@ -56,7 +56,7 @@ class DevInvoker extends Invoker implements InvokerInterface
             }
             throw new Exception\MethodNotAllowed(get_class($request->ro) . "::$method()", 405);
         }
-        
+
         $resource->headers[self::HEADER_QUERY] = json_encode($request->query);
         $time = microtime(true);
         $memory = memory_get_usage();
@@ -68,7 +68,7 @@ class DevInvoker extends Invoker implements InvokerInterface
         $params = $this->getParams($ro, $method, $request->query);
         $resource->headers[self::HEADER_PARAMS] = json_encode($params, true);
         $result = parent::invoke($request);
-        
+
         // post process for log
         $time = microtime(true) - $time;
         $memory = memory_get_usage() - $memory;
@@ -79,13 +79,14 @@ class DevInvoker extends Invoker implements InvokerInterface
             $profileId = (new XHProfRuns_Default)->save_run($xhprof, 'resource');
             $resource->headers[self::HEADER_PROFILE_ID] = $profileId;
         }
+
         return $result;
     }
-    
+
     public function getBindInfo(Bind $binds)
     {
         $result = [];
-        $binds = (array)$binds;
+        $binds = (array) $binds;
         foreach ($binds as $method => $bind) {
             $interceptors = array_values($binds[$method]);
             foreach ($interceptors as &$interceptor) {
@@ -93,6 +94,7 @@ class DevInvoker extends Invoker implements InvokerInterface
             }
             $result[$method] = $interceptors;
         }
+
         return $result;
     }
 }

@@ -14,6 +14,7 @@ class Test extends AbstractObject implements ResourceObject, Adapter
     public function onGet($a, $b)
     {
         $this['posts'] = [$a, $b];
+
         return $this;
     }
 }

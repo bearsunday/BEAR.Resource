@@ -15,7 +15,6 @@ use BEAR\Resource\Request\Method,
 BEAR\Resource\Adapter\Nop;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 
-
 /**
  * Test class for BEAR.Resource.
  */
@@ -134,7 +133,6 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         ));
         $this->assertSame($expected, $result);
     }
-
 
     public function test_SelfLinkSelf()
     {

@@ -7,8 +7,6 @@
  */
 namespace BEAR\Resource\Adapter\App;
 
-use BEAR\Resource\Object as ResourceObject;
-
 /**
  * The value of a link constant
  *

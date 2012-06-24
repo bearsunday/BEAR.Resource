@@ -44,6 +44,7 @@ class Order extends AbstractObject
         $this->code = 201;
         $this->headers['Location'] = "app://self/RestBucks/Order/?id=$orderId";
         $this->headers['rel=payment'] = new Uri('app://self/RestBucks/Payment', array('order_id' => $orderId));
+
         return $this;
     }
 }

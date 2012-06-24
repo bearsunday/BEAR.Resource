@@ -7,8 +7,6 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Object as ResourceObject;
-
 /**
  * Interface for resource factory
  *

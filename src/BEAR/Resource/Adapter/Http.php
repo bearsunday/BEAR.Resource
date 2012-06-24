@@ -13,7 +13,6 @@ use BEAR\Resource\Adapter\Http\Guzzle;
 
 use Guzzle\Service\Client as GuzzleClient;
 
-
 /**
  * App resource (app:://self/path/to/resource)
  *
@@ -42,6 +41,7 @@ class Http implements ResourceObject, Provider, Adapter
     public function get($uri)
     {
         $instance = new Http\Guzzle(new GuzzleClient($uri));
+
         return $instance;
     }
 }

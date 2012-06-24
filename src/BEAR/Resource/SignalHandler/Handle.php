@@ -7,8 +7,6 @@
  */
 namespace BEAR\Resource\SignalHandler;
 
-use BEAR\Resource\Object as ResourceObject;
-
 use ReflectionParameter;
 use Ray\Aop\ReflectiveMethodInvocation;
 use Ray\Di\Definition;
@@ -26,7 +24,7 @@ interface Handle
     /**
      * Handle parameter signal
      *
-     * @param mixed                      $return handler provided return value
+     * @param mixed                      $return     handler provided return value
      * @param ReflectionParameter        $parameter  parameter reflection
      * @param ReflectiveMethodInvocation $invovation Method invocation
      * @param Definition                 $definition Class definition

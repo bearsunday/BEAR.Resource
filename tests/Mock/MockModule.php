@@ -10,7 +10,8 @@ use Ray\Di\AbstractModule,
  */
 class MockModule extends AbstractModule
 {
-    public function __construct(InjectorInterface $injector){
+    public function __construct(InjectorInterface $injector)
+    {
         $this->injector = $injector;
         $this->configure();
     }

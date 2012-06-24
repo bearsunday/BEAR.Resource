@@ -7,11 +7,7 @@
  */
 namespace BEAR\Resource\Adapter\Http;
 
-use Ray\Di\InjectorInterface;
 use BEAR\Resource\Object as ResourceObject;
-use BEAR\Resource\Provider;
-use BEAR\Resource\Exception;
-use BEAR\Resource\LinkerInterface;
 use BEAR\Resource\Request;
 
 use Guzzle\Service\Client as GuzzleClient;
@@ -98,6 +94,7 @@ class Guzzle implements ResourceObject, HttpClient
     {
         $this->response = $response = $this->guzzle->delete()->send();
         list($this->code, $this->headers, $this->body) = $this->parseResponse($this->response);
+
         return $this;
     }
 
@@ -109,6 +106,7 @@ class Guzzle implements ResourceObject, HttpClient
     {
         $this->response = $response = $this->guzzle->head()->send();
         list($this->code, $this->headers, $this->body) = $this->parseResponse($this->response);
+
         return $this;
     }
 
@@ -120,6 +118,7 @@ class Guzzle implements ResourceObject, HttpClient
     {
         $this->response = $response = $this->guzzle->options()->send();
         list($this->code, $this->headers, $this->body) = $this->parseResponse($this->response);
+
         return $this;
     }
 
@@ -139,13 +138,14 @@ class Guzzle implements ResourceObject, HttpClient
         } elseif (strpos($headers['Content-Type'][0], 'json') !== false) {
             $body = json_decode($body);
         }
+
         return array($code, $headers, $body);
     }
 
     /**
      * Continue Sync
      *
-     * @param Request $request
+     * @param Request      $request
      * @param \ArrayObject $syncData
      *
      * @return void
@@ -158,7 +158,7 @@ class Guzzle implements ResourceObject, HttpClient
     /**
      * Finalise sync
      *
-     * @param Request $request
+     * @param Request      $request
      * @param \ArrayObject $syncData
      *
      * @return \BEAR\Resource\Adapter\Http\Guzzle
@@ -176,6 +176,7 @@ class Guzzle implements ResourceObject, HttpClient
             list($code, $headers, $body) = $this->parseResponse($response);
             $this->body[] = $body;
         }
+
         return $this;
     }
 }

@@ -73,7 +73,7 @@ final class Linker implements LinkerInterface
                 for ($i = 0; $i < $cnt; $i++) {
                     list($item, $ro) = $q->dequeue();
                     try {
-                        $request = $this->getLinkResult($ro, $link->key, (array)$item);
+                        $request = $this->getLinkResult($ro, $link->key, (array) $item);
                     } catch (BadLinkRequest $e) {
                         $method = 'on' . ucfirst($method);
                         $linkAnnotations = $this->reader->getMethodAnnotations(new ReflectionMethod($ro, $method));
@@ -87,7 +87,7 @@ final class Linker implements LinkerInterface
                     $requestResult = $request();
                     $a = $requestResult;
                     $item[$link->key] = $a;
-                    $item = (array)$item;
+                    $item = (array) $item;
                 }
                 continue;
             }
@@ -132,10 +132,11 @@ final class Linker implements LinkerInterface
                         $sourceValue,
                         function(&$in) {
             if ($in instanceof \ArrayObject) {
-                $in = (array)$in;
+                $in = (array) $in;
             }
         }
         );
+
         return $sourceValue;
     }
 
@@ -161,6 +162,7 @@ final class Linker implements LinkerInterface
                     }
                     $method = $annotation->method;
                     $result = $this->resource->$method->uri($uri)->withQuery($input)->eager->request();
+
                     return $result;
                 }
             }
@@ -168,6 +170,7 @@ final class Linker implements LinkerInterface
             throw new BadLinkRequest(get_class($ro) . "::{$method}");
         }
         $result = call_user_func(array($ro, $method), $input);
+
         return $result;
     }
 
@@ -183,13 +186,14 @@ final class Linker implements LinkerInterface
         if (!(is_array($list))) {
             return false;
         }
-        $list = array_values((array)$list);
+        $list = array_values((array) $list);
         $result = (count($list) > 1
                         && isset($list[0])
                         && isset($list[1])
                         && is_array($list[0])
                         && is_array($list[1])
                         && (array_keys($list[0]) === array_keys($list[1])));
+
         return $result;
     }
 

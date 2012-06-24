@@ -2,8 +2,6 @@
 
 namespace BEAR\Resource;
 
-use Doctrine\Common\Util\Debug;
-
 use Ray\Di\Definition,
 Ray\Di\Annotation,
 Ray\Di\Config,
@@ -37,6 +35,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
                 Definition $definition
         ) {
             $return->value = 1;
+
             return \Aura\Signal\Manager::STOP;
         };
         $config = new Config(new Annotation(new Definition, $additonalAnnotations));
@@ -160,7 +159,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         }));
         $actual = $this->invoker->invokeTraversal($body);
         $expected = new \ArrayObject(array('a' =>1 ,'b' => 2));
-        $this->assertSame((array)$expected, (array)$actual);
+        $this->assertSame((array) $expected, (array) $actual);
     }
 
     public function test_invokeWeave()

@@ -6,8 +6,6 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Object as ResourceObject;
-
 /**
  * Link type DTO
  *

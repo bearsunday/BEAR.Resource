@@ -38,7 +38,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $actual = $this->request->toUriWithMethod();
         $this->assertSame('get test://self/path/to/resource?a=koriym&b=25', $actual);
     }
-    
+
     public function test_toUri()
     {
         $this->request->method = 'get';
@@ -88,7 +88,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $expected = array('koriym', 30);
         $this->assertInstanceOf('\BEAR\Resource\Request', $this->request);
         $request = $this->request;
-        $result = (string)$request;
+        $result = (string) $request;
         $this->assertSame('{"posts":["koriym",30]}', $result);
     }
 }

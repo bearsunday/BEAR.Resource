@@ -9,11 +9,9 @@ namespace BEAR\Resource\Adapter;
 
 use BEAR\Resource\Object as ResourceObject;
 use BEAR\Resource\Provider;
-use BEAR\Resource\LinkerInterface;
 use BEAR\Resource\Exception\ResourceNotFound;
 use Ray\Di\InjectorInterface;
 use Ray\Di\Di\Inject;
-use Ray\Di\Di\Named;
 use RuntimeException;
 use Exception;
 
@@ -53,7 +51,7 @@ class App implements ResourceObject, Provider, Adapter
      *
      * @param InjectorInterface $injector  Application dependency injector
      * @param string            $namespace Resource adapter namespace
-     * @param string		    $path      Resource adapter path
+     * @param string            $path      Resource adapter path
      *
      * @Inject
      */
@@ -87,9 +85,13 @@ class App implements ResourceObject, Provider, Adapter
         $className = "{$this->namespace}\\{$this->path}{$path}";
         try {
             $instance = $this->injector->getInstance($className);
+        } catch (\Doctrine\Common\Annotations\AnnotationException $e) {
+            throw $e;
         } catch (Exception $e) {
-            throw new ResourceNotFound($uri, 400, $e);
+            echo $e;
+            throw new ResourceNotFound("$uri ($className)", 400, $e);
         }
+
         return $instance;
     }
 }

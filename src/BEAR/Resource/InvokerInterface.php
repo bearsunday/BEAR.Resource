@@ -20,7 +20,7 @@ interface InvokerInterface
     /**
      * Invoke resource request
      *
-     * @param Request $request
+     * @param  Request $request
      * @return mixed
      */
     public function invoke(Request $request);

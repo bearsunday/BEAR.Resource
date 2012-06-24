@@ -53,7 +53,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $this->resource['b'] = 'banana';
         $this->resource->ksort();
         $expected = array('a' => 'orange', 'b' => 'banana', 'd' => 'lemon');
-        $this->assertSame($expected, (array)$this->resource->body);
+        $this->assertSame($expected, (array) $this->resource->body);
     }
 
     public function test_asort()
@@ -64,7 +64,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $this->resource['b'] = 'banana';
         $this->resource->asort();
         $expected = array('b' => 'banana', 'd' => 'lemon', 'a' => 'orange');
-        $this->assertSame($expected, (array)$this->resource->body);
+        $this->assertSame($expected, (array) $this->resource->body);
     }
 
     public function test_append()
@@ -77,7 +77,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
     {
         $iterator = $this->resource->getIterator();
         $actual = '';
-        while($iterator->valid()) {
+        while ($iterator->valid()) {
             $actual .=  $iterator->key() . '=>' . $iterator->current() . ",";
             $iterator->next();
         }
@@ -90,7 +90,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $iterator = $this->resource->body = 'string';
         $iterator = $this->resource->getIterator();
         $actual = '';
-        while($iterator->valid()) {
+        while ($iterator->valid()) {
             $actual .=  $iterator->key() . '=>' . $iterator->current() . ",";
             $iterator->next();
         }
@@ -108,7 +108,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
     public function atest_toString()
     {
         $this->resource->headers['X-TEST'] = __FUNCTION__;
-        $str = (string)$this->resource;
+        $str = (string) $this->resource;
         $this->assertTrue(is_string($str));
     }
 
@@ -116,7 +116,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
     {
         $this->resource->headers['X-TEST'] = __FUNCTION__;
         $this->resource->body = 'OK';
-        $str = (string)$this->resource;
+        $str = (string) $this->resource;
         $this->assertTrue(is_string($str));
     }
 
@@ -124,14 +124,13 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
     {
         $renderer = new TestRenderer;
         $this->resource->setRenderer($renderer);
-        $result = (string)($this->resource);
+        $result = (string) ($this->resource);
         $this->assertSame('["entry1","entry2","entry3"]', $result);
     }
 
     public function test_setRendererWithoutRenderer()
     {
-        $result = (string)($this->resource);
+        $result = (string) ($this->resource);
         $this->assertSame('', $result);
     }
 }
-

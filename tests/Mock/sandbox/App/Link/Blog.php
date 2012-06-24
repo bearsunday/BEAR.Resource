@@ -1,9 +1,7 @@
 <?php
 namespace sandbox\App\Link;
 
-use BEAR\Resource\Object as ResourceObject;
 use BEAR\Resource\AbstractObject;
-use BEAR\Resource\ResourceInterface;
 
 class Blog extends AbstractObject
 {

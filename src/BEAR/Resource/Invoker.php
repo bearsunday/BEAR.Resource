@@ -9,15 +9,12 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Object;
 
-
 use Aura\Di\ConfigInterface;
 use Aura\Signal\Manager as Signal;
-use Aura\Signal\Exception as AuraException;
 use BEAR\Resource\Object as ResourceObject;
 use BEAR\Resource\Annotation\ParamSignal;
 use Ray\Aop\Weave;
 use Ray\Aop\ReflectiveMethodInvocation;
-use Ray\Di\ProviderInterface;
 use Ray\Di\Annotation;
 use Ray\Di\Definition;
 use Ray\Di\Di\Inject;
@@ -65,19 +62,18 @@ class Invoker implements InvokerInterface
      */
     const ANNOTATION_PROVIDES = 'Provides';
 
-
     const SIGNAL_PARAM = 'param';
 
     /**
      * Set resource client
-     * 
+     *
      * @param ResourceInterface $resource
      */
     public function setResourceClient(ResourceInterface $resource)
     {
         $this->linker->setResource($resource);
     }
-    
+
     /**
      * Constructor
      *
@@ -118,6 +114,7 @@ class Invoker implements InvokerInterface
                 $ro = $weave->___getObject();
                 $result = $this->linker->invoke($ro, $request, $result);
             }
+
             return $result;
         }
         if (method_exists($request->ro, $method) !== true) {
@@ -138,9 +135,10 @@ class Invoker implements InvokerInterface
         if ($request->links) {
             $result = $this->linker->invoke($request->ro, $request, $result);
         }
+
         return $result;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see BEAR\Resource.InvokerInterface::invokeTraversal()
@@ -152,6 +150,7 @@ class Invoker implements InvokerInterface
                 $element = $element();
             }
         }
+
         return $requests;
     }
 
@@ -160,7 +159,7 @@ class Invoker implements InvokerInterface
      *
      * @param object $object
      * @param string $method
-     * @param array $args
+     * @param array  $args
      *
      * @return array
      * @throws Exception\InvalidParameter
@@ -191,6 +190,7 @@ class Invoker implements InvokerInterface
                 }
             }
         }
+
         return $params;
     }
 
@@ -199,10 +199,10 @@ class Invoker implements InvokerInterface
      *
      * Thie method called when client and service object both has no argument
      *
-     * @param array $definition
+     * @param array  $definition
      * @param object $object
      * @param string $method
-     * @param array $args
+     * @param array  $args
      *
      * @return mixed
      * @throws Exception\InvalidParameter
@@ -267,11 +267,12 @@ PARAMETER_NOT_PROVIDED:
             $refMethod = new \ReflectionMethod($ro, 'on' . $follow);
             $parameters = $refMethod->getParameters();
             foreach ($parameters as $parameter) {
-                $paramArray[] = (string)$parameter;
+                $paramArray[] = (string) $parameter;
             }
             $params = array($follow => implode(',', $paramArray));
         }
         $result = array('allows' => $allows, 'params' => $params);
+
         return $result;
     }
 
@@ -283,7 +284,7 @@ PARAMETER_NOT_PROVIDED:
     {
         $requests->rewind();
         $data = new \ArrayObject();
-        while($requests->valid()) {
+        while ($requests->valid()) {
             // each sync request method call.
             $request = $requests->current();
             if (method_exists($request->ro, 'onSync')) {
@@ -293,6 +294,7 @@ PARAMETER_NOT_PROVIDED:
         }
         //onFinalSync summaraize all sync request data.
         $result = call_user_func(array($request->ro, 'onFinalSync'), $request, $data);
+
         return $result;
     }
 

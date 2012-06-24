@@ -5,7 +5,6 @@ use BEAR\Resource\DevInvoker;
 namespace BEAR\Resource;
 
 require __DIR__ . '/InvokerTest.php';
-use Doctrine\Common\Util\Debug;
 
 use Ray\Di\Definition,
 Ray\Di\Annotation,
@@ -15,13 +14,11 @@ Ray\Di\Container,
 Ray\Di\Manager,
 Ray\Di\Injector,
 Ray\Di\EmptyModule;
-
 use Ray\Aop\Weaver,
 Ray\Aop\Bind,
 Ray\Aop\ReflectiveMethodInvocation;
 use BEAR\Resource\Mock\User;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
-
 
 /**
  * Test class for BEAR.Resource.
@@ -33,9 +30,6 @@ class DevInvokerTest extends InvokerTest
 
     protected function setUp()
     {
-        restore_exception_handler();
-        restore_error_handler();
-        $additionalAnnotations = require __DIR__ . '/scripts/additionalAnnotations.php';
         $signalProvider = function (
                 $return,
                 \ReflectionParameter $parameter,
@@ -43,9 +37,10 @@ class DevInvokerTest extends InvokerTest
                 Definition $definition
         ) {
             $return->value = 1;
+
             return \Aura\Signal\Manager::STOP;
         };
-        $config = new Config(new Annotation(new Definition, $additonalAnnotations));
+        $config = new Config(new Annotation(new Definition, new Reader));
         $scheme = new SchemeCollection;
         $scheme->scheme('nop')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Nop);
         $scheme->scheme('prov')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Prov);
@@ -81,9 +76,10 @@ class DevInvokerTest extends InvokerTest
         $expected = array('id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12);
         $ro = $this->request->ro;
         $this->assertSame($actual, $expected);
+
         return $ro->headers;
     }
-    
+
     /**
      * @depends invoke
      */
@@ -107,7 +103,7 @@ class DevInvokerTest extends InvokerTest
     {
         $this->assertArrayHasKey(DevInvoker::HEADER_MEMORY_USAGE, $headers);
     }
-    
+
     /**
      * @depends invoke
      */
@@ -119,7 +115,7 @@ class DevInvokerTest extends InvokerTest
     /**
      * (non-PHPdoc)
      * @see BEAR\Resource.InvokerTest::test_invokeWeave()
-     * 
+     *
      * @test
      */
     public function invokeWeave()
@@ -131,15 +127,16 @@ class DevInvokerTest extends InvokerTest
         $this->request->method = 'get';
         $this->request->query = array('id' => 1);
         $actual = $this->invoker->invoke($this->request);
-        
+
         $ro = $this->request->ro->___getObject();
         $this->assertInstanceOf('testworld\ResourceObject\Weave\Book', $ro);
+
         return $ro->headers;
     }
-    
+
     /**
      * @param array $headers
-     * 
+     *
      * @depends invokeWeave
      */
     public function testInvokeWeavedResourceHasLogInObjectHeader(array $headers)
@@ -149,22 +146,22 @@ class DevInvokerTest extends InvokerTest
 
     /**
      * @param array $headers
-     * 
+     *
      * @depends invokeWeave
      */
     public function testInvokeWeavedResourceLogInObjectHeaderIsBind(array $headers)
     {
         $this->assertTrue(isset($headers[DevInvoker::HEADER_INTERCEPTORS]));
     }
-    
+
     /**
      * @param array $headers
-     * 
+     *
      * @depends invokeWeave
      */
     public function testInvokeWeavedResourceLogInObjectHeaderContents(array $headers)
     {
-        $bind = (array)$headers[DevInvoker::HEADER_INTERCEPTORS];
+        $bind = (array) $headers[DevInvoker::HEADER_INTERCEPTORS];
         $this->assertSame( json_encode(['onGet' =>['testworld\Interceptor\Log']]), $headers[DevInvoker::HEADER_INTERCEPTORS]);
     }
 }

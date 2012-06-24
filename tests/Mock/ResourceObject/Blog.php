@@ -58,7 +58,7 @@ class Blog extends AbstractObject
     {
         $request = $this->resource
         ->get->uri('app://self/User')->withQuery(['id' => $body['inviter']])->request();
+
         return $request;
     }
 }
-

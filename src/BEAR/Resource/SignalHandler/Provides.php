@@ -25,7 +25,7 @@ class Provides implements Handle
     /**
      * Handle parameter signal
      *
-     * @param mixed                      $return handler provided return value
+     * @param mixed                      $return     handler provided return value
      * @param ReflectionParameter        $parameter  parameter reflection
      * @param ReflectiveMethodInvocation $invovation Method invocation
      * @param Definition                 $definition Class definition

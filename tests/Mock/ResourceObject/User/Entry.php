@@ -6,7 +6,6 @@ use BEAR\Resource\Object as ResourceObject,
     BEAR\Resource\AbstractObject,
     BEAR\Resource\Resource;
 
-
 class Entry extends AbstractObject
 {
 
@@ -26,7 +25,7 @@ class Entry extends AbstractObject
         101 => array('id' => 101, 'title' => "Entry2"),
         102 => array('id' => 102, 'title' => "Entry3"),
     );
-     
+
     /**
      * @param id
      *
@@ -43,7 +42,7 @@ class Entry extends AbstractObject
     {
         $request = $this->resource
         ->get->uri('app://self/User/Entry/Comment')->withQuery(['entry_id' => $body['id']])->request();
+
         return $request;
     }
 }
-

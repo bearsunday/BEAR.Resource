@@ -14,7 +14,7 @@ class Comment extends AbstractObject
      */
     public function onGet($id)
     {
-        return "entry{$id}";
+        return "entry {$id}";
     }
 
     /**

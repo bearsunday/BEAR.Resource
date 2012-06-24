@@ -18,11 +18,11 @@ final class Result
 {
     /**
      * Value
-     * 
+     *
      * @var mixed
      */
     public $value;
-    
+
     /**
      * Arguments
      *

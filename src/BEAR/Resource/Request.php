@@ -9,7 +9,6 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Render;
 use Ray\Di\Di\Inject;
-use Ray\Di\Di\Named;
 use Exception;
 
 /**
@@ -78,7 +77,6 @@ final class Request implements Requestable
      */
     public $in;
 
-
     /**
      * Links
      *
@@ -121,6 +119,7 @@ final class Request implements Requestable
             $this->query = array_merge($this->query, $query);
         }
         $result = $this->invoker->invoke($this);
+
         return $result;
     }
 
@@ -139,7 +138,7 @@ final class Request implements Requestable
                 return $this->result;
             }
             if (method_exists($this->result, '__toString')) {
-                return (string)$this->result;
+                return (string) $this->result;
             }
             if ($this->result instanceof Object && is_string($this->result->body)) {
                 return $this->result->body;
@@ -147,6 +146,7 @@ final class Request implements Requestable
         } catch (Exception $e) {
             return '';
         }
+
         return '';
     }
 
@@ -165,6 +165,7 @@ final class Request implements Requestable
             $linkString .= ", link {$link->type}:{$link->key}";
         }
         $string = $queryString . $linkString;
+
         return $string;
     }
 

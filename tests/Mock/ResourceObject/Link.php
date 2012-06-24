@@ -15,10 +15,10 @@ class Link extends AbstractObject
     {
         return "bear{$id}";
     }
-    
+
     /**
      * @param string $string
-     * 
+     *
      * @return string
      */
     public function onLinkView($string)

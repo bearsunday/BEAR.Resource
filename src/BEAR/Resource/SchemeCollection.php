@@ -47,6 +47,7 @@ class SchemeCollection extends ArrayObject
     public function scheme($scheme)
     {
         $this->scheme = $scheme;
+
         return $this;
     }
 
@@ -58,6 +59,7 @@ class SchemeCollection extends ArrayObject
     public function host($host)
     {
         $this->host = $host;
+
         return $this;
     }
 
@@ -70,6 +72,7 @@ class SchemeCollection extends ArrayObject
     {
         $this[$this->scheme][$this->host] = $adapter;
         $this->scheme = $this->host = null;
+
         return $this;
     }
 }

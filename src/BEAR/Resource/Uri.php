@@ -31,7 +31,7 @@ final class Uri
 
     /**
      * Constructor
-     * 
+     *
      * @param string $uri
      * @param array  $query
      */
@@ -49,6 +49,7 @@ final class Uri
     public function __toString()
     {
         $uriWithQuery = $this->uri . ($this->query ? '?' . http_build_query($this->query) : '');
+
         return $uriWithQuery;
     }
 }

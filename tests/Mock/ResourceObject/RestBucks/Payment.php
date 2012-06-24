@@ -25,7 +25,7 @@ class Payment extends AbstractObject
         // payment transaction here..
         $this->code = 201;
         $this->headers['Location'] = "app://self/RestBucks/Order/?id=$order_id";
+
         return $this;
     }
 }
-

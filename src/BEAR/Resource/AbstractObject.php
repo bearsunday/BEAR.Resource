@@ -8,7 +8,6 @@
 namespace BEAR\Resource;
 
 use Ray\Di\Di\Inject;
-use Ray\Di\Di\Named;
 use Countable;
 use IteratorAggregate;
 
@@ -115,12 +114,13 @@ abstract class AbstractObject implements Object, \ArrayAccess, Countable, Iterat
                     $this->view = $this->renderer->render($this);
                 } catch (\Exception $e) {
                     $this->view = '';
-                    error_log((string)$e);
+                    error_log((string) $e);
                 }
                 $string = $this->view;
             } else {
                 $string = get_class($this) . '#' . md5(serialize($this->body));
             }
+
             return $string;
         }
     }

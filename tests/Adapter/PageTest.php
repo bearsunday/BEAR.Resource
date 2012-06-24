@@ -68,7 +68,6 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\stdClass', $instance);
     }
 
-
     public function testGetRequestByPost()
     {
         $query = array();
@@ -149,7 +148,6 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $request->toUriWithMethod());
     }
 
-
     public function testPostWithNoDefaultParameter()
     {
         $actual = $this->resource->post->object($this->user)->withQuery($this->query)->eager->request();
@@ -168,9 +166,8 @@ class PageTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->resource->get->uri('nop://self/dummy')->withQuery($this->query);
         $expected = "nop://self/dummy?id=10&name=Ray&age=43";
-        $this->assertSame($expected, (string)$client);
+        $this->assertSame($expected, (string) $client);
     }
-
 
     public function testPutWithDefaultParameter()
     {

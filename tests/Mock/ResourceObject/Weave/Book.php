@@ -6,7 +6,6 @@ use BEAR\Resource\Object as ResourceObject,
     BEAR\Resource\AbstractObject,
     BEAR\Resource\Resource;
 
-
 class Book extends AbstractObject
 {
 
@@ -20,12 +19,12 @@ class Book extends AbstractObject
         }
         $this->resource = $resource;
     }
-     
+
     /**
      * @param id
      *
      * @return array
-     * 
+     *
      * @Log
      */
     public function onGet($id)
@@ -33,4 +32,3 @@ class Book extends AbstractObject
         return "book id[{$id}]";
     }
 }
-
