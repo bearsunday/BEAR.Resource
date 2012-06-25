@@ -41,7 +41,7 @@ final class Linker implements LinkerInterface
     /**
      * Constructor
      *
-     * @oaram ConfigInterface $config
+     * @param ConfigInterface $config
      *
      * @Inject
      */
