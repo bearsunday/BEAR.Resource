@@ -86,7 +86,7 @@ abstract class AbstractObject implements Object, ArrayAccess, Countable, Iterato
      */
     public function __toString()
     {
-        if (! is_null($this->view)) {
+        if (is_string($this->view)) {
             return $this->view;
         }
         if ($this->renderer instanceof Renderable) {
