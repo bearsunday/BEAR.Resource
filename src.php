@@ -61,6 +61,6 @@ require_once __DIR__ . '/src/BEAR/Resource/SignalHandler/Provides.php';
 require_once __DIR__ . '/src/BEAR/Resource/Code.php';
 
 // vendor class
-require_once __DIR__ . '/vendor/xhprof/xhprof/xhprof/xhprof_lib/utils/xhprof_lib.php';
-require_once __DIR__ . '/vendor/xhprof/xhprof/xhprof/xhprof_lib/utils/xhprof_runs.php';
+require_once __DIR__ . '/vendor/facebook/xhprof/xhprof_lib/utils/xhprof_lib.php';
+require_once __DIR__ . '/vendor/facebook/xhprof/xhprof_lib/utils/xhprof_runs.php';
 
