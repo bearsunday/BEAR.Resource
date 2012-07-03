@@ -3,7 +3,7 @@
     "description": "RESTful service layer framework",
     "keywords": ["rest", "service layer"],
     "homepage": "https://github.com/koriym/BEAR.Resource",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "license": "BSD-3-Clause",
     "repositories": [
         {
