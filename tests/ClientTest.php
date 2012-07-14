@@ -17,6 +17,7 @@ use BEAR\Resource\SignalHandler\Provides;
 use Guzzle\Common\Cache\DoctrineCacheAdapter as CacheAdapter;
 use Doctrine\Common\Cache\ArrayCache as Cache;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
+use BEAR\Resource\Mock\TestModule;
 
 /**
  * Test class for BEAR.Resource.
@@ -33,26 +34,30 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition)))), new EmptyModule);
+        
+        // build resource client
         $scheme = new SchemeCollection;
+        $injector = require dirname(__DIR__) . '/scripts/injector.php';
+        $injector->setModule(new TestModule);
         $scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject'));
         $scheme->scheme('page')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'Page'));
         $scheme->scheme('nop')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Nop);
         $scheme->scheme('test')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Test);
         $scheme->scheme('prov')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Prov);
         $scheme->scheme('http')->host('*')->toAdapter(new \BEAR\Resource\Adapter\Http);
+        /** @var $resource BEAR\Resource\Resource */
+        $this->resource = require dirname(__DIR__) . '/scripts/instance.php';
+        $this->resource->setSchemeCollection($scheme);
+        
+        // new resource object;
         $factory = new Factory($scheme);
-        $this->signal = require dirname(__DIR__) . '/vendor/Aura/Signal/scripts/instance.php';
-        $reader = new Reader;
-        $this->invoker = new Invoker(new Config(new Annotation(new Definition), $reader), new Linker($reader), $this->signal);
-        $this->resource = new Resource($factory, $this->invoker, new Request($this->invoker));
         $this->user = $factory->newInstance('app://self/user');
         $this->nop = $factory->newInstance('nop://self/dummy');
-        $this->query = array(
-                'id' => 10,
-                'name' => 'Ray',
-                'age' => 43
-        );
+        $this->query = [
+            'id' => 10,
+            'name' => 'Ray',
+            'age' => 43
+        ];
     }
 
     public function test_New()

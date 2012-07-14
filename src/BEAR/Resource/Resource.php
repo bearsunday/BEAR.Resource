@@ -90,6 +90,18 @@ class Resource implements ResourceInterface
     {
         $this->cache = $cache;
     }
+    
+    /**
+     * Set scheme collection
+     * 
+     * @param SchemeCollection $scheme
+     * 
+     * @Inject(optional = true)
+     */
+    public function setSchemeCollection(SchemeCollection $scheme)
+    {
+        $this->factory->setSchemeCollection($scheme);
+    }
 
     /**
      * (non-PHPdoc)

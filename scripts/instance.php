@@ -18,13 +18,11 @@ require_once __DIR__ . '/instance/DefaultModule.php';
 
 $config = new Config(new Annotation(new Definition));
 $injector = new Injector(new Container(new Forge($config)), new DefaultModule);
-$scheme = new SchemeCollection;
-$scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'sandbox', 'App'));
 $invoker = new Invoker(
     $config,
     new Linker(new Reader),
     new Manager(
     new HandlerFactory, new ResultFactory, new ResultCollection)
 );
-$resource = new Resource(new Factory($scheme), $invoker, new Request($invoker));
+$resource = new Resource(new Factory(new SchemeCollection), $invoker, new Request($invoker));
 return $resource;

@@ -26,6 +26,7 @@ require_once __DIR__ . '/Mock/ResourceObject/MethodAnnotation.php';
 require_once __DIR__ . '/Mock/Page/News.php';
 require_once __DIR__ . '/Mock/Interceptor/Log.php';
 require_once __DIR__ . '/Mock/MockModule.php';
+require_once __DIR__ . '/Mock/TestModule.php';
 require_once __DIR__ . '/Mock/TestRenderer.php';
 require_once __DIR__ . '/Mock/ErrorRenderer.php';
 

@@ -17,6 +17,7 @@ require_once __DIR__ . '/src/BEAR/Resource/AbstractObject.php';
 
 // concrete class
 require_once __DIR__ . '/src/BEAR/Resource/Object.php';
+require_once __DIR__ . '/src/BEAR/Resource/Requestable.php';
 require_once __DIR__ . '/src/BEAR/Resource/Request.php';
 require_once __DIR__ . '/src/BEAR/Resource/Result.php';
 require_once __DIR__ . '/src/BEAR/Resource/Resource.php';
@@ -26,6 +27,7 @@ require_once __DIR__ . '/src/BEAR/Resource/Invoker.php';
 require_once __DIR__ . '/src/BEAR/Resource/Linker.php';
 require_once __DIR__ . '/src/BEAR/Resource/SchemeCollection.php';
 require_once __DIR__ . '/src/BEAR/Resource/Renderable.php';
+require_once __DIR__ . '/src/BEAR/Resource/Adapter/Adapter.php';
 require_once __DIR__ . '/src/BEAR/Resource/Adapter/App.php';
 require_once __DIR__ . '/src/BEAR/Resource/Adapter/App/Link.php';
 require_once __DIR__ . '/src/BEAR/Resource/Adapter/Page.php';

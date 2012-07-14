@@ -8,6 +8,10 @@ class ClientLinkTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->resource = require dirname(__DIR__) . '/scripts/instance.php';
+        $scheme = new SchemeCollection;
+        $injector = require dirname(__DIR__) . '/scripts/injector.php';
+        $scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'sandbox', 'App'));
+        $this->resource->setSchemeCollection($scheme);
         $this->user = $this->resource->newInstance('app://self/Link/User');
     }
 
