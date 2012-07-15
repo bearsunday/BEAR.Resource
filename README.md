@@ -37,26 +37,30 @@ Client Code
  */
 
 // order latte.
-$order = array('drink' => 'latte');
-$order = $resource->post->uri('app://self/RestBucks/Order')->withQuery($order)->eager->request();
+// order latte.
+$orderDrink = ['drink' => 'latte'];
+$order = $resource->post->uri('app://self/Order')->withQuery($orderDrink)->eager->request();
 
 // get response and hyper link.
-$paymentUri = $order->headers['rel=payment'];
-$payment = array(
+$paymentUri = $order->links['payment'];
+$payment = [
 	'credit_card_number' => '123456789',
 	'expires' => '07/07',
 	'name' => 'John Citizen',
 	'amount' => '4.00'
-);
+];
 
 // requet payment using hyper link.
 $response = $resource->put->uri($paymentUri)->addQuery($payment)->eager->request();
-
-// payment done, enjoy coffee !
-$expected = 201;
-$code = new \BEAR\Resource\Code;
 echo "$response->code: " . $code->statusText[$response->code] . PHP_EOL;
 echo 'Location: ' . $response->headers['Location'] . PHP_EOL;
+echo 'Oreter: ' . (($response->code === 201) ? 'Success' : 'Failure'). PHP_EOL;
+```
+
+```php
+201: Created
+Location: app://self/Order/?id=1234
+Oreter: Success
 ```
 
 Service Code
@@ -65,35 +69,57 @@ Service Code
 ### Order
 ```php
 <?php
-class Order
+class Order extends AbstractObject
 {
-	public function onPost($drink)
-	{
-	    // data store here
-	    //   .. and get order id.
-	    $orderId = 1234;
-	    $this->orders[$orderId] = $drink;
-	    // created
-	    $this->code = 201;
-	    $this->headers['Location'] = "app://self/RestBucks/Order/?id=$orderId";
-	    $this->headers['rel=payment'] = new Uri('app://self/RestBucks/Payment', array('order_id' => $orderId));
-	    return $this;
-	}
+    private $orders = [];
+
+    public function onGet($id)
+    {
+        return $this->orders[$id];
+    }
+
+    /**
+     * Post
+     *
+     * @param string $drink
+     */
+    public function onPost($drink)
+    {
+        // data store here
+        //   .. and get order id.
+        $orderId = 1234;
+        $this->orders[$orderId] = $drink;
+
+        // created
+        $this->code = 201;
+        $this->headers['Location'] = "app://self/Order/?id=$orderId";
+        $this->links['payment'] = new Uri('app://self/Payment', array('order_id' => $orderId));
+
+        return $this;
+    }
+}
 ```
 
 ### Payment
 
 ```php
 <?php
-class Payment
+class Payment extends AbstractObject
 {
-	public function onPut($order_id, $credit_card_number, $expires, $name, $amount)
-	{
-	   // payment transaction here..
-	   $this->code = 201;
-	   $this->headers['Location'] = "app://self/RestBucks/Order/?id=$order_id";
-	   return $this;
-	}
+    /**
+     * @param id
+     *
+     * @return array
+     */
+    public function onPut($order_id, $credit_card_number, $expires, $name, $amount)
+    {
+        // payment transaction here..
+        $this->code = 201;
+        $this->headers['Location'] = "app://self/Order/?id={$order_id}";
+
+        return $this;
+    }
+}
 ```		
 		
 
