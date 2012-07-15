@@ -122,7 +122,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $expected = "post nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
-
+    
     public function test_put()
     {
         $request = $this->resource->put->object($this->nop)->withQuery($this->query)->request();
@@ -312,4 +312,22 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     {
         $request = $this->resource->uri('nop://self/dummy')->withQuery($this->query)->request();
     }
+    
+    public function tst_weavedResource()
+    {
+        $result = $this->resource->get->uri('app://self/weave/book')->withQuery($this->query)->eager->request();
+        $result->a = 100;
+        $obj = $result->___getObject();
+        $this->assertSame(100, $obj->a);
+    }
+
+    public function test_docsSample01RestBucks()
+    {
+        ob_start();
+        $response = require dirname(__DIR__) . '/docs/sample/01-rest-bucks/order.php';
+        $response = ob_get_clean();
+        $this->assertContains('201: Created', $response);
+        $this->assertContains('Oreter: Success', $response);
+    }
+
 }
