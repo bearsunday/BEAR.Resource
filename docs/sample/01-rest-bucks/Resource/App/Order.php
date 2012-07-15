@@ -1,6 +1,6 @@
 <?php
 
-namespace testworld\ResourceObject\RestBucks;
+namespace restbucks\Resource\App;
 
 use BEAR\Resource\Object as ResourceObject,
     BEAR\Resource\AbstractObject,
@@ -17,13 +17,6 @@ class Order extends AbstractObject
 {
 
     private $orders = array();
-
-    /**
-     * @param Resource $resource
-     */
-    public function __construct()
-    {
-    }
 
     public function onGet($id)
     {
@@ -44,8 +37,8 @@ class Order extends AbstractObject
 
         // created
         $this->code = 201;
-        $this->headers['Location'] = "app://self/RestBucks/Order/?id=$orderId";
-        $this->links['payment'] = new Uri('app://self/RestBucks/Payment', array('order_id' => $orderId));
+        $this->headers['Location'] = "app://self/Order/?id=$orderId";
+        $this->links['payment'] = new Uri('app://self/Payment', array('order_id' => $orderId));
 
         return $this;
     }
