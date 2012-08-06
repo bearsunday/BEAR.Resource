@@ -34,7 +34,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        
+
         // build resource client
         $scheme = new SchemeCollection;
         $injector = require dirname(__DIR__) . '/scripts/injector.php';
@@ -48,15 +48,15 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         /** @var $resource BEAR\Resource\Resource */
         $this->resource = require dirname(__DIR__) . '/scripts/instance.php';
         $this->resource->setSchemeCollection($scheme);
-        
+
         // new resource object;
         $factory = new Factory($scheme);
         $this->user = $factory->newInstance('app://self/user');
         $this->nop = $factory->newInstance('nop://self/dummy');
         $this->query = [
-            'id' => 10,
-            'name' => 'Ray',
-            'age' => 43
+        'id' => 10,
+        'name' => 'Ray',
+        'age' => 43
         ];
     }
 
@@ -122,7 +122,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $expected = "post nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
-    
+
     public function test_put()
     {
         $request = $this->resource->put->object($this->nop)->withQuery($this->query)->request();
@@ -233,10 +233,10 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     public function testParameterProvidedBySignalClosure()
     {
         $signalProvider = function (
-                $return,
-                \ReflectionParameter $parameter,
-                ReflectiveMethodInvocation $invovation,
-                Definition $definition
+            $return,
+            \ReflectionParameter $parameter,
+            ReflectiveMethodInvocation $invovation,
+            Definition $definition
         ) {
             $return->value = 1;
 
@@ -250,10 +250,10 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     public function testParameterProvidedBySignalWithInvokerInterfaceObject()
     {
         $signalProvider = function (
-                $return,
-                \ReflectionParameter $parameter,
-                ReflectiveMethodInvocation $invovation,
-                Definition $definition
+            $return,
+            \ReflectionParameter $parameter,
+            ReflectiveMethodInvocation $invovation,
+            Definition $definition
         ) {
             $return->value = 1;
 
@@ -312,7 +312,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     {
         $request = $this->resource->uri('nop://self/dummy')->withQuery($this->query)->request();
     }
-    
+
     public function tst_weavedResource()
     {
         $result = $this->resource->get->uri('app://self/weave/book')->withQuery($this->query)->eager->request();
@@ -329,5 +329,4 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('201: Created', $response);
         $this->assertContains('Oreter: Success', $response);
     }
-
 }
