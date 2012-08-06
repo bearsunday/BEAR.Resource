@@ -57,13 +57,20 @@ abstract class AbstractObject implements Object, ArrayAccess, Countable, Iterato
      * @var string
      */
     public $view;
+    
+    /**
+     * Resource links
+     *
+     * @var array
+     */
+    public $links = [];
 
     /**
      * Renderer
      *
-     * @var string
+     * @var BEAR\Resource\Renderable
      */
-    private $renderer = '';
+    private $renderer;
 
     /**
      * Set renderer
@@ -91,15 +98,25 @@ abstract class AbstractObject implements Object, ArrayAccess, Countable, Iterato
         }
         if ($this->renderer instanceof Renderable) {
             try {
-                $this->view = $this->renderer->render($this);
+                $view = $this->renderer->render($this);
             } catch (Exception $e) {
-                $this->view = '';
+                $view = '';
+                error_log('Exception catched in ' . __METHOD__);
                 error_log((string) $e);
             }
         } else {
-            $this->view = '';
+            $view = '';
         }
-
-        return $this->view;
+        return $view;
+    }
+    
+    /**
+     * Sleep
+     * 
+     * @return array
+     */
+    public function __sleep()
+    {
+        return ['uri', 'code', 'headers', 'body', 'view', 'links'];
     }
 }
