@@ -50,8 +50,8 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->request->set($test, 'test://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
         $this->logger->log($this->request, 0);
         foreach($this->logger as $log) {
-            $this->assertSame(3, count($log));
-            $this->assertSame('get test://self/path/to/resource?a=koriym&b=25', $log[0]);
+            $this->assertSame(2, count($log));
+            $this->assertSame('get test://self/path/to/resource?a=koriym&b=25', $log[0]->toUriWithMethod());
         }
     }
 }
