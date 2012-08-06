@@ -60,6 +60,13 @@ class Resource implements ResourceInterface
      * @var Guzzle\Common\Cache\CacheAdapterInterface
      */
     private $cache;
+    
+    /**
+     * Resource requeset log
+     * 
+     * @var array
+     */
+    private $logs = [];
 
     /**
      * Constructor
@@ -113,7 +120,7 @@ class Resource implements ResourceInterface
             $uri .= 'index';
         }
         if ($this->cache instanceof Cache) {
-            $key = __METHOD__ . $uri;
+            $key = '(Resource) ' . $uri;
             $cached = $this->cache->fetch($key);
             if ($cached) {
                 return $cached;
@@ -252,7 +259,7 @@ class Resource implements ResourceInterface
 
             return $result;
         }
-
+        // logs
         return $this->request;
     }
 

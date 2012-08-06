@@ -24,5 +24,6 @@ $invoker = new Invoker(
     new Manager(
     new HandlerFactory, new ResultFactory, new ResultCollection)
 );
+$invoker->setResourceLogger(new Logger);
 $resource = new Resource(new Factory(new SchemeCollection), $invoker, new Request($invoker));
 return $resource;

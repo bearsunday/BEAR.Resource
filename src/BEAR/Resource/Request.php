@@ -108,6 +108,14 @@ final class Request implements Requestable
         $this->invoker = $invoker;
     }
 
+    public function set(Object $ro, $uri, $method, array $query)
+    {
+        $this->ro = $ro;
+        $this->uri = $uri;
+        $this->method = $method;
+        $this->query = $query;
+    }
+    
     /**
      * (non-PHPdoc)
      * @see BEAR\Resource.Requestable::__invoke()
@@ -145,7 +153,11 @@ final class Request implements Requestable
     {
         $query = http_build_query($this->query, null, '&', PHP_QUERY_RFC3986);
         $uri = $this->ro->uri;
-        $queryString = "{$uri}" . ($query ? '?' :  '') . $query;
+        if (isset(parse_url($uri)['query'])) {
+            $queryString = $uri;
+        } else {
+            $queryString = "{$uri}" . ($query ? '?' :  '') . $query;
+        }
         $linkString = '';
         foreach ($this->links as $link) {
             $linkString .= ", link {$link->type}:{$link->key}";

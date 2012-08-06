@@ -49,6 +49,13 @@ class Invoker implements InvokerInterface
     private $signal;
 
     /**
+     * Logger
+     * 
+     * @var BEAR\Resource\Logger
+     */
+    private $logger;
+    
+    /**
      * Method OPTIONS
      *
      * @var string
@@ -64,6 +71,24 @@ class Invoker implements InvokerInterface
 
     const SIGNAL_PARAM = 'param';
 
+
+    /**
+     * Constructor
+     *
+     * @param ConfigInterface $config
+     *
+     * @Inject
+     */
+    public function __construct(
+        ConfigInterface $config,
+        LinkerInterface $linker,
+        Signal $signal
+    ){
+        $this->config = $config;
+        $this->linker = $linker;
+        $this->signal = $signal;
+    }
+
     /**
      * Set resource client
      *
@@ -73,21 +98,19 @@ class Invoker implements InvokerInterface
     {
         $this->linker->setResource($resource);
     }
-
+    
     /**
-     * Constructor
-     *
-     * @param ConfigInterface $config
-     *
-     * @Inject
+     * Resource logger setter
+     * 
+     * @param ResourceLoggerInterface $logger
+     * 
+     * @Inject(optional=true)
      */
-    public function __construct(ConfigInterface $config, LinkerInterface $linker, Signal $signal)
+    public function setResourceLogger(LoggerInterface $logger)
     {
-        $this->config = $config;
-        $this->linker = $linker;
-        $this->signal = $signal;
+        $this->logger = $logger;
     }
-
+    
     /**
      * Return config
      *
@@ -109,8 +132,7 @@ class Invoker implements InvokerInterface
         if ($request->ro instanceof Weave) {
             $weave = $request->ro;
             $result = $weave(array($this, 'getParams'), $method, $request->query);
-
-            return $result;
+            goto completed;
         }
         if (method_exists($request->ro, $method) !== true) {
             if ($request->method === self::OPTIONS) {
@@ -130,7 +152,10 @@ class Invoker implements InvokerInterface
         if ($request->links) {
             $result = $this->linker->invoke($request->ro, $request, $result);
         }
-
+        // request / result log
+        if ($this->logger) {
+            $this->logger->log($request, $result);
+        }
         return $result;
     }
 
