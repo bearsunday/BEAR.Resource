@@ -57,7 +57,7 @@ abstract class AbstractObject implements Object, ArrayAccess, Countable, Iterato
      * @var string
      */
     public $view;
-    
+
     /**
      * Resource links
      *
@@ -107,12 +107,13 @@ abstract class AbstractObject implements Object, ArrayAccess, Countable, Iterato
         } else {
             $view = '';
         }
+
         return $view;
     }
-    
+
     /**
      * Sleep
-     * 
+     *
      * @return array
      */
     public function __sleep()

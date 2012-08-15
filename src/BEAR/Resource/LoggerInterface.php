@@ -20,10 +20,10 @@ interface LoggerInterface
 {
     /**
      * Log
-     * 
+     *
      * @param Request $request
-     * @param mixed $result
-     * 
+     * @param mixed   $result
+     *
      * @return void
      */
     public function log(Request $request, $result);

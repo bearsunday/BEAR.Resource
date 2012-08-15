@@ -115,7 +115,7 @@ final class Request implements Requestable
         $this->method = $method;
         $this->query = $query;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see BEAR\Resource.Requestable::__invoke()

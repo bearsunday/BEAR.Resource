@@ -7,7 +7,6 @@
  */
 namespace BEAR\Resource;
 
-use ArrayIterator;
 use ArrayObject;
 
 /**

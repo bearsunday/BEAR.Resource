@@ -42,7 +42,7 @@ class Logger implements LoggerInterface, IteratorAggregate, Countable
      * Return new resource object instance
      *
      * @param $request $request
-     * @param mixed    $result
+     * @param mixed $result
      *
      * @return void
      */

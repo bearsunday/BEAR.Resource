@@ -39,12 +39,12 @@ class Factory implements FactoryInterface
     {
         $this->scheme = $scheme;
     }
-    
+
     /**
      * Set scheme collection
-     * 
+     *
      * @param SchemeCollection $scheme
-     * 
+     *
      * @Inject(optional = true)
      */
     public function setSchemeCollection(SchemeCollection $scheme)

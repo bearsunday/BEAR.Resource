@@ -50,11 +50,11 @@ class Invoker implements InvokerInterface
 
     /**
      * Logger
-     * 
+     *
      * @var BEAR\Resource\Logger
      */
     private $logger;
-    
+
     /**
      * Method OPTIONS
      *
@@ -70,7 +70,6 @@ class Invoker implements InvokerInterface
     const ANNOTATION_PROVIDES = 'Provides';
 
     const SIGNAL_PARAM = 'param';
-
 
     /**
      * Constructor
@@ -98,19 +97,19 @@ class Invoker implements InvokerInterface
     {
         $this->linker->setResource($resource);
     }
-    
+
     /**
      * Resource logger setter
-     * 
+     *
      * @param ResourceLoggerInterface $logger
-     * 
+     *
      * @Inject(optional=true)
      */
     public function setResourceLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
     }
-    
+
     /**
      * Return config
      *
@@ -156,6 +155,7 @@ class Invoker implements InvokerInterface
         if ($this->logger) {
             $this->logger->log($request, $result);
         }
+
         return $result;
     }
 
