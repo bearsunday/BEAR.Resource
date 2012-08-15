@@ -44,7 +44,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $factory = new Factory($scheme);
         $schemeAdapters = array('nop' => '\BEAR\Resource\Adapter\Nop', 'prov' => '\BEAR\Resource\Mock\Prov');
         $injector = new Injector(new Container(new Forge($config)), new EmptyModule);
-        $this->signal = require dirname(__DIR__) . '/vendor/Aura/Signal/scripts/instance.php';
+        $this->signal = require dirname(__DIR__) . '/vendor/aura/signal/scripts/instance.php';
         $this->invoker = new Invoker($config, new Linker, $this->signal);
         $this->invoker->getSignal()->handler(
                 '\BEAR\Resource\Invoker',

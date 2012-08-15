@@ -29,7 +29,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->logger = new Logger;
-        $signal = require dirname(__DIR__) . '/vendor/Aura/Signal/scripts/instance.php';
+        $signal = require dirname(__DIR__) . '/vendor/aura/signal/scripts/instance.php';
         $this->request = new Request(new Invoker(new Config(new Annotation(new Definition)), new Linker(new Reader), $signal));
         $this->request->method = 'get';
         $this->request->ro = new Test;
