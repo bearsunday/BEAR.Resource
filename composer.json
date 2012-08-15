@@ -1,5 +1,5 @@
 {
-    "name": "BEAR/Resource",
+    "name": "bear/resource",
     "description": "RESTful service layer framework",
     "keywords": ["rest", "service layer"],
     "homepage": "https://github.com/koriym/BEAR.Resource",
@@ -41,9 +41,7 @@
     ],
     "autoload": {
         "psr-0": {
-            "BEAR\\Resource": "src/",
-            "Aura\\Di": "vendor/Aura/Di/src/",
-            "Aura\\Signal": "vendor/Aura/Signal/src/"
+            "BEAR\\Resource": "src/"
         }
     }
 }

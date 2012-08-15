@@ -1,0 +1,59 @@
+{
+    "hash": "9fab4793ec8aa75a9d54c5d3746b77ce",
+    "packages": [
+        {
+            "package": "Ray/Aop",
+            "version": "dev-master",
+            "source-reference": "71843ff9fba774e1c0266f777b6a07c9ba953ecc",
+            "commit-date": "1344486379"
+        },
+        {
+            "package": "Ray/Di",
+            "version": "dev-master",
+            "source-reference": "93f5b6e4d103701bf771a76bd1fe879023e5eff1",
+            "commit-date": "1345009803"
+        },
+        {
+            "package": "aura/di",
+            "version": "dev-master",
+            "source-reference": "1.0.0-beta3",
+            "commit-date": "1343709915"
+        },
+        {
+            "package": "aura/signal",
+            "version": "dev-master",
+            "source-reference": "1.0.0-beta3",
+            "commit-date": "1343710041"
+        },
+        {
+            "package": "doctrine/common",
+            "version": "2.3.x-dev",
+            "source-reference": "2ec4bc6db13db6a0976a16b71058083c55cbcdbd",
+            "commit-date": "1343847076"
+        },
+        {
+            "package": "facebook/xhprof",
+            "version": "0.9.2"
+        },
+        {
+            "package": "guzzle/guzzle",
+            "version": "v2.7.2"
+        },
+        {
+            "package": "symfony/event-dispatcher",
+            "version": "v2.0.16"
+        }
+    ],
+    "packages-dev": null,
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "aura/di": 20,
+        "aura/signal": 20,
+        "doctrine/common": 20,
+        "ray/aop": 20,
+        "ray/di": 20
+    }
+}

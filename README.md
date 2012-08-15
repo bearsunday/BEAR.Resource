@@ -131,7 +131,7 @@ Here's how to install Ray.Aop from source to run the unit tests and sample:
 ```
 $ git clone git://github.com/koriym/BEAR.Resource.git
 $ (wget http://getcomposer.org/composer.phar)
-$ php composer.phar install
+$ php composer.phar update
 $ phpunit
 ```
 
@@ -143,6 +143,6 @@ If you're using [Composer](https://github.com/composer/composer) to manage depen
 
 	{
 		"require": {
-			"BEAR/Resource": ">=0.1"
+			"bear/resource": ">=0.1"
 		}
 	}
