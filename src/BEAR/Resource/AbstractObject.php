@@ -110,14 +110,4 @@ abstract class AbstractObject implements Object, ArrayAccess, Countable, Iterato
 
         return $view;
     }
-
-    /**
-     * Sleep
-     *
-     * @return array
-     */
-    public function __sleep()
-    {
-        return ['uri', 'code', 'headers', 'body', 'view', 'links'];
-    }
 }
