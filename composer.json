@@ -39,6 +39,7 @@
             "email": "akihito.koriyama@gmail.com"
         }
     ],
+    "minimum-stability": "dev",
     "autoload": {
         "psr-0": {
             "BEAR\\Resource": "src/"
