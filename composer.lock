@@ -4,14 +4,14 @@
         {
             "package": "Ray/Aop",
             "version": "dev-master",
-            "source-reference": "71843ff9fba774e1c0266f777b6a07c9ba953ecc",
-            "commit-date": "1344486379"
+            "source-reference": "2d118d33454a2c2006b83a2d62ae9270eea33413",
+            "commit-date": "1345435456"
         },
         {
             "package": "Ray/Di",
             "version": "dev-master",
-            "source-reference": "93f5b6e4d103701bf771a76bd1fe879023e5eff1",
-            "commit-date": "1345009803"
+            "source-reference": "1.0.0-beta1",
+            "commit-date": "1345435997"
         },
         {
             "package": "aura/di",
