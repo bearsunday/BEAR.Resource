@@ -119,7 +119,8 @@ class Resource implements ResourceInterface
         if (substr($uri, -1) === '/') {
             $uri .= 'index';
         }
-        if ($this->cache instanceof Cache) {
+        $useCache = $this->cache instanceof Cache;
+        if ($useCache === true) {
             $key = '(Resource) ' . $uri;
             $cached = $this->cache->fetch($key);
             if ($cached) {
@@ -127,8 +128,13 @@ class Resource implements ResourceInterface
             }
         }
         $instance = $this->factory->newInstance($uri);
-        if ($this->cache instanceof Cache) {
-            $this->cache->save($key, $instance);
+        if ($useCache === true) {
+            try {
+                $this->cache->save($key, $instance);
+            } catch (\Exception $e) {
+                $msg = "resource({$uri}) is not stored in cache";
+                error_log($msg);
+            }
         }
 
         return $instance;

@@ -15,7 +15,7 @@ BEAR\Resource\Mock\User;
 use Ray\Aop\ReflectiveMethodInvocation;
 use BEAR\Resource\SignalHandler\Provides;
 use Guzzle\Common\Cache\DoctrineCacheAdapter as CacheAdapter;
-use Doctrine\Common\Cache\ArrayCache as Cache;
+use Doctrine\Common\Cache\FilesystemCache as Cache;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use BEAR\Resource\Mock\TestModule;
 
@@ -30,6 +30,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
      * @var Aura\Signal\Manager
      */
     protected $singnal;
+    protected $cache;
 
     protected function setUp()
     {
@@ -58,6 +59,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         'name' => 'Ray',
         'age' => 43
         ];
+        $this->cache = new CacheAdapter(new Cache('/tmp'));
     }
 
     public function test_New()
@@ -268,11 +270,22 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
     public function test_setCacheAdapter()
     {
-        $cache = new CacheAdapter(new Cache);
-        $this->resource->setCacheAdapter($cache);
+        $this->resource->setCacheAdapter($this->cache);
         $instance1 = $this->resource->newInstance('nop://self/path/to/dummy');
         $instance2 = $this->resource->newInstance('nop://self/path/to/dummy');
         $this->assertSame($instance1, $instance2);
+    }
+
+    /**
+     * This resource contain PDO (which can't store in cache)
+     * It can not be in cache strage.
+     */
+    public function test_setCacheButUnserializedInstance()
+    {
+        $this->resource->setCacheAdapter($this->cache);
+        $instance1 = $this->resource->newInstance('app://self/cache/pdo');
+        $instance2 = $this->resource->newInstance('app://self/cache/pdo');
+        $this->assertNotSame($instance1->time, $instance2->time);
     }
 
     public function test_LazyReqeustResultAsString()

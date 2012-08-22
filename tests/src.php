@@ -22,6 +22,7 @@ require_once __DIR__ . '/Mock/ResourceObject/RestBucks/Order.php';
 require_once __DIR__ . '/Mock/ResourceObject/RestBucks/Payment.php';
 require_once __DIR__ . '/Mock/ResourceObject/RestBucks/Menu.php';
 require_once __DIR__ . '/Mock/ResourceObject/MethodAnnotation.php';
+require_once __DIR__ . '/Mock/ResourceObject/Cache/Pdo.php';
 
 require_once __DIR__ . '/Mock/Page/News.php';
 require_once __DIR__ . '/Mock/Interceptor/Log.php';
