@@ -1,5 +1,5 @@
 {
-    "hash": "9fab4793ec8aa75a9d54c5d3746b77ce",
+    "hash": "778a0191a063bed7f7b75a0f00c25053",
     "packages": [
         {
             "package": "Ray/Aop",
@@ -16,8 +16,8 @@
         {
             "package": "aura/di",
             "version": "dev-master",
-            "source-reference": "1.0.0-beta3",
-            "commit-date": "1343709915"
+            "source-reference": "8730acf19625fb74fca9f5ec8a0f80012c754442",
+            "commit-date": "1346013492"
         },
         {
             "package": "aura/signal",
@@ -28,8 +28,8 @@
         {
             "package": "doctrine/common",
             "version": "2.3.x-dev",
-            "source-reference": "2ec4bc6db13db6a0976a16b71058083c55cbcdbd",
-            "commit-date": "1343847076"
+            "source-reference": "605b1b8b5a7bc8daf9111fb35483e5708e30de35",
+            "commit-date": "1346249247"
         },
         {
             "package": "facebook/xhprof",
@@ -41,14 +41,22 @@
         },
         {
             "package": "symfony/event-dispatcher",
-            "version": "v2.0.16"
+            "version": "dev-master",
+            "alias-pretty-version": "2.1.x-dev",
+            "alias-version": "2.1.9999999.9999999-dev"
+        },
+        {
+            "package": "symfony/event-dispatcher",
+            "version": "dev-master",
+            "source-reference": "v2.1.0-RC2",
+            "commit-date": "1345643321"
         }
     ],
     "packages-dev": null,
     "aliases": [
 
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": {
         "aura/di": 20,
         "aura/signal": 20,
