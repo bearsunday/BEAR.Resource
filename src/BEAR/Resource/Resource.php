@@ -133,7 +133,9 @@ class Resource implements ResourceInterface
                 $this->cache->save($key, $instance);
             } catch (\Exception $e) {
                 $msg = "resource({$uri}) is not stored in cache";
-                error_log($msg);
+                if (PHP_SAPI !== 'cli') {
+                    error_log($msg);
+                }
             }
         }
 
@@ -160,6 +162,13 @@ class Resource implements ResourceInterface
         if (is_string($uri)) {
             if (! $this->request) {
                 throw new BadRequest('Request method (get/put/post/delete/options) required before uri()');
+            }
+            // uri with query parsed
+            if (strpos($uri, '?') !== false) {
+                $parsed = parse_url($uri);
+                $uri = $parsed['scheme'] . '://' .  $parsed['host'] .  $parsed['path'];
+                parse_str($parsed['query'], $query);
+                $this->withQuery($query);
             }
             $this->request->ro = $this->newInstance($uri);
             $this->request->uri = $uri;
