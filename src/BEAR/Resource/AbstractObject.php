@@ -70,7 +70,7 @@ abstract class AbstractObject implements Object, ArrayAccess, Countable, Iterato
      *
      * @var BEAR\Resource\Renderable
      */
-    private $renderer;
+    protected $renderer;
 
     /**
      * Set renderer
