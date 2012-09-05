@@ -118,5 +118,4 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $result = (string) $request;
         $this->assertSame('{"posts":["koriym",30]}', $result);
     }
-
 }

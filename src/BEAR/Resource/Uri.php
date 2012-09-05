@@ -35,7 +35,7 @@ final class Uri
      * @param string $uri
      * @param array  $query
      */
-    public function __construct($uri, array $query)
+    public function __construct($uri, array $query = [])
     {
         $this->uri = $uri;
         $this->query = $query;

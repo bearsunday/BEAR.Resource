@@ -229,7 +229,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         ->get->uri('http://news.google.com/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss')->sync->request()
         ->get->uri('http://phpspot.org/blog/index.xml')->eager->sync->request()
         ->get->uri('http://rss.excite.co.jp/rss/excite/odd')->eager->request();
-        $this->assertTrue(isset($response->body[0]->channel));
+        $this->assertContains('<!DOCTYPE HTML>', $response->body[0]);
     }
 
     public function testParameterProvidedBySignalClosure()
@@ -341,5 +341,12 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $response = ob_get_clean();
         $this->assertContains('201: Created', $response);
         $this->assertContains('Oreter: Success', $response);
+    }
+
+    public function test_uriWithQuery()
+    {
+        $response = $this->resource->get->uri('app://self/user?id=1')->eager->request();
+        $expected = 'Aramis';
+        $this->assertSame($expected, $response->body['name']);
     }
 }
