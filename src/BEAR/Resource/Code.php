@@ -36,6 +36,19 @@ final class Code
      */
     const ERROR = 500;
 
+    // 20X
+    const CREATED = 201;
+    const ACCEPTED = 202;
+    const NO_CONTENT = 204;
+    // 30X
+    const MOVED_PERMANENTALY = 301;
+    const SEE_OTHER = 303;
+    const NOT_MODIFIED = 304;
+    // 40X
+    const UNAUTHORIZED = 401;
+    const NOT_FOUND = 404;
+    const CONFLICT = 409;
+
     /**
      * Hypertext Transfer Protocol (HTTP) Status Code Registry
      *
