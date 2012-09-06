@@ -349,4 +349,11 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $expected = 'Aramis';
         $this->assertSame($expected, $response->body['name']);
     }
+
+    public function test_verbOptions()
+    {
+        $response = $this->resource->options->uri('app://self/user')->eager->request();
+        $expected = ['get', 'post', 'put', 'delete'];
+        $this->assertSame($expected, $response->headers['allows']);
+    }
 }

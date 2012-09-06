@@ -135,7 +135,12 @@ class Invoker implements InvokerInterface
         }
         if (method_exists($request->ro, $method) !== true) {
             if ($request->method === self::OPTIONS) {
-                return $this->getOptions($request->ro);
+                $options = $this->getOptions($request->ro);
+                $ro = $request->ro;
+                $ro->headers['allows'] = $options['allows'];
+                $ro->headers['params'] = $options['params'];
+
+                return $ro;
             }
             throw new Exception\MethodNotAllowed(get_class($request->ro) . "::$method()", 405);
         }
@@ -278,7 +283,7 @@ PARAMETER_NOT_PROVIDED:
             $isRequestMethod = (substr($method->name, 0, 2) === 'on')
             && (substr($method->name, 0, 6) !== 'onLink');
             if ($isRequestMethod) {
-                $allows[] = substr($method->name, 2);
+                $allows[] = strtolower(substr($method->name, 2));
             }
         }
         $params = [];
@@ -289,9 +294,9 @@ PARAMETER_NOT_PROVIDED:
             foreach ($parameters as $parameter) {
                 $paramArray[] = (string) $parameter;
             }
-            $params = array($follow => implode(',', $paramArray));
+            $params = [$follow => implode(',', $paramArray)];
         }
-        $result = array('allows' => $allows, 'params' => $params);
+        $result = ['allows' => $allows, 'params' => $params];
 
         return $result;
     }

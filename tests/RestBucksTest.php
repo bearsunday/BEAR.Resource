@@ -26,7 +26,7 @@ class RestBucksTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        
+
         $this->resource =  require dirname(__DIR__) .'/scripts/instance.php';
         $injector =  require dirname(__DIR__) .'/scripts/injector.php';
         $scheme = new SchemeCollection;
@@ -41,11 +41,10 @@ class RestBucksTest extends \PHPUnit_Framework_TestCase
 
     public function testOption()
     {
-        $options = $this->resource->options->uri('app://self/Menu')->eager->request()->body;
-        $allows = $options['allows'];
-        asort($options['allows']);
-        $expected = array('Get');
-        $this->assertSame($expected, $options['allows']);
+        $allows = $this->resource->options->uri('app://self/Menu')->eager->request()->headers['allows'];
+        asort($allows);
+        $expected = ['get'];
+        $this->assertSame($expected, $allows);
     }
 
     /**

@@ -195,7 +195,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->request->method = Invoker::OPTIONS;
         $response = $this->invoker->invoke($this->request);
         $actual = $response['allows'];
-        $expected = array('Get', 'Post', 'Put', 'Delete');
+        $expected = ['get', 'post', 'put', 'delete'];
         asort($actual);
         asort($expected);
         $this->assertSame($actual, $expected);
@@ -207,7 +207,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->request->ro = new  \testworld\ResourceObject\RestBucks\Order;
         $response = $this->invoker->invoke($this->request);
         $actual = $response['allows'];
-        $expected = array('Get', 'Post');
+        $expected = ['get', 'post'];
         asort($actual);
         asort($expected);
         $this->assertSame($actual, $expected);
