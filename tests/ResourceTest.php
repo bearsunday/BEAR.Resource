@@ -354,6 +354,6 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     {
         $response = $this->resource->options->uri('app://self/user')->eager->request();
         $expected = ['get', 'post', 'put', 'delete'];
-        $this->assertSame($expected, $response->headers['allows']);
+        $this->assertSame($expected, $response->headers['allow']);
     }
 }

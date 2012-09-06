@@ -128,18 +128,19 @@ class Invoker implements InvokerInterface
     public function invoke(Request $request)
     {
         $method = 'on' . ucfirst($request->method);
-        if ($request->ro instanceof Weave) {
+        $isWeave = $request->ro instanceof Weave;
+        if ($isWeave && $request->method !== Invoker::OPTIONS) {
             $weave = $request->ro;
             $result = $weave(array($this, 'getParams'), $method, $request->query);
             goto completed;
         }
-        if (method_exists($request->ro, $method) !== true) {
+        $ro = $isWeave ? $request->ro->___getObject() : $request->ro;
+        if (method_exists($ro, $method) !== true) {
             if ($request->method === self::OPTIONS) {
-                $options = $this->getOptions($request->ro);
-                $ro = $request->ro;
-                $ro->headers['allows'] = $options['allows'];
-                $ro->headers['params'] = $options['params'];
-
+                $options = $this->getOptions($ro);
+                $ro->headers['allow'] = $options['allow'];
+                $ro->headers += $options['params'];
+                $ro->body = null;
                 return $ro;
             }
             throw new Exception\MethodNotAllowed(get_class($request->ro) . "::$method()", 405);
@@ -278,25 +279,29 @@ PARAMETER_NOT_PROVIDED:
     {
         $ref = new \ReflectionClass($ro);
         $methods = $ref->getMethods();
-        $allows = [];
+        $allow = [];
         foreach ($methods as $method) {
             $isRequestMethod = (substr($method->name, 0, 2) === 'on')
             && (substr($method->name, 0, 6) !== 'onLink');
             if ($isRequestMethod) {
-                $allows[] = strtolower(substr($method->name, 2));
+                $allow[] = strtolower(substr($method->name, 2));
             }
         }
         $params = [];
-        foreach ($allows as $follow) {
-            $paramArray = [];
-            $refMethod = new \ReflectionMethod($ro, 'on' . $follow);
+        $paramArray = [];
+        foreach ($allow as $method) {
+            $refMethod = new \ReflectionMethod($ro, 'on' . $method);
             $parameters = $refMethod->getParameters();
+            $paramArray = [];
             foreach ($parameters as $parameter) {
-                $paramArray[] = (string) $parameter;
+                $name = $parameter->getName();
+                $param =  $parameter->isOptional() ? "({$name})" : $name;
+                $paramArray[] = $param;
             }
-            $params = [$follow => implode(',', $paramArray)];
+            $key = "param-{$method}";
+            $params[$key] = implode(',', $paramArray);
         }
-        $result = ['allows' => $allows, 'params' => $params];
+        $result = ['allow' => $allow, 'params' => $params];
 
         return $result;
     }

@@ -41,10 +41,10 @@ class RestBucksTest extends \PHPUnit_Framework_TestCase
 
     public function testOption()
     {
-        $allows = $this->resource->options->uri('app://self/Menu')->eager->request()->headers['allows'];
-        asort($allows);
+        $allow = $this->resource->options->uri('app://self/Menu')->eager->request()->headers['allow'];
+        asort($allow);
         $expected = ['get'];
-        $this->assertSame($expected, $allows);
+        $this->assertSame($expected, $allow);
     }
 
     /**
