@@ -2,6 +2,12 @@
     "hash": "778a0191a063bed7f7b75a0f00c25053",
     "packages": [
         {
+            "package": "Aura/Signal",
+            "version": "dev-master",
+            "source-reference": "1.0.0-beta3",
+            "commit-date": "1343710041"
+        },
+        {
             "package": "Ray/Aop",
             "version": "dev-master",
             "source-reference": "2d118d33454a2c2006b83a2d62ae9270eea33413",
@@ -18,12 +24,6 @@
             "version": "dev-master",
             "source-reference": "8730acf19625fb74fca9f5ec8a0f80012c754442",
             "commit-date": "1346013492"
-        },
-        {
-            "package": "aura/signal",
-            "version": "dev-master",
-            "source-reference": "1.0.0-beta3",
-            "commit-date": "1343710041"
         },
         {
             "package": "doctrine/common",
