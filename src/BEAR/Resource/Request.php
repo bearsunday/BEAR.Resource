@@ -158,13 +158,8 @@ final class Request implements Requestable
         } else {
             $queryString = "{$uri}" . ($query ? '?' :  '') . $query;
         }
-        $linkString = '';
-        foreach ($this->links as $link) {
-            $linkString .= ", link {$link->type}:{$link->key}";
-        }
-        $string = $queryString . $linkString;
 
-        return $string;
+        return $queryString;
     }
 
     /**

@@ -123,28 +123,28 @@ class PageTest extends \PHPUnit_Framework_TestCase
     public function test_linkSelfString()
     {
         $request = $this->resource->get->object($this->nop)->withQuery($this->query)->linkSelf('dummyLink')->request();
-        $expected = "get nop://self/dummy?id=10&name=Ray&age=43, link self:dummyLink";
+        $expected = "get nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
 
     public function test_linkNewString()
     {
         $request = $this->resource->get->object($this->nop)->withQuery($this->query)->linkNew('dummyLink')->request();
-        $expected = "get nop://self/dummy?id=10&name=Ray&age=43, link new:dummyLink";
+        $expected = "get nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
 
     public function test_linkCrawlString()
     {
         $request = $this->resource->get->object($this->nop)->withQuery($this->query)->linkCrawl('dummyLink')->request();
-        $expected = "get nop://self/dummy?id=10&name=Ray&age=43, link crawl:dummyLink";
+        $expected = "get nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
 
     public function test_linkTwo()
     {
         $request = $this->resource->get->object($this->nop)->withQuery($this->query)->linkSelf('dummyLink')->linkSelf('dummyLink2')->request();
-        $expected = "get nop://self/dummy?id=10&name=Ray&age=43, link self:dummyLink, link self:dummyLink2";
+        $expected = "get nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
 

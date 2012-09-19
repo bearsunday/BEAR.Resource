@@ -254,6 +254,7 @@ class Resource implements ResourceInterface
      */
     public function request()
     {
+        $this->request->ro->uri = $this->request->toUri();
         if (isset($this->request->options['sync'])) {
             $this->requests->attach($this->request);
             $this->request = clone $this->newRequest;
