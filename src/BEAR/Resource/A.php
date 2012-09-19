@@ -9,7 +9,7 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Object as ResourceObject;
 use BEAR\Resource\Exception\InvalidLink;
-use Guzzle\Parser\UriTemplate\UriTemplate;
+use Guzzle\Parser\UriTemplate\UriTemplateInterface;
 
 /**
  * Get hyper reffernce
@@ -25,8 +25,10 @@ class A implements Referable
      * Constructor
      *
      * @param UriTemplate $uriTemplate
+     *
+     * @Inject
      */
-    public function __construct(UriTemplate $uriTemplate)
+    public function __construct(UriTemplateInterface $uriTemplate)
     {
         $this->uriTemplate = $uriTemplate;
     }
