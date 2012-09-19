@@ -3,6 +3,7 @@
 require_once __DIR__ . '/Mock/Blog.php';
 require_once __DIR__ . '/Mock/Entry.php';
 require_once __DIR__ . '/Mock/Comment.php';
+require_once __DIR__ . '/Mock/User.php';
 
 require_once __DIR__ . '/Mock/Adapter/Nop.php';
 require_once __DIR__ . '/Mock/Adapter/Prov.php';
