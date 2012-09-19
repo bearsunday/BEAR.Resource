@@ -10,6 +10,8 @@ namespace BEAR\Resource;
 use BEAR\Resource\Object as ResourceObject;
 use BEAR\Resource\Exception\InvalidLink;
 use Guzzle\Parser\UriTemplate\UriTemplateInterface;
+use Ray\Di\Di\Inject;
+use Ray\Di\Di\Scope;
 
 /**
  * Get hyper reffernce
