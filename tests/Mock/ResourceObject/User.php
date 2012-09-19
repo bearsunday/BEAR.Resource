@@ -67,7 +67,6 @@ class User extends AbstractObject
      */
     public function onDelete($delete_id)
     {
-
         return "{$delete_id} deleted";
     }
 

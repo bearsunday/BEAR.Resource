@@ -141,6 +141,7 @@ class Invoker implements InvokerInterface
                 $ro->headers['allow'] = $options['allow'];
                 $ro->headers += $options['params'];
                 $ro->body = null;
+
                 return $ro;
             }
             throw new Exception\MethodNotAllowed(get_class($request->ro) . "::$method()", 405);

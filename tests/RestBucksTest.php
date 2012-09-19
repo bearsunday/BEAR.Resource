@@ -12,7 +12,6 @@ use Ray\Di\Definition,
     Ray\Di\EmptyModule;
 use BEAR\Resource\Builder,
     BEAR\Resource\Mock\User;
-use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use BEAR\Resource\SchemeCollection;
 use BEAR\Resource\Adapter\App;
 
