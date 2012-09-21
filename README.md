@@ -135,6 +135,11 @@ $ php composer.phar update
 $ phpunit
 ```
 
+A Resource Oriented Framework
+============
+__BEAR.Sunday__ is a resource oriented framework using BEAR.Resource as well as Gooogle Guice clone DI/AOP system [Ray](https://github.com/koriym/Ray.Di).
+See more at [BEAR.Sunday GitHub](https://github.com/koriym/BEAR.Sunday).
+
 Installation
 ============
 
