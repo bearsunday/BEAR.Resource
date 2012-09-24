@@ -7,6 +7,8 @@
  */
 namespace BEAR\Resource;
 
+use Ray\Di\Di\ImplementedBy;
+
 /**
  * Resource request invoke interface
  *

@@ -8,6 +8,7 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Object;
+use Ray\Di\Di\Scope;
 
 use Aura\Di\ConfigInterface;
 use Aura\Signal\Manager as Signal;

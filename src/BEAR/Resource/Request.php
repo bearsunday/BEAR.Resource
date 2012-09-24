@@ -9,6 +9,7 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Render;
 use Ray\Di\Di\Inject;
+use Ray\Di\Di\Scope;
 
 /**
  * Interface for resource adapter provider.
