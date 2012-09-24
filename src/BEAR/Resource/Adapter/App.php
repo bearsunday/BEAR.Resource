@@ -11,6 +11,8 @@ use BEAR\Resource\Object as ResourceObject;
 use BEAR\Resource\Provider;
 use Ray\Di\InjectorInterface;
 use Ray\Di\Di\Inject;
+use Ray\Di\Di\Named;
+use Ray\Di\Di\Scope;
 use RuntimeException;
 use Exception;
 

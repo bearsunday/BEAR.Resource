@@ -8,6 +8,7 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Object as ResourceObject;
+use Ray\Di\Di\ImplementedBy;
 
 /**
  * Interface for resource link

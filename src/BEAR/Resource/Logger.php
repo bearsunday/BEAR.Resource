@@ -10,6 +10,7 @@ namespace BEAR\Resource;
 use ArrayIterator;
 use IteratorAggregate;
 use Countable;
+use Ray\Di\Di\Scope;
 
 /**
  * Interface for resource logger

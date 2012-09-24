@@ -7,11 +7,15 @@
  */
 namespace BEAR\Resource;
 
+use Ray\Di\Di\ImplementedBy;
+
 /**
  * Interface for resource factory
  *
  * @package BEAR.Resource
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
+ *
+ * @ImplementedBy("Factory")
  */
 interface FactoryInterface
 {

@@ -11,7 +11,6 @@ namespace BEAR\Resource;
  *
  * @package BEAR.Resource
  * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
- * @Scope("prototype")
  */
 class LinkType
 {

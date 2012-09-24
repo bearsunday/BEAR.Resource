@@ -11,6 +11,9 @@ use Ray\Aop\Weave;
 use Ray\Aop\Bind;
 use XHProfRuns_Default;
 
+use Ray\Di\Di\ImplementedBy;
+use Ray\Di\Di\Scope;
+
 /**
  * Resource request invoker
  *
