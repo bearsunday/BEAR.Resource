@@ -13,6 +13,7 @@ use BEAR\Resource\Exception;
 use BEAR\Resource\Exception\InvalidUri;
 use Guzzle\Common\Cache\AbstractCacheAdapter as Cache;
 use Ray\Di\Di\Inject;
+use Ray\Di\Di\Scope;
 
 /**
  * Resource client
