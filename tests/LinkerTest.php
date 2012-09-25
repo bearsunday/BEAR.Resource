@@ -2,17 +2,17 @@
 
 namespace BEAR\Resource;
 
-use Ray\Di\Definition,
-    Ray\Di\Annotation,
-    Ray\Di\Config,
-    Ray\Di\Forge,
-    Ray\Di\Container,
-    Ray\Di\Manager,
-    Ray\Di\Injector,
-    Ray\Di\EmptyModule;
+use Ray\Di\Definition;
+use Ray\Di\Annotation;
+use Ray\Di\Config;
+use Ray\Di\Forge;
+use Ray\Di\Container;
+use Ray\Di\Manager;
+use Ray\Di\Injector;
+use Ray\Di\EmptyModule;
 
-use BEAR\Resource\Request\Method,
-BEAR\Resource\Adapter\Nop;
+use BEAR\Resource\Request\Method;
+use BEAR\Resource\Adapter\Nop;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 
 /**

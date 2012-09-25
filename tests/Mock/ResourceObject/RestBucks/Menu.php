@@ -2,10 +2,10 @@
 
 namespace testworld\ResourceObject\RestBucks;
 
-use BEAR\Resource\Object as ResourceObject,
-    BEAR\Resource\AbstractObject,
-    BEAR\Resource\Resource,
-    BEAR\Resource\Uri;
+use BEAR\Resource\Object as ResourceObject;
+use BEAR\Resource\AbstractObject;
+use BEAR\Resource\Resource;
+use BEAR\Resource\Uri;
 use BEAR\Resource\Annotation\Link;
 use Ray\Di\Di\Scope;
 

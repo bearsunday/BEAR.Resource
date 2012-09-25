@@ -1,22 +1,22 @@
 <?php
-use BEAR\Resource\Object as ResourceObject,
-    BEAR\Resource\AbstractObject,
-    BEAR\Resource\ResourceInterface,
-    BEAR\Resource\Factory,
-    BEAR\Resource\Invoker,
-    BEAR\Resource\Linker,
-    BEAR\Resource\Resource,
-    BEAR\Resource\Request,
-    BEAR\Resource\SchemeCollection;
+use BEAR\Resource\Object as ResourceObject;
+use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceInterface;
+use BEAR\Resource\Factory;
+use BEAR\Resource\Invoker;
+use BEAR\Resource\Linker;
+use BEAR\Resource\Resource;
+use BEAR\Resource\Request;
+use BEAR\Resource\SchemeCollection;
 
-use Ray\Di\Definition,
-    Ray\Di\Annotation,
-    Ray\Di\Config,
-    Ray\Di\Forge,
-    Ray\Di\Container,
-    Ray\Di\Manager,
-    Ray\Di\Injector,
-    Ray\Di\EmptyModule;
+use Ray\Di\Definition;
+use Ray\Di\Annotation;
+use Ray\Di\Config;
+use Ray\Di\Forge;
+use Ray\Di\Container;
+use Ray\Di\Manager;
+use Ray\Di\Injector;
+use Ray\Di\EmptyModule;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 
 $injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition, new Reader)))), new EmptyModule);

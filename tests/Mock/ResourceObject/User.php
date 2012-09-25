@@ -2,12 +2,12 @@
 
 namespace testworld\ResourceObject;
 
-use BEAR\Resource\Object as ResourceObject,
-    BEAR\Resource\AbstractObject,
-    BEAR\Resource\ResourceInterface;
+use BEAR\Resource\Object as ResourceObject;
+use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceInterface;
 
-use BEAR\Resource\Annotation\Provides,
-    BEAR\Resource\Annotation\ParamSignal;
+use BEAR\Resource\Annotation\Provides;
+use BEAR\Resource\Annotation\ParamSignal;
 
 use Ray\Di\Di\Scope;
 

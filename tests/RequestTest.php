@@ -2,12 +2,12 @@
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Request\Method,
-    BEAR\Resource\Adapter\Nop,
-    BEAR\Resource\Adapter\Test;
-use Ray\Di\Config,
-    Ray\Di\Annotation,
-    Ray\Di\Definition;
+use BEAR\Resource\Request\Method;
+use BEAR\Resource\Adapter\Nop;
+use BEAR\Resource\Adapter\Test;
+use Ray\Di\Config;
+use Ray\Di\Annotation;
+use Ray\Di\Definition;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 
 /**

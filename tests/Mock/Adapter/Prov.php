@@ -2,8 +2,8 @@
 
 namespace BEAR\Resource\Adapter;
 
-use BEAR\Resource\Object,
-    BEAR\Resource\Provider;
+use BEAR\Resource\Object;
+use BEAR\Resource\Provider;
 
 class Prov implements Object, Provider, Adapter
 {

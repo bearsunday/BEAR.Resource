@@ -2,8 +2,8 @@
 
 namespace BEAR\Resource\Mock;
 
-use Ray\Di\AbstractModule,
-    Ray\Di\InjectorInterface;
+use Ray\Di\AbstractModule;
+use Ray\Di\InjectorInterface;
 
 /**
  * Framework default module

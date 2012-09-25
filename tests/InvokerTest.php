@@ -2,18 +2,18 @@
 
 namespace BEAR\Resource;
 
-use Ray\Di\Definition,
-Ray\Di\Annotation,
-Ray\Di\Config,
-Ray\Di\Forge,
-Ray\Di\Container,
-Ray\Di\Manager,
-Ray\Di\Injector,
-Ray\Di\EmptyModule;
+use Ray\Di\Definition;
+use Ray\Di\Annotation;
+use Ray\Di\Config;
+use Ray\Di\Forge;
+use Ray\Di\Container;
+use Ray\Di\Manager;
+use Ray\Di\Injector;
+use Ray\Di\EmptyModule;
 
-use Ray\Aop\Weaver,
-Ray\Aop\Bind,
-Ray\Aop\ReflectiveMethodInvocation;
+use Ray\Aop\Weaver;
+use Ray\Aop\Bind;
+use Ray\Aop\ReflectiveMethodInvocation;
 use BEAR\Resource\Mock\User;
 
 /**

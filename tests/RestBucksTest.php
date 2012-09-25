@@ -2,16 +2,16 @@
 
 namespace BEAR\Resource;
 
-use Ray\Di\Definition,
-    Ray\Di\Annotation,
-    Ray\Di\Config,
-    Ray\Di\Forge,
-    Ray\Di\Container,
-    Ray\Di\Manager,
-    Ray\Di\Injector,
-    Ray\Di\EmptyModule;
-use BEAR\Resource\Builder,
-    BEAR\Resource\Mock\User;
+use Ray\Di\Definition;
+use Ray\Di\Annotation;
+use Ray\Di\Config;
+use Ray\Di\Forge;
+use Ray\Di\Container;
+use Ray\Di\Manager;
+use Ray\Di\Injector;
+use Ray\Di\EmptyModule;
+use BEAR\Resource\Builder;
+use BEAR\Resource\Mock\User;
 use BEAR\Resource\SchemeCollection;
 use BEAR\Resource\Adapter\App;
 

@@ -2,9 +2,9 @@
 
 namespace testworld\ResourceObject\User;
 
-use BEAR\Resource\Object as ResourceObject,
-    BEAR\Resource\AbstractObject,
-    BEAR\Resource\Resource;
+use BEAR\Resource\Object as ResourceObject;
+use BEAR\Resource\AbstractObject;
+use BEAR\Resource\Resource;
 
 class Entry extends AbstractObject
 {
