@@ -11,7 +11,6 @@ namespace BEAR\Resource;
  * Generic package exception.
  *
  * @package BEAR.Resource
- * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
  */
 class Exception extends \Exception
 {

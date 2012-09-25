@@ -1,6 +1,6 @@
 <?php
 /**
- * BEAR.Resource
+ * This file is part of the BEAR.Resource package
  *
  * @package BEAR.Resource
  * @license http://opensource.org/licenses/bsd-license.php BSD
@@ -10,15 +10,12 @@ namespace BEAR\Resource;
 use Ray\Aop\Weave;
 use Ray\Aop\Bind;
 use XHProfRuns_Default;
-
-use Ray\Di\Di\ImplementedBy;
 use Ray\Di\Di\Scope;
 
 /**
  * Resource request invoker
  *
  * @package BEAR.Resource
- * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
  *
  * @Scope("singleton")
  */

@@ -1,6 +1,6 @@
 <?php
 /**
- * BEAR.Resource
+ * This file is part of the BEAR.Resource package
  *
  * @package BEAR.Resource
  * @license http://opensource.org/licenses/bsd-license.php BSD
@@ -15,7 +15,6 @@ use Ray\Di\Di\Scope;
  * Interface for resource adapter provider.
  *
  * @package BEAR.Resource
- * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
  *
  * @Scope("prototype")
  */

@@ -2,8 +2,6 @@
 
 namespace BEAR\Resource;
 
-use Ray\Di\Definition;
-
 use Ray\Di\Annotation,
 Ray\Di\Config,
 Ray\Di\Forge,

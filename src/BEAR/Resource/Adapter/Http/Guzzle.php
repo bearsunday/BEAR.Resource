@@ -1,29 +1,26 @@
 <?php
 /**
- * BEAR.Resource
+ * This file is part of the BEAR.Resource package
  *
  * @package BEAR.Resource
- * @license http://opensource.org/licenses/bsd-license.php BSD
  */
 namespace BEAR\Resource\Adapter\Http;
 
 use BEAR\Resource\Object as ResourceObject;
 use BEAR\Resource\Request;
-
 use Guzzle\Service\Client as GuzzleClient;
 use Guzzle\Common\Cache\DoctrineCacheAdapter;
 use Guzzle\Http\Plugin\CachePlugin;
 use Guzzle\Http\Message\RequestInterface;
 use Guzzle\Http\Message\Response;
-
 use Doctrine\Common\Cache\ApcCache;
 use Doctrine\Common\Cache\ArrayCache;
+use Ray\Di\Di\Scope;
 
 /**
  * App resource (app:://self/path/to/resource)
  *
  * @package BEAR.Resource
- * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
  *
  * @Scope("singleton")
  */
@@ -41,6 +38,11 @@ class Guzzle implements ResourceObject, HttpClient
      */
     private $guzzle;
 
+    /**
+     * Constructor
+     *
+     * @param GuzzleClient $guzzle
+     */
     public function __construct(GuzzleClient $guzzle)
     {
         $this->guzzle = $guzzle;

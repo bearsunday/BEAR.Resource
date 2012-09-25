@@ -1,6 +1,6 @@
 <?php
 /**
- * BEAR.Resource
+ * This file is part of the BEAR.Resource package
  *
  * @package BEAR.Resource
  * @license http://opensource.org/licenses/bsd-license.php BSD
@@ -14,7 +14,6 @@ use Ray\Di\Di\ImplementedBy;
  * Interface for resource link
  *
  * @package BEAR.Resource
- * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
  *
  * @ImplementedBy("BEAR\Resource\Linker")
  */
