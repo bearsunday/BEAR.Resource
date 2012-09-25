@@ -72,7 +72,7 @@ class App implements ResourceObject, Provider, Adapter
      *
      * @see    BEAR\Resource.Provider::get()
      * @return object
-     * @throws Exception\InvalidHost
+     * @throws Exception\Host
      */
     public function get($uri)
     {

@@ -31,7 +31,7 @@ class DevInvoker extends Invoker implements InvokerInterface
     /**
      * (non-PHPdoc)
      * @see BEAR\Resource.InvokerInterface::invoke()
-     * @throws Exception\InvalidRequest
+     * @throws Exception\Request
      */
     public function invoke(Request $request)
     {

@@ -122,7 +122,7 @@ class Invoker implements InvokerInterface
     /**
      * (non-PHPdoc)
      * @see BEAR\Resource.InvokerInterface::invoke()
-     * @throws Exception\InvalidRequest
+     * @throws Exception\Request
      */
     public function invoke(Request $request)
     {
@@ -188,7 +188,7 @@ class Invoker implements InvokerInterface
      * @param array  $args
      *
      * @return array
-     * @throws Exception\InvalidParameter
+     * @throws Exception\Parameter
      */
     public function getParams($object, $method, array $args)
     {
@@ -231,7 +231,7 @@ class Invoker implements InvokerInterface
      * @param array  $args
      *
      * @return mixed
-     * @throws Exception\InvalidParameter
+     * @throws Exception\Parameter
      */
     private function getArgumentBySignal(ReflectionParameter $parameter, $object, $method, array $args)
     {
@@ -265,7 +265,7 @@ PARAMETER_PROVIDED:
         return $return;
 PARAMETER_NOT_PROVIDED:
         $msg = '$' . "{$parameter->name} in " . get_class($object) . '::' . $method;
-        throw new Exception\InvalidParameter($msg);
+        throw new Exception\Parameter($msg);
     }
 
     /**

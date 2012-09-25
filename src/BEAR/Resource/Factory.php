@@ -55,22 +55,22 @@ class Factory implements FactoryInterface
     /**
      * (non-PHPdoc)
      * @see BEAR\Resource.FactoryInterface::newInstance()
-     * @throws Exception\InvalidScheme
+     * @throws Exception\Scheme
      */
     public function newInstance($uri)
     {
         $parsedUrl = parse_url($uri);
         if (!(isset($parsedUrl['scheme']) && isset($parsedUrl['scheme']))) {
-            throw new Exception\InvalidUri;
+            throw new Exception\Uri;
         }
         $scheme = $parsedUrl['scheme'];
         $host = $parsedUrl['host'];
         if (!isset($this->scheme[$scheme])) {
-            throw new Exception\InvalidScheme($uri);
+            throw new Exception\Scheme($uri);
         }
         if (!isset($this->scheme[$scheme][$host])) {
             if (!(isset($this->scheme[$scheme]['*']))) {
-                throw new Exception\InvalidScheme($uri);
+                throw new Exception\Scheme($uri);
             }
             $host = '*';
         }

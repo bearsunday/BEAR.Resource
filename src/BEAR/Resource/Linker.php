@@ -74,7 +74,7 @@ final class Linker implements LinkerInterface
                     list($item, $ro) = $q->dequeue();
                     $request = $this->getLinkResult($ro, $link->key, (array) $item);
                     if (!($request instanceof Request)) {
-                        throw new Exception('From list to instance link is not currently supported.');
+                        throw new Exception\Link('From list to instance link is not currently supported.');
                     }
                     $ro = $request->ro;
                     $requestResult = $request();

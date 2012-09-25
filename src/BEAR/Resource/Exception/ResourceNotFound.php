@@ -12,6 +12,6 @@ namespace BEAR\Resource\Exception;
  *
  * @package BEAR.Framework
  */
-class ResourceNotFound extends \BEAR\Resource\Exception
+class ResourceNotFound extends BadRequest implements Exception
 {
 }

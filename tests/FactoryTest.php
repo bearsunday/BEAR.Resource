@@ -49,28 +49,21 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\InvalidScheme
+     * @expectedException BEAR\Resource\Exception\Scheme
      */
-    public function test_newInstanceInvalidScheme()
+    public function test_newInstanceScheme()
     {
         $instance = $this->factory->newInstance('bad://self/news');
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\InvalidScheme
+     * @expectedException BEAR\Resource\Exception\Scheme
      */
-    public function test_newInstanceInvalidSchemes()
+    public function test_newInstanceSchemes()
     {
         $instance = $this->factory->newInstance('app://invalid_host/news');
     }
 
-    /**
-     * @expectedException BEAR\Resource\Exception\Factory
-     */
-    public function test_Exception()
-    {
-        throw new Exception\Factory();
-    }
 
     public function test_newInstanceApp()
     {
@@ -85,7 +78,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\InvalidUri
+     * @expectedException BEAR\Resource\Exception\Uri
      */
     public function test_invaliUri()
     {

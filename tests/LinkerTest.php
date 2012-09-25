@@ -334,7 +334,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception
+     * @expectedException BEAR\Resource\Exception\Link
      */
     public function test_ReturnInsideInstanceAfterListLink()
     {

@@ -8,10 +8,10 @@
 namespace BEAR\Resource\Exception;
 
 /**
- * Invalid parameter
+ * Invalid scheme
  *
  * @package BEAR.Resource
  */
-class InvalidParameter extends \BEAR\Resource\Exception
+class Scheme extends BadRequest implements Exception
 {
 }

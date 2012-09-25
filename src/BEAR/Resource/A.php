@@ -7,8 +7,8 @@
  */
 namespace BEAR\Resource;
 
+use BEAR\Resource\Exception;;
 use BEAR\Resource\Object as ResourceObject;
-use BEAR\Resource\Exception\InvalidLink;
 use Guzzle\Parser\UriTemplate\UriTemplateInterface;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Scope;
@@ -43,7 +43,7 @@ class A implements Referable
     public function href($rel, ResourceObject $ro)
     {
         if (! isset($ro->links[$rel])) {
-            throw new InvalidLink(get_class($ro) . ':' . $rel);
+            throw new Exception\Link(get_class($ro) . ':' . $rel);
         }
         $link = $ro->links[$rel];
         $isTemplated = (isset($link[Link::TEMPLATED]) &&  $link[Link::TEMPLATED] === true);

@@ -67,14 +67,6 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\BEAR\Resource\Resource', $this->resource);
     }
 
-    /**
-     * @expectedException BEAR\Resource\Exception
-     */
-    public function test_Exception()
-    {
-        throw new Exception;
-    }
-
     public function test_newInstanceNop()
     {
         $instance = $this->resource->newInstance('nop://self/path/to/dummy');
@@ -204,7 +196,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\InvalidUri
+     * @expectedException BEAR\Resource\Exception\Uri
      */
     public function testInvalidUri()
     {

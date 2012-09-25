@@ -7,13 +7,11 @@
  */
 namespace BEAR\Resource\Exception;
 
-use BadMethodCallException;
-
 /**
  * Bad link request
  *
  * @package BEAR.Resource
  */
-class BadLinkRequest extends BadMethodCallException
+class BadLinkRequest extends \BadMethodCallException implements Exception
 {
 }

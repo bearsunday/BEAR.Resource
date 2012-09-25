@@ -22,7 +22,7 @@ class ATest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\InvalidLink
+     * @expectedException BEAR\Resource\Exception\Link
      */
     public function test_hrefInvalidRel()
     {

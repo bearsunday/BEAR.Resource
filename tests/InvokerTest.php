@@ -99,7 +99,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\InvalidParameter
+     * @expectedException BEAR\Resource\Exception\Parameter
      */
     public function test_InvokerInterfaceDefaultParamWithNoProvider()
     {
@@ -110,7 +110,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\InvalidParameter
+     * @expectedException BEAR\Resource\Exception\Parameter
      */
     public function test_InvokerInterfaceWithNoProvider()
     {
@@ -131,7 +131,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     //     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\InvalidParameter
+     * @expectedException BEAR\Resource\Exception\Parameter
      */
     public function test_InvokerInterfaceWithUnspecificProviderButNoResult()
     {

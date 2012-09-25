@@ -12,6 +12,6 @@ namespace BEAR\Resource\Exception;
  *
  * @package BEAR.Resource
  */
-class InvalidLink extends \BEAR\Resource\Exception
+class Link extends BadRequest implements Exception
 {
 }

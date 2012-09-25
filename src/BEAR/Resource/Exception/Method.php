@@ -8,11 +8,10 @@
 namespace BEAR\Resource\Exception;
 
 /**
- * Invalid request
+ * Invalid method
  *
  * @package BEAR.Resource
- * @author  Akihito Koriyama <akihito.koriyama@gmail.com>
  */
-class InvalidRequest extends \BEAR\Resource\Exception
+class Method extends BadRequest implements Exception
 {
 }

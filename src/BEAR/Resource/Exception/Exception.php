@@ -1,17 +1,17 @@
 <?php
 /**
- * BEAR.Resource;
+ * This file is part of the BEAR.Resource package
  *
  * @package BEAR.Resource
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace BEAR\Resource;
+namespace BEAR\Resource\Exception;
 
 /**
- * Generic package exception.
+ * Gneric exception
  *
  * @package BEAR.Resource
  */
-class Exception extends \Exception
+interface Exception
 {
 }

@@ -49,11 +49,12 @@ class PageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception
+     * @expectedException BEAR\Resource\Exception\BadRequest
      */
     public function test_Exception()
     {
-        throw new Exception;
+
+        throw new Exception\BadRequest;
     }
 
     public function test_newInstanceNop()

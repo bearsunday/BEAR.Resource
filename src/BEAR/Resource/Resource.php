@@ -8,9 +8,8 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Adapter\App\Link as LikType;
-use BEAR\Resource\Exception\BadRequest;
 use BEAR\Resource\Exception;
-use BEAR\Resource\Exception\InvalidUri;
+use BEAR\Resource\Uri;
 use Guzzle\Common\Cache\AbstractCacheAdapter as Cache;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Scope;
@@ -160,10 +159,10 @@ class Resource implements ResourceInterface
     {
         if (is_string($uri)) {
             if (! $this->request) {
-                throw new BadRequest('Request method (get/put/post/delete/options) required before uri()');
+                throw new Exception\BadRequest('Request method (get/put/post/delete/options) required before uri()');
             }
             if (! preg_match('|^[a-z]+?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i', $uri)) {
-                throw new Exception\InvalidUri($uri);
+                throw new Exception\Uri($uri);
             }
             // uri with query parsed
             if (strpos($uri, '?') !== false) {
@@ -183,7 +182,7 @@ class Resource implements ResourceInterface
 
             return $this;
         }
-        throw new Exception\InvalidUri;
+        throw new Exception\Uri;
     }
 
     /**
@@ -297,7 +296,7 @@ class Resource implements ResourceInterface
     /**
      * (non-PHPdoc)
      * @see BEAR\Resource.Resource::__get($name)
-     * @throws Exception\InvalidRequest
+     * @throws Exception\Request
      */
     public function __get($name)
     {

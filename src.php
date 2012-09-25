@@ -43,15 +43,14 @@ require_once __DIR__ . '/src/BEAR/Resource/Annotation/Provides.php';
 require_once __DIR__ . '/src/BEAR/Resource/Annotation/Link.php';
 
 // exception
-require_once __DIR__ . '/src/BEAR/Resource/Exception.php';
-require_once __DIR__ . '/src/BEAR/Resource/Exception/Factory.php';
-require_once __DIR__ . '/src/BEAR/Resource/Exception/InvalidParameter.php';
-require_once __DIR__ . '/src/BEAR/Resource/Exception/InvalidMethod.php';
-require_once __DIR__ . '/src/BEAR/Resource/Exception/InvalidHost.php';
-require_once __DIR__ . '/src/BEAR/Resource/Exception/InvalidScheme.php';
-require_once __DIR__ . '/src/BEAR/Resource/Exception/InvalidRequest.php';
-require_once __DIR__ . '/src/BEAR/Resource/Exception/InvalidLink.php';
-require_once __DIR__ . '/src/BEAR/Resource/Exception/InvalidUri.php';
+//require_once __DIR__ . '/src/BEAR/Resource/Exception/Factory.php';
+require_once __DIR__ . '/src/BEAR/Resource/Exception/Parameter.php';
+require_once __DIR__ . '/src/BEAR/Resource/Exception/Method.php';
+require_once __DIR__ . '/src/BEAR/Resource/Exception/Host.php';
+require_once __DIR__ . '/src/BEAR/Resource/Exception/Scheme.php';
+require_once __DIR__ . '/src/BEAR/Resource/Exception/Request.php';
+require_once __DIR__ . '/src/BEAR/Resource/Exception/Link.php';
+require_once __DIR__ . '/src/BEAR/Resource/Exception/Uri.php';
 require_once __DIR__ . '/src/BEAR/Resource/Exception/BadRequest.php';
 require_once __DIR__ . '/src/BEAR/Resource/Exception/MethodNotAllowed.php';
 require_once __DIR__ . '/src/BEAR/Resource/Exception/ResourceNotFound.php';

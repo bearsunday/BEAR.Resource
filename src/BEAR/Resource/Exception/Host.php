@@ -8,10 +8,10 @@
 namespace BEAR\Resource\Exception;
 
 /**
- * Invalid parameter
+ * Invalid host
  *
  * @package BEAR.Resource
  */
-class Factory extends \BEAR\Resource\Exception
+class Host extends BadRequest implements Exception
 {
 }
