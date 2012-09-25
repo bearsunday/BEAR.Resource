@@ -29,7 +29,7 @@ class Blog extends AbstractObject
     public function __construct(ResourceInterface $resource = null)
     {
         if (is_null($resource)) {
-            $resurce = include dirname(dirname(__DIR__)) . '/script/resource.php';
+            $resurce = include dirname(dirname(__DIR__)) . '/scripts/resource.php';
         }
         $this->resource = $resource;
     }

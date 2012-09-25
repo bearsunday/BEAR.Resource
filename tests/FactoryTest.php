@@ -22,7 +22,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition)))), new EmptyModule());
+        $injector = require dirname(__DIR__) . '/scripts/injector.php';
         $scheme = new SchemeCollection;
         $scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject'));
         $scheme->scheme('page')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'Page'));

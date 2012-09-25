@@ -16,13 +16,14 @@ use Doctrine\Common\Annotations\AnnotationReader as Reader;
 
 require_once __DIR__ . '/instance/DefaultModule.php';
 
-$config = new Config(new Annotation(new Definition));
+$config = new Config(new Annotation(new Definition, new Reader));
 $injector = new Injector(new Container(new Forge($config)), new DefaultModule);
 $invoker = new Invoker(
     $config,
     new Linker(new Reader),
     new Manager(
-    new HandlerFactory, new ResultFactory, new ResultCollection)
+        new HandlerFactory, new ResultFactory, new ResultCollection
+    )
 );
 $invoker->setResourceLogger(new Logger);
 $resource = new Resource(new Factory(new SchemeCollection), $invoker, new Request($invoker));

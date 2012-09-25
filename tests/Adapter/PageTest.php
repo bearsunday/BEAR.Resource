@@ -3,15 +3,15 @@
 namespace BEAR\Resource;
 
 use Ray\Di\Definition,
-    Ray\Di\Annotation,
-    Ray\Di\Config,
-    Ray\Di\Forge,
-    Ray\Di\Container,
-    Ray\Di\Manager,
-    Ray\Di\Injector,
-    Ray\Di\EmptyModule;
+Ray\Di\Annotation,
+Ray\Di\Config,
+Ray\Di\Forge,
+Ray\Di\Container,
+Ray\Di\Manager,
+Ray\Di\Injector,
+Ray\Di\EmptyModule;
 use BEAR\Resource\Builder,
-    BEAR\Resource\Mock\User;
+BEAR\Resource\Mock\User;
 use Aura\Signal\Manager as Signal;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 
@@ -24,14 +24,14 @@ class PageTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition)))), new EmptyModule);
+        $injector = require dirname(dirname(__DIR__)) . '/scripts/injector.php';
         $scheme = new SchemeCollection;
         $scheme->scheme('nop')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Nop);
         $scheme->scheme('prov')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Prov);
         $scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject'));
         $factory = new Factory($scheme);
         $this->signal = require dirname(dirname(__DIR__)) . '/vendor/aura/signal/scripts/instance.php';
-        $invoker = new Invoker(new Config(new Annotation(new Definition)), new Linker(new Reader), $this->signal);
+        $invoker = new Invoker(new Config(new Annotation(new Definition, new Reader)), new Linker(new Reader), $this->signal);
         $this->resource = new Resource($factory, $invoker, new Request($invoker));
         $this->user = $factory->newInstance('app://self/user');
         $this->nop = $factory->newInstance('nop://self/dummy');

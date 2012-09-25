@@ -18,6 +18,7 @@ namespace BEAR\Resource\Adapter {
         Ray\Di\Injector,
         Ray\Di\EmptyModule;
     use BEAR\Resource\Adapter\App as AppAdapter;
+    use Doctrine\Common\Annotations\AnnotationReader as Reader;
 
     class AppTest extends \PHPUnit_Framework_TestCase
     {
@@ -27,7 +28,7 @@ namespace BEAR\Resource\Adapter {
         protected function setUp()
         {
             parent::setUp();
-            $this->injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition)))), new EmptyModule());
+            $this->injector = require dirname(dirname(__DIR__)) . '/scripts/injector.php';
             $this->namespace = 'testworld';
         }
 
