@@ -206,4 +206,3 @@ class Guzzle implements ResourceObject, HttpClient
         return $this;
     }
 }
-
