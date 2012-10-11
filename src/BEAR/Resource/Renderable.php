@@ -21,5 +21,5 @@ interface Renderable
      *
      * @return mixed
      */
-    public function render(Object $resourceObject);
+    public function render(AbstractObject $resourceObject);
 }
