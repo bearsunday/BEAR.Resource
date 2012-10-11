@@ -10,13 +10,10 @@ use Ray\Di\Di\Scope;
 
 /**
  * Order
- *
- * @Scope("singleton")
  */
 class Order extends AbstractObject
 {
-
-    private $orders = array();
+    private $orders = [];
 
     public function onGet($id)
     {
@@ -32,13 +29,14 @@ class Order extends AbstractObject
     {
         // data store here
         //   .. and get order id.
-        $orderId = 1234;
-        $this->orders[$orderId] = $drink;
+        $orderId = rand();
+        $this['drink'] = $drink;
+        $this['order_id'] = $orderId;
 
         // created
         $this->code = 201;
         $this->headers['Location'] = "app://self/Order/?id=$orderId";
-        $this->links['payment'] = new Uri('app://self/Payment', array('order_id' => $orderId));
+        $this->links['payment'] = ['href' => 'app://self/Payment{?order_id}', 'templated' => true];
 
         return $this;
     }

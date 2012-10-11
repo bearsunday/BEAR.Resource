@@ -332,7 +332,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $response = require dirname(__DIR__) . '/docs/sample/01-rest-bucks/order.php';
         $response = ob_get_clean();
         $this->assertContains('201: Created', $response);
-        $this->assertContains('Oreter: Success', $response);
+        $this->assertContains('Order: Success', $response);
     }
 
     public function test_uriWithQuery()
