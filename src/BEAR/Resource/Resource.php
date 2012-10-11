@@ -55,16 +55,9 @@ class Resource implements ResourceInterface
     /**
      * Cache
      *
-     * @var Guzzle\Common\Cache\CacheAdapterInterface
+     * @var \Guzzle\Common\Cache\CacheAdapterInterface
      */
     private $cache;
-
-    /**
-     * Resource requeset log
-     *
-     * @var array
-     */
-    private $logs = [];
 
     /**
      * Constructor
@@ -158,16 +151,16 @@ class Resource implements ResourceInterface
     public function uri($uri)
     {
         if (is_string($uri)) {
-            if (! $this->request) {
+            if (!$this->request) {
                 throw new Exception\BadRequest('Request method (get/put/post/delete/options) required before uri()');
             }
-            if (! preg_match('|^[a-z]+?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i', $uri)) {
+            if (!preg_match('|^[a-z]+?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i', $uri)) {
                 throw new Exception\Uri($uri);
             }
             // uri with query parsed
             if (strpos($uri, '?') !== false) {
                 $parsed = parse_url($uri);
-                $uri = $parsed['scheme'] . '://' .  $parsed['host'] .  $parsed['path'];
+                $uri = $parsed['scheme'] . '://' . $parsed['host'] . $parsed['path'];
                 parse_str($parsed['query'], $query);
                 $this->withQuery($query);
             }
@@ -276,6 +269,7 @@ class Resource implements ResourceInterface
 
             return $result;
         }
+
         // logs
         return $this->request;
     }
@@ -287,9 +281,9 @@ class Resource implements ResourceInterface
     public function attachParamProvider($signal, Callable $argProvider)
     {
         $this->invoker->getSignal()->handler(
-                '\BEAR\Resource\Invoker',
-                \BEAR\Resource\Invoker::SIGNAL_PARAM . $signal,
-                $argProvider
+            '\BEAR\Resource\Invoker',
+            \BEAR\Resource\Invoker::SIGNAL_PARAM . $signal,
+            $argProvider
         );
     }
 
@@ -328,7 +322,7 @@ class Resource implements ResourceInterface
     }
 
     /**
-     * Return requeset string
+     * Return request string
      *
      * @return string
      */

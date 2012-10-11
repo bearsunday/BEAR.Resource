@@ -7,7 +7,7 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Render;
+use BEAR\Resource\Renderable;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Scope;
 
@@ -20,13 +20,6 @@ use Ray\Di\Di\Scope;
  */
 final class Request implements Requestable
 {
-    /**
-     * Renderer
-     *
-     * @var Render
-     */
-    private $render;
-
     /**
      * object URI scheme
      *
@@ -42,9 +35,9 @@ final class Request implements Requestable
     public $uri;
 
     /**
-     * Resource Objcet
+     * Resource object
      *
-     * @var BEAR\Resource\Object
+     * @var \BEAR\Resource\AbstractObject
      */
     public $ro;
 
@@ -82,13 +75,6 @@ final class Request implements Requestable
      * @var array
      */
     public $links = [];
-
-    /**
-     * Renderer
-     *
-     * @var Rendaerable
-     */
-    private $renderer;
 
     /**
      * Request Result
@@ -141,7 +127,7 @@ final class Request implements Requestable
             $this->result = $this->__invoke();
         }
 
-        return (string) $this->result;
+        return (string)$this->result;
     }
 
     /**
@@ -156,7 +142,7 @@ final class Request implements Requestable
         if (isset(parse_url($uri)['query'])) {
             $queryString = $uri;
         } else {
-            $queryString = "{$uri}" . ($query ? '?' :  '') . $query;
+            $queryString = "{$uri}" . ($query ? '?' : '') . $query;
         }
 
         return $queryString;

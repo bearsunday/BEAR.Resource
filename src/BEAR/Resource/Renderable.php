@@ -17,10 +17,9 @@ interface Renderable
     /**
      * Render
      *
-     * @param Request $request
-     * @param array   $data
+     * @param \BEAR\Resource\Object $resourceObject
      *
-     * @return string
+     * @return mixed
      */
     public function render(Object $resourceObject);
 }

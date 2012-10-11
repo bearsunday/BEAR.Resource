@@ -15,10 +15,4 @@ namespace BEAR\Resource\Adapter;
  */
 class Page extends App
 {
-    /**
-     * Class config
-     *
-     * @var array
-     */
-    public $config = array(self::CONFIG_RO_FOLDER => 'Page');
 }

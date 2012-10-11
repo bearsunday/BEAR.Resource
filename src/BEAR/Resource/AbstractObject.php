@@ -67,7 +67,7 @@ abstract class AbstractObject implements Object, ArrayAccess, Countable, Iterato
     /**
      * Renderer
      *
-     * @var BEAR\Resource\Renderable
+     * @var \BEAR\Resource\Renderable
      */
     protected $renderer;
 
@@ -100,8 +100,8 @@ abstract class AbstractObject implements Object, ArrayAccess, Countable, Iterato
                 $view = $this->renderer->render($this);
             } catch (Exception $e) {
                 $view = '';
-                error_log('Exception catched in ' . __METHOD__);
-                error_log((string) $e);
+                error_log('Exception cached in ' . __METHOD__);
+                error_log((string)$e);
             }
         } else {
             $view = '';

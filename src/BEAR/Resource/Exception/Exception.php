@@ -8,7 +8,7 @@
 namespace BEAR\Resource\Exception;
 
 /**
- * Gneric exception
+ * Generic exception
  *
  * @package BEAR.Resource
  */

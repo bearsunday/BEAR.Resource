@@ -29,6 +29,20 @@ use ReflectionMethod;
 final class Linker implements LinkerInterface
 {
     /**
+     * Method name
+     *
+     * @var string
+     */
+    private $method;
+
+    /**
+     * Resource client
+     *
+     * @var ResourceInterface
+     */
+    private $resource;
+
+    /**
      * Set resource
      *
      * @param $resource $resource
@@ -53,7 +67,7 @@ final class Linker implements LinkerInterface
     /**
      * (non-PHPdoc)
      * @see BEAR\Resource.LinkerInterface::invoke()
-     * @throws Exception
+     * @throws Exception\Link
      */
     public function invoke(ResourceObject $ro, Request $request, $sourceValue)
     {
@@ -69,10 +83,9 @@ final class Linker implements LinkerInterface
         foreach ($links as $link) {
             $cnt = $q->count();
             if ($cnt !== 0) {
-                $method = $request->method;
                 for ($i = 0; $i < $cnt; $i++) {
                     list($item, $ro) = $q->dequeue();
-                    $request = $this->getLinkResult($ro, $link->key, (array) $item);
+                    $request = $this->getLinkResult($ro, $link->key, (array)$item);
                     if (!($request instanceof Request)) {
                         throw new Exception\Link('From list to instance link is not currently supported.');
                     }
@@ -80,7 +93,7 @@ final class Linker implements LinkerInterface
                     $requestResult = $request();
                     $a = $requestResult;
                     $item[$link->key] = $a;
-                    $item = (array) $item;
+                    $item = (array)$item;
                 }
                 continue;
             }
@@ -122,12 +135,12 @@ final class Linker implements LinkerInterface
             }
         }
         array_walk_recursive(
-                $sourceValue,
-                function(&$in) {
-            if ($in instanceof \ArrayObject) {
-                $in = (array) $in;
+            $sourceValue,
+            function (&$in) {
+                if ($in instanceof \ArrayObject) {
+                    $in = (array)$in;
+                }
             }
-        }
         );
 
         return $sourceValue;
@@ -141,12 +154,12 @@ final class Linker implements LinkerInterface
      * @param mixed  $input
      *
      * @return mixed
-     * @throws BadMethodCallException
+     * @throws BadLinkRequest
      */
     private function getLinkResult($ro, $linkKey, $input)
     {
         $method = 'onLink' . ucfirst($linkKey);
-        if (! method_exists($ro, $method)) {
+        if (!method_exists($ro, $method)) {
             $annotations = $this->reader->getMethodAnnotations(new ReflectionMethod($ro, $this->method));
             foreach ($annotations as $annotation) {
                 if ($annotation instanceof AnnotationLink) {
@@ -154,6 +167,7 @@ final class Linker implements LinkerInterface
                         $uri = $annotation->href;
                     }
                     $method = $annotation->method;
+                    /** @noinspection PhpUndefinedMethodInspection */
                     $result = $this->resource->$method->uri($uri)->withQuery($input)->eager->request();
 
                     return $result;
@@ -179,13 +193,10 @@ final class Linker implements LinkerInterface
         if (!(is_array($list))) {
             return false;
         }
-        $list = array_values((array) $list);
-        $result = (count($list) > 1
-                && isset($list[0])
-                && isset($list[1])
-                && is_array($list[0])
-                && is_array($list[1])
-                && (array_keys($list[0]) === array_keys($list[1])));
+        $list = array_values((array)$list);
+        $result = (count($list) > 1 && isset($list[0]) && isset($list[1]) && is_array($list[0]) && is_array(
+            $list[1]
+        ) && (array_keys($list[0]) === array_keys($list[1])));
 
         return $result;
     }

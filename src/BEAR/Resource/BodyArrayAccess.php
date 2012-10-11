@@ -31,7 +31,7 @@ trait BodyArrayAccess
     }
 
     /**
-     * Sets the body value at the specified index to newval
+     * Sets the body value at the specified index to renew
      *
      * @param mixed $offset offset
      * @param mixed $value  value
@@ -58,7 +58,7 @@ trait BodyArrayAccess
     }
 
     /**
-     * nsets the value at the specified index
+     * Set the value at the specified index
      *
      * @param mixed $offset offset
      *
@@ -109,8 +109,8 @@ trait BodyArrayAccess
      */
     public function getIterator()
     {
-        return ((is_array($this->body) || $this->body instanceof Traversable)
-        ?  new ArrayIterator($this->body)
-        :  new ArrayIterator([]));
+        return ((is_array(
+            $this->body
+        ) || $this->body instanceof Traversable) ? new ArrayIterator($this->body) : new ArrayIterator([]));
     }
 }

@@ -10,11 +10,12 @@ namespace BEAR\Resource\SignalHandler;
 use Ray\Aop\ReflectiveMethodInvocation;
 use Ray\Di\Definition;
 use Aura\Signal\Manager as Signal;
+use ReflectionParameter;
 
 /**
  * [At]Provides parameter handler
  *
- * If class has "Provides" annoteted method, call that method and return value.
+ * If class has "Provides" annotated method, call that method and return value.
  *
  * @package BEAR.Resource
  */
@@ -24,19 +25,16 @@ class Provides implements Handle
      * (non-PHPdoc)
      * @see BEAR\Resource\SignalHandler.Handle::__invoke()
      */
-     public function __invoke(
+    public function __invoke(
         $return,
-        $parameter,
-        ReflectiveMethodInvocation $invovation,
+        ReflectionParameter $parameter,
+        ReflectiveMethodInvocation $invocation,
         Definition $definition
     ) {
-        $class = $parameter->getDeclaringFunction()->class;
-        $method = $parameter->getDeclaringFunction()->name;
-        $msg = '$' . "{$parameter->name} in {$class}::{$method}()";
-        /** @var Ray\Di\Definition $definition */
+        /** @var \Ray\Di\Definition $definition */
         $provideMethods = $definition->getUserAnnotationMethodName('Provides');
         if (is_null($provideMethods)) {
-            goto PROVIDE_FAILD;
+            goto PROVIDE_FAILED;
         }
         $parameterMethod = [];
         foreach ($provideMethods as $provideMethod) {
@@ -46,15 +44,17 @@ class Provides implements Handle
         $hasMethod = isset($parameterMethod[$parameter->name]);
         if ($hasMethod === true) {
             $providesMethod = $parameterMethod[$parameter->name];
-            $object = $invovation->getThis();
+            $object = $invocation->getThis();
             $func = [$object, $providesMethod];
             $providedValue = $func();
             $return->value = $providedValue;
             goto SUCCESS;
         }
-PROVIDE_FAILD:
+        PROVIDE_FAILED:
+
         return null;
-SUCCESS:
+        SUCCESS:
+
         return Signal::STOP;
 
     }

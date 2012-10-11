@@ -31,9 +31,9 @@ interface ResourceInterface
     /**
      * Set resource object
      *
-     * @paramResourceObject $ro
+     * @param mixed $ro
      *
-     * @return Resource
+     * @return AbstractObject
      */
     public function object($ro);
 
@@ -50,6 +50,7 @@ interface ResourceInterface
      * Set named parameter query
      *
      * @param  array    $query
+     *
      * @return Resource
      */
     public function withQuery(array $query);

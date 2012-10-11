@@ -18,13 +18,6 @@ use ArrayObject;
 class SchemeCollection extends ArrayObject
 {
     /**
-     * SchemeCollection body
-     *
-     * @var array
-     */
-    private $body;
-
-    /**
      * Scheme
      *
      * @var string
