@@ -10,6 +10,7 @@ namespace BEAR\Resource\SignalHandler;
 use Ray\Aop\ReflectiveMethodInvocation;
 use Ray\Di\Definition;
 use Aura\Signal\Manager as Signal;
+use ReflectionParameter;
 
 /**
  * [At]Provides parameter handler
@@ -26,8 +27,8 @@ class Provides implements Handle
      */
      public function __invoke(
         $return,
-        $parameter,
-        ReflectiveMethodInvocation $invovation,
+        ReflectionParameter $parameter,
+        ReflectiveMethodInvocation $invocation,
         Definition $definition
     ) {
         $class = $parameter->getDeclaringFunction()->class;
@@ -46,7 +47,7 @@ class Provides implements Handle
         $hasMethod = isset($parameterMethod[$parameter->name]);
         if ($hasMethod === true) {
             $providesMethod = $parameterMethod[$parameter->name];
-            $object = $invovation->getThis();
+            $object = $invocation->getThis();
             $func = [$object, $providesMethod];
             $providedValue = $func();
             $return->value = $providedValue;

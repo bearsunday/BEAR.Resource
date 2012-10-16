@@ -25,15 +25,15 @@ interface Handle
      *
      * @param mixed                      $return     handler provided return value
      * @param ReflectionParameter        $parameter  parameter reflection
-     * @param ReflectiveMethodInvocation $invovation Method invocation
+     * @param ReflectiveMethodInvocation $invocation Method invocation
      * @param Definition                 $definition Class definition
      *
      * @return null | Signal::STOP
      */
     public function __invoke(
         $return,
-        $parameter,
-        ReflectiveMethodInvocation $invovation,
+        ReflectionParameter $parameter,
+        ReflectiveMethodInvocation $invocation,
         Definition $definition
     );
 }
