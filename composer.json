@@ -1,9 +1,14 @@
 {
     "name": "bear/resource",
     "description": "RESTful service layer framework",
-    "keywords": ["rest", "service layer"],
+    "keywords": [
+        "rest",
+        "HATEOAS",
+        "hyper link",
+        "service layer"
+    ],
     "homepage": "https://github.com/koriym/BEAR.Resource",
-    "version": "0.4.1",
+    "version": "0.5.0",
     "license": "BSD-3-Clause",
     "repositories": [
         {

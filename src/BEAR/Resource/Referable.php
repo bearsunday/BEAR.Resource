@@ -10,7 +10,7 @@ namespace BEAR\Resource;
 use BEAR\Resource\Object as ResourceObject;
 
 /**
- * Interface for hyper refference
+ * Interface for hyper reference
  *
  * @package BEAR.Resource
  */
@@ -19,8 +19,10 @@ interface Referable
     /**
      * Get hyper reference URI
      *
-     * @param string         $rel
-     * @param ResourceObject $ro
+     * @param                $rel
+     * @param AbstractObject $ro
+     *
+     * @return mixed
      */
-    public function href($rel, ResourceObject $ro);
+    public function href($rel, AbstractObject $ro);
 }

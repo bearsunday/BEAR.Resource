@@ -1,2 +1,9 @@
+.idea
+templates_c
 vendor
-templates_c/
+tmp
+*.log
+build
+cache.properties
+
+composer.lock

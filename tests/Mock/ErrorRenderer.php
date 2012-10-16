@@ -4,7 +4,7 @@ namespace BEAR\Resource;
 
 class ErrorRenderer implements Renderable
 {
-    public function render(Object $resourceObject)
+    public function render(AbstractObject $resourceObject)
     {
         throw new \ErrorException;
     }

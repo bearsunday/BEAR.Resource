@@ -36,11 +36,12 @@ class DevInvoker extends Invoker implements InvokerInterface
     public function invoke(Request $request)
     {
         $method = 'on' . ucfirst($request->method);
-        $ro = ($request->ro instanceof Weave) ? $request->ro->___getObject() : $request->ro;
         // before process
         if ($request->ro instanceof Weave) {
-            // interceptor binded object
+            // interceptor bound object
+            /** @noinspection PhpUndefinedMethodInspection */
             $bind = $request->ro->___getBind();
+            /** @noinspection PhpUndefinedMethodInspection */
             $resource = $request->ro->___getObject();
             $interceptors = $this->getBindInfo($bind);
             $resource->headers[self::HEADER_INTERCEPTORS] = json_encode($interceptors);
@@ -50,7 +51,7 @@ class DevInvoker extends Invoker implements InvokerInterface
         }
 
         // MethodNotAllowed
-        if ((! $request->ro instanceof Weave) && method_exists($request->ro, $method) !== true) {
+        if ((!$request->ro instanceof Weave) && method_exists($request->ro, $method) !== true) {
             if ($request->method === self::OPTIONS) {
                 return $this->getOptions($request->ro);
             }
@@ -61,9 +62,12 @@ class DevInvoker extends Invoker implements InvokerInterface
         $time = microtime(true);
         $memory = memory_get_usage();
         if (extension_loaded('xhprof')) {
+            /** @noinspection PhpUndefinedConstantInspection */
+            /** @noinspection PhpUndefinedFunctionInspection */
             xhprof_enable(XHPROF_FLAGS_NO_BUILTINS | XHPROF_FLAGS_CPU | XHPROF_FLAGS_MEMORY);
         }
         // proceed original method
+        /** @noinspection PhpUndefinedMethodInspection */
         $ro = ($request->ro instanceof Weave) ? $request->ro->___getObject() : $request->ro;
         $params = $this->getParams($ro, $method, $request->query);
         $resource->headers[self::HEADER_PARAMS] = json_encode($params, true);
@@ -75,6 +79,7 @@ class DevInvoker extends Invoker implements InvokerInterface
         $resource->headers[self::HEADER_EXECUTION_TIME] = $time;
         $resource->headers[self::HEADER_MEMORY_USAGE] = $memory;
         if (extension_loaded('xhprof') && class_exists('XHProfRuns_Default', false)) {
+            /** @noinspection PhpUndefinedFunctionInspection */
             $xhprof = xhprof_disable();
             $profileId = (new XHProfRuns_Default)->save_run($xhprof, 'resource');
             $resource->headers[self::HEADER_PROFILE_ID] = $profileId;
@@ -86,7 +91,6 @@ class DevInvoker extends Invoker implements InvokerInterface
     public function getBindInfo(Bind $binds)
     {
         $result = [];
-        $binds = (array) $binds;
         foreach ($binds as $method => $bind) {
             $interceptors = array_values($binds[$method]);
             foreach ($interceptors as &$interceptor) {

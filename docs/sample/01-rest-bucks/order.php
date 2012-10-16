@@ -9,6 +9,8 @@
 use BEAR\Resource\SchemeCollection;
 use BEAR\Resource\Adapter\App;
 use BEAR\Resource\Code;
+use BEAR\Resource\A;
+use Guzzle\Parser\UriTemplate\UriTemplate;
 
 // loader
 require __DIR__ . '/src.php';
@@ -24,8 +26,9 @@ $resource->setSchemeCollection($scheme);
 $orderDrink = ['drink' => 'latte'];
 $order = $resource->post->uri('app://self/Order')->withQuery($orderDrink)->eager->request();
 
-// get response and hyper link.
-$paymentUri = $order->links['payment'];
+// get payment uri with hyperlink.
+$a = new A(new UriTemplate);
+$paymentUri = $a->href('payment', $order);
 $payment = [
 	'credit_card_number' => '123456789',
 	'expires' => '07/07',
@@ -33,11 +36,11 @@ $payment = [
 	'amount' => '4.00'
 ];
 
-// requet payment using hyper link.
+// request payment
 $response = $resource->put->uri($paymentUri)->addQuery($payment)->eager->request();
 
 // payment done, enjoy coffee !
 $code = new Code;
 echo "$response->code: " . $code->statusText[$response->code] . PHP_EOL;
 echo 'Location: ' . $response->headers['Location'] . PHP_EOL;
-echo 'Oreter: ' . (($response->code === 201) ? 'Success' : 'Failure'). PHP_EOL;
+echo 'Order: ' . (($response->code === 201) ? 'Success' : 'Failure'). PHP_EOL;

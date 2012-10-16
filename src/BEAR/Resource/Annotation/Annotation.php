@@ -8,19 +8,11 @@
 namespace BEAR\Resource\Annotation;
 
 /**
- * Provides
- *
- * @Annotation
- * @Target("METHOD")
+ * Annotation
  *
  * @package    BEAR.Resource
  * @subpackage Annotation
  */
-final class Provides implements Annotation
+interface Annotation
 {
-    /**
-     * @var string
-     */
-    public $value;
-
 }

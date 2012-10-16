@@ -27,7 +27,7 @@ class App implements ResourceObject, Provider, Adapter
     /**
      * Application dependency injector
      *
-     * @var Injector
+     * @var \Ray\Di\Injector
      */
     private $injector;
 
@@ -53,13 +53,14 @@ class App implements ResourceObject, Provider, Adapter
      * @param string            $path      Resource adapter path
      *
      * @Inject
+     * @throws RuntimeException
      */
     public function __construct(
-            InjectorInterface $injector,
-            $namespace,
-            $path
-    ){
-        if (! is_string($namespace)) {
+        InjectorInterface $injector,
+        $namespace,
+        $path
+    ) {
+        if (!is_string($namespace)) {
             throw new RuntimeException('namespace not string');
         }
         $this->injector = $injector;
@@ -72,7 +73,6 @@ class App implements ResourceObject, Provider, Adapter
      *
      * @see    BEAR\Resource.Provider::get()
      * @return object
-     * @throws Exception\Host
      */
     public function get($uri)
     {
@@ -80,7 +80,6 @@ class App implements ResourceObject, Provider, Adapter
         $path = str_replace('/', ' ', $parsedUrl['path']);
         $path = ucwords($path);
         $path = str_replace(' ', '\\', $path);
-        $host = $parsedUrl['host'];
         $className = "{$this->namespace}\\{$this->path}{$path}";
         $instance = $this->injector->getInstance($className);
 

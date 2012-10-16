@@ -16,9 +16,26 @@ namespace BEAR\Resource\Annotation;
  * @package    BEAR.Resource
  * @subpackage Annotation
  */
-final class Link
+final class Link implements Annotation
 {
+    /**
+     * Relation
+     *
+     * @var string
+     */
     public $rel;
+
+    /**
+     * Hyper reference
+     *
+     * @var string
+     */
     public $href;
+
+    /**
+     * Request method
+     *
+     * @var string
+     */
     public $method = 'get';
 }

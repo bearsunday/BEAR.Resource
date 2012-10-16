@@ -21,8 +21,8 @@ use Ray\Di\Di\Scope;
  */
 class Logger implements LoggerInterface, IteratorAggregate, Countable
 {
-    const LOG_REQUEST  = 0;
-    const LOG_RESULT   = 1;
+    const LOG_REQUEST = 0;
+    const LOG_RESULT = 1;
 
     /**
      * Logs
@@ -41,7 +41,7 @@ class Logger implements LoggerInterface, IteratorAggregate, Countable
     /**
      * Return new resource object instance
      *
-     * @param $request $request
+     * @param       $request $request
      * @param mixed $result
      *
      * @return void

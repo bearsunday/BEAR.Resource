@@ -13,8 +13,6 @@ use Guzzle\Common\Cache\DoctrineCacheAdapter;
 use Guzzle\Http\Plugin\CachePlugin;
 use Guzzle\Http\Message\RequestInterface;
 use Guzzle\Http\Message\Response;
-use Doctrine\Common\Cache\ApcCache;
-use Doctrine\Common\Cache\ArrayCache;
 use Ray\Di\Di\Scope;
 
 /**
@@ -27,6 +25,27 @@ use Ray\Di\Di\Scope;
 class Guzzle implements ResourceObject, HttpClient
 {
     /**
+     * Code
+     *
+     * @var int
+     */
+    public $code;
+
+    /**
+     * Headers
+     *
+     * @var array
+     */
+    public $headers;
+
+    /**
+     * Body
+     *
+     * @var mixed
+     */
+    public $body;
+
+    /**
      * HTTP Response
      *
      * @var RequestInterface
@@ -34,19 +53,23 @@ class Guzzle implements ResourceObject, HttpClient
     private $response;
 
     /**
-     * @var GuzzleClient
+     * Http client
+     *
+     * @var \Guzzle\Http\Client
      */
     private $guzzle;
 
     /**
      * Constructor
      *
-     * @param GuzzleClient $guzzle
+     * @param \Guzzle\Service\Client $guzzle
      */
     public function __construct(GuzzleClient $guzzle)
     {
         $this->guzzle = $guzzle;
-        $cacheAdapter = (function_exists('apc_cache_info')) ? 'Doctrine\Common\Cache\ApcCache' : 'Doctrine\Common\Cache\ArrayCache';
+        $cacheAdapter = (function_exists(
+            'apc_cache_info'
+        )) ? 'Doctrine\Common\Cache\ApcCache' : 'Doctrine\Common\Cache\ArrayCache';
         $adapter = new DoctrineCacheAdapter(new $cacheAdapter());
         $cache = new CachePlugin($adapter, true);
         $this->guzzle->getEventDispatcher()->addSubscriber($cache);
@@ -58,7 +81,8 @@ class Guzzle implements ResourceObject, HttpClient
      */
     public function onGet()
     {
-        $this->response = $response = $this->guzzle->get()->send();
+        /** @noinspection PhpUndefinedMethodInspection */
+        $this->response = $this->guzzle->get()->send();
         list($this->code, $this->headers, $this->body) = $this->parseResponse($this->response);
 
         return $this;
@@ -70,7 +94,8 @@ class Guzzle implements ResourceObject, HttpClient
      */
     public function onPost()
     {
-        $this->response = $response = $this->guzzle->post()->send();
+        /** @noinspection PhpUndefinedMethodInspection */
+        $this->response = $this->guzzle->post()->send();
         list($this->code, $this->headers, $this->body) = $this->parseResponse($this->response);
 
         return $this;
@@ -82,7 +107,8 @@ class Guzzle implements ResourceObject, HttpClient
      */
     public function onPut()
     {
-        $this->response = $response = $this->guzzle->put()->send();
+        /** @noinspection PhpUndefinedMethodInspection */
+        $this->response = $this->guzzle->put()->send();
         list($this->code, $this->headers, $this->body) = $this->parseResponse($this->response);
 
         return $this;
@@ -94,7 +120,8 @@ class Guzzle implements ResourceObject, HttpClient
      */
     public function onDelete()
     {
-        $this->response = $response = $this->guzzle->delete()->send();
+        /** @noinspection PhpUndefinedMethodInspection */
+        $this->response = $this->guzzle->delete()->send();
         list($this->code, $this->headers, $this->body) = $this->parseResponse($this->response);
 
         return $this;
@@ -106,7 +133,8 @@ class Guzzle implements ResourceObject, HttpClient
      */
     public function onHead()
     {
-        $this->response = $response = $this->guzzle->head()->send();
+        /** @noinspection PhpUndefinedMethodInspection */
+        $this->response = $this->guzzle->head()->send();
         list($this->code, $this->headers, $this->body) = $this->parseResponse($this->response);
 
         return $this;
@@ -118,7 +146,8 @@ class Guzzle implements ResourceObject, HttpClient
      */
     public function onOptions()
     {
-        $this->response = $response = $this->guzzle->options()->send();
+        /** @noinspection PhpUndefinedMethodInspection */
+        $this->response = $this->guzzle->options()->send();
         list($this->code, $this->headers, $this->body) = $this->parseResponse($this->response);
 
         return $this;
@@ -127,11 +156,13 @@ class Guzzle implements ResourceObject, HttpClient
     /**
      * Parse HTTP response
      *
-     * @param Response $response
+     * @param \Guzzle\Http\Message\Response $response
+     *
+     * @return array
      */
     protected function parseResponse(Response $response)
     {
-        /* @var $response \Guzzle\Http\Message\RequestInterface */
+        /* @var $response \Guzzle\Http\Message\Response */
         $code = $response->getStatusCode();
         $headers = $response->getHeaders()->getAll();
         $body = $response->getBody(true);
@@ -167,6 +198,7 @@ class Guzzle implements ResourceObject, HttpClient
      */
     public function onFinalSync(Request $request, \ArrayObject $syncData)
     {
+        unset($request);
         $batch = [];
         foreach ($syncData as $request) {
             $method = $request->method;
@@ -175,7 +207,7 @@ class Guzzle implements ResourceObject, HttpClient
         $this->body = [];
         $responses = $this->guzzle->send($batch);
         foreach ($responses as $response) {
-            list($code, $headers, $body) = $this->parseResponse($response);
+            list(, , $body) = $this->parseResponse($response);
             $this->body[] = $body;
         }
 

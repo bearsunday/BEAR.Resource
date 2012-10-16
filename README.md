@@ -1,4 +1,4 @@
-BEAR.Resource, a RESTful service layer framework.
+BEAR.Resource, a RESTful object / service layer framework.
 =================================================
 
 [![Build Status](https://secure.travis-ci.org/koriym/BEAR.Resource.png)](http://travis-ci.org/koriym/BEAR.git@github.com:koriym/BEAR.Resource.git)
@@ -19,30 +19,27 @@ RESTBucks sample
 ### What's RESTBucks ?
 See this article.[How to GET a Cup of Coffee](http://www.infoq.com/articles/webber-rest-workflow)
 
-Run Sample
+Run hyper link application sample
 ----------
-    $ php docs/sample/01-rest-bucks/order.php 
+    $ php docs/sample/01-rest-bucks/order.php
+
     201: Created
-    Location: app://self/RestBucks/Order/?id=1234
+    Location: app://self/RestBucks/Order/?id=1184049611
 
 
 Client Code
 -----------
 ```php
 <?php
-/**
- * RESTbucks simple example
- *
- * @see http://www.infoq.com/articles/webber-rest-workflow
- */
+...
 
-// order latte.
 // order latte.
 $orderDrink = ['drink' => 'latte'];
 $order = $resource->post->uri('app://self/Order')->withQuery($orderDrink)->eager->request();
 
-// get response and hyper link.
-$paymentUri = $order->links['payment'];
+// get payment uri with hyperlink.
+$a = new A(new UriTemplate);
+$paymentUri = $a->href('payment', $order);
 $payment = [
 	'credit_card_number' => '123456789',
 	'expires' => '07/07',
@@ -50,17 +47,16 @@ $payment = [
 	'amount' => '4.00'
 ];
 
-// requet payment using hyper link.
+// request payment
 $response = $resource->put->uri($paymentUri)->addQuery($payment)->eager->request();
-echo "$response->code: " . $code->statusText[$response->code] . PHP_EOL;
-echo 'Location: ' . $response->headers['Location'] . PHP_EOL;
-echo 'Oreter: ' . (($response->code === 201) ? 'Success' : 'Failure'). PHP_EOL;
+
+// payment done, enjoy coffee !
 ```
 
 ```php
 201: Created
-Location: app://self/Order/?id=1234
-Oreter: Success
+Location: app://self/Order/?id=1184049611
+Order: Success
 ```
 
 Service Code
@@ -87,13 +83,14 @@ class Order extends AbstractObject
     {
         // data store here
         //   .. and get order id.
-        $orderId = 1234;
-        $this->orders[$orderId] = $drink;
+        $orderId = rand();
+        $this['drink'] = $drink;
+        $this['order_id'] = $orderId;
 
         // created
         $this->code = 201;
         $this->headers['Location'] = "app://self/Order/?id=$orderId";
-        $this->links['payment'] = new Uri('app://self/Payment', array('order_id' => $orderId));
+        $this->links['payment'] = ['href' => 'app://self/Payment{?order_id}', 'templated' => true];
 
         return $this;
     }
@@ -135,11 +132,6 @@ $ php composer.phar update
 $ phpunit
 ```
 
-A Resource Oriented Framework
-============
-__BEAR.Sunday__ is a resource oriented framework using BEAR.Resource as well as Gooogle Guice clone DI/AOP system [Ray](https://github.com/koriym/Ray.Di).
-See more at [BEAR.Sunday GitHub](https://github.com/koriym/BEAR.Sunday).
-
 Installation
 ============
 
@@ -151,3 +143,8 @@ If you're using [Composer](https://github.com/composer/composer) to manage depen
 			"bear/resource": ">=0.1"
 		}
 	}
+
+A Resource Oriented Framework
+============
+__BEAR.Sunday__ is a resource oriented framework using BEAR.Resource as well as Gooogle Guice clone DI/AOP system [Ray](https://github.com/koriym/Ray.Di).
+See more at [BEAR.Sunday GitHub](https://github.com/koriym/BEAR.Sunday).

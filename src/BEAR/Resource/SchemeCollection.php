@@ -18,13 +18,6 @@ use ArrayObject;
 class SchemeCollection extends ArrayObject
 {
     /**
-     * SchemeCollection body
-     *
-     * @var array
-     */
-    private $body;
-
-    /**
      * Scheme
      *
      * @var string
@@ -41,7 +34,9 @@ class SchemeCollection extends ArrayObject
     /**
      * Set scheme
      *
-     * @param string $scheme
+     * @param $scheme
+     *
+     * @return SchemeCollection
      */
     public function scheme($scheme)
     {
@@ -53,7 +48,9 @@ class SchemeCollection extends ArrayObject
     /**
      * Set host
      *
-     * @param string $host
+     * @param $host
+     *
+     * @return SchemeCollection
      */
     public function host($host)
     {
@@ -66,6 +63,8 @@ class SchemeCollection extends ArrayObject
      * Set resource adapter
      *
      * @param Adapter $adapter
+     *
+     * @return SchemeCollection
      */
     public function toAdapter(Adapter $adapter)
     {

@@ -17,10 +17,9 @@ interface Renderable
     /**
      * Render
      *
-     * @param Request $request
-     * @param array   $data
+     * @param AbstractObject $resourceObject
      *
-     * @return string
+     * @return mixed
      */
-    public function render(Object $resourceObject);
+    public function render(AbstractObject $resourceObject);
 }

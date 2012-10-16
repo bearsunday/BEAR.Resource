@@ -23,15 +23,14 @@ class Factory implements FactoryInterface
     /**
      * Resource adapter biding config
      *
-     * @var Scheme
+     * @var SchemeCollection
      */
     private $scheme = [];
 
     /**
-     * Construcotr
+     * Constructor
      *
-     * @param InjectorInterface $injector
-     * @param Scheme            $scheme
+     * @param SchemeCollection  $scheme
      *
      * @Inject
      */

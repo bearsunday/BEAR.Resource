@@ -16,7 +16,10 @@ namespace BEAR\Resource\Annotation;
  * @package    BEAR.Resource
  * @subpackage Annotation
  */
-final class ParamSignal
+final class ParamSignal implements Annotation
 {
+    /**
+     * @var string
+     */
     public $value;
 }

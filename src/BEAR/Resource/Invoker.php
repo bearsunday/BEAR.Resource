@@ -7,19 +7,20 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Object;
-use Ray\Di\Di\Scope;
 use Aura\Di\ConfigInterface;
 use Aura\Signal\Manager as Signal;
 use BEAR\Resource\Object as ResourceObject;
 use BEAR\Resource\Annotation\ParamSignal;
+use Ray\Di\Annotation;
 use Ray\Aop\Weave;
 use Ray\Aop\ReflectiveMethodInvocation;
-use Ray\Di\Annotation;
-use Ray\Di\Definition;
+use ReflectionParameter;
+
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
-use ReflectionParameter;
+use Ray\Di\Di\Scope;
+use Ray\Di\Config;
+use Ray\Di\Definition;
 
 /**
  * Resource request invoker
@@ -33,24 +34,24 @@ class Invoker implements InvokerInterface
     /**
      * Config
      *
-     * @var Ray\Di\Config
+     * @var \Ray\Di\Config
      */
     private $config;
 
     /**
-     * @var BEAR\Resource\Linker
+     * @var \BEAR\Resource\Linker
      */
     private $linker;
 
     /**
-     * @var Aura\Signal\Manager
+     * @var \Aura\Signal\Manager
      */
     private $signal;
 
     /**
      * Logger
      *
-     * @var BEAR\Resource\Logger
+     * @var \BEAR\Resource\Logger
      */
     private $logger;
 
@@ -73,7 +74,9 @@ class Invoker implements InvokerInterface
     /**
      * Constructor
      *
-     * @param ConfigInterface $config
+     * @param \Aura\Di\ConfigInterface $config
+     * @param LinkerInterface          $linker
+     * @param \Aura\Signal\Manager     $signal
      *
      * @Inject
      */
@@ -81,16 +84,15 @@ class Invoker implements InvokerInterface
         ConfigInterface $config,
         LinkerInterface $linker,
         Signal $signal
-    ){
+    ) {
         $this->config = $config;
         $this->linker = $linker;
         $this->signal = $signal;
     }
 
     /**
-     * Set resource client
-     *
-     * @param ResourceInterface $resource
+     * (non-PHPDoc)
+     * @see \BEAR\Resource\InvokderInterface::setResourceClient()
      */
     public function setResourceClient(ResourceInterface $resource)
     {
@@ -100,7 +102,7 @@ class Invoker implements InvokerInterface
     /**
      * Resource logger setter
      *
-     * @param ResourceLoggerInterface $logger
+     * @param LoggerInterface $logger
      *
      * @Inject(optional=true)
      */
@@ -130,9 +132,13 @@ class Invoker implements InvokerInterface
         $isWeave = $request->ro instanceof Weave;
         if ($isWeave && $request->method !== Invoker::OPTIONS) {
             $weave = $request->ro;
-            $result = $weave(array($this, 'getParams'), $method, $request->query);
+            /** @noinspection PhpUnusedLocalVariableInspection */
+            /** @var $weave Callable */
+            $result = $weave([$this, 'getParams'], $method, $request->query);
             goto completed;
         }
+        /** @var $request->ro \Ray\Aop\Weave */
+        /** @noinspection PhpUndefinedMethodInspection */
         $ro = $isWeave ? $request->ro->___getObject() : $request->ro;
         if (method_exists($ro, $method) !== true) {
             if ($request->method === self::OPTIONS) {
@@ -188,7 +194,6 @@ class Invoker implements InvokerInterface
      * @param array  $args
      *
      * @return array
-     * @throws Exception\Parameter
      */
     public function getParams($object, $method, array $args)
     {
@@ -197,6 +202,7 @@ class Invoker implements InvokerInterface
             return [];
         }
         $providesArgs = [];
+        $params = [];
         foreach ($parameters as $parameter) {
             if (isset($args[$parameter->name])) {
                 $params[] = $args[$parameter->name];
@@ -205,15 +211,11 @@ class Invoker implements InvokerInterface
             } elseif (isset($providesArgs[$parameter->name])) {
                 $params[] = $providesArgs[$parameter->name];
             } else {
-                try {
-                    $result = $this->getArgumentBySignal($parameter, $object, $method, $args);
-                    if ($result->args) {
-                        $providesArgs = $result->args;
-                    }
-                    $params[] = $result->value;
-                } catch (\Exception $e) {
-                    throw $e;
+                $result = $this->getArgumentBySignal($parameter, $object, $method, $args);
+                if ($result->args) {
+                    $providesArgs = $result->args;
                 }
+                $params[] = $result->value;
             }
         }
 
@@ -221,49 +223,56 @@ class Invoker implements InvokerInterface
     }
 
     /**
-     * Return argument from providver or signal handler
+     * Return argument from provider or signal handler
      *
-     * Thie method called when client and service object both has no argument
+     * This method called when client and service object both has sufficient argument
      *
-     * @param array  $definition
-     * @param object $object
-     * @param string $method
-     * @param array  $args
+     * @param \ReflectionParameter $parameter
+     * @param  object              $object
+     * @param string               $method
+     * @param array                $args
      *
-     * @return mixed
+     * @return Result
      * @throws Exception\Parameter
      */
     private function getArgumentBySignal(ReflectionParameter $parameter, $object, $method, array $args)
     {
-        /** @todo rm magic number 2 = definition */
-        $definition = $this->config->fetch(get_class($object))[2];
+        $definition = $this->config->fetch(get_class($object))[Config::INDEX_DEFINITION];
+        /** @var $definition \Ray\Di\Definition  */
         $userAnnotation = $definition->getUserAnnotationByMethod($method);
-        $signalAannotations = isset($userAnnotation['ParamSignal']) ? $userAnnotation['ParamSignal'] : [];
+        $signalAnnotations = isset($userAnnotation['ParamSignal']) ? $userAnnotation['ParamSignal'] : [];
         $signalIds = ['Provides'];
-        foreach ($signalAannotations as $annotation) {
+        foreach ($signalAnnotations as $annotation) {
             if ($annotation instanceof ParamSignal) {
                 $signalIds[] = $annotation->value;
             }
         }
         $return = new Result;
-        foreach ($signalIds as $signalId) {
-            $results = $this->signal->send(
-                    $this,
-                    self::SIGNAL_PARAM . $signalId,
-                    $return,
-                    $parameter,
-                    new ReflectiveMethodInvocation([$object, $method], $args, $signalAannotations),
-                    $definition
-            );
-        }
-        $isStoped = $results->isStopped();
-        $result = $results->getLast();
-        if ($isStoped === false || is_null($result)) {
+        if (!$signalIds) {
             goto PARAMETER_NOT_PROVIDED;
         }
-PARAMETER_PROVIDED:
+        foreach ($signalIds as $signalId) {
+            $results = $this->signal->send(
+                $this,
+                self::SIGNAL_PARAM . $signalId,
+                $return,
+                $parameter,
+                new ReflectiveMethodInvocation([$object, $method], $args, $signalAnnotations),
+                $definition
+            );
+        }
+        /** @noinspection PhpUndefinedVariableInspection */
+        $isStopped = $results->isStopped();
+        $result = $results->getLast();
+        if ($isStopped === false || is_null($result)) {
+            goto PARAMETER_NOT_PROVIDED;
+        }
+        PARAMETER_PROVIDED:
+
         return $return;
-PARAMETER_NOT_PROVIDED:
+
+        PARAMETER_NOT_PROVIDED:
+        /** @noinspection PhpUnreachableStatementInspection */
         $msg = '$' . "{$parameter->name} in " . get_class($object) . '::' . $method;
         throw new Exception\Parameter($msg);
     }
@@ -281,21 +290,19 @@ PARAMETER_NOT_PROVIDED:
         $methods = $ref->getMethods();
         $allow = [];
         foreach ($methods as $method) {
-            $isRequestMethod = (substr($method->name, 0, 2) === 'on')
-            && (substr($method->name, 0, 6) !== 'onLink');
+            $isRequestMethod = (substr($method->name, 0, 2) === 'on') && (substr($method->name, 0, 6) !== 'onLink');
             if ($isRequestMethod) {
                 $allow[] = strtolower(substr($method->name, 2));
             }
         }
         $params = [];
-        $paramArray = [];
         foreach ($allow as $method) {
             $refMethod = new \ReflectionMethod($ro, 'on' . $method);
             $parameters = $refMethod->getParameters();
             $paramArray = [];
             foreach ($parameters as $parameter) {
                 $name = $parameter->getName();
-                $param =  $parameter->isOptional() ? "({$name})" : $name;
+                $param = $parameter->isOptional() ? "({$name})" : $name;
                 $paramArray[] = $param;
             }
             $key = "param-{$method}";
@@ -322,8 +329,9 @@ PARAMETER_NOT_PROVIDED:
             }
             $requests->next();
         }
-        //onFinalSync summaraize all sync request data.
-        $result = call_user_func(array($request->ro, 'onFinalSync'), $request, $data);
+        // onFinalSync summarize all sync request data.
+        /** @noinspection PhpUndefinedVariableInspection */
+        $result = call_user_func([$request->ro, 'onFinalSync'], $request, $data);
 
         return $result;
     }

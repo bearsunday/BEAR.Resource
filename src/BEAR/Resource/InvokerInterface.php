@@ -22,6 +22,7 @@ interface InvokerInterface
      * Invoke resource request
      *
      * @param  Request $request
+     *
      * @return mixed
      */
     public function invoke(Request $request);
@@ -44,4 +45,10 @@ interface InvokerInterface
      */
     public function invokeSync(\SplObjectStorage $requests);
 
+    /**
+     * Set resource client
+     *
+     * @param ResourceInterface $resource
+     */
+    public function setResourceClient(ResourceInterface $resource);
 }

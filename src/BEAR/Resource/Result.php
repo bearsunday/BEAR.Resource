@@ -8,7 +8,7 @@
 namespace BEAR\Resource;
 
 /**
- * Conventional class for refference value.
+ * Conventional class for reference value.
  *
  * @package  BEAR.Resource
  * @see      http://stackoverflow.com/questions/295016/is-it-possible-to-pass-parameters-by-reference-using-call-user-func-array
