@@ -26,7 +26,7 @@ interface Handle
      * @param mixed                      $return     handler provided return value
      * @param ReflectionParameter        $parameter  parameter reflection
      * @param ReflectiveMethodInvocation $invocation
-     * @param Definition                 $invocation
+     * @param Definition                 $definition
      *
      * @return mixed null | Signal::STOP
      *
@@ -35,6 +35,6 @@ interface Handle
         $return,
         ReflectionParameter $parameter,
         ReflectiveMethodInvocation $invocation,
-        Definition $invocation
+        Definition $definition
     );
 }
