@@ -56,6 +56,8 @@ final class Linker implements LinkerInterface
      * Constructor
      *
      * @param \Doctrine\Common\Annotations\Reader $reader
+     *
+     * @Inject
      */
     public function __construct(Reader $reader)
     {
