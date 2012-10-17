@@ -1,5 +1,5 @@
 {
-    "hash": "93b782f283ac0d5ff45ddc899dc6bbd7",
+    "hash": "06137a326ca8d7d308bedddb375ced67",
     "packages": [
         {
             "name": "aura/di",
@@ -166,7 +166,7 @@
                     "email": "kontakt@beberlei.de"
                 },
                 {
-                    "name": "Johannes M. Schmitt",
+                    "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
                     "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
@@ -273,7 +273,7 @@
         },
         {
             "name": "ray/aop",
-            "version": "dev-master",
+            "version": "1.0.0-beta2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Ray.Aop.git",
@@ -289,9 +289,9 @@
                 "php": ">=5.4.0",
                 "doctrine/common": "2.3.*-dev"
             },
-            "time": "1350458033",
+            "time": "2012-10-17 00:13:53",
             "type": "library",
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Ray\\Aop": "src/"
@@ -318,7 +318,7 @@
         },
         {
             "name": "ray/di",
-            "version": "dev-master",
+            "version": "1.0.0-beta2",
             "source": {
                 "type": "git",
                 "url": "git://github.com/koriym/Ray.Di.git",
@@ -333,12 +333,12 @@
             "require": {
                 "php": ">=5.4.0",
                 "doctrine/common": "2.3.*-dev",
-                "aura/di": ">=1.0.*-dev",
-                "ray/aop": "*"
+                "ray/aop": "*",
+                "aura/di": ">=1.0.*-dev"
             },
-            "time": "1350459624",
+            "time": "2012-10-17 00:40:24",
             "type": "library",
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Ray\\Di": "src/"
@@ -429,10 +429,10 @@
     ],
     "minimum-stability": "dev",
     "stability-flags": {
+        "ray/aop": 10,
+        "ray/di": 10,
         "aura/di": 20,
         "aura/signal": 20,
-        "doctrine/common": 20,
-        "ray/aop": 20,
-        "ray/di": 20
+        "doctrine/common": 20
     }
 }
