@@ -15,7 +15,7 @@ use BEAR\Resource\Mock\User;
 use Ray\Aop\ReflectiveMethodInvocation;
 use BEAR\Resource\SignalHandler\Provides;
 use Guzzle\Common\Cache\DoctrineCacheAdapter as CacheAdapter;
-use Doctrine\Common\Cache\FilesystemCache as Cache;
+use Doctrine\Common\Cache\ApcCache as Cache;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use BEAR\Resource\Mock\TestModule;
 
@@ -24,7 +24,7 @@ use BEAR\Resource\Mock\TestModule;
  */
 class ResourceTest extends \PHPUnit_Framework_TestCase
 {
-    protected $skelton;
+    protected $skeleton;
 
     /**
      * @var Aura\Signal\Manager
@@ -63,7 +63,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
             'name' => 'Ray',
             'age' => 43
         ];
-        $this->cache = new CacheAdapter(new Cache('/tmp'));
+        $this->cache = new CacheAdapter(new Cache);
     }
 
     public function test_New()
@@ -253,18 +253,21 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->resource->setCacheAdapter($this->cache);
         $instance1 = $this->resource->newInstance('nop://self/path/to/dummy');
         $instance2 = $this->resource->newInstance('nop://self/path/to/dummy');
-        $this->assertSame($instance1, $instance2);
+        $this->assertSame($instance1->time, $instance2->time);
     }
 
     /**
      * This resource contain PDO (which can't store in cache)
-     * It can not be in cache strage.
+     * It can not be in cache storage.
+     *
+     * @expectedException \PDOException
      */
     public function test_setCacheButUnserializedInstance()
     {
         $this->resource->setCacheAdapter($this->cache);
         $instance1 = $this->resource->newInstance('app://self/cache/pdo');
         $instance2 = $this->resource->newInstance('app://self/cache/pdo');
+        var_dump($instance1);
         $this->assertNotSame($instance1->time, $instance2->time);
     }
 
@@ -335,6 +338,22 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $response = $this->resource->options->uri('app://self/user')->eager->request();
         $expected = ['get', 'post', 'put', 'delete'];
         $this->assertSame($expected, $response->headers['allow']);
+    }
+
+    /**
+     * @expectedException \BEAR\Resource\Exception\Uri
+     */
+    public function test_invalidUri()
+    {
+        $response = $this->resource->get->uri('invalid')->eager->request();
+    }
+
+    public function test_usingUri()
+    {
+        $uri = new Uri('app://self/user', ['id' => 1]);
+        $response = $this->resource->get->uri($uri)->eager->request();
+        $expected = 'Aramis';
+        $this->assertSame($expected, $response->body['name']);
     }
 }
 
