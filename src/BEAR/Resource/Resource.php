@@ -121,15 +121,7 @@ class Resource implements ResourceInterface
         }
         $instance = $this->factory->newInstance($uri);
         if ($useCache === true) {
-            try {
-                /** @noinspection PhpUndefinedVariableInspection */
-                $this->cache->save($key, $instance);
-            } catch (\Exception $e) {
-                $msg = "resource({$uri}) is not stored in cache";
-                if (PHP_SAPI !== 'cli') {
-                    error_log($msg);
-                }
-            }
+            $this->cache->save($key, $instance);
         }
 
         return $instance;
