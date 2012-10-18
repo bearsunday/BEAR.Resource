@@ -10,7 +10,7 @@ namespace BEAR\Resource;
 use BEAR\Resource\Adapter\App\Link as LikType;
 use BEAR\Resource\Exception;
 use BEAR\Resource\Uri;
-use Guzzle\Common\Cache\AbstractCacheAdapter as Cache;
+use Guzzle\Common\Cache\CacheAdapterInterface as Cache;
 use BEAR\Resource\SignalHandler\Handle;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
@@ -58,7 +58,7 @@ class Resource implements ResourceInterface
     /**
      * Cache
      *
-     * @var \Guzzle\Common\Cache\CacheAdapterInterface
+     * @var Cache
      */
     private $cache;
 
