@@ -159,8 +159,10 @@ class Resource implements ResourceInterface
             if (strpos($uri, '?') !== false) {
                 $parsed = parse_url($uri);
                 $uri = $parsed['scheme'] . '://' . $parsed['host'] . $parsed['path'];
-                parse_str($parsed['query'], $query);
-                $this->withQuery($query);
+                if (isset($parsed['query'])) {
+                    parse_str($parsed['query'], $query);
+                    $this->withQuery($query);
+                }
             }
             $this->request->ro = $this->newInstance($uri);
             $this->request->uri = $uri;
