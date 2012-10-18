@@ -15,6 +15,7 @@ use BEAR\Resource\SignalHandler\Handle;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
 use Ray\Di\Di\Scope;
+use SplObjectStorage;
 
 /**
  * Resource client
@@ -61,23 +62,6 @@ class Resource implements ResourceInterface
      */
     private $cache;
 
-    /**
-     * Constructor
-     *
-     * @param Factory          $factory resource object factory.
-     * @param InvokerInterface $invoker resource request invoker
-     * @param Request          $request resource request
-     *
-     * @Inject
-     */
-    public function __construct(Factory $factory, InvokerInterface $invoker, Request $request)
-    {
-        $this->factory = $factory;
-        $this->invoker = $invoker;
-        $this->newRequest = $request;
-        $this->requests = new \SplObjectStorage;
-        $this->invoker->setResourceClient($this);
-    }
 
     /**
      * Set cache adapter
@@ -102,6 +86,24 @@ class Resource implements ResourceInterface
     public function setSchemeCollection(SchemeCollection $scheme)
     {
         $this->factory->setSchemeCollection($scheme);
+    }
+
+    /**
+     * Constructor
+     *
+     * @param Factory          $factory resource object factory
+     * @param InvokerInterface $invoker resource request invoker
+     * @param Request          $request resource request
+     *
+     * @Inject
+     */
+    public function __construct(Factory $factory, InvokerInterface $invoker, Request $request)
+    {
+        $this->factory = $factory;
+        $this->invoker = $invoker;
+        $this->newRequest = $request;
+        $this->requests = new SplObjectStorage;
+        $this->invoker->setResourceClient($this);
     }
 
     /**
