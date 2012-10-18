@@ -13,6 +13,7 @@ use BEAR\Resource\Uri;
 use Guzzle\Common\Cache\AbstractCacheAdapter as Cache;
 use BEAR\Resource\SignalHandler\Handle;
 use Ray\Di\Di\Inject;
+use Ray\Di\Di\Named;
 use Ray\Di\Di\Scope;
 
 /**
@@ -84,6 +85,7 @@ class Resource implements ResourceInterface
      * @param Cache $cache
      *
      * @Inject(optional = true)
+     * @Named("resource_cache")
      */
     public function setCacheAdapter(Cache $cache)
     {
