@@ -40,8 +40,12 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $scheme = new SchemeCollection;
         $injector = require dirname(__DIR__) . '/scripts/injector.php';
         $injector->setModule(new TestModule);
-        $scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject'));
-        $scheme->scheme('page')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'Page'));
+        $scheme->scheme('app')->host('self')->toAdapter(
+            new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject')
+        );
+        $scheme->scheme('page')->host('self')->toAdapter(
+            new \BEAR\Resource\Adapter\App($injector, 'testworld', 'Page')
+        );
         $scheme->scheme('nop')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Nop);
         $scheme->scheme('test')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Test);
         $scheme->scheme('prov')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Prov);
@@ -55,9 +59,9 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->user = $factory->newInstance('app://self/user');
         $this->nop = $factory->newInstance('nop://self/dummy');
         $this->query = [
-        'id' => 10,
-        'name' => 'Ray',
-        'age' => 43
+            'id' => 10,
+            'name' => 'Ray',
+            'age' => 43
         ];
         $this->cache = new CacheAdapter(new Cache('/tmp'));
     }
@@ -112,7 +116,9 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
      */
     public function test_postInvalidOption()
     {
-        $request = $this->resource->post->object($this->nop)->withQuery($this->query)->poe->csrf->invalid_option_cause_exception->request();
+        $request = $this->resource->post->object($this->nop)->withQuery(
+            $this->query
+        )->poe->csrf->invalid_option_cause_exception->request();
         $expected = "post nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
@@ -154,7 +160,9 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
     public function test_linkTwo()
     {
-        $request = $this->resource->get->object($this->nop)->withQuery($this->query)->linkSelf('dummyLink')->linkSelf('dummyLink2')->request();
+        $request = $this->resource->get->object($this->nop)->withQuery($this->query)->linkSelf('dummyLink')->linkSelf(
+            'dummyLink2'
+        )->request();
         $expected = "get nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
@@ -177,7 +185,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->resource->get->uri('nop://self/dummy')->withQuery($this->query);
         $expected = "nop://self/dummy?id=10&name=Ray&age=43";
-        $this->assertSame($expected, (string) $client);
+        $this->assertSame($expected, (string)$client);
     }
 
     public function testPutWithDefaultParameter()
@@ -217,45 +225,25 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     public function testsyncHttp()
     {
         $query = array();
-        $response = $this->resource
-        ->get->uri('http://news.google.com/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss')->sync->request()
-        ->get->uri('http://phpspot.org/blog/index.xml')->eager->sync->request()
-        ->get->uri('http://rss.excite.co.jp/rss/excite/odd')->eager->request();
+        $response = $this->resource->get->uri(
+            'http://news.google.com/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss'
+        )->sync->request()->get->uri('http://phpspot.org/blog/index.xml')->eager->sync->request()->get->uri(
+            'http://rss.excite.co.jp/rss/excite/odd'
+        )->eager->request();
         $this->assertSame(3, count($response->body));
     }
 
     public function testParameterProvidedBySignalClosure()
     {
-        $signalProvider = function (
-            $return,
-            \ReflectionParameter $parameter,
-            ReflectiveMethodInvocation $invovation,
-            Definition $definition
-        ) {
-            $return->value = 1;
-
-            return \Aura\Signal\Manager::STOP;
-        };
-        $this->resource->attachParamProvider('login_id', $signalProvider);
+        $this->resource->attachParamProvider('login_id', new varProvider);
         $actual = $this->resource->delete->object($this->user)->withQuery([])->eager->request();
         $this->assertSame("1 deleted", $actual->body);
     }
 
     public function testParameterProvidedBySignalWithInvokerInterfaceObject()
     {
-        $signalProvider = function (
-            $return,
-            \ReflectionParameter $parameter,
-            ReflectiveMethodInvocation $invovation,
-            Definition $definition
-        ) {
-            $return->value = 1;
-
-            return \Aura\Signal\Manager::STOP;
-        };
-
         $this->resource->attachParamProvider('Provides', new Provides);
-        $this->resource->attachParamProvider('login_id', $signalProvider);
+        $this->resource->attachParamProvider('login_id', new varProvider);
         $actual = $this->resource->delete->object($this->user)->withQuery([])->eager->request();
         $this->assertSame("1 deleted", $actual->body);
     }
@@ -293,8 +281,8 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->signal = require dirname(__DIR__) . '/vendor/aura/signal/scripts/instance.php';
         $this->invoker = new Invoker(new Config(new Annotation(new Definition, new Reader), new Reader), new Linker(new Reader), $this->signal);
         $this->resource = new Resource($factory, $this->invoker, new Request($this->invoker));
-        $request = $this->resource->get->uri('test://self/path/to/example')->withQuery(['a'=>1, 'b'=>2])->request();
-        $this->assertSame('{"posts":[1,2]}', (string) $request);
+        $request = $this->resource->get->uri('test://self/path/to/example')->withQuery(['a' => 1, 'b' => 2])->request();
+        $this->assertSame('{"posts":[1,2]}', (string)$request);
         $this->assertSame(['posts' => [1, 2]], $request()->body);
     }
 
@@ -347,5 +335,19 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $response = $this->resource->options->uri('app://self/user')->eager->request();
         $expected = ['get', 'post', 'put', 'delete'];
         $this->assertSame($expected, $response->headers['allow']);
+    }
+}
+
+class varProvider implements \BEAR\Resource\SignalHandler\Handle
+{
+    public function __invoke(
+        $return,
+        \ReflectionParameter $parameter,
+        ReflectiveMethodInvocation $invocation,
+        Definition $definition
+    ) {
+        $return->value = 1;
+
+        return \Aura\Signal\Manager::STOP;
     }
 }

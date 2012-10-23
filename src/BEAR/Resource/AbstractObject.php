@@ -44,13 +44,6 @@ abstract class AbstractObject implements Object, ArrayAccess, Countable, Iterato
     public $headers = [];
 
     /**
-     * Resource body
-     *
-     * @var mixed
-     */
-    public $body;
-
-    /**
      * Resource representation
      *
      * @var string

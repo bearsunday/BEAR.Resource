@@ -18,6 +18,13 @@ use Traversable;
 trait BodyArrayAccess
 {
     /**
+     * Body
+     *
+     * @var mixed
+     */
+    public $body;
+
+    /**
      * Returns the body value at the specified index
      *
      * @param mixed $offset offset

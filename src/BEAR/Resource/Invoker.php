@@ -133,6 +133,7 @@ class Invoker implements InvokerInterface
         if ($isWeave && $request->method !== Invoker::OPTIONS) {
             $weave = $request->ro;
             /** @noinspection PhpUnusedLocalVariableInspection */
+            /** @var $weave Callable */
             $result = $weave([$this, 'getParams'], $method, $request->query);
             goto completed;
         }
@@ -271,6 +272,7 @@ class Invoker implements InvokerInterface
         return $return;
 
         PARAMETER_NOT_PROVIDED:
+        /** @noinspection PhpUnreachableStatementInspection */
         $msg = '$' . "{$parameter->name} in " . get_class($object) . '::' . $method;
         throw new Exception\Parameter($msg);
     }
@@ -328,6 +330,7 @@ class Invoker implements InvokerInterface
             $requests->next();
         }
         // onFinalSync summarize all sync request data.
+        /** @noinspection PhpUndefinedVariableInspection */
         $result = call_user_func([$request->ro, 'onFinalSync'], $request, $data);
 
         return $result;

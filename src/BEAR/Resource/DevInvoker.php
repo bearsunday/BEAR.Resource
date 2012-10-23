@@ -62,6 +62,8 @@ class DevInvoker extends Invoker implements InvokerInterface
         $time = microtime(true);
         $memory = memory_get_usage();
         if (extension_loaded('xhprof')) {
+            /** @noinspection PhpUndefinedConstantInspection */
+            /** @noinspection PhpUndefinedFunctionInspection */
             xhprof_enable(XHPROF_FLAGS_NO_BUILTINS | XHPROF_FLAGS_CPU | XHPROF_FLAGS_MEMORY);
         }
         // proceed original method
@@ -77,6 +79,7 @@ class DevInvoker extends Invoker implements InvokerInterface
         $resource->headers[self::HEADER_EXECUTION_TIME] = $time;
         $resource->headers[self::HEADER_MEMORY_USAGE] = $memory;
         if (extension_loaded('xhprof') && class_exists('XHProfRuns_Default', false)) {
+            /** @noinspection PhpUndefinedFunctionInspection */
             $xhprof = xhprof_disable();
             $profileId = (new XHProfRuns_Default)->save_run($xhprof, 'resource');
             $resource->headers[self::HEADER_PROFILE_ID] = $profileId;

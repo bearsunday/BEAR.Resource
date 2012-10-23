@@ -17,7 +17,7 @@ interface Renderable
     /**
      * Render
      *
-     * @param \BEAR\Resource\Object $resourceObject
+     * @param AbstractObject $resourceObject
      *
      * @return mixed
      */

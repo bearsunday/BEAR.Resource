@@ -55,7 +55,7 @@ final class Linker implements LinkerInterface
     /**
      * Constructor
      *
-     * @param ConfigInterface $config
+     * @param \Doctrine\Common\Annotations\Reader $reader
      *
      * @Inject
      */
@@ -168,6 +168,7 @@ final class Linker implements LinkerInterface
                     }
                     $method = $annotation->method;
                     /** @noinspection PhpUndefinedMethodInspection */
+                    /** @noinspection PhpUndefinedVariableInspection */
                     $result = $this->resource->$method->uri($uri)->withQuery($input)->eager->request();
 
                     return $result;

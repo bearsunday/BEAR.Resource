@@ -46,6 +46,7 @@ class Provides implements Handle
             $providesMethod = $parameterMethod[$parameter->name];
             $object = $invocation->getThis();
             $func = [$object, $providesMethod];
+            /** @var $func Callable  */
             $providedValue = $func();
             $return->value = $providedValue;
             goto SUCCESS;
@@ -54,6 +55,8 @@ class Provides implements Handle
 
         return null;
         SUCCESS:
+
+        /** @noinspection PhpUnreachableStatementInspection */
 
         return Signal::STOP;
 

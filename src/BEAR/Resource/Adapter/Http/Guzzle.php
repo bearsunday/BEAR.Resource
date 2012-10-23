@@ -81,6 +81,7 @@ class Guzzle implements ResourceObject, HttpClient
      */
     public function onGet()
     {
+        /** @noinspection PhpUndefinedMethodInspection */
         $this->response = $this->guzzle->get()->send();
         list($this->code, $this->headers, $this->body) = $this->parseResponse($this->response);
 
@@ -93,6 +94,7 @@ class Guzzle implements ResourceObject, HttpClient
      */
     public function onPost()
     {
+        /** @noinspection PhpUndefinedMethodInspection */
         $this->response = $this->guzzle->post()->send();
         list($this->code, $this->headers, $this->body) = $this->parseResponse($this->response);
 
@@ -105,6 +107,7 @@ class Guzzle implements ResourceObject, HttpClient
      */
     public function onPut()
     {
+        /** @noinspection PhpUndefinedMethodInspection */
         $this->response = $this->guzzle->put()->send();
         list($this->code, $this->headers, $this->body) = $this->parseResponse($this->response);
 
@@ -117,6 +120,7 @@ class Guzzle implements ResourceObject, HttpClient
      */
     public function onDelete()
     {
+        /** @noinspection PhpUndefinedMethodInspection */
         $this->response = $this->guzzle->delete()->send();
         list($this->code, $this->headers, $this->body) = $this->parseResponse($this->response);
 
@@ -129,6 +133,7 @@ class Guzzle implements ResourceObject, HttpClient
      */
     public function onHead()
     {
+        /** @noinspection PhpUndefinedMethodInspection */
         $this->response = $this->guzzle->head()->send();
         list($this->code, $this->headers, $this->body) = $this->parseResponse($this->response);
 
@@ -141,6 +146,7 @@ class Guzzle implements ResourceObject, HttpClient
      */
     public function onOptions()
     {
+        /** @noinspection PhpUndefinedMethodInspection */
         $this->response = $this->guzzle->options()->send();
         list($this->code, $this->headers, $this->body) = $this->parseResponse($this->response);
 
@@ -150,7 +156,9 @@ class Guzzle implements ResourceObject, HttpClient
     /**
      * Parse HTTP response
      *
-     * @param Response $response
+     * @param \Guzzle\Http\Message\Response $response
+     *
+     * @return array
      */
     protected function parseResponse(Response $response)
     {

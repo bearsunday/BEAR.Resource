@@ -11,6 +11,7 @@ use BEAR\Resource\Adapter\App\Link as LikType;
 use BEAR\Resource\Exception;
 use BEAR\Resource\Uri;
 use Guzzle\Common\Cache\AbstractCacheAdapter as Cache;
+use BEAR\Resource\SignalHandler\Handle;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Scope;
 
@@ -121,6 +122,7 @@ class Resource implements ResourceInterface
         $instance = $this->factory->newInstance($uri);
         if ($useCache === true) {
             try {
+                /** @noinspection PhpUndefinedVariableInspection */
                 $this->cache->save($key, $instance);
             } catch (\Exception $e) {
                 $msg = "resource({$uri}) is not stored in cache";
@@ -278,8 +280,9 @@ class Resource implements ResourceInterface
      * (non-PHPdoc)
      * @see BEAR\Resource.Resource::attachParamProvider()
      */
-    public function attachParamProvider($signal, Callable $argProvider)
+    public function attachParamProvider($signal, Handle $argProvider)
     {
+        /** @noinspection PhpParamsInspection */
         $this->invoker->getSignal()->handler(
             '\BEAR\Resource\Invoker',
             \BEAR\Resource\Invoker::SIGNAL_PARAM . $signal,

@@ -8,6 +8,7 @@
 namespace BEAR\Resource;
 
 use Ray\Di\Di\ImplementedBy;
+use BEAR\Resource\SignalHandler\Handle;
 
 /**
  * Interface for resource client
@@ -90,12 +91,12 @@ interface ResourceInterface
     public function linkCrawl($linkKey);
 
     /**
-     * Attach argument provider
+     *  Attach argument provider
      *
-     * @param string   $signal
-     * @param Callable $argProvider
+     * @param  string              $signal
+     * @param SignalHandler\Handle $argProvider
      *
-     * @return void
+     * @return mixed
      */
-    public function attachParamProvider($signal, Callable $argProvider);
+    public function attachParamProvider($signal, Handle $argProvider);
 }
