@@ -50,10 +50,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers BEAR\Resource\Adapter\Http\Guzzle::onPost
-     * @covers BEAR\Resource\Adapter\Http\Guzzle::onPut
-     * @covers BEAR\Resource\Adapter\Http\Guzzle::onDelete
-     * @covers BEAR\Resource\Adapter\Http\Guzzle::onDelete
+     * @covers \BEAR\Resource\Adapter\Http\Guzzle::onPost
+     * @covers \BEAR\Resource\Adapter\Http\Guzzle::onPut
+     * @covers \BEAR\Resource\Adapter\Http\Guzzle::onDelete
      */
     public function testGetBody()
     {
@@ -63,11 +62,37 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual);
     }
 
-    /**
-     */
     public function testHead()
     {
         $ro = $this->httpAdapter->onHead();
+        $expected = 'application/xml; charset=UTF-8';
+        $this->assertSame($expected, $ro->headers['Content-Type'][0]);
+    }
+
+    /**
+     * @expectedException Guzzle\Http\Exception\ClientErrorResponseException
+     * @covers BEAR\Resource\Adapter\Http\Guzzle::onPut
+     */
+    public function testPut()
+    {
+        $ro = $this->httpAdapter->onPut();
+    }
+
+    /**
+     * @expectedException Guzzle\Http\Exception\ClientErrorResponseException
+     * @covers BEAR\Resource\Adapter\Http\Guzzle::onDelete
+     */
+    public function testDelete()
+    {
+        $ro = $this->httpAdapter->onDelete();
+    }
+
+    /**
+     * @covers BEAR\Resource\Adapter\Http\Guzzle::onPost
+     */
+    public function testPost()
+    {
+        $ro = $this->httpAdapter->onPost();
         $expected = 'application/xml; charset=UTF-8';
         $this->assertSame($expected, $ro->headers['Content-Type'][0]);
     }

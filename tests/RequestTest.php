@@ -104,18 +104,16 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($result, '');
     }
 
-    public function est__toStringWithoutRender()
+    public function test__toStringWithoutRender()
     {
         $this->request->method = 'get';
         $this->request->ro = new Test;
         $this->request->ro->uri = 'nop://self/path/to/resource';
         $this->request->query = array('a' => 'koriym', 'b' => 25);
         $request = $this->request;
-        $actual = $request(array('b' => 30));
-        $expected = array('koriym', 30);
         $this->assertInstanceOf('\BEAR\Resource\Request', $this->request);
         $request = $this->request;
         $result = (string) $request;
-        $this->assertSame('{"posts":["koriym",30]}', $result);
+        $this->assertSame('', $result);
     }
 }
