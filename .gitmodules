@@ -28,3 +28,6 @@
 [submodule "vendor/Aura.Di"]
 	path = vendor/Aura.Di
 	url = https://github.com/auraphp/Aura.Di.git
+[submodule "cs"]
+	path = cs
+	url = https://github.com/koriym/cs.git
