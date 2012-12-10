@@ -1,31 +1,33 @@
 {
-    "hash": "06137a326ca8d7d308bedddb375ced67",
+    "hash": "ed7703cadb737813b748e16cb204225e",
     "packages": [
         {
             "name": "aura/di",
-            "version": "dev-master",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/auraphp/Aura.Di",
-                "reference": "ab76ec847533fc97d5239f4444b54c3dd4c9a67e"
+                "reference": "1.0.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/auraphp/Aura.Di/zipball/ab76ec847533fc97d5239f4444b54c3dd4c9a67e",
-                "reference": "ab76ec847533fc97d5239f4444b54c3dd4c9a67e",
+                "url": "https://github.com/auraphp/Aura.Di/archive/1.0.1.zip",
+                "reference": "1.0.1",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.4.0"
+                "php": ">=5.4.0",
+                "aura/installer-default": ">=1.0.0"
             },
-            "time": "1350360847",
-            "type": "library",
-            "installation-source": "source",
+            "time": "2012-11-28 00:00:00",
+            "type": "aura-package",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Aura\\Di": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD"
             ],
@@ -60,32 +62,76 @@
             ]
         },
         {
-            "name": "aura/signal",
-            "version": "dev-master",
+            "name": "aura/installer-default",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/auraphp/Aura.Signal",
-                "reference": "1.0.0-beta3"
+                "url": "https://github.com/auraphp/installer-default",
+                "reference": "1.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/auraphp/Aura.Signal/zipball/1.0.0-beta3",
-                "reference": "1.0.0-beta3",
+                "url": "https://github.com/auraphp/installer-default/archive/1.0.0.zip",
+                "reference": "1.0.0",
+                "shasum": ""
+            },
+            "time": "2012-11-26 21:35:57",
+            "type": "composer-installer",
+            "extra": {
+                "class": "Aura\\Composer\\DefaultInstaller"
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "psr-0": {
+                    "Aura\\Composer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Paul M. Jones",
+                    "email": "pmjones88@gmail.com",
+                    "homepage": "http://paul-m-jones.com"
+                }
+            ],
+            "description": "Installs Aura packages using the Composer defaults.",
+            "keywords": [
+                "installer",
+                "aura"
+            ]
+        },
+        {
+            "name": "aura/signal",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/auraphp/Aura.Signal",
+                "reference": "1.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/auraphp/Aura.Signal/archive/1.0.0.zip",
+                "reference": "1.0.0",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.4.0"
+                "php": ">=5.4.0",
+                "aura/installer-default": ">=1.0.0"
             },
-            "time": "1343710041",
-            "type": "library",
-            "installation-source": "source",
+            "time": "2012-11-28 00:00:00",
+            "type": "aura-package",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Aura\\Signal": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD"
+                "BSD-2-Clause"
             ],
             "authors": [
                 {
@@ -130,7 +176,7 @@
             "require": {
                 "php": ">=5.3.2"
             },
-            "time": "1348120518",
+            "time": "2012-09-20 05:55:18",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -318,25 +364,26 @@
         },
         {
             "name": "ray/di",
-            "version": "1.0.0-beta2",
+            "version": "1.0.0-beta3",
             "source": {
                 "type": "git",
                 "url": "git://github.com/koriym/Ray.Di.git",
-                "reference": "1.0.0-beta2"
+                "reference": "1.0.0-beta3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/koriym/Ray.Di/zipball/1.0.0-beta2",
-                "reference": "1.0.0-beta2",
+                "url": "https://github.com/koriym/Ray.Di/archive/1.0.0-beta3.zip",
+                "reference": "1.0.0-beta3",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.4.0",
                 "doctrine/common": "2.3.*-dev",
-                "ray/aop": "*",
-                "aura/di": ">=1.0.*-dev"
+                "ray/aop": ">=1.0.0-beta2",
+                "aura/di": "1.0.*",
+                "aura/installer-default": "1.0.*"
             },
-            "time": "2012-10-17 00:40:24",
+            "time": "2012-12-10 12:57:46",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -344,6 +391,7 @@
                     "Ray\\Di": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -375,12 +423,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/EventDispatcher",
-                "reference": "24a1039d52b6b9f533cb73dcb96c7748262db686"
+                "reference": "eb290a447c0af5bea0d3de5d95d498afd8c82f89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/EventDispatcher/zipball/24a1039d52b6b9f533cb73dcb96c7748262db686",
-                "reference": "24a1039d52b6b9f533cb73dcb96c7748262db686",
+                "url": "https://github.com/symfony/EventDispatcher/archive/eb290a447c0af5bea0d3de5d95d498afd8c82f89.zip",
+                "reference": "eb290a447c0af5bea0d3de5d95d498afd8c82f89",
                 "shasum": ""
             },
             "require": {
@@ -393,7 +441,7 @@
                 "symfony/dependency-injection": "2.2.*",
                 "symfony/http-kernel": "2.2.*"
             },
-            "time": "1349553479",
+            "time": "2012-11-13 14:08:04",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -406,6 +454,7 @@
                     "Symfony\\Component\\EventDispatcher\\": ""
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -431,8 +480,6 @@
     "stability-flags": {
         "ray/aop": 10,
         "ray/di": 10,
-        "aura/di": 20,
-        "aura/signal": 20,
         "doctrine/common": 20
     }
 }
