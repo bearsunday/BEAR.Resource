@@ -163,7 +163,7 @@ class Invoker implements InvokerInterface
             $result = $this->linker->invoke($request->ro, $request, $result);
         }
         // request / result log
-        if ($this->logger) {
+        if ($this->logger instanceof LoggerInterface) {
             $this->logger->log($request, $result);
         }
 
