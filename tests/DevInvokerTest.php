@@ -45,7 +45,7 @@ class DevInvokerTest extends InvokerTest
         $scheme->scheme('nop')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Nop);
         $scheme->scheme('prov')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Prov);
         $factory = new Factory($scheme);
-        $schemeAdapters = array('nop' => '\BEAR\Resource\Adapter\Nop', 'prov' => '\BEAR\Resource\Mock\Prov');
+        $schemeAdapters = ['nop' => '\BEAR\Resource\Adapter\Nop', 'prov' => '\BEAR\Resource\Mock\Prov'];
         $injector = new Injector(new Container(new Forge($config)), new EmptyModule);
         $this->signal = require dirname(__DIR__) . '/vendor/aura/signal/scripts/instance.php';
         $this->invoker = new DevInvoker($config, new Linker(new Reader), $this->signal);
@@ -64,7 +64,7 @@ class DevInvokerTest extends InvokerTest
         $this->request = new Request($this->invoker);
         $this->request->method = 'get';
         $this->request->ro = $resource;
-        $this->request->query = array('id' => 1);
+        $this->request->query = ['id' => 1];
     }
 
     /**
@@ -73,7 +73,7 @@ class DevInvokerTest extends InvokerTest
     public function invoke()
     {
         $actual = $this->invoker->invoke($this->request)->body;
-        $expected = array('id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12);
+        $expected = ['id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12];
         $ro = $this->request->ro;
         $this->assertSame($actual, $expected);
 
@@ -121,11 +121,11 @@ class DevInvokerTest extends InvokerTest
     public function invokeWeave()
     {
         $bind = new Bind;
-        $bind->bindInterceptors('onGet', array(new \testworld\Interceptor\Log));
+        $bind->bindInterceptors('onGet', [new \testworld\Interceptor\Log]);
         $weave = new Weaver(new \testworld\ResourceObject\Weave\Book, $bind);
         $this->request->ro = $weave;
         $this->request->method = 'get';
-        $this->request->query = array('id' => 1);
+        $this->request->query = ['id' => 1];
         $actual = $this->invoker->invoke($this->request);
 
         $ro = $this->request->ro->___getObject();

@@ -152,7 +152,7 @@ class Invoker implements InvokerInterface
         }
         $params = $this->getParams($request->ro, $method, $request->query);
         try {
-            $result = call_user_func_array(array($request->ro, $method), $params);
+            $result = call_user_func_array([$request->ro, $method], $params);
         } catch (\Exception $e) {
             // @todo implements "Exception signal"
             throw $e;
@@ -328,7 +328,7 @@ class Invoker implements InvokerInterface
             // each sync request method call.
             $request = $requests->current();
             if (method_exists($request->ro, 'onSync')) {
-                call_user_func(array($request->ro, 'onSync'), $request, $data);
+                call_user_func([$request->ro, 'onSync'], $request, $data);
             }
             $requests->next();
         }

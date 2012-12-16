@@ -17,7 +17,7 @@ use Ray\Di\Di\Scope;
 class Menu extends AbstractObject
 {
 
-    private $menu = array();
+    private $menu = [];
 
     /**
      * @param Resource $resource

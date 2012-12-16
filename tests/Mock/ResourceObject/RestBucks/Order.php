@@ -16,7 +16,7 @@ use Ray\Di\Di\Scope;
 class Order extends AbstractObject
 {
 
-    private $orders = array();
+    private $orders = [];
 
     /**
      * @param Resource $resource

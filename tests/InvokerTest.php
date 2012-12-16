@@ -42,7 +42,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $scheme->scheme('nop')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Nop);
         $scheme->scheme('prov')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Prov);
         $factory = new Factory($scheme);
-        $schemeAdapters = array('nop' => '\BEAR\Resource\Adapter\Nop', 'prov' => '\BEAR\Resource\Mock\Prov');
+        $schemeAdapters = ['nop' => '\BEAR\Resource\Adapter\Nop', 'prov' => '\BEAR\Resource\Mock\Prov'];
         $injector = new Injector(new Container(new Forge($config)), new EmptyModule);
         $this->signal = require dirname(__DIR__) . '/vendor/aura/signal/scripts/instance.php';
         $this->invoker = new Invoker($config, new Linker, $this->signal);
@@ -61,19 +61,19 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->request = new Request($this->invoker);
         $this->request->method = 'get';
         $this->request->ro = $resource;
-        $this->request->query = array('id' => 1);
+        $this->request->query = ['id' => 1];
     }
 
     public function test_Invoke()
     {
         $actual = $this->invoker->invoke($this->request)->body;
-        $expected = array('id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12);
+        $expected = ['id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12];
         $this->assertSame($actual, $expected);
     }
 
     public function test_InvokerInterfaceWithNoPrams()
     {
-        $this->request->query = array();
+        $this->request->query = [];
         $this->request->method = 'delete';
         $actual = $this->invoker->invoke($this->request)->body;
         $expected = '1 deleted';
@@ -84,15 +84,15 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     {
         $this->request->query = [];
         $actual = $this->invoker->invoke($this->request)->body;
-        $expected = array('id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12);
+        $expected = ['id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12];
         $this->assertSame($actual, $expected);
     }
 
     public function test_InvokerInterfaceDefaultParam()
     {
-        $this->request->query = array();
+        $this->request->query = [];
         $this->request->method = 'post';
-        $this->query = array('id' => 1);
+        $this->query = ['id' => 1];
         $actual = $this->invoker->invoke($this->request)->body;
         $expected = 'post user[1 default_name 99]';
         $this->assertSame($actual, $expected);
@@ -103,9 +103,9 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
      */
     public function test_InvokerInterfaceDefaultParamWithNoProvider()
     {
-        $this->request->query = array();
+        $this->request->query = [];
         $this->request->method = 'put';
-        $this->query = array();
+        $this->query = [];
         $actual = $this->invoker->invoke($this->request);
     }
 
@@ -115,7 +115,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     public function test_InvokerInterfaceWithNoProvider()
     {
         $this->request->ro = new Mock\Blog;
-        $this->request->query = array();
+        $this->request->query = [];
         $this->request->method = 'get';
         $actual = $this->invoker->invoke($this->request);
     }
@@ -124,7 +124,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     //     public function test_InvokerInterfaceWithUnspecificProvider()
     //     {
     //         $this->request->ro = new Mock\Entry;
-    //         $this->request->query = array();
+    //         $this->request->query = [];
     //         $this->request->method = 'get';
     //         $actual = $this->invoker->invoke($this->request);
     //         $this->assertSame('entry1', $actual);
@@ -136,7 +136,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     public function test_InvokerInterfaceWithUnspecificProviderButNoResult()
     {
         $this->request->ro = new Mock\Comment;
-        $this->request->query = array();
+        $this->request->query = [];
         $this->request->method = 'get';
         $actual = $this->invoker->invoke($this->request);
         $this->assertSame('entry1', $actual);
@@ -153,22 +153,22 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
 
     public function test_invokeTraversal()
     {
-        $body = new \ArrayObject(array('a' => 1, 'b' => function(){
+        $body = new \ArrayObject(['a' => 1, 'b' => function(){
             return 2;
-        }));
+        }]);
         $actual = $this->invoker->invokeTraversal($body);
-        $expected = new \ArrayObject(array('a' =>1 ,'b' => 2));
+        $expected = new \ArrayObject(['a' =>1 ,'b' => 2]);
         $this->assertSame((array) $expected, (array) $actual);
     }
 
     public function test_invokeWeave()
     {
         $bind = new Bind;
-        $bind->bindInterceptors('onGet', array(new \testworld\Interceptor\Log));
+        $bind->bindInterceptors('onGet', [new \testworld\Interceptor\Log]);
         $weave = new Weaver(new \testworld\ResourceObject\Weave\Book, $bind);
         $this->request->ro = $weave;
         $this->request->method = 'get';
-        $this->request->query = array('id' => 1);
+        $this->request->query = ['id' => 1];
         $actual = $this->invoker->invoke($this->request);
         $expected = "book id[1][Log] target = testworld\\ResourceObject\\Weave\\Book, input = Array\n(\n    [0] => 1\n)\n, result = book id[1]";
         $this->assertSame($expected, $actual);
@@ -182,9 +182,9 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $link = new LinkType;
         $link->type = LinkType::SELF_LINK;
         $link->key = 'View';
-        $links = array($link);
+        $links = [$link];
         $this->request->links = $links;
-        $this->request->query = array('id' => 1);
+        $this->request->query = ['id' => 1];
         $actual = $this->invoker->invoke($this->request);
         $expected = '<html>bear1</html>';
         $this->assertSame($actual, $expected);

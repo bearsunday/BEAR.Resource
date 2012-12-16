@@ -102,7 +102,7 @@ final class Linker implements LinkerInterface
                     $requestResult = is_callable($request) ? $request()->body : $request;
                     $requestResult = is_array($requestResult) ? new \ArrayObject($requestResult) : $requestResult;
                     $item[$link->key] = $requestResult;
-                    $q->enqueue(array($requestResult, $request->ro));
+                    $q->enqueue([$requestResult, $request->ro]);
                 }
                 $refValue = &$requestResult;
                 continue;
@@ -184,7 +184,7 @@ final class Linker implements LinkerInterface
             $ro->body = $input;
             $input = $ro;
         }
-        $result = call_user_func(array($ro, $method), $input);
+        $result = call_user_func([$ro, $method], $input);
 
         return $result;
     }
