@@ -73,9 +73,13 @@ class Factory implements FactoryInterface
             }
             $host = '*';
         }
-        $adapter = $this->scheme[$scheme][$host];
-        if ($adapter instanceof Provider) {
-            $adapter = $adapter->get($uri);
+        try {
+            $adapter = $this->scheme[$scheme][$host];
+            if ($adapter instanceof Provider) {
+                $adapter = $adapter->get($uri);
+            }
+        } catch (\Exception $e) {
+            throw new Exception\ResourceNotFound($uri);
         }
         $adapter->uri = $uri;
 

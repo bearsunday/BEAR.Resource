@@ -1,5 +1,5 @@
 {
-    "hash": "ed7703cadb737813b748e16cb204225e",
+    "hash": "eadd3bce707bbd33fa6558e652e9b4eb",
     "packages": [
         {
             "name": "aura/di",
@@ -169,7 +169,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/doctrine/common/zipball/bb0aebbf234db52df476a2b473d434745b34221c",
+                "url": "https://github.com/doctrine/common/archive/bb0aebbf234db52df476a2b473d434745b34221c.zip",
                 "reference": "bb0aebbf234db52df476a2b473d434745b34221c",
                 "shasum": ""
             },
@@ -189,6 +189,7 @@
                     "Doctrine\\Common": "lib/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -227,23 +228,6 @@
                 "annotations",
                 "persistence"
             ]
-        },
-        {
-            "name": "facebook/xhprof",
-            "version": "0.9.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/facebook/xhprof.git",
-                "reference": "master"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/facebook/xhprof/zipball/master",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "library",
-            "installation-source": "dist"
         },
         {
             "name": "guzzle/guzzle",
@@ -291,6 +275,7 @@
                     "Guzzle": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -343,6 +328,7 @@
                     "Ray\\Aop": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
