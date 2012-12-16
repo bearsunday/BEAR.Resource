@@ -38,10 +38,10 @@ class Entry extends AbstractObject
         return $this->entries;
     }
 
-    public function onLinkComment(array $body)
+    public function onLinkComment(ResourceObject $ro)
     {
         $request = $this->resource
-        ->get->uri('app://self/User/Entry/Comment')->withQuery(['entry_id' => $body['id']])->request();
+        ->get->uri('app://self/User/Entry/Comment')->withQuery(['entry_id' => $ro->body['id']])->request();
 
         return $request;
     }

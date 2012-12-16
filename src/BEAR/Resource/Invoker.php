@@ -157,6 +157,10 @@ class Invoker implements InvokerInterface
             // @todo implements "Exception signal"
             throw $e;
         }
+        if (! $result instanceof Object) {
+            $request->ro->body = $result;
+            $result = $request->ro;
+        }
         // link
         completed:
         if ($request->links) {

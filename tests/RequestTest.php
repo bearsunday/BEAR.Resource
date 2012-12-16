@@ -56,7 +56,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->request->ro->uri = 'nop://self/path/to/resource';
         $this->request->query = array('a' => 'koriym', 'b' => 25);
         $request = $this->request;
-        $actual = $request();
+        $actual = $request()->body;
         $expected = array('koriym', 25);
         $this->assertInstanceOf('\BEAR\Resource\Request', $this->request);
         $this->assertSame($expected, $actual);
@@ -69,7 +69,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->request->ro->uri = 'nop://self/path/to/resource';
         $this->request->query = array('a' => 'koriym', 'b' => 25);
         $request = $this->request;
-        $actual = $request(array('b' => 30));
+        $actual = $request(array('b' => 30))->body;
         $expected = array('koriym', 30);
         $this->assertInstanceOf('\BEAR\Resource\Request', $this->request);
         $this->assertSame($expected, $actual);
@@ -84,7 +84,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->request->ro->uri = 'nop://self/path/to/resource';
         $this->request->query = array('a' => 'koriym', 'b' => 25);
         $request = $this->request;
-        $actual = $request(array('b' => 30));
+        $actual = $request(array('b' => 30))->body;
         $expected = array('koriym', 30);
         $this->assertInstanceOf('\BEAR\Resource\Request', $this->request);
         $request = $this->request;

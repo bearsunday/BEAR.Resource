@@ -66,7 +66,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
 
     public function test_Invoke()
     {
-        $actual = $this->invoker->invoke($this->request);
+        $actual = $this->invoker->invoke($this->request)->body;
         $expected = array('id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12);
         $this->assertSame($actual, $expected);
     }
@@ -75,7 +75,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     {
         $this->request->query = array();
         $this->request->method = 'delete';
-        $actual = $this->invoker->invoke($this->request);
+        $actual = $this->invoker->invoke($this->request)->body;
         $expected = '1 deleted';
         $this->assertSame($actual, $expected);
     }
@@ -83,7 +83,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     public function test_InvokerInterfaceMissingParam()
     {
         $this->request->query = [];
-        $actual = $this->invoker->invoke($this->request);
+        $actual = $this->invoker->invoke($this->request)->body;
         $expected = array('id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12);
         $this->assertSame($actual, $expected);
     }
@@ -93,7 +93,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->request->query = array();
         $this->request->method = 'post';
         $this->query = array('id' => 1);
-        $actual = $this->invoker->invoke($this->request);
+        $actual = $this->invoker->invoke($this->request)->body;
         $expected = 'post user[1 default_name 99]';
         $this->assertSame($actual, $expected);
     }

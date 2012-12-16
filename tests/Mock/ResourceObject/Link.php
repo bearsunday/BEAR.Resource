@@ -3,6 +3,7 @@
 namespace BEAR\Resource\Mock;
 
 use BEAR\Resource\AbstractObject;
+use BEAR\Resource\Object;
 
 class Link extends AbstractObject
 {
@@ -21,8 +22,8 @@ class Link extends AbstractObject
      *
      * @return string
      */
-    public function onLinkView($string)
+    public function onLinkView(Object $resource)
     {
-        return "<html>$string</html>";
+        return "<html>$resource->body</html>";
     }
 }

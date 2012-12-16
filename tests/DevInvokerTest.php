@@ -72,7 +72,7 @@ class DevInvokerTest extends InvokerTest
      */
     public function invoke()
     {
-        $actual = $this->invoker->invoke($this->request);
+        $actual = $this->invoker->invoke($this->request)->body;
         $expected = array('id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12);
         $ro = $this->request->ro;
         $this->assertSame($actual, $expected);
