@@ -94,6 +94,14 @@ final class Request implements Requestable
         $this->invoker = $invoker;
     }
 
+    /**
+     * Set
+     *
+     * @param Object $ro
+     * @param string $uri
+     * @param string $method
+     * @param array  $query
+     */
     public function set(Object $ro, $uri, $method, array $query)
     {
         $this->ro = $ro;
@@ -126,7 +134,6 @@ final class Request implements Requestable
         if (is_null($this->result)) {
             $this->result = $this->__invoke();
         }
-
         return (string)$this->result;
     }
 
