@@ -35,7 +35,9 @@
         "aura/signal"            : "1.0.*",
 		"aura/installer-default" : "1.0.*",
         "doctrine/common"        : "2.3.*-dev",
-        "guzzle/guzzle"          : "2.7.*",
+        "guzzle/guzzle"          : "2.7.*"
+    },
+    "require-dev": {
         "facebook/xhprof"        : "0.9.2"
     },
     "authors": [
