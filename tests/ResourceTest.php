@@ -85,7 +85,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRequestByPost()
     {
-        $query = array();
+        $query = [];
         $request = $this->resource->get->object($this->nop)->withQuery($query)->request();
         $this->assertInstanceOf('\BEAR\Resource\Request', $request);
     }
@@ -208,7 +208,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidUri()
     {
-        $query = array();
+        $query = [];
         $request = $this->resource->get->uri($this->nop)->withQuery($query)->request();
         $this->assertInstanceOf('\BEAR\Resource\Request', $request);
     }
@@ -218,13 +218,13 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
      */
     public function testServiceError()
     {
-        $query = array();
+        $query = [];
         $request = $this->resource->post->uri('app://self/blog')->eager->request();
     }
 
     public function testsyncHttp()
     {
-        $query = array();
+        $query = [];
         $response = $this->resource->get->uri(
             'http://news.google.com/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss'
         )->sync->request()->get->uri('http://phpspot.org/blog/index.xml')->eager->sync->request()->get->uri(

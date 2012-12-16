@@ -50,19 +50,19 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $link = new LinkType;
         $link->type = LinkType::SELF_LINK;
         $link->key = 'UNAVAILABLE';
-        $links = array($link);
+        $links = [$link];
         $this->request->links = $links;
         $this->request->method = 'get';
         $result = $this->linker->invoke($ro, $this->request, $ro->onGet(1));
     }
 
-    public function test_link()
+    public function test_linkSelf1()
     {
         $ro = new Mock\Link;
         $link = new LinkType;
         $link->type = LinkType::SELF_LINK;
         $link->key = 'View';
-        $links = array($link);
+        $links = [$link];
         $this->request->links = $links;
         $this->request->method = 'get';
         $result = $this->linker->invoke($ro, $this->request, $ro->onGet(1));
@@ -70,14 +70,14 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function test_linkSelf()
+    public function test_linkSelf2()
     {
         $ro = new \testworld\ResourceObject\User;
         $ro->setResource($this->resource);
         $link = new LinkType;
         $link->type = LinkType::SELF_LINK;
         $link->key = 'Blog';
-        $links = array($link);
+        $links = [$link];
         $this->request->links = $links;
         $this->request->method = 'get';
         $result = $this->linker->invoke($ro, $this->request, $ro->onGet(1));
@@ -90,14 +90,14 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function test_linkTarget()
+    public function test_linkNew1()
     {
         $ro = new \testworld\ResourceObject\User;
         $ro->setResource($this->resource);
         $link = new LinkType;
         $link->type = LinkType::NEW_LINK;
         $link->key = 'Blog';
-        $links = array($link);
+        $links = [$link];
         $this->request->links = $links;
         $this->request->method = 'get';
         $result = $this->linker->invoke($ro, $this->request, $ro->onGet(1));
@@ -108,37 +108,38 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function test_linkGraph()
+    public function test_linkCrawl()
     {
         $ro = new \testworld\ResourceObject\User;
         $ro->setResource($this->resource);
         $link = new LinkType;
         $link->type = LinkType::CRAWL_LINK;
         $link->key = 'Blog';
-        $links = array($link);
+        $links = [$link];
         $result = $ro->onGet(1);
         $this->request->links = $links;
         $this->request->method = 'get';
         $result = $this->linker->invoke($ro, $this->request, $result);
         $expected = array (
-  'id' => 2,
-  'name' => 'Aramis',
-  'age' => 16,
-  'blog_id' => 12,
-  'Blog' =>
-        array (
-    'id' => 12,
-    'name' => 'Aramis blog',
-    'inviter' => 2,
-        ));
+            'id' => 2,
+            'name' => 'Aramis',
+            'age' => 16,
+            'blog_id' => 12,
+            'Blog' =>
+            array (
+                'id' => 12,
+                'name' => 'Aramis blog',
+                'inviter' => 2,
+            )
+        );
         $this->assertSame($expected, $result);
     }
 
-    public function est_SelfLinkSelf()
+    public function test_SelfLinkSelf()
     {
         $ro = new \testworld\ResourceObject\User;
         $ro->setResource($this->resource);
-        $links = array();
+        $links = [];
         $link = new LinkType;
         $link->type = LinkType::SELF_LINK;
         $link->key = 'Blog';
@@ -150,7 +151,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->request->links = $links;
         $this->request->method = 'get';
         $result = $this->linker->invoke($ro, $this->request, $ro->onGet(1));
-        $expected =  array('id' => 3, 'name' => 'Porthos', 'age' => 17, 'blog_id' => 0);
+        $expected = ['id' => 3, 'name' => 'Porthos', 'age' => 17, 'blog_id' => 0];
         $this->assertSame($expected, $result);
     }
 
@@ -158,7 +159,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     {
         $ro = new \testworld\ResourceObject\User;
         $ro->setResource($this->resource);
-        $links = array();
+        $links = [];
         $link = new LinkType;
         $link->type = LinkType::SELF_LINK;
         $link->key = 'Blog';
@@ -170,10 +171,10 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->request->links = $links;
         $this->request->method = 'get';
         $result = $this->linker->invoke($ro, $this->request, $ro->onGet(1));
-        $expected = array(
-        0 => array( 'id' => 12, 'name' => 'Aramis blog', 'inviter' => 2),
-        1 => array( 'id' => 3, 'name' => 'Porthos', 'age' => 17, 'blog_id' => 0)
-        );
+        $expected = [
+            0 => ['id' => 12, 'name' => 'Aramis blog', 'inviter' => 2],
+            1 => ['id' => 3, 'name' => 'Porthos', 'age' => 17, 'blog_id' => 0]
+        ];
         $this->assertSame($expected, $result);
     }
 
@@ -181,7 +182,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     {
         $ro = new \testworld\ResourceObject\User;
         $ro->setResource($this->resource);
-        $links = array();
+        $links = [];
         $link = new LinkType;
         $link->type = LinkType::NEW_LINK;
         $link->key = 'Blog';
@@ -206,7 +207,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     {
         $ro = new \testworld\ResourceObject\User;
         $ro->setResource($this->resource);
-        $links = array();
+        $links = [];
         $link = new LinkType;
         $link->type = LinkType::NEW_LINK;
         $link->key = 'Blog';
@@ -225,13 +226,13 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function test_ListGraph()
+    public function test_ListCrawlBasic()
     {
         $ro = new \testworld\ResourceObject\User\Entry;
         $link = new LinkType;
         $link->type = LinkType::CRAWL_LINK;
         $link->key = 'Comment';
-        $links = array($link);
+        $links = [$link];
         $result = $ro->onGet(1);
         $this->request->links = $links;
         $this->request->method = 'get';
@@ -270,10 +271,10 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function test_ListGraphThenGraphh()
+    public function test_ListCrawlThenCrawl()
     {
         $ro = new \testworld\ResourceObject\User\Entry;
-        $links = array();
+        $links = [];
         $link = new LinkType;
         $link->type = LinkType::CRAWL_LINK;
         $link->key = 'Comment';
@@ -339,7 +340,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     public function test_ReturnInsideInstanceAfterListLink()
     {
         $ro = new \testworld\ResourceObject\User\Entry;
-        $links = array();
+        $links = [];
         $link = new LinkType;
         $link->type = LinkType::CRAWL_LINK;
         $link->key = 'Comment';

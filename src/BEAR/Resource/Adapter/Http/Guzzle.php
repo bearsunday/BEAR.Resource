@@ -172,7 +172,7 @@ class Guzzle implements ResourceObject, HttpClient
             $body = json_decode($body);
         }
 
-        return array($code, $headers, $body);
+        return [$code, $headers, $body];
     }
 
     /**

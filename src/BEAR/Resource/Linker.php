@@ -78,7 +78,6 @@ final class Linker implements LinkerInterface
         $refValue = &$sourceValue;
         $q = new SplQueue;
         $q->setIteratorMode(\SplQueue::IT_MODE_DELETE);
-
         // has links
         foreach ($links as $link) {
             $cnt = $q->count();
@@ -91,7 +90,7 @@ final class Linker implements LinkerInterface
                     }
                     $ro = $request->ro;
                     $requestResult = $request();
-                    $a = $requestResult;
+                    $a = $requestResult->body;
                     $item[$link->key] = $a;
                     $item = (array)$item;
                 }
@@ -100,38 +99,39 @@ final class Linker implements LinkerInterface
             if ($this->isList($refValue)) {
                 foreach ($refValue as &$item) {
                     $request = $this->getLinkResult($ro, $link->key, $item);
-                    $requestResult = is_callable($request) ? $request() : $request;
+                    $requestResult = is_callable($request) ? $request()->body : $request;
                     $requestResult = is_array($requestResult) ? new \ArrayObject($requestResult) : $requestResult;
                     $item[$link->key] = $requestResult;
-                    $q->enqueue(array($requestResult, $request->ro));
+                    $q->enqueue([$requestResult, $request->ro]);
                 }
                 $refValue = &$requestResult;
                 continue;
             }
             $request = $this->getLinkResult($ro, $link->key, $refValue);
+
             if (!($request instanceof Request)) {
                 return $request;
             }
             $ro = $request->ro;
             $requestResult = $request();
+
             switch ($link->type) {
                 case LINK::NEW_LINK:
                     if (!$hasTargeted) {
-                        $sourceValue = array($sourceValue, $requestResult);
+                        $sourceValue = [$sourceValue, $requestResult->body];
                         $hasTargeted = true;
                     } else {
-                        $sourceValue[] = $requestResult;
+                        $sourceValue[] = $requestResult->body;
                     }
                     $refValue = &$requestResult;
                     break;
                 case LINK::CRAWL_LINK:
-                    $refValue[$link->key] = $requestResult;
+                    $refValue[$link->key] = $requestResult->body;
                     $refValue = &$requestResult;
                     break;
                 case LINK::SELF_LINK:
                 default:
-                    $refValue = $requestResult;
-                    break;
+                    $refValue = $requestResult->body;
             }
         }
         array_walk_recursive(
@@ -169,6 +169,9 @@ final class Linker implements LinkerInterface
                     $method = $annotation->method;
                     /** @noinspection PhpUndefinedMethodInspection */
                     /** @noinspection PhpUndefinedVariableInspection */
+                    if ($input instanceof Object) {
+                        $input = $input->body;
+                    }
                     $result = $this->resource->$method->uri($uri)->withQuery($input)->eager->request();
 
                     return $result;
@@ -177,7 +180,11 @@ final class Linker implements LinkerInterface
 
             throw new BadLinkRequest(get_class($ro) . "::{$method}");
         }
-        $result = call_user_func(array($ro, $method), $input);
+        if (! $input instanceof Object) {
+            $ro->body = $input;
+            $input = $ro;
+        }
+        $result = call_user_func([$ro, $method], $input);
 
         return $result;
     }

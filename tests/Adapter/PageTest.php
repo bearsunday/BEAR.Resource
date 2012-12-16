@@ -71,7 +71,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRequestByPost()
     {
-        $query = array();
+        $query = [];
         $request = $this->resource->get->object($this->nop)->withQuery($query)->request();
         $this->assertInstanceOf('\BEAR\Resource\Request', $request);
     }
