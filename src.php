@@ -11,6 +11,7 @@ require_once __DIR__ . '/src/BEAR/Resource/LinkType.php';
 
 // trait
 require_once __DIR__ . '/src/BEAR/Resource/BodyArrayAccess.php';
+require_once __DIR__ . '/src/BEAR/Resource/Render.php';
 
 // abstract class
 require_once __DIR__ . '/src/BEAR/Resource/AbstractObject.php';

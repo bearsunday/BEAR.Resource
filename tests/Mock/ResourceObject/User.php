@@ -70,10 +70,10 @@ class User extends AbstractObject
         return "{$delete_id} deleted";
     }
 
-    public function onLinkBlog(array $user)
+    public function onLinkBlog(ResourceObject $resource)
     {
         return $this->resource
-        ->get->uri('app://self/Blog')->withQuery(['id' => $user['blog_id']])->request();
+        ->get->uri('app://self/Blog')->withQuery(['id' => $resource->body['blog_id']])->request();
     }
 
     /**

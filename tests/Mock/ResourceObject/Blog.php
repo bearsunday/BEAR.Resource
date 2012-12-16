@@ -54,10 +54,10 @@ class Blog extends AbstractObject
         return $this->blogs[$id];
     }
 
-    public function onLinkInviter(array $body)
+    public function onLinkInviter(ResourceObject $ro)
     {
         $request = $this->resource
-        ->get->uri('app://self/User')->withQuery(['id' => $body['inviter']])->request();
+        ->get->uri('app://self/User')->withQuery(['id' => $ro->body['inviter']])->request();
 
         return $request;
     }

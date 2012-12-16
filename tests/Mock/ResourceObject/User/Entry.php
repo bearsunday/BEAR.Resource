@@ -15,7 +15,7 @@ class Entry extends AbstractObject
     public function __construct(ResourceInterface $resource = null)
     {
         if (is_null($resource)) {
-            $resurce = include dirname(dirname(dirname(__DIR__))) . '/scripts/resource.php';
+            $resource = include dirname(dirname(dirname(__DIR__))) . '/scripts/resource.php';
         }
         $this->resource = $resource;
     }
@@ -33,15 +33,13 @@ class Entry extends AbstractObject
      */
     public function onGet()
     {
-//         $this['count'] =  count($this->entries);
-//         $this['entry'] =  $this->entries;
         return $this->entries;
     }
 
-    public function onLinkComment(array $body)
+    public function onLinkComment(ResourceObject $ro)
     {
         $request = $this->resource
-        ->get->uri('app://self/User/Entry/Comment')->withQuery(['entry_id' => $body['id']])->request();
+        ->get->uri('app://self/User/Entry/Comment')->withQuery(['entry_id' => $ro->body['id']])->request();
 
         return $request;
     }

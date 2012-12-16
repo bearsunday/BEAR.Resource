@@ -8,8 +8,12 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Renderable;
+use IteratorAggregate;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Scope;
+use ArrayAccess;
+use ArrayIterator;
+use OutOfBoundsException;
 
 /**
  * Interface for resource adapter provider.
@@ -18,8 +22,10 @@ use Ray\Di\Di\Scope;
  *
  * @Scope("prototype")
  */
-final class Request implements Requestable
+final class Request implements Requestable, ArrayAccess, IteratorAggregate
 {
+    use BodyArrayAccess;
+
     /**
      * object URI scheme
      *
@@ -94,6 +100,14 @@ final class Request implements Requestable
         $this->invoker = $invoker;
     }
 
+    /**
+     * Set
+     *
+     * @param Object $ro
+     * @param string $uri
+     * @param string $method
+     * @param array  $query
+     */
     public function set(Object $ro, $uri, $method, array $query)
     {
         $this->ro = $ro;
@@ -156,5 +170,55 @@ final class Request implements Requestable
     public function toUriWithMethod()
     {
         return "{$this->method} " . $this->toUri();
+    }
+
+    /**
+     * Returns the body value at the specified index
+     *
+     * @param mixed $offset offset
+     *
+     * @return mixed
+     */
+    public function offsetGet($offset)
+    {
+        if (is_null($this->result)) {
+            $this->result = $this->__invoke();
+        }
+        if (! isset($this->result->body[$offset])) {
+            throw new OutOfBoundsException("[$offset] for object[" . get_class($this->result) . "]");
+        }
+        return $this->result->body[$offset];
+    }
+
+
+    /**
+     * Returns whether the requested index in body exists
+     *
+     * @param mixed $offset offset
+     *
+     * @return bool
+     */
+    public function offsetExists($offset)
+    {
+        if (is_null($this->result)) {
+            $this->result = $this->__invoke();
+        }
+
+        return isset($this->result->body[$offset]);
+    }
+
+    /**
+     * Get array iterator
+     *
+     * @return \ArrayIterator
+     */
+    public function getIterator()
+    {
+        if (is_null($this->result)) {
+            $this->result = $this->__invoke();
+        }
+        $isArray = (is_array($this->result->body) || $this->result->body instanceof Traversable);
+        $iterator = $isArray ? new ArrayIterator($this->result->body) : new ArrayIterator([]);
+        return $iterator;
     }
 }
