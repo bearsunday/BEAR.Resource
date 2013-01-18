@@ -47,9 +47,6 @@ trait Render
         if (is_string($this->view)) {
             return $this->view;
         }
-        if (is_scalar($this->body)) {
-            return (string)$this->body;
-        }
         if ($this->renderer instanceof Renderable) {
             try {
                 $view = $this->renderer->render($this);
@@ -58,6 +55,8 @@ trait Render
                 error_log('Exception cached in ' . __METHOD__);
                 error_log((string)$e);
             }
+        } elseif (is_scalar($this->body)) {
+            return (string)$this->body;
         } else {
             $view = '';
         }
