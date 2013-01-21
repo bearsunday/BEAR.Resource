@@ -16,7 +16,7 @@ namespace BEAR\Resource\Annotation;
  * @package    BEAR.Resource
  * @subpackage Annotation
  */
-final class Link implements Annotation
+final class Link implements AnnotationInterface
 {
     /**
      * Relation

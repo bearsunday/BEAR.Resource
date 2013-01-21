@@ -12,6 +12,6 @@ namespace BEAR\Resource\Exception;
  *
  * @package BEAR.Resource
  */
-class Uri extends BadRequest implements Exception
+class Uri extends BadRequest implements ExceptionInterface
 {
 }

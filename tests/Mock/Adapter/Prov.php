@@ -2,10 +2,10 @@
 
 namespace BEAR\Resource\Adapter;
 
-use BEAR\Resource\Object;
-use BEAR\Resource\Provider;
+use BEAR\Resource\ObjectInterface;
+use BEAR\Resource\ProviderInterface;
 
-class Prov implements Object, Provider, Adapter
+class Prov implements ObjectInterface, ProviderInterface, AdapterInterface
 {
     public function __construct()
     {}

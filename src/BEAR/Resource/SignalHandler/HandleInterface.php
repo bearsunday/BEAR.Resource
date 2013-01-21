@@ -18,10 +18,10 @@ use Aura\Signal\Manager as Signal;
  * @package BEAR.Resource
  *
  */
-interface Handle
+interface HandleInterface
 {
     /**
-     * Handle parameter signal
+     * HandleInterface parameter signal
      *
      * @param mixed                      $return     handler provided return value
      * @param ReflectionParameter        $parameter  parameter reflection

@@ -19,11 +19,11 @@ use ReflectionParameter;
  *
  * @package BEAR.Resource
  */
-class Provides implements Handle
+class Provides implements HandleInterface
 {
     /**
      * (non-PHPdoc)
-     * @see BEAR\Resource\SignalHandler.Handle::__invoke()
+     * @see BEAR\Resource\SignalHandler.HandleInterface::__invoke()
      */
     public function __invoke(
         $return,

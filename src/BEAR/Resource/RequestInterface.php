@@ -17,7 +17,7 @@ use Ray\Di\Di\ImplementedBy;
  * @ImplementedBy("BEAR\Resource\Request")
  *
  */
-interface Requestable
+interface RequestInterface
 {
     /**
      * Constructor

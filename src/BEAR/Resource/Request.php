@@ -7,7 +7,7 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Renderable;
+use BEAR\Resource\RenderInterface;
 use IteratorAggregate;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Scope;
@@ -22,9 +22,9 @@ use OutOfBoundsException;
  *
  * @Scope("prototype")
  */
-final class Request implements Requestable, ArrayAccess, IteratorAggregate
+final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
 {
-    use BodyArrayAccess;
+    use BodyArrayAccessTrait;
 
     /**
      * object URI scheme
@@ -91,7 +91,7 @@ final class Request implements Requestable, ArrayAccess, IteratorAggregate
 
     /**
      * (non-PHPdoc)
-     * @see BEAR\Resource.Requestable::__construct()
+     * @see BEAR\Resource.RequestInterface::__construct()
      *
      * @Inject
      */
@@ -108,7 +108,7 @@ final class Request implements Requestable, ArrayAccess, IteratorAggregate
      * @param string $method
      * @param array  $query
      */
-    public function set(Object $ro, $uri, $method, array $query)
+    public function set(ObjectInterface $ro, $uri, $method, array $query)
     {
         $this->ro = $ro;
         $this->uri = $uri;
@@ -118,7 +118,7 @@ final class Request implements Requestable, ArrayAccess, IteratorAggregate
 
     /**
      * (non-PHPdoc)
-     * @see BEAR\Resource.Requestable::__invoke()
+     * @see BEAR\Resource.RequestInterface::__invoke()
      */
     public function __invoke(array $query = null)
     {

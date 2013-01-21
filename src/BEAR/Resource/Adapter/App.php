@@ -7,8 +7,8 @@
  */
 namespace BEAR\Resource\Adapter;
 
-use BEAR\Resource\Object as ResourceObject;
-use BEAR\Resource\Provider;
+use BEAR\Resource\ObjectInterface as ResourceObject;
+use BEAR\Resource\ProviderInterface;
 use Ray\Di\InjectorInterface;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Scope;
@@ -22,7 +22,7 @@ use Exception;
  *
  * @Scope("prototype")
  */
-class App implements ResourceObject, Provider, Adapter
+class App implements ResourceObject, ProviderInterface, AdapterInterface
 {
     /**
      * Application dependency injector
@@ -71,8 +71,8 @@ class App implements ResourceObject, Provider, Adapter
     /**
      * (non-PHPdoc)
      *
-     * @see    BEAR\Resource.Provider::get()
-     * @return object
+     * @see    BEAR\Resource.ProviderInterface::get()
+     * @return ResourceObject
      */
     public function get($uri)
     {

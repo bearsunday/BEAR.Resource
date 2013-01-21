@@ -8,16 +8,10 @@
 namespace BEAR\Resource;
 
 /**
- * Interface for resource adapter provider.
+ * Resource object marker interface
  *
  * @package BEAR.Resource
  */
-interface Provider
+interface ObjectInterface
 {
-    /**
-     * Get resource adapter
-     *
-     * @param string $uri
-     */
-    public function get($uri);
 }

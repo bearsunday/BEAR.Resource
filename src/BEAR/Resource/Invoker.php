@@ -9,7 +9,7 @@ namespace BEAR\Resource;
 
 use Aura\Di\ConfigInterface;
 use Aura\Signal\Manager as Signal;
-use BEAR\Resource\Object as ResourceObject;
+use BEAR\Resource\ObjectInterface as ResourceObject;
 use BEAR\Resource\Annotation\ParamSignal;
 use Ray\Di\Annotation;
 use Ray\Aop\Weave;
@@ -62,7 +62,7 @@ class Invoker implements InvokerInterface
     const OPTIONS = 'options';
 
     /**
-     * Provider annotation
+     * ProviderInterface annotation
      *
      * @var string
      */
@@ -157,7 +157,7 @@ class Invoker implements InvokerInterface
             // @todo implements "Exception signal"
             throw $e;
         }
-        if (! $result instanceof Object) {
+        if (! $result instanceof ObjectInterface) {
             $request->ro->body = $result;
             $result = $request->ro;
         }

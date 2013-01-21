@@ -8,7 +8,7 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception;
-use BEAR\Resource\Object as ResourceObject;
+use BEAR\Resource\ObjectInterface as ResourceObject;
 use Guzzle\Parser\UriTemplate\UriTemplateInterface;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Scope;
@@ -20,7 +20,7 @@ use Ray\Di\Di\Scope;
  *
  * @Scope("singleton")
  */
-class A implements Referable
+class A implements HrefInterface
 {
     /**
      * Constructor

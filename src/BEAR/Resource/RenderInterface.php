@@ -7,22 +7,19 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Object as ResourceObject;
-
 /**
- * Interface for hyper reference
+ * Interface for render view
  *
  * @package BEAR.Resource
  */
-interface Referable
+interface RenderInterface
 {
     /**
-     * Get hyper reference URI
+     * Render
      *
-     * @param                $rel
-     * @param AbstractObject $ro
+     * @param AbstractObject $resourceObject
      *
      * @return mixed
      */
-    public function href($rel, AbstractObject $ro);
+    public function render(AbstractObject $resourceObject);
 }

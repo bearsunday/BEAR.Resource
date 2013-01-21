@@ -2,7 +2,7 @@
 
 namespace BEAR\Resource;
 
-class ErrorRenderer implements Renderable
+class ErrorRenderer implements RenderInterface
 {
     public function render(AbstractObject $resourceObject)
     {

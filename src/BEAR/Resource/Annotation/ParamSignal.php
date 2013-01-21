@@ -16,7 +16,7 @@ namespace BEAR\Resource\Annotation;
  * @package    BEAR.Resource
  * @subpackage Annotation
  */
-final class ParamSignal implements Annotation
+final class ParamSignal implements AnnotationInterface
 {
     /**
      * @var string

@@ -6,7 +6,7 @@
  */
 namespace BEAR\Resource\Adapter\Http;
 
-use BEAR\Resource\Object as ResourceObject;
+use BEAR\Resource\ObjectInterface as ResourceObject;
 use BEAR\Resource\Request;
 use Guzzle\Service\Client as GuzzleClient;
 use Guzzle\Common\Cache\DoctrineCacheAdapter;
@@ -22,7 +22,7 @@ use Ray\Di\Di\Scope;
  *
  * @Scope("singleton")
  */
-class Guzzle implements ResourceObject, HttpClient
+class Guzzle implements ResourceObject, HttpClientInterface
 {
     /**
      * Code
@@ -77,7 +77,7 @@ class Guzzle implements ResourceObject, HttpClient
 
     /**
      * (non-PHPdoc)
-     * @see BEAR\Resource\Adapter\Http.HttpClient::onGet()
+     * @see BEAR\Resource\Adapter\Http.HttpClientInterface::onGet()
      */
     public function onGet()
     {
@@ -90,7 +90,7 @@ class Guzzle implements ResourceObject, HttpClient
 
     /**
      * (non-PHPdoc)
-     * @see BEAR\Resource\Adapter\Http.HttpClient::onPost()
+     * @see BEAR\Resource\Adapter\Http.HttpClientInterface::onPost()
      */
     public function onPost()
     {
@@ -103,7 +103,7 @@ class Guzzle implements ResourceObject, HttpClient
 
     /**
      * (non-PHPdoc)
-     * @see BEAR\Resource\Adapter\Http.HttpClient::onPut()
+     * @see BEAR\Resource\Adapter\Http.HttpClientInterface::onPut()
      */
     public function onPut()
     {
@@ -116,7 +116,7 @@ class Guzzle implements ResourceObject, HttpClient
 
     /**
      * (non-PHPdoc)
-     * @see BEAR\Resource\Adapter\Http.HttpClient::onDelete()
+     * @see BEAR\Resource\Adapter\Http.HttpClientInterface::onDelete()
      */
     public function onDelete()
     {
@@ -129,7 +129,7 @@ class Guzzle implements ResourceObject, HttpClient
 
     /**
      * (non-PHPdoc)
-     * @see BEAR\Resource\Adapter\Http.HttpClient::onHead()
+     * @see BEAR\Resource\Adapter\Http.HttpClientInterface::onHead()
      */
     public function onHead()
     {
@@ -142,7 +142,7 @@ class Guzzle implements ResourceObject, HttpClient
 
     /**
      * (non-PHPdoc)
-     * @see BEAR\Resource\Adapter\Http.HttpClient::onOptions()
+     * @see BEAR\Resource\Adapter\Http.HttpClientInterface::onOptions()
      */
     public function onOptions()
     {

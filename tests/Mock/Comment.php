@@ -2,7 +2,7 @@
 
 namespace BEAR\Resource\Mock;
 
-use BEAR\Resource\Object as ResourceObject;
+use BEAR\Resource\ObjectInterface as ResourceObject;
 use BEAR\Resource\AbstractObject;
 
 use BEAR\Resource\Annotation\Provides;

@@ -3,9 +3,9 @@
 namespace BEAR\Resource\Adapter;
 
 use BEAR\Resource\AbstractObject;
-use BEAR\Resource\Object as ResourceObject;
+use BEAR\Resource\ObjectInterface as ResourceObject;
 
-class Nop extends AbstractObject implements ResourceObject, Adapter
+class Nop extends AbstractObject implements ResourceObject, AdapterInterface
 {
     public $time;
 

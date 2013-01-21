@@ -2,7 +2,7 @@
 
 namespace restbucks\Resource\App;
 
-use BEAR\Resource\Object as ResourceObject,
+use BEAR\Resource\ObjectInterface as ResourceObject,
     BEAR\Resource\AbstractObject,
     BEAR\Resource\Resource;
 

@@ -12,7 +12,7 @@ namespace BEAR\Resource\Adapter\Http;
  *
  * @package BEAR.Resource
  */
-interface HttpClient
+interface HttpClientInterface
 {
     /**
      * Get

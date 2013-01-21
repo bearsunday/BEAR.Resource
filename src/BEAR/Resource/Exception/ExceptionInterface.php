@@ -5,13 +5,13 @@
  * @package BEAR.Resource
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace BEAR\Resource;
+namespace BEAR\Resource\Exception;
 
 /**
- * Resource object marker interface
+ * Generic exception
  *
  * @package BEAR.Resource
  */
-interface Object
+interface ExceptionInterface
 {
 }

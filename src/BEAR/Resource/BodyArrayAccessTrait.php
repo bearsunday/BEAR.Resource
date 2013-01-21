@@ -15,7 +15,7 @@ use Traversable;
  *
  * @package BEAR.Resource
  */
-trait BodyArrayAccess
+trait BodyArrayAccessTrait
 {
     /**
      * Body

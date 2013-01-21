@@ -8,18 +8,16 @@
 namespace BEAR\Resource;
 
 /**
- * Interface for render view
+ * Interface for resource adapter provider.
  *
  * @package BEAR.Resource
  */
-interface Renderable
+interface ProviderInterface
 {
     /**
-     * Render
+     * Get resource adapter
      *
-     * @param AbstractObject $resourceObject
-     *
-     * @return mixed
+     * @param string $uri
      */
-    public function render(AbstractObject $resourceObject);
+    public function get($uri);
 }

@@ -12,6 +12,6 @@ namespace BEAR\Resource\Exception;
  *
  * @package BEAR.Resource
  */
-class MethodNotAllowed extends BadRequest implements Exception
+class MethodNotAllowed extends BadRequest implements ExceptionInterface
 {
 }

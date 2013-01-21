@@ -18,13 +18,13 @@ use Exception;
  *
  * @package BEAR.Resource
  */
-abstract class AbstractObject implements Object, ArrayAccess, Countable, IteratorAggregate
+abstract class AbstractObject implements ObjectInterface, ArrayAccess, Countable, IteratorAggregate
 {
     // (array)
-    use BodyArrayAccess;
+    use BodyArrayAccessTrait;
 
     // (string)
-    use Render;
+    use RenderTrait;
 
     /**
      * URI

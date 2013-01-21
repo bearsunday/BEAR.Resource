@@ -11,7 +11,7 @@ use BEAR\Resource\Adapter\App\Link as LikType;
 use BEAR\Resource\Exception;
 use BEAR\Resource\Uri;
 use Guzzle\Common\Cache\CacheAdapterInterface as Cache;
-use BEAR\Resource\SignalHandler\Handle;
+use BEAR\Resource\SignalHandler\HandleInterface;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
 use Ray\Di\Di\Scope;
@@ -262,7 +262,7 @@ class Resource implements ResourceInterface
                 $this->requests->attach($this->request);
                 $result = $this->invoker->invokeSync($this->requests);
             }
-            if (!($result instanceof Object) && isset($this->request->ro)) {
+            if (!($result instanceof ObjectInterface) && isset($this->request->ro)) {
                 $this->request->ro->body = $result;
                 $result = $this->request->ro;
             }
@@ -278,7 +278,7 @@ class Resource implements ResourceInterface
      * (non-PHPdoc)
      * @see BEAR\Resource.Resource::attachParamProvider()
      */
-    public function attachParamProvider($signal, Handle $argProvider)
+    public function attachParamProvider($signal, HandleInterface $argProvider)
     {
         /** @noinspection PhpParamsInspection */
         $this->invoker->getSignal()->handler(

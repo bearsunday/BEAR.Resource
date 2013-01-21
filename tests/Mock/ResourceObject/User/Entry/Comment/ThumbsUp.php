@@ -2,7 +2,7 @@
 
 namespace testworld\ResourceObject\Entry\Comment;
 
-use BEAR\Resource\Object as ResourceObject;
+use BEAR\Resource\ObjectInterface as ResourceObject;
 use BEAR\Resource\AbstractObject;
 use BEAR\Resource\ResourceInterface;
 use BEAR\Resource\Factory;

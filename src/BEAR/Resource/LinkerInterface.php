@@ -7,7 +7,7 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Object as ResourceObject;
+use BEAR\Resource\ObjectInterface as ResourceObject;
 use Ray\Di\Di\ImplementedBy;
 
 /**

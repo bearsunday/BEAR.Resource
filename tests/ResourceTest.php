@@ -357,7 +357,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     }
 }
 
-class varProvider implements \BEAR\Resource\SignalHandler\Handle
+class varProvider implements \BEAR\Resource\SignalHandler\HandleInterface
 {
     public function __invoke(
         $return,

@@ -14,23 +14,23 @@ use Exception;
  *
  * @package BEAR.Resource
  */
-trait Render
+trait RenderTrait
 {
     /**
      * Renderer
      *
-     * @var \BEAR\Resource\Renderable
+     * @var \BEAR\Resource\RenderInterface
      */
     protected $renderer;
 
     /**
      * Set renderer
      *
-     * @param Renderable $renderer
+     * @param RenderInterface $renderer
      *
      * @Inject(optional = true)
      */
-    public function setRenderer(Renderable $renderer)
+    public function setRenderer(RenderInterface $renderer)
     {
         $this->renderer = $renderer;
     }
@@ -47,7 +47,7 @@ trait Render
         if (is_string($this->view)) {
             return $this->view;
         }
-        if ($this->renderer instanceof Renderable) {
+        if ($this->renderer instanceof RenderInterface) {
             try {
                 $view = $this->renderer->render($this);
             } catch (Exception $e) {

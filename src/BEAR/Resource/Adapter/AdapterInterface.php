@@ -5,13 +5,11 @@
  * @package BEAR.Resource
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace BEAR\Resource\Exception;
+namespace BEAR\Resource\Adapter;
 
 /**
- * Generic exception
- *
- * @package BEAR.Resource
+ * Interface for resource adapter
  */
-interface Exception
+interface AdapterInterface
 {
 }

@@ -75,7 +75,7 @@ class Factory implements FactoryInterface
         }
         try {
             $adapter = $this->scheme[$scheme][$host];
-            if ($adapter instanceof Provider) {
+            if ($adapter instanceof ProviderInterface) {
                 $adapter = $adapter->get($uri);
             }
         } catch (\Exception $e) {

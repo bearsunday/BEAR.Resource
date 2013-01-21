@@ -12,6 +12,6 @@ namespace BEAR\Resource\Exception;
  *
  * @package BEAR.Resource
  */
-class BadLinkRequest extends \BadMethodCallException implements Exception
+class BadLinkRequest extends \BadMethodCallException implements ExceptionInterface
 {
 }

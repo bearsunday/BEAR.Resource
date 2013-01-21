@@ -7,8 +7,8 @@
  */
 namespace BEAR\Resource\Adapter;
 
-use BEAR\Resource\Object as ResourceObject;
-use BEAR\Resource\Provider;
+use BEAR\Resource\ObjectInterface as ResourceObject;
+use BEAR\Resource\ProviderInterface;
 use BEAR\Resource\Adapter\Http\Guzzle;
 use Guzzle\Service\Client as GuzzleClient;
 
@@ -19,7 +19,7 @@ use Guzzle\Service\Client as GuzzleClient;
  *
  * @Scope("singleton")
  */
-class Http implements ResourceObject, Provider, Adapter
+class Http implements ResourceObject, ProviderInterface, AdapterInterface
 {
     /**
      * Constructor
@@ -31,7 +31,7 @@ class Http implements ResourceObject, Provider, Adapter
 
     /**
      * (non-PHPdoc)
-     * @see BEAR\Resource.Provider::get()
+     * @see BEAR\Resource.ProviderInterface::get()
      */
     public function get($uri)
     {

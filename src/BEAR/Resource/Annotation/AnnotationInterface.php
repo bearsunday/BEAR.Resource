@@ -5,11 +5,14 @@
  * @package BEAR.Resource
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace BEAR\Resource\Adapter;
+namespace BEAR\Resource\Annotation;
 
 /**
- * Interface for resource adapter
+ * Annotation
+ *
+ * @package    BEAR.Resource
+ * @subpackage Annotation
  */
-interface Adapter
+interface AnnotationInterface
 {
 }

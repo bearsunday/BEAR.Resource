@@ -8,7 +8,7 @@
 namespace BEAR\Resource;
 
 use Ray\Di\Di\ImplementedBy;
-use BEAR\Resource\SignalHandler\Handle;
+use BEAR\Resource\SignalHandler\HandleInterface;
 
 /**
  * Interface for resource client
@@ -94,9 +94,9 @@ interface ResourceInterface
      *  Attach argument provider
      *
      * @param  string              $signal
-     * @param SignalHandler\Handle $argProvider
+     * @param SignalHandler\HandleInterface $argProvider
      *
      * @return mixed
      */
-    public function attachParamProvider($signal, Handle $argProvider);
+    public function attachParamProvider($signal, HandleInterface $argProvider);
 }

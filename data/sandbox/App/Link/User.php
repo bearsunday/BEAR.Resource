@@ -1,7 +1,7 @@
 <?php
 namespace sandbox\App\Link;
 
-use BEAR\Resource\Object as ResourceObject;
+use BEAR\Resource\ObjectInterface as ResourceObject;
 use BEAR\Resource\AbstractObject;
 use BEAR\Resource\ResourceInterface;
 use BEAR\Resource\Annotation\Link;

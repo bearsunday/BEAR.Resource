@@ -7,7 +7,7 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Adapter\Adapter;
+use BEAR\Resource\Adapter\AdapterInterface;
 use ArrayObject;
 
 /**
@@ -62,11 +62,11 @@ class SchemeCollection extends ArrayObject
     /**
      * Set resource adapter
      *
-     * @param Adapter $adapter
+     * @param AdapterInterface $adapter
      *
      * @return SchemeCollection
      */
-    public function toAdapter(Adapter $adapter)
+    public function toAdapter(AdapterInterface $adapter)
     {
         $this[$this->scheme][$this->host] = $adapter;
         $this->scheme = $this->host = null;

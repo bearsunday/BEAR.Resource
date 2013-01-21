@@ -7,7 +7,7 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Object as ResourceObject;
+use BEAR\Resource\ObjectInterface as ResourceObject;
 use BEAR\Resource\Adapter\App\Link;
 use BEAR\Resource\Annotation\Link as AnnotationLink;
 use BEAR\Resource\Exception\BadLinkRequest;
@@ -169,7 +169,7 @@ final class Linker implements LinkerInterface
                     $method = $annotation->method;
                     /** @noinspection PhpUndefinedMethodInspection */
                     /** @noinspection PhpUndefinedVariableInspection */
-                    if ($input instanceof Object) {
+                    if ($input instanceof ObjectInterface) {
                         $input = $input->body;
                     }
                     $result = $this->resource->$method->uri($uri)->withQuery($input)->eager->request();
@@ -180,7 +180,7 @@ final class Linker implements LinkerInterface
 
             throw new BadLinkRequest(get_class($ro) . "::{$method}");
         }
-        if (! $input instanceof Object) {
+        if (! $input instanceof ObjectInterface) {
             $ro->body = $input;
             $input = $ro;
         }
