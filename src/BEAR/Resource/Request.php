@@ -14,6 +14,7 @@ use Ray\Di\Di\Scope;
 use ArrayAccess;
 use ArrayIterator;
 use OutOfBoundsException;
+use Traversable;
 
 /**
  * Interface for resource adapter provider.
@@ -103,12 +104,12 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
     /**
      * Set
      *
-     * @param Object $ro
-     * @param string $uri
-     * @param string $method
-     * @param array  $query
+     * @param AbstractObject $ro
+     * @param string         $uri
+     * @param string         $method
+     * @param array          $query
      */
-    public function set(ObjectInterface $ro, $uri, $method, array $query)
+    public function set(AbstractObject $ro, $uri, $method, array $query)
     {
         $this->ro = $ro;
         $this->uri = $uri;
@@ -119,6 +120,7 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
     /**
      * (non-PHPdoc)
      * @see BEAR\Resource.RequestInterface::__invoke()
+     * @return AbstractObject
      */
     public function __invoke(array $query = null)
     {
@@ -128,6 +130,32 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
         $result = $this->invoker->invoke($this);
 
         return $result;
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see BEAR\Resource.RequestInterface::toUri()
+     */
+    public function toUri()
+    {
+        $query = http_build_query($this->query, null, '&', PHP_QUERY_RFC3986);
+        $uri = $this->ro->uri;
+        if (isset(parse_url($uri)['query'])) {
+            $queryString = $uri;
+        } else {
+            $queryString = "{$uri}" . ($query ? '?' : '') . $query;
+        }
+
+        return $queryString;
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see BEAR\Resource.RequestInterface::toUriWithMethod()
+     */
+    public function toUriWithMethod()
+    {
+        return "{$this->method} " . $this->toUri();
     }
 
     /**
@@ -145,46 +173,19 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
     }
 
     /**
-     * To Request URI string
-     *
-     * @return string
-     */
-    public function toUri()
-    {
-        $query = http_build_query($this->query, null, '&', PHP_QUERY_RFC3986);
-        $uri = $this->ro->uri;
-        if (isset(parse_url($uri)['query'])) {
-            $queryString = $uri;
-        } else {
-            $queryString = "{$uri}" . ($query ? '?' : '') . $query;
-        }
-
-        return $queryString;
-    }
-
-    /**
-     * To Request URI string with request method
-     *
-     * @return string
-     */
-    public function toUriWithMethod()
-    {
-        return "{$this->method} " . $this->toUri();
-    }
-
-    /**
      * Returns the body value at the specified index
      *
      * @param mixed $offset offset
      *
      * @return mixed
+     * @throws OutOfBoundsException
      */
     public function offsetGet($offset)
     {
         if (is_null($this->result)) {
             $this->result = $this->__invoke();
         }
-        if (! isset($this->result->body[$offset])) {
+        if (!isset($this->result->body[$offset])) {
             throw new OutOfBoundsException("[$offset] for object[" . get_class($this->result) . "]");
         }
         return $this->result->body[$offset];

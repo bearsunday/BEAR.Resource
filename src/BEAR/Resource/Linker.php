@@ -7,7 +7,7 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\ObjectInterface as ResourceObject;
+use BEAR\Resource\AbstractObject as ResourceObject;
 use BEAR\Resource\Adapter\App\Link;
 use BEAR\Resource\Annotation\Link as AnnotationLink;
 use BEAR\Resource\Exception\BadLinkRequest;
@@ -90,6 +90,7 @@ final class Linker implements LinkerInterface
                     }
                     $ro = $request->ro;
                     $requestResult = $request();
+                    /** @var $requestResult AbstractObject */
                     $a = $requestResult->body;
                     $item[$link->key] = $a;
                     $item = (array)$item;
@@ -99,6 +100,7 @@ final class Linker implements LinkerInterface
             if ($this->isList($refValue)) {
                 foreach ($refValue as &$item) {
                     $request = $this->getLinkResult($ro, $link->key, $item);
+                    /** @noinspection PhpUndefinedFieldInspection */
                     $requestResult = is_callable($request) ? $request()->body : $request;
                     $requestResult = is_array($requestResult) ? new \ArrayObject($requestResult) : $requestResult;
                     $item[$link->key] = $requestResult;
@@ -167,11 +169,11 @@ final class Linker implements LinkerInterface
                         $uri = $annotation->href;
                     }
                     $method = $annotation->method;
-                    /** @noinspection PhpUndefinedMethodInspection */
-                    /** @noinspection PhpUndefinedVariableInspection */
-                    if ($input instanceof ObjectInterface) {
+                    if ($input instanceof AbstractObject) {
                         $input = $input->body;
                     }
+                    /** @noinspection PhpUndefinedMethodInspection */
+                    /** @noinspection PhpUndefinedVariableInspection */
                     $result = $this->resource->$method->uri($uri)->withQuery($input)->eager->request();
 
                     return $result;
@@ -180,7 +182,7 @@ final class Linker implements LinkerInterface
 
             throw new BadLinkRequest(get_class($ro) . "::{$method}");
         }
-        if (! $input instanceof ObjectInterface) {
+        if (! $input instanceof AbstractObject) {
             $ro->body = $input;
             $input = $ro;
         }

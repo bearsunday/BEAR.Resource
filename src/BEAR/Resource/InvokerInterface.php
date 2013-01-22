@@ -23,7 +23,7 @@ interface InvokerInterface
      *
      * @param  Request $request
      *
-     * @return mixed
+     * @return AbstractObject
      */
     public function invoke(Request $request);
 
