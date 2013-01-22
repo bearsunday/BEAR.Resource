@@ -32,6 +32,22 @@ interface RequestInterface
      * InvokerInterface resource request
      *
      * @param array $query
+     *
+     * @return AbstractObject
      */
     public function __invoke(array $query = null);
+
+    /**
+     * To Request URI string
+     *
+     * @return string
+     */
+    public function toUri();
+
+    /**
+     * To Request URI string with request method
+     *
+     * @return string
+     */
+    public function toUriWithMethod();
 }
