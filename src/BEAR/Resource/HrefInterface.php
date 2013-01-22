@@ -7,8 +7,6 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\ObjectInterface as ResourceObject;
-
 /**
  * Interface for hyper reference
  *
