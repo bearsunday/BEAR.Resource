@@ -8,7 +8,6 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception;
-use BEAR\Resource\ObjectInterface as ResourceObject;
 use Guzzle\Parser\UriTemplate\UriTemplateInterface;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Scope;
