@@ -37,6 +37,9 @@
         "doctrine/common"        : "2.3.*-dev",
         "guzzle/guzzle"          : "2.7.*"
     },
+    "require-dev": {
+        "facebook/xhprof"        : "dev-master"
+    },
     "authors": [
         {
             "name": "Akihito Koriyama",
