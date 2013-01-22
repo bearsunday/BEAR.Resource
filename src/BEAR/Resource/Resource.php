@@ -125,6 +125,7 @@ class Resource implements ResourceInterface
         }
         $instance = $this->factory->newInstance($uri);
         if ($useCache === true) {
+            /** @noinspection PhpUndefinedVariableInspection */
             $this->cache->save($key, $instance);
         }
 
