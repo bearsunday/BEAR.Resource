@@ -7,8 +7,8 @@
  */
 namespace BEAR\Resource;
 
-use Ray\Di\Di\ImplementedBy;
 use BEAR\Resource\SignalHandler\HandleInterface;
+use Ray\Di\Di\ImplementedBy;
 
 /**
  * Interface for resource client
@@ -16,7 +16,6 @@ use BEAR\Resource\SignalHandler\HandleInterface;
  * @package BEAR.Resource
  *
  * @ImplementedBy("BEAR\Resource\Resource")
- *
  */
 interface ResourceInterface
 {

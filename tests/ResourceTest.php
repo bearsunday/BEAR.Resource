@@ -14,7 +14,7 @@ use BEAR\Resource\Builder;
 use BEAR\Resource\Mock\User;
 use Ray\Aop\ReflectiveMethodInvocation;
 use BEAR\Resource\SignalHandler\Provides;
-use Guzzle\Common\Cache\DoctrineCacheAdapter as CacheAdapter;
+use Guzzle\Cache\DoctrineCacheAdapter as CacheAdapter;
 use Doctrine\Common\Cache\ApcCache as Cache;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use BEAR\Resource\Mock\TestModule;
@@ -30,6 +30,10 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
      * @var Aura\Signal\Manager
      */
     protected $singnal;
+
+    /**
+     * @var CacheAdapter
+     */
     protected $cache;
 
     protected function setUp()

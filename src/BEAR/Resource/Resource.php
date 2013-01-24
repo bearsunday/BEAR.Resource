@@ -10,12 +10,12 @@ namespace BEAR\Resource;
 use BEAR\Resource\Adapter\App\Link as LikType;
 use BEAR\Resource\Exception;
 use BEAR\Resource\Uri;
-use Guzzle\Common\Cache\CacheAdapterInterface as Cache;
+use Guzzle\Cache\CacheAdapterInterface;
 use BEAR\Resource\SignalHandler\HandleInterface;
-use Ray\Di\Di\Inject;
-use Ray\Di\Di\Named;
 use Ray\Di\Di\Scope;
 use SplObjectStorage;
+use Ray\Di\Di\Inject;
+use Ray\Di\Di\Named;
 
 /**
  * Resource client
@@ -71,7 +71,7 @@ class Resource implements ResourceInterface
      * @Inject(optional = true)
      * @Named("resource_cache")
      */
-    public function setCacheAdapter(Cache $cache)
+    public function setCacheAdapter(CacheAdapterInterface $cache)
     {
         $this->cache = $cache;
     }
