@@ -49,4 +49,3 @@ class Link
      */
     public $type;
 }
-
