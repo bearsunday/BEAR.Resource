@@ -13,7 +13,6 @@ use Ray\Di\InjectorInterface;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Scope;
 use RuntimeException;
-use Exception;
 
 /**
  * App resource (app:://self/path/to/resource)

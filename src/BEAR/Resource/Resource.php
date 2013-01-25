@@ -58,7 +58,7 @@ class Resource implements ResourceInterface
     /**
      * Cache
      *
-     * @var Cache
+     * @var CacheAdapterInterface
      */
     private $cache;
 
@@ -66,7 +66,7 @@ class Resource implements ResourceInterface
     /**
      * Set cache adapter
      *
-     * @param Cache $cache
+     * @param CacheAdapterInterface $cache
      *
      * @Inject(optional = true)
      * @Named("resource_cache")
@@ -115,7 +115,7 @@ class Resource implements ResourceInterface
         if (substr($uri, -1) === '/') {
             $uri .= 'index';
         }
-        $useCache = $this->cache instanceof Cache;
+        $useCache = $this->cache instanceof CacheAdapterInterface;
         if ($useCache === true) {
             $key = '(Resource) ' . $uri;
             $cached = $this->cache->fetch($key);
