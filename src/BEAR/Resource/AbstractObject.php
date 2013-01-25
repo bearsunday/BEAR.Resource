@@ -11,7 +11,6 @@ use Ray\Di\Di\Inject;
 use ArrayAccess;
 use Countable;
 use IteratorAggregate;
-use Exception;
 
 /**
  * Abstract resource object

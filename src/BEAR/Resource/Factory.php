@@ -7,7 +7,6 @@
  */
 namespace BEAR\Resource;
 
-use Ray\Di\InjectorInterface;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Scope;
 
