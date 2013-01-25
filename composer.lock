@@ -1,5 +1,5 @@
 {
-    "hash": "94728b3bc321d7ed8ab286e5327578f4",
+    "hash": "e2550188a0a73f4b11573bf57fb6a6ee",
     "packages": [
         {
             "name": "aura/di",
@@ -422,12 +422,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/EventDispatcher",
-                "reference": "1ba2e333b644ac0a0e5ef751d514dd01b3a26e9d"
+                "reference": "v2.2.0-BETA2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/EventDispatcher/archive/1ba2e333b644ac0a0e5ef751d514dd01b3a26e9d.zip",
-                "reference": "1ba2e333b644ac0a0e5ef751d514dd01b3a26e9d",
+                "url": "https://github.com/symfony/EventDispatcher/archive/v2.2.0-BETA2.zip",
+                "reference": "v2.2.0-BETA2",
                 "shasum": ""
             },
             "require": {
@@ -470,7 +470,27 @@
             "homepage": "http://symfony.com"
         }
     ],
-    "packages-dev": null,
+    "packages-dev": [
+        {
+            "name": "facebook/xhprof",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/99designs/xhprof.git",
+                "reference": "c38ed6c2bbc63a01a4a82dfe2ff0a3eb45fe568b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/99designs/xhprof/archive/c38ed6c2bbc63a01a4a82dfe2ff0a3eb45fe568b.zip",
+                "reference": "c38ed6c2bbc63a01a4a82dfe2ff0a3eb45fe568b",
+                "shasum": ""
+            },
+            "time": "2012-08-16 23:24:45",
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "XHProf: A Hierarchical Profiler for PHP"
+        }
+    ],
     "aliases": [
 
     ],
@@ -478,6 +498,7 @@
     "stability-flags": {
         "ray/aop": 10,
         "ray/di": 10,
-        "doctrine/common": 20
+        "doctrine/common": 20,
+        "facebook/xhprof": 20
     }
 }
