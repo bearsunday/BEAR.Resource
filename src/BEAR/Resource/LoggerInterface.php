@@ -8,6 +8,7 @@
 namespace BEAR\Resource;
 
 use Ray\Di\Di\ImplementedBy;
+use IteratorAggregate;
 
 /**
  * Interface for resource logger
@@ -17,7 +18,7 @@ use Ray\Di\Di\ImplementedBy;
  * @ImplementedBy("BEAR\Resource\Logger")
  *
  */
-interface LoggerInterface
+interface LoggerInterface extends IteratorAggregate
 {
     /**
      * Log

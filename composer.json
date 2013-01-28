@@ -7,7 +7,7 @@
         "service layer"
     ],
     "homepage": "https://github.com/koriym/BEAR.Resource",
-    "version": "0.5.5",
+    "version": "0.6.0",
     "license": "BSD-3-Clause",
     "repositories": [
         {
@@ -35,7 +35,7 @@
         "aura/signal"            : "1.0.*",
 		"aura/installer-default" : "1.0.*",
         "doctrine/common"        : "2.3.*-dev",
-        "guzzle/guzzle"          : "2.7.*"
+        "guzzle/guzzle"          : "3.0.*"
     },
     "require-dev": {
         "facebook/xhprof"        : "dev-master"

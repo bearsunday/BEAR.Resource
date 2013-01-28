@@ -10,7 +10,6 @@ namespace BEAR\Resource\SignalHandler;
 use ReflectionParameter;
 use Ray\Aop\ReflectiveMethodInvocation;
 use Ray\Di\Definition;
-use Aura\Signal\Manager as Signal;
 
 /**
  * Interface for resource link

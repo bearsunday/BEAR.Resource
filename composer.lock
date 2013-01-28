@@ -1,5 +1,5 @@
 {
-    "hash": "eadd3bce707bbd33fa6558e652e9b4eb",
+    "hash": "e2550188a0a73f4b11573bf57fb6a6ee",
     "packages": [
         {
             "name": "aura/di",
@@ -21,7 +21,6 @@
             },
             "time": "2012-11-28 00:00:00",
             "type": "aura-package",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Aura\\Di": "src/"
@@ -80,7 +79,6 @@
             "extra": {
                 "class": "Aura\\Composer\\DefaultInstaller"
             },
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Aura\\Composer\\": "src/"
@@ -123,7 +121,6 @@
             },
             "time": "2012-11-28 00:00:00",
             "type": "aura-package",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Aura\\Signal": "src/"
@@ -183,7 +180,6 @@
                     "dev-master": "2.3.x-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Doctrine\\Common": "lib/"
@@ -215,7 +211,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -231,27 +227,45 @@
         },
         {
             "name": "guzzle/guzzle",
-            "version": "v2.7.2",
+            "version": "v3.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle",
-                "reference": "v2.7.2"
+                "reference": "v3.0.7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/guzzle/guzzle/zipball/v2.7.2",
-                "reference": "v2.7.2",
+                "url": "https://github.com/guzzle/guzzle/archive/v3.0.7.zip",
+                "reference": "v3.0.7",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2",
                 "ext-curl": "*",
-                "symfony/event-dispatcher": "2.*"
+                "symfony/event-dispatcher": ">=2.1"
             },
             "replace": {
+                "guzzle/batch": "self.version",
+                "guzzle/cache": "self.version",
                 "guzzle/common": "self.version",
                 "guzzle/http": "self.version",
-                "guzzle/parser": "self.version"
+                "guzzle/inflection": "self.version",
+                "guzzle/iterator": "self.version",
+                "guzzle/log": "self.version",
+                "guzzle/parser": "self.version",
+                "guzzle/plugin": "self.version",
+                "guzzle/plugin-async": "self.version",
+                "guzzle/plugin-backoff": "self.version",
+                "guzzle/plugin-cache": "self.version",
+                "guzzle/plugin-cookie": "self.version",
+                "guzzle/plugin-curlauth": "self.version",
+                "guzzle/plugin-history": "self.version",
+                "guzzle/plugin-log": "self.version",
+                "guzzle/plugin-md5": "self.version",
+                "guzzle/plugin-mock": "self.version",
+                "guzzle/plugin-oauth": "self.version",
+                "guzzle/service": "self.version",
+                "guzzle/stream": "self.version"
             },
             "require-dev": {
                 "doctrine/common": "*",
@@ -259,16 +273,17 @@
                 "monolog/monolog": "1.*",
                 "zendframework/zend-cache": "2.0.*",
                 "zendframework/zend-log": "2.0.*",
-                "zendframework/zend-loader": "2.0.*",
-                "zendframework/zend-stdlib": "2.0.*",
-                "zendframework/zend-eventmanager": "2.0.*",
-                "zendframework/zend-servicemanager": "2.0.*",
-                "zend/zend-log1": "1.11",
-                "zend/zend-cache1": "1.11"
+                "zend/zend-log1": "1.12",
+                "zend/zend-cache1": "1.12",
+                "phpunit/phpunit": "3.7.*"
             },
-            "time": "2012-07-02 14:04:37",
+            "time": "2012-12-19 23:06:35",
             "type": "library",
-            "installation-source": "dist",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0-dev"
+                }
+            },
             "autoload": {
                 "psr-0": {
                     "Guzzle\\Tests": "tests/",
@@ -322,7 +337,6 @@
             },
             "time": "2012-10-17 00:13:53",
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Ray\\Aop": "src/"
@@ -371,7 +385,6 @@
             },
             "time": "2012-12-10 12:57:46",
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Ray\\Di": "src/"
@@ -409,12 +422,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/EventDispatcher",
-                "reference": "eb290a447c0af5bea0d3de5d95d498afd8c82f89"
+                "reference": "v2.2.0-BETA2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/EventDispatcher/archive/eb290a447c0af5bea0d3de5d95d498afd8c82f89.zip",
-                "reference": "eb290a447c0af5bea0d3de5d95d498afd8c82f89",
+                "url": "https://github.com/symfony/EventDispatcher/archive/v2.2.0-BETA2.zip",
+                "reference": "v2.2.0-BETA2",
                 "shasum": ""
             },
             "require": {
@@ -427,14 +440,13 @@
                 "symfony/dependency-injection": "2.2.*",
                 "symfony/http-kernel": "2.2.*"
             },
-            "time": "2012-11-13 14:08:04",
+            "time": "2013-01-17 15:25:59",
             "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-master": "2.2-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Symfony\\Component\\EventDispatcher\\": ""
@@ -458,7 +470,27 @@
             "homepage": "http://symfony.com"
         }
     ],
-    "packages-dev": null,
+    "packages-dev": [
+        {
+            "name": "facebook/xhprof",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/99designs/xhprof.git",
+                "reference": "c38ed6c2bbc63a01a4a82dfe2ff0a3eb45fe568b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/99designs/xhprof/archive/c38ed6c2bbc63a01a4a82dfe2ff0a3eb45fe568b.zip",
+                "reference": "c38ed6c2bbc63a01a4a82dfe2ff0a3eb45fe568b",
+                "shasum": ""
+            },
+            "time": "2012-08-16 23:24:45",
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "XHProf: A Hierarchical Profiler for PHP"
+        }
+    ],
     "aliases": [
 
     ],
@@ -466,6 +498,7 @@
     "stability-flags": {
         "ray/aop": 10,
         "ray/di": 10,
-        "doctrine/common": 20
+        "doctrine/common": 20,
+        "facebook/xhprof": 20
     }
 }

@@ -7,14 +7,13 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\RenderInterface;
 use IteratorAggregate;
-use Ray\Di\Di\Inject;
-use Ray\Di\Di\Scope;
 use ArrayAccess;
 use ArrayIterator;
 use OutOfBoundsException;
 use Traversable;
+use Ray\Di\Di\Inject;
+use Ray\Di\Di\Scope;
 
 /**
  * Interface for resource adapter provider.
@@ -120,7 +119,6 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
     /**
      * (non-PHPdoc)
      * @see BEAR\Resource.RequestInterface::__invoke()
-     * @return AbstractObject
      */
     public function __invoke(array $query = null)
     {

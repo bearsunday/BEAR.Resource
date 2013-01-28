@@ -8,7 +8,6 @@
 namespace BEAR\Resource;
 
 use ArrayIterator;
-use IteratorAggregate;
 use Countable;
 use Ray\Di\Di\Scope;
 
@@ -19,7 +18,7 @@ use Ray\Di\Di\Scope;
  *
  * @Scope("singleton")
  */
-class Logger implements LoggerInterface, IteratorAggregate, Countable
+class Logger implements LoggerInterface, Countable
 {
     const LOG_REQUEST = 0;
     const LOG_RESULT = 1;
