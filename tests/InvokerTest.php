@@ -194,7 +194,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     {
         $this->request->method = Invoker::OPTIONS;
         $response = $this->invoker->invoke($this->request);
-        $actual = $response['allow'];
+        $actual = $response->headers['allow'];
         $expected = ['get', 'post', 'put', 'delete'];
         asort($actual);
         asort($expected);
@@ -206,7 +206,19 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->request->method = Invoker::OPTIONS;
         $this->request->ro = new  \testworld\ResourceObject\RestBucks\Order;
         $response = $this->invoker->invoke($this->request);
-        $actual = $response['allow'];
+        $actual = $response->headers['allow'];
+        $expected = ['get', 'post'];
+        asort($actual);
+        asort($expected);
+        $this->assertSame($actual, $expected);
+    }
+
+    public function test_OptionsWeaver()
+    {
+        $this->request->method = Invoker::OPTIONS;
+        $this->request->ro = new Weaver(new  \testworld\ResourceObject\RestBucks\Order, new Bind);
+        $response = $this->invoker->invoke($this->request);
+        $actual = $response->headers['allow'];
         $expected = ['get', 'post'];
         asort($actual);
         asort($expected);

@@ -50,11 +50,13 @@ class DevInvoker extends Invoker implements InvokerInterface
             $resource = $request->ro;
         }
 
+        if ($request->method === self::OPTIONS) {
+            parent::invoke($request);
+            return parent::invoke($request);
+        }
+
         // MethodNotAllowed
         if ((!$request->ro instanceof Weave) && method_exists($request->ro, $method) !== true) {
-            if ($request->method === self::OPTIONS) {
-                return $this->getOptions($request->ro);
-            }
             throw new Exception\MethodNotAllowed(get_class($request->ro) . "::$method()", 405);
         }
 
