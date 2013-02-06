@@ -7,26 +7,22 @@
  */
 namespace BEAR\Resource;
 
-use Ray\Di\Di\ImplementedBy;
 use IteratorAggregate;
 
 /**
  * Interface for resource logger
  *
  * @package BEAR.Resource
- *
- * @ImplementedBy("BEAR\Resource\Logger")
- *
  */
 interface LoggerInterface extends IteratorAggregate
 {
     /**
      * Log
      *
-     * @param Request $request
-     * @param mixed   $result
+     * @param RequestInterface $request
+     * @param ObjectInterface  $result
      *
      * @return void
      */
-    public function log(Request $request, $result);
+    public function log(RequestInterface $request, ObjectInterface $result);
 }

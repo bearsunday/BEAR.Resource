@@ -31,21 +31,14 @@ class Logger implements LoggerInterface, Countable
     private $logs = [];
 
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-    }
-
-    /**
      * Return new resource object instance
      *
-     * @param       $request $request
-     * @param mixed $result
+     * @param RequestInterface $request
+     * @param ObjectInterface  $result
      *
      * @return void
      */
-    public function log(Request $request, $result)
+    public function log(RequestInterface $request, ObjectInterface $result)
     {
         $this->logs[] = [
             self::LOG_REQUEST => $request,
@@ -63,6 +56,9 @@ class Logger implements LoggerInterface, Countable
         return new ArrayIterator($this->logs);
     }
 
+    /**
+     * @return int
+     */
     public function count()
     {
         return count($this->logs);

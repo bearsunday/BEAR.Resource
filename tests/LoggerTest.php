@@ -47,7 +47,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $test = new Test;
         $test->uri = 'test://self/path/to/resource';
         $this->request->set($test, 'test://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
-        $this->logger->log($this->request, 0);
+        $this->logger->log($this->request, new Test);
         foreach ($this->logger as $log) {
             $this->assertSame(2, count($log));
             $this->assertSame('get test://self/path/to/resource?a=koriym&b=25', $log[0]->toUriWithMethod());
