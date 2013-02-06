@@ -157,14 +157,18 @@ class Invoker implements InvokerInterface
             // @todo implements "Exception signal"
             throw $e;
         }
-        if (! $result instanceof AbstractObject) {
-            $request->ro->body = $result;
-            $result = $request->ro;
-        }
         // link
         completed:
         if ($request->links) {
             $result = $this->linker->invoke($request->ro, $request, $result);
+        }
+        if (! $result instanceof AbstractObject) {
+            $request->ro->body = $result;
+            $result = $request->ro;
+            if ($result instanceof Weave) {
+                $result = $result->___getObject();
+            }
+
         }
         // request / result log
         if ($this->logger instanceof LoggerInterface) {

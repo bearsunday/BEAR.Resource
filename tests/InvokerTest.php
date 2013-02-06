@@ -15,6 +15,7 @@ use Ray\Aop\Weaver;
 use Ray\Aop\Bind;
 use Ray\Aop\ReflectiveMethodInvocation;
 use BEAR\Resource\Mock\User;
+use Doctrine\Common\Annotations\AnnotationReader as Reader;
 
 /**
  * Test class for BEAR.Resource.
@@ -45,7 +46,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $schemeAdapters = ['nop' => '\BEAR\Resource\Adapter\Nop', 'prov' => '\BEAR\Resource\Mock\Prov'];
         $injector = new Injector(new Container(new Forge($config)), new EmptyModule);
         $this->signal = require dirname(__DIR__) . '/vendor/aura/signal/scripts/instance.php';
-        $this->invoker = new Invoker($config, new Linker, $this->signal);
+        $this->invoker = new Invoker($config, new Linker(new Reader), $this->signal);
         $this->invoker->getSignal()->handler(
                 '\BEAR\Resource\Invoker',
                 \BEAR\Resource\Invoker::SIGNAL_PARAM . 'Provides',
@@ -169,7 +170,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->request->ro = $weave;
         $this->request->method = 'get';
         $this->request->query = ['id' => 1];
-        $actual = $this->invoker->invoke($this->request);
+        $actual = $this->invoker->invoke($this->request)->body;
         $expected = "book id[1][Log] target = testworld\\ResourceObject\\Weave\\Book, input = Array\n(\n    [0] => 1\n)\n, result = book id[1]";
         $this->assertSame($expected, $actual);
     }
@@ -185,7 +186,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $links = [$link];
         $this->request->links = $links;
         $this->request->query = ['id' => 1];
-        $actual = $this->invoker->invoke($this->request);
+        $actual = $this->invoker->invoke($this->request)->body;
         $expected = '<html>bear1</html>';
         $this->assertSame($actual, $expected);
     }
