@@ -16,6 +16,9 @@ use Doctrine\Common\Annotations\AnnotationReader as Reader;
  */
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Request
+     */
     protected $request;
 
     protected function setUp()
@@ -32,30 +35,21 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function test_toUriWithMethod()
     {
-        $this->request->method = 'get';
-        $this->request->ro = new Test;
-        $this->request->ro->uri = 'test://self/path/to/resource';
-        $this->request->query = array('a' => 'koriym', 'b' => 25);
+        $this->request->set(new Test, 'test://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
         $actual = $this->request->toUriWithMethod();
         $this->assertSame('get test://self/path/to/resource?a=koriym&b=25', $actual);
     }
 
     public function test_toUri()
     {
-        $this->request->method = 'get';
-        $this->request->ro = new Test;
-        $this->request->ro->uri = 'test://self/path/to/resource';
-        $this->request->query = array('a' => 'koriym', 'b' => 25);
+        $this->request->set(new Test, 'test://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
         $actual = $this->request->toUri();
         $this->assertSame('test://self/path/to/resource?a=koriym&b=25', $actual);
     }
 
     public function test__invoke()
     {
-        $this->request->method = 'get';
-        $this->request->ro = new Nop;
-        $this->request->ro->uri = 'nop://self/path/to/resource';
-        $this->request->query = array('a' => 'koriym', 'b' => 25);
+        $this->request->set(new Nop, 'nop://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
         $request = $this->request;
         $actual = $request()->body;
         $expected = array('koriym', 25);
@@ -65,12 +59,9 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function test__invokeWithQuery()
     {
-        $this->request->method = 'get';
-        $this->request->ro = new Nop;
-        $this->request->ro->uri = 'nop://self/path/to/resource';
-        $this->request->query = array('a' => 'koriym', 'b' => 25);
+        $this->request->set(new Nop, 'nop://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
         $request = $this->request;
-        $actual = $request(array('b' => 30))->body;
+        $actual = $request(['b' => 30])->body;
         $expected = array('koriym', 30);
         $this->assertInstanceOf('\BEAR\Resource\Request', $this->request);
         $this->assertSame($expected, $actual);
@@ -78,15 +69,12 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function test__toStringWithRenderableResourceObject()
     {
-        $this->request->method = 'get';
-        $this->request->ro = new Test;
-        $renderer = new TestRenderer;
-        $this->request->ro->setRenderer($renderer);
-        $this->request->ro->uri = 'nop://self/path/to/resource';
-        $this->request->query = array('a' => 'koriym', 'b' => 25);
+        $ro = (new Test)->setRenderer(new TestRenderer);
+        $this->request->set($ro, 'nop://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
         $request = $this->request;
-        $actual = $request(array('b' => 30))->body;
-        $expected = array('koriym', 30);
+        $actual = $request(['b' => 30])->body['posts'];
+        $expected = ['koriym', 30];
+        $this->assertSame($expected, $actual);
         $this->assertInstanceOf('\BEAR\Resource\Request', $this->request);
         $request = $this->request;
         $result = (string) $request;
