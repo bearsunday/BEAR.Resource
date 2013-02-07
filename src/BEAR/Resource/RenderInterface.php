@@ -19,7 +19,7 @@ interface RenderInterface
      *
      * @param AbstractObject $resourceObject
      *
-     * @return mixed
+     * @return self
      */
     public function render(AbstractObject $resourceObject);
 }

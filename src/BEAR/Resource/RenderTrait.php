@@ -33,6 +33,7 @@ trait RenderTrait
     public function setRenderer(RenderInterface $renderer)
     {
         $this->renderer = $renderer;
+        return $this;
     }
 
     /**
