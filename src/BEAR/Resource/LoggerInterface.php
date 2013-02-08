@@ -25,4 +25,20 @@ interface LoggerInterface extends IteratorAggregate
      * @return void
      */
     public function log(RequestInterface $request, ObjectInterface $result);
+
+    /**
+     * Set log writer
+     *
+     * @param LogWriterInterface $writer
+     *
+     * @return void
+     */
+    public function setWriter(LogWriterInterface $writer);
+
+    /**
+     * write log
+     *
+     * @return void
+     */
+    public function write();
 }

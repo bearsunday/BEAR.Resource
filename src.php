@@ -30,6 +30,7 @@ require_once __DIR__ . '/src/BEAR/Resource/LoggerInterface.php';
 require_once __DIR__ . '/src/BEAR/Resource/Logger.php';
 require_once __DIR__ . '/src/BEAR/Resource/SchemeCollection.php';
 require_once __DIR__ . '/src/BEAR/Resource/RenderInterface.php';
+require_once __DIR__ . '/src/BEAR/Resource/LogWriterInterface.php';
 require_once __DIR__ . '/src/BEAR/Resource/Adapter/AdapterInterface.php';
 require_once __DIR__ . '/src/BEAR/Resource/Adapter/App.php';
 require_once __DIR__ . '/src/BEAR/Resource/Adapter/App/Link.php';

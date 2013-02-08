@@ -17,12 +17,27 @@ use BEAR\Resource\Request\Method;
 use BEAR\Resource\Adapter\Nop;
 use BEAR\Resource\Adapter\Test;
 
+class TestWriter implements LogWriterInterface
+{
+    public function write(RequestInterface $req, AbstractObject $result)
+    {
+    }
+}
+
 /**
  * Test class for BEAR.Resource.
  */
 class LoggerTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Logger
+     */
     protected $logger;
+
+    /**
+     * @var Request
+     */
+    protected $request;
 
     protected function setUp()
     {
@@ -52,6 +67,19 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
             $this->assertSame(2, count($log));
             $this->assertSame('get test://self/path/to/resource?a=koriym&b=25', $log[0]->toUriWithMethod());
         }
+    }
+
+    public function test_setWriter()
+    {
+        $this->logger->setWriter(new TestWriter);
+        $result = $this->logger->write($this->request, new Test);
+        $this->assertSame(true, $result);
+    }
+
+    public function test_setWriter_WhenWriterIsNotSet()
+    {
+        $result = $this->logger->write($this->request, new Test);
+        $this->assertSame(false, $result);
     }
 
     public function test_count()

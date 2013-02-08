@@ -10,6 +10,7 @@ namespace BEAR\Resource;
 use ArrayIterator;
 use Countable;
 use Ray\Di\Di\Scope;
+use Ray\Di\Di\Inject;
 
 /**
  * Interface for resource logger
@@ -31,12 +32,14 @@ class Logger implements LoggerInterface, Countable
     private $logs = [];
 
     /**
+     * @var WriterInterface
+     */
+    private $writer;
+
+    /**
      * Return new resource object instance
      *
-     * @param RequestInterface $request
-     * @param ObjectInterface  $result
-     *
-     * @return void
+     * {@inheritdoc}
      */
     public function log(RequestInterface $request, ObjectInterface $result)
     {
@@ -44,6 +47,31 @@ class Logger implements LoggerInterface, Countable
             self::LOG_REQUEST => $request,
             self::LOG_RESULT => $result
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @Inject(optional = true)
+     */
+    public function setWriter(LogWriterInterface $writer)
+    {
+        $this->writer = $writer;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function write()
+    {
+        if ($this->writer instanceof LogWriterInterface) {
+            foreach ($this->logs as $log) {
+                $this->writer->write($log[0], $log[1]);
+            }
+            $this->logs = [];
+            return true;
+        }
+        return false;
     }
 
     /**
