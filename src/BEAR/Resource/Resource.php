@@ -7,7 +7,6 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Adapter\App\Link as LikType;
 use BEAR\Resource\Exception;
 use BEAR\Resource\Uri;
 use Guzzle\Cache\CacheAdapterInterface;
@@ -207,9 +206,9 @@ class Resource implements ResourceInterface
      */
     public function linkSelf($linkKey)
     {
-        $link = new LikType;
+        $link = new LinkType;
         $link->key = $linkKey;
-        $link->type = LikType::SELF_LINK;
+        $link->type = LinkType::SELF_LINK;
         $this->request->links[] = $link;
 
         return $this;
@@ -221,9 +220,9 @@ class Resource implements ResourceInterface
      */
     public function linkNew($linkKey)
     {
-        $link = new LikType;
+        $link = new LinkType;
         $link->key = $linkKey;
-        $link->type = LikType::NEW_LINK;
+        $link->type = LinkType::NEW_LINK;
         $this->request->links[] = $link;
 
         return $this;
@@ -235,9 +234,9 @@ class Resource implements ResourceInterface
      */
     public function linkCrawl($linkKey)
     {
-        $link = new LikType;
+        $link = new LinkType;
         $link->key = $linkKey;
-        $link->type = LikType::CRAWL_LINK;
+        $link->type = LinkType::CRAWL_LINK;
         $this->request->links[] = $link;
 
         return $this;

@@ -8,14 +8,13 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\AbstractObject as ResourceObject;
-use BEAR\Resource\Adapter\App\Link as AppLink;
 use BEAR\Resource\Annotation\Link as AnnotationLink;
 use BEAR\Resource\Exception\BadLinkRequest;
-use Ray\Di\Di\Inject;
 use Ray\Di\Di\Scope;
 use Doctrine\Common\Annotations\Reader;
 use SplQueue;
 use ReflectionMethod;
+use Ray\Di\Di\Inject;
 
 /**
  * Resource linker
@@ -116,7 +115,7 @@ final class Linker implements LinkerInterface
             $requestResult = $request();
 
             switch ($link->type) {
-                case AppLink::NEW_LINK:
+                case LinkType::NEW_LINK:
                     if (!$hasTargeted) {
                         $sourceValue = [$sourceValue, $requestResult->body];
                         $hasTargeted = true;
@@ -125,11 +124,11 @@ final class Linker implements LinkerInterface
                     }
                     $refValue = &$requestResult;
                     break;
-                case AppLink::CRAWL_LINK:
+                case LinkType::CRAWL_LINK:
                     $refValue[$link->key] = $requestResult->body;
                     $refValue = &$requestResult;
                     break;
-                case AppLink::SELF_LINK:
+                case LinkType::SELF_LINK:
                 default:
                     $refValue = $requestResult->body;
             }

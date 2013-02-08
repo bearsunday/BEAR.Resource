@@ -8,11 +8,11 @@
 namespace BEAR\Resource;
 
 /**
- * Link type DTO
+ * Link type
  *
  * @package BEAR.Resource
  */
-class LinkType
+final class LinkType
 {
     /**
      * Self link
