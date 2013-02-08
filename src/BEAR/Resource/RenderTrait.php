@@ -28,6 +28,7 @@ trait RenderTrait
      *
      * @param RenderInterface $renderer
      *
+     * @return RenderTrait
      * @Inject(optional = true)
      */
     public function setRenderer(RenderInterface $renderer)

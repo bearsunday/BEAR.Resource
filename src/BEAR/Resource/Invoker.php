@@ -211,6 +211,7 @@ class Invoker implements InvokerInterface
         $providesArgs = [];
         $params = [];
         foreach ($parameters as $parameter) {
+            /** @var $parameter \ReflectionParameter */
             if (isset($args[$parameter->name])) {
                 $params[] = $args[$parameter->name];
             } elseif ($parameter->isDefaultValueAvailable() === true) {

@@ -8,6 +8,7 @@
 namespace BEAR\Resource;
 
 use IteratorAggregate;
+use BEAR\Resource\AbstractObject as ResourceObject;
 
 /**
  * Interface for resource logger
@@ -20,11 +21,11 @@ interface LoggerInterface extends IteratorAggregate
      * Log
      *
      * @param RequestInterface $request
-     * @param ObjectInterface  $result
+     * @param ResourceObject   $result
      *
      * @return void
      */
-    public function log(RequestInterface $request, ObjectInterface $result);
+    public function log(RequestInterface $request, ResourceObject $result);
 
     /**
      * Set log writer

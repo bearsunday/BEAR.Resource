@@ -10,6 +10,7 @@ namespace BEAR\Resource;
 use ArrayIterator;
 use Countable;
 use Ray\Di\Di\Scope;
+use BEAR\Resource\AbstractObject as ResourceObject;
 use Ray\Di\Di\Inject;
 
 /**
@@ -32,7 +33,7 @@ class Logger implements LoggerInterface, Countable
     private $logs = [];
 
     /**
-     * @var WriterInterface
+     * @var LogWriterInterface
      */
     private $writer;
 
@@ -41,7 +42,7 @@ class Logger implements LoggerInterface, Countable
      *
      * {@inheritdoc}
      */
-    public function log(RequestInterface $request, ObjectInterface $result)
+    public function log(RequestInterface $request, ResourceObject $result)
     {
         $this->logs[] = [
             self::LOG_REQUEST => $request,
