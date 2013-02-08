@@ -11,15 +11,14 @@ use Aura\Di\ConfigInterface;
 use Aura\Signal\Manager as Signal;
 use BEAR\Resource\AbstractObject as ResourceObject;
 use BEAR\Resource\Annotation\ParamSignal;
-use Ray\Di\Annotation;
 use Ray\Aop\Weave;
 use Ray\Aop\ReflectiveMethodInvocation;
 use ReflectionParameter;
-use Ray\Di\Di\Inject;
-use Ray\Di\Di\Named;
 use Ray\Di\Di\Scope;
 use Ray\Di\Config;
 use Ray\Di\Definition;
+use Ray\Di\Di\Inject;
+use Ray\Di\Di\Named;
 
 /**
  * Resource request invoker
