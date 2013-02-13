@@ -116,7 +116,7 @@ class Resource implements ResourceInterface
         }
         $useCache = $this->cache instanceof CacheAdapterInterface;
         if ($useCache === true) {
-            $key = '(Resource) ' . $uri;
+            $key = 'res-' . str_replace('/', '-', $uri);
             $cached = $this->cache->fetch($key);
             if ($cached) {
                 return $cached;
