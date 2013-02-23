@@ -1,33 +1,3 @@
-[submodule "vendor/Ray.Di"]
-	path = vendor/Ray.Di
-	url = git://github.com/koriym/Ray.Di.git
-[submodule "vendor/Ray.Aop"]
-	path = vendor/Ray.Aop
-	url = git://github.com/koriym/Ray.Aop.git
-[submodule "vendor/Guzzle"]
-	path = vendor/Guzzle
-	url = git://github.com/guzzle/guzzle.git
-[submodule "vendor/Symfony/Component/ClassLoader"]
-	path = vendor/Symfony/Component/ClassLoader
-	url = git://github.com/symfony/ClassLoader.git
-[submodule "vendor/Doctorine"]
-	path = vendor/Doctorine
-	url = https://github.com/doctrine/common
-[submodule "vendor/Monolog"]
-	path = vendor/Monolog
-	url = https://github.com/Seldaek/monolog.git
-[submodule "vendor/Doctrine"]
-	path = vendor/Doctrine
-	url = https://github.com/doctrine/common
-[submodule "vendor/Symfony/Component/EventDispatcher"]
-	path = vendor/Symfony/Component/EventDispatcher
-	url = https://github.com/symfony/EventDispatcher.git
-[submodule "vendor/Aura.Signal"]
-	path = vendor/Aura.Signal
-	url = https://github.com/auraphp/Aura.Signal.git
-[submodule "vendor/Aura.Di"]
-	path = vendor/Aura.Di
-	url = https://github.com/auraphp/Aura.Di.git
 [submodule "cs"]
 	path = cs
 	url = https://github.com/koriym/cs.git
