@@ -28,7 +28,9 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $scheme = new SchemeCollection;
         $scheme->scheme('nop')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Nop);
         $scheme->scheme('prov')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Prov);
-        $scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject'));
+        $scheme->scheme('app')->host('self')->toAdapter(
+            new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject')
+        );
         $factory = new Factory($scheme);
         $this->signal = require dirname(dirname(__DIR__)) . '/vendor/aura/signal/scripts/instance.php';
         $invoker = new Invoker(new Config(new Annotation(new Definition, new Reader)), new Linker(new Reader), $this->signal);
@@ -102,7 +104,9 @@ class PageTest extends \PHPUnit_Framework_TestCase
      */
     public function test_postInvalidOption()
     {
-        $request = $this->resource->post->object($this->nop)->withQuery($this->query)->poe->csrf->invalid_option_cause_exception->request();
+        $request = $this->resource->post->object($this->nop)->withQuery(
+            $this->query
+        )->poe->csrf->invalid_option_cause_exception->request();
         $expected = "post nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
@@ -144,7 +148,9 @@ class PageTest extends \PHPUnit_Framework_TestCase
 
     public function test_linkTwo()
     {
-        $request = $this->resource->get->object($this->nop)->withQuery($this->query)->linkSelf('dummyLink')->linkSelf('dummyLink2')->request();
+        $request = $this->resource->get->object($this->nop)->withQuery($this->query)->linkSelf('dummyLink')->linkSelf(
+            'dummyLink2'
+        )->request();
         $expected = "get nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
@@ -167,7 +173,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->resource->get->uri('nop://self/dummy')->withQuery($this->query);
         $expected = "nop://self/dummy?id=10&name=Ray&age=43";
-        $this->assertSame($expected, (string) $client);
+        $this->assertSame($expected, (string)$client);
     }
 
     public function testPutWithDefaultParameter()

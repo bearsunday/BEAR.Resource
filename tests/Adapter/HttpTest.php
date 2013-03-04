@@ -27,7 +27,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $scheme = new SchemeCollection;
         $scheme->scheme('http')->host('*')->toAdapter(new \BEAR\Resource\Adapter\Http);
         $this->factory = new Factory($scheme);
-        $this->httpAdapter = $this->factory->newInstance('http://news.google.com/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss');
+        $this->httpAdapter = $this->factory->newInstance(
+            'http://news.google.com/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss'
+        );
     }
 
     public function test_New()
@@ -43,7 +45,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
     public function testGetHeaderRepeatWithCache()
     {
-        foreach (range(1,10) as $i) {
+        foreach (range(1, 10) as $i) {
             $ro = $this->httpAdapter->onGet();
         }
         $this->assertSame($ro->headers['Content-Type'][0], 'application/xml; charset=UTF-8');
@@ -57,7 +59,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     public function testGetBody()
     {
         $ro = $this->httpAdapter->onGet();
-        $actual = (string) ($ro->body->channel->title[0]);
+        $actual = (string)($ro->body->channel->title[0]);
         $expected = 'Top Stories - Google News';
         $this->assertSame($expected, $actual);
     }

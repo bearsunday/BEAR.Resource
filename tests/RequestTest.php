@@ -77,9 +77,10 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual);
         $this->assertInstanceOf('\BEAR\Resource\Request', $this->request);
         $request = $this->request;
-        $result = (string) $request;
+        $result = (string)$request;
         $this->assertSame('{"posts":["koriym",30]}', $result);
     }
+
     public function test__toStringWithErrorRenderer()
     {
         $this->request->method = 'get';
@@ -89,7 +90,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->request->ro->uri = 'nop://self/path/to/resource';
         $this->request->query = array('a' => 'koriym', 'b' => 25);
         $request = $this->request;
-        $result = (string) $request;
+        $result = (string)$request;
         $this->assertSame($result, '');
     }
 
@@ -101,7 +102,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->request->query = array('a' => 'koriym', 'b' => 25);
         $request = $this->request;
         $this->assertInstanceOf('\BEAR\Resource\Request', $this->request);
-        $result = (string) $request;
+        $result = (string)$request;
         $this->assertSame('', $result);
     }
 
@@ -124,22 +125,19 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function testIterator(Request $request)
     {
         $result = [];
-        foreach($request as $row) {
+        foreach ($request as $row) {
             $result[] = $row;
         }
-        $expected = array (
-            0 =>
-            array (
+        $expected = array(
+            0 => array(
                 'id' => 100,
                 'title' => 'Entry1',
             ),
-            1 =>
-            array (
+            1 => array(
                 'id' => 101,
                 'title' => 'Entry2',
             ),
-            2 =>
-            array (
+            2 => array(
                 'id' => 102,
                 'title' => 'Entry3',
             ),
@@ -153,7 +151,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function test_ArrayAccess(Request $request)
     {
         $result = $request[100];
-        $expected = array (
+        $expected = array(
             'id' => 100,
             'title' => 'Entry1',
         );

@@ -24,6 +24,6 @@ class Comment extends AbstractObject
      */
     public function provideId()
     {
-        return array('aaa'=>1);
+        return array('aaa' => 1);
     }
 }

@@ -31,10 +31,10 @@ class DevInvokerTest extends InvokerTest
     protected function setUp()
     {
         $signalProvider = function (
-                $return,
-                \ReflectionParameter $parameter,
-                ReflectiveMethodInvocation $invovation,
-                Definition $definition
+            $return,
+            \ReflectionParameter $parameter,
+            ReflectiveMethodInvocation $invovation,
+            Definition $definition
         ) {
             $return->value = 1;
 
@@ -50,14 +50,14 @@ class DevInvokerTest extends InvokerTest
         $this->signal = require dirname(__DIR__) . '/vendor/aura/signal/scripts/instance.php';
         $this->invoker = new DevInvoker($config, new Linker(new Reader), $this->signal);
         $this->invoker->getSignal()->handler(
-                '\BEAR\Resource\Invoker',
-                \BEAR\Resource\Invoker::SIGNAL_PARAM . 'Provides',
-                new SignalHandler\Provides
+            '\BEAR\Resource\Invoker',
+            \BEAR\Resource\Invoker::SIGNAL_PARAM . 'Provides',
+            new SignalHandler\Provides
         );
         $this->invoker->getSignal()->handler(
-                '\BEAR\Resource\Invoker',
-                \BEAR\Resource\Invoker::SIGNAL_PARAM . 'login_id',
-                $signalProvider
+            '\BEAR\Resource\Invoker',
+            \BEAR\Resource\Invoker::SIGNAL_PARAM . 'login_id',
+            $signalProvider
         );
         $resource = new \testworld\ResourceObject\User;
         $resource->uri = 'dummy://self/User';
@@ -161,7 +161,10 @@ class DevInvokerTest extends InvokerTest
      */
     public function testInvokeWeavedResourceLogInObjectHeaderContents(array $headers)
     {
-        $bind = (array) $headers[DevInvoker::HEADER_INTERCEPTORS];
-        $this->assertSame( json_encode(['onGet' =>['testworld\Interceptor\Log']]), $headers[DevInvoker::HEADER_INTERCEPTORS]);
+        $bind = (array)$headers[DevInvoker::HEADER_INTERCEPTORS];
+        $this->assertSame(
+            json_encode(['onGet' => ['testworld\Interceptor\Log']]),
+            $headers[DevInvoker::HEADER_INTERCEPTORS]
+        );
     }
 }

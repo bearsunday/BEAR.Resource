@@ -8,7 +8,8 @@ use BEAR\Resource\ProviderInterface;
 class Prov implements ObjectInterface, ProviderInterface, AdapterInterface
 {
     public function __construct()
-    {}
+    {
+    }
 
     public function get($path)
     {

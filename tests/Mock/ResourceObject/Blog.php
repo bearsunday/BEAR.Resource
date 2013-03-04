@@ -18,7 +18,11 @@ use Ray\Di\Manager;
 use Ray\Di\Injector;
 use Ray\Di\EmptyModule;
 
-class Shutdown extends \RuntimeException{};
+class Shutdown extends \RuntimeException
+{
+}
+
+;
 
 class Blog extends AbstractObject
 {
@@ -56,8 +60,7 @@ class Blog extends AbstractObject
 
     public function onLinkInviter(ResourceObject $ro)
     {
-        $request = $this->resource
-        ->get->uri('app://self/User')->withQuery(['id' => $ro->body['inviter']])->request();
+        $request = $this->resource->get->uri('app://self/User')->withQuery(['id' => $ro->body['inviter']])->request();
 
         return $request;
     }

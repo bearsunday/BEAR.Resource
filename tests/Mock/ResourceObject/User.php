@@ -30,9 +30,9 @@ class User extends AbstractObject
     }
 
     private $users = array(
-            array('id' => 1, 'name' => 'Athos', 'age' => 15, 'blog_id' => 11),
-            array('id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12),
-            array('id' => 3, 'name' => 'Porthos', 'age' => 17, 'blog_id' => 0)
+        array('id' => 1, 'name' => 'Athos', 'age' => 15, 'blog_id' => 11),
+        array('id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12),
+        array('id' => 3, 'name' => 'Porthos', 'age' => 17, 'blog_id' => 0)
     );
 
     /**
@@ -49,7 +49,7 @@ class User extends AbstractObject
         return $this->users[$id];
     }
 
-    public function onPost($id, $name='default_name', $age=99)
+    public function onPost($id, $name = 'default_name', $age = 99)
     {
         return "post user[{$id} {$name} {$age}]";
     }
@@ -76,8 +76,7 @@ class User extends AbstractObject
 
     public function onLinkBlog(ResourceObject $resource)
     {
-        return $this->resource
-        ->get->uri('app://self/Blog')->withQuery(['id' => $resource->body['blog_id']])->request();
+        return $this->resource->get->uri('app://self/Blog')->withQuery(['id' => $resource->body['blog_id']])->request();
     }
 
     /**

@@ -24,8 +24,12 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $injector = require dirname(__DIR__) . '/scripts/injector.php';
         $scheme = new SchemeCollection;
-        $scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject'));
-        $scheme->scheme('page')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'Page'));
+        $scheme->scheme('app')->host('self')->toAdapter(
+            new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject')
+        );
+        $scheme->scheme('page')->host('self')->toAdapter(
+            new \BEAR\Resource\Adapter\App($injector, 'testworld', 'Page')
+        );
         $scheme->scheme('nop')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Nop);
         $scheme->scheme('prov')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Prov);
         $this->factory = new Factory($scheme);
