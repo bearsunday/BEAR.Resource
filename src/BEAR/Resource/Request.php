@@ -90,8 +90,7 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
     private $result;
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource.RequestInterface::__construct()
+     * {@inheritdoc}
      *
      * @Inject
      */
@@ -117,8 +116,7 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
     }
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource.RequestInterface::__invoke()
+     * {@inheritdoc}
      */
     public function __invoke(array $query = null)
     {
@@ -131,8 +129,7 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
     }
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource.RequestInterface::toUri()
+     * {@inheritdoc}
      */
     public function toUri()
     {
@@ -148,8 +145,7 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
     }
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource.RequestInterface::toUriWithMethod()
+     * {@inheritdoc}
      */
     public function toUriWithMethod()
     {

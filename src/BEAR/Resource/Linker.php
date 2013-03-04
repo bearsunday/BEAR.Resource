@@ -62,8 +62,7 @@ final class Linker implements LinkerInterface
     }
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource.LinkerInterface::invoke()
+     * {@inheritdoc}
      * @throws Exception\Link
      */
     public function invoke(ResourceObject $ro, Request $request, $sourceValue)
