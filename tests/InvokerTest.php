@@ -231,4 +231,45 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $actual = $this->invoker->getConfig();
         $this->assertInstanceOf('Ray\Di\Config', $actual);
     }
+
+    public function test_getParams()
+    {
+        $ro = new  \testworld\ResourceObject\RestBucks\Order;
+        $query = ['id' => 1];
+        $actual = $this->invoker->getParams($ro, 'onGet', $query);
+        $expected = [1];
+        $this->assertSame($expected, $actual);
+    }
+
+    public function test_getParamsInRandomOrder()
+    {
+        $ro = new  \testworld\ResourceObject\RestBucks\Payment;
+        // in any order
+        $query = [
+            'credit_card_number' => '12345678',
+            'order_id' => 1,
+            'name' => 'koriym',
+            'expires' => "20130214",
+            'amount' => 1
+        ];
+        $actual = $this->invoker->getParams($ro, 'onPut', $query);
+        $expected = [
+            1,
+            '12345678',
+            '20130214',
+            'koriym',
+            1
+        ];
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @expectedException \BEAR\Resource\Exception\MethodNotAllowed
+     */
+    public function test_getParamsMethodNotExists()
+    {
+        $ro = new  \testworld\ResourceObject\RestBucks\Order;
+        $query = ['id' => 1];
+        $actual = $this->invoker->getParams($ro, 'onDelete', $query);
+    }
 }
