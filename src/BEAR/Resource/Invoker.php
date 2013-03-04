@@ -207,6 +207,7 @@ class Invoker implements InvokerInterface
      * @param string $method
      * @param array  $args
      *
+     * @throws Exception\MethodNotAllowed
      * @return array
      */
     public function getParams($object, $method, array $args)
