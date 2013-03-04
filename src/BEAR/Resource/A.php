@@ -13,7 +13,7 @@ use Ray\Di\Di\Inject;
 use Ray\Di\Di\Scope;
 
 /**
- * Get hyper reference
+ * Anchor
  *
  * @package BEAR.Resource
  *
@@ -22,8 +22,6 @@ use Ray\Di\Di\Scope;
 class A implements HrefInterface
 {
     /**
-     * Constructor
-     *
      * @param UriTemplateInterface $uriTemplate
      *
      * @Inject
@@ -34,7 +32,7 @@ class A implements HrefInterface
     }
 
     /**
-     * Get hyper reference URI
+     * Return hyper reference URI
      *
      * @param string         $rel
      * @param AbstractObject $ro
