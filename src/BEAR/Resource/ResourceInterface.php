@@ -92,7 +92,7 @@ interface ResourceInterface
     /**
      *  Attach argument provider
      *
-     * @param  string              $signal
+     * @param  string                       $signal
      * @param SignalHandler\HandleInterface $argProvider
      *
      * @return mixed

@@ -46,7 +46,7 @@ trait RenderTrait
      */
     public function __toString()
     {
-        /** @var $this AbstractObject  */
+        /** @var $this AbstractObject */
         if (is_string($this->view)) {
             return $this->view;
         }
