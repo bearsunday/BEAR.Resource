@@ -21,6 +21,7 @@ use Ray\Di\Definition;
 use ReflectionException;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
+
 /**
  * Resource request invoker
  *
@@ -169,7 +170,7 @@ class Invoker implements InvokerInterface
         if ($request->links) {
             $result = $this->linker->invoke($request->ro, $request, $result);
         }
-        if (! $result instanceof AbstractObject) {
+        if (!$result instanceof AbstractObject) {
             $request->ro->body = $result;
             $result = $request->ro;
             if ($result instanceof Weave) {
@@ -258,7 +259,7 @@ class Invoker implements InvokerInterface
     private function getArgumentBySignal(ReflectionParameter $parameter, $object, $method, array $args)
     {
         $definition = $this->config->fetch(get_class($object))[Config::INDEX_DEFINITION];
-        /** @var $definition \Ray\Di\Definition  */
+        /** @var $definition \Ray\Di\Definition */
         $userAnnotation = $definition->getUserAnnotationByMethod($method);
         $signalAnnotations = isset($userAnnotation['ParamSignal']) ? $userAnnotation['ParamSignal'] : [];
         $signalIds = ['Provides'];

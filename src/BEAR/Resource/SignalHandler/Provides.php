@@ -46,7 +46,7 @@ class Provides implements HandleInterface
             $providesMethod = $parameterMethod[$parameter->name];
             $object = $invocation->getThis();
             $func = [$object, $providesMethod];
-            /** @var $func Callable  */
+            /** @var $func Callable */
             $providedValue = $func();
             $return->value = $providedValue;
             goto SUCCESS;
