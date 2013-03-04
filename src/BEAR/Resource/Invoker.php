@@ -11,15 +11,16 @@ use Aura\Di\ConfigInterface;
 use Aura\Signal\Manager as Signal;
 use BEAR\Resource\AbstractObject as ResourceObject;
 use BEAR\Resource\Annotation\ParamSignal;
+use BEAR\Resource\Exception\MethodNotAllowed;
 use Ray\Aop\Weave;
 use Ray\Aop\ReflectiveMethodInvocation;
 use ReflectionParameter;
 use Ray\Di\Di\Scope;
 use Ray\Di\Config;
 use Ray\Di\Definition;
+use ReflectionException;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
-
 /**
  * Resource request invoker
  *
@@ -210,7 +211,11 @@ class Invoker implements InvokerInterface
      */
     public function getParams($object, $method, array $args)
     {
-        $parameters = (new \ReflectionMethod($object, $method))->getParameters();
+        try {
+            $parameters = (new \ReflectionMethod($object, $method))->getParameters();
+        } catch (ReflectionException $e) {
+            throw new MethodNotAllowed;
+        }
         if ($parameters === []) {
             return [];
         }
