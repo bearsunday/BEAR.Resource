@@ -106,8 +106,7 @@ class Resource implements ResourceInterface
     }
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource.Resource::newInstance()
+     * {@inheritdoc}
      */
     public function newInstance($uri)
     {
@@ -132,8 +131,7 @@ class Resource implements ResourceInterface
     }
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource.Resource::object()
+     * {@inheritdoc}
      */
     public function object($ro)
     {
@@ -143,8 +141,7 @@ class Resource implements ResourceInterface
     }
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource.Resource::uri()
+     * {@inheritdoc}
      */
     public function uri($uri)
     {
@@ -179,8 +176,7 @@ class Resource implements ResourceInterface
     }
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource.Resource::withQuery()
+     * {@inheritdoc}
      */
     public function withQuery(array $query)
     {
@@ -190,8 +186,7 @@ class Resource implements ResourceInterface
     }
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource.Resource::addQuery()
+     * {@inheritdoc}
      */
     public function addQuery(array $query)
     {
@@ -201,8 +196,7 @@ class Resource implements ResourceInterface
     }
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource.Resource::linkSelf()
+     * {@inheritdoc}
      */
     public function linkSelf($linkKey)
     {
@@ -215,8 +209,7 @@ class Resource implements ResourceInterface
     }
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource.Resource::linkNew()
+     * {@inheritdoc}
      */
     public function linkNew($linkKey)
     {
@@ -229,8 +222,7 @@ class Resource implements ResourceInterface
     }
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource.Resource::linkCrawl()
+     * {@inheritdoc}
      */
     public function linkCrawl($linkKey)
     {
@@ -243,8 +235,7 @@ class Resource implements ResourceInterface
     }
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource.Resource::request()
+     * {@inheritdoc}
      */
     public function request()
     {
@@ -275,8 +266,7 @@ class Resource implements ResourceInterface
     }
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource.Resource::attachParamProvider()
+     * {@inheritdoc}
      */
     public function attachParamProvider($signal, HandleInterface $argProvider)
     {
@@ -289,8 +279,7 @@ class Resource implements ResourceInterface
     }
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource.Resource::__get($name)
+     * {@inheritdoc}
      * @throws Exception\Request
      */
     public function __get($name)

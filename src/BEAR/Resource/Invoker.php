@@ -91,8 +91,7 @@ class Invoker implements InvokerInterface
     }
 
     /**
-     * (non-PHPDoc)
-     * @see \BEAR\Resource\InvokderInterface::setResourceClient()
+     * {@inheritdoc}
      */
     public function setResourceClient(ResourceInterface $resource)
     {
@@ -122,8 +121,7 @@ class Invoker implements InvokerInterface
     }
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource.InvokerInterface::invoke()
+     * {@inheritdoc}
      * @throws Exception\Request
      */
     public function invoke(Request $request)
@@ -187,8 +185,7 @@ class Invoker implements InvokerInterface
     }
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource.InvokerInterface::invokeTraversal()
+     * {@inheritdoc}
      */
     public function invokeTraversal(\Traversable $requests)
     {
@@ -335,8 +332,7 @@ class Invoker implements InvokerInterface
     }
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource.InvokerInterface::invokeSync()
+     * {@inheritdoc}
      */
     public function invokeSync(\SplObjectStorage $requests)
     {
