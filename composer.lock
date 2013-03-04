@@ -1,5 +1,5 @@
 {
-    "hash": "987dae329d1e9e8addd02974da867a69",
+    "hash": "400ff4d8a9a460a02479030fc3a80682",
     "packages": [
         {
             "name": "aura/di",
@@ -161,12 +161,12 @@
             "version": "2.3.x-dev",
             "source": {
                 "type": "git",
-                "url": "https://github.com/doctrine/common",
+                "url": "https://github.com/doctrine/common.git",
                 "reference": "bb0aebbf234db52df476a2b473d434745b34221c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/doctrine/common/archive/bb0aebbf234db52df476a2b473d434745b34221c.zip",
+                "url": "https://api.github.com/repos/doctrine/common/zipball/bb0aebbf234db52df476a2b473d434745b34221c",
                 "reference": "bb0aebbf234db52df476a2b473d434745b34221c",
                 "shasum": ""
             },
@@ -227,16 +227,16 @@
         },
         {
             "name": "guzzle/guzzle",
-            "version": "v3.0.7",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/guzzle/guzzle",
-                "reference": "v3.0.7"
+                "url": "https://github.com/guzzle/guzzle.git",
+                "reference": "5dd4a2a73a0acb7ebdd5df48c9f330551cfb6949"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/guzzle/guzzle/archive/v3.0.7.zip",
-                "reference": "v3.0.7",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/5dd4a2a73a0acb7ebdd5df48c9f330551cfb6949",
+                "reference": "5dd4a2a73a0acb7ebdd5df48c9f330551cfb6949",
                 "shasum": ""
             },
             "require": {
@@ -259,6 +259,7 @@
                 "guzzle/plugin-cache": "self.version",
                 "guzzle/plugin-cookie": "self.version",
                 "guzzle/plugin-curlauth": "self.version",
+                "guzzle/plugin-error-response": "self.version",
                 "guzzle/plugin-history": "self.version",
                 "guzzle/plugin-log": "self.version",
                 "guzzle/plugin-md5": "self.version",
@@ -268,7 +269,7 @@
                 "guzzle/stream": "self.version"
             },
             "require-dev": {
-                "doctrine/common": "*",
+                "doctrine/cache": "*",
                 "monolog/monolog": "1.*",
                 "phpunit/phpunit": "3.7.*",
                 "symfony/class-loader": "*",
@@ -280,7 +281,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0-dev"
+                    "dev-master": "3.3-dev"
                 }
             },
             "autoload": {
@@ -315,7 +316,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2012-12-19 23:06:35"
+            "time": "2013-03-04 01:25:08"
         },
         {
             "name": "ray/aop",
@@ -504,7 +505,6 @@
     "stability-flags": {
         "ray/aop": 10,
         "ray/di": 10,
-        "doctrine/common": 20,
         "facebook/xhprof": 20
     }
 }
