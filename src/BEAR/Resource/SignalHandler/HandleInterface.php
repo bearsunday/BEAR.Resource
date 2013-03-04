@@ -15,7 +15,6 @@ use Ray\Di\Definition;
  * Interface for resource link
  *
  * @package BEAR.Resource
- *
  */
 interface HandleInterface
 {

@@ -11,7 +11,7 @@ use Ray\Di\Di\Inject;
 use Ray\Di\Di\Scope;
 
 /**
- * Resource object factory.
+ * Resource object factory
  *
  * @package BEAR.Resource
  *

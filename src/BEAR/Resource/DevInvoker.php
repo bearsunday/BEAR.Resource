@@ -13,7 +13,7 @@ use XHProfRuns_Default;
 use Ray\Di\Di\Scope;
 
 /**
- * Resource request invoker
+ * Resource request invoker for dev
  *
  * @package BEAR.Resource
  *
