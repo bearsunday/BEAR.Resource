@@ -22,6 +22,6 @@ class Entry extends AbstractObject
      */
     public function provideId()
     {
-        return array('id'=>1);
+        return array('id' => 1);
     }
 }

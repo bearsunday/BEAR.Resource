@@ -31,9 +31,11 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->request = new Request(new Invoker(new Config(new Annotation(new Definition, new Reader)), new Linker(new Reader), $signal));
         $invoker = new Invoker(new Config(new Annotation(new Definition, new Reader)), new Linker(new Reader), $signal);
         $scheme = new SchemeCollection;
-        $scheme->scheme('app')->host('self')->toAdapter(new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject'));
+        $scheme->scheme('app')->host('self')->toAdapter(
+            new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject')
+        );
         $factory = new Factory($scheme);
-        $this->resource = new Resource( $factory, $invoker, new Request($invoker));
+        $this->resource = new Resource($factory, $invoker, new Request($invoker));
     }
 
     public function test_New()
@@ -82,10 +84,10 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->request->method = 'get';
         $result = $this->linker->invoke($ro, $this->request, $ro->onGet(1));
         //         $expected = '<html><html>bear1</html></html>';
-        $expected =  array (
-    'id' => 12,
-    'name' => 'Aramis blog',
-    'inviter' => 2
+        $expected = array(
+            'id' => 12,
+            'name' => 'Aramis blog',
+            'inviter' => 2
         );
         $this->assertSame($expected, $result);
     }
@@ -101,9 +103,9 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->request->links = $links;
         $this->request->method = 'get';
         $result = $this->linker->invoke($ro, $this->request, $ro->onGet(1));
-        $expected = array (
-        0 => array ( 'id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12),
-        1 => array ( 'id' => 12, 'name' => 'Aramis blog', 'inviter' => 2)
+        $expected = array(
+            0 => array('id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12),
+            1 => array('id' => 12, 'name' => 'Aramis blog', 'inviter' => 2)
         );
         $this->assertSame($expected, $result);
     }
@@ -120,13 +122,12 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->request->links = $links;
         $this->request->method = 'get';
         $result = $this->linker->invoke($ro, $this->request, $result);
-        $expected = array (
+        $expected = array(
             'id' => 2,
             'name' => 'Aramis',
             'age' => 16,
             'blog_id' => 12,
-            'Blog' =>
-            array (
+            'Blog' => array(
                 'id' => 12,
                 'name' => 'Aramis blog',
                 'inviter' => 2,
@@ -191,14 +192,14 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $link->type = LinkType::NEW_LINK;
         $link->key = 'Inviter';
         $links[] = $link;
-        $result =  $ro->onGet(1);
+        $result = $ro->onGet(1);
         $this->request->links = $links;
         $this->request->method = 'get';
         $result = $this->linker->invoke($ro, $this->request, $result);
-        $expected = array (
-        array ( 'id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12 ),
-        array ( 'id' => 12, 'name' => 'Aramis blog', 'inviter' => 2 ),
-        array ( 'id' => 3, 'name' => 'Porthos', 'age' => 17, 'blog_id' => 0 )
+        $expected = array(
+            array('id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12),
+            array('id' => 12, 'name' => 'Aramis blog', 'inviter' => 2),
+            array('id' => 3, 'name' => 'Porthos', 'age' => 17, 'blog_id' => 0)
         );
         $this->assertSame($expected, $result);
     }
@@ -220,8 +221,8 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->request->method = 'get';
         $result = $this->linker->invoke($ro, $this->request, $ro->onGet(1));
         $expected = array(
-        0 => array( 'id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12),
-        1 => array( 'id' => 12, 'name' => 'Aramis blog', 'inviter' => 2)
+            0 => array('id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12),
+            1 => array('id' => 12, 'name' => 'Aramis blog', 'inviter' => 2)
         );
         $this->assertSame($expected, $result);
     }
@@ -237,37 +238,32 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->request->links = $links;
         $this->request->method = 'get';
         $result = $this->linker->invoke($ro, $this->request, $result);
-        $expected = array (
-        100 =>
-        array (
-    'id' => 100,
-    'title' => 'Entry1',
-    'Comment' =>
-        array (
-      'comment_id' => 200,
-      'body' => 'entry 100 comment',
-        ),
-        ),
-        101 =>
-        array (
-    'id' => 101,
-    'title' => 'Entry2',
-    'Comment' =>
-        array (
-      'comment_id' => 201,
-      'body' => 'entry 101 comment',
-        ),
-        ),
-        102 =>
-        array (
-    'id' => 102,
-    'title' => 'Entry3',
-    'Comment' =>
-        array (
-      'comment_id' => 202,
-      'body' => 'entry 102 comment',
-        ),
-        ));
+        $expected = array(
+            100 => array(
+                'id' => 100,
+                'title' => 'Entry1',
+                'Comment' => array(
+                    'comment_id' => 200,
+                    'body' => 'entry 100 comment',
+                ),
+            ),
+            101 => array(
+                'id' => 101,
+                'title' => 'Entry2',
+                'Comment' => array(
+                    'comment_id' => 201,
+                    'body' => 'entry 101 comment',
+                ),
+            ),
+            102 => array(
+                'id' => 102,
+                'title' => 'Entry3',
+                'Comment' => array(
+                    'comment_id' => 202,
+                    'body' => 'entry 102 comment',
+                ),
+            )
+        );
         $this->assertSame($expected, $result);
     }
 
@@ -286,50 +282,42 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->request->links = $links;
         $this->request->method = 'get';
         $result = $this->linker->invoke($ro, $this->request, $ro->onGet(1));
-        $expected = array (
-        100 =>
-        array (
-    'id' => 100,
-    'title' => 'Entry1',
-    'Comment' =>
-        array (
-      'comment_id' => 200,
-      'body' => 'entry 100 comment',
-      'ThumbsUp' =>
-        array (
-        'up' => 30,
-        'down' => 10,
-        'body' => 'thumbsup for 200 comment',
-        ),
-        ),
-        ),
-        101 =>
-        array (
-    'id' => 101,
-    'title' => 'Entry2',
-    'Comment' =>
-        array (
-      'comment_id' => 201,
-      'body' => 'entry 101 comment',
-      'ThumbsUp' =>
-        array (
-        'up' => 30,
-        'down' => 10,
-        'body' => 'thumbsup for 201 comment',
-        ),
-        ),
-        ),
-        102 =>
-        array (
-    'comment_id' => 202,
-    'body' => 'entry 102 comment',
-    'ThumbsUp' =>
-        array (
-      'up' => 30,
-      'down' => 10,
-      'body' => 'thumbsup for 202 comment',
-        ),
-        ),
+        $expected = array(
+            100 => array(
+                'id' => 100,
+                'title' => 'Entry1',
+                'Comment' => array(
+                    'comment_id' => 200,
+                    'body' => 'entry 100 comment',
+                    'ThumbsUp' => array(
+                        'up' => 30,
+                        'down' => 10,
+                        'body' => 'thumbsup for 200 comment',
+                    ),
+                ),
+            ),
+            101 => array(
+                'id' => 101,
+                'title' => 'Entry2',
+                'Comment' => array(
+                    'comment_id' => 201,
+                    'body' => 'entry 101 comment',
+                    'ThumbsUp' => array(
+                        'up' => 30,
+                        'down' => 10,
+                        'body' => 'thumbsup for 201 comment',
+                    ),
+                ),
+            ),
+            102 => array(
+                'comment_id' => 202,
+                'body' => 'entry 102 comment',
+                'ThumbsUp' => array(
+                    'up' => 30,
+                    'down' => 10,
+                    'body' => 'thumbsup for 202 comment',
+                ),
+            ),
         );
         $this->assertSame($expected, $result);
     }

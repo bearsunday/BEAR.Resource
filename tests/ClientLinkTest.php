@@ -22,18 +22,13 @@ class ClientLinkTest extends \PHPUnit_Framework_TestCase
 
     public function test_LinkSelf()
     {
-        $blog = $this
-        ->resource
-        ->get
-        ->uri('app://self/Link/User')
-        ->withQuery(['id' => 1])
-        ->linkSelf("blog")
-        ->eager
-        ->request()->body;
-        $expected = array (
-                        'id' => 12,
-                        'name' => 'Aramis blog',
-                        'inviter' => 2,
+        $blog = $this->resource->get->uri('app://self/Link/User')->withQuery(['id' => 1])->linkSelf(
+            "blog"
+        )->eager->request()->body;
+        $expected = array(
+            'id' => 12,
+            'name' => 'Aramis blog',
+            'inviter' => 2,
         );
         $this->assertSame($expected, $blog);
     }

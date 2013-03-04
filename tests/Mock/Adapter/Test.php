@@ -9,7 +9,8 @@ use BEAR\Resource\ObjectInterface as ResourceObject;
 class Test extends AbstractObject implements ResourceObject, AdapterInterface
 {
     public function __construct()
-    {}
+    {
+    }
 
     public function onGet($a, $b)
     {

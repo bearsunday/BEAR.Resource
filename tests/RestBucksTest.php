@@ -27,8 +27,8 @@ class RestBucksTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->resource =  require dirname(__DIR__) .'/scripts/instance.php';
-        $injector =  require dirname(__DIR__) .'/scripts/injector.php';
+        $this->resource = require dirname(__DIR__) . '/scripts/instance.php';
+        $injector = require dirname(__DIR__) . '/scripts/injector.php';
         $scheme = new SchemeCollection;
         $scheme->scheme('app')->host('self')->toAdapter(new App($injector, 'restbucks', 'Resource\App'));
         $this->resource->setSchemeCollection($scheme);
@@ -72,7 +72,12 @@ class RestBucksTest extends \PHPUnit_Framework_TestCase
         $order = $this->resource->post->uri('app://self/Order')->withQuery($order)->eager->request();
         $a = new A(new UriTemplate);
         $paymentUri = $a->href('payment', $order);
-        $payment = array('credit_card_number' => '123456789', 'expires' => '07/07', 'name' => 'John Citizen', 'amount' => '4.00');
+        $payment = array(
+            'credit_card_number' => '123456789',
+            'expires' => '07/07',
+            'name' => 'John Citizen',
+            'amount' => '4.00'
+        );
         $response = $this->resource->put->uri($paymentUri)->addQuery($payment)->eager->request();
         $expected = 201;
         $this->assertSame($expected, $response->code);

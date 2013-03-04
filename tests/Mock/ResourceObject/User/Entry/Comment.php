@@ -45,8 +45,9 @@ class Comment extends AbstractObject
 
     public function onLinkThumbsUp(ResourceObject $ro)
     {
-        $request = $this->resource
-        ->get->uri('app://self/Entry/Comment/ThumbsUp')->withQuery(['comment_id' => $ro->body['comment_id']])->request();
+        $request = $this->resource->get->uri('app://self/Entry/Comment/ThumbsUp')->withQuery(
+            ['comment_id' => $ro->body['comment_id']]
+        )->request();
 
         return $request;
     }
