@@ -1,5 +1,5 @@
 {
-    "hash": "e2550188a0a73f4b11573bf57fb6a6ee",
+    "hash": "987dae329d1e9e8addd02974da867a69",
     "packages": [
         {
             "name": "aura/di",
@@ -16,10 +16,9 @@
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.4.0",
-                "aura/installer-default": ">=1.0.0"
+                "aura/installer-default": ">=1.0.0",
+                "php": ">=5.4.0"
             },
-            "time": "2012-11-28 00:00:00",
             "type": "aura-package",
             "autoload": {
                 "psr-0": {
@@ -53,12 +52,13 @@
             "description": "The Aura DI package provides a dependency injection container system with native support for constructor- and setter-based injection, lazy-loading of services, and inheritable configuration of setters and constructor params.",
             "homepage": "http://auraphp.github.com/Aura.Di",
             "keywords": [
-                "dependency injection",
                 "container",
+                "dependency injection",
+                "dependency injection container",
                 "di",
-                "di container",
-                "dependency injection container"
-            ]
+                "di container"
+            ],
+            "time": "2012-11-28 00:00:00"
         },
         {
             "name": "aura/installer-default",
@@ -74,7 +74,6 @@
                 "reference": "1.0.0",
                 "shasum": ""
             },
-            "time": "2012-11-26 21:35:57",
             "type": "composer-installer",
             "extra": {
                 "class": "Aura\\Composer\\DefaultInstaller"
@@ -97,9 +96,10 @@
             ],
             "description": "Installs Aura packages using the Composer defaults.",
             "keywords": [
-                "installer",
-                "aura"
-            ]
+                "aura",
+                "installer"
+            ],
+            "time": "2012-11-26 21:35:57"
         },
         {
             "name": "aura/signal",
@@ -116,10 +116,9 @@
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.4.0",
-                "aura/installer-default": ">=1.0.0"
+                "aura/installer-default": ">=1.0.0",
+                "php": ">=5.4.0"
             },
-            "time": "2012-11-28 00:00:00",
             "type": "aura-package",
             "autoload": {
                 "psr-0": {
@@ -154,7 +153,8 @@
                 "event handling",
                 "signal",
                 "signal slots"
-            ]
+            ],
+            "time": "2012-11-28 00:00:00"
         },
         {
             "name": "doctrine/common",
@@ -173,7 +173,6 @@
             "require": {
                 "php": ">=5.3.2"
             },
-            "time": "2012-09-20 05:55:18",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -218,12 +217,13 @@
             "description": "Common Library for Doctrine projects",
             "homepage": "http://www.doctrine-project.org",
             "keywords": [
-                "collections",
-                "spl",
-                "eventmanager",
                 "annotations",
-                "persistence"
-            ]
+                "collections",
+                "eventmanager",
+                "persistence",
+                "spl"
+            ],
+            "time": "2012-09-20 05:55:18"
         },
         {
             "name": "guzzle/guzzle",
@@ -240,8 +240,8 @@
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.2",
                 "ext-curl": "*",
+                "php": ">=5.3.2",
                 "symfony/event-dispatcher": ">=2.1"
             },
             "replace": {
@@ -269,15 +269,14 @@
             },
             "require-dev": {
                 "doctrine/common": "*",
-                "symfony/class-loader": "*",
                 "monolog/monolog": "1.*",
-                "zendframework/zend-cache": "2.0.*",
-                "zendframework/zend-log": "2.0.*",
-                "zend/zend-log1": "1.12",
+                "phpunit/phpunit": "3.7.*",
+                "symfony/class-loader": "*",
                 "zend/zend-cache1": "1.12",
-                "phpunit/phpunit": "3.7.*"
+                "zend/zend-log1": "1.12",
+                "zendframework/zend-cache": "2.0.*",
+                "zendframework/zend-log": "2.0.*"
             },
-            "time": "2012-12-19 23:06:35",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -308,14 +307,15 @@
             "description": "Guzzle is a PHP HTTP client library and framework for building RESTful web service clients",
             "homepage": "http://guzzlephp.org/",
             "keywords": [
-                "framework",
-                "curl",
-                "http",
-                "rest",
-                "http client",
                 "client",
+                "curl",
+                "framework",
+                "http",
+                "http client",
+                "rest",
                 "web service"
-            ]
+            ],
+            "time": "2012-12-19 23:06:35"
         },
         {
             "name": "ray/aop",
@@ -332,10 +332,9 @@
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.4.0",
-                "doctrine/common": "2.3.*-dev"
+                "doctrine/common": "2.3.*-dev",
+                "php": ">=5.4.0"
             },
-            "time": "2012-10-17 00:13:53",
             "type": "library",
             "autoload": {
                 "psr-0": {
@@ -356,34 +355,34 @@
             "description": "Aspect oriented programing framework",
             "homepage": "https://github.com/koriym/Ray.Aop",
             "keywords": [
+                "annotation",
                 "aop",
                 "aspect",
-                "annotation",
                 "method interception"
-            ]
+            ],
+            "time": "2012-10-17 00:13:53"
         },
         {
             "name": "ray/di",
-            "version": "1.0.0-beta3",
+            "version": "1.0.0-beta5",
             "source": {
                 "type": "git",
-                "url": "git://github.com/koriym/Ray.Di.git",
-                "reference": "1.0.0-beta3"
+                "url": "https://github.com/koriym/Ray.Di.git",
+                "reference": "1.0.0-beta5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/koriym/Ray.Di/archive/1.0.0-beta3.zip",
-                "reference": "1.0.0-beta3",
+                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/1.0.0-beta5",
+                "reference": "1.0.0-beta5",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.4.0",
-                "doctrine/common": "2.3.*-dev",
-                "ray/aop": ">=1.0.0-beta2",
                 "aura/di": "1.0.*",
-                "aura/installer-default": "1.0.*"
+                "aura/installer-default": "1.0.*",
+                "doctrine/common": "2.3.*-dev",
+                "php": ">=5.4.0",
+                "ray/aop": "1.0.*"
             },
-            "time": "2012-12-10 12:57:46",
             "type": "library",
             "autoload": {
                 "psr-0": {
@@ -404,16 +403,17 @@
             "description": "Guice style annotation-driven dependency injection framework",
             "homepage": "https://github.com/koriym/Ray.Di",
             "keywords": [
-                "dependency injection",
-                "container",
-                "aop",
-                "di",
-                "jsr",
                 "annotation",
-                "method interception",
+                "aop",
+                "container",
+                "dependency injection",
+                "di",
                 "guice",
-                "ioc"
-            ]
+                "ioc",
+                "jsr",
+                "method interception"
+            ],
+            "time": "2013-02-27 10:32:28"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -421,30 +421,29 @@
             "target-dir": "Symfony/Component/EventDispatcher",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/EventDispatcher",
-                "reference": "v2.2.0-BETA2"
+                "url": "https://github.com/symfony/EventDispatcher.git",
+                "reference": "2e1fce7bb3ea06d9e42756f1dd3edf966420c755"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/EventDispatcher/archive/v2.2.0-BETA2.zip",
-                "reference": "v2.2.0-BETA2",
+                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/2e1fce7bb3ea06d9e42756f1dd3edf966420c755",
+                "reference": "2e1fce7bb3ea06d9e42756f1dd3edf966420c755",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
             "require-dev": {
-                "symfony/dependency-injection": "2.2.*"
+                "symfony/dependency-injection": ">=2.0,<3.0"
             },
             "suggest": {
                 "symfony/dependency-injection": "2.2.*",
                 "symfony/http-kernel": "2.2.*"
             },
-            "time": "2013-01-17 15:25:59",
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.2-dev"
+                    "dev-master": "2.3-dev"
                 }
             },
             "autoload": {
@@ -467,7 +466,8 @@
                 }
             ],
             "description": "Symfony EventDispatcher Component",
-            "homepage": "http://symfony.com"
+            "homepage": "http://symfony.com",
+            "time": "2013-02-11 11:27:01"
         }
     ],
     "packages-dev": [
@@ -476,19 +476,25 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git://github.com/99designs/xhprof.git",
-                "reference": "c38ed6c2bbc63a01a4a82dfe2ff0a3eb45fe568b"
+                "url": "https://github.com/facebook/xhprof.git",
+                "reference": "c93037e4c50b4b7f28f8dd856d85756814ad7daa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/99designs/xhprof/archive/c38ed6c2bbc63a01a4a82dfe2ff0a3eb45fe568b.zip",
-                "reference": "c38ed6c2bbc63a01a4a82dfe2ff0a3eb45fe568b",
+                "url": "https://api.github.com/repos/facebook/xhprof/zipball/c93037e4c50b4b7f28f8dd856d85756814ad7daa",
+                "reference": "c93037e4c50b4b7f28f8dd856d85756814ad7daa",
                 "shasum": ""
             },
-            "time": "2012-08-16 23:24:45",
             "type": "library",
+            "autoload": {
+                "files": [
+                    "xhprof_lib/utils/xhprof_lib.php",
+                    "xhprof_lib/utils/xhprof_runs.php"
+                ]
+            },
             "notification-url": "https://packagist.org/downloads/",
-            "description": "XHProf: A Hierarchical Profiler for PHP"
+            "description": "XHProf: A Hierarchical Profiler for PHP",
+            "time": "2013-02-06 17:42:37"
         }
     ],
     "aliases": [
