@@ -1,5 +1,5 @@
 {
-    "hash": "400ff4d8a9a460a02479030fc3a80682",
+    "hash": "b6f22d8bd306a53856bfa86da5dbddc1",
     "packages": [
         {
             "name": "aura/di",
@@ -231,12 +231,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "5dd4a2a73a0acb7ebdd5df48c9f330551cfb6949"
+                "reference": "62f34582779fcb007b92fb57dbe0a9441b808165"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/5dd4a2a73a0acb7ebdd5df48c9f330551cfb6949",
-                "reference": "5dd4a2a73a0acb7ebdd5df48c9f330551cfb6949",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/62f34582779fcb007b92fb57dbe0a9441b808165",
+                "reference": "62f34582779fcb007b92fb57dbe0a9441b808165",
                 "shasum": ""
             },
             "require": {
@@ -316,7 +316,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2013-03-04 01:25:08"
+            "time": "2013-03-04 06:35:49"
         },
         {
             "name": "ray/aop",
