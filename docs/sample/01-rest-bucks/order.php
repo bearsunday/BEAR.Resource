@@ -30,10 +30,10 @@ $order = $resource->post->uri('app://self/Order')->withQuery($orderDrink)->eager
 $a = new A(new UriTemplate);
 $paymentUri = $a->href('payment', $order);
 $payment = [
-	'credit_card_number' => '123456789',
-	'expires' => '07/07',
-	'name' => 'John Citizen',
-	'amount' => '4.00'
+    'credit_card_number' => '123456789',
+    'expires' => '07/07',
+    'name' => 'John Citizen',
+    'amount' => '4.00'
 ];
 
 // request payment
