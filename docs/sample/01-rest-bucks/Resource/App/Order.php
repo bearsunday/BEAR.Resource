@@ -13,8 +13,14 @@ use Ray\Di\Di\Scope;
  */
 class Order extends AbstractObject
 {
+    /**
+     * @var array
+     */
     private $orders = [];
 
+    /**
+     * @param $id
+     */
     public function onGet($id)
     {
         return $this->orders[$id];

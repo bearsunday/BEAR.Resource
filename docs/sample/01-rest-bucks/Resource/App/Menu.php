@@ -17,7 +17,7 @@ use Ray\Di\Di\Scope;
 class Menu extends AbstractObject
 {
 
-    private $menu = array();
+    private $menu = [];
 
     /**
      * @param Resource $resource
@@ -31,8 +31,6 @@ class Menu extends AbstractObject
      * Menu
      *
      * @param string $drink
-     *
-     * @return \testworld\ResourceObject\RestBucks\Menu
      *
      * @Link(rel="order", href="app://self/Order?drink={dring}")
      */
