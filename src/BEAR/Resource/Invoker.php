@@ -63,6 +63,13 @@ class Invoker implements InvokerInterface
     const OPTIONS = 'options';
 
     /**
+     * Method HEAD
+     *
+     * @var string
+     */
+    const HEAD = 'head';
+
+    /**
      * ProviderInterface annotation
      *
      * @var string
@@ -70,6 +77,16 @@ class Invoker implements InvokerInterface
     const ANNOTATION_PROVIDES = 'Provides';
 
     const SIGNAL_PARAM = 'param';
+
+    /**
+     * Return signal manager
+     *
+     * @return \Aura\Signal\Manager
+     */
+    public function getSignal()
+    {
+        return $this->signal;
+    }
 
     /**
      * Constructor
@@ -122,13 +139,12 @@ class Invoker implements InvokerInterface
 
     /**
      * {@inheritdoc}
-     * @throws Exception\Request
      */
     public function invoke(Request $request)
     {
         $method = 'on' . ucfirst($request->method);
         $isWeave = $request->ro instanceof Weave;
-        if ($isWeave && $request->method !== Invoker::OPTIONS) {
+        if ($isWeave && $request->method !== Invoker::OPTIONS && $request->method !== Invoker::HEAD) {
             $weave = $request->ro;
             /** @noinspection PhpUnusedLocalVariableInspection */
             /** @var $weave Callable */
@@ -139,22 +155,7 @@ class Invoker implements InvokerInterface
         /** @noinspection PhpUndefinedMethodInspection */
         $ro = $isWeave ? $request->ro->___getObject() : $request->ro;
         if (method_exists($ro, $method) !== true) {
-            if ($request->method === self::OPTIONS) {
-                $options = $this->getOptions($ro);
-                $ro->headers['allow'] = $options['allow'];
-                $ro->headers += $options['params'];
-                $ro->body = null;
-
-                return $ro;
-            }
-            if ($method === 'onHead' && method_exists($ro, 'onGet')) {
-                $params = $this->getParams($request->ro, 'onGet', $request->query);
-                call_user_func_array([$request->ro, 'onGet'], $params);
-                $request->ro->body = '';
-                return $request->ro;
-            } else {
-                throw new Exception\MethodNotAllowed(get_class($request->ro) . "::$method()", 405);
-            }
+            return $this->methodNotExists($ro, $request, $method);
         }
         $params = $this->getParams($request->ro, $method, $request->query);
         try {
@@ -193,7 +194,7 @@ class Invoker implements InvokerInterface
             if ($element instanceof Request || is_callable($element)) {
                 $element = $element();
             }
-        }
+        (non-PHPdoc)}
 
         return $requests;
     }
@@ -205,7 +206,6 @@ class Invoker implements InvokerInterface
      * @param string $method
      * @param array  $args
      *
-     * @throws Exception\MethodNotAllowed
      * @return array
      */
     public function getParams($object, $method, array $args)
@@ -296,6 +296,28 @@ class Invoker implements InvokerInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function invokeSync(\SplObjectStorage $requests)
+    {
+        $requests->rewind();
+        $data = new \ArrayObject();
+        while ($requests->valid()) {
+            // each sync request method call.
+            $request = $requests->current();
+            if (method_exists($request->ro, 'onSync')) {
+                call_user_func([$request->ro, 'onSync'], $request, $data);
+            }
+            $requests->next();
+        }
+        // onFinalSync summarize all sync request data.
+        /** @noinspection PhpUndefinedVariableInspection */
+        $result = call_user_func([$request->ro, 'onFinalSync'], $request, $data);
+
+        return $result;
+    }
+
+    /**
      * Return available resource request method
      *
      * @param ResourceObject $ro
@@ -332,34 +354,54 @@ class Invoker implements InvokerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param AbstractObject $ro
+     * @param Request        $request
+     * @param                $method
+     *
+     * @return AbstractObject
+     * @throws Exception\MethodNotAllowed
      */
-    public function invokeSync(\SplObjectStorage $requests)
+    private function methodNotExists(AbstractObject $ro, Request $request, $method)
     {
-        $requests->rewind();
-        $data = new \ArrayObject();
-        while ($requests->valid()) {
-            // each sync request method call.
-            $request = $requests->current();
-            if (method_exists($request->ro, 'onSync')) {
-                call_user_func([$request->ro, 'onSync'], $request, $data);
-            }
-            $requests->next();
+        if ($request->method === self::OPTIONS) {
+            return $this->onOptions($ro);
         }
-        // onFinalSync summarize all sync request data.
-        /** @noinspection PhpUndefinedVariableInspection */
-        $result = call_user_func([$request->ro, 'onFinalSync'], $request, $data);
-
-        return $result;
+        if ($method === 'onHead' && method_exists($ro, 'onGet')) {
+            return $this->onHead($request);
+        } else {
+            throw new Exception\MethodNotAllowed(get_class($request->ro) . "::$method()", 405);
+        }
     }
 
     /**
-     * Return signal manager
+     * @param AbstractObject $ro resource object
      *
-     * @return \Aura\Signal\Manager
+     * @return AbstractObject
      */
-    public function getSignal()
+    private function onOptions(AbstractObject $ro)
     {
-        return $this->signal;
+        $options = $this->getOptions($ro);
+        $ro->headers['allow'] = $options['allow'];
+        $ro->headers += $options['params'];
+        $ro->body = null;
+
+        return $ro;
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return AbstractObject
+     */
+    private function onHead(Request $request)
+    {
+        $ro = ($request->ro instanceof Weave) ? $request->ro->___getObject() :  $request->ro;
+        if (method_exists($ro, 'onGet')) {
+            $params = $this->getParams($ro, 'onGet', $request->query);
+            call_user_func_array([$ro, 'onGet'], $params);
+        }
+        $ro->body = '';
+
+        return $ro;
     }
 }
