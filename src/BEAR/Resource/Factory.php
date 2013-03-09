@@ -51,8 +51,7 @@ class Factory implements FactoryInterface
     }
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource.FactoryInterface::newInstance()
+     * {@inheritDoc}
      * @throws Exception\Scheme
      */
     public function newInstance($uri)

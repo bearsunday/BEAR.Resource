@@ -70,6 +70,16 @@ class Invoker implements InvokerInterface
     const SIGNAL_PARAM = 'param';
 
     /**
+     * Return signal manager
+     *
+     * @return \Aura\Signal\Manager
+     */
+    public function getSignal()
+    {
+        return $this->signal;
+    }
+
+    /**
      * Constructor
      *
      * @param \Aura\Di\ConfigInterface $config
@@ -89,8 +99,7 @@ class Invoker implements InvokerInterface
     }
 
     /**
-     * (non-PHPDoc)
-     * @see \BEAR\Resource\InvokderInterface::setResourceClient()
+     * {@inheritDoc}
      */
     public function setResourceClient(ResourceInterface $resource)
     {
@@ -120,9 +129,7 @@ class Invoker implements InvokerInterface
     }
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource.InvokerInterface::invoke()
-     * @throws Exception\Request
+     * {@inheritDoc}
      */
     public function invoke(Request $request)
     {
@@ -139,15 +146,7 @@ class Invoker implements InvokerInterface
         /** @noinspection PhpUndefinedMethodInspection */
         $ro = $isWeave ? $request->ro->___getObject() : $request->ro;
         if (method_exists($ro, $method) !== true) {
-            if ($request->method === self::OPTIONS) {
-                $options = $this->getOptions($ro);
-                $ro->headers['allow'] = $options['allow'];
-                $ro->headers += $options['params'];
-                $ro->body = null;
-
-                return $ro;
-            }
-            throw new Exception\MethodNotAllowed(get_class($request->ro) . "::$method()", 405);
+            return $this->methodNotExists($ro, $request, $method);
         }
         $params = $this->getParams($request->ro, $method, $request->query);
         try {
@@ -161,7 +160,7 @@ class Invoker implements InvokerInterface
         if ($request->links) {
             $result = $this->linker->invoke($request->ro, $request, $result);
         }
-        if (! $result instanceof AbstractObject) {
+        if (!$result instanceof AbstractObject) {
             $request->ro->body = $result;
             $result = $request->ro;
             if ($result instanceof Weave) {
@@ -245,7 +244,7 @@ class Invoker implements InvokerInterface
     private function getArgumentBySignal(ReflectionParameter $parameter, $object, $method, array $args)
     {
         $definition = $this->config->fetch(get_class($object))[Config::INDEX_DEFINITION];
-        /** @var $definition \Ray\Di\Definition  */
+        /** @var $definition \Ray\Di\Definition */
         $userAnnotation = $definition->getUserAnnotationByMethod($method);
         $signalAnnotations = isset($userAnnotation['ParamSignal']) ? $userAnnotation['ParamSignal'] : [];
         $signalIds = ['Provides'];
@@ -285,6 +284,29 @@ class Invoker implements InvokerInterface
     }
 
     /**
+     * (non-PHPdoc)
+     * @see BEAR\Resource.InvokerInterface::invokeSync()
+     */
+    public function invokeSync(\SplObjectStorage $requests)
+    {
+        $requests->rewind();
+        $data = new \ArrayObject();
+        while ($requests->valid()) {
+            // each sync request method call.
+            $request = $requests->current();
+            if (method_exists($request->ro, 'onSync')) {
+                call_user_func([$request->ro, 'onSync'], $request, $data);
+            }
+            $requests->next();
+        }
+        // onFinalSync summarize all sync request data.
+        /** @noinspection PhpUndefinedVariableInspection */
+        $result = call_user_func([$request->ro, 'onFinalSync'], $request, $data);
+
+        return $result;
+    }
+
+    /**
      * Return available resource request method
      *
      * @param ResourceObject $ro
@@ -321,35 +343,51 @@ class Invoker implements InvokerInterface
     }
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource.InvokerInterface::invokeSync()
+     * @param AbstractObject $ro
+     * @param Request        $request
+     * @param                $method
+     *
+     * @return AbstractObject
+     * @throws Exception\MethodNotAllowed
      */
-    public function invokeSync(\SplObjectStorage $requests)
+    private function methodNotExists(AbstractObject $ro, Request $request, $method)
     {
-        $requests->rewind();
-        $data = new \ArrayObject();
-        while ($requests->valid()) {
-            // each sync request method call.
-            $request = $requests->current();
-            if (method_exists($request->ro, 'onSync')) {
-                call_user_func([$request->ro, 'onSync'], $request, $data);
-            }
-            $requests->next();
+        if ($request->method === self::OPTIONS) {
+            return $this->onOptions($ro);
         }
-        // onFinalSync summarize all sync request data.
-        /** @noinspection PhpUndefinedVariableInspection */
-        $result = call_user_func([$request->ro, 'onFinalSync'], $request, $data);
-
-        return $result;
+        if ($method === 'onHead' && method_exists($ro, 'onGet')) {
+            return $this->onHead($request);
+        } else {
+            throw new Exception\MethodNotAllowed(get_class($request->ro) . "::$method()", 405);
+        }
     }
 
     /**
-     * Return signal manager
+     * @param AbstractObject $ro resource object
      *
-     * @return \Aura\Signal\Manager
+     * @return AbstractObject
      */
-    public function getSignal()
+    private function onOptions(AbstractObject $ro)
     {
-        return $this->signal;
+        $options = $this->getOptions($ro);
+        $ro->headers['allow'] = $options['allow'];
+        $ro->headers += $options['params'];
+        $ro->body = null;
+
+        return $ro;
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return AbstractObject
+     */
+    private function onHead(Request $request)
+    {
+        $params = $this->getParams($request->ro, 'onGet', $request->query);
+        call_user_func_array([$request->ro, 'onGet'], $params);
+        $request->ro->body = '';
+
+        return $request->ro;
     }
 }

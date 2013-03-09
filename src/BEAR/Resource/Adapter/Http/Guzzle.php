@@ -76,8 +76,7 @@ class Guzzle implements ObjectInterface, HttpClientInterface
     }
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource\Adapter\Http.HttpClientInterface::onGet()
+     * {@inheritDoc}
      */
     public function onGet()
     {
@@ -89,8 +88,7 @@ class Guzzle implements ObjectInterface, HttpClientInterface
     }
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource\Adapter\Http.HttpClientInterface::onPost()
+     * {@inheritDoc}
      */
     public function onPost()
     {
@@ -102,8 +100,7 @@ class Guzzle implements ObjectInterface, HttpClientInterface
     }
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource\Adapter\Http.HttpClientInterface::onPut()
+     * {@inheritDoc}
      */
     public function onPut()
     {
@@ -115,8 +112,7 @@ class Guzzle implements ObjectInterface, HttpClientInterface
     }
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource\Adapter\Http.HttpClientInterface::onDelete()
+     * {@inheritDoc}
      */
     public function onDelete()
     {
@@ -128,8 +124,7 @@ class Guzzle implements ObjectInterface, HttpClientInterface
     }
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource\Adapter\Http.HttpClientInterface::onHead()
+     * {@inheritDoc}
      */
     public function onHead()
     {
@@ -141,8 +136,7 @@ class Guzzle implements ObjectInterface, HttpClientInterface
     }
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource\Adapter\Http.HttpClientInterface::onOptions()
+     * {@inheritDoc}
      */
     public function onOptions()
     {

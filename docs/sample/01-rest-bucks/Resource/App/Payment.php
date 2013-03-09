@@ -10,8 +10,6 @@ class Payment extends AbstractObject
 {
     /**
      * @param id
-     *
-     * @return array
      */
     public function onPut($order_id, $credit_card_number, $expires, $name, $amount)
     {

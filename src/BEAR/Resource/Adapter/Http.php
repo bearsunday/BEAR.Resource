@@ -21,17 +21,12 @@ use Guzzle\Service\Client as GuzzleClient;
  */
 class Http implements ObjectInterface, ProviderInterface, AdapterInterface
 {
-    /**
-     * Constructor
-     *
-     */
     public function __construct()
     {
     }
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource.ProviderInterface::get()
+     * {@inheritDoc}
      */
     public function get($uri)
     {

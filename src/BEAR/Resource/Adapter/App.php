@@ -68,9 +68,7 @@ class App implements ObjectInterface, ProviderInterface, AdapterInterface
     }
 
     /**
-     * (non-PHPdoc)
-     *
-     * @see    BEAR\Resource.ProviderInterface::get()
+     * {@inheritDoc}
      */
     public function get($uri)
     {

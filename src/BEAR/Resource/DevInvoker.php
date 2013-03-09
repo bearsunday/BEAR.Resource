@@ -29,9 +29,7 @@ class DevInvoker extends Invoker implements InvokerInterface
     const HEADER_QUERY = 'x-query';
 
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource.InvokerInterface::invoke()
-     * @throws Exception\Request
+     * {@inheritDoc}
      */
     public function invoke(Request $request)
     {
