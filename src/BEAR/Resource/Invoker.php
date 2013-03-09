@@ -147,7 +147,14 @@ class Invoker implements InvokerInterface
 
                 return $ro;
             }
-            throw new Exception\MethodNotAllowed(get_class($request->ro) . "::$method()", 405);
+            if ($method === 'onHead' && method_exists($ro, 'onGet')) {
+                $params = $this->getParams($request->ro, 'onGet', $request->query);
+                call_user_func_array([$request->ro, 'onGet'], $params);
+                $request->ro->body = '';
+                return $request->ro;
+            } else {
+                throw new Exception\MethodNotAllowed(get_class($request->ro) . "::$method()", 405);
+            }
         }
         $params = $this->getParams($request->ro, $method, $request->query);
         try {

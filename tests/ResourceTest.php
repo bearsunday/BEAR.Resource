@@ -359,6 +359,15 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $expected = 'Aramis';
         $this->assertSame($expected, $response->body['name']);
     }
+
+    public function test_headRequest()
+    {
+        $uri = new Uri('app://self/user', ['id' => 1]);
+        $response = $this->resource->head->uri($uri)->eager->request();
+        $this->assertSame('', $response->body);
+        $this->assertSame('123', $response->headers['x-header-test']);
+    }
+
 }
 
 class varProvider implements \BEAR\Resource\SignalHandler\HandleInterface
