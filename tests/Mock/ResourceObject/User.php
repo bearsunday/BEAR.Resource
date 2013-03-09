@@ -16,6 +16,10 @@ use Ray\Di\Di\Scope;
  */
 class User extends AbstractObject
 {
+    public $headers = [
+        'x-header-test' => '123'
+    ];
+
     /**
      *
      * @param ResourceInterface $resource
