@@ -40,7 +40,7 @@ class Logger implements LoggerInterface, Countable
     /**
      * Return new resource object instance
      *
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function log(RequestInterface $request, ResourceObject $result)
     {
@@ -51,7 +51,7 @@ class Logger implements LoggerInterface, Countable
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @Inject(optional = true)
      */
@@ -61,7 +61,7 @@ class Logger implements LoggerInterface, Countable
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function write()
     {

@@ -106,7 +106,7 @@ class Resource implements ResourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function newInstance($uri)
     {
@@ -131,7 +131,7 @@ class Resource implements ResourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function object($ro)
     {
@@ -141,7 +141,7 @@ class Resource implements ResourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function uri($uri)
     {
@@ -176,7 +176,7 @@ class Resource implements ResourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function withQuery(array $query)
     {
@@ -186,7 +186,7 @@ class Resource implements ResourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function addQuery(array $query)
     {
@@ -196,7 +196,7 @@ class Resource implements ResourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function linkSelf($linkKey)
     {
@@ -209,7 +209,7 @@ class Resource implements ResourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function linkNew($linkKey)
     {
@@ -222,7 +222,7 @@ class Resource implements ResourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function linkCrawl($linkKey)
     {
@@ -235,7 +235,7 @@ class Resource implements ResourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function request()
     {
@@ -266,7 +266,7 @@ class Resource implements ResourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function attachParamProvider($signal, HandleInterface $argProvider)
     {
@@ -279,7 +279,7 @@ class Resource implements ResourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      * @throws Exception\Request
      */
     public function __get($name)

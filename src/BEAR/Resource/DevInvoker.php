@@ -29,7 +29,7 @@ class DevInvoker extends Invoker implements InvokerInterface
     const HEADER_QUERY = 'x-query';
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function invoke(Request $request)
     {

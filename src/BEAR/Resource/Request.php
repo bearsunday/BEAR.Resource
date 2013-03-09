@@ -90,7 +90,7 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
     private $result;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @Inject
      */
@@ -116,7 +116,7 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function __invoke(array $query = null)
     {
@@ -129,7 +129,7 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function toUri()
     {
@@ -145,7 +145,7 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function toUriWithMethod()
     {

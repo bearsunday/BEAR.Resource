@@ -108,7 +108,7 @@ class Invoker implements InvokerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function setResourceClient(ResourceInterface $resource)
     {
@@ -138,7 +138,7 @@ class Invoker implements InvokerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function invoke(Request $request)
     {
@@ -186,7 +186,7 @@ class Invoker implements InvokerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function invokeTraversal(\Traversable $requests)
     {
@@ -194,7 +194,7 @@ class Invoker implements InvokerInterface
             if ($element instanceof Request || is_callable($element)) {
                 $element = $element();
             }
-        (non-PHPdoc)}
+        }
 
         return $requests;
     }
@@ -296,7 +296,7 @@ class Invoker implements InvokerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function invokeSync(\SplObjectStorage $requests)
     {
