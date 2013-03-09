@@ -13,7 +13,7 @@ use XHProfRuns_Default;
 use Ray\Di\Di\Scope;
 
 /**
- * Resource request invoker for dev
+ * Resource request invoker
  *
  * @package BEAR.Resource
  *
@@ -29,8 +29,7 @@ class DevInvoker extends Invoker implements InvokerInterface
     const HEADER_QUERY = 'x-query';
 
     /**
-     * {@inheritdoc}
-     * @throws Exception\Request
+     * {@inheritDoc}
      */
     public function invoke(Request $request)
     {
@@ -49,7 +48,7 @@ class DevInvoker extends Invoker implements InvokerInterface
             $resource = $request->ro;
         }
 
-        if ($request->method === self::OPTIONS) {
+        if ($request->method === self::OPTIONS || $request->method === self::HEAD) {
             parent::invoke($request);
             return parent::invoke($request);
         }

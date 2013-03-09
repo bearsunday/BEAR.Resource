@@ -62,7 +62,7 @@ final class Linker implements LinkerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      * @throws Exception\Link
      */
     public function invoke(ResourceObject $ro, Request $request, $sourceValue)
@@ -71,7 +71,7 @@ final class Linker implements LinkerInterface
 
         $links = $request->links;
         $hasTargeted = false;
-        $refValue = & $sourceValue;
+        $refValue = &$sourceValue;
         $q = new SplQueue;
         $q->setIteratorMode(\SplQueue::IT_MODE_DELETE);
         // has links
@@ -102,7 +102,7 @@ final class Linker implements LinkerInterface
                     $item[$link->key] = $requestResult;
                     $q->enqueue([$requestResult, $request->ro]);
                 }
-                $refValue = & $requestResult;
+                $refValue = &$requestResult;
                 continue;
             }
             $request = $this->getLinkResult($ro, $link->key, $refValue);
@@ -121,11 +121,11 @@ final class Linker implements LinkerInterface
                     } else {
                         $sourceValue[] = $requestResult->body;
                     }
-                    $refValue = & $requestResult;
+                    $refValue = &$requestResult;
                     break;
                 case LinkType::CRAWL_LINK:
                     $refValue[$link->key] = $requestResult->body;
-                    $refValue = & $requestResult;
+                    $refValue = &$requestResult;
                     break;
                 case LinkType::SELF_LINK:
                 default:
@@ -178,7 +178,7 @@ final class Linker implements LinkerInterface
 
             throw new BadLinkRequest(get_class($ro) . "::{$method}");
         }
-        if (!$input instanceof AbstractObject) {
+        if (! $input instanceof AbstractObject) {
             $ro->body = $input;
             $input = $ro;
         }

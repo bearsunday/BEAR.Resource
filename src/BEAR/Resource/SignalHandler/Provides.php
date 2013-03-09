@@ -22,8 +22,7 @@ use ReflectionParameter;
 class Provides implements HandleInterface
 {
     /**
-     * (non-PHPdoc)
-     * @see BEAR\Resource\SignalHandler.HandleInterface::__invoke()
+     * {@inheritDoc}
      */
     public function __invoke(
         $return,
@@ -46,7 +45,7 @@ class Provides implements HandleInterface
             $providesMethod = $parameterMethod[$parameter->name];
             $object = $invocation->getThis();
             $func = [$object, $providesMethod];
-            /** @var $func Callable */
+            /** @var $func Callable  */
             $providedValue = $func();
             $return->value = $providedValue;
             goto SUCCESS;

@@ -51,7 +51,7 @@ class Factory implements FactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      * @throws Exception\Scheme
      */
     public function newInstance($uri)
