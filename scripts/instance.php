@@ -1,30 +1,17 @@
 <?php
 namespace BEAR\Resource;
 
-use Ray\Di\Definition;
+use Aura\Signal\HandlerFactory;
+use Aura\Signal\Manager;
+use Aura\Signal\ResultCollection;
+use Aura\Signal\ResultFactory;
 use Ray\Di\Annotation;
 use Ray\Di\Config;
-use Ray\Di\Forge;
-use Ray\Di\Container;
+use Ray\Di\Definition;
 use Ray\Di\Injector;
-use Ray\Di\EmptyModule;
-use Aura\Signal\Manager;
-use Aura\Signal\HandlerFactory;
-use Aura\Signal\ResultFactory;
-use Aura\Signal\ResultCollection;
-use Doctrine\Common\Annotations\AnnotationReader as Reader;
 
-require_once __DIR__ . '/instance/DefaultModule.php';
-
-$config = new Config(new Annotation(new Definition, new Reader));
-$injector = new Injector(new Container(new Forge($config)), new DefaultModule);
-$invoker = new Invoker(
-    $config,
-    new Linker(new Reader),
-    new Manager(
-        new HandlerFactory, new ResultFactory, new ResultCollection
-    )
-);
+$invoker = new Invoker(new Config(new Annotation(new Definition, new AnnotationReader)), new Linker(new Reader), new Manager(new HandlerFactory, new ResultFactory, new ResultCollection));
 $invoker->setResourceLogger(new Logger);
 $resource = new Resource(new Factory(new SchemeCollection), $invoker, new Request($invoker));
+
 return $resource;
