@@ -9,6 +9,8 @@ require_once __DIR__ . '/Mock/Adapter/Nop.php';
 require_once __DIR__ . '/Mock/Adapter/Prov.php';
 require_once __DIR__ . '/Mock/Adapter/Test.php';
 
+require_once __DIR__ . '/Mock/Resource/App/Index.php';
+
 require_once __DIR__ . '/Mock/ResourceObject/Index.php';
 require_once __DIR__ . '/Mock/ResourceObject/News.php';
 require_once __DIR__ . '/Mock/ResourceObject/User.php';
