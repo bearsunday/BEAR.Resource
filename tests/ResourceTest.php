@@ -42,7 +42,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
         // build resource client
         $scheme = new SchemeCollection;
-        $injector = require dirname(__DIR__) . '/scripts/injector.php';
+        $injector = Injector::create();
         $injector->setModule(new TestModule);
         $scheme->scheme('app')->host('self')->toAdapter(
             new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject')

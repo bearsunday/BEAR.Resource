@@ -23,7 +23,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->injector = require dirname(dirname(__DIR__)) . '/scripts/injector.php';
+        $this->injector = \Ray\Di\Injector::create([]);
         $scheme = new SchemeCollection;
         $scheme->scheme('http')->host('*')->toAdapter(new \BEAR\Resource\Adapter\Http);
         $this->factory = new Factory($scheme);
