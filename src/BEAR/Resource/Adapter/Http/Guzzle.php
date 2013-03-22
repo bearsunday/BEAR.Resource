@@ -6,6 +6,7 @@
  */
 namespace BEAR\Resource\Adapter\Http;
 
+use BEAR\Resource\AbstractObject;
 use BEAR\Resource\ObjectInterface;
 use BEAR\Resource\Request;
 use Guzzle\Service\Client as GuzzleClient;
@@ -13,6 +14,7 @@ use Guzzle\Cache\DoctrineCacheAdapter;
 use Guzzle\Plugin\Cache\CachePlugin;
 use Guzzle\Http\Message\RequestInterface;
 use Guzzle\Http\Message\Response;
+use Ray\Di\AbstractModule;
 use Ray\Di\Di\Scope;
 
 /**
@@ -22,29 +24,8 @@ use Ray\Di\Di\Scope;
  *
  * @Scope("singleton")
  */
-class Guzzle implements ObjectInterface, HttpClientInterface
+class Guzzle extends AbstractObject implements ObjectInterface, HttpClientInterface
 {
-    /**
-     * Code
-     *
-     * @var int
-     */
-    public $code;
-
-    /**
-     * Headers
-     *
-     * @var array
-     */
-    public $headers;
-
-    /**
-     * Body
-     *
-     * @var mixed
-     */
-    public $body;
-
     /**
      * HTTP Response
      *
