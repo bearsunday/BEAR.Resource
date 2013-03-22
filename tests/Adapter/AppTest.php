@@ -28,7 +28,8 @@ namespace BEAR\Resource\Adapter {
         protected function setUp()
         {
             parent::setUp();
-            $this->injector = require dirname(dirname(__DIR__)) . '/scripts/injector.php';
+
+            $this->injector = \Ray\Di\Injector::create([]);
             $this->namespace = 'testworld';
         }
 

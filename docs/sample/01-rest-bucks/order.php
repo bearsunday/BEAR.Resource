@@ -11,13 +11,14 @@ use BEAR\Resource\Adapter\App;
 use BEAR\Resource\Code;
 use BEAR\Resource\A;
 use Guzzle\Parser\UriTemplate\UriTemplate;
+use Ray\Di\Injector;
 
 // loader
 require __DIR__ . '/src.php';
 
 // build resource client
 $resource = require $base . '/scripts/instance.php';
-$injector = require $base . '/scripts/injector.php';
+$injector = Injector::create();
 $scheme = new SchemeCollection;
 $scheme->scheme('app')->host('self')->toAdapter(new App($injector, 'restbucks', 'Resource\App'));
 $resource->setSchemeCollection($scheme);
