@@ -7,28 +7,24 @@
         "service layer"
     ],
     "homepage": "https://github.com/koriym/BEAR.Resource",
-    "version": "0.7.1",
     "license": "BSD-3-Clause",
-    "require": {
-        "php"                    : ">=5.4.0",
-        "ray/aop"                : ">=1.0.0-beta2",
-        "ray/di"                 : ">=1.0.0-beta3",
-        "aura/di"                : "1.0.*",
-        "aura/signal"            : "1.0.*",
-        "aura/installer-default" : "1.0.*",
-        "doctrine/common"        : "2.3.*",
-        "guzzle/guzzle"          : "3.3.*"
-    },
-    "require-dev": {
-        "facebook/xhprof"        : "dev-master"
-    },
     "authors": [
         {
             "name": "Akihito Koriyama",
             "email": "akihito.koriyama@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.4.0",
+        "aura/signal": "1.*",
+        "ray/di": "1.0.*",
+        "doctrine/cache": "1.*",
+        "guzzle/guzzle": "3.3.*"
+    },
+    "require-dev": {
+        "facebook/xhprof": "dev-master"
+    },
+    "minimum-stability": "beta",
     "autoload": {
         "psr-0": {
             "BEAR\\Resource": "src/"
