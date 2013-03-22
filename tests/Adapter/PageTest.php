@@ -24,7 +24,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $injector = require dirname(dirname(__DIR__)) . '/scripts/injector.php';
+        $injector = Injector::create();
         $scheme = new SchemeCollection;
         $scheme->scheme('nop')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Nop);
         $scheme->scheme('prov')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Prov);
