@@ -1,16 +1,14 @@
 <?php
 use \Doctrine\Common\Annotations\AnnotationRegistry;
 
-// vendor
-require dirname(__DIR__) . '/vendor/autoload.php';
+// vendor & annotation
+$loader = require dirname(__DIR__) . '/vendor/autoload.php';
+AnnotationRegistry::registerLoader([$loader, 'loadClass']);
+
 // library
 require dirname(__DIR__) . '/src.php';
 // tests
 require __DIR__ . '/src.php';
-
-// annotation "silent" loader
-AnnotationRegistry::registerAutoloadNamespace('BEAR\Resource\Annotation', dirname(__DIR__) . '/src');
-AnnotationRegistry::registerAutoloadNamespace('Ray\Di\Di', dirname(__DIR__) . '/vendor/ray/di/src');
 
 $dir = sys_get_temp_dir();
 ini_set('error_log', $dir . '/error.log');
