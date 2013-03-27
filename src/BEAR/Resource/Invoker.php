@@ -144,6 +144,9 @@ class Invoker implements InvokerInterface
     {
         $method = 'on' . ucfirst($request->method);
         $isWeave = $request->ro instanceof Weave;
+        /** @var $request->ro \Ray\Aop\Weave */
+        /** @noinspection PhpUndefinedMethodInspection */
+        $ro = $isWeave ? $request->ro->___getObject() : $request->ro;
         if ($isWeave && $request->method !== Invoker::OPTIONS && $request->method !== Invoker::HEAD) {
             $weave = $request->ro;
             /** @noinspection PhpUnusedLocalVariableInspection */
@@ -151,15 +154,12 @@ class Invoker implements InvokerInterface
             $result = $weave([$this, 'getParams'], $method, $request->query);
             goto completed;
         }
-        /** @var $request->ro \Ray\Aop\Weave */
-        /** @noinspection PhpUndefinedMethodInspection */
-        $ro = $isWeave ? $request->ro->___getObject() : $request->ro;
         if (method_exists($ro, $method) !== true) {
             return $this->methodNotExists($ro, $request, $method);
         }
-        $params = $this->getParams($request->ro, $method, $request->query);
+        $params = $this->getParams($ro, $method, $request->query);
         try {
-            $result = call_user_func_array([$request->ro, $method], $params);
+            $result = call_user_func_array([$ro, $method], $params);
         } catch (\Exception $e) {
             // @todo implements "Exception signal"
             throw $e;
@@ -167,11 +167,11 @@ class Invoker implements InvokerInterface
         // link
         completed:
         if ($request->links) {
-            $result = $this->linker->invoke($request->ro, $request, $result);
+            $result = $this->linker->invoke($ro, $request, $result);
         }
         if (!$result instanceof AbstractObject) {
-            $request->ro->body = $result;
-            $result = $request->ro;
+            $ro->body = $result;
+            $result = $ro;
             if ($result instanceof Weave) {
                 $result = $result->___getObject();
             }

@@ -178,6 +178,24 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual);
     }
 
+    public function test_invokeWeaveWithLink()
+    {
+        $bind = new Bind;
+        $bind->bindInterceptors('onGet', [new \testworld\Interceptor\Log]);
+        $weave = new Weaver(new \testworld\ResourceObject\Weave\Link, $bind);
+        $this->request->ro = $weave;
+        $this->request->method = 'get';
+        $this->request->query = ['animal' => 'bear'];
+        $link = new LinkType;
+        $link->type = LinkType::SELF_LINK;
+        $link->key = 'View';
+        $links = [$link];
+        $this->request->links = $links;
+        $actual = $this->invoker->invoke($this->request)->body;
+        $expected = "<html>Like a bear to a honey pot.[Log] target = testworld\\ResourceObject\\Weave\\Link, input = Array\n(\n    [0] => bear\n)\n, result = Like a bear to a honey pot.</html>";
+        $this->assertSame($expected, $actual);
+    }
+
     public function test_InvokerInterfaceLink()
     {
 
