@@ -1,5 +1,5 @@
 {
-    "hash": "b45e2045f6aeccacc197d30297a24efd",
+    "hash": "c1cf3926495ac031672f0bc188e37de4",
     "packages": [
         {
             "name": "aura/di",
@@ -430,16 +430,16 @@
         },
         {
             "name": "ray/aop",
-            "version": "1.0.0-beta4",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Ray.Aop.git",
-                "reference": "1.0.0-beta4"
+                "reference": "1.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Ray.Aop/zipball/1.0.0-beta4",
-                "reference": "1.0.0-beta4",
+                "url": "https://api.github.com/repos/koriym/Ray.Aop/zipball/1.0.0",
+                "reference": "1.0.0",
                 "shasum": ""
             },
             "require": {
@@ -470,28 +470,29 @@
                 "aspect",
                 "method interception"
             ],
-            "time": "2013-03-21 09:39:57"
+            "time": "2013-03-31 11:58:17"
         },
         {
             "name": "ray/di",
-            "version": "1.0.0-beta5",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Ray.Di.git",
-                "reference": "1.0.0-beta5"
+                "reference": "1.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/1.0.0-beta5",
-                "reference": "1.0.0-beta5",
+                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/1.0.0",
+                "reference": "1.0.0",
                 "shasum": ""
             },
             "require": {
                 "aura/di": "1.0.*",
                 "aura/installer-default": "1.0.*",
                 "doctrine/annotations": "1.*",
+                "doctrine/cache": "1.*",
                 "php": ">=5.4.0",
-                "ray/aop": "1.0.*@beta"
+                "ray/aop": "1.0.*"
             },
             "type": "library",
             "autoload": {
@@ -523,7 +524,7 @@
                 "jsr",
                 "method interception"
             ],
-            "time": "2013-03-21 10:02:04"
+            "time": "2013-03-31 12:46:44"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -587,13 +588,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/facebook/xhprof.git",
-                "reference": "c93037e4c50b4b7f28f8dd856d85756814ad7daa"
+                "reference": "3425f7fe3aeff711091811906319d8cebd82fc06"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/facebook/xhprof/zipball/c93037e4c50b4b7f28f8dd856d85756814ad7daa",
-                "reference": "c93037e4c50b4b7f28f8dd856d85756814ad7daa",
+                "url": "https://api.github.com/repos/facebook/xhprof/zipball/3425f7fe3aeff711091811906319d8cebd82fc06",
+                "reference": "3425f7fe3aeff711091811906319d8cebd82fc06",
                 "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.0"
             },
             "type": "library",
             "autoload": {
@@ -603,14 +607,22 @@
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
             "description": "XHProf: A Hierarchical Profiler for PHP",
-            "time": "2013-02-06 17:42:37"
+            "homepage": "http://pecl.php.net/package/xhprof",
+            "keywords": [
+                "performance",
+                "profiling"
+            ],
+            "time": "2013-03-26 22:23:06"
         }
     ],
     "aliases": [
 
     ],
-    "minimum-stability": "beta",
+    "minimum-stability": "stable",
     "stability-flags": {
         "facebook/xhprof": 20
     },
