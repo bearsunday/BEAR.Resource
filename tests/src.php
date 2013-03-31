@@ -21,6 +21,7 @@ require_once __DIR__ . '/Mock/ResourceObject/User/Entry.php';
 require_once __DIR__ . '/Mock/ResourceObject/User/Entry/Comment.php';
 require_once __DIR__ . '/Mock/ResourceObject/User/Entry/Comment/ThumbsUp.php';
 require_once __DIR__ . '/Mock/ResourceObject/Weave/Book.php';
+require_once __DIR__ . '/Mock/ResourceObject/Weave/Link.php';
 require_once __DIR__ . '/Mock/ResourceObject/RestBucks/Order.php';
 require_once __DIR__ . '/Mock/ResourceObject/RestBucks/Payment.php';
 require_once __DIR__ . '/Mock/ResourceObject/RestBucks/Menu.php';
