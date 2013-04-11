@@ -32,14 +32,14 @@ class ATest extends \PHPUnit_Framework_TestCase
 
     public function test_hrefWithTemplateUri()
     {
-        $resource = new \BEAR\Resource\Mock\User;
+        $resource = new Mock\User;
         $uri = $this->a->href('friend', $resource);
         $this->assertSame('app://self/friend/?id=1', $uri);
     }
 
     public function test_hrefWithoutTemplateUri()
     {
-        $resource = new \BEAR\Resource\Mock\User;
+        $resource = new Mock\User;
         $uri = $this->a->href('profile', $resource);
         $this->assertSame('app://self/prfofile', $uri);
     }

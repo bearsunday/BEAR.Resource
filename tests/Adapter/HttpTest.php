@@ -23,9 +23,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->injector = \Ray\Di\Injector::create([]);
+        $this->injector = Injector::create([]);
         $scheme = new SchemeCollection;
-        $scheme->scheme('http')->host('*')->toAdapter(new \BEAR\Resource\Adapter\Http);
+        $scheme->scheme('http')->host('*')->toAdapter(new Adapter\Http);
         $this->factory = new Factory($scheme);
         $this->httpAdapter = $this->factory->newInstance(
             'http://news.google.com/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss'

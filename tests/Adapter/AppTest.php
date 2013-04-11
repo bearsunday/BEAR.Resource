@@ -29,7 +29,7 @@ namespace BEAR\Resource\Adapter {
         {
             parent::setUp();
 
-            $this->injector = \Ray\Di\Injector::create([]);
+            $this->injector = Injector::create([]);
             $this->namespace = 'testworld';
         }
 

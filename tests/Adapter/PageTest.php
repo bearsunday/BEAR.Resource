@@ -26,10 +26,10 @@ class PageTest extends \PHPUnit_Framework_TestCase
 
         $injector = Injector::create();
         $scheme = new SchemeCollection;
-        $scheme->scheme('nop')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Nop);
-        $scheme->scheme('prov')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Prov);
+        $scheme->scheme('nop')->host('self')->toAdapter(new Adapter\Nop);
+        $scheme->scheme('prov')->host('self')->toAdapter(new Adapter\Prov);
         $scheme->scheme('app')->host('self')->toAdapter(
-            new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject')
+            new Adapter\App($injector, 'testworld', 'ResourceObject')
         );
         $factory = new Factory($scheme);
 

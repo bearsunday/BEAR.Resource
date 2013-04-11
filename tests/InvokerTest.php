@@ -6,13 +6,16 @@ use Ray\Di\Definition;
 use Ray\Di\Annotation;
 use Ray\Di\Config;
 use Ray\Di\Injector;
-
 use Ray\Aop\Weaver;
 use Ray\Aop\Bind;
 use Ray\Aop\ReflectiveMethodInvocation;
-use BEAR\Resource\Mock\User;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use Aura\Signal\Manager;
+use testworld\Interceptor\Log;
+use testworld\ResourceObject\RestBucks\Order;
+use testworld\ResourceObject\User;
+use testworld\ResourceObject\Weave\Book;
+use testworld\ResourceObject\Weave\Link;
 
 /**
  * Test class for BEAR.Resource.
@@ -21,19 +24,20 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
 {
     protected $signal;
     protected $invoker;
+    protected $request;
+    protected $query;
 
     protected function setUp()
     {
-        parent::setUp();
         $signal = require dirname(__DIR__) . '/vendor/aura/signal/scripts/instance.php';
         $signal->handler(
             '\BEAR\Resource\ReflectiveParams',
-            \BEAR\Resource\ReflectiveParams::SIGNAL_PARAM . 'Provides',
+            ReflectiveParams::SIGNAL_PARAM . 'Provides',
             new SignalHandler\Provides
         );
         $signal->handler(
             '\BEAR\Resource\ReflectiveParams',
-            \BEAR\Resource\ReflectiveParams::SIGNAL_PARAM . 'login_id',
+            ReflectiveParams::SIGNAL_PARAM . 'login_id',
             function (
                 $return,
                 \ReflectionParameter $parameter,
@@ -42,18 +46,12 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
             ) {
                 $return->value = 1;
 
-                return \Aura\Signal\Manager::STOP;
+                return Manager::STOP;
             }
         );
-        $this->invoker = new Invoker(
-                new Linker(new Reader),
-                new ReflectiveParams(
-                    new Config(new Annotation(new Definition, new Reader)),
-                    $signal
-                )
-        );
+        $this->invoker = new Invoker(new Linker(new Reader), new ReflectiveParams(new Config(new Annotation(new Definition, new Reader)), $signal));
 
-        $resource = new \testworld\ResourceObject\User;
+        $resource = new User;
         $resource->uri = 'dummy://self/User';
         $this->request = new Request($this->invoker);
         $this->request->method = 'get';
@@ -96,39 +94,29 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\Parameter
+     * @expectedException \BEAR\Resource\Exception\Parameter
      */
     public function test_InvokerInterfaceDefaultParamWithNoProvider()
     {
         $this->request->query = [];
         $this->request->method = 'put';
         $this->query = [];
-        $actual = $this->invoker->invoke($this->request);
+        $this->invoker->invoke($this->request);
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\Parameter
+     * @expectedException \BEAR\Resource\Exception\Parameter
      */
     public function test_InvokerInterfaceWithNoProvider()
     {
         $this->request->ro = new Mock\Blog;
         $this->request->query = [];
         $this->request->method = 'get';
-        $actual = $this->invoker->invoke($this->request);
+        $this->invoker->invoke($this->request);
     }
 
-    // deprecated for @Provides any support.
-    //     public function test_InvokerInterfaceWithUnspecificProvider()
-    //     {
-    //         $this->request->ro = new Mock\Entry;
-    //         $this->request->query = [];
-    //         $this->request->method = 'get';
-    //         $actual = $this->invoker->invoke($this->request);
-    //         $this->assertSame('entry1', $actual);
-    //     }
-
     /**
-     * @expectedException BEAR\Resource\Exception\Parameter
+     * @expectedException \BEAR\Resource\Exception\Parameter
      */
     public function test_InvokerInterfaceWithUnspecificProviderButNoResult()
     {
@@ -140,12 +128,12 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\MethodNotAllowed
+     * @expectedException \BEAR\Resource\Exception\MethodNotAllowed
      */
     public function test_InvokerInterfaceInvalidMethod()
     {
         $this->request->method = 'InvalidMethod';
-        $actual = $this->invoker->invoke($this->request);
+        $this->invoker->invoke($this->request);
     }
 
     public function test_invokeTraversal()
@@ -164,8 +152,8 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     public function test_invokeWeave()
     {
         $bind = new Bind;
-        $bind->bindInterceptors('onGet', [new \testworld\Interceptor\Log]);
-        $weave = new Weaver(new \testworld\ResourceObject\Weave\Book, $bind);
+        $bind->bindInterceptors('onGet', [new Log]);
+        $weave = new Weaver(new Book, $bind);
         $this->request->ro = $weave;
         $this->request->method = 'get';
         $this->request->query = ['id' => 1];
@@ -177,8 +165,8 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     public function test_invokeWeaveWithLink()
     {
         $bind = new Bind;
-        $bind->bindInterceptors('onGet', [new \testworld\Interceptor\Log]);
-        $weave = new Weaver(new \testworld\ResourceObject\Weave\Link, $bind);
+        $bind->bindInterceptors('onGet', [new Log]);
+        $weave = new Weaver(new Link, $bind);
         $this->request->ro = $weave;
         $this->request->method = 'get';
         $this->request->query = ['animal' => 'bear'];
@@ -222,7 +210,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     public function test_OptionsMethod2()
     {
         $this->request->method = Invoker::OPTIONS;
-        $this->request->ro = new  \testworld\ResourceObject\RestBucks\Order;
+        $this->request->ro = new  Order;
         $response = $this->invoker->invoke($this->request);
         $actual = $response->headers['allow'];
         $expected = ['get', 'post'];
@@ -234,7 +222,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     public function test_OptionsWeaver()
     {
         $this->request->method = Invoker::OPTIONS;
-        $this->request->ro = new Weaver(new  \testworld\ResourceObject\RestBucks\Order, new Bind);
+        $this->request->ro = new Weaver(new Order, new Bind);
         $response = $this->invoker->invoke($this->request);
         $actual = $response->headers['allow'];
         $expected = ['get', 'post'];

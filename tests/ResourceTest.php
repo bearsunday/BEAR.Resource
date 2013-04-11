@@ -45,15 +45,15 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $injector = Injector::create();
         $injector->setModule(new TestModule);
         $scheme->scheme('app')->host('self')->toAdapter(
-            new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject')
+            new Adapter\App($injector, 'testworld', 'ResourceObject')
         );
         $scheme->scheme('page')->host('self')->toAdapter(
-            new \BEAR\Resource\Adapter\App($injector, 'testworld', 'Page')
+            new Adapter\App($injector, 'testworld', 'Page')
         );
-        $scheme->scheme('nop')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Nop);
-        $scheme->scheme('test')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Test);
-        $scheme->scheme('prov')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Prov);
-        $scheme->scheme('http')->host('*')->toAdapter(new \BEAR\Resource\Adapter\Http);
+        $scheme->scheme('nop')->host('self')->toAdapter(new Adapter\Nop);
+        $scheme->scheme('test')->host('self')->toAdapter(new Adapter\Test);
+        $scheme->scheme('prov')->host('self')->toAdapter(new Adapter\Prov);
+        $scheme->scheme('http')->host('*')->toAdapter(new Adapter\Http);
         /** @var $resource BEAR\Resource\Resource */
         $this->resource = require dirname(__DIR__) . '/scripts/instance.php';
         $this->resource->setSchemeCollection($scheme);
@@ -280,7 +280,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $additionalAnnotations = require __DIR__ . '/scripts/additionalAnnotations.php';
         $injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition, new Reader)))), new EmptyModule);
         $scheme = new SchemeCollection;
-        $testAdapter = new \BEAR\Resource\Adapter\Test;
+        $testAdapter = new Adapter\Test;
         $testAdapter->setRenderer(new TestRenderer);
         $scheme->scheme('test')->host('self')->toAdapter($testAdapter);
         $this->factory = new Factory($scheme);
@@ -370,7 +370,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
 }
 
-class varProvider implements \BEAR\Resource\SignalHandler\HandleInterface
+class varProvider implements SignalHandler\HandleInterface
 {
     public function __invoke(
         $return,

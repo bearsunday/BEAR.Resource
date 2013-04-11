@@ -19,6 +19,8 @@ use Ray\Aop\Bind;
 use Ray\Aop\ReflectiveMethodInvocation;
 use BEAR\Resource\Mock\User;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
+use testworld\Interceptor\Log;
+use testworld\ResourceObject\Weave\Book;
 
 /**
  * Test class for BEAR.Resource.
@@ -33,12 +35,12 @@ class DevInvokerTest extends \PHPUnit_Framework_TestCase
         $signal = require dirname(__DIR__) . '/vendor/aura/signal/scripts/instance.php';
         $signal->handler(
             '\BEAR\Resource\ReflectiveParams',
-            \BEAR\Resource\ReflectiveParams::SIGNAL_PARAM . 'Provides',
+            ReflectiveParams::SIGNAL_PARAM . 'Provides',
             new SignalHandler\Provides
         );
         $signal->handler(
             '\BEAR\Resource\ReflectiveParams',
-            \BEAR\Resource\ReflectiveParams::SIGNAL_PARAM . 'login_id',
+            ReflectiveParams::SIGNAL_PARAM . 'login_id',
             function (
                 $return,
                 \ReflectionParameter $parameter,
@@ -121,8 +123,8 @@ class DevInvokerTest extends \PHPUnit_Framework_TestCase
     public function invokeWeave()
     {
         $bind = new Bind;
-        $bind->bindInterceptors('onGet', [new \testworld\Interceptor\Log]);
-        $weave = new Weaver(new \testworld\ResourceObject\Weave\Book, $bind);
+        $bind->bindInterceptors('onGet', [new Log]);
+        $weave = new Weaver(new Book, $bind);
         $this->request->ro = $weave;
         $this->request->method = 'get';
         $this->request->query = ['id' => 1];
