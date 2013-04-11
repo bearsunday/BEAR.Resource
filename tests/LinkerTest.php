@@ -28,8 +28,14 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->linker = new Linker(new Reader);
         $injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition, new Reader)))), new EmptyModule);
         $signal = require dirname(__DIR__) . '/vendor/aura/signal/scripts/instance.php';
-        $this->request = new Request(new Invoker(new Config(new Annotation(new Definition, new Reader)), new Linker(new Reader), $signal));
-        $invoker = new Invoker(new Config(new Annotation(new Definition, new Reader)), new Linker(new Reader), $signal);
+        $invoker = new Invoker(
+            new Linker(new Reader),
+            new ReflectiveParams(
+                new Config(new Annotation(new Definition, new Reader)),
+                $signal
+            )
+        );
+        $this->request = new Request($invoker);
         $scheme = new SchemeCollection;
         $scheme->scheme('app')->host('self')->toAdapter(
             new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject')

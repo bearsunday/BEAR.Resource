@@ -34,16 +34,44 @@ final class ReflectiveParams
     const SIGNAL_PARAM = 'param';
 
 
+    /**
+     * @var \Aura\Di\ConfigInterface
+     */
     private $config;
+
+    /**
+     * @var \Aura\Signal\Manager
+     */
     private $signal;
 
-    public function __construct(ConfigInterface $config, Signal $signal, Invoker $invoker)
+    /**
+     * @return Signal
+     */
+    public function getSignal()
+    {
+        return $this->signal;
+    }
+
+    /**
+     * @param ConfigInterface $config
+     * @param Signal          $signal
+     */
+    public function __construct(ConfigInterface $config, Signal $signal)
     {
         $this->config = $config;
         $this->signal = $signal;
-        $this->invoker = $invoker;
     }
 
+    /**
+     * Return parameters
+     *
+     * @param object $object
+     * @param string $method
+     * @param array  $args
+     *
+     * @return array
+     * @throws Exception\MethodNotAllowed
+     */
     public function getParams($object, $method, array $args)
     {
         try {
@@ -124,7 +152,6 @@ final class ReflectiveParams
         PARAMETER_PROVIDED:
 
         return $return;
-
 
         PARAMETER_NOT_PROVIDED:
         /** @noinspection PhpUnreachableStatementInspection */

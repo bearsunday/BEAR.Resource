@@ -44,7 +44,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $this->logger = new Logger;
         $signal = require dirname(__DIR__) . '/vendor/aura/signal/scripts/instance.php';
-        $this->request = new Request(new Invoker(new Config(new Annotation(new Definition, new Reader)), new Linker(new Reader), $signal));
+        $this->request = new Request(new Invoker(new Linker(new Reader), new ReflectiveParams(new Config(new Annotation(new Definition, new Reader)), $signal)), new Linker(new Reader), $signal);
         $this->request->method = 'get';
         $this->request->ro = new Test;
         $this->request->ro->uri = 'test://self/path/to/resource';

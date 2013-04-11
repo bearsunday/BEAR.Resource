@@ -27,14 +27,14 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     protected $skeleton;
 
     /**
-     * @var Aura\Signal\Manager
-     */
-    protected $singnal;
-
-    /**
      * @var CacheAdapter
      */
     protected $cache;
+
+    /**
+     * @var Resource
+     */
+    private $resource;
 
     protected function setUp()
     {
@@ -286,7 +286,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->factory = new Factory($scheme);
         $factory = new Factory($scheme);
         $this->signal = require dirname(__DIR__) . '/vendor/aura/signal/scripts/instance.php';
-        $this->invoker = new Invoker(new Config(new Annotation(new Definition, new Reader), new Reader), new Linker(new Reader), $this->signal);
+        $this->invoker = new Invoker(new Linker(new Reader), new ReflectiveParams(new Config(new Annotation(new Definition, new Reader)), $this->signal));
         $this->resource = new Resource($factory, $this->invoker, new Request($this->invoker));
         $request = $this->resource->get->uri('test://self/path/to/example')->withQuery(['a' => 1, 'b' => 2])->request();
         $this->assertSame('{"posts":[1,2]}', (string)$request);

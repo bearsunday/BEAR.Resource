@@ -8,6 +8,7 @@ use BEAR\Resource\Linker;
 use BEAR\Resource\Resource;
 use BEAR\Resource\Request;
 use BEAR\Resource\SchemeCollection;
+use BEAR\Resource\ReflectiveParams;
 
 use Ray\Di\Definition;
 use Ray\Di\Annotation;
@@ -27,7 +28,7 @@ $scheme->scheme('app')->host('self')->toAdapter(
 );
 $factory = new Factory($scheme);
 $signal = require dirname(dirname(__DIR__)) . '/vendor/aura/signal/scripts/instance.php';
-$invoker = new Invoker(new Config(new Annotation(new Definition, new Reader)), new Linker(new Reader), $signal);
+$invoker = new Invoker(new Linker(new Reader), new ReflectiveParams(new Config(new Annotation(new Definition, new Reader)), $signal));
 $resource = new Resource($factory, $invoker, new Request($invoker));
 
 return $resource;

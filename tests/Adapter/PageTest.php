@@ -32,8 +32,15 @@ class PageTest extends \PHPUnit_Framework_TestCase
             new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject')
         );
         $factory = new Factory($scheme);
-        $this->signal = require dirname(dirname(__DIR__)) . '/vendor/aura/signal/scripts/instance.php';
-        $invoker = new Invoker(new Config(new Annotation(new Definition, new Reader)), new Linker(new Reader), $this->signal);
+
+        $signal = require dirname(dirname(__DIR__)) . '/vendor/aura/signal/scripts/instance.php';
+        $invoker = new Invoker(
+            new Linker(new Reader),
+            new ReflectiveParams(
+                new Config(new Annotation(new Definition, new Reader)),
+                $signal
+            )
+        );
         $this->resource = new Resource($factory, $invoker, new Request($invoker));
         $this->user = $factory->newInstance('app://self/user');
         $this->nop = $factory->newInstance('nop://self/dummy');

@@ -272,8 +272,8 @@ class Resource implements ResourceInterface
     {
         /** @noinspection PhpParamsInspection */
         $this->invoker->getSignal()->handler(
-            '\BEAR\Resource',
-            Invoker::SIGNAL_PARAM . $signal,
+            '\BEAR\Resource\ReflectiveParams',
+            ReflectiveParams::SIGNAL_PARAM . $signal,
             $argProvider
         );
     }

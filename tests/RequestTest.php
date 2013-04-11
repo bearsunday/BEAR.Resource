@@ -25,7 +25,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $signal = require dirname(__DIR__) . '/vendor/aura/signal/scripts/instance.php';
-        $this->request = new Request(new Invoker(new Config(new Annotation(new Definition, new Reader)), new Linker(new Reader), $signal));
+        $this->request = new Request(new Invoker(new Linker(new Reader), new ReflectiveParams(new Config(new Annotation(new Definition, new Reader)), $signal)), new Linker(new Reader), $signal);
     }
 
     public function test_New()
@@ -116,6 +116,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->request->ro->uri = 'nop://self/path/to/resource';
         $this->request->query = [];
         $this->assertInstanceOf('\BEAR\Resource\Request', $this->request);
+
         return $this->request;
     }
 

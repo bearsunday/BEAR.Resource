@@ -30,35 +30,35 @@ class DevInvokerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $signalProvider = function (
-            $return,
-            \ReflectionParameter $parameter,
-            ReflectiveMethodInvocation $invovation,
-            Definition $definition
-        ) {
-            $return->value = 1;
-
-            return \Aura\Signal\Manager::STOP;
-        };
-        $config = new Config(new Annotation(new Definition, new Reader));
-        $scheme = new SchemeCollection;
-        $scheme->scheme('nop')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Nop);
-        $scheme->scheme('prov')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Prov);
-        $factory = new Factory($scheme);
-        $schemeAdapters = ['nop' => '\BEAR\Resource\Adapter\Nop', 'prov' => '\BEAR\Resource\Mock\Prov'];
-        $injector = new Injector(new Container(new Forge($config)), new EmptyModule);
-        $this->signal = require dirname(__DIR__) . '/vendor/aura/signal/scripts/instance.php';
-        $this->invoker = new DevInvoker($config, new Linker(new Reader), $this->signal);
-        $this->invoker->getSignal()->handler(
-            '\BEAR\Resource',
+        $signal = require dirname(__DIR__) . '/vendor/aura/signal/scripts/instance.php';
+        $signal->handler(
+            '\BEAR\Resource\ReflectiveParams',
             \BEAR\Resource\ReflectiveParams::SIGNAL_PARAM . 'Provides',
             new SignalHandler\Provides
         );
-        $this->invoker->getSignal()->handler(
-            '\BEAR\Resource',
+        $signal->handler(
+            '\BEAR\Resource\ReflectiveParams',
             \BEAR\Resource\ReflectiveParams::SIGNAL_PARAM . 'login_id',
-            $signalProvider
+            function (
+                $return,
+                \ReflectionParameter $parameter,
+                ReflectiveMethodInvocation $invocation,
+                Definition $definition
+            ) {
+                $return->value = 1;
+
+                return \Aura\Signal\Manager::STOP;
+            }
         );
+        $this->invoker = new DevInvoker(
+            new Linker(new Reader),
+            new ReflectiveParams(
+                new Config(new Annotation(new Definition, new Reader)),
+                $signal
+            )
+        );
+
+
         $resource = new \testworld\ResourceObject\User;
         $resource->uri = 'dummy://self/User';
         $this->request = new Request($this->invoker);
