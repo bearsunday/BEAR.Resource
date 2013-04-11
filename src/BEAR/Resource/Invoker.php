@@ -100,11 +100,13 @@ class Invoker implements InvokerInterface
     public function __construct(
         ConfigInterface $config,
         LinkerInterface $linker,
-        Signal $signal
+        Signal $signal,
+        ReflectiveParams $params = null
     ) {
         $this->config = $config;
         $this->linker = $linker;
         $this->signal = $signal;
+        $this->params = $params ? : new ReflectiveParams($config, $signal, $this);
     }
 
     /**
@@ -151,13 +153,13 @@ class Invoker implements InvokerInterface
             $weave = $request->ro;
             /** @noinspection PhpUnusedLocalVariableInspection */
             /** @var $weave Callable */
-            $result = $weave([$this, 'getParams'], $method, $request->query);
+            $result = $weave([$this->params, 'getParams'], $method, $request->query);
             goto completed;
         }
         if (method_exists($ro, $method) !== true) {
             return $this->methodNotExists($ro, $request, $method);
         }
-        $params = $this->getParams($ro, $method, $request->query);
+        $params = $this->params->getParams($ro, $method, $request->query);
         try {
             $result = call_user_func_array([$ro, $method], $params);
         } catch (\Exception $e) {
