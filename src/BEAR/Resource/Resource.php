@@ -273,7 +273,7 @@ class Resource implements ResourceInterface
         /** @noinspection PhpParamsInspection */
         $this->invoker->getSignal()->handler(
             '\BEAR\Resource\Invoker',
-            \BEAR\Resource\Invoker::SIGNAL_PARAM . $signal,
+            Invoker::SIGNAL_PARAM . $signal,
             $argProvider
         );
     }
