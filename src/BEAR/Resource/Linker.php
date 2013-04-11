@@ -62,6 +62,35 @@ final class Linker implements LinkerInterface
     }
 
     /**
+     * @param SplQueue $q
+     * @param string   $link
+     *
+     * @return array|null
+     * @throws Exception\Link
+     */
+    private function getItem(\SplQueue $q, $link)
+    {
+        $cnt = $q->count();
+        if ($cnt === 0) {
+            return null;
+        }
+        $item = null;
+        for ($i = 0; $i < $cnt; $i++) {
+            list($item, $ro) = $q->dequeue();
+            $request = $this->getLinkResult($ro, $link->key, (array)$item);
+            if (!($request instanceof Request)) {
+                throw new Exception\Link('From list to instance link is not currently supported.');
+            }
+            $requestResult = $request();
+            /** @var $requestResult AbstractObject */
+            $item[$link->key] = $requestResult->body;
+            $item = (array)$item;
+        }
+
+        return $item;
+    }
+
+    /**
      * {@inheritDoc}
      * @throws Exception\Link
      */
@@ -76,21 +105,8 @@ final class Linker implements LinkerInterface
         $q->setIteratorMode(\SplQueue::IT_MODE_DELETE);
         // has links
         foreach ($links as $link) {
-            $cnt = $q->count();
-            if ($cnt !== 0) {
-                for ($i = 0; $i < $cnt; $i++) {
-                    list($item, $ro) = $q->dequeue();
-                    $request = $this->getLinkResult($ro, $link->key, (array)$item);
-                    if (!($request instanceof Request)) {
-                        throw new Exception\Link('From list to instance link is not currently supported.');
-                    }
-                    $ro = $request->ro;
-                    $requestResult = $request();
-                    /** @var $requestResult AbstractObject */
-                    $a = $requestResult->body;
-                    $item[$link->key] = $a;
-                    $item = (array)$item;
-                }
+            $item = $this->getItem($q, $link);
+            if ($item) {
                 continue;
             }
             if ($this->isList($refValue)) {
@@ -102,6 +118,7 @@ final class Linker implements LinkerInterface
                     $item[$link->key] = $requestResult;
                     $q->enqueue([$requestResult, $request->ro]);
                 }
+
                 $refValue = &$requestResult;
                 continue;
             }
@@ -112,7 +129,7 @@ final class Linker implements LinkerInterface
             }
             $ro = $request->ro;
             $requestResult = $request();
-
+            /** @var $requestResult \BEAR\Resource\AbstractObject */
             switch ($link->type) {
                 case LinkType::NEW_LINK:
                     if (!$hasTargeted) {
@@ -206,4 +223,5 @@ final class Linker implements LinkerInterface
 
         return $result;
     }
+
 }
