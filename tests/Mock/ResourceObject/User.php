@@ -65,9 +65,10 @@ class User extends AbstractObject
     }
 
     /**
-     * @ParamSignal("login_id")
+     * @param $delete_id
      *
      * @return string
+     * @ParamSignal("login_id")
      */
     public function onDelete($delete_id)
     {

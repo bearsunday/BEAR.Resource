@@ -16,12 +16,8 @@ use Ray\Di\Di\Scope;
  */
 class Menu extends AbstractObject
 {
-
     private $menu = [];
 
-    /**
-     * @param Resource $resource
-     */
     public function __construct()
     {
         $this->menu = array('coffee' => 300, 'latte' => 400);
