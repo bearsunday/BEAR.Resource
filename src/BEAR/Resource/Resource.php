@@ -320,5 +320,4 @@ class Resource implements ResourceInterface
     {
         return $this->request->toUri();
     }
-
 }

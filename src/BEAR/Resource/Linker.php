@@ -206,5 +206,4 @@ final class Linker implements LinkerInterface
 
         return $result;
     }
-
 }
