@@ -7,7 +7,10 @@ namespace BEAR\Resource;
  */
 class ObjectTest extends \PHPUnit_Framework_TestCase
 {
-    protected $skelton;
+    /**
+     * @var AbstractObject
+     */
+    protected $resource;
 
     protected function setUp()
     {
@@ -87,7 +90,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
 
     public function test_getEmptyItelator()
     {
-        $iterator = $this->resource->body = 'string';
+        $this->resource->body = 'string';
         $iterator = $this->resource->getIterator();
         $actual = '';
         while ($iterator->valid()) {

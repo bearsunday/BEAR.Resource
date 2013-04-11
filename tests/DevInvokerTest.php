@@ -1,5 +1,7 @@
 <?php
 
+namespace BEAR\Resource;
+
 use BEAR\Resource\DevInvoker;
 
 namespace BEAR\Resource;

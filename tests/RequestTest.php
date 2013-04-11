@@ -2,7 +2,6 @@
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Request\Method;
 use testworld\ResourceObject\User\Entry;
 use BEAR\Resource\Adapter\Nop;
 use BEAR\Resource\Adapter\Test;
@@ -70,6 +69,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function test__toStringWithRenderableResourceObject()
     {
         $ro = (new Test)->setRenderer(new TestRenderer);
+        /**  @var $ro AbstractObject */
         $this->request->set($ro, 'nop://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
         $request = $this->request;
         $actual = $request(['b' => 30])->body['posts'];
