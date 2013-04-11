@@ -91,12 +91,15 @@ class DevInvoker extends Invoker implements InvokerInterface
     public function getBindInfo(Bind $binds)
     {
         $result = [];
-        foreach ($binds as $method => $bind) {
+        $iterator = $binds->getIterator();
+        while ($iterator->valid()) {
+            $method = $iterator->key();
             $interceptors = array_values($binds[$method]);
             foreach ($interceptors as &$interceptor) {
                 $interceptor = get_class($interceptor);
             }
             $result[$method] = $interceptors;
+            $iterator->next();
         }
 
         return $result;
