@@ -31,7 +31,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $signalProvider = function (
             $return,
             \ReflectionParameter $parameter,
-            ReflectiveMethodInvocation $invovation,
+            ReflectiveMethodInvocation $invocation,
             Definition $definition
         ) {
             $return->value = 1;
@@ -48,13 +48,13 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->signal = require dirname(__DIR__) . '/vendor/aura/signal/scripts/instance.php';
         $this->invoker = new Invoker($config, new Linker(new Reader), $this->signal);
         $this->invoker->getSignal()->handler(
-            '\BEAR\Resource\Invoker',
-            \BEAR\Resource\Invoker::SIGNAL_PARAM . 'Provides',
+            '\BEAR\Resource',
+            \BEAR\Resource\ReflectiveParams::SIGNAL_PARAM . 'Provides',
             new SignalHandler\Provides
         );
         $this->invoker->getSignal()->handler(
-            '\BEAR\Resource\Invoker',
-            \BEAR\Resource\Invoker::SIGNAL_PARAM . 'login_id',
+            '\BEAR\Resource',
+            \BEAR\Resource\ReflectiveParams::SIGNAL_PARAM . 'login_id',
             $signalProvider
         );
         $resource = new \testworld\ResourceObject\User;

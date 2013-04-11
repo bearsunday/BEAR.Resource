@@ -107,7 +107,7 @@ final class ReflectiveParams
         }
         foreach ($signalIds as $signalId) {
             $results = $this->signal->send(
-                $this->invoker,
+                $this,
                 ReflectiveParams::SIGNAL_PARAM . $signalId,
                 $return,
                 $parameter,

@@ -4,7 +4,7 @@ use BEAR\Resource\DevInvoker;
 
 namespace BEAR\Resource;
 
-require __DIR__ . '/InvokerTest.php';
+//require __DIR__ . '/InvokerTest.php';
 
 use Ray\Di\Definition;
 use Ray\Di\Annotation;
@@ -23,7 +23,7 @@ use Doctrine\Common\Annotations\AnnotationReader as Reader;
 /**
  * Test class for BEAR.Resource.
  */
-class DevInvokerTest extends InvokerTest
+class DevInvokerTest extends \PHPUnit_Framework_TestCase
 {
     protected $signal;
     protected $invoker;
@@ -50,13 +50,13 @@ class DevInvokerTest extends InvokerTest
         $this->signal = require dirname(__DIR__) . '/vendor/aura/signal/scripts/instance.php';
         $this->invoker = new DevInvoker($config, new Linker(new Reader), $this->signal);
         $this->invoker->getSignal()->handler(
-            '\BEAR\Resource\Invoker',
-            \BEAR\Resource\Invoker::SIGNAL_PARAM . 'Provides',
+            '\BEAR\Resource',
+            \BEAR\Resource\ReflectiveParams::SIGNAL_PARAM . 'Provides',
             new SignalHandler\Provides
         );
         $this->invoker->getSignal()->handler(
-            '\BEAR\Resource\Invoker',
-            \BEAR\Resource\Invoker::SIGNAL_PARAM . 'login_id',
+            '\BEAR\Resource',
+            \BEAR\Resource\ReflectiveParams::SIGNAL_PARAM . 'login_id',
             $signalProvider
         );
         $resource = new \testworld\ResourceObject\User;
