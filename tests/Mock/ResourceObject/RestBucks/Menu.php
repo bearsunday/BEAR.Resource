@@ -30,7 +30,7 @@ class Menu extends AbstractObject
      *
      * @return \testworld\ResourceObject\RestBucks\Menu
      *
-     * @Link(rel="order", href="app://self/RestBucks/Order?drink={dring}")
+     * @Link(rel="order", href="app://self/RestBucks/Order?drink={drink}")
      */
     public function onGet($drink = null)
     {

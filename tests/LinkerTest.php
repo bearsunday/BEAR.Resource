@@ -186,7 +186,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function test_TargeLinktTarget()
+    public function test_TargetLinkTarget()
     {
         $ro = new User;
         $ro->setResource($this->resource);
@@ -211,7 +211,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function test_TargeLinktSelf()
+    public function test_TargetLinkSelf()
     {
         $ro = new User;
         $ro->setResource($this->resource);

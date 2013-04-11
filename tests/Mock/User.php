@@ -10,7 +10,7 @@ class User extends AbstractObject
 {
     public $links = [
         'friend' => [Link::HREF => 'app://self/friend/{?id}', Link::TEMPLATED => true],
-        'profile' => [Link::HREF => 'app://self/prfofile']
+        'profile' => [Link::HREF => 'app://self/profile']
     ];
 
     public $body = [

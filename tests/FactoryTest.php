@@ -35,7 +35,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $this->factory = new Factory($scheme);
     }
 
-    public function test_Newfactory()
+    public function test_NewFactory()
     {
         $this->assertInstanceOf('\BEAR\Resource\Factory', $this->factory);
     }

@@ -41,6 +41,6 @@ class ATest extends \PHPUnit_Framework_TestCase
     {
         $resource = new Mock\User;
         $uri = $this->a->href('profile', $resource);
-        $this->assertSame('app://self/prfofile', $uri);
+        $this->assertSame('app://self/profile', $uri);
     }
 }

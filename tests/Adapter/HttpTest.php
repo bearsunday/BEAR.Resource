@@ -18,7 +18,7 @@ use BEAR\Resource\Mock\User;
  */
 class HttpTest extends \PHPUnit_Framework_TestCase
 {
-    protected $skelton;
+    protected $skeleton;
 
     protected function setUp()
     {
@@ -105,7 +105,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     public function test404()
     {
-        $this->httpAdapter = $this->factory->newInstance('http://news.google.com/notexists/');
+        $this->httpAdapter = $this->factory->newInstance('http://news.google.com/not_exists/');
         $ro = $this->httpAdapter->onGet();
         $expected = 'Top Stories - Google News';
         $this->assertSame($expected, $actual);

@@ -275,7 +275,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame($instance1->time, $instance2->time);
     }
 
-    public function test_LazyReqeustResultAsString()
+    public function test_LazyRequestResultAsString()
     {
         $additionalAnnotations = require __DIR__ . '/scripts/additionalAnnotations.php';
         $injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition, new Reader)))), new EmptyModule);
