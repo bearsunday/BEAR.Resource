@@ -90,12 +90,12 @@ interface ResourceInterface
     public function linkCrawl($linkKey);
 
     /**
-     *  Attach argument provider
+     * Attach parameter provider
      *
-     * @param  string                       $signal
-     * @param SignalHandler\HandleInterface $argProvider
+     * @param                        $varName
+     * @param ParamProviderInterface $provider
      *
      * @return mixed
      */
-    public function attachParamProvider($signal, HandleInterface $argProvider);
+    public function attachParamProvider($varName, ParamProviderInterface $provider);
 }

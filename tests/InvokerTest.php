@@ -2,15 +2,15 @@
 
 namespace BEAR\Resource;
 
+use Aura\Signal\Manager;
+use Aura\Signal\HandlerFactory;
+use Aura\Signal\ResultFactory;
+use Aura\Signal\ResultCollection;
 use Ray\Di\Definition;
-use Ray\Di\Annotation;
-use Ray\Di\Config;
 use Ray\Di\Injector;
 use Ray\Aop\Weaver;
 use Ray\Aop\Bind;
-use Ray\Aop\ReflectiveMethodInvocation;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
-use Aura\Signal\Manager;
 use testworld\Interceptor\Log;
 use testworld\ResourceObject\RestBucks\Order;
 use testworld\ResourceObject\User;
@@ -29,27 +29,9 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $signal = require dirname(__DIR__) . '/vendor/aura/signal/scripts/instance.php';
-        $signal->handler(
-            '\BEAR\Resource\ReflectiveParams',
-            ReflectiveParams::SIGNAL_PARAM . 'Provides',
-            new SignalHandler\Provides
-        );
-        $signal->handler(
-            '\BEAR\Resource\ReflectiveParams',
-            ReflectiveParams::SIGNAL_PARAM . 'login_id',
-            function (
-                $return,
-                \ReflectionParameter $parameter,
-                ReflectiveMethodInvocation $invocation,
-                Definition $definition
-            ) {
-                $return->value = 1;
-
-                return Manager::STOP;
-            }
-        );
-        $this->invoker = new Invoker(new Linker(new Reader), new ReflectiveParams(new Config(new Annotation(new Definition, new Reader)), $signal));
+        $signal = new Manager(new HandlerFactory, new ResultFactory, new ResultCollection);
+        $params = new NamedParams(new SignalParam($signal, new Param));
+        $this->invoker = new Invoker(new Linker(new Reader), $params);
 
         $resource = new User;
         $resource->uri = 'dummy://self/User';
@@ -61,23 +43,6 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
 
     public function test_Invoke()
     {
-        $actual = $this->invoker->invoke($this->request)->body;
-        $expected = ['id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12];
-        $this->assertSame($actual, $expected);
-    }
-
-    public function test_InvokerInterfaceWithNoPrams()
-    {
-        $this->request->query = [];
-        $this->request->method = 'delete';
-        $actual = $this->invoker->invoke($this->request)->body;
-        $expected = '1 deleted';
-        $this->assertSame($actual, $expected);
-    }
-
-    public function test_InvokerInterfaceMissingParam()
-    {
-        $this->request->query = [];
         $actual = $this->invoker->invoke($this->request)->body;
         $expected = ['id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12];
         $this->assertSame($actual, $expected);

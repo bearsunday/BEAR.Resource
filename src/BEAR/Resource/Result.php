@@ -29,5 +29,5 @@ final class Result
      *
      * @var array
      */
-    public $args;
+    public $namedArgs;
 }

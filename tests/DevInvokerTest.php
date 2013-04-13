@@ -8,12 +8,16 @@ namespace BEAR\Resource;
 
 //require __DIR__ . '/InvokerTest.php';
 
+use Aura\Signal\Manager;
+use Aura\Signal\HandlerFactory;
+use Aura\Signal\ResultFactory;
+use Aura\Signal\ResultCollection;
+
 use Ray\Di\Definition;
 use Ray\Di\Annotation;
 use Ray\Di\Config;
 use Ray\Di\Forge;
 use Ray\Di\Container;
-use Ray\Di\Manager;
 use Ray\Di\Injector;
 use Ray\Di\EmptyModule;
 use Ray\Aop\Weaver;
@@ -34,33 +38,9 @@ class DevInvokerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $signal = require dirname(__DIR__) . '/vendor/aura/signal/scripts/instance.php';
-        $signal->handler(
-            '\BEAR\Resource\ReflectiveParams',
-            ReflectiveParams::SIGNAL_PARAM . 'Provides',
-            new SignalHandler\Provides
-        );
-        $signal->handler(
-            '\BEAR\Resource\ReflectiveParams',
-            ReflectiveParams::SIGNAL_PARAM . 'login_id',
-            function (
-                $return,
-                \ReflectionParameter $parameter,
-                ReflectiveMethodInvocation $invocation,
-                Definition $definition
-            ) {
-                $return->value = 1;
-
-                return \Aura\Signal\Manager::STOP;
-            }
-        );
-        $this->invoker = new DevInvoker(
-            new Linker(new Reader),
-            new ReflectiveParams(
-                new Config(new Annotation(new Definition, new Reader)),
-                $signal
-            )
-        );
+        $signal = new Manager(new HandlerFactory, new ResultFactory, new ResultCollection);
+        $params = new NamedParams(new SignalParam($signal, new Param));
+        $this->invoker = new DevInvoker(new Linker(new Reader), $params);
 
 
         $resource = new \testworld\ResourceObject\User;

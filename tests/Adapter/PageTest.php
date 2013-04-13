@@ -31,19 +31,10 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $scheme->scheme('app')->host('self')->toAdapter(
             new Adapter\App($injector, 'testworld', 'ResourceObject')
         );
-        $factory = new Factory($scheme);
-
-        $signal = require dirname(dirname(__DIR__)) . '/vendor/aura/signal/scripts/instance.php';
-        $invoker = new Invoker(
-            new Linker(new Reader),
-            new ReflectiveParams(
-                new Config(new Annotation(new Definition, new Reader)),
-                $signal
-            )
-        );
-        $this->resource = new Resource($factory, $invoker, new Request($invoker));
-        $this->user = $factory->newInstance('app://self/user');
-        $this->nop = $factory->newInstance('nop://self/dummy');
+        $this->resource = require dirname(dirname(__DIR__)) . '/scripts/instance.php';
+        $this->resource->setSchemeCollection($scheme);
+        $this->user = $this->resource->newInstance('app://self/user');
+        $this->nop = $this->resource->newInstance('nop://self/dummy');
         $this->query = array(
             'id' => 10,
             'name' => 'Ray',

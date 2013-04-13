@@ -2,6 +2,10 @@
 
 namespace BEAR\Resource;
 
+use Aura\Signal\Manager;
+use Aura\Signal\HandlerFactory;
+use Aura\Signal\ResultFactory;
+use Aura\Signal\ResultCollection;
 use testworld\ResourceObject\User\Entry;
 use BEAR\Resource\Adapter\Nop;
 use BEAR\Resource\Adapter\Test;
@@ -22,9 +26,10 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        parent::setUp();
-        $signal = require dirname(__DIR__) . '/vendor/aura/signal/scripts/instance.php';
-        $this->request = new Request(new Invoker(new Linker(new Reader), new ReflectiveParams(new Config(new Annotation(new Definition, new Reader)), $signal)), new Linker(new Reader), $signal);
+        $signal = new Manager(new HandlerFactory, new ResultFactory, new ResultCollection);
+        $params = new NamedParams(new SignalParam($signal, new Param));
+        $invoker = new Invoker(new Linker(new Reader), $params);
+        $this->request = new Request($invoker);
     }
 
     public function test_New()

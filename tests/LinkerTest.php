@@ -2,12 +2,15 @@
 
 namespace BEAR\Resource;
 
+use Aura\Signal\Manager;
+use Aura\Signal\HandlerFactory;
+use Aura\Signal\ResultFactory;
+use Aura\Signal\ResultCollection;
 use Ray\Di\Definition;
 use Ray\Di\Annotation;
 use Ray\Di\Config;
 use Ray\Di\Forge;
 use Ray\Di\Container;
-use Ray\Di\Manager;
 use Ray\Di\Injector;
 use Ray\Di\EmptyModule;
 
@@ -26,16 +29,15 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
+
         $this->linker = new Linker(new Reader);
+        $signal = new Manager(new HandlerFactory, new ResultFactory, new ResultCollection);
+        $params = new NamedParams(new SignalParam($signal, new Param));
+        $invoker = new Invoker($this->linker, $params);
+
+
         $injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition, new Reader)))), new EmptyModule);
-        $signal = require dirname(__DIR__) . '/vendor/aura/signal/scripts/instance.php';
-        $invoker = new Invoker(
-            new Linker(new Reader),
-            new ReflectiveParams(
-                new Config(new Annotation(new Definition, new Reader)),
-                $signal
-            )
-        );
+
         $this->request = new Request($invoker);
         $scheme = new SchemeCollection;
         $scheme->scheme('app')->host('self')->toAdapter(

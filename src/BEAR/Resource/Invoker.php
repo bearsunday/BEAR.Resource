@@ -9,12 +9,12 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\AbstractObject as ResourceObject;
 use BEAR\Resource\Exception\MethodNotAllowed;
+use Ray\Aop\ReflectiveMethodInvocation;
 use Ray\Aop\Weave;
 use Ray\Di\Di\Scope;
 use Ray\Di\Definition;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
-
 /**
  * Resource request invoker
  *
@@ -37,7 +37,7 @@ class Invoker implements InvokerInterface
     private $logger;
 
     /**
-     * @var ReflectiveParams
+     * @var NamedParams
      */
     protected $params;
 
@@ -75,16 +75,18 @@ class Invoker implements InvokerInterface
 
     /**
      * @param LinkerInterface  $linker
-     * @param ReflectiveParams $params
+     * @param NamedParams $params
      *
      * @Inject
      */
     public function __construct(
         LinkerInterface $linker,
-        ReflectiveParams $params
+        NamedParams $params,
+        LoggerInterface $logger = null
     ) {
         $this->linker = $linker;
         $this->params = $params;
+        $this->logger = $logger;
     }
 
     /**
@@ -112,28 +114,17 @@ class Invoker implements InvokerInterface
      */
     public function invoke(Request $request)
     {
-        $method = 'on' . ucfirst($request->method);
+        $onMethod = 'on' . ucfirst($request->method);
+        $weave = null;
         $isWeave = $request->ro instanceof Weave;
-        /** @var $request->ro \Ray\Aop\Weave */
-        /** @noinspection PhpUndefinedMethodInspection */
         $ro = $isWeave ? $request->ro->___getObject() : $request->ro;
-        if ($isWeave && $request->method !== Invoker::OPTIONS && $request->method !== Invoker::HEAD) {
-            $weave = $request->ro;
-            /** @noinspection PhpUnusedLocalVariableInspection */
-            /** @var $weave Callable */
-            $result = $weave([$this->params, 'getParams'], $method, $request->query);
-            goto completed;
+        $weave = ($isWeave && $request->method !== Invoker::OPTIONS && $request->method !== Invoker::HEAD) ? $request->ro : null;
+        if (method_exists($ro, $onMethod) !== true) {
+            return $this->methodNotExists($ro, $request, $onMethod);
         }
-        if (method_exists($ro, $method) !== true) {
-            return $this->methodNotExists($ro, $request, $method);
-        }
-        $params = $this->params->getParams($ro, $method, $request->query);
-        try {
-            $result = call_user_func_array([$ro, $method], $params);
-        } catch (\Exception $e) {
-            // @todo implements "Exception signal"
-            throw $e;
-        }
+        // invoke with Named param and Signal param
+        $result = $this->params->invoke(new ReflectiveMethodInvocation([$ro, $onMethod], $request->query), $weave);
+
         // link
         completed:
         if ($request->links) {
@@ -270,12 +261,18 @@ class Invoker implements InvokerInterface
     private function onHead(Request $request)
     {
         $ro = ($request->ro instanceof Weave) ? $request->ro->___getObject() :  $request->ro;
+        $weave = ($request->ro instanceof Weave) ? $request->ro : null;
         if (method_exists($ro, 'onGet')) {
-            $params = $this->params->getParams($ro, 'onGet', $request->query);
-            call_user_func_array([$ro, 'onGet'], $params);
+            $this->params->invoke(new ReflectiveMethodInvocation([$ro, 'onGet'], $request->query), $weave);
         }
         $ro->body = '';
 
         return $ro;
     }
+
+    public function attachParamProvider($varName, ParamProviderInterface $provider)
+    {
+        $this->params->attachParamProvider($varName, $provider);
+    }
+
 }
