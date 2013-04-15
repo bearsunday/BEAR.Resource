@@ -2,20 +2,16 @@
 
 namespace BEAR\Resource;
 
-use Ray\Di\Definition;
-use Ray\Di\Annotation;
-use Ray\Di\Config;
-use Ray\Di\Forge;
-use Ray\Di\Container;
-use Ray\Di\Manager;
-use Ray\Di\Injector;
-use Ray\Di\EmptyModule;
-use BEAR\Resource\factory;
-use Doctrine\Common\Annotations\AnnotationReader as Reader;
-
-use BEAR\Resource\Request\Method;
+use Aura\Signal\HandlerFactory;
+use Aura\Signal\Manager;
+use Aura\Signal\ResultCollection;
+use Aura\Signal\ResultFactory;
 use BEAR\Resource\Adapter\Nop;
 use BEAR\Resource\Adapter\Test;
+use BEAR\Resource\Request\Method;
+use Doctrine\Common\Annotations\AnnotationReader as Reader;
+use Ray\Di\Definition;
+use Ray\Di\Injector;
 
 class TestWriter implements LogWriterInterface
 {
@@ -43,8 +39,12 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->logger = new Logger;
-        $signal = require dirname(__DIR__) . '/vendor/aura/signal/scripts/instance.php';
-        $this->request = new Request(new Invoker(new Config(new Annotation(new Definition, new Reader)), new Linker(new Reader), $signal));
+
+        $signal = new Manager(new HandlerFactory, new ResultFactory, new ResultCollection);
+        $params = new NamedParams(new SignalParam($signal, new Param));
+        $invoker = new Invoker(new Linker(new Reader), $params);
+
+        $this->request = new Request($invoker);
         $this->request->method = 'get';
         $this->request->ro = new Test;
         $this->request->ro->uri = 'test://self/path/to/resource';

@@ -1,5 +1,5 @@
 <?php
-$additonalAnnotations = [
+$additionalAnnotations = [
     'provides' => 'BEAR\Resource\Annotation\Provides',
     'signal' => 'BEAR\Resource\Annotation\Signal',
     'argsignal' => 'BEAR\Resource\Annotation\ParamSignal',
@@ -8,4 +8,4 @@ $additonalAnnotations = [
     'put' => 'BEAR\Resource\Annotation\Put',
     'delete' => 'BEAR\Resource\Annotation\Delete',
 ];
-return $additonalAnnotations;
+return $additionalAnnotations;

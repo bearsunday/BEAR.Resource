@@ -22,5 +22,4 @@ final class Provides implements AnnotationInterface
      * @var string
      */
     public $value;
-
 }

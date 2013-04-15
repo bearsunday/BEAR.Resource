@@ -2,22 +2,30 @@
 
 namespace BEAR\Resource;
 
-use Ray\Di\Definition;
+use Aura\Signal\HandlerFactory;
+use Aura\Signal\Manager;
+use Aura\Signal\ResultCollection;
+use Aura\Signal\ResultFactory;
+use BEAR\Resource\Builder;
+use BEAR\Resource\Mock\TestModule;
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Cache\ApcCache as Cache;
+use Guzzle\Cache\DoctrineCacheAdapter as CacheAdapter;
 use Ray\Di\Annotation;
 use Ray\Di\Config;
-use Ray\Di\Forge;
 use Ray\Di\Container;
-use Ray\Di\Manager;
-use Ray\Di\Injector;
+use Ray\Di\Definition;
 use Ray\Di\EmptyModule;
-use BEAR\Resource\Builder;
-use BEAR\Resource\Mock\User;
-use Ray\Aop\ReflectiveMethodInvocation;
-use BEAR\Resource\SignalHandler\Provides;
-use Guzzle\Cache\DoctrineCacheAdapter as CacheAdapter;
-use Doctrine\Common\Cache\ApcCache as Cache;
-use Doctrine\Common\Annotations\AnnotationReader as Reader;
-use BEAR\Resource\Mock\TestModule;
+use Ray\Di\Forge;
+use Ray\Di\Injector;
+
+class varProvider implements ParamProviderInterface
+{
+    public function __invoke(Param $param)
+    {
+        return $param->inject(1);
+    }
+}
 
 /**
  * Test class for BEAR.Resource.
@@ -27,14 +35,14 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     protected $skeleton;
 
     /**
-     * @var Aura\Signal\Manager
-     */
-    protected $singnal;
-
-    /**
      * @var CacheAdapter
      */
     protected $cache;
+
+    /**
+     * @var Resource
+     */
+    private $resource;
 
     protected function setUp()
     {
@@ -45,15 +53,15 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $injector = Injector::create();
         $injector->setModule(new TestModule);
         $scheme->scheme('app')->host('self')->toAdapter(
-            new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject')
+            new Adapter\App($injector, 'testworld', 'ResourceObject')
         );
         $scheme->scheme('page')->host('self')->toAdapter(
-            new \BEAR\Resource\Adapter\App($injector, 'testworld', 'Page')
+            new Adapter\App($injector, 'testworld', 'Page')
         );
-        $scheme->scheme('nop')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Nop);
-        $scheme->scheme('test')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Test);
-        $scheme->scheme('prov')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Prov);
-        $scheme->scheme('http')->host('*')->toAdapter(new \BEAR\Resource\Adapter\Http);
+        $scheme->scheme('nop')->host('self')->toAdapter(new Adapter\Nop);
+        $scheme->scheme('test')->host('self')->toAdapter(new Adapter\Test);
+        $scheme->scheme('prov')->host('self')->toAdapter(new Adapter\Prov);
+        $scheme->scheme('http')->host('*')->toAdapter(new Adapter\Http);
         /** @var $resource BEAR\Resource\Resource */
         $this->resource = require dirname(__DIR__) . '/scripts/instance.php';
         $this->resource->setSchemeCollection($scheme);
@@ -232,22 +240,14 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $response = $this->resource->get->uri(
             'http://news.google.com/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss'
         )->sync->request()->get->uri('http://phpspot.org/blog/index.xml')->eager->sync->request()->get->uri(
-            'http://rss.excite.co.jp/rss/excite/odd'
-        )->eager->request();
+                'http://rss.excite.co.jp/rss/excite/odd'
+            )->eager->request();
         $this->assertSame(3, count($response->body));
     }
 
-    public function testParameterProvidedBySignalClosure()
+    public function testAttachParamProvider()
     {
-        $this->resource->attachParamProvider('login_id', new varProvider);
-        $actual = $this->resource->delete->object($this->user)->withQuery([])->eager->request();
-        $this->assertSame("1 deleted", $actual->body);
-    }
-
-    public function testParameterProvidedBySignalWithInvokerInterfaceObject()
-    {
-        $this->resource->attachParamProvider('Provides', new Provides);
-        $this->resource->attachParamProvider('login_id', new varProvider);
+        $this->resource->attachParamProvider('delete_id', new varProvider);
         $actual = $this->resource->delete->object($this->user)->withQuery([])->eager->request();
         $this->assertSame("1 deleted", $actual->body);
     }
@@ -275,20 +275,21 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame($instance1->time, $instance2->time);
     }
 
-    public function test_LazyReqeustResultAsString()
+    public function test_LazyRequestResultAsString()
     {
         $additionalAnnotations = require __DIR__ . '/scripts/additionalAnnotations.php';
-        $injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition, new Reader)))), new EmptyModule);
+        $injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition, new AnnotationReader)))), new EmptyModule);
         $scheme = new SchemeCollection;
-        $testAdapter = new \BEAR\Resource\Adapter\Test;
+        $testAdapter = new Adapter\Test;
         $testAdapter->setRenderer(new TestRenderer);
         $scheme->scheme('test')->host('self')->toAdapter($testAdapter);
         $this->factory = new Factory($scheme);
         $factory = new Factory($scheme);
-        $this->signal = require dirname(__DIR__) . '/vendor/aura/signal/scripts/instance.php';
-        $this->invoker = new Invoker(new Config(new Annotation(new Definition, new Reader), new Reader), new Linker(new Reader), $this->signal);
-        $this->resource = new Resource($factory, $this->invoker, new Request($this->invoker));
-        $request = $this->resource->get->uri('test://self/path/to/example')->withQuery(['a' => 1, 'b' => 2])->request();
+        $this->resource = require dirname(__DIR__) . '/scripts/instance.php';
+
+        $invoker = new Invoker(new Linker(new AnnotationReader), new NamedParams(new SignalParam(new Manager(new HandlerFactory, new ResultFactory, new ResultCollection), new Param)), new Logger);
+        $resource = new Resource(new Factory($scheme), $invoker, new Request($invoker));
+        $request = $resource->get->uri('test://self/path/to/example')->withQuery(['a' => 1, 'b' => 2])->request();
         $this->assertSame('{"posts":[1,2]}', (string)$request);
         $this->assertSame(['posts' => [1, 2]], $request()->body);
     }
@@ -368,18 +369,4 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('123', $response->headers['x-header-test']);
     }
 
-}
-
-class varProvider implements \BEAR\Resource\SignalHandler\HandleInterface
-{
-    public function __invoke(
-        $return,
-        \ReflectionParameter $parameter,
-        ReflectiveMethodInvocation $invocation,
-        Definition $definition
-    ) {
-        $return->value = 1;
-
-        return \Aura\Signal\Manager::STOP;
-    }
 }

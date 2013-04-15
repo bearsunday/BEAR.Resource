@@ -1,17 +1,23 @@
 <?php
 
+namespace BEAR\Resource;
+
 use BEAR\Resource\DevInvoker;
 
 namespace BEAR\Resource;
 
-require __DIR__ . '/InvokerTest.php';
+//require __DIR__ . '/InvokerTest.php';
+
+use Aura\Signal\Manager;
+use Aura\Signal\HandlerFactory;
+use Aura\Signal\ResultFactory;
+use Aura\Signal\ResultCollection;
 
 use Ray\Di\Definition;
 use Ray\Di\Annotation;
 use Ray\Di\Config;
 use Ray\Di\Forge;
 use Ray\Di\Container;
-use Ray\Di\Manager;
 use Ray\Di\Injector;
 use Ray\Di\EmptyModule;
 use Ray\Aop\Weaver;
@@ -19,46 +25,24 @@ use Ray\Aop\Bind;
 use Ray\Aop\ReflectiveMethodInvocation;
 use BEAR\Resource\Mock\User;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
+use testworld\Interceptor\Log;
+use testworld\ResourceObject\Weave\Book;
 
 /**
  * Test class for BEAR.Resource.
  */
-class DevInvokerTest extends InvokerTest
+class DevInvokerTest extends \PHPUnit_Framework_TestCase
 {
     protected $signal;
     protected $invoker;
 
     protected function setUp()
     {
-        $signalProvider = function (
-            $return,
-            \ReflectionParameter $parameter,
-            ReflectiveMethodInvocation $invovation,
-            Definition $definition
-        ) {
-            $return->value = 1;
+        $signal = new Manager(new HandlerFactory, new ResultFactory, new ResultCollection);
+        $params = new NamedParams(new SignalParam($signal, new Param));
+        $this->invoker = new DevInvoker(new Linker(new Reader), $params);
 
-            return \Aura\Signal\Manager::STOP;
-        };
-        $config = new Config(new Annotation(new Definition, new Reader));
-        $scheme = new SchemeCollection;
-        $scheme->scheme('nop')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Nop);
-        $scheme->scheme('prov')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Prov);
-        $factory = new Factory($scheme);
-        $schemeAdapters = ['nop' => '\BEAR\Resource\Adapter\Nop', 'prov' => '\BEAR\Resource\Mock\Prov'];
-        $injector = new Injector(new Container(new Forge($config)), new EmptyModule);
-        $this->signal = require dirname(__DIR__) . '/vendor/aura/signal/scripts/instance.php';
-        $this->invoker = new DevInvoker($config, new Linker(new Reader), $this->signal);
-        $this->invoker->getSignal()->handler(
-            '\BEAR\Resource\Invoker',
-            \BEAR\Resource\Invoker::SIGNAL_PARAM . 'Provides',
-            new SignalHandler\Provides
-        );
-        $this->invoker->getSignal()->handler(
-            '\BEAR\Resource\Invoker',
-            \BEAR\Resource\Invoker::SIGNAL_PARAM . 'login_id',
-            $signalProvider
-        );
+
         $resource = new \testworld\ResourceObject\User;
         $resource->uri = 'dummy://self/User';
         $this->request = new Request($this->invoker);
@@ -121,8 +105,8 @@ class DevInvokerTest extends InvokerTest
     public function invokeWeave()
     {
         $bind = new Bind;
-        $bind->bindInterceptors('onGet', [new \testworld\Interceptor\Log]);
-        $weave = new Weaver(new \testworld\ResourceObject\Weave\Book, $bind);
+        $bind->bindInterceptors('onGet', [new Log]);
+        $weave = new Weaver(new Book, $bind);
         $this->request->ro = $weave;
         $this->request->method = 'get';
         $this->request->query = ['id' => 1];

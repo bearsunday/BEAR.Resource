@@ -268,15 +268,11 @@ class Resource implements ResourceInterface
     /**
      * {@inheritDoc}
      */
-    public function attachParamProvider($signal, HandleInterface $argProvider)
+    public function attachParamProvider($varName, ParamProviderInterface $provider)
     {
-        /** @noinspection PhpParamsInspection */
-        $this->invoker->getSignal()->handler(
-            '\BEAR\Resource\Invoker',
-            \BEAR\Resource\Invoker::SIGNAL_PARAM . $signal,
-            $argProvider
-        );
+        $this->invoker->attachParamProvider($varName, $provider);
     }
+
 
     /**
      * {@inheritDoc}
@@ -284,25 +280,17 @@ class Resource implements ResourceInterface
      */
     public function __get($name)
     {
-        switch ($name) {
-            case 'get':
-            case 'post':
-            case 'put':
-            case 'delete':
-            case 'head':
-            case 'options':
+        switch (true) {
+            case (in_array($name, ['get', 'post', 'put', 'delete', 'head', 'options'])):
                 $this->request = clone $this->newRequest;
                 $this->request->method = $name;
 
                 return $this;
-            case 'lazy':
-            case 'eager':
+            case (in_array($name, ['lazy', 'eager'])):
                 $this->request->in = $name;
 
                 return $this;
-            case 'poe':
-            case 'csrf':
-            case 'sync':
+            case (in_array($name, ['sync', 'poe', 'csrf'])):
                 $this->request->options[$name] = true;
 
                 return $this;
@@ -320,5 +308,4 @@ class Resource implements ResourceInterface
     {
         return $this->request->toUri();
     }
-
 }

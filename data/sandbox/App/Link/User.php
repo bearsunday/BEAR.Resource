@@ -14,7 +14,7 @@ class User extends AbstractObject implements ResourceObject
         ['id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12],
         ['id' => 3, 'name' => 'Porthos', 'age' => 17, 'blog_id' => 0]
     ];
-    
+
     /**
      * @Link(rel="blog", href="app://self/Blog")
      * @Inject
@@ -22,7 +22,7 @@ class User extends AbstractObject implements ResourceObject
     public function gggggggg($id)
     {
     }
-    
+
     /**
      * @Link(rel="blog", href="app://self/Blog")
      */

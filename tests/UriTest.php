@@ -4,8 +4,6 @@ namespace BEAR\Resource;
 
 class UriTest extends \PHPUnit_Framework_TestCase
 {
-    protected $skelton;
-
     protected function setUp()
     {
         parent::setUp();

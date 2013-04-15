@@ -21,7 +21,7 @@ use BEAR\Resource\Adapter\App;
  */
 class RestBucksTest extends \PHPUnit_Framework_TestCase
 {
-    protected $skelton;
+    protected $skeleton;
 
     protected function setUp()
     {

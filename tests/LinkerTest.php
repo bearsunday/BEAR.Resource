@@ -2,18 +2,22 @@
 
 namespace BEAR\Resource;
 
+use Aura\Signal\Manager;
+use Aura\Signal\HandlerFactory;
+use Aura\Signal\ResultFactory;
+use Aura\Signal\ResultCollection;
 use Ray\Di\Definition;
 use Ray\Di\Annotation;
 use Ray\Di\Config;
 use Ray\Di\Forge;
 use Ray\Di\Container;
-use Ray\Di\Manager;
 use Ray\Di\Injector;
 use Ray\Di\EmptyModule;
 
 use BEAR\Resource\Request\Method;
 use BEAR\Resource\Adapter\Nop;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
+use testworld\ResourceObject\User;
 
 /**
  * Test class for BEAR.Resource.
@@ -25,14 +29,19 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
+
         $this->linker = new Linker(new Reader);
+        $signal = new Manager(new HandlerFactory, new ResultFactory, new ResultCollection);
+        $params = new NamedParams(new SignalParam($signal, new Param));
+        $invoker = new Invoker($this->linker, $params);
+
+
         $injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition, new Reader)))), new EmptyModule);
-        $signal = require dirname(__DIR__) . '/vendor/aura/signal/scripts/instance.php';
-        $this->request = new Request(new Invoker(new Config(new Annotation(new Definition, new Reader)), new Linker(new Reader), $signal));
-        $invoker = new Invoker(new Config(new Annotation(new Definition, new Reader)), new Linker(new Reader), $signal);
+
+        $this->request = new Request($invoker);
         $scheme = new SchemeCollection;
         $scheme->scheme('app')->host('self')->toAdapter(
-            new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject')
+            new Adapter\App($injector, 'testworld', 'ResourceObject')
         );
         $factory = new Factory($scheme);
         $this->resource = new Resource($factory, $invoker, new Request($invoker));
@@ -74,7 +83,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
 
     public function test_linkSelf2()
     {
-        $ro = new \testworld\ResourceObject\User;
+        $ro = new User;
         $ro->setResource($this->resource);
         $link = new LinkType;
         $link->type = LinkType::SELF_LINK;
@@ -94,7 +103,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
 
     public function test_linkNew1()
     {
-        $ro = new \testworld\ResourceObject\User;
+        $ro = new User;
         $ro->setResource($this->resource);
         $link = new LinkType;
         $link->type = LinkType::NEW_LINK;
@@ -112,7 +121,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
 
     public function test_linkCrawl()
     {
-        $ro = new \testworld\ResourceObject\User;
+        $ro = new User;
         $ro->setResource($this->resource);
         $link = new LinkType;
         $link->type = LinkType::CRAWL_LINK;
@@ -138,7 +147,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
 
     public function test_SelfLinkSelf()
     {
-        $ro = new \testworld\ResourceObject\User;
+        $ro = new User;
         $ro->setResource($this->resource);
         $links = [];
         $link = new LinkType;
@@ -158,7 +167,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
 
     public function test_SelfLinkTarget()
     {
-        $ro = new \testworld\ResourceObject\User;
+        $ro = new User;
         $ro->setResource($this->resource);
         $links = [];
         $link = new LinkType;
@@ -179,9 +188,9 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function test_TargeLinktTarget()
+    public function test_TargetLinkTarget()
     {
-        $ro = new \testworld\ResourceObject\User;
+        $ro = new User;
         $ro->setResource($this->resource);
         $links = [];
         $link = new LinkType;
@@ -204,9 +213,9 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function test_TargeLinktSelf()
+    public function test_TargetLinkSelf()
     {
-        $ro = new \testworld\ResourceObject\User;
+        $ro = new User;
         $ro->setResource($this->resource);
         $links = [];
         $link = new LinkType;
@@ -229,7 +238,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
 
     public function test_ListCrawlBasic()
     {
-        $ro = new \testworld\ResourceObject\User\Entry;
+        $ro = new User\Entry;
         $link = new LinkType;
         $link->type = LinkType::CRAWL_LINK;
         $link->key = 'Comment';
@@ -269,7 +278,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
 
     public function test_ListCrawlThenCrawl()
     {
-        $ro = new \testworld\ResourceObject\User\Entry;
+        $ro = new User\Entry;
         $links = [];
         $link = new LinkType;
         $link->type = LinkType::CRAWL_LINK;
@@ -327,7 +336,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
      */
     public function test_ReturnInsideInstanceAfterListLink()
     {
-        $ro = new \testworld\ResourceObject\User\Entry;
+        $ro = new User\Entry;
         $links = [];
         $link = new LinkType;
         $link->type = LinkType::CRAWL_LINK;

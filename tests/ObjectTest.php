@@ -7,7 +7,10 @@ namespace BEAR\Resource;
  */
 class ObjectTest extends \PHPUnit_Framework_TestCase
 {
-    protected $skelton;
+    /**
+     * @var AbstractObject
+     */
+    protected $resource;
 
     protected function setUp()
     {
@@ -29,7 +32,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(isset($this->resource[0]));
     }
 
-    public function test_offsetUnsert()
+    public function test_offsetUnset()
     {
         unset($this->resource[0]);
         $this->assertFalse(isset($this->resource[0]));
@@ -85,9 +88,9 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function test_getEmptyItelator()
+    public function test_getEmptyIterator()
     {
-        $iterator = $this->resource->body = 'string';
+        $this->resource->body = 'string';
         $iterator = $this->resource->getIterator();
         $actual = '';
         while ($iterator->valid()) {
@@ -112,7 +115,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_string($str));
     }
 
-    public function test_toStringScalaraBody()
+    public function test_toStringScalarBody()
     {
         $this->resource->headers['X-TEST'] = __FUNCTION__;
         $this->resource->body = 'OK';

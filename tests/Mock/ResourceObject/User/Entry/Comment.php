@@ -20,7 +20,7 @@ class Comment extends AbstractObject
     public function __construct(ResourceInterface $resource = null)
     {
         if (is_null($resource)) {
-            $resurce = include dirname(dirname(dirname(dirname(__DIR__)))) . '/scripts/resource.php';
+            $resource = include dirname(dirname(dirname(dirname(__DIR__)))) . '/scripts/resource.php';
         }
         $this->resource = $resource;
     }

@@ -18,7 +18,7 @@ class Link extends AbstractObject
     }
 
     /**
-     * @param string $string
+     * @param ObjectInterface $resource
      *
      * @return string
      */

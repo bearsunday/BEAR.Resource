@@ -55,19 +55,20 @@ class User extends AbstractObject
     }
 
     /**
-     * @param unknown_type $noprovide
+     * @param unknown_type $noProvide
      *
      */
-    public function onPut($noprovide)
+    public function onPut($noProvide)
     {
         //return "put user[{$id} {$name} {$age}]";
-        return "$noprovide";
+        return "$noProvide";
     }
 
     /**
-     * @ParamSignal("login_id")
+     * @param $delete_id
      *
      * @return string
+     * @ParamSignal("login_id")
      */
     public function onDelete($delete_id)
     {
