@@ -2,7 +2,10 @@
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Request\Method;
+use Aura\Signal\Manager;
+use Aura\Signal\HandlerFactory;
+use Aura\Signal\ResultFactory;
+use Aura\Signal\ResultCollection;
 use testworld\ResourceObject\User\Entry;
 use BEAR\Resource\Adapter\Nop;
 use BEAR\Resource\Adapter\Test;
@@ -23,9 +26,10 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        parent::setUp();
-        $signal = require dirname(__DIR__) . '/vendor/aura/signal/scripts/instance.php';
-        $this->request = new Request(new Invoker(new Config(new Annotation(new Definition, new Reader)), new Linker(new Reader), $signal));
+        $signal = new Manager(new HandlerFactory, new ResultFactory, new ResultCollection);
+        $params = new NamedParams(new SignalParam($signal, new Param));
+        $invoker = new Invoker(new Linker(new Reader), $params);
+        $this->request = new Request($invoker);
     }
 
     public function test_New()
@@ -70,6 +74,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function test__toStringWithRenderableResourceObject()
     {
         $ro = (new Test)->setRenderer(new TestRenderer);
+        /**  @var $ro AbstractObject */
         $this->request->set($ro, 'nop://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
         $request = $this->request;
         $actual = $request(['b' => 30])->body['posts'];
@@ -116,6 +121,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->request->ro->uri = 'nop://self/path/to/resource';
         $this->request->query = [];
         $this->assertInstanceOf('\BEAR\Resource\Request', $this->request);
+
         return $this->request;
     }
 

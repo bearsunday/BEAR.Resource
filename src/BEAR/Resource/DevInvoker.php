@@ -9,8 +9,8 @@ namespace BEAR\Resource;
 
 use Ray\Aop\Weave;
 use Ray\Aop\Bind;
-use XHProfRuns_Default;
 use Ray\Di\Di\Scope;
+use XHProfRuns_Default;
 
 /**
  * Resource request invoker
@@ -68,9 +68,6 @@ class DevInvoker extends Invoker implements InvokerInterface
         }
         // proceed original method
         /** @noinspection PhpUndefinedMethodInspection */
-        $ro = ($request->ro instanceof Weave) ? $request->ro->___getObject() : $request->ro;
-        $params = $this->getParams($ro, $method, $request->query);
-        $resource->headers[self::HEADER_PARAMS] = json_encode($params, true);
         $result = parent::invoke($request);
 
         // post process for log
@@ -88,6 +85,11 @@ class DevInvoker extends Invoker implements InvokerInterface
         return $result;
     }
 
+    /**
+     * @param Bind $binds
+     *
+     * @return array
+     */
     public function getBindInfo(Bind $binds)
     {
         $result = [];

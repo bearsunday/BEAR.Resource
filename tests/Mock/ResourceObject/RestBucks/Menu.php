@@ -16,12 +16,8 @@ use Ray\Di\Di\Scope;
  */
 class Menu extends AbstractObject
 {
-
     private $menu = [];
 
-    /**
-     * @param Resource $resource
-     */
     public function __construct()
     {
         $this->menu = array('coffee' => 300, 'latte' => 400);
@@ -34,7 +30,7 @@ class Menu extends AbstractObject
      *
      * @return \testworld\ResourceObject\RestBucks\Menu
      *
-     * @Link(rel="order", href="app://self/RestBucks/Order?drink={dring}")
+     * @Link(rel="order", href="app://self/RestBucks/Order?drink={drink}")
      */
     public function onGet($drink = null)
     {

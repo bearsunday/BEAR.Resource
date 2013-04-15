@@ -26,17 +26,15 @@ class PageTest extends \PHPUnit_Framework_TestCase
 
         $injector = Injector::create();
         $scheme = new SchemeCollection;
-        $scheme->scheme('nop')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Nop);
-        $scheme->scheme('prov')->host('self')->toAdapter(new \BEAR\Resource\Adapter\Prov);
+        $scheme->scheme('nop')->host('self')->toAdapter(new Adapter\Nop);
+        $scheme->scheme('prov')->host('self')->toAdapter(new Adapter\Prov);
         $scheme->scheme('app')->host('self')->toAdapter(
-            new \BEAR\Resource\Adapter\App($injector, 'testworld', 'ResourceObject')
+            new Adapter\App($injector, 'testworld', 'ResourceObject')
         );
-        $factory = new Factory($scheme);
-        $this->signal = require dirname(dirname(__DIR__)) . '/vendor/aura/signal/scripts/instance.php';
-        $invoker = new Invoker(new Config(new Annotation(new Definition, new Reader)), new Linker(new Reader), $this->signal);
-        $this->resource = new Resource($factory, $invoker, new Request($invoker));
-        $this->user = $factory->newInstance('app://self/user');
-        $this->nop = $factory->newInstance('nop://self/dummy');
+        $this->resource = require dirname(dirname(__DIR__)) . '/scripts/instance.php';
+        $this->resource->setSchemeCollection($scheme);
+        $this->user = $this->resource->newInstance('app://self/user');
+        $this->nop = $this->resource->newInstance('nop://self/dummy');
         $this->query = array(
             'id' => 10,
             'name' => 'Ray',

@@ -22,7 +22,7 @@ class Link extends AbstractObject
     }
 
     /**
-     * @param string $string
+     * @param ResourceObject $resource
      *
      * @return string
      */

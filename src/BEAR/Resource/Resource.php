@@ -268,15 +268,11 @@ class Resource implements ResourceInterface
     /**
      * {@inheritDoc}
      */
-    public function attachParamProvider($signal, HandleInterface $argProvider)
+    public function attachParamProvider($varName, ParamProviderInterface $provider)
     {
-        /** @noinspection PhpParamsInspection */
-        $this->invoker->getSignal()->handler(
-            '\BEAR\Resource\Invoker',
-            Invoker::SIGNAL_PARAM . $signal,
-            $argProvider
-        );
+        $this->invoker->attachParamProvider($varName, $provider);
     }
+
 
     /**
      * {@inheritDoc}

@@ -7,21 +7,14 @@
  */
 namespace BEAR\Resource;
 
-use Aura\Di\ConfigInterface;
-use Aura\Signal\Manager as Signal;
 use BEAR\Resource\AbstractObject as ResourceObject;
-use BEAR\Resource\Annotation\ParamSignal;
 use BEAR\Resource\Exception\MethodNotAllowed;
-use Ray\Aop\Weave;
 use Ray\Aop\ReflectiveMethodInvocation;
-use ReflectionParameter;
+use Ray\Aop\Weave;
 use Ray\Di\Di\Scope;
-use Ray\Di\Config;
 use Ray\Di\Definition;
-use ReflectionException;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
-
 /**
  * Resource request invoker
  *
@@ -32,21 +25,9 @@ use Ray\Di\Di\Named;
 class Invoker implements InvokerInterface
 {
     /**
-     * Config
-     *
-     * @var \Ray\Di\Config
-     */
-    private $config;
-
-    /**
      * @var \BEAR\Resource\Linker
      */
     private $linker;
-
-    /**
-     * @var \Aura\Signal\Manager
-     */
-    private $signal;
 
     /**
      * Logger
@@ -54,6 +35,11 @@ class Invoker implements InvokerInterface
      * @var \BEAR\Resource\Logger
      */
     private $logger;
+
+    /**
+     * @var NamedParams
+     */
+    protected $params;
 
     /**
      * Method OPTIONS
@@ -76,7 +62,6 @@ class Invoker implements InvokerInterface
      */
     const ANNOTATION_PROVIDES = 'Provides';
 
-    const SIGNAL_PARAM = 'param';
 
     /**
      * Return signal manager
@@ -85,28 +70,24 @@ class Invoker implements InvokerInterface
      */
     public function getSignal()
     {
-        return $this->signal;
+        return $this->params->getSignal();
     }
 
     /**
-     * Constructor
-     *
-     * @param \Aura\Di\ConfigInterface $config
-     * @param LinkerInterface          $linker
-     * @param \Aura\Signal\Manager     $signal
+     * @param LinkerInterface $linker
+     * @param NamedParams     $params
+     * @param LoggerInterface $logger
      *
      * @Inject
      */
     public function __construct(
-        ConfigInterface $config,
         LinkerInterface $linker,
-        Signal $signal,
-        ReflectiveParams $params = null
+        NamedParams $params,
+        LoggerInterface $logger = null
     ) {
-        $this->config = $config;
         $this->linker = $linker;
-        $this->signal = $signal;
-        $this->params = $params ? : new ReflectiveParams($config, $signal, $this);
+        $this->params = $params;
+        $this->logger = $logger;
     }
 
     /**
@@ -130,42 +111,21 @@ class Invoker implements InvokerInterface
     }
 
     /**
-     * Return config
-     *
-     * @return \Ray\Di\Config
-     */
-    public function getConfig()
-    {
-        return $this->config;
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function invoke(Request $request)
     {
-        $method = 'on' . ucfirst($request->method);
+        $onMethod = 'on' . ucfirst($request->method);
+        $weave = null;
         $isWeave = $request->ro instanceof Weave;
-        /** @var $request->ro \Ray\Aop\Weave */
-        /** @noinspection PhpUndefinedMethodInspection */
         $ro = $isWeave ? $request->ro->___getObject() : $request->ro;
-        if ($isWeave && $request->method !== Invoker::OPTIONS && $request->method !== Invoker::HEAD) {
-            $weave = $request->ro;
-            /** @noinspection PhpUnusedLocalVariableInspection */
-            /** @var $weave Callable */
-            $result = $weave([$this->params, 'getParams'], $method, $request->query);
-            goto completed;
+        $weave = ($isWeave && $request->method !== Invoker::OPTIONS && $request->method !== Invoker::HEAD) ? $request->ro : null;
+        if (method_exists($ro, $onMethod) !== true) {
+            return $this->methodNotExists($ro, $request, $onMethod);
         }
-        if (method_exists($ro, $method) !== true) {
-            return $this->methodNotExists($ro, $request, $method);
-        }
-        $params = $this->params->getParams($ro, $method, $request->query);
-        try {
-            $result = call_user_func_array([$ro, $method], $params);
-        } catch (\Exception $e) {
-            // @todo implements "Exception signal"
-            throw $e;
-        }
+        // invoke with Named param and Signal param
+        $result = $this->params->invoke(new ReflectiveMethodInvocation([$ro, $onMethod], $request->query), $weave);
+
         // link
         completed:
         if ($request->links) {
@@ -199,103 +159,6 @@ class Invoker implements InvokerInterface
         }
 
         return $requests;
-    }
-
-    /**
-     * Get named parameters
-     *
-     * @param object $object
-     * @param string $method
-     * @param array  $args
-     *
-     * @return array
-     * @throws MethodNotAllowed
-     */
-    public function getParams($object, $method, array $args)
-    {
-        try {
-            $parameters = (new \ReflectionMethod($object, $method))->getParameters();
-        } catch (ReflectionException $e) {
-            throw new MethodNotAllowed;
-        }
-        if ($parameters === []) {
-            return [];
-        }
-        $providesArgs = [];
-        $params = [];
-        foreach ($parameters as $parameter) {
-            /** @var $parameter \ReflectionParameter */
-            if (isset($args[$parameter->name])) {
-                $params[] = $args[$parameter->name];
-            } elseif ($parameter->isDefaultValueAvailable() === true) {
-                $params[] = $parameter->getDefaultValue();
-            } elseif (isset($providesArgs[$parameter->name])) {
-                $params[] = $providesArgs[$parameter->name];
-            } else {
-                $result = $this->getArgumentBySignal($parameter, $object, $method, $args);
-                if ($result->args) {
-                    $providesArgs = $result->args;
-                }
-                $params[] = $result->value;
-            }
-        }
-
-        return $params;
-    }
-
-    /**
-     * Return argument from provider or signal handler
-     *
-     * This method called when client and service object both has sufficient argument
-     *
-     * @param \ReflectionParameter $parameter
-     * @param  object              $object
-     * @param string               $method
-     * @param array                $args
-     *
-     * @return Result
-     * @throws Exception\Parameter
-     */
-    private function getArgumentBySignal(ReflectionParameter $parameter, $object, $method, array $args)
-    {
-        $definition = $this->config->fetch(get_class($object))[Config::INDEX_DEFINITION];
-        /** @var $definition \Ray\Di\Definition */
-        $userAnnotation = $definition->getUserAnnotationByMethod($method);
-        $signalAnnotations = isset($userAnnotation['ParamSignal']) ? $userAnnotation['ParamSignal'] : [];
-        $signalIds = ['Provides'];
-        foreach ($signalAnnotations as $annotation) {
-            if ($annotation instanceof ParamSignal) {
-                $signalIds[] = $annotation->value;
-            }
-        }
-        $return = new Result;
-        if (!$signalIds) {
-            goto PARAMETER_NOT_PROVIDED;
-        }
-        foreach ($signalIds as $signalId) {
-            $results = $this->signal->send(
-                $this,
-                self::SIGNAL_PARAM . $signalId,
-                $return,
-                $parameter,
-                new ReflectiveMethodInvocation([$object, $method], $args, $signalAnnotations),
-                $definition
-            );
-        }
-        /** @noinspection PhpUndefinedVariableInspection */
-        $isStopped = $results->isStopped();
-        $result = $results->getLast();
-        if ($isStopped === false || is_null($result)) {
-            goto PARAMETER_NOT_PROVIDED;
-        }
-        PARAMETER_PROVIDED:
-
-        return $return;
-
-        PARAMETER_NOT_PROVIDED:
-        /** @noinspection PhpUnreachableStatementInspection */
-        $msg = '$' . "{$parameter->name} in " . get_class($object) . '::' . $method;
-        throw new Exception\Parameter($msg);
     }
 
     /**
@@ -399,12 +262,18 @@ class Invoker implements InvokerInterface
     private function onHead(Request $request)
     {
         $ro = ($request->ro instanceof Weave) ? $request->ro->___getObject() :  $request->ro;
+        $weave = ($request->ro instanceof Weave) ? $request->ro : null;
         if (method_exists($ro, 'onGet')) {
-            $params = $this->getParams($ro, 'onGet', $request->query);
-            call_user_func_array([$ro, 'onGet'], $params);
+            $this->params->invoke(new ReflectiveMethodInvocation([$ro, 'onGet'], $request->query), $weave);
         }
         $ro->body = '';
 
         return $ro;
     }
+
+    public function attachParamProvider($varName, ParamProviderInterface $provider)
+    {
+        $this->params->attachParamProvider($varName, $provider);
+    }
+
 }

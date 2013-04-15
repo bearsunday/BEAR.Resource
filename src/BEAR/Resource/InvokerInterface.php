@@ -51,4 +51,14 @@ interface InvokerInterface
      * @param ResourceInterface $resource
      */
     public function setResourceClient(ResourceInterface $resource);
+
+    /**
+     * Attach parameter provider
+     *
+     * @param string                 $varName
+     * @param ParamProviderInterface $provider
+     *
+     * @return self
+     */
+    public function attachParamProvider($varName, ParamProviderInterface $provider);
 }

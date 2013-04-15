@@ -15,12 +15,8 @@ use Ray\Di\Di\Scope;
  */
 class Order extends AbstractObject
 {
-
     private $orders = [];
 
-    /**
-     * @param Resource $resource
-     */
     public function __construct()
     {
     }

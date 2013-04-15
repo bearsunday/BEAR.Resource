@@ -63,12 +63,12 @@ final class Linker implements LinkerInterface
 
     /**
      * @param SplQueue $q
-     * @param string   $link
+     * @param LinkType $link
      *
      * @return array|null
      * @throws Exception\Link
      */
-    private function getItem(\SplQueue $q, $link)
+    private function getItem(\SplQueue $q, LinkType $link)
     {
         $cnt = $q->count();
         if ($cnt === 0) {
