@@ -25,6 +25,14 @@ final class Param implements ParamInterface
      */
     private $parameter;
 
+    /**
+     * @var mixed
+     */
+    private $arg;
+
+    /**
+     * {@inheritdoc}
+     */
     public function set(MethodInvocation $invocation, ReflectionParameter $parameter)
     {
         $this->invocation = $invocation;
@@ -33,22 +41,34 @@ final class Param implements ParamInterface
         return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getMethodInvocation()
     {
         return $this->invocation;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getParameter()
     {
         return $this->parameter;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function inject($arg)
     {
         $this->arg = $arg;
         return Manager::STOP;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getArg()
     {
         return $this->arg;

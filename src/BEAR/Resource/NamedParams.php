@@ -7,28 +7,17 @@
  */
 namespace BEAR\Resource;
 
-use Aura\Di\ConfigInterface;
-use Aura\Signal\Manager as Signal;
-use Ray\Aop\Interceptor;
-use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
 use Ray\Aop\Weave;
-use Ray\Aop\Weaver;
 use ReflectionParameter;
-use ReflectionMethod;
-use Ray\Aop\ReflectiveMethodInvocation;
-use Ray\Di\Config;
-use ReflectionException;
-use BEAR\Resource\Exception\MethodNotAllowed;
-use BEAR\Resource\Annotation\ParamSignal;
-
+use Ray\Di\Di\Inject;
 
 /**
  * Reflective Parameter
  *
  * @package BEAR.Resource
  */
-final class NamedParams implements MethodInterceptor
+final class NamedParams implements NamedParamInterface
 {
     /**
      * @var SignalParamsInterface
@@ -36,15 +25,9 @@ final class NamedParams implements MethodInterceptor
     private $signalParam;
 
     /**
-     * @return Signal
-     */
-    public function getSignal()
-    {
-        return $this->signal;
-    }
-
-    /**
-     * @param SignalParamsInterface $signal
+     * @param SignalParamsInterface $signalParam
+     *
+     * @Inject
      */
     public function __construct(SignalParamsInterface $signalParam)
     {
@@ -52,14 +35,7 @@ final class NamedParams implements MethodInterceptor
     }
 
     /**
-     * Return parameters
-     *
-     * @param object $object
-     * @param string $method
-     * @param array  $namedArgs
-     *
-     * @return array
-     * @throws Exception\MethodNotAllowed
+     * {@inheritdoc}
      */
     public function invoke(MethodInvocation $invocation, Weave $weave = null)
     {
@@ -78,12 +54,15 @@ final class NamedParams implements MethodInterceptor
                 $args[] = $this->signalParam->getArg($parameter, $invocation);
             }
         }
-        $object = $weave ?: $object;
+        $object = $weave ? : $object;
         $result = call_user_func_array([$object, $method->name], $args);
 
         return $result;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function attachParamProvider($varName, ParamProviderInterface $provider)
     {
         $this->signalParam->attachParamProvider($varName, $provider);

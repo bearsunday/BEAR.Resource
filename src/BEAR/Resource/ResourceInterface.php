@@ -7,15 +7,10 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\SignalHandler\HandleInterface;
-use Ray\Di\Di\ImplementedBy;
-
 /**
  * Interface for resource client
  *
  * @package BEAR.Resource
- *
- * @ImplementedBy("BEAR\Resource\Resource")
  */
 interface ResourceInterface
 {
@@ -92,10 +87,10 @@ interface ResourceInterface
     /**
      * Attach parameter provider
      *
-     * @param                        $varName
+     * @param string                 $varName
      * @param ParamProviderInterface $provider
      *
-     * @return mixed
+     * @return self
      */
     public function attachParamProvider($varName, ParamProviderInterface $provider);
 }

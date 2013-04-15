@@ -74,8 +74,9 @@ class Invoker implements InvokerInterface
     }
 
     /**
-     * @param LinkerInterface  $linker
-     * @param NamedParams $params
+     * @param LinkerInterface $linker
+     * @param NamedParams     $params
+     * @param LoggerInterface $logger
      *
      * @Inject
      */

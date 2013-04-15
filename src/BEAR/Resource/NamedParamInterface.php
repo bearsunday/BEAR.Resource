@@ -1,27 +1,33 @@
 <?php
 /**
- * This file is part of the BEAR.Package package
+ * This file is part of the BEAR.Resource package
  *
- * @package BEAR.Package
+ * @package BEAR.Resource
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-
 namespace BEAR\Resource;
 
-use ReflectionParameter;
 use Ray\Aop\MethodInvocation;
+use Ray\Aop\Weave;
 
-interface SignalParamsInterface
+/**
+ * Resource request invoke interface
+ *
+ * @package BEAR.Resource
+ *
+ * @ImplementedBy("BEAR\Resource\Invoker")
+ */
+interface NamedParamInterface
 {
     /**
-     * Return single argument by signal
+     * Return parameters
      *
-     * @param ReflectionParameter $parameter
-     * @param MethodInvocation    $invocation
+     * @param MethodInvocation $invocation
+     * @param Weave            $weave
      *
      * @return mixed
      */
-    public function getArg(ReflectionParameter $parameter, MethodInvocation $invocation);
+    public function invoke(MethodInvocation $invocation, Weave $weave = null);
 
     /**
      * Attach parameter provider

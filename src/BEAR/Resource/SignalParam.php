@@ -40,6 +40,9 @@ class SignalParam implements SignalParamsInterface
         $this->param = $param;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getArg(ReflectionParameter $parameter, MethodInvocation $invocation)
     {
         $param = clone $this->param;
@@ -56,6 +59,9 @@ class SignalParam implements SignalParamsInterface
         return $param->getArg();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function attachParamProvider($varName, ParamProviderInterface $provider)
     {
         $this->signal->handler('*', $varName, $provider);
