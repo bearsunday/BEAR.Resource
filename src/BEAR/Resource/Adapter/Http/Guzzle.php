@@ -9,11 +9,11 @@ namespace BEAR\Resource\Adapter\Http;
 use BEAR\Resource\AbstractObject;
 use BEAR\Resource\ObjectInterface;
 use BEAR\Resource\Request;
-use Guzzle\Service\Client as GuzzleClient;
 use Guzzle\Cache\DoctrineCacheAdapter;
-use Guzzle\Plugin\Cache\CachePlugin;
 use Guzzle\Http\Message\RequestInterface;
 use Guzzle\Http\Message\Response;
+use Guzzle\Plugin\Cache\CachePlugin;
+use Guzzle\Service\Client as GuzzleClient;
 use Ray\Di\AbstractModule;
 use Ray\Di\Di\Scope;
 
@@ -117,18 +117,6 @@ class Guzzle extends AbstractObject implements ObjectInterface, HttpClientInterf
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public function onOptions()
-    {
-        /** @noinspection PhpUndefinedMethodInspection */
-        $this->response = $this->guzzle->options()->send();
-        list($this->code, $this->headers, $this->body) = $this->parseResponse($this->response);
-
-        return $this;
-    }
-
-    /**
      * Parse HTTP response
      *
      * @param \Guzzle\Http\Message\Response $response
@@ -148,6 +136,18 @@ class Guzzle extends AbstractObject implements ObjectInterface, HttpClientInterf
         }
 
         return [$code, $headers, $body];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function onOptions()
+    {
+        /** @noinspection PhpUndefinedMethodInspection */
+        $this->response = $this->guzzle->options()->send();
+        list($this->code, $this->headers, $this->body) = $this->parseResponse($this->response);
+
+        return $this;
     }
 
     /**

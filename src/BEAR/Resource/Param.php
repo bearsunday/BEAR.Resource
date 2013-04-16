@@ -2,17 +2,16 @@
 
 namespace BEAR\Resource;
 
+use Aura\Signal\Manager;
+use Ray\Aop\MethodInvocation;
+use ReflectionParameter;
+
 /**
  * This file is part of the {package} package
  *
  * @package BEAR.Resource
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-
-use Ray\Aop\MethodInvocation;
-use ReflectionParameter;
-use Aura\Signal\Manager;
-
 final class Param implements ParamInterface
 {
     /**
