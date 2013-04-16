@@ -1,18 +1,22 @@
 {
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
     "hash": "c1cf3926495ac031672f0bc188e37de4",
     "packages": [
         {
             "name": "aura/di",
-            "version": "1.0.1",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/auraphp/Aura.Di",
-                "reference": "1.0.1"
+                "url": "https://github.com/auraphp/Aura.Di.git",
+                "reference": "1.1.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/auraphp/Aura.Di/archive/1.0.1.zip",
-                "reference": "1.0.1",
+                "url": "https://api.github.com/repos/auraphp/Aura.Di/zipball/1.1.0",
+                "reference": "1.1.0",
                 "shasum": ""
             },
             "require": {
@@ -27,7 +31,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD"
+                "BSD-2-Clause"
             ],
             "authors": [
                 {
@@ -58,7 +62,7 @@
                 "di",
                 "di container"
             ],
-            "time": "2012-11-28 00:00:00"
+            "time": "2013-04-07 00:00:00"
         },
         {
             "name": "aura/installer-default",
@@ -474,21 +478,20 @@
         },
         {
             "name": "ray/di",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Ray.Di.git",
-                "reference": "1.0.0"
+                "reference": "1.0.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/1.0.0",
-                "reference": "1.0.0",
+                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/1.0.1",
+                "reference": "1.0.1",
                 "shasum": ""
             },
             "require": {
-                "aura/di": "1.0.*",
-                "aura/installer-default": "1.0.*",
+                "aura/di": "1.1.*",
                 "doctrine/annotations": "1.*",
                 "doctrine/cache": "1.*",
                 "php": ">=5.4.0",
@@ -516,29 +519,27 @@
             "keywords": [
                 "annotation",
                 "aop",
-                "container",
+                "aspect oriented programming",
                 "dependency injection",
                 "di",
                 "guice",
-                "ioc",
-                "jsr",
-                "method interception"
+                "jsr"
             ],
-            "time": "2013-03-31 12:46:44"
+            "time": "2013-04-16 08:03:56"
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.2.0",
+            "version": "v2.2.1",
             "target-dir": "Symfony/Component/EventDispatcher",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/EventDispatcher.git",
-                "reference": "v2.2.0-RC3"
+                "reference": "v2.2.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/v2.2.0-RC3",
-                "reference": "v2.2.0-RC3",
+                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/v2.2.1",
+                "reference": "v2.2.1",
                 "shasum": ""
             },
             "require": {
@@ -588,12 +589,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/facebook/xhprof.git",
-                "reference": "3425f7fe3aeff711091811906319d8cebd82fc06"
+                "reference": "254eb24dcfa763c76c57b472093ebc4b81af2b7d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/facebook/xhprof/zipball/3425f7fe3aeff711091811906319d8cebd82fc06",
-                "reference": "3425f7fe3aeff711091811906319d8cebd82fc06",
+                "url": "https://api.github.com/repos/facebook/xhprof/zipball/254eb24dcfa763c76c57b472093ebc4b81af2b7d",
+                "reference": "254eb24dcfa763c76c57b472093ebc4b81af2b7d",
                 "shasum": ""
             },
             "require": {
@@ -616,7 +617,7 @@
                 "performance",
                 "profiling"
             ],
-            "time": "2013-03-26 22:23:06"
+            "time": "2013-04-09 18:16:36"
         }
     ],
     "aliases": [
