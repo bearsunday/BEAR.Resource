@@ -2,7 +2,9 @@
 
 namespace Sandbox\Resource\Page {
 
-    class Index extends \BEAR\Resource\AbstractObject
+    use BEAR\Resource\AbstractObject;
+
+    class Index extends AbstractObject
     {
         public $name;
 
@@ -16,7 +18,9 @@ namespace Sandbox\Resource\Page {
 
 namespace Another\Resource\Page {
 
-    class Index extends \BEAR\Resource\AbstractObject
+    use BEAR\Resource\AbstractObject;
+
+    class Index extends AbstractObject
     {
         public function onGet()
         {
@@ -59,8 +63,7 @@ namespace BEAR\Resource {
         private $schemeCollection;
 
         /**
-         * @param SchemeCollectionInterface $schemeCollectionInterface
-         *
+         * @param SchemeCollectionInterface $schemeCollection
          * @Inject
          */
         public function __construct(SchemeCollectionInterface $schemeCollection)

@@ -7,7 +7,6 @@ use Ray\Di\Annotation;
 use Ray\Di\Config;
 use Ray\Di\Forge;
 use Ray\Di\Container;
-use Ray\Di\Manager;
 use Ray\Di\Injector;
 use Ray\Di\EmptyModule;
 use BEAR\Resource\factory;
@@ -53,7 +52,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\Scheme
+     * @expectedException \BEAR\Resource\Exception\Scheme
      */
     public function test_newInstanceScheme()
     {
@@ -61,7 +60,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\Scheme
+     * @expectedException \BEAR\Resource\Exception\Scheme
      */
     public function test_newInstanceSchemes()
     {
@@ -82,7 +81,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\Uri
+     * @expectedException \BEAR\Resource\Exception\Uri
      */
     public function test_invaliUri()
     {

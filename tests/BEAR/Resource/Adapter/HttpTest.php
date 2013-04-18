@@ -6,7 +6,6 @@ use Ray\Di\Annotation;
 use Ray\Di\Config;
 use Ray\Di\Forge;
 use Ray\Di\Container;
-use Ray\Di\Manager;
 use Ray\Di\Injector;
 use Ray\Di\EmptyModule;
 use BEAR\Resource\SchemeCollection;
@@ -49,6 +48,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         foreach (range(1, 10) as $i) {
             $ro = $this->httpAdapter->onGet();
         }
+        /** @noinspection PhpUndefinedVariableInspection */
         $this->assertSame($ro->headers['Content-Type'][0], 'application/xml; charset=UTF-8');
     }
 
@@ -109,7 +109,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->httpAdapter = $this->factory->newInstance('http://news.google.com/not_exists/');
         $ro = $this->httpAdapter->onGet();
         $expected = 'Top Stories - Google News';
-        $this->assertSame($expected, $actual);
+        $this->assertSame($expected, $ro);
     }
 
     public function testJson()

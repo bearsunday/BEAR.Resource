@@ -2,21 +2,13 @@
 
 namespace BEAR\Resource\Adapter;
 
-use Ray\Di\Definition;
-use Ray\Di\Annotation;
-use Ray\Di\Config;
-use Ray\Di\Forge;
-use Ray\Di\Container;
-use Ray\Di\Manager;
-use Ray\Di\Injector;
-use Ray\Di\EmptyModule;
 use BEAR\Resource\Builder;
-use BEAR\Resource\Mock\User;
-use Aura\Signal\Manager as Signal;
-use Doctrine\Common\Annotations\AnnotationReader as Reader;
-use BEAR\Resource\SchemeCollection;
 use BEAR\Resource\Exception\BadRequest;
 use BEAR\Resource\Mock;
+use BEAR\Resource\SchemeCollection;
+use Doctrine\Common\Annotations\AnnotationReader as Reader;
+use Ray\Di\Definition;
+use Ray\Di\Injector;
 
 /**
  * Test class for BEAR.Resource.
@@ -100,7 +92,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\BadRequest
+     * @expectedException \BEAR\Resource\Exception\BadRequest
      */
     public function test_postInvalidOption()
     {

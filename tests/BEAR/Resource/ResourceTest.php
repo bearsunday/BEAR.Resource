@@ -6,7 +6,6 @@ use Aura\Signal\HandlerFactory;
 use Aura\Signal\Manager;
 use Aura\Signal\ResultCollection;
 use Aura\Signal\ResultFactory;
-use BEAR\Resource\Builder;
 use BEAR\Resource\Mock\TestModule;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ApcCache as Cache;
@@ -124,7 +123,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\BadRequest
+     * @expectedException \BEAR\Resource\Exception\BadRequest
      */
     public function test_postInvalidOption()
     {
@@ -216,7 +215,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\Uri
+     * @expectedException \BEAR\Resource\Exception\Uri
      */
     public function testInvalidUri()
     {
@@ -307,7 +306,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\BadRequest
+     * @expectedException \BEAR\Resource\Exception\BadRequest
      */
     public function test_badRequest_noMethod()
     {

@@ -53,7 +53,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\BadLinkRequest
+     * @expectedException \BEAR\Resource\Exception\BadLinkRequest
      */
     public function test_linkException()
     {
@@ -332,7 +332,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\Link
+     * @expectedException \BEAR\Resource\Exception\Link
      */
     public function test_ReturnInsideInstanceAfterListLink()
     {
