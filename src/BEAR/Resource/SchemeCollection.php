@@ -15,7 +15,7 @@ use ArrayObject;
  *
  * @package BEAR.Resource
  */
-class SchemeCollection extends ArrayObject
+class SchemeCollection extends ArrayObject implements SchemeCollectionInterface
 {
     /**
      * Scheme

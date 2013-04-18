@@ -76,11 +76,11 @@ class Resource implements ResourceInterface
     /**
      * Set scheme collection
      *
-     * @param SchemeCollection $scheme
+     * @param SchemeCollectionInterface $scheme
      *
      * @Inject(optional = true)
      */
-    public function setSchemeCollection(SchemeCollection $scheme)
+    public function setSchemeCollection(SchemeCollectionInterface $scheme)
     {
         $this->factory->setSchemeCollection($scheme);
     }
