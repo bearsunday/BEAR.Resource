@@ -16,7 +16,7 @@ use Ray\Di\Scope;
  *
  * @package BEAR.Package
  * @license http://opensource.org/licenses/bsd-license.php BSD
- */ 
+ */
 class ResourceModule extends AbstractModule
 {
     protected function configure()
