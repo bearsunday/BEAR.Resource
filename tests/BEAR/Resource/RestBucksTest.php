@@ -27,7 +27,7 @@ class RestBucksTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->resource = require dirname(__DIR__) . '/scripts/instance.php';
+        $this->resource = require dirname(dirname(dirname(__DIR__))) . '/scripts/instance.php';
         $injector = Injector::create();
         $scheme = new SchemeCollection;
         $scheme->scheme('app')->host('self')->toAdapter(new App($injector, 'restbucks', 'Resource\App'));

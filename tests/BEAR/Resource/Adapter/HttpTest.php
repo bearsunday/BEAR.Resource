@@ -1,6 +1,6 @@
 <?php
 
-namespace BEAR\Resource;
+namespace BEAR\Resource\Adapter;
 
 use Ray\Di\Annotation;
 use Ray\Di\Config;
@@ -9,8 +9,9 @@ use Ray\Di\Container;
 use Ray\Di\Manager;
 use Ray\Di\Injector;
 use Ray\Di\EmptyModule;
-
+use BEAR\Resource\SchemeCollection;
 use BEAR\Resource\Builder;
+use BEAR\Resource\Factory;
 use BEAR\Resource\Mock\User;
 
 /**
@@ -25,7 +26,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $this->injector = Injector::create([]);
         $scheme = new SchemeCollection;
-        $scheme->scheme('http')->host('*')->toAdapter(new Adapter\Http);
+        $scheme->scheme('http')->host('*')->toAdapter(new Http);
         $this->factory = new Factory($scheme);
         $this->httpAdapter = $this->factory->newInstance(
             'http://news.google.com/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss'
