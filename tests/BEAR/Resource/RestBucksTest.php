@@ -2,19 +2,13 @@
 
 namespace BEAR\Resource;
 
-use Ray\Di\Definition;
-use Guzzle\Parser\UriTemplate\UriTemplate;
-use Ray\Di\Annotation;
-use Ray\Di\Config;
-use Ray\Di\Forge;
-use Ray\Di\Container;
-use Ray\Di\Manager;
-use Ray\Di\Injector;
-use Ray\Di\EmptyModule;
-use BEAR\Resource\Builder;
-use BEAR\Resource\Mock\User;
-use BEAR\Resource\SchemeCollection;
 use BEAR\Resource\Adapter\App;
+use BEAR\Resource\Builder;
+use BEAR\Resource\SchemeCollection;
+use Guzzle\Parser\UriTemplate\UriTemplate;
+use Ray\Di\Definition;
+use Ray\Di\Injector;
+use Ray\Di\Manager;
 
 /**
  * Test class for BEAR.Resource.
@@ -27,7 +21,7 @@ class RestBucksTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->resource = require dirname(__DIR__) . '/scripts/instance.php';
+        $this->resource = require dirname(dirname(dirname(__DIR__))) . '/scripts/instance.php';
         $injector = Injector::create();
         $scheme = new SchemeCollection;
         $scheme->scheme('app')->host('self')->toAdapter(new App($injector, 'restbucks', 'Resource\App'));
@@ -48,7 +42,7 @@ class RestBucksTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\MethodNotAllowed
+     * @expectedException \BEAR\Resource\Exception\MethodNotAllowed
      */
     public function testOptionDelete()
     {

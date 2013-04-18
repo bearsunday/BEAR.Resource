@@ -1,19 +1,14 @@
 <?php
 
-namespace BEAR\Resource;
+namespace BEAR\Resource\Adapter;
 
-use Ray\Di\Definition;
-use Ray\Di\Annotation;
-use Ray\Di\Config;
-use Ray\Di\Forge;
-use Ray\Di\Container;
-use Ray\Di\Manager;
-use Ray\Di\Injector;
-use Ray\Di\EmptyModule;
 use BEAR\Resource\Builder;
-use BEAR\Resource\Mock\User;
-use Aura\Signal\Manager as Signal;
+use BEAR\Resource\Exception\BadRequest;
+use BEAR\Resource\Mock;
+use BEAR\Resource\SchemeCollection;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
+use Ray\Di\Definition;
+use Ray\Di\Injector;
 
 /**
  * Test class for BEAR.Resource.
@@ -26,12 +21,12 @@ class PageTest extends \PHPUnit_Framework_TestCase
 
         $injector = Injector::create();
         $scheme = new SchemeCollection;
-        $scheme->scheme('nop')->host('self')->toAdapter(new Adapter\Nop);
-        $scheme->scheme('prov')->host('self')->toAdapter(new Adapter\Prov);
+        $scheme->scheme('nop')->host('self')->toAdapter(new Nop);
+        $scheme->scheme('prov')->host('self')->toAdapter(new Prov);
         $scheme->scheme('app')->host('self')->toAdapter(
-            new Adapter\App($injector, 'testworld', 'ResourceObject')
+            new App($injector, 'testworld', 'ResourceObject')
         );
-        $this->resource = require dirname(dirname(__DIR__)) . '/scripts/instance.php';
+        $this->resource = require dirname(dirname(dirname(dirname(__DIR__)))) . '/scripts/instance.php';
         $this->resource->setSchemeCollection($scheme);
         $this->user = $this->resource->newInstance('app://self/user');
         $this->nop = $this->resource->newInstance('nop://self/dummy');
@@ -49,12 +44,11 @@ class PageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\BadRequest
+     * @expectedException \BEAR\Resource\Exception\BadRequest
      */
     public function test_Exception()
     {
-
-        throw new Exception\BadRequest;
+        throw new BadRequest;
     }
 
     public function test_newInstanceNop()
@@ -98,7 +92,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\BadRequest
+     * @expectedException \BEAR\Resource\Exception\BadRequest
      */
     public function test_postInvalidOption()
     {

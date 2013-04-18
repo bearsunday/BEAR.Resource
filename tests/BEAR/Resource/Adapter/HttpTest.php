@@ -1,16 +1,16 @@
 <?php
 
-namespace BEAR\Resource;
+namespace BEAR\Resource\Adapter;
 
 use Ray\Di\Annotation;
 use Ray\Di\Config;
 use Ray\Di\Forge;
 use Ray\Di\Container;
-use Ray\Di\Manager;
 use Ray\Di\Injector;
 use Ray\Di\EmptyModule;
-
+use BEAR\Resource\SchemeCollection;
 use BEAR\Resource\Builder;
+use BEAR\Resource\Factory;
 use BEAR\Resource\Mock\User;
 
 /**
@@ -25,7 +25,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $this->injector = Injector::create([]);
         $scheme = new SchemeCollection;
-        $scheme->scheme('http')->host('*')->toAdapter(new Adapter\Http);
+        $scheme->scheme('http')->host('*')->toAdapter(new Http);
         $this->factory = new Factory($scheme);
         $this->httpAdapter = $this->factory->newInstance(
             'http://news.google.com/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss'
@@ -48,6 +48,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         foreach (range(1, 10) as $i) {
             $ro = $this->httpAdapter->onGet();
         }
+        /** @noinspection PhpUndefinedVariableInspection */
         $this->assertSame($ro->headers['Content-Type'][0], 'application/xml; charset=UTF-8');
     }
 
@@ -108,7 +109,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->httpAdapter = $this->factory->newInstance('http://news.google.com/not_exists/');
         $ro = $this->httpAdapter->onGet();
         $expected = 'Top Stories - Google News';
-        $this->assertSame($expected, $actual);
+        $this->assertSame($expected, $ro);
     }
 
     public function testJson()

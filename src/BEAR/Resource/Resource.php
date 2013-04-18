@@ -76,7 +76,7 @@ class Resource implements ResourceInterface
     /**
      * Set scheme collection
      *
-     * @param SchemeCollection $scheme
+     * @param SchemeCollectionInterface $scheme
      *
      * @Inject(optional = true)
      */
