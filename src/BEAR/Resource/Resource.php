@@ -80,7 +80,7 @@ class Resource implements ResourceInterface
      *
      * @Inject(optional = true)
      */
-    public function setSchemeCollection(SchemeCollection $scheme)
+    public function setSchemeCollection(SchemeCollectionInterface $scheme)
     {
         $this->factory->setSchemeCollection($scheme);
     }
