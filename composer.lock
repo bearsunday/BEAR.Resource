@@ -478,16 +478,16 @@
         },
         {
             "name": "ray/di",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Ray.Di.git",
-                "reference": "1.0.1"
+                "reference": "1.0.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/1.0.1",
-                "reference": "1.0.1",
+                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/1.0.2",
+                "reference": "1.0.2",
                 "shasum": ""
             },
             "require": {
@@ -525,7 +525,7 @@
                 "guice",
                 "jsr"
             ],
-            "time": "2013-04-16 08:03:56"
+            "time": "2013-04-19 08:42:37"
         },
         {
             "name": "symfony/event-dispatcher",
