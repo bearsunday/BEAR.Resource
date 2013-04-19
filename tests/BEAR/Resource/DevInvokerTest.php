@@ -4,33 +4,20 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\DevInvoker;
 
-namespace BEAR\Resource;
-
-//require __DIR__ . '/InvokerTest.php';
-
 use Aura\Signal\Manager;
 use Aura\Signal\HandlerFactory;
 use Aura\Signal\ResultFactory;
 use Aura\Signal\ResultCollection;
-
 use Ray\Di\Definition;
-use Ray\Di\Annotation;
-use Ray\Di\Config;
-use Ray\Di\Forge;
-use Ray\Di\Container;
 use Ray\Di\Injector;
-use Ray\Di\EmptyModule;
 use Ray\Aop\Weaver;
 use Ray\Aop\Bind;
 use Ray\Aop\ReflectiveMethodInvocation;
-use BEAR\Resource\Mock\User;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use testworld\Interceptor\Log;
+use testworld\ResourceObject\User;
 use testworld\ResourceObject\Weave\Book;
 
-/**
- * Test class for BEAR.Resource.
- */
 class DevInvokerTest extends \PHPUnit_Framework_TestCase
 {
     protected $signal;
@@ -43,7 +30,7 @@ class DevInvokerTest extends \PHPUnit_Framework_TestCase
         $this->invoker = new DevInvoker(new Linker(new Reader), $params);
 
 
-        $resource = new \testworld\ResourceObject\User;
+        $resource = new User;
         $resource->uri = 'dummy://self/User';
         $this->request = new Request($this->invoker);
         $this->request->method = 'get';

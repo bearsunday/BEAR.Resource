@@ -15,6 +15,7 @@ use Ray\Di\Di\Scope;
 use Ray\Di\Definition;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
+
 /**
  * Resource request invoker
  *

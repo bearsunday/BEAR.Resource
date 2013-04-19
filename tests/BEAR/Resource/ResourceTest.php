@@ -6,7 +6,6 @@ use Aura\Signal\HandlerFactory;
 use Aura\Signal\Manager;
 use Aura\Signal\ResultCollection;
 use Aura\Signal\ResultFactory;
-use BEAR\Resource\Builder;
 use BEAR\Resource\Mock\TestModule;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ApcCache as Cache;
@@ -63,7 +62,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $scheme->scheme('prov')->host('self')->toAdapter(new Adapter\Prov);
         $scheme->scheme('http')->host('*')->toAdapter(new Adapter\Http);
         /** @var $resource BEAR\Resource\Resource */
-        $this->resource = require dirname(__DIR__) . '/scripts/instance.php';
+        $this->resource = require dirname(dirname(dirname(__DIR__))) . '/scripts/instance.php';
         $this->resource->setSchemeCollection($scheme);
 
         // new resource object;
@@ -124,7 +123,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\BadRequest
+     * @expectedException \BEAR\Resource\Exception\BadRequest
      */
     public function test_postInvalidOption()
     {
@@ -216,7 +215,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\Uri
+     * @expectedException \BEAR\Resource\Exception\Uri
      */
     public function testInvalidUri()
     {
@@ -277,7 +276,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
     public function test_LazyRequestResultAsString()
     {
-        $additionalAnnotations = require __DIR__ . '/scripts/additionalAnnotations.php';
+        $additionalAnnotations = require dirname(dirname(__DIR__)) . '/scripts/additionalAnnotations.php';
         $injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition, new AnnotationReader)))), new EmptyModule);
         $scheme = new SchemeCollection;
         $testAdapter = new Adapter\Test;
@@ -285,7 +284,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $scheme->scheme('test')->host('self')->toAdapter($testAdapter);
         $this->factory = new Factory($scheme);
         $factory = new Factory($scheme);
-        $this->resource = require dirname(__DIR__) . '/scripts/instance.php';
+        $this->resource =  require dirname(dirname(dirname(__DIR__))) . '/scripts/instance.php';
 
         $invoker = new Invoker(new Linker(new AnnotationReader), new NamedParams(new SignalParam(new Manager(new HandlerFactory, new ResultFactory, new ResultCollection), new Param)), new Logger);
         $resource = new Resource(new Factory($scheme), $invoker, new Request($invoker));
@@ -307,7 +306,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\BadRequest
+     * @expectedException \BEAR\Resource\Exception\BadRequest
      */
     public function test_badRequest_noMethod()
     {
@@ -325,7 +324,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     public function test_docsSample01RestBucks()
     {
         ob_start();
-        $response = require dirname(__DIR__) . '/docs/sample/01-rest-bucks/order.php';
+        $response =  require dirname(dirname(dirname(__DIR__))) . '/docs/sample/01-rest-bucks/order.php';
         $response = ob_get_clean();
         $this->assertContains('201: Created', $response);
         $this->assertContains('Order: Success', $response);

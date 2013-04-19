@@ -7,16 +7,16 @@
     "packages": [
         {
             "name": "aura/di",
-            "version": "1.0.1",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/auraphp/Aura.Di",
-                "reference": "1.0.1"
+                "url": "https://github.com/auraphp/Aura.Di.git",
+                "reference": "1.1.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/auraphp/Aura.Di/archive/1.0.1.zip",
-                "reference": "1.0.1",
+                "url": "https://api.github.com/repos/auraphp/Aura.Di/zipball/1.1.0",
+                "reference": "1.1.0",
                 "shasum": ""
             },
             "require": {
@@ -31,7 +31,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD"
+                "BSD-2-Clause"
             ],
             "authors": [
                 {
@@ -62,7 +62,7 @@
                 "di",
                 "di container"
             ],
-            "time": "2012-11-28 00:00:00"
+            "time": "2013-04-07 00:00:00"
         },
         {
             "name": "aura/installer-default",
@@ -478,21 +478,20 @@
         },
         {
             "name": "ray/di",
-            "version": "1.0.0",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Ray.Di.git",
-                "reference": "1.0.0"
+                "reference": "1.0.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/1.0.0",
-                "reference": "1.0.0",
+                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/1.0.2",
+                "reference": "1.0.2",
                 "shasum": ""
             },
             "require": {
-                "aura/di": "1.0.*",
-                "aura/installer-default": "1.0.*",
+                "aura/di": "1.1.*",
                 "doctrine/annotations": "1.*",
                 "doctrine/cache": "1.*",
                 "php": ">=5.4.0",
@@ -520,15 +519,13 @@
             "keywords": [
                 "annotation",
                 "aop",
-                "container",
+                "aspect oriented programming",
                 "dependency injection",
                 "di",
                 "guice",
-                "ioc",
-                "jsr",
-                "method interception"
+                "jsr"
             ],
-            "time": "2013-03-31 12:46:44"
+            "time": "2013-04-19 08:42:37"
         },
         {
             "name": "symfony/event-dispatcher",

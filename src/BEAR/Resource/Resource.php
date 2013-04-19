@@ -10,12 +10,10 @@ namespace BEAR\Resource;
 use BEAR\Resource\Exception;
 use BEAR\Resource\Uri;
 use Guzzle\Cache\CacheAdapterInterface;
-use BEAR\Resource\SignalHandler\HandleInterface;
-use Ray\Di\Di\Scope;
 use SplObjectStorage;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
-
+use Ray\Di\Di\Scope;
 /**
  * Resource client
  *
@@ -78,11 +76,11 @@ class Resource implements ResourceInterface
     /**
      * Set scheme collection
      *
-     * @param SchemeCollection $scheme
+     * @param SchemeCollectionInterface $scheme
      *
      * @Inject(optional = true)
      */
-    public function setSchemeCollection(SchemeCollection $scheme)
+    public function setSchemeCollection(SchemeCollectionInterface $scheme)
     {
         $this->factory->setSchemeCollection($scheme);
     }

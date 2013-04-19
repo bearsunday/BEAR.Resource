@@ -7,9 +7,9 @@
  */
 namespace BEAR\Resource;
 
-use IteratorAggregate;
 use ArrayAccess;
 use ArrayIterator;
+use IteratorAggregate;
 use OutOfBoundsException;
 use Traversable;
 use Ray\Di\Di\Inject;

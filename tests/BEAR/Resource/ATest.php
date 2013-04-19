@@ -2,9 +2,6 @@
 
 namespace BEAR\Resource;
 
-/**
- * Test class for BEAR.Resource.
- */
 use Guzzle\Parser\UriTemplate\UriTemplate;
 use testworld\ResourceObject\User;
 
@@ -22,7 +19,7 @@ class ATest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BEAR\Resource\Exception\Link
+     * @expectedException \BEAR\Resource\Exception\Link
      */
     public function test_hrefInvalidRel()
     {

@@ -9,7 +9,7 @@ class ClientLinkTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->resource = require dirname(__DIR__) . '/scripts/instance.php';
+        $this->resource = require dirname(dirname(dirname(__DIR__))) . '/scripts/instance.php';
         $scheme = new SchemeCollection;
         $injector = Injector::create();
         $scheme->scheme('app')->host('self')->toAdapter(new Adapter\App($injector, 'sandbox', 'App'));
@@ -24,9 +24,15 @@ class ClientLinkTest extends \PHPUnit_Framework_TestCase
 
     public function test_LinkSelf()
     {
-        $blog = $this->resource->get->uri('app://self/Link/User')->withQuery(['id' => 1])->linkSelf(
-            "blog"
-        )->eager->request()->body;
+        $blog = $this
+            ->resource
+            ->get
+            ->uri('app://self/Link/User')
+            ->withQuery(['id' => 1])
+            ->linkSelf("blog")
+            ->eager
+            ->request()
+            ->body;
         $expected = array(
             'id' => 12,
             'name' => 'Aramis blog',

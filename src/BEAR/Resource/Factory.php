@@ -29,11 +29,11 @@ class Factory implements FactoryInterface
     /**
      * Constructor
      *
-     * @param SchemeCollection  $scheme
+     * @param SchemeCollectionInterface $scheme
      *
      * @Inject
      */
-    public function __construct(SchemeCollection $scheme)
+    public function __construct(SchemeCollectionInterface $scheme)
     {
         $this->scheme = $scheme;
     }
@@ -41,11 +41,11 @@ class Factory implements FactoryInterface
     /**
      * Set scheme collection
      *
-     * @param SchemeCollection $scheme
+     * @param SchemeCollectionInterface $scheme
      *
      * @Inject(optional = true)
      */
-    public function setSchemeCollection(SchemeCollection $scheme)
+    public function setSchemeCollection(SchemeCollectionInterface $scheme)
     {
         $this->scheme = $scheme;
     }
