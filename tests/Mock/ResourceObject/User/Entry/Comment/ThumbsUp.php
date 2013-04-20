@@ -19,8 +19,8 @@ class ThumbsUp extends AbstractObject
      */
     public function onGet($comment_id)
     {
-        $thumbsup = array('up' => 30, 'down' => 10, 'body' => "thumbsup for {$comment_id} comment");
+        $like = array('up' => 30, 'down' => 10, 'body' => "like for {$comment_id} comment");
 
-        return $thumbsup;
+        return $like;
     }
 }

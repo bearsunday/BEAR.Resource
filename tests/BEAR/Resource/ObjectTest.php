@@ -76,7 +76,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(4, count($this->resource->body));
     }
 
-    public function test_getItelator()
+    public function test_getIterator()
     {
         $iterator = $this->resource->getIterator();
         $actual = '';
@@ -108,7 +108,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(Code::ERROR, 500);
     }
 
-    public function atest_toString()
+    public function test_toString()
     {
         $this->resource->headers['X-TEST'] = __FUNCTION__;
         $str = (string)$this->resource;

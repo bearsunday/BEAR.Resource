@@ -131,6 +131,7 @@ class DevInvokerTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvokeWeavedResourceLogInObjectHeaderContents(array $headers)
     {
+        /** @noinspection PhpExpressionResultUnusedInspection */
         (array)$headers[DevInvoker::HEADER_INTERCEPTORS];
         $this->assertSame(
             json_encode(['onGet' => ['testworld\Interceptor\Log']]),

@@ -77,7 +77,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \BEAR\Resource\Exception\Uri
      */
-    public function test_invaliUri()
+    public function test_invalidUri()
     {
         $this->factory->newInstance('invalid_uri');
     }
