@@ -61,6 +61,7 @@ trait RenderTrait
         } elseif (is_scalar($this->body)) {
             return (string)$this->body;
         } else {
+            error_log('No renderer set for ' . get_class($this)  . ' in ' . __METHOD__);
             $view = '';
         }
 
