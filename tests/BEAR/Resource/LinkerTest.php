@@ -63,7 +63,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $links = [$link];
         $this->request->links = $links;
         $this->request->method = 'get';
-        $result = $this->linker->invoke($ro, $this->request, $ro->onGet(1));
+        $this->linker->invoke($ro, $this->request, $ro->onGet(1));
     }
 
     public function test_linkSelf1()
@@ -347,6 +347,6 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $links[] = $link;
         $this->request->links = $links;
         $this->request->method = 'get';
-        $result = $this->linker->invoke($ro, $this->request, $ro->onGet(1));
+        $this->linker->invoke($ro, $this->request, $ro->onGet(1));
     }
 }

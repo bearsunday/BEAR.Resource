@@ -96,7 +96,7 @@ class DevInvokerTest extends \PHPUnit_Framework_TestCase
         $this->request->ro = $weave;
         $this->request->method = 'get';
         $this->request->query = ['id' => 1];
-        $actual = $this->invoker->invoke($this->request);
+        $this->invoker->invoke($this->request);
 
         $ro = $this->request->ro->___getObject();
         $this->assertInstanceOf('testworld\ResourceObject\Weave\Book', $ro);
@@ -131,7 +131,7 @@ class DevInvokerTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvokeWeavedResourceLogInObjectHeaderContents(array $headers)
     {
-        $bind = (array)$headers[DevInvoker::HEADER_INTERCEPTORS];
+        (array)$headers[DevInvoker::HEADER_INTERCEPTORS];
         $this->assertSame(
             json_encode(['onGet' => ['testworld\Interceptor\Log']]),
             $headers[DevInvoker::HEADER_INTERCEPTORS]

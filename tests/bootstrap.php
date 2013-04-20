@@ -1,9 +1,11 @@
 <?php
 use \Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\Common\Annotations\AnnotationReader;
 
 // vendor & annotation
 $loader = require dirname(__DIR__) . '/vendor/autoload.php';
 AnnotationRegistry::registerLoader([$loader, 'loadClass']);
+AnnotationReader::addGlobalIgnoredName('noinspection');
 
 // library
 require dirname(__DIR__) . '/src.php';

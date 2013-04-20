@@ -144,7 +144,7 @@ namespace BEAR\Resource {
         public function testApp()
         {
             $app = Injector::create([new InjectorModule(new SchemeModifyModule)])->getInstance('BEAR\Resource\MyApp');
-            /** @var $app \BEAR\Resource\App */
+            /** @var $app \BEAR\Resource\MyApp */
             $page = $app->resource->get->uri('page://self/index')->withQuery(['name' => 'koriym'])->eager->request();
             $this->assertInstanceOf('Sandbox\Resource\Page\Index', $page);
 
@@ -156,7 +156,7 @@ namespace BEAR\Resource {
          */
         public function TODO_TestAppDependencyModification($app)
         {
-            $page = $app->resource->get->uri('https://www.example.com')->eager->request();
+            $app->resource->get->uri('https://www.example.com')->eager->request();
         }
     }
 }

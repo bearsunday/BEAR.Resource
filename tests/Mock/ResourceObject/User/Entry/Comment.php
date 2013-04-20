@@ -21,12 +21,6 @@ class Comment extends AbstractObject
         $this->resource = $resource;
     }
 
-    private $comment = array(
-        100 => array('id' => 100, 'title' => "Entry1"),
-        101 => array('id' => 101, 'title' => "Entry2"),
-        102 => array('id' => 102, 'title' => "Entry3"),
-    );
-
     /**
      * @param id
      *

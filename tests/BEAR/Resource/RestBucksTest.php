@@ -44,7 +44,7 @@ class RestBucksTest extends \PHPUnit_Framework_TestCase
      */
     public function testOptionDelete()
     {
-        $options = $this->resource->delete->uri('app://self/Menu')->eager->request()->body;
+        $this->resource->delete->uri('app://self/Menu')->eager->request()->body;
     }
 
     public function tesMenuLinksOrder()
