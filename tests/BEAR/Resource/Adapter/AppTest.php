@@ -10,13 +10,7 @@ namespace testworld\Resource\App\User {
 namespace BEAR\Resource\Adapter {
 
     use Ray\Di\Definition;
-    use Ray\Di\Annotation;
-    use Ray\Di\Config;
-    use Ray\Di\Forge;
-    use Ray\Di\Container;
-    use Ray\Di\Manager;
     use Ray\Di\Injector;
-    use Ray\Di\EmptyModule;
     use BEAR\Resource\Adapter\App as AppAdapter;
     use Doctrine\Common\Annotations\AnnotationReader as Reader;
 
@@ -34,7 +28,7 @@ namespace BEAR\Resource\Adapter {
         }
 
         /**
-         * @expectedException RuntimeException
+         * @expectedException \RuntimeException
          */
         public function test_NewInvalidNamespace()
         {

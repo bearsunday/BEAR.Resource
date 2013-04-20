@@ -2,9 +2,7 @@
 
 namespace testworld\ResourceObject\RestBucks;
 
-use BEAR\Resource\ObjectInterface as ResourceObject;
 use BEAR\Resource\AbstractObject;
-use BEAR\Resource\Resource;
 
 class Payment extends AbstractObject
 {

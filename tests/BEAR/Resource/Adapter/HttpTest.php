@@ -2,16 +2,9 @@
 
 namespace BEAR\Resource\Adapter;
 
-use Ray\Di\Annotation;
-use Ray\Di\Config;
-use Ray\Di\Forge;
-use Ray\Di\Container;
 use Ray\Di\Injector;
-use Ray\Di\EmptyModule;
 use BEAR\Resource\SchemeCollection;
-use BEAR\Resource\Builder;
 use BEAR\Resource\Factory;
-use BEAR\Resource\Mock\User;
 
 /**
  * Test class for BEAR.Resource.
@@ -73,7 +66,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Guzzle\Http\Exception\ClientErrorResponseException
+     * @expectedException \Guzzle\Http\Exception\ClientErrorResponseException
      * @covers BEAR\Resource\Adapter\Http\Guzzle::onPut
      */
     public function testPut()
@@ -82,7 +75,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Guzzle\Http\Exception\ClientErrorResponseException
+     * @expectedException \Guzzle\Http\Exception\ClientErrorResponseException
      * @covers BEAR\Resource\Adapter\Http\Guzzle::onDelete
      */
     public function testDelete()
@@ -102,7 +95,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
     /**
      *
-     * @expectedException Guzzle\Http\Exception\ClientErrorResponseException
+     * @expectedException \Guzzle\Http\Exception\ClientErrorResponseException
      */
     public function test404()
     {

@@ -4,18 +4,8 @@ namespace testworld\ResourceObject;
 
 use BEAR\Resource\ObjectInterface as ResourceObject;
 use BEAR\Resource\AbstractObject;
-use BEAR\Resource\Resource;
-use BEAR\Resource\Factory;
 use BEAR\Resource\Invoker;
-use BEAR\Resource\Linker;
-use BEAR\Resource\Request;
-
-use Ray\Di\Annotation;
-use Ray\Di\Config;
-use Ray\Di\Forge;
-use Ray\Di\Container;
 use Ray\Di\Injector;
-use Ray\Di\EmptyModule;
 
 class Shutdown extends \RuntimeException
 {

@@ -3,12 +3,10 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Adapter\App;
-use BEAR\Resource\Builder;
 use BEAR\Resource\SchemeCollection;
 use Guzzle\Parser\UriTemplate\UriTemplate;
 use Ray\Di\Definition;
 use Ray\Di\Injector;
-use Ray\Di\Manager;
 
 /**
  * Test class for BEAR.Resource.

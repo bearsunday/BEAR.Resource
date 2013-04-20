@@ -3,13 +3,7 @@
 namespace BEAR\Resource;
 
 use Ray\Di\Definition;
-use Ray\Di\Annotation;
-use Ray\Di\Config;
-use Ray\Di\Forge;
-use Ray\Di\Container;
 use Ray\Di\Injector;
-use Ray\Di\EmptyModule;
-use BEAR\Resource\factory;
 
 /**
  * Test class for BEAR.Resource.
