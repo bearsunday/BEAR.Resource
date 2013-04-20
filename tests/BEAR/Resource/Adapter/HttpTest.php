@@ -71,7 +71,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     public function testPut()
     {
-        $ro = $this->httpAdapter->onPut();
+        $this->httpAdapter->onPut();
     }
 
     /**
@@ -80,7 +80,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     public function testDelete()
     {
-        $ro = $this->httpAdapter->onDelete();
+        $this->httpAdapter->onDelete();
     }
 
     /**

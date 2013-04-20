@@ -50,7 +50,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function test_newInstanceScheme()
     {
-        $instance = $this->factory->newInstance('bad://self/news');
+        $this->factory->newInstance('bad://self/news');
     }
 
     /**
@@ -58,7 +58,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function test_newInstanceSchemes()
     {
-        $instance = $this->factory->newInstance('app://invalid_host/news');
+        $this->factory->newInstance('app://invalid_host/news');
     }
 
 
@@ -79,7 +79,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function test_invaliUri()
     {
-        $instance = $this->factory->newInstance('invalid_uri');
+        $this->factory->newInstance('invalid_uri');
     }
 
 }

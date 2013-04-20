@@ -3,12 +3,14 @@
 namespace testworld\ResourceObject\Weave;
 
 use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceInterface;
+
 
 class Book extends AbstractObject
 {
 
     /**
-     * @param ResourceInterface $resource
+     * @param \BEAR\Resource\ResourceInterface $resource
      */
     public function __construct(ResourceInterface $resource = null)
     {

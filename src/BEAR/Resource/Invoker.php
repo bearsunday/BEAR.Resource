@@ -63,17 +63,6 @@ class Invoker implements InvokerInterface
      */
     const ANNOTATION_PROVIDES = 'Provides';
 
-
-    /**
-     * Return signal manager
-     *
-     * @return \Aura\Signal\Manager
-     */
-    public function getSignal()
-    {
-        return $this->params->getSignal();
-    }
-
     /**
      * @param LinkerInterface $linker
      * @param NamedParams     $params

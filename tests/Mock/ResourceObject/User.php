@@ -57,6 +57,7 @@ class User extends AbstractObject
 
     /**
      * @param string $noProvide
+     * @return string
      */
     public function onPut($noProvide)
     {

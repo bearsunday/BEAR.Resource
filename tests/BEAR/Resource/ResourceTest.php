@@ -229,13 +229,11 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
      */
     public function testServiceError()
     {
-        $query = [];
-        $request = $this->resource->post->uri('app://self/blog')->eager->request();
+        $this->resource->post->uri('app://self/blog')->eager->request();
     }
 
     public function testsyncHttp()
     {
-        $query = [];
         $response = $this->resource->get->uri(
             'http://news.google.com/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss'
         )->sync->request()->get->uri('http://phpspot.org/blog/index.xml')->eager->sync->request()->get->uri(
@@ -276,14 +274,11 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
     public function test_LazyRequestResultAsString()
     {
-        $additionalAnnotations = require dirname(dirname(__DIR__)) . '/scripts/additionalAnnotations.php';
-        $injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition, new AnnotationReader)))), new EmptyModule);
         $scheme = new SchemeCollection;
         $testAdapter = new Adapter\Test;
         $testAdapter->setRenderer(new TestRenderer);
         $scheme->scheme('test')->host('self')->toAdapter($testAdapter);
         $this->factory = new Factory($scheme);
-        $factory = new Factory($scheme);
         $this->resource =  require dirname(dirname(dirname(__DIR__))) . '/scripts/instance.php';
 
         $invoker = new Invoker(new Linker(new AnnotationReader), new NamedParams(new SignalParam(new Manager(new HandlerFactory, new ResultFactory, new ResultCollection), new Param)), new Logger);
@@ -310,7 +305,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
      */
     public function test_badRequest_noMethod()
     {
-        $request = $this->resource->uri('nop://self/dummy')->withQuery($this->query)->request();
+        $this->resource->uri('nop://self/dummy')->withQuery($this->query)->request();
     }
 
     public function tst_weavedResource()
@@ -324,7 +319,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     public function test_docsSample01RestBucks()
     {
         ob_start();
-        $response =  require dirname(dirname(dirname(__DIR__))) . '/docs/sample/01-rest-bucks/order.php';
+        require dirname(dirname(dirname(__DIR__))) . '/docs/sample/01-rest-bucks/order.php';
         $response = ob_get_clean();
         $this->assertContains('201: Created', $response);
         $this->assertContains('Order: Success', $response);
@@ -349,7 +344,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
      */
     public function test_invalidUri()
     {
-        $response = $this->resource->get->uri('invalid')->eager->request();
+        $this->resource->get->uri('invalid')->eager->request();
     }
 
     public function test_usingUri()

@@ -28,6 +28,7 @@ class Order extends AbstractObject
      * Post
      *
      * @param string $drink
+     * @return $this
      */
     public function onPost($drink)
     {

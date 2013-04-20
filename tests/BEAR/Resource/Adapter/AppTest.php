@@ -32,7 +32,7 @@ namespace BEAR\Resource\Adapter {
          */
         public function test_NewInvalidNamespace()
         {
-            $app = new AppAdapter($this->injector, [], '');
+            new AppAdapter($this->injector, [], '');
         }
 
         public function test_New()

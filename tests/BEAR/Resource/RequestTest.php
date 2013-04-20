@@ -164,14 +164,14 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends request
-     * @expectedException OutOfBoundsException
+     * @expectedException \OutOfBoundsException
      */
     public function test_ArrayAccessNotExists(Request $request)
     {
         $this->request->method = 'get';
         $this->request->ro = new Entry;
         $request = $this->request;
-        $result = $request[0];
+        $request[0];
     }
 
     /**
