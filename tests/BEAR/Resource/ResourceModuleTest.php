@@ -39,6 +39,7 @@ namespace BEAR\Resource {
     use Ray\Di\Injector;
     use Ray\Di\InjectorInterface;
     use Ray\Di\Di\Inject;
+    use Ray\Di\Module\InjectorModule;
 
     class AnotherAppModule extends AbstractModule
     {
@@ -53,7 +54,7 @@ namespace BEAR\Resource {
     {
         protected function configure()
         {
-            $this->install(new ResourceModule);
+            $this->install(new \Ray\Di\Module\InjectorModule(new ResourceModule));
             $this->requestInjection(__NAMESPACE__ . '\Modify')->modify();
         }
     }
@@ -105,7 +106,7 @@ namespace BEAR\Resource {
         protected function setUp()
         {
             AnnotationReader::addGlobalIgnoredName('noinspection');
-            $this->module = new ResourceModule;
+            $this->module = new InjectorModule(new ResourceModule);
         }
 
         public function testResourceModule()
@@ -135,14 +136,14 @@ namespace BEAR\Resource {
 
         public function testCreateResourceObjectOfAnotherApplication()
         {
-            $resource = Injector::create([new AnotherAppModule])->getInstance('BEAR\Resource\ResourceInterface');
+            $resource = Injector::create([new InjectorModule(new AnotherAppModule)])->getInstance('BEAR\Resource\ResourceInterface');
             $page = $resource->get->uri('page://self/index')->eager->request();
             $this->assertInstanceOf('Another\Resource\Page\Index', $page);
         }
 
         public function testApp()
         {
-            $app = Injector::create([new SchemeModifyModule])->getInstance('BEAR\Resource\MyApp');
+            $app = Injector::create([new InjectorModule(new SchemeModifyModule)])->getInstance('BEAR\Resource\MyApp');
             /** @var $app \BEAR\Resource\App */
             $page = $app->resource->get->uri('page://self/index')->withQuery(['name' => 'koriym'])->eager->request();
             $this->assertInstanceOf('Sandbox\Resource\Page\Index', $page);
