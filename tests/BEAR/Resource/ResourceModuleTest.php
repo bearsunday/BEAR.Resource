@@ -54,7 +54,7 @@ namespace BEAR\Resource {
     {
         protected function configure()
         {
-            $this->install(new \Ray\Di\Module\InjectorModule(new ResourceModule));
+            $this->install(new InjectorModule(new ResourceModule));
             $this->requestInjection(__NAMESPACE__ . '\Modify')->modify();
         }
     }

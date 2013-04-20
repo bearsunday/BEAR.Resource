@@ -36,9 +36,10 @@ class User extends AbstractObject
     );
 
     /**
-     * @param id
+     * @param $id
      *
-     * @return array
+     * @return mixed
+     * @throws \InvalidArgumentException
      */
     public function onGet($id)
     {
@@ -55,8 +56,7 @@ class User extends AbstractObject
     }
 
     /**
-     * @param unknown_type $noProvide
-     *
+     * @param string $noProvide
      */
     public function onPut($noProvide)
     {

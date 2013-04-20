@@ -7,8 +7,17 @@
  */
 namespace BEAR\Resource;
 
-
+/**
+ * Interface for ParamProvider
+ *
+ * @package BEAR\Resource
+ */
 interface ParamProviderInterface
 {
+    /**
+     * @param Param $param
+     *
+     * @return mixed
+     */
     public function __invoke(Param $param);
 }

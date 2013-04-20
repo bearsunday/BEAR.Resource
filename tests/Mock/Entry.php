@@ -2,7 +2,6 @@
 
 namespace BEAR\Resource\Mock;
 
-use BEAR\Resource\ObjectInterface as ResourceObject;
 use BEAR\Resource\AbstractObject;
 
 class Entry extends AbstractObject

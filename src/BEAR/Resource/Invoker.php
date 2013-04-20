@@ -272,6 +272,9 @@ class Invoker implements InvokerInterface
         return $ro;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function attachParamProvider($varName, ParamProviderInterface $provider)
     {
         $this->params->attachParamProvider($varName, $provider);

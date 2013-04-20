@@ -14,7 +14,6 @@ use Ray\Di\Annotation;
 use Ray\Di\Config;
 use Ray\Di\Forge;
 use Ray\Di\Container;
-use Ray\Di\Manager;
 use Ray\Di\Injector;
 use Ray\Di\EmptyModule;
 
@@ -28,7 +27,7 @@ class Blog extends AbstractObject
 {
 
     /**
-     * @param ResourceInterface $resource
+     * @param \BEAR\Resource\ResourceInterface $resource
      */
     public function __construct(ResourceInterface $resource = null)
     {

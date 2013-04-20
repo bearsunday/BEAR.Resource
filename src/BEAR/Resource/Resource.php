@@ -86,8 +86,6 @@ class Resource implements ResourceInterface
     }
 
     /**
-     * Constructor
-     *
      * @param Factory          $factory resource object factory
      * @param InvokerInterface $invoker resource request invoker
      * @param Request          $request resource request
