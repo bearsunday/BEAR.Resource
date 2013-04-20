@@ -16,7 +16,7 @@ use Ray\Di\ProviderInterface as Provide;
 /**
  * Signal provider
  *
- * @package    BEAR.Sunday
+ * @package    BEAR.Resource
  * @subpackage Module
  */
 class SignalProvider implements Provide

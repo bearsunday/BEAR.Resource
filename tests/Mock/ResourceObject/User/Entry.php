@@ -10,7 +10,7 @@ class Entry extends AbstractObject
 {
 
     /**
-     * @param ResourceInterface $resource
+     * @param \BEAR\Resource\ResourceInterface $resource
      */
     public function __construct(ResourceInterface $resource = null)
     {

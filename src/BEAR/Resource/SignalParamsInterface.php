@@ -2,7 +2,7 @@
 /**
  * This file is part of the BEAR.Package package
  *
- * @package BEAR.Package
+ * @package BEAR.Resource
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
 
@@ -11,6 +11,11 @@ namespace BEAR\Resource;
 use ReflectionParameter;
 use Ray\Aop\MethodInvocation;
 
+/**
+ * Interface for signal Parameter
+ *
+ * @package BEAR\Resource
+ */
 interface SignalParamsInterface
 {
     /**

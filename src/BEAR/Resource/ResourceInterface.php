@@ -85,12 +85,7 @@ interface ResourceInterface
     public function linkCrawl($linkKey);
 
     /**
-     * Attach parameter provider
-     *
-     * @param string                 $varName
-     * @param ParamProviderInterface $provider
-     *
-     * @return self
+     * {@inheritdoc}
      */
     public function attachParamProvider($varName, ParamProviderInterface $provider);
 }
