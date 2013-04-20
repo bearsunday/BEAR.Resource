@@ -39,6 +39,5 @@ class ResourceModule extends AbstractModule
         $this
             ->bind('Guzzle\Parser\UriTemplate\UriTemplateInterface')
             ->to('Guzzle\Parser\UriTemplate\UriTemplate');
-        $this->install(new InjectorModule($this));
     }
 }
