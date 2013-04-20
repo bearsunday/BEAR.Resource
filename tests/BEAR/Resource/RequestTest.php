@@ -9,8 +9,6 @@ use Aura\Signal\ResultCollection;
 use testworld\ResourceObject\User\Entry;
 use BEAR\Resource\Adapter\Nop;
 use BEAR\Resource\Adapter\Test;
-use Ray\Di\Config;
-use Ray\Di\Annotation;
 use Ray\Di\Definition;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 

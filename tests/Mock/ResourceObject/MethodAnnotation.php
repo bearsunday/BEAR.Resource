@@ -2,7 +2,6 @@
 
 namespace testworld\ResourceObject;
 
-use BEAR\Resource\ObjectInterface as ResourceObject;
 use BEAR\Resource\AbstractObject;
 
 /**

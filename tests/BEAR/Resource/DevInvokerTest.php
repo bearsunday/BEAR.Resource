@@ -12,7 +12,6 @@ use Ray\Di\Definition;
 use Ray\Di\Injector;
 use Ray\Aop\Weaver;
 use Ray\Aop\Bind;
-use Ray\Aop\ReflectiveMethodInvocation;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use testworld\Interceptor\Log;
 use testworld\ResourceObject\User;

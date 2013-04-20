@@ -2,9 +2,7 @@
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Request\Method;
 use BEAR\Resource\Adapter\Nop;
-use Ray\Di\Config;
 
 /**
  * Test class for BEAR.Resource.

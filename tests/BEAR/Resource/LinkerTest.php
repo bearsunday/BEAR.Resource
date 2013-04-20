@@ -14,7 +14,6 @@ use Ray\Di\Container;
 use Ray\Di\Injector;
 use Ray\Di\EmptyModule;
 
-use BEAR\Resource\Request\Method;
 use BEAR\Resource\Adapter\Nop;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use testworld\ResourceObject\User;

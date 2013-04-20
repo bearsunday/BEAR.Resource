@@ -2,7 +2,6 @@
 
 namespace BEAR\Resource\Adapter;
 
-use BEAR\Resource\Builder;
 use BEAR\Resource\Exception\BadRequest;
 use BEAR\Resource\Mock;
 use BEAR\Resource\SchemeCollection;

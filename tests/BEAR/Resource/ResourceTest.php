@@ -61,7 +61,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $scheme->scheme('test')->host('self')->toAdapter(new Adapter\Test);
         $scheme->scheme('prov')->host('self')->toAdapter(new Adapter\Prov);
         $scheme->scheme('http')->host('*')->toAdapter(new Adapter\Http);
-        /** @var $resource BEAR\Resource\Resource */
+        /** @var $resource \BEAR\Resource\Resource */
         $this->resource = require dirname(dirname(dirname(__DIR__))) . '/scripts/instance.php';
         $this->resource->setSchemeCollection($scheme);
 
@@ -225,7 +225,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException testworld\ResourceObject\Shutdown
+     * @expectedException \testworld\ResourceObject\Shutdown
      */
     public function testServiceError()
     {

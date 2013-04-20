@@ -8,7 +8,6 @@ use Aura\Signal\ResultCollection;
 use Aura\Signal\ResultFactory;
 use BEAR\Resource\Adapter\Nop;
 use BEAR\Resource\Adapter\Test;
-use BEAR\Resource\Request\Method;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use Ray\Di\Definition;
 use Ray\Di\Injector;

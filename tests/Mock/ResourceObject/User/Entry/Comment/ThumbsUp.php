@@ -2,14 +2,8 @@
 
 namespace testworld\ResourceObject\Entry\Comment;
 
-use BEAR\Resource\ObjectInterface as ResourceObject;
 use BEAR\Resource\AbstractObject;
-use BEAR\Resource\ResourceInterface;
-use BEAR\Resource\Factory;
 use BEAR\Resource\Invoker;
-use BEAR\Resource\Linker;
-use BEAR\Resource\Resource;
-use BEAR\Resource\Request;
 
 class ThumbsUp extends AbstractObject
 {
