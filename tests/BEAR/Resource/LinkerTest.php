@@ -300,7 +300,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
                     'ThumbsUp' => array(
                         'up' => 30,
                         'down' => 10,
-                        'body' => 'thumbsup for 200 comment',
+                        'body' => 'like for 200 comment',
                     ),
                 ),
             ),
@@ -313,7 +313,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
                     'ThumbsUp' => array(
                         'up' => 30,
                         'down' => 10,
-                        'body' => 'thumbsup for 201 comment',
+                        'body' => 'like for 201 comment',
                     ),
                 ),
             ),
@@ -323,7 +323,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
                 'ThumbsUp' => array(
                     'up' => 30,
                     'down' => 10,
-                    'body' => 'thumbsup for 202 comment',
+                    'body' => 'like for 202 comment',
                 ),
             ),
         );
