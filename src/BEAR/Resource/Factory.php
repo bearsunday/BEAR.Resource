@@ -9,6 +9,7 @@ namespace BEAR\Resource;
 
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Scope;
+use Ray\Di\Exception\NotReadable;
 
 /**
  * Resource object factory
@@ -76,8 +77,10 @@ class Factory implements FactoryInterface
             if ($adapter instanceof ProviderInterface) {
                 $adapter = $adapter->get($uri);
             }
-        } catch (\Exception $e) {
+        } catch (NotReadable $e) {
             throw new Exception\ResourceNotFound($uri, 0, $e);
+        } catch (\Exception $e) {
+            throw $e;
         }
         $adapter->uri = $uri;
 
