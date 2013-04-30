@@ -2,7 +2,6 @@
 /**
  * This file is part of the BEAR.Resource package
  *
- * @package BEAR.Resource
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
 namespace BEAR\Resource;
@@ -19,7 +18,6 @@ use Ray\Di\Di\Named;
 /**
  * Resource request invoker
  *
- * @package BEAR.Resource
  *
  * @Scope("singleton")
  */

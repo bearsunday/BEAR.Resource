@@ -6,7 +6,6 @@ use Ray\Aop\MethodInvocation;
 
 /**
  * Log Interceptor
- *
  */
 class Log implements MethodInterceptor
 {

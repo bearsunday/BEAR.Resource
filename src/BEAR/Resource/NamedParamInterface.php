@@ -2,7 +2,6 @@
 /**
  * This file is part of the BEAR.Resource package
  *
- * @package BEAR.Resource
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
 namespace BEAR\Resource;
@@ -13,7 +12,6 @@ use Ray\Aop\Weave;
 /**
  * Resource request invoke interface
  *
- * @package BEAR.Resource
  *
  * @ImplementedBy("BEAR\Resource\Invoker")
  */

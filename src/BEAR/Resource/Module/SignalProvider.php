@@ -2,7 +2,6 @@
 /**
  * This file is part of the BEAR.Sunday package
  *
- * @package BEAR.Resource
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
 namespace BEAR\Resource\Module;
@@ -15,9 +14,6 @@ use Ray\Di\ProviderInterface as Provide;
 
 /**
  * Signal provider
- *
- * @package    BEAR.Resource
- * @subpackage Module
  */
 class SignalProvider implements Provide
 {
