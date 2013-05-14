@@ -52,7 +52,7 @@ trait RenderTrait
                 $view = $this->renderer->render($this);
             } catch (Exception $e) {
                 $view = '';
-                error_log('Exception cached in ' . __METHOD__);
+                error_log('Exception caught in ' . __METHOD__);
                 error_log((string)$e);
             }
         } elseif (is_scalar($this->body)) {
