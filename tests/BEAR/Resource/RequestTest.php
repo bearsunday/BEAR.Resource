@@ -195,4 +195,20 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $result = isset($request[0]);
         $this->assertFalse($result);
     }
+
+    public function testWithQuery()
+    {
+        $this->request->set(new Test, 'test://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
+        $this->request->withQuery(['a' => 'bear']);
+        $actual = $this->request->toUriWithMethod();
+        $this->assertSame('get test://self/path/to/resource?a=bear', $actual);
+    }
+
+    public function testAddQuery()
+    {
+        $this->request->set(new Test, 'test://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
+        $this->request->addQuery(['a' => 'bear', 'c' => 'kuma']);
+        $actual = $this->request->toUriWithMethod();
+        $this->assertSame('get test://self/path/to/resource?a=bear&b=25&c=kuma', $actual);
+    }
 }
