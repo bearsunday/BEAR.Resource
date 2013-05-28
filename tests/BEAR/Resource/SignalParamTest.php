@@ -24,6 +24,14 @@ class IdProvider implements ParamProviderInterface
     }
 }
 
+class IdProviderSkip implements ParamProviderInterface
+{
+    public function __invoke(Param $param)
+    {
+        return;
+    }
+}
+
 class ByProviderMethodClass
 {
     /**
@@ -100,6 +108,18 @@ class SignalParamTest extends \PHPUnit_Framework_TestCase
     public function testGetArgWithSignalFault()
     {
         $this->param->attachParamProvider('invalid_xxx_id', new IdProvider);
+        $callable = [new ByProviderTestClass, 'onGet'];
+        $result = $this->param->getArg(
+            new \ReflectionParameter($callable, 'id'),
+            new ReflectiveMethodInvocation($callable, [])
+        );
+        $this->assertSame(1002, $result);
+    }
+
+    public function testGetArgWithSignalSkip()
+    {
+        $this->param->attachParamProvider('id', new IdProviderSkip);
+        $this->param->attachParamProvider('id', new IdProvider);
         $callable = [new ByProviderTestClass, 'onGet'];
         $result = $this->param->getArg(
             new \ReflectionParameter($callable, 'id'),
