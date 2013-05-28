@@ -26,6 +26,24 @@ interface RequestInterface
     public function __construct(InvokerInterface $invoker);
 
     /**
+     * Set query
+     *
+     * @param array $query
+     *
+     * @return self
+     */
+    public function withQuery(array $query);
+
+    /**
+     * Add(merge) query
+     *
+     * @param array $query
+     *
+     * @return self
+     */
+    public function addQuery(array $query);
+
+    /**
      * InvokerInterface resource request
      *
      * @param array $query

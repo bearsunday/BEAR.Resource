@@ -114,6 +114,26 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function withQuery(array $query)
+    {
+        $this->query = $query;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addQuery(array $query)
+    {
+        $this->query = array_merge($this->query, $query);
+
+        return $this;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function __invoke(array $query = null)
