@@ -34,7 +34,7 @@ interface ResourceInterface
      *
      * @param string $uri
      *
-     * @return Resource
+     * @return self
      */
     public function uri($uri);
 
@@ -43,9 +43,18 @@ interface ResourceInterface
      *
      * @param  array    $query
      *
-     * @return Resource
+     * @return self
      */
     public function withQuery(array $query);
+
+    /**
+     * Add query
+     *
+     * @param array $query
+     *
+     * @return self
+     */
+    public function addQuery(array $query);
 
     /**
      * Return Request
@@ -59,7 +68,7 @@ interface ResourceInterface
      *
      * @param string $linkKey
      *
-     * @return mixed
+     * @return self
      */
     public function linkSelf($linkKey);
 
@@ -68,7 +77,7 @@ interface ResourceInterface
      *
      * @param string $linkKey
      *
-     * @return mixed
+     * @return self
      */
     public function linkNew($linkKey);
 
@@ -77,12 +86,17 @@ interface ResourceInterface
      *
      * @param string $linkKey
      *
-     * @return mixed
+     * @return self
      */
     public function linkCrawl($linkKey);
 
     /**
-     * {@inheritdoc}
+     * Attach parameter provider
+     *
+     * @param                        $varName
+     * @param ParamProviderInterface $provider
+     *
+     * @return self
      */
     public function attachParamProvider($varName, ParamProviderInterface $provider);
 }

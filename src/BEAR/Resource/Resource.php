@@ -265,6 +265,8 @@ class Resource implements ResourceInterface
     public function attachParamProvider($varName, ParamProviderInterface $provider)
     {
         $this->invoker->attachParamProvider($varName, $provider);
+
+        return $this;
     }
 
 
