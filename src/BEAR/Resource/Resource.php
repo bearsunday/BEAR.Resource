@@ -2,7 +2,6 @@
 /**
  * This file is part of the BEAR.Resource package
  *
- * @package BEAR.Resource
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
 namespace BEAR\Resource;
@@ -17,7 +16,6 @@ use Ray\Di\Di\Scope;
 /**
  * Resource client
  *
- * @package BEAR.Resource
  * @SuppressWarnings(PHPMD.TooManyMethods)
  *
  * @Scope("singleton")
@@ -59,6 +57,22 @@ class Resource implements ResourceInterface
      */
     private $cache;
 
+    /**
+     * @var string
+     */
+    private $appName = '';
+
+    /**
+     * @param $appName
+     *
+     * @Inject(optional = true)
+     * @Named("app_name")
+     *
+     */
+    public function setAppName($appName)
+    {
+        $this->appName = $appName;
+    }
 
     /**
      * Set cache adapter
@@ -111,7 +125,7 @@ class Resource implements ResourceInterface
         }
         $useCache = $this->cache instanceof CacheAdapterInterface;
         if ($useCache === true) {
-            $key = 'res-' . str_replace('/', '-', $uri);
+            $key = $this->appName . 'res-' . str_replace('/', '-', $uri);
             $cached = $this->cache->fetch($key);
             if ($cached) {
                 return $cached;

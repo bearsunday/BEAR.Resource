@@ -1,6 +1,7 @@
 BEAR.Resource, a RESTful object / service layer framework.
 =================================================
 
+[![Latest Stable Version](https://poser.pugx.org/bear/resource/v/stable.png)](https://packagist.org/packages/bear/resource)
 [![Build Status](https://secure.travis-ci.org/koriym/BEAR.Resource.png)](http://travis-ci.org/koriym/BEAR.git@github.com:koriym/BEAR.Resource.git)
 
  * Service Layer - _Defines an application's boundary with a layer of services that establishes a set of available operations and coordinates the application's response in each operation. (Martin Fowler - PoEAA)_
@@ -8,7 +9,7 @@ BEAR.Resource, a RESTful object / service layer framework.
 
 BEAR.Resource is a combination of both technology.
 
-Requiement
+Requirement
 -------------
 
  * PHP 5.4+

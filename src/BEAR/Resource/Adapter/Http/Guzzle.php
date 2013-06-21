@@ -1,8 +1,6 @@
 <?php
 /**
  * This file is part of the BEAR.Resource package
- *
- * @package BEAR.Resource
  */
 namespace BEAR\Resource\Adapter\Http;
 
@@ -20,7 +18,6 @@ use Ray\Di\Di\Scope;
 /**
  * App resource (app:://self/path/to/resource)
  *
- * @package BEAR.Resource
  *
  * @Scope("singleton")
  */

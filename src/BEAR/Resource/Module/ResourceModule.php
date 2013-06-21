@@ -2,7 +2,6 @@
 /**
  * This file is part of the BEAR.Resource package
  *
- * @package BEAR.Resource
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
 namespace BEAR\Resource\Module;
@@ -14,7 +13,6 @@ use Ray\Di\Scope;
 /**
  * This file is part of the BEAR.Package package
  *
- * @package BEAR.Resource
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
 class ResourceModule extends AbstractModule

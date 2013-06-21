@@ -2,7 +2,6 @@
 /**
  * This file is part of the BEAR.Resource package
  *
- * @package BEAR.Resource
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
 namespace BEAR\Resource;
@@ -11,8 +10,6 @@ use Exception;
 
 /**
  * Trait for resource string
- *
- * @package BEAR.Resource
  */
 trait RenderTrait
 {
@@ -55,7 +52,7 @@ trait RenderTrait
                 $view = $this->renderer->render($this);
             } catch (Exception $e) {
                 $view = '';
-                error_log('Exception cached in ' . __METHOD__);
+                error_log('Exception caught in ' . __METHOD__);
                 error_log((string)$e);
             }
         } elseif (is_scalar($this->body)) {
