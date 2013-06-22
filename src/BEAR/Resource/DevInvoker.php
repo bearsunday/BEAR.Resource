@@ -47,8 +47,8 @@ class DevInvoker extends Invoker implements InvokerInterface
         }
 
         if ($request->method === self::OPTIONS || $request->method === self::HEAD) {
-            parent::invoke($request);
-            return parent::invoke($request);
+            $result = parent::invoke($request);
+            return $result;
         }
 
         // MethodNotAllowed
