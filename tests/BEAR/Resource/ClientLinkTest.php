@@ -17,12 +17,12 @@ class ClientLinkTest extends \PHPUnit_Framework_TestCase
         $this->user = $this->resource->newInstance('app://self/Link/User');
     }
 
-    public function test_New()
+    public function testNew()
     {
         $this->assertInstanceOf('\BEAR\Resource\ObjectInterface', $this->user);
     }
 
-    public function test_LinkSelf()
+    public function testLinkSelf()
     {
         $blog = $this
             ->resource

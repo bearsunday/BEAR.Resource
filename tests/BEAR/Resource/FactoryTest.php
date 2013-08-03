@@ -28,18 +28,18 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $this->factory = new Factory($scheme);
     }
 
-    public function test_NewFactory()
+    public function testNewFactory()
     {
         $this->assertInstanceOf('\BEAR\Resource\Factory', $this->factory);
     }
 
-    public function test_newInstanceNop()
+    public function testNewInstanceNop()
     {
         $instance = $this->factory->newInstance('nop://self/path/to/dummy');
         $this->assertInstanceOf('\BEAR\Resource\Adapter\Nop', $instance);
     }
 
-    public function test_newInstanceWithProvider()
+    public function testNewInstanceWithProvider()
     {
         $instance = $this->factory->newInstance('prov://self/path/to/dummy');
         $this->assertInstanceOf('\stdClass', $instance);
@@ -48,7 +48,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \BEAR\Resource\Exception\Scheme
      */
-    public function test_newInstanceScheme()
+    public function testNewInstanceScheme()
     {
         $this->factory->newInstance('bad://self/news');
     }
@@ -56,19 +56,19 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \BEAR\Resource\Exception\Scheme
      */
-    public function test_newInstanceSchemes()
+    public function testNewInstanceSchemes()
     {
         $this->factory->newInstance('app://invalid_host/news');
     }
 
 
-    public function test_newInstanceApp()
+    public function testNewInstanceApp()
     {
         $instance = $this->factory->newInstance('app://self/news');
         $this->assertInstanceOf('testworld\ResourceObject\news', $instance);
     }
 
-    public function test_newInstancePage()
+    public function testNewInstancePage()
     {
         $instance = $this->factory->newInstance('page://self/news');
         $this->assertInstanceOf('testworld\Page\news', $instance);
@@ -77,9 +77,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \BEAR\Resource\Exception\Uri
      */
-    public function test_invalidUri()
+    public function testInvalidUri()
     {
         $this->factory->newInstance('invalid_uri');
     }
-
 }

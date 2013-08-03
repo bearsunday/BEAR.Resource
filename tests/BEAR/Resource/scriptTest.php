@@ -25,7 +25,7 @@ class scriptTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\BEAR\Resource\Resource', $this->resource);
     }
 
-    public function test_setSchemeHttp()
+    public function testSetSchemeHttp()
     {
         $scheme = (new SchemeCollection)->scheme('http')->host('*')->toAdapter(new Http);
         $this->resource->setSchemeCollection($scheme);
@@ -33,7 +33,7 @@ class scriptTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(200, $result->code);
     }
 
-    public function test_setSchemeApp()
+    public function testSetSchemeApp()
     {
         $app = new App(Injector::create([]), 'Space', 'Resource\App');
         $scheme = (new SchemeCollection)->scheme('app')->host('self')->toAdapter($app);

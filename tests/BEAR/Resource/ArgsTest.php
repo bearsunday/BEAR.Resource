@@ -10,7 +10,7 @@ class ArgsTest extends \PHPUnit_Framework_TestCase
         $this->args = new Args;
     }
 
-    public function test_New()
+    public function testNew()
     {
         $this->assertInstanceOf('\BEAR\Resource\Args', $this->args);
     }

@@ -46,7 +46,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->resource = new Resource($factory, $invoker, new Request($invoker));
     }
 
-    public function test_New()
+    public function testNew()
     {
         $this->assertInstanceOf('\BEAR\Resource\Linker', $this->linker);
     }
@@ -54,7 +54,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \BEAR\Resource\Exception\BadLinkRequest
      */
-    public function test_linkException()
+    public function testLinkException()
     {
         $ro = new Mock\Link;
         $link = new LinkType;
@@ -66,7 +66,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->linker->invoke($ro, $this->request, $ro->onGet(1));
     }
 
-    public function test_linkSelf1()
+    public function testLinkSelf1()
     {
         $ro = new Mock\Link;
         $link = new LinkType;
@@ -80,7 +80,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function test_linkSelf2()
+    public function testLinkSelf2()
     {
         $ro = new User;
         $ro->setResource($this->resource);
@@ -100,7 +100,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function test_linkNew1()
+    public function testLinkNew1()
     {
         $ro = new User;
         $ro->setResource($this->resource);
@@ -118,7 +118,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function test_linkCrawl()
+    public function testLinkCrawl()
     {
         $ro = new User;
         $ro->setResource($this->resource);
@@ -144,7 +144,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function test_SelfLinkSelf()
+    public function testSelfLinkSelf()
     {
         $ro = new User;
         $ro->setResource($this->resource);
@@ -164,7 +164,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function test_SelfLinkTarget()
+    public function testSelfLinkTarget()
     {
         $ro = new User;
         $ro->setResource($this->resource);
@@ -187,7 +187,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function test_TargetLinkTarget()
+    public function testTargetLinkTarget()
     {
         $ro = new User;
         $ro->setResource($this->resource);
@@ -212,7 +212,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function test_TargetLinkSelf()
+    public function testTargetLinkSelf()
     {
         $ro = new User;
         $ro->setResource($this->resource);
@@ -235,7 +235,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function test_ListCrawlBasic()
+    public function testListCrawlBasic()
     {
         $ro = new User\Entry;
         $link = new LinkType;
@@ -275,7 +275,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function test_ListCrawlThenCrawl()
+    public function testListCrawlThenCrawl()
     {
         $ro = new User\Entry;
         $links = [];
@@ -333,7 +333,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \BEAR\Resource\Exception\Link
      */
-    public function test_ReturnInsideInstanceAfterListLink()
+    public function testReturnInsideInstanceAfterListLink()
     {
         $ro = new User\Entry;
         $links = [];

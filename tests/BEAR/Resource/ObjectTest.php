@@ -21,34 +21,34 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $this->resource[2] = 'entry3';
     }
 
-    public function test_offsetGet()
+    public function testOffsetGet()
     {
         $actual = $this->resource[0];
         $this->assertSame('entry1', $actual);
     }
 
-    public function test_offsetExists()
+    public function testOffsetExists()
     {
         $this->assertTrue(isset($this->resource[0]));
     }
 
-    public function test_offsetUnset()
+    public function testOffsetUnset()
     {
         unset($this->resource[0]);
         $this->assertFalse(isset($this->resource[0]));
     }
 
-    public function test_offsetExistsFalse()
+    public function testOffsetExistsFalse()
     {
         $this->assertFalse(isset($this->resource[10]));
     }
 
-    public function test_count()
+    public function testCount()
     {
         $this->assertSame(3, count($this->resource));
     }
 
-    public function test_ksort()
+    public function testKsort()
     {
         $this->resource = new Mock\Entry();
         $this->resource['d'] = 'lemon';
@@ -59,7 +59,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, (array)$this->resource->body);
     }
 
-    public function test_asort()
+    public function testAsort()
     {
         $this->resource = new Mock\Entry();
         $this->resource['d'] = 'lemon';
@@ -70,13 +70,13 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, (array)$this->resource->body);
     }
 
-    public function test_append()
+    public function testAppend()
     {
         $this->resource[] = 'entry_append';
         $this->assertSame(4, count($this->resource->body));
     }
 
-    public function test_getIterator()
+    public function testGetIterator()
     {
         $iterator = $this->resource->getIterator();
         $actual = '';
@@ -88,7 +88,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function test_getEmptyIterator()
+    public function testGetEmptyIterator()
     {
         $this->resource->body = 'string';
         $iterator = $this->resource->getIterator();
@@ -101,21 +101,21 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function test_Code()
+    public function testCode()
     {
         $this->assertSame(Code::OK, 200);
         $this->assertSame(Code::BAD_REQUEST, 400);
         $this->assertSame(Code::ERROR, 500);
     }
 
-    public function test_toString()
+    public function testToString()
     {
         $this->resource->headers['X-TEST'] = __FUNCTION__;
         $str = (string)$this->resource;
         $this->assertTrue(is_string($str));
     }
 
-    public function test_toStringScalarBody()
+    public function testToStringScalarBody()
     {
         $this->resource->headers['X-TEST'] = __FUNCTION__;
         $this->resource->body = 'OK';
@@ -123,7 +123,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_string($str));
     }
 
-    public function test_toStringWithRenderer()
+    public function testToStringWithRenderer()
     {
         $renderer = new TestRenderer;
         $this->resource->setRenderer($renderer);
@@ -131,13 +131,13 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('["entry1","entry2","entry3"]', $result);
     }
 
-    public function test_setRendererWithoutRenderer()
+    public function testSetRendererWithoutRenderer()
     {
         $result = (string)($this->resource);
         $this->assertSame('', $result);
     }
 
-    public function test_resourceHasView()
+    public function testResourceHasView()
     {
         $view = 'i have view';
         $this->resource->view = $view;

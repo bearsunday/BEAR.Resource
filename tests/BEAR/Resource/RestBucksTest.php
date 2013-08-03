@@ -26,7 +26,7 @@ class RestBucksTest extends \PHPUnit_Framework_TestCase
         $this->resource->setSchemeCollection($scheme);
     }
 
-    public function test_New()
+    public function testNew()
     {
         $this->assertInstanceOf('\BEAR\Resource\Resource', $this->resource);
     }

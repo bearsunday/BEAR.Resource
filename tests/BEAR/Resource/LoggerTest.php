@@ -51,12 +51,12 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
     }
 
-    public function test_New()
+    public function testNew()
     {
         $this->assertInstanceOf('\BEAR\Resource\Logger', $this->logger);
     }
 
-    public function test_Log()
+    public function testLog()
     {
         $test = new Test;
         $test->uri = 'test://self/path/to/resource';
@@ -68,26 +68,26 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function test_setWriter()
+    public function testSetWriter()
     {
         $this->logger->setWriter(new TestWriter);
         $result = $this->logger->write($this->request, new Test);
         $this->assertSame(true, $result);
     }
 
-    public function test_setWriter_WhenWriterIsNotSet()
+    public function testSetWriter_WhenWriterIsNotSet()
     {
         $result = $this->logger->write($this->request, new Test);
         $this->assertSame(false, $result);
     }
 
-    public function test_count()
+    public function testCount()
     {
         $this->assertSame(0, count($this->logger));
     }
 
 
-    public function test_serialize()
+    public function testSerialize()
     {
         $request = $this->request;
         $request->closure = function(){};

@@ -53,7 +53,7 @@ class DevInvokerTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends invoke
      */
-    public function test_isHEADER_EXECUTION_TIME_headerExists(array $headers)
+    public function testIsHEADER_EXECUTION_TIME_headerExists(array $headers)
     {
         $this->assertArrayHasKey(DevInvoker::HEADER_EXECUTION_TIME, $headers);
     }
@@ -61,7 +61,7 @@ class DevInvokerTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends invoke
      */
-    public function test_HEADER_EXECUTION_TIME_isPlus(array $headers)
+    public function testIsHEADER_EXECUTION_TIME_Plus(array $headers)
     {
         $this->assertTrue($headers[DevInvoker::HEADER_EXECUTION_TIME] > 0);
     }
@@ -69,7 +69,7 @@ class DevInvokerTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends invoke
      */
-    public function test_isHEADER_MEMORY_USAGEExists(array $headers)
+    public function testIsHEADER_MEMORY_USAGEExists(array $headers)
     {
         $this->assertArrayHasKey(DevInvoker::HEADER_MEMORY_USAGE, $headers);
     }
@@ -77,7 +77,7 @@ class DevInvokerTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends invoke
      */
-    public function test_HEADER_MEMORY_USAGE_isPlus(array $headers)
+    public function testIsHEADER_MEMORY_USAGE_Plus(array $headers)
     {
         $this->assertTrue($headers[DevInvoker::HEADER_MEMORY_USAGE] > 0);
     }
