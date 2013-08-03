@@ -85,4 +85,14 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame(0, count($this->logger));
     }
+
+
+    public function test_serialize()
+    {
+        $request = $this->request;
+        $request->closure = function(){};
+        $this->logger->log($request, new Test);
+        $logStr = serialize($this->logger);
+        $this->assertInternalType('string', $logStr);
+    }
 }

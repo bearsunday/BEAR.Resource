@@ -10,6 +10,7 @@ use ArrayIterator;
 use Countable;
 use Ray\Di\Di\Scope;
 use BEAR\Resource\AbstractObject as ResourceObject;
+use Serializable;
 use Ray\Di\Di\Inject;
 
 /**
@@ -18,7 +19,7 @@ use Ray\Di\Di\Inject;
  *
  * @Scope("singleton")
  */
-class Logger implements LoggerInterface, Countable
+class Logger implements LoggerInterface, Countable, Serializable
 {
     const LOG_REQUEST = 0;
     const LOG_RESULT = 1;
@@ -89,5 +90,14 @@ class Logger implements LoggerInterface, Countable
     public function count()
     {
         return count($this->logs);
+    }
+
+    public function serialize()
+    {
+        unset($this->logs);
+    }
+
+    public function unserialize($data)
+    {
     }
 }
