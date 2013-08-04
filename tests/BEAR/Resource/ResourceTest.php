@@ -49,8 +49,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
         // build resource client
         $scheme = new SchemeCollection;
-        $injector = Injector::create();
-        $injector->setModule(new TestModule);
+        $injector = Injector::create([new TestModule]);
         $scheme->scheme('app')->host('self')->toAdapter(
             new Adapter\App($injector, 'testworld', 'ResourceObject')
         );
@@ -293,12 +292,11 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->resource->uri('nop://self/dummy')->withQuery($this->query)->request();
     }
 
-    public function tstWeavedResource()
+    public function testWeavedResource()
     {
         $result = $this->resource->get->uri('app://self/weave/book')->withQuery($this->query)->eager->request();
         $result->a = 100;
-        $obj = $result->___getObject();
-        $this->assertSame(100, $obj->a);
+        $this->assertSame(100, $result->a);
     }
 
     public function testDocsSample01RestBucks()

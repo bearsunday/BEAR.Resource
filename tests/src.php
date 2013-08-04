@@ -37,6 +37,7 @@ require_once __DIR__ . '/Mock/ErrorRenderer.php';
 
 require_once __DIR__ . '/Mock/sandbox/App/Link/User.php';
 require_once __DIR__ . '/Mock/sandbox/App/Link/Blog.php';
+require_once __DIR__ . '/BEAR/Resource/Annotation/Log.php';
 
 $restbucks = dirname(__DIR__) . '/docs/sample/01-rest-bucks/Resource/App';
 require_once $restbucks . '/Menu.php';
