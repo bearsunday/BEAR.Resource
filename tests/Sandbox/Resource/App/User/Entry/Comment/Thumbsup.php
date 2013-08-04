@@ -5,7 +5,7 @@ namespace Sandbox\Resource\App\User\Entry\Comment;
 use BEAR\Resource\AbstractObject;
 use BEAR\Resource\Invoker;
 
-class ThumbsUp extends AbstractObject
+class Thumbsup extends AbstractObject
 {
 
     public function __construct()
