@@ -23,9 +23,9 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $scheme->scheme('nop')->host('self')->toAdapter(new Nop);
         $scheme->scheme('prov')->host('self')->toAdapter(new Prov);
         $scheme->scheme('app')->host('self')->toAdapter(
-            new App($injector, 'testworld', 'ResourceObject')
+            new App($injector, 'Sandbox', 'Resource\App')
         );
-        $this->resource = require dirname(dirname(dirname(dirname(__DIR__)))) . '/scripts/instance.php';
+        $this->resource = $GLOBALS['RESOURCE'];
         $this->resource->setSchemeCollection($scheme);
         $this->user = $this->resource->newInstance('app://self/user');
         $this->nop = $this->resource->newInstance('nop://self/dummy');
@@ -176,7 +176,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
 
     public function testP()
     {
-        $ro = new Mock\Link;
+        $ro = new \Sandbox\Resource\App\Link;
         $actual = $this->resource->get->object($ro)->withQuery(array('id' => 1))->linkSelf('View')->eager->request();
         $expected = '<html>bear1</html>';
         $this->assertSame($expected, $actual->body);

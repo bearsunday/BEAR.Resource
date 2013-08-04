@@ -18,7 +18,7 @@ use Doctrine\Common\Annotations\AnnotationReader;
 $injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition, new AnnotationReader)))), new EmptyModule);
 $scheme = new SchemeCollection;
 $scheme->scheme('app')->host('self')->toAdapter(
-    new Adapter\App($injector, 'testworld', 'ResourceObject')
+    new Adapter\App($injector, 'Sandbox', 'Resource\App')
 );
 $factory = new Factory($scheme);
 

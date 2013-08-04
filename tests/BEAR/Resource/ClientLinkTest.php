@@ -9,20 +9,20 @@ class ClientLinkTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->resource = require dirname(dirname(dirname(__DIR__))) . '/scripts/instance.php';
+        $this->resource = $GLOBALS['RESOURCE'];
         $scheme = new SchemeCollection;
         $injector = Injector::create();
-        $scheme->scheme('app')->host('self')->toAdapter(new Adapter\App($injector, 'sandbox', 'App'));
+        $scheme->scheme('app')->host('self')->toAdapter(new Adapter\App($injector, 'Sandbox', 'Resource\App'));
         $this->resource->setSchemeCollection($scheme);
         $this->user = $this->resource->newInstance('app://self/Link/User');
     }
 
-    public function test_New()
+    public function testNew()
     {
         $this->assertInstanceOf('\BEAR\Resource\ObjectInterface', $this->user);
     }
 
-    public function test_LinkSelf()
+    public function testLinkSelf()
     {
         $blog = $this
             ->resource

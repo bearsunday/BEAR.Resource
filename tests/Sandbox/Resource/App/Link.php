@@ -1,0 +1,29 @@
+<?php
+
+namespace Sandbox\Resource\App;
+
+use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ObjectInterface;
+
+class Link extends AbstractObject
+{
+    /**
+     * @param id
+     *
+     * @return string
+     */
+    public function onGet($id)
+    {
+        return "bear{$id}";
+    }
+
+    /**
+     * @param ObjectInterface $resource
+     *
+     * @return string
+     */
+    public function onLinkView(ObjectInterface $resource)
+    {
+        return "<html>$resource->body</html>";
+    }
+}

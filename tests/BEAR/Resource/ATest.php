@@ -3,7 +3,7 @@
 namespace BEAR\Resource;
 
 use Guzzle\Parser\UriTemplate\UriTemplate;
-use testworld\ResourceObject\User;
+use Sandbox\Resource\App\User;
 
 class ATest extends \PHPUnit_Framework_TestCase
 {
@@ -13,7 +13,7 @@ class ATest extends \PHPUnit_Framework_TestCase
         $this->a = new A(new UriTemplate);
     }
 
-    public function test_New()
+    public function testNew()
     {
         $this->assertInstanceOf('\BEAR\Resource\A', $this->a);
     }
@@ -21,20 +21,20 @@ class ATest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \BEAR\Resource\Exception\Link
      */
-    public function test_hrefInvalidRel()
+    public function testHrefInvalidRel()
     {
         $resource = new Mock\Entry;
         $this->a->href('not_found', $resource);
     }
 
-    public function test_hrefWithTemplateUri()
+    public function testHrefWithTemplateUri()
     {
         $resource = new Mock\User;
         $uri = $this->a->href('friend', $resource);
         $this->assertSame('app://self/friend/?id=1', $uri);
     }
 
-    public function test_hrefWithoutTemplateUri()
+    public function testHrefWithoutTemplateUri()
     {
         $resource = new Mock\User;
         $uri = $this->a->href('profile', $resource);

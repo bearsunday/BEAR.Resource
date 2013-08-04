@@ -11,11 +11,11 @@ use Ray\Di\Injector;
 use Ray\Aop\Weaver;
 use Ray\Aop\Bind;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
-use testworld\Interceptor\Log;
-use testworld\ResourceObject\RestBucks\Order;
-use testworld\ResourceObject\User;
-use testworld\ResourceObject\Weave\Book;
-use testworld\ResourceObject\Weave\Link;
+use BEAR\Resource\Interceptor\Log;
+use Sandbox\Resource\App\RestBucks\Order;
+use Sandbox\Resource\App\User;
+use Sandbox\Resource\App\Weave\Book;
+use Sandbox\Resource\App\Weave\Link;
 
 /**
  * Test class for BEAR.Resource.
@@ -41,14 +41,14 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->request->query = ['id' => 1];
     }
 
-    public function test_Invoke()
+    public function testInvoke()
     {
         $actual = $this->invoker->invoke($this->request)->body;
         $expected = ['id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12];
         $this->assertSame($actual, $expected);
     }
 
-    public function test_InvokerInterfaceDefaultParam()
+    public function testInvokerInterfaceDefaultParam()
     {
         $this->request->query = [];
         $this->request->method = 'post';
@@ -61,7 +61,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \BEAR\Resource\Exception\Parameter
      */
-    public function test_InvokerInterfaceDefaultParamWithNoProvider()
+    public function testInvokerInterfaceDefaultParamWithNoProvider()
     {
         $this->request->query = [];
         $this->request->method = 'put';
@@ -72,7 +72,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \BEAR\Resource\Exception\Parameter
      */
-    public function test_InvokerInterfaceWithNoProvider()
+    public function testInvokerInterfaceWithNoProvider()
     {
         $this->request->ro = new Mock\Blog;
         $this->request->query = [];
@@ -83,7 +83,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \BEAR\Resource\Exception\Parameter
      */
-    public function test_InvokerInterfaceWithUnspecificProviderButNoResult()
+    public function testInvokerInterfaceWithUnspecificProviderButNoResult()
     {
         $this->request->ro = new Mock\Comment;
         $this->request->query = [];
@@ -95,13 +95,13 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \BEAR\Resource\Exception\MethodNotAllowed
      */
-    public function test_InvokerInterfaceInvalidMethod()
+    public function testInvokerInterfaceInvalidMethod()
     {
         $this->request->method = 'InvalidMethod';
         $this->invoker->invoke($this->request);
     }
 
-    public function test_invokeTraversal()
+    public function testInvokeTraversal()
     {
         $body = new \ArrayObject([
             'a' => 1,
@@ -114,7 +114,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame((array)$expected, (array)$actual);
     }
 
-    public function test_invokeWeave()
+    public function testInvokeWeave()
     {
         $bind = new Bind;
         $bind->bindInterceptors('onGet', [new Log]);
@@ -123,11 +123,11 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->request->method = 'get';
         $this->request->query = ['id' => 1];
         $actual = $this->invoker->invoke($this->request)->body;
-        $expected = "book id[1][Log] target = testworld\\ResourceObject\\Weave\\Book, input = Array\n(\n    [0] => 1\n)\n, result = book id[1]";
+        $expected = "book id[1][Log] target = Sandbox\\Resource\\App\\Weave\\Book, input = Array\n(\n    [0] => 1\n)\n, result = book id[1]";
         $this->assertSame($expected, $actual);
     }
 
-    public function test_invokeWeaveWithLink()
+    public function testInvokeWeaveWithLink()
     {
         $bind = new Bind;
         $bind->bindInterceptors('onGet', [new Log]);
@@ -141,14 +141,14 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $links = [$link];
         $this->request->links = $links;
         $actual = $this->invoker->invoke($this->request)->body;
-        $expected = "<html>Like a bear to a honey pot.[Log] target = testworld\\ResourceObject\\Weave\\Link, input = Array\n(\n    [0] => bear\n)\n, result = Like a bear to a honey pot.</html>";
+        $expected = "<html>Like a bear to a honey pot.[Log] target = Sandbox\\Resource\\App\\Weave\\Link, input = Array\n(\n    [0] => bear\n)\n, result = Like a bear to a honey pot.</html>";
         $this->assertSame($expected, $actual);
     }
 
-    public function test_InvokerInterfaceLink()
+    public function testInvokerInterfaceLink()
     {
 
-        $ro = new Mock\Link;
+        $ro = new \Sandbox\Resource\App\Link;
         $this->request->ro = $ro;
         $link = new LinkType;
         $link->type = LinkType::SELF_LINK;
@@ -161,7 +161,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($actual, $expected);
     }
 
-    public function test_OptionsMethod()
+    public function testOptionsMethod()
     {
         $this->request->method = Invoker::OPTIONS;
         $response = $this->invoker->invoke($this->request);
@@ -172,7 +172,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($actual, $expected);
     }
 
-    public function test_OptionsMethod2()
+    public function testOptionsMethod2()
     {
         $this->request->method = Invoker::OPTIONS;
         $this->request->ro = new  Order;
@@ -184,7 +184,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($actual, $expected);
     }
 
-    public function test_OptionsWeaver()
+    public function testOptionsWeaver()
     {
         $this->request->method = Invoker::OPTIONS;
         $this->request->ro = new Weaver(new Order, new Bind);
@@ -195,5 +195,4 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         asort($expected);
         $this->assertSame($actual, $expected);
     }
-
 }

@@ -6,11 +6,13 @@ use Aura\Signal\Manager;
 use Aura\Signal\HandlerFactory;
 use Aura\Signal\ResultFactory;
 use Aura\Signal\ResultCollection;
-use testworld\ResourceObject\User\Entry;
+use Sandbox\Resource\App\User\Entry;
 use BEAR\Resource\Adapter\Nop;
 use BEAR\Resource\Adapter\Test;
 use Ray\Di\Definition;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
+use BEAR\Resource\Renderer\TestRenderer;
+use BEAR\Resource\Renderer\ErrorRenderer;
 
 /**
  * Test class for BEAR.Resource.
@@ -30,26 +32,26 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->request = new Request($invoker);
     }
 
-    public function test_New()
+    public function testNew()
     {
         $this->assertInstanceOf('\BEAR\Resource\Request', $this->request);
     }
 
-    public function test_toUriWithMethod()
+    public function testToUriWithMethod()
     {
         $this->request->set(new Test, 'test://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
         $actual = $this->request->toUriWithMethod();
         $this->assertSame('get test://self/path/to/resource?a=koriym&b=25', $actual);
     }
 
-    public function test_toUri()
+    public function testToUri()
     {
         $this->request->set(new Test, 'test://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
         $actual = $this->request->toUri();
         $this->assertSame('test://self/path/to/resource?a=koriym&b=25', $actual);
     }
 
-    public function test__invoke()
+    public function testInvoke()
     {
         $this->request->set(new Nop, 'nop://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
         $request = $this->request;
@@ -59,7 +61,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function test__invokeWithQuery()
+    public function testInvokeWithQuery()
     {
         $this->request->set(new Nop, 'nop://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
         $request = $this->request;
@@ -69,7 +71,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function test__toStringWithRenderableResourceObject()
+    public function testToStringWithRenderableResourceObject()
     {
         $ro = (new Test)->setRenderer(new TestRenderer);
         /**  @var $ro AbstractObject */
@@ -84,7 +86,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('{"posts":["koriym",30]}', $result);
     }
 
-    public function test__toStringWithErrorRenderer()
+    public function testToStringWithErrorRenderer()
     {
         $this->request->method = 'get';
         $this->request->ro = new Test;
@@ -97,7 +99,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($result, '');
     }
 
-    public function test__toStringWithoutRender()
+    public function testToStringWithoutRender()
     {
         $this->request->method = 'get';
         $this->request->ro = new Test;
@@ -152,7 +154,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends request
      */
-    public function test_ArrayAccess(Request $request)
+    public function testArrayAccess(Request $request)
     {
         $result = $request[100];
         $expected = array(
@@ -166,7 +168,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      * @depends request
      * @expectedException \OutOfBoundsException
      */
-    public function test_ArrayAccessNotExists(Request $request)
+    public function testArrayAccessNotExists(Request $request)
     {
         $this->request->method = 'get';
         $this->request->ro = new Entry;
@@ -177,7 +179,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends request
      */
-    public function test_IsSet(Request $request)
+    public function testIsSet(Request $request)
     {
         $result = isset($request[100]);
         $this->assertTrue($result);
@@ -186,7 +188,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends request
      */
-    public function test_IsSetNot(Request $request)
+    public function testIsSetNot(Request $request)
     {
         $this->request->method = 'get';
         $this->request->ro = new Entry;

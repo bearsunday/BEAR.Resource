@@ -10,7 +10,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
         $this->uri = new Uri('dummy://self/path/to/resource', array('id' => 1, 'name' => 'BEAR'));
     }
 
-    public function test_offsetGet()
+    public function testOffsetGet()
     {
         $this->assertTrue(is_string((string)$this->uri));
     }

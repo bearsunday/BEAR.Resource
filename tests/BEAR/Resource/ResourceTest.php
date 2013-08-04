@@ -17,6 +17,7 @@ use Ray\Di\Definition;
 use Ray\Di\EmptyModule;
 use Ray\Di\Forge;
 use Ray\Di\Injector;
+use BEAR\Resource\Renderer\TestRenderer;
 
 class varProvider implements ParamProviderInterface
 {
@@ -49,13 +50,12 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
         // build resource client
         $scheme = new SchemeCollection;
-        $injector = Injector::create();
-        $injector->setModule(new TestModule);
+        $injector = Injector::create([new TestModule]);
         $scheme->scheme('app')->host('self')->toAdapter(
-            new Adapter\App($injector, 'testworld', 'ResourceObject')
+            new Adapter\App($injector, 'Sandbox', 'Resource\App')
         );
         $scheme->scheme('page')->host('self')->toAdapter(
-            new Adapter\App($injector, 'testworld', 'Page')
+            new Adapter\App($injector, 'Sandbox', 'Resource\Page')
         );
         $scheme->scheme('nop')->host('self')->toAdapter(new Adapter\Nop);
         $scheme->scheme('test')->host('self')->toAdapter(new Adapter\Test);
@@ -77,18 +77,18 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->cache = new CacheAdapter(new Cache);
     }
 
-    public function test_New()
+    public function testNew()
     {
         $this->assertInstanceOf('\BEAR\Resource\Resource', $this->resource);
     }
 
-    public function test_newInstanceNop()
+    public function testNewInstanceNop()
     {
         $instance = $this->resource->newInstance('nop://self/path/to/dummy');
         $this->assertInstanceOf('\BEAR\Resource\Adapter\Nop', $instance);
     }
 
-    public function test_newInstanceAppWithProvider()
+    public function testNewInstanceAppWithProvider()
     {
         $instance = $this->resource->newInstance('prov://self/path/to/dummy');
         $this->assertInstanceOf('\stdClass', $instance);
@@ -101,21 +101,21 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\BEAR\Resource\Request', $request);
     }
 
-    public function test_get()
+    public function testGet()
     {
         $request = $this->resource->get->object($this->nop)->withQuery($this->query)->request();
         $expected = "get nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
 
-    public function test_post()
+    public function testPost()
     {
         $request = $this->resource->post->object($this->nop)->withQuery($this->query)->request();
         $expected = "post nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
 
-    public function test_postPoeCsrf()
+    public function testPostPoeCsrf()
     {
         $request = $this->resource->post->object($this->nop)->withQuery($this->query)->poe->csrf->request();
         $expected = "post nop://self/dummy?id=10&name=Ray&age=43";
@@ -125,7 +125,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \BEAR\Resource\Exception\BadRequest
      */
-    public function test_postInvalidOption()
+    public function testPostInvalidOption()
     {
         $request = $this->resource->post->object($this->nop)->withQuery(
             $this->query
@@ -134,42 +134,42 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $request->toUriWithMethod());
     }
 
-    public function test_put()
+    public function testPut()
     {
         $request = $this->resource->put->object($this->nop)->withQuery($this->query)->request();
         $expected = "put nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
 
-    public function test_delete()
+    public function testDelete()
     {
         $request = $this->resource->delete->object($this->nop)->withQuery($this->query)->request();
         $expected = "delete nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
 
-    public function test_linkSelfString()
+    public function testLinkSelfString()
     {
         $request = $this->resource->get->object($this->nop)->withQuery($this->query)->linkSelf('dummyLink')->request();
         $expected = "get nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
 
-    public function test_linkNewString()
+    public function testLinkNewString()
     {
         $request = $this->resource->get->object($this->nop)->withQuery($this->query)->linkNew('dummyLink')->request();
         $expected = "get nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
 
-    public function test_linkCrawlString()
+    public function testLinkCrawlString()
     {
         $request = $this->resource->get->object($this->nop)->withQuery($this->query)->linkCrawl('dummyLink')->request();
         $expected = "get nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
 
-    public function test_linkTwo()
+    public function testLinkTwo()
     {
         $request = $this->resource->get->object($this->nop)->withQuery($this->query)->linkSelf('dummyLink')->linkSelf(
             'dummyLink2'
@@ -185,14 +185,14 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual->body);
     }
 
-    public function test_uri()
+    public function testUri()
     {
         $request = $this->resource->get->uri('nop://self/dummy')->withQuery($this->query)->request();
         $expected = "get nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
 
-    public function test_eager()
+    public function testEager()
     {
         $client = $this->resource->get->uri('nop://self/dummy')->withQuery($this->query);
         $expected = "nop://self/dummy?id=10&name=Ray&age=43";
@@ -208,7 +208,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
     public function testP()
     {
-        $ro = new Mock\Link;
+        $ro = new \Sandbox\Resource\App\Link;
         $actual = $this->resource->get->object($ro)->withQuery(array('id' => 1))->linkSelf('View')->eager->request();
         $expected = '<html>bear1</html>';
         $this->assertSame($expected, $actual->body);
@@ -217,7 +217,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \BEAR\Resource\Exception\Uri
      */
-    public function testInvalidUri()
+    public function testInvalidUriThrowException()
     {
         $query = [];
         $request = $this->resource->get->uri($this->nop)->withQuery($query)->request();
@@ -225,14 +225,14 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \testworld\ResourceObject\Shutdown
+     * @expectedException \Sandbox\Resource\App\Shutdown
      */
     public function testServiceError()
     {
         $this->resource->post->uri('app://self/blog')->eager->request();
     }
 
-    public function testsyncHttp()
+    public function testSyncHttp()
     {
         $response = $this->resource->get->uri(
             'http://news.google.com/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss'
@@ -249,7 +249,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame("1 deleted", $actual->body);
     }
 
-    public function test_setCacheAdapter()
+    public function testSetCacheAdapter()
     {
         $this->resource->setCacheAdapter($this->cache);
         $instance1 = $this->resource->newInstance('nop://self/path/to/dummy');
@@ -257,7 +257,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($instance1->time, $instance2->time);
     }
 
-    public function test_LazyRequestResultAsString()
+    public function testLazyRequestResultAsString()
     {
         $scheme = new SchemeCollection;
         $testAdapter = new Adapter\Test;
@@ -273,51 +273,50 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(['posts' => [1, 2]], $request()->body);
     }
 
-    public function test_IndexIsDefaultIfUriEndsWithSlash()
+    public function testIndexIsDefaultIfUriEndsWithSlash()
     {
         $user = $this->resource->newInstance('app://self/user/');
-        $this->assertSame($user->class, 'testworld\ResourceObject\User\Index');
+        $this->assertSame($user->class, 'Sandbox\Resource\App\User\Index');
     }
 
-    public function test_IndexIsDefaultIfUriEndsWithSlashInRoot()
+    public function testIndexIsDefaultIfUriEndsWithSlashInRoot()
     {
         $user = $this->resource->newInstance('app://self/');
-        $this->assertSame($user->class, 'testworld\ResourceObject\Index');
+        $this->assertSame($user->class, 'Sandbox\Resource\App\Index');
     }
 
     /**
      * @expectedException \BEAR\Resource\Exception\BadRequest
      */
-    public function test_badRequest_noMethod()
+    public function testBadRequestNoMethod()
     {
         $this->resource->uri('nop://self/dummy')->withQuery($this->query)->request();
     }
 
-    public function tst_weavedResource()
+    public function testWeavedResource()
     {
         $result = $this->resource->get->uri('app://self/weave/book')->withQuery($this->query)->eager->request();
         $result->a = 100;
-        $obj = $result->___getObject();
-        $this->assertSame(100, $obj->a);
+        $this->assertSame(100, $result->a);
     }
 
-    public function test_docsSample01RestBucks()
+    public function testDocsSample01RestBucks()
     {
         ob_start();
-        require dirname(dirname(dirname(__DIR__))) . '/docs/sample/01-rest-bucks/order.php';
+        require dirname(dirname(dirname(__DIR__))) . '/docs/sample/Restbucks/order.php';
         $response = ob_get_clean();
         $this->assertContains('201: Created', $response);
         $this->assertContains('Order: Success', $response);
     }
 
-    public function test_uriWithQuery()
+    public function testUriWithQuery()
     {
         $response = $this->resource->get->uri('app://self/user?id=1')->eager->request();
         $expected = 'Aramis';
         $this->assertSame($expected, $response->body['name']);
     }
 
-    public function test_verbOptions()
+    public function testVerbOptions()
     {
         $response = $this->resource->options->uri('app://self/user')->eager->request();
         $expected = ['get', 'post', 'put', 'delete'];
@@ -327,12 +326,12 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \BEAR\Resource\Exception\Uri
      */
-    public function test_invalidUri()
+    public function testInvalidUri()
     {
         $this->resource->get->uri('invalid')->eager->request();
     }
 
-    public function test_usingUri()
+    public function testUsingUri()
     {
         $uri = new Uri('app://self/user', ['id' => 1]);
         $response = $this->resource->get->uri($uri)->eager->request();
@@ -340,12 +339,11 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $response->body['name']);
     }
 
-    public function test_headRequest()
+    public function testHeadRequest()
     {
         $uri = new Uri('app://self/user', ['id' => 1]);
         $response = $this->resource->head->uri($uri)->eager->request();
         $this->assertSame('', $response->body);
         $this->assertSame('123', $response->headers['x-header-test']);
     }
-
 }
