@@ -6,11 +6,13 @@ use Aura\Signal\Manager;
 use Aura\Signal\HandlerFactory;
 use Aura\Signal\ResultFactory;
 use Aura\Signal\ResultCollection;
-use testworld\ResourceObject\User\Entry;
+use Sandbox\Resource\App\User\Entry;
 use BEAR\Resource\Adapter\Nop;
 use BEAR\Resource\Adapter\Test;
 use Ray\Di\Definition;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
+use BEAR\Resource\Renderer\TestRenderer;
+use BEAR\Resource\Renderer\ErrorRenderer;
 
 /**
  * Test class for BEAR.Resource.

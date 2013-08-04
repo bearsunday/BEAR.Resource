@@ -3,7 +3,7 @@
 namespace BEAR\Resource;
 
 use Guzzle\Parser\UriTemplate\UriTemplate;
-use testworld\ResourceObject\User;
+use Sandbox\Resource\App\User;
 
 class ATest extends \PHPUnit_Framework_TestCase
 {

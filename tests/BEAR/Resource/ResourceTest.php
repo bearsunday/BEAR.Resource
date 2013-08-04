@@ -17,6 +17,7 @@ use Ray\Di\Definition;
 use Ray\Di\EmptyModule;
 use Ray\Di\Forge;
 use Ray\Di\Injector;
+use BEAR\Resource\Renderer\TestRenderer;
 
 class varProvider implements ParamProviderInterface
 {
@@ -51,10 +52,10 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $scheme = new SchemeCollection;
         $injector = Injector::create([new TestModule]);
         $scheme->scheme('app')->host('self')->toAdapter(
-            new Adapter\App($injector, 'testworld', 'ResourceObject')
+            new Adapter\App($injector, 'Sandbox', 'Resource\App')
         );
         $scheme->scheme('page')->host('self')->toAdapter(
-            new Adapter\App($injector, 'testworld', 'Page')
+            new Adapter\App($injector, 'Sandbox', 'Resource\Page')
         );
         $scheme->scheme('nop')->host('self')->toAdapter(new Adapter\Nop);
         $scheme->scheme('test')->host('self')->toAdapter(new Adapter\Test);
@@ -207,7 +208,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
     public function testP()
     {
-        $ro = new Mock\Link;
+        $ro = new \Sandbox\Resource\App\Link;
         $actual = $this->resource->get->object($ro)->withQuery(array('id' => 1))->linkSelf('View')->eager->request();
         $expected = '<html>bear1</html>';
         $this->assertSame($expected, $actual->body);
@@ -224,7 +225,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \testworld\ResourceObject\Shutdown
+     * @expectedException \Sandbox\Resource\App\Shutdown
      */
     public function testServiceError()
     {
@@ -275,13 +276,13 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     public function testIndexIsDefaultIfUriEndsWithSlash()
     {
         $user = $this->resource->newInstance('app://self/user/');
-        $this->assertSame($user->class, 'testworld\ResourceObject\User\Index');
+        $this->assertSame($user->class, 'Sandbox\Resource\App\User\Index');
     }
 
     public function testIndexIsDefaultIfUriEndsWithSlashInRoot()
     {
         $user = $this->resource->newInstance('app://self/');
-        $this->assertSame($user->class, 'testworld\ResourceObject\Index');
+        $this->assertSame($user->class, 'Sandbox\Resource\App\Index');
     }
 
     /**
@@ -302,7 +303,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     public function testDocsSample01RestBucks()
     {
         ob_start();
-        require dirname(dirname(dirname(__DIR__))) . '/docs/sample/01-rest-bucks/order.php';
+        require dirname(dirname(dirname(__DIR__))) . '/docs/sample/Restbucks/order.php';
         $response = ob_get_clean();
         $this->assertContains('201: Created', $response);
         $this->assertContains('Order: Success', $response);

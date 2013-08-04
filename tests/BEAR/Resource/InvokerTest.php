@@ -11,11 +11,11 @@ use Ray\Di\Injector;
 use Ray\Aop\Weaver;
 use Ray\Aop\Bind;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
-use testworld\Interceptor\Log;
-use testworld\ResourceObject\RestBucks\Order;
-use testworld\ResourceObject\User;
-use testworld\ResourceObject\Weave\Book;
-use testworld\ResourceObject\Weave\Link;
+use BEAR\Resource\Interceptor\Log;
+use Sandbox\Resource\App\RestBucks\Order;
+use Sandbox\Resource\App\User;
+use Sandbox\Resource\App\Weave\Book;
+use Sandbox\Resource\App\Weave\Link;
 
 /**
  * Test class for BEAR.Resource.
@@ -123,7 +123,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->request->method = 'get';
         $this->request->query = ['id' => 1];
         $actual = $this->invoker->invoke($this->request)->body;
-        $expected = "book id[1][Log] target = testworld\\ResourceObject\\Weave\\Book, input = Array\n(\n    [0] => 1\n)\n, result = book id[1]";
+        $expected = "book id[1][Log] target = Sandbox\\Resource\\App\\Weave\\Book, input = Array\n(\n    [0] => 1\n)\n, result = book id[1]";
         $this->assertSame($expected, $actual);
     }
 
@@ -141,14 +141,14 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $links = [$link];
         $this->request->links = $links;
         $actual = $this->invoker->invoke($this->request)->body;
-        $expected = "<html>Like a bear to a honey pot.[Log] target = testworld\\ResourceObject\\Weave\\Link, input = Array\n(\n    [0] => bear\n)\n, result = Like a bear to a honey pot.</html>";
+        $expected = "<html>Like a bear to a honey pot.[Log] target = Sandbox\\Resource\\App\\Weave\\Link, input = Array\n(\n    [0] => bear\n)\n, result = Like a bear to a honey pot.</html>";
         $this->assertSame($expected, $actual);
     }
 
     public function testInvokerInterfaceLink()
     {
 
-        $ro = new Mock\Link;
+        $ro = new \Sandbox\Resource\App\Link;
         $this->request->ro = $ro;
         $link = new LinkType;
         $link->type = LinkType::SELF_LINK;

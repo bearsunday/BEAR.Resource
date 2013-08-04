@@ -2,6 +2,8 @@
 
 namespace BEAR\Resource;
 
+use BEAR\Resource\Renderer\TestRenderer;
+
 /**
  * Test class for BEAR.Resource.
  */

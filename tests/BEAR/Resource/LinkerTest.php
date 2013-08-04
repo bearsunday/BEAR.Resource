@@ -16,7 +16,7 @@ use Ray\Di\EmptyModule;
 
 use BEAR\Resource\Adapter\Nop;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
-use testworld\ResourceObject\User;
+use Sandbox\Resource\App\User;
 
 /**
  * Test class for BEAR.Resource.
@@ -40,7 +40,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->request = new Request($invoker);
         $scheme = new SchemeCollection;
         $scheme->scheme('app')->host('self')->toAdapter(
-            new Adapter\App($injector, 'testworld', 'ResourceObject')
+            new Adapter\App($injector, 'Sandbox', 'Resource\App')
         );
         $factory = new Factory($scheme);
         $this->resource = new Resource($factory, $invoker, new Request($invoker));
@@ -56,7 +56,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
      */
     public function testLinkException()
     {
-        $ro = new Mock\Link;
+        $ro = new \Sandbox\Resource\App\Link;
         $link = new LinkType;
         $link->type = LinkType::SELF_LINK;
         $link->key = 'UNAVAILABLE';
@@ -68,7 +68,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
 
     public function testLinkSelf1()
     {
-        $ro = new Mock\Link;
+        $ro = new \Sandbox\Resource\App\Link;
         $link = new LinkType;
         $link->type = LinkType::SELF_LINK;
         $link->key = 'View';

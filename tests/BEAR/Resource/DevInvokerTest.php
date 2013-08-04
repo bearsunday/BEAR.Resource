@@ -13,9 +13,9 @@ use Ray\Di\Injector;
 use Ray\Aop\Weaver;
 use Ray\Aop\Bind;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
-use testworld\Interceptor\Log;
-use testworld\ResourceObject\User;
-use testworld\ResourceObject\Weave\Book;
+use BEAR\Resource\Interceptor\Log;
+use Sandbox\Resource\App\User;
+use Sandbox\Resource\App\Weave\Book;
 
 class DevInvokerTest extends \PHPUnit_Framework_TestCase
 {
@@ -99,7 +99,7 @@ class DevInvokerTest extends \PHPUnit_Framework_TestCase
         $this->invoker->invoke($this->request);
 
         $ro = $this->request->ro->___getObject();
-        $this->assertInstanceOf('testworld\ResourceObject\Weave\Book', $ro);
+        $this->assertInstanceOf('Sandbox\Resource\App\Weave\Book', $ro);
 
         return $ro->headers;
     }
@@ -134,7 +134,7 @@ class DevInvokerTest extends \PHPUnit_Framework_TestCase
         /** @noinspection PhpExpressionResultUnusedInspection */
         (array)$headers[DevInvoker::HEADER_INTERCEPTORS];
         $this->assertSame(
-            json_encode(['onGet' => ['testworld\Interceptor\Log']]),
+            json_encode(['onGet' => ['BEAR\Resource\Interceptor\Log']]),
             $headers[DevInvoker::HEADER_INTERCEPTORS]
         );
     }

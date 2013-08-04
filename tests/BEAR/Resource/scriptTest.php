@@ -17,7 +17,7 @@ class scriptTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->resource = require dirname(dirname(dirname(__DIR__))) . '/scripts/instance.php';
+        $this->resource = $GLOBALS['RESOURCE'];
     }
 
     public function test_New()
@@ -35,7 +35,7 @@ class scriptTest extends \PHPUnit_Framework_TestCase
 
     public function testSetSchemeApp()
     {
-        $app = new App(Injector::create([]), 'Space', 'Resource\App');
+        $app = new App(Injector::create([]), 'Sandbox', 'Resource\App');
         $scheme = (new SchemeCollection)->scheme('app')->host('self')->toAdapter($app);
         $this->resource->setSchemeCollection($scheme);
         $result = $this->resource->get->uri('app://self/index')->eager->request();
