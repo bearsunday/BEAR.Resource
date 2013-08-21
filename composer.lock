@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "c1cf3926495ac031672f0bc188e37de4",
+    "hash": "da8fbfceeec3a2a991199d2bead2f99a",
     "packages": [
         {
             "name": "aura/di",
@@ -237,22 +237,30 @@
         },
         {
             "name": "doctrine/cache",
-            "version": "v1.0",
+            "version": "v1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/cache.git",
-                "reference": "v1.0"
+                "reference": "2c9761ff1d13e188d5f7378066c1ce2882d7a336"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/doctrine/cache/archive/v1.0.zip",
-                "reference": "v1.0",
+                "url": "https://api.github.com/repos/doctrine/cache/zipball/2c9761ff1d13e188d5f7378066c1ce2882d7a336",
+                "reference": "2c9761ff1d13e188d5f7378066c1ce2882d7a336",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
             },
+            "conflict": {
+                "doctrine/common": ">2.2,<2.4"
+            },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
             "autoload": {
                 "psr-0": {
                     "Doctrine\\Common\\Cache\\": "lib/"
@@ -294,7 +302,7 @@
                 "cache",
                 "caching"
             ],
-            "time": "2013-01-10 22:43:46"
+            "time": "2013-08-07 16:04:25"
         },
         {
             "name": "doctrine/lexer",
@@ -442,21 +450,61 @@
             "time": "2013-03-10 23:05:38"
         },
         {
-            "name": "ray/aop",
-            "version": "1.0.0",
+            "name": "nikic/php-parser",
+            "version": "v0.9.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/koriym/Ray.Aop.git",
-                "reference": "1.0.0"
+                "url": "https://github.com/nikic/PHP-Parser.git",
+                "reference": "98ebfc8d545979636fa438f51921fdbec433f0f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Ray.Aop/zipball/1.0.0",
-                "reference": "1.0.0",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/98ebfc8d545979636fa438f51921fdbec433f0f9",
+                "reference": "98ebfc8d545979636fa438f51921fdbec433f0f9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "PHPParser": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nikita Popov"
+                }
+            ],
+            "description": "A PHP parser written in PHP",
+            "keywords": [
+                "parser",
+                "php"
+            ],
+            "time": "2012-11-22 18:54:05"
+        },
+        {
+            "name": "ray/aop",
+            "version": "dev-develop",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/koriym/Ray.Aop.git",
+                "reference": "bd2af8655aaf90ce12d09de72ddc62649b24f231"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/koriym/Ray.Aop/zipball/bd2af8655aaf90ce12d09de72ddc62649b24f231",
+                "reference": "bd2af8655aaf90ce12d09de72ddc62649b24f231",
                 "shasum": ""
             },
             "require": {
                 "doctrine/annotations": "1.*",
+                "nikic/php-parser": "*",
                 "php": ">=5.4.0"
             },
             "type": "library",
@@ -483,28 +531,29 @@
                 "aspect",
                 "method interception"
             ],
-            "time": "2013-03-31 11:58:17"
+            "time": "2013-08-21 10:30:57"
         },
         {
             "name": "ray/di",
-            "version": "1.0.5",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Ray.Di.git",
-                "reference": "1.0.5"
+                "reference": "f260cd8a950ebe01b5497943bbb22b44ab54715a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/1.0.5",
-                "reference": "1.0.5",
+                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/f260cd8a950ebe01b5497943bbb22b44ab54715a",
+                "reference": "f260cd8a950ebe01b5497943bbb22b44ab54715a",
                 "shasum": ""
             },
             "require": {
                 "aura/di": "1.1.*",
                 "doctrine/annotations": "1.*",
                 "doctrine/cache": "1.*",
+                "nikic/php-parser": "*",
                 "php": ">=5.4.0",
-                "ray/aop": "1.0.*"
+                "ray/aop": "dev-develop#bd2af8655aaf90ce12d09de72ddc62649b24f231"
             },
             "type": "library",
             "autoload": {
@@ -540,21 +589,21 @@
                 "guice",
                 "jsr"
             ],
-            "time": "2013-07-12 04:03:52"
+            "time": "2013-08-21 10:47:22"
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.3.2",
+            "version": "v2.3.3",
             "target-dir": "Symfony/Component/EventDispatcher",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/EventDispatcher.git",
-                "reference": "v2.3.2"
+                "reference": "41c9826457c65fa3cf746f214985b7ca9cba42f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/v2.3.2",
-                "reference": "v2.3.2",
+                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/41c9826457c65fa3cf746f214985b7ca9cba42f8",
+                "reference": "41c9826457c65fa3cf746f214985b7ca9cba42f8",
                 "shasum": ""
             },
             "require": {
@@ -594,7 +643,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "http://symfony.com",
-            "time": "2013-05-13 14:36:40"
+            "time": "2013-07-21 12:12:18"
         }
     ],
     "packages-dev": [
@@ -604,12 +653,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/facebook/xhprof.git",
-                "reference": "62638e0b4126823dbf3f02deb6e68753a4f0f7e6"
+                "reference": "ec8b884ffdae5dfa5e1e271ab6762115123989c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/facebook/xhprof/zipball/62638e0b4126823dbf3f02deb6e68753a4f0f7e6",
-                "reference": "62638e0b4126823dbf3f02deb6e68753a4f0f7e6",
+                "url": "https://api.github.com/repos/facebook/xhprof/zipball/ec8b884ffdae5dfa5e1e271ab6762115123989c5",
+                "reference": "ec8b884ffdae5dfa5e1e271ab6762115123989c5",
                 "shasum": ""
             },
             "require": {
@@ -632,7 +681,7 @@
                 "performance",
                 "profiling"
             ],
-            "time": "2013-07-19 22:03:53"
+            "time": "2013-08-09 16:22:45"
         }
     ],
     "aliases": [
@@ -640,6 +689,8 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
+        "ray/di": 20,
+        "ray/aop": 20,
         "facebook/xhprof": 20
     },
     "platform": {

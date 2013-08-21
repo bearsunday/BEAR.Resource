@@ -17,7 +17,8 @@
     "require": {
         "php": ">=5.4.0",
         "aura/signal": "1.*",
-        "ray/di": "1.0.*",
+        "ray/di": "dev-develop",
+        "ray/aop": "dev-develop",
         "doctrine/cache": "1.*",
         "guzzle/guzzle": "3.3.*"
     },
