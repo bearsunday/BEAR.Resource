@@ -111,12 +111,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/auraphp/Aura.Signal.git",
-                "reference": "1.0.1"
+                "reference": "d2127cfb10db7cdb39b27c8c12955fcf005e4eb5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/auraphp/Aura.Signal/zipball/1.0.1",
-                "reference": "1.0.1",
+                "url": "https://api.github.com/repos/auraphp/Aura.Signal/zipball/d2127cfb10db7cdb39b27c8c12955fcf005e4eb5",
+                "reference": "d2127cfb10db7cdb39b27c8c12955fcf005e4eb5",
                 "shasum": ""
             },
             "require": {
@@ -150,7 +150,8 @@
                 },
                 {
                     "name": "Akihito Koriyama",
-                    "email": "akihito.koriyama@gmail.com"
+                    "email": "akihito.koriyama@gmail.com",
+                    "role": "Lead"
                 }
             ],
             "description": "A SignalSlots/EventHandler implementation for PHP; with it, we can invoke handlers (\"slots\" or \"hooks\") whenever an object sends a signal (\"notification\" or \"event\") to the signal manager.",
@@ -170,12 +171,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/annotations.git",
-                "reference": "v1.1.2"
+                "reference": "40db0c96985aab2822edbc4848b3bd2429e02670"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/annotations/zipball/v1.1.2",
-                "reference": "v1.1.2",
+                "url": "https://api.github.com/repos/doctrine/annotations/zipball/40db0c96985aab2822edbc4848b3bd2429e02670",
+                "reference": "40db0c96985aab2822edbc4848b3bd2429e02670",
                 "shasum": ""
             },
             "require": {
@@ -451,22 +452,27 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v0.9.3",
+            "version": "v0.9.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "98ebfc8d545979636fa438f51921fdbec433f0f9"
+                "reference": "1e5e280ae88a27effa2ae4aa2bd088494ed8594f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/98ebfc8d545979636fa438f51921fdbec433f0f9",
-                "reference": "98ebfc8d545979636fa438f51921fdbec433f0f9",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/1e5e280ae88a27effa2ae4aa2bd088494ed8594f",
+                "reference": "1e5e280ae88a27effa2ae4aa2bd088494ed8594f",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.9-dev"
+                }
+            },
             "autoload": {
                 "psr-0": {
                     "PHPParser": "lib/"
@@ -486,7 +492,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2012-11-22 18:54:05"
+            "time": "2013-08-25 17:11:40"
         },
         {
             "name": "ray/aop",
@@ -494,12 +500,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Ray.Aop.git",
-                "reference": "bd2af8655aaf90ce12d09de72ddc62649b24f231"
+                "reference": "506c4fc309c73e058ded49e0910ef88cbc842e75"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Ray.Aop/zipball/bd2af8655aaf90ce12d09de72ddc62649b24f231",
-                "reference": "bd2af8655aaf90ce12d09de72ddc62649b24f231",
+                "url": "https://api.github.com/repos/koriym/Ray.Aop/zipball/506c4fc309c73e058ded49e0910ef88cbc842e75",
+                "reference": "506c4fc309c73e058ded49e0910ef88cbc842e75",
                 "shasum": ""
             },
             "require": {
@@ -531,7 +537,7 @@
                 "aspect",
                 "method interception"
             ],
-            "time": "2013-08-21 10:30:57"
+            "time": "2013-09-01 04:37:35"
         },
         {
             "name": "ray/di",
@@ -539,12 +545,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Ray.Di.git",
-                "reference": "f260cd8a950ebe01b5497943bbb22b44ab54715a"
+                "reference": "8680b1f585b5f14b812fb6321a054657ae2bed27"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/f260cd8a950ebe01b5497943bbb22b44ab54715a",
-                "reference": "f260cd8a950ebe01b5497943bbb22b44ab54715a",
+                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/8680b1f585b5f14b812fb6321a054657ae2bed27",
+                "reference": "8680b1f585b5f14b812fb6321a054657ae2bed27",
                 "shasum": ""
             },
             "require": {
@@ -589,11 +595,11 @@
                 "guice",
                 "jsr"
             ],
-            "time": "2013-08-21 10:47:22"
+            "time": "2013-09-01 04:35:30"
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.3.3",
+            "version": "v2.3.4",
             "target-dir": "Symfony/Component/EventDispatcher",
             "source": {
                 "type": "git",
