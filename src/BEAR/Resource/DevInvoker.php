@@ -8,6 +8,7 @@ namespace BEAR\Resource;
 
 use Ray\Aop\Weave;
 use Ray\Aop\Bind;
+use Ray\Aop\WeavedInterface;
 use Ray\Di\Di\Scope;
 use XHProfRuns_Default;
 
@@ -32,19 +33,8 @@ class DevInvoker extends Invoker implements InvokerInterface
     public function invoke(Request $request)
     {
         $method = 'on' . ucfirst($request->method);
-        // before process
-        if ($request->ro instanceof Weave) {
-            // interceptor bound object
-            /** @noinspection PhpUndefinedMethodInspection */
-            $bind = $request->ro->___getBind();
-            /** @noinspection PhpUndefinedMethodInspection */
-            $resource = $request->ro->___getObject();
-            $interceptors = $this->getBindInfo($bind);
-            $resource->headers[self::HEADER_INTERCEPTORS] = json_encode($interceptors);
-        } else {
-            // no bind.
-            $resource = $request->ro;
-        }
+
+        $resource = $this->getRo($request);
 
         if ($request->method === self::OPTIONS || $request->method === self::HEAD) {
             $result = parent::invoke($request);
@@ -55,7 +45,7 @@ class DevInvoker extends Invoker implements InvokerInterface
         if ((!$request->ro instanceof Weave) && method_exists($request->ro, $method) !== true) {
             throw new Exception\MethodNotAllowed(get_class($request->ro) . "::$method()", 405);
         }
-
+        error_log(print_r($resource, true));
         $resource->headers[self::HEADER_QUERY] = json_encode($request->query);
         $time = microtime(true);
         $memory = memory_get_usage();
@@ -83,6 +73,25 @@ class DevInvoker extends Invoker implements InvokerInterface
         return $result;
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return AbstractObject|WeavedInterface
+     */
+    private function getRo(Request $request)
+    {
+        if (! $request->ro instanceof WeavedInterface) {
+            return $request->ro;
+        }
+        $ro = $request->ro;
+        /** @var $ro \Ray\Aop\AbstractWeaved */
+        $bind = $ro->rayAopBind;
+        /** @noinspection PhpUndefinedMethodInspection */
+        $interceptors = $this->getBindInfo($bind);
+        $ro->headers[self::HEADER_INTERCEPTORS] = json_encode($interceptors);
+
+        return $request->ro;
+    }
     /**
      * @param Bind $binds
      *

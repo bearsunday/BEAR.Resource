@@ -8,6 +8,7 @@ use Aura\Signal\Manager;
 use Aura\Signal\HandlerFactory;
 use Aura\Signal\ResultFactory;
 use Aura\Signal\ResultCollection;
+use Ray\Aop\Compiler;
 use Ray\Di\Definition;
 use Ray\Di\Injector;
 use Ray\Aop\Weaver;
@@ -92,13 +93,14 @@ class DevInvokerTest extends \PHPUnit_Framework_TestCase
     {
         $bind = new Bind;
         $bind->bindInterceptors('onGet', [new Log]);
-        $weave = new Weaver(new Book, $bind);
+        $weave = (new Compiler)->newInstance('Sandbox\Resource\App\Weave\Book', [], $bind);
+//        $weave = new Weaver(new Book, $bind);
         $this->request->ro = $weave;
         $this->request->method = 'get';
         $this->request->query = ['id' => 1];
         $this->invoker->invoke($this->request);
 
-        $ro = $this->request->ro->___getObject();
+        $ro = $this->request->ro;
         $this->assertInstanceOf('Sandbox\Resource\App\Weave\Book', $ro);
 
         return $ro->headers;
