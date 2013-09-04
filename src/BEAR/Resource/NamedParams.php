@@ -34,7 +34,7 @@ final class NamedParams implements NamedParamInterface
     /**
      * {@inheritdoc}
      */
-    public function invoke(MethodInvocation $invocation, Weave $weave = null)
+    public function invoke(MethodInvocation $invocation)
     {
         $object = $invocation->getThis();
         $namedArgs = $invocation->getArguments();
@@ -53,7 +53,6 @@ final class NamedParams implements NamedParamInterface
             }
             $args[] = $this->signalParam->getArg($parameter, $invocation);
         }
-        $object = $weave ? : $object;
         $result = call_user_func_array([$object, $method->name], $args);
 
         return $result;

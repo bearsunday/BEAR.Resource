@@ -25,7 +25,7 @@ interface NamedParamInterface
      *
      * @return mixed
      */
-    public function invoke(MethodInvocation $invocation, Weave $weave = null);
+    public function invoke(MethodInvocation $invocation);
 
     /**
      * Attach parameter provider
