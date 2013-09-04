@@ -19,9 +19,8 @@ interface NamedParamInterface
 {
     /**
      * Return parameters
-     *
+     * 
      * @param MethodInvocation $invocation
-     * @param Weave            $weave
      *
      * @return mixed
      */
