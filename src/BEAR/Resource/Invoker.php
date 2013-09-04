@@ -101,7 +101,7 @@ class Invoker implements InvokerInterface
     /**
      * {@inheritDoc}
      */
-    public function invoke(Request $request)
+    public function invoke(Request $request)    
     {
         $onMethod = 'on' . ucfirst($request->method);
         $weave = null;
@@ -222,9 +222,9 @@ class Invoker implements InvokerInterface
         }
         if ($method === 'onHead' && method_exists($ro, 'onGet')) {
             return $this->onHead($request);
-        } else {
-            throw new Exception\MethodNotAllowed(get_class($request->ro) . "::$method()", 405);
         }
+        
+        throw new Exception\MethodNotAllowed(get_class($request->ro) . "::$method()", 405);
     }
 
     /**
