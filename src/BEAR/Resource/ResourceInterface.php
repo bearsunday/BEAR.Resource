@@ -41,7 +41,7 @@ interface ResourceInterface
     /**
      * Set named parameter query
      *
-     * @param  array    $query
+     * @param  array $query
      *
      * @return self
      */
@@ -59,7 +59,7 @@ interface ResourceInterface
     /**
      * Return Request
      *
-     * @return mixed ( | Request)
+     * @return Request | AbstractObject
      */
     public function request();
 
