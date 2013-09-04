@@ -14,4 +14,6 @@ AnnotationReader::addGlobalIgnoredName('noinspection');
 $tmp = sys_get_temp_dir();
 ini_set('error_log', $tmp . '/error.log');
 ini_set('xhprof.output_dir', $tmp);
+
 $GLOBALS['RESOURCE'] = require __DIR__ . '/scripts/resource.php';
+$_ENV['BEAR_TMP'] = __DIR__ . '/tmp';

@@ -9,6 +9,7 @@ use Aura\Signal\ResultFactory;
 use BEAR\Resource\Mock\TestModule;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ApcCache as Cache;
+use Doctrine\Common\Cache\FilesystemCache;
 use Guzzle\Cache\DoctrineCacheAdapter as CacheAdapter;
 use Ray\Di\Definition;
 use Ray\Di\Injector;
@@ -71,7 +72,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
             'name' => 'Ray',
             'age' => 43
         ];
-        $this->cache = new CacheAdapter(new Cache);
+        $this->cache = new CacheAdapter(new FilesystemCache($_ENV['BEAR_TMP']));
     }
 
     public function testNew()
