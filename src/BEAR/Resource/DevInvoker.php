@@ -84,7 +84,6 @@ class DevInvoker extends Invoker implements InvokerInterface
             return $request->ro;
         }
         $ro = $request->ro;
-        /** @var $ro \Ray\Aop\AbstractWeaved */
         $bind = $ro->rayAopBind;
         /** @noinspection PhpUndefinedMethodInspection */
         $interceptors = $this->getBindInfo($bind);
