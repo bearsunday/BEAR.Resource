@@ -130,13 +130,13 @@ final class Linker implements LinkerInterface
             /** @var $requestResult \BEAR\Resource\AbstractObject */
             switch ($link->type) {
                 case LinkType::NEW_LINK:
+                    $refValue = &$requestResult;
                     if (!$hasTargeted) {
                         $sourceValue = [$sourceValue, $requestResult->body];
                         $hasTargeted = true;
-                    } else {
-                        $sourceValue[] = $requestResult->body;
+                        continue;
                     }
-                    $refValue = &$requestResult;
+                    $sourceValue[] = $requestResult->body;
                     break;
                 case LinkType::CRAWL_LINK:
                     $refValue[$link->key] = $requestResult->body;
