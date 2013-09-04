@@ -8,6 +8,7 @@ use BEAR\Resource\SchemeCollection;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use Ray\Di\Definition;
 use Ray\Di\Injector;
+use Sandbox\Resource\App\Link;
 
 /**
  * Test class for BEAR.Resource.
@@ -72,6 +73,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     public function test_get()
     {
         $request = $this->resource->get->object($this->nop)->withQuery($this->query)->request();
+        /** @var $request \BEAR\Resource\Request */
         $expected = "get nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
@@ -79,6 +81,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     public function test_post()
     {
         $request = $this->resource->post->object($this->nop)->withQuery($this->query)->request();
+        /** @var $request \BEAR\Resource\Request */
         $expected = "post nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
@@ -86,6 +89,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     public function test_postPoeCsrf()
     {
         $request = $this->resource->post->object($this->nop)->withQuery($this->query)->poe->csrf->request();
+        /** @var $request \BEAR\Resource\Request */
         $expected = "post nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
@@ -98,6 +102,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $request = $this->resource->post->object($this->nop)->withQuery(
             $this->query
         )->poe->csrf->invalid_option_cause_exception->request();
+        /** @var $request \BEAR\Resource\Request */
         $expected = "post nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
@@ -105,6 +110,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     public function test_put()
     {
         $request = $this->resource->put->object($this->nop)->withQuery($this->query)->request();
+        /** @var $request \BEAR\Resource\Request */
         $expected = "put nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
@@ -112,6 +118,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     public function test_delete()
     {
         $request = $this->resource->delete->object($this->nop)->withQuery($this->query)->request();
+        /** @var $request \BEAR\Resource\Request */
         $expected = "delete nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
@@ -119,6 +126,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     public function test_linkSelfString()
     {
         $request = $this->resource->get->object($this->nop)->withQuery($this->query)->linkSelf('dummyLink')->request();
+        /** @var $request \BEAR\Resource\Request */
         $expected = "get nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
@@ -126,6 +134,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     public function test_linkNewString()
     {
         $request = $this->resource->get->object($this->nop)->withQuery($this->query)->linkNew('dummyLink')->request();
+        /** @var $request \BEAR\Resource\Request */
         $expected = "get nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
@@ -133,6 +142,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     public function test_linkCrawlString()
     {
         $request = $this->resource->get->object($this->nop)->withQuery($this->query)->linkCrawl('dummyLink')->request();
+        /** @var $request \BEAR\Resource\Request */
         $expected = "get nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
@@ -142,6 +152,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $request = $this->resource->get->object($this->nop)->withQuery($this->query)->linkSelf('dummyLink')->linkSelf(
             'dummyLink2'
         )->request();
+        /** @var $request \BEAR\Resource\Request */
         $expected = "get nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
@@ -156,6 +167,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     public function test_uri()
     {
         $request = $this->resource->get->uri('nop://self/dummy')->withQuery($this->query)->request();
+        /** @var $request \BEAR\Resource\Request */
         $expected = "get nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
@@ -176,7 +188,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
 
     public function testP()
     {
-        $ro = new \Sandbox\Resource\App\Link;
+        $ro = new Link;
         $actual = $this->resource->get->object($ro)->withQuery(array('id' => 1))->linkSelf('View')->eager->request();
         $expected = '<html>bear1</html>';
         $this->assertSame($expected, $actual->body);

@@ -10,14 +10,10 @@ use BEAR\Resource\Mock\TestModule;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ApcCache as Cache;
 use Guzzle\Cache\DoctrineCacheAdapter as CacheAdapter;
-use Ray\Di\Annotation;
-use Ray\Di\Config;
-use Ray\Di\Container;
 use Ray\Di\Definition;
-use Ray\Di\EmptyModule;
-use Ray\Di\Forge;
 use Ray\Di\Injector;
 use BEAR\Resource\Renderer\TestRenderer;
+use Sandbox\Resource\App\Link;
 
 class varProvider implements ParamProviderInterface
 {
@@ -40,7 +36,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     protected $cache;
 
     /**
-     * @var Resource
+     * @var \BEAR\Resource\Resource
      */
     private $resource;
 
@@ -61,8 +57,9 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $scheme->scheme('test')->host('self')->toAdapter(new Adapter\Test);
         $scheme->scheme('prov')->host('self')->toAdapter(new Adapter\Prov);
         $scheme->scheme('http')->host('*')->toAdapter(new Adapter\Http);
+        $resource = require dirname(dirname(dirname(__DIR__))) . '/scripts/instance.php';
         /** @var $resource \BEAR\Resource\Resource */
-        $this->resource = require dirname(dirname(dirname(__DIR__))) . '/scripts/instance.php';
+        $this->resource = $resource;
         $this->resource->setSchemeCollection($scheme);
 
         // new resource object;
@@ -208,7 +205,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
     public function testP()
     {
-        $ro = new \Sandbox\Resource\App\Link;
+        $ro = new Link;
         $actual = $this->resource->get->object($ro)->withQuery(array('id' => 1))->linkSelf('View')->eager->request();
         $expected = '<html>bear1</html>';
         $this->assertSame($expected, $actual->body);

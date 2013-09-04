@@ -9,10 +9,10 @@ use Aura\Signal\ResultCollection;
 use Ray\Aop\Compiler;
 use Ray\Di\Definition;
 use Ray\Di\Injector;
-use Ray\Aop\Weaver;
 use Ray\Aop\Bind;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use BEAR\Resource\Interceptor\Log;
+use Sandbox\Resource\App\Link;
 use Sandbox\Resource\App\RestBucks\Order;
 use Sandbox\Resource\App\User;
 
@@ -22,6 +22,10 @@ use Sandbox\Resource\App\User;
 class InvokerTest extends \PHPUnit_Framework_TestCase
 {
     protected $signal;
+
+    /**
+     * @var Invoker
+     */
     protected $invoker;
     protected $request;
     protected $query;
@@ -147,7 +151,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     public function testInvokerInterfaceLink()
     {
 
-        $ro = new \Sandbox\Resource\App\Link;
+        $ro = new Link;
         $this->request->ro = $ro;
         $link = new LinkType;
         $link->type = LinkType::SELF_LINK;
@@ -186,7 +190,6 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     public function testOptionsWeaver()
     {
         $this->request->method = Invoker::OPTIONS;
-        $this->request->ro = new Weaver(new Order, new Bind);
         $this->request->ro = (new Compiler)->newInstance('Sandbox\Resource\App\RestBucks\Order', [], new Bind);
 
         $response = $this->invoker->invoke($this->request);

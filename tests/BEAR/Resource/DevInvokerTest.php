@@ -11,16 +11,18 @@ use Aura\Signal\ResultCollection;
 use Ray\Aop\Compiler;
 use Ray\Di\Definition;
 use Ray\Di\Injector;
-use Ray\Aop\Weaver;
 use Ray\Aop\Bind;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use BEAR\Resource\Interceptor\Log;
 use Sandbox\Resource\App\User;
-use Sandbox\Resource\App\Weave\Book;
 
 class DevInvokerTest extends \PHPUnit_Framework_TestCase
 {
     protected $signal;
+
+    /**
+     * @var Invoker
+     */
     protected $invoker;
 
     protected function setUp()
@@ -94,7 +96,6 @@ class DevInvokerTest extends \PHPUnit_Framework_TestCase
         $bind = new Bind;
         $bind->bindInterceptors('onGet', [new Log]);
         $weave = (new Compiler)->newInstance('Sandbox\Resource\App\Weave\Book', [], $bind);
-//        $weave = new Weaver(new Book, $bind);
         $this->request->ro = $weave;
         $this->request->method = 'get';
         $this->request->query = ['id' => 1];

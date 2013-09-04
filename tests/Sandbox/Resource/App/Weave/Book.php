@@ -14,9 +14,6 @@ class Book extends AbstractObject
      */
     public function __construct(ResourceInterface $resource = null)
     {
-        if (is_null($resource)) {
-            $resource = $GLOBALS['RESOURCE'];
-        }
     }
 
     /**

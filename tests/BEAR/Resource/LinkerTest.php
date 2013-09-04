@@ -16,6 +16,7 @@ use Ray\Di\EmptyModule;
 
 use BEAR\Resource\Adapter\Nop;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
+use Sandbox\Resource\App\Link;
 use Sandbox\Resource\App\User;
 
 /**
@@ -56,7 +57,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
      */
     public function testLinkException()
     {
-        $ro = new \Sandbox\Resource\App\Link;
+        $ro = new Link;
         $link = new LinkType;
         $link->type = LinkType::SELF_LINK;
         $link->key = 'UNAVAILABLE';
@@ -68,7 +69,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
 
     public function testLinkSelf1()
     {
-        $ro = new \Sandbox\Resource\App\Link;
+        $ro = new Link;
         $link = new LinkType;
         $link->type = LinkType::SELF_LINK;
         $link->key = 'View';
