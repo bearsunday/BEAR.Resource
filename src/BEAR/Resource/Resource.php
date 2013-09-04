@@ -258,17 +258,10 @@ class Resource implements ResourceInterface
             return $this;
         }
         if ($this->request->in !== 'eager') {
-
             return $this->request;
         }
-        $result = $this->invoke();
 
-        if (!($result instanceof ObjectInterface) && isset($this->request->ro)) {
-            $this->request->ro->body = $result;
-            $result = $this->request->ro;
-        }
-
-        return $result;
+        return $this->invoke();
     }
 
     /**
