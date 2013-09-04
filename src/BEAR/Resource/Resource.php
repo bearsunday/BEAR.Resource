@@ -257,24 +257,32 @@ class Resource implements ResourceInterface
 
             return $this;
         }
-        if ($this->request->in === 'eager') {
-            if ($this->requests->count() === 0) {
-                $result = $this->invoker->invoke($this->request);
-            } else {
-                $this->requests->attach($this->request);
-                $result = $this->invoker->invokeSync($this->requests);
-            }
-            if (!($result instanceof ObjectInterface) && isset($this->request->ro)) {
-                $this->request->ro->body = $result;
-                $result = $this->request->ro;
-            }
+        if ($this->request->in !== 'eager') {
 
-            return $result;
+            return $this->request;
+        }
+        $result = $this->invoke();
+
+        if (!($result instanceof ObjectInterface) && isset($this->request->ro)) {
+            $this->request->ro->body = $result;
+            $result = $this->request->ro;
         }
 
-        // logs
-        return $this->request;
+        return $result;
     }
+
+    /**
+     * @return AbstractObject|mixed
+     */
+    private function invoke()
+    {
+        if ($this->requests->count() === 0) {
+            return $this->invoker->invoke($this->request);
+        }
+        $this->requests->attach($this->request);
+        return $this->invoker->invokeSync($this->requests);
+    }
+
 
     /**
      * {@inheritDoc}
