@@ -6,6 +6,7 @@ use Aura\Signal\Manager;
 use Aura\Signal\HandlerFactory;
 use Aura\Signal\ResultFactory;
 use Aura\Signal\ResultCollection;
+use Ray\Aop\Compiler;
 use Ray\Di\Definition;
 use Ray\Di\Injector;
 use Ray\Aop\Weaver;
@@ -14,8 +15,6 @@ use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use BEAR\Resource\Interceptor\Log;
 use Sandbox\Resource\App\RestBucks\Order;
 use Sandbox\Resource\App\User;
-use Sandbox\Resource\App\Weave\Book;
-use Sandbox\Resource\App\Weave\Link;
 
 /**
  * Test class for BEAR.Resource.
@@ -118,7 +117,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     {
         $bind = new Bind;
         $bind->bindInterceptors('onGet', [new Log]);
-        $weave = new Weaver(new Book, $bind);
+        $weave = (new Compiler)->newInstance('Sandbox\Resource\App\Weave\Book', [], $bind);
         $this->request->ro = $weave;
         $this->request->method = 'get';
         $this->request->query = ['id' => 1];
@@ -131,7 +130,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     {
         $bind = new Bind;
         $bind->bindInterceptors('onGet', [new Log]);
-        $weave = new Weaver(new Link, $bind);
+        $weave = (new Compiler)->newInstance('Sandbox\Resource\App\Weave\Link', [], $bind);
         $this->request->ro = $weave;
         $this->request->method = 'get';
         $this->request->query = ['animal' => 'bear'];
@@ -188,6 +187,8 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     {
         $this->request->method = Invoker::OPTIONS;
         $this->request->ro = new Weaver(new Order, new Bind);
+        $this->request->ro = (new Compiler)->newInstance('Sandbox\Resource\App\RestBucks\Order', [], new Bind);
+
         $response = $this->invoker->invoke($this->request);
         $actual = $response->headers['allow'];
         $expected = ['get', 'post'];

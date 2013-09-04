@@ -104,28 +104,20 @@ class Invoker implements InvokerInterface
     public function invoke(Request $request)    
     {
         $onMethod = 'on' . ucfirst($request->method);
-        $weave = null;
-        $isWeave = $request->ro instanceof Weave;
-        $ro = $isWeave ? $request->ro->___getObject() : $request->ro;
-        $weave = ($isWeave && $request->method !== Invoker::OPTIONS && $request->method !== Invoker::HEAD) ? $request->ro : null;
-        if (method_exists($ro, $onMethod) !== true) {
-            return $this->methodNotExists($ro, $request, $onMethod);
+        if (method_exists($request->ro, $onMethod) !== true) {
+            return $this->methodNotExists($request->ro, $request, $onMethod);
         }
         // invoke with Named param and Signal param
-        $result = $this->params->invoke(new ReflectiveMethodInvocation([$ro, $onMethod], $request->query), $weave);
+        $result = $this->params->invoke(new ReflectiveMethodInvocation([$request->ro, $onMethod], $request->query));
 
         // link
         completed:
         if ($request->links) {
-            $result = $this->linker->invoke($ro, $request, $result);
+            $result = $this->linker->invoke($request->ro, $request, $result);
         }
         if (!$result instanceof AbstractObject) {
-            $ro->body = $result;
-            $result = $ro;
-            if ($result instanceof Weave) {
-                $result = $result->___getObject();
-            }
-
+            $request->ro->body = $result;
+            $result = $request->ro;
         }
         // request / result log
         if ($this->logger instanceof LoggerInterface) {

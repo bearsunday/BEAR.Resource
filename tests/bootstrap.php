@@ -11,7 +11,7 @@ $loader->add('Sandbox', [__DIR__]);
 AnnotationRegistry::registerLoader([$loader, 'loadClass']);
 AnnotationReader::addGlobalIgnoredName('noinspection');
 
-$dir = sys_get_temp_dir();
-ini_set('error_log', $dir . '/error.log');
-
+$tmp = sys_get_temp_dir();
+ini_set('error_log', $tmp . '/error.log');
+ini_set('xhprof.output_dir', $tmp);
 $GLOBALS['RESOURCE'] = require __DIR__ . '/scripts/resource.php';
