@@ -9,7 +9,6 @@ namespace BEAR\Resource;
 use BEAR\Resource\AbstractObject as ResourceObject;
 use BEAR\Resource\Exception\MethodNotAllowed;
 use Ray\Aop\ReflectiveMethodInvocation;
-use Ray\Aop\Weave;
 use Ray\Di\Di\Scope;
 use Ray\Di\Definition;
 use Ray\Di\Di\Inject;

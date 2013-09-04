@@ -7,7 +7,6 @@
 namespace BEAR\Resource;
 
 use Ray\Aop\MethodInvocation;
-use Ray\Aop\Weave;
 
 /**
  * Resource request invoke interface
@@ -19,7 +18,7 @@ interface NamedParamInterface
 {
     /**
      * Return parameters
-     * 
+     *
      * @param MethodInvocation $invocation
      *
      * @return mixed

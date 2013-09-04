@@ -7,7 +7,6 @@
 namespace BEAR\Resource;
 
 use Ray\Aop\MethodInvocation;
-use Ray\Aop\Weave;
 use ReflectionParameter;
 use Ray\Di\Di\Inject;
 
