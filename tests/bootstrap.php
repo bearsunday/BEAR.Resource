@@ -17,3 +17,11 @@ ini_set('xhprof.output_dir', $tmp);
 
 $GLOBALS['RESOURCE'] = require __DIR__ . '/scripts/resource.php';
 $_ENV['BEAR_TMP'] = __DIR__ . '/tmp';
+
+$rm = function ($dir) use (&$rm) {
+    foreach (glob($dir . '/*') as $file) {
+        is_dir($file) ? $rm($file) : unlink($file);
+        @rmdir($file);
+    }
+};
+$rm($_ENV['BEAR_TMP']);
