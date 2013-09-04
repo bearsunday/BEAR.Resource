@@ -153,13 +153,7 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
     {
         $query = http_build_query($this->query, null, '&', PHP_QUERY_RFC3986);
         $uri = isset($this->ro->uri) && $this->ro->uri ? $this->ro->uri : $this->uri;
-        if (isset(parse_url($uri)['query'])) {
-            $queryString = $uri;
-        } else {
-            $queryString = "{$uri}" . ($query ? '?' : '') . $query;
-        }
-
-        return $queryString;
+        return isset(parse_url($uri)['query']) ? $uri : $queryString = "{$uri}" . ($query ? '?' : '') . $query;
     }
 
     /**
