@@ -266,5 +266,4 @@ class Invoker implements InvokerInterface
     {
         $this->params->attachParamProvider($varName, $provider);
     }
-
 }

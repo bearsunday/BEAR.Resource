@@ -10,9 +10,10 @@ use BEAR\Resource\Exception;
 use BEAR\Resource\Uri;
 use Guzzle\Cache\CacheAdapterInterface;
 use SplObjectStorage;
+use Ray\Di\Di\Scope;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
-use Ray\Di\Di\Scope;
+
 /**
  * Resource client
  *

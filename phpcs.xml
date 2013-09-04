@@ -2,9 +2,11 @@
 <ruleset name="BEAR">
     <description>The BEAR coding standard.</description>
     <!-- 2. General -->
+    <rule ref="Generic.NamingConventions.UpperCaseConstantName">
+        <exclude name="Generic.NamingConventions.UpperCaseConstantName.ConstantNotUpperCase"/>
+    </rule>
     <rule ref="Generic.CodeAnalysis.UnusedFunctionParameter"/>
     <rule ref="Generic.Strings.UnnecessaryStringConcat"/>
-
     <!-- Include the whole PSR-2 standard -->
     <rule ref="PSR2">
     </rule>
