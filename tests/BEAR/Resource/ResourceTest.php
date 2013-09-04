@@ -8,7 +8,6 @@ use Aura\Signal\ResultCollection;
 use Aura\Signal\ResultFactory;
 use BEAR\Resource\Mock\TestModule;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Cache\ApcCache as Cache;
 use Doctrine\Common\Cache\FilesystemCache;
 use Guzzle\Cache\DoctrineCacheAdapter as CacheAdapter;
 use Ray\Di\Definition;
@@ -29,8 +28,6 @@ class varProvider implements ParamProviderInterface
  */
 class ResourceTest extends \PHPUnit_Framework_TestCase
 {
-    protected $skeleton;
-
     /**
      * @var CacheAdapter
      */
@@ -40,6 +37,11 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
      * @var \BEAR\Resource\Resource
      */
     private $resource;
+
+    /**
+     * @var \Sandbox\Resource\App\User
+     */
+    private $user;
 
     protected function setUp()
     {
