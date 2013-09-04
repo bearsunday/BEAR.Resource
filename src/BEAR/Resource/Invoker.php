@@ -223,7 +223,7 @@ class Invoker implements InvokerInterface
         if ($method === 'onHead' && method_exists($ro, 'onGet')) {
             return $this->onHead($request);
         }
-        
+
         throw new Exception\MethodNotAllowed(get_class($request->ro) . "::$method()", 405);
     }
 

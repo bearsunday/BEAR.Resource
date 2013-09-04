@@ -30,7 +30,8 @@ class Provides implements HandleInterface
         /** @var \Ray\Di\Definition $definition */
         $provideMethods = $definition->getUserAnnotationMethodName('Provides');
         if (is_null($provideMethods)) {
-            goto PROVIDE_FAILED;
+            // failed
+            return null;
         }
         $parameterMethod = [];
         foreach ($provideMethods as $provideMethod) {
@@ -38,23 +39,20 @@ class Provides implements HandleInterface
             $parameterMethod[$annotation->value] = $provideMethod;
         }
         $hasMethod = isset($parameterMethod[$parameter->name]);
-        if ($hasMethod === true) {
+        if ($hasMethod === false) {
+            // failed
+            return null;
+        }
+
+        SUCCESS: {
             $providesMethod = $parameterMethod[$parameter->name];
             $object = $invocation->getThis();
             $func = [$object, $providesMethod];
             /** @var $func callable  */
             $providedValue = $func();
             $return->value = $providedValue;
-            goto SUCCESS;
+
+            return Signal::STOP;
         }
-        PROVIDE_FAILED:
-
-        return null;
-        SUCCESS:
-
-        /** @noinspection PhpUnreachableStatementInspection */
-
-        return Signal::STOP;
-
     }
 }
