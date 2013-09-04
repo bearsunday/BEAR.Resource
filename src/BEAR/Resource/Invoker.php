@@ -241,14 +241,12 @@ class Invoker implements InvokerInterface
      */
     private function onHead(Request $request)
     {
-        $ro = ($request->ro instanceof Weave) ? $request->ro->___getObject() :  $request->ro;
-        $weave = ($request->ro instanceof Weave) ? $request->ro : null;
-        if (method_exists($ro, 'onGet')) {
-            $this->params->invoke(new ReflectiveMethodInvocation([$ro, 'onGet'], $request->query), $weave);
+        if (method_exists($request->ro, 'onGet')) {
+            $this->params->invoke(new ReflectiveMethodInvocation([$request->ro, 'onGet'], $request->query));
         }
-        $ro->body = '';
+        $request->ro->body = '';
 
-        return $ro;
+        return $request->ro;
     }
 
     /**
