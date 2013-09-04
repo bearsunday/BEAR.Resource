@@ -199,4 +199,10 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         asort($expected);
         $this->assertSame($actual, $expected);
     }
+
+    public function testSetResourceLogger()
+    {
+        $invoker = $this->invoker->setResourceLogger(new Logger);
+        $this->assertInstanceOf('BEAR\Resource\Invoker', $invoker);
+    }
 }
