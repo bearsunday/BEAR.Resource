@@ -73,6 +73,8 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     public function testSetWriter()
     {
         $this->logger->setWriter(new TestWriter);
+        $this->request->set(new Test, 'test://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
+        $this->logger->log($this->request, new Test);
         $result = $this->logger->write($this->request, new Test);
         $this->assertSame(true, $result);
     }
@@ -96,5 +98,18 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->logger->log($request, new Test);
         $logStr = serialize($this->logger);
         $this->assertInternalType('string', $logStr);
+        return $logStr;
+
+    }
+
+    /**
+     * @param $logStr
+     *
+     * @depends testSerialize
+     */
+    public function testUnserialize($logStr)
+    {
+        $logger = unserialize($logStr);
+        $this->assertInstanceOf('BEAR\Resource\Logger', $logger);
     }
 }
