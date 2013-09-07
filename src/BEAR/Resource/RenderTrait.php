@@ -26,7 +26,7 @@ trait RenderTrait
      * @param RenderInterface $renderer
      *
      * @return RenderTrait
-     * @Inject(optional = true)
+     * @Ray\Di\Di\Inject(optional = true)
      */
     public function setRenderer(RenderInterface $renderer)
     {
