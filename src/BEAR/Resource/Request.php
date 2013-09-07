@@ -76,7 +76,7 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
     /**
      * Links
      *
-     * @var array
+     * @var LinkType[]
      */
     public $links = [];
 
