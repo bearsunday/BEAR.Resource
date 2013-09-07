@@ -1,5 +1,5 @@
 <?php
-namespace Sandbox\Resource\App\Link;
+namespace Sandbox\Resource\App\Marshal;
 
 use BEAR\Resource\AbstractObject;
 use BEAR\Resource\Annotation\Link;
@@ -13,46 +13,36 @@ class Post extends AbstractObject
             'id' => '1',
             'author_id' => '1',
             'body' => 'Anna post #1',
-            'fake_field' => '69',
-            'null_field' => null,
         ],
         [
             'id' => '2',
             'author_id' => '1',
             'body' => 'Anna post #2',
-            'fake_field' => '69',
-            'null_field' => null,
         ],
         [
             'id' => '3',
             'author_id' => '1',
             'body' => 'Anna post #3',
-            'fake_field' => '69',
-            'null_field' => null,
         ],
         [
             'id' => '4',
             'author_id' => '2',
             'body' => 'Clara post #1',
-            'fake_field' => '88',
-            'null_field' => null,
         ],
         [
             'id' => '5',
             'author_id' => '2',
             'body' => 'Clara post #2',
-            'fake_field' => '88',
-            'null_field' => null,
         ],
     ];
 
     /**
-     * @Link(crawl="tree", rel="meta", href="app://self/link/meta", method="get")
-     * @Link(crawl="tree", rel="tag", href="app://self/link/post/tag", method="get")
+     * @Link(crawl="tree", rel="meta", href="app://self/marshal/meta?post_id={id}", method="get")
+     * @Link(crawl="tree", rel="tag",  href="app://self/marshal/tag?post_id={id}",  method="get")
      */
-    public function onGet($id)
+    public function onGet($author_id)
     {
-        $posts = $this->select('author_id', $id);
+        $posts = $this->select('author_id', $author_id);
         return $posts;
     }
 }

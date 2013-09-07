@@ -9,6 +9,10 @@ namespace BEAR\Resource;
 use BEAR\Resource\AbstractObject as ResourceObject;
 use BEAR\Resource\Exception;
 use Doctrine\Common\Annotations\Reader;
+use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\Cache\Cache;
+use Guzzle\Parser\UriTemplate\UriTemplate;
+use Guzzle\Parser\UriTemplate\UriTemplateInterface;
 use Ray\Di\AbstractModule;
 use Ray\Di\Di\Scope;
 use ReflectionMethod;
@@ -37,15 +41,25 @@ final class Linker implements LinkerInterface
     private $resource;
 
     /**
-     * Constructor
-     *
-     * @param \Doctrine\Common\Annotations\Reader $reader
+     * @var \Guzzle\Parser\UriTemplate\UriTemplate
+     */
+    private $uriTemplate;
+
+    /**
+     * @param Reader               $reader
+     * @param Cache                $cache
+     * @param UriTemplateInterface $uriTemplate
      *
      * @Inject
      */
-    public function __construct(Reader $reader)
+    public function __construct(
+        Reader $reader,
+        Cache $cache = null,
+        UriTemplateInterface $uriTemplate = null)
     {
         $this->reader = $reader;
+        $this->cache = $cache ?: new ArrayCache;
+        $this->uriTemplate = $uriTemplate ?: new UriTemplate;
     }
 
     /**
@@ -67,7 +81,7 @@ final class Linker implements LinkerInterface
         foreach ($request->links as $link) {
             $linkMethod = 'onLink' . $link->key;
             $nextResource = method_exists($current, $linkMethod) ?
-                $this->methodLink($link, $current, $request) :
+                $this->methodLink($link, $current) :
                 $this->annotationLink($link, $current, $request);
             $current = $this->nextLink($link, $current, $nextResource);
         }
@@ -75,9 +89,17 @@ final class Linker implements LinkerInterface
         return $current;
     }
 
+    /**
+     * How next linked resource treated (add ? replace ?)
+     *
+     * @param LinkType       $link
+     * @param AbstractObject $ro
+     * @param $nextResource
+     *
+     * @return AbstractObject
+     */
     private function nextLink(LinkType $link, ResourceObject $ro, $nextResource)
     {
-
         $nextBody = $nextResource instanceof AbstractObject ? $nextResource->body : $nextResource;
 
         if ($link->type === LinkType::SELF_LINK) {
@@ -89,21 +111,28 @@ final class Linker implements LinkerInterface
             $ro->body = [$ro->body, $nextBody];
             return $ro;
         }
-
         // crawl
         return $ro;
     }
 
-    private function methodLink(LinkType $link, ResourceObject $current, Request $request)
+    private function methodLink(LinkType $link, ResourceObject $current)
     {
         $classMethod = 'onLink' . ucfirst($link->key);
         $args = is_array($current->body) ? $current->body : [];
-        $args = $current->body;
         $nexResource =  call_user_func_array([$current, $classMethod], $args);
 
         return $nexResource;
     }
 
+    /**
+     * Annotation link
+     *
+     * @param LinkType       $link
+     * @param AbstractObject $current
+     * @param Request        $request
+     *
+     * @return AbstractObject|mixed
+     */
     private function annotationLink(LinkType $link, ResourceObject $current, Request $request)
     {
         $classMethod = 'on' . ucfirst($request->method);
@@ -114,6 +143,16 @@ final class Linker implements LinkerInterface
         return $this->annotationRel($annotations, $link, $current)->body;
     }
 
+    /**
+     * Annotation link (new, self)
+     *
+     * @param array          $annotations
+     * @param LinkType       $link
+     * @param AbstractObject $current
+     *
+     * @return AbstractObject
+     * @throws Exception\Link
+     */
     private function annotationRel(array $annotations, LinkType $link, AbstractObject $current)
     {
         foreach($annotations as $annotation)
@@ -135,26 +174,69 @@ final class Linker implements LinkerInterface
         throw new Exception\Link(get_class($current) . " link({$link->key}");
     }
 
+    /**
+     * Link annotation crawl
+     *
+     * @param array          $annotations
+     * @param LinkType       $link
+     * @param AbstractObject $current
+     *
+     * @return AbstractObject
+     */
     private function annotationCrawl(array $annotations, LinkType $link, AbstractObject $current)
     {
-        foreach($annotations as $annotation)
-        {
-            /* @var $annotation Annotation\Link */
-            if ($annotation->crawl !== $link->key) {
-                continue;
+        $isList = $this->isList($current->body);
+        $bodyList = $isList ? $current->body : [$current->body];
+        foreach ($bodyList as &$body) {
+            foreach($annotations as $annotation)
+            {
+                /* @var $annotation Annotation\Link */
+                if ($annotation->crawl !== $link->key) {
+                    continue;
+                }
+                $uri = $this->uriTemplate->expand($annotation->href, $body);
+                $request = $this
+                    ->resource
+                    ->{$annotation->method}
+                    ->uri($uri)
+                    ->linkCrawl($link->key)
+                    ->request();
+                /* @var $request Request */
+                $hash = $request->hash();
+                if ($this->cache->contains($hash)) {
+//                    $body[$annotation->rel] =$this->cache->fetch($hash);
+//                    continue;
+                }
+                /* @var $linkedResource AbstractObject */
+                $body[$annotation->rel] = $request()->body;
+                $this->cache->save($hash, $body[$annotation->rel]);
             }
-            $linkedResource = $this
-                ->resource
-                ->{$annotation->method}
-                ->uri($annotation->href)
-                ->withQuery($current->body)
-                ->linkCrawl($link->key)
-                ->eager
-                ->request();
-            /* @var $linkedResource AbstractObject */
-            $current->body[$annotation->rel] = $linkedResource->body;
         }
-
+        $current->body = $isList ? $bodyList : $bodyList[0];
         return $current;
+    }
+
+    /**
+     * Is data list ?
+     *
+     * @param mixed $value
+     *
+     * @return boolean
+     */
+    private function isList($value)
+    {
+        if (!(is_array($value))) {
+            return false;
+        }
+        $value = array_values((array)$value);
+        $isMultiColumnList = (count($value) > 1
+            && isset($value[0])
+            && isset($value[1])
+            && is_array($value[0])
+            && is_array($value[1])
+            && (array_keys($value[0]) === array_keys($value[1])));
+        $isOneColumnList = (count($value) === 1) && is_array($value[0]);
+
+        return ($isOneColumnList | $isMultiColumnList);
     }
 }

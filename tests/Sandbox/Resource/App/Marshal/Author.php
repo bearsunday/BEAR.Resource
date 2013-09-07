@@ -1,5 +1,5 @@
 <?php
-namespace Sandbox\Resource\App\Link;
+namespace Sandbox\Resource\App\Marshal;
 
 use BEAR\Resource\ObjectInterface as ResourceObject;
 use BEAR\Resource\AbstractObject;
@@ -16,7 +16,7 @@ class Author extends AbstractObject implements ResourceObject
     ];
 
     /**
-     * @Link(crawl="tree", rel="post", href="app://self/link/post", method="get")
+     * @Link(crawl="tree", rel="post", href="app://self/marshal/post?author_id={id}", method="get")
      */
     public function onGet($id = null)
     {
