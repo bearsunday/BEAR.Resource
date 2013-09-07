@@ -55,13 +55,10 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\BEAR\Resource\Linker', $this->linker);
     }
 
-
     public function testLinkAnnotationSelf()
     {
-        $links= [new LinkType('blog', LinkType::SELF_LINK)];
-        $this->request->links = $links;
+        $this->request->links = [new LinkType('blog', LinkType::SELF_LINK)];
         $this->request->method = 'get';
-
         $ro = new User;
         $ro->body = $ro->onGet(1);
         $this->request->ro = $ro;
@@ -73,5 +70,32 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $result->body);
 
         return $this->request;
+    }
+
+    /**
+     * @param Request $request
+     *
+     *  testLinkAnnotationSelf
+     */
+    public function testAnnotationNew()
+    {
+        $this->request->links = [new LinkType('blog', LinkType::NEW_LINK)];
+        $this->request->method = 'get';
+        $ro = new User;
+        $ro->body = $ro->onGet(1);
+        $this->request->ro = $ro;
+
+        $result = $this->linker->invoke($this->request);
+        $expected = [
+            [
+                'name' => 'Aramis',
+                'age' => 16,
+                'blog_id' => 12,
+            ],
+            [
+                'name' => 'Aramis blog',
+            ],
+        ];
+        $this->assertSame($expected, $result->body);
     }
 }
