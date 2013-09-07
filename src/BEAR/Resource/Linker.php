@@ -79,10 +79,7 @@ final class Linker implements LinkerInterface
     {
         $current = clone $request->ro;
         foreach ($request->links as $link) {
-            $linkMethod = 'onLink' . $link->key;
-            $nextResource = method_exists($current, $linkMethod) ?
-                $this->methodLink($link, $current) :
-                $this->annotationLink($link, $current, $request);
+            $nextResource = $this->annotationLink($link, $current, $request);
             $current = $this->nextLink($link, $current, $nextResource);
         }
 
@@ -115,15 +112,6 @@ final class Linker implements LinkerInterface
         return $ro;
     }
 
-    private function methodLink(LinkType $link, ResourceObject $current)
-    {
-        $classMethod = 'onLink' . ucfirst($link->key);
-        $args = is_array($current->body) ? $current->body : [];
-        $nexResource =  call_user_func_array([$current, $classMethod], $args);
-
-        return $nexResource;
-    }
-
     /**
      * Annotation link
      *
@@ -132,9 +120,13 @@ final class Linker implements LinkerInterface
      * @param Request        $request
      *
      * @return AbstractObject|mixed
+     * @throws Exception\LinkQuery
      */
     private function annotationLink(LinkType $link, ResourceObject $current, Request $request)
     {
+        if (!(is_array($current->body))) {
+            throw new Exception\LinkQuery('Only array is allowed for link in ' . get_class($current));
+        }
         $classMethod = 'on' . ucfirst($request->method);
         $annotations = $this->reader->getMethodAnnotations(new ReflectionMethod($current, $classMethod));
         if ($link->type === LinkType::CRAWL_LINK) {
@@ -171,7 +163,7 @@ final class Linker implements LinkerInterface
             /* @var $linkedResource AbstractObject */
             return $linkedResource;
         }
-        throw new Exception\Link(get_class($current) . " link({$link->key}");
+        throw new Exception\LinkRel("[{$link->key}] in " . get_class($current) . ' is not available.');
     }
 
     /**
@@ -186,7 +178,7 @@ final class Linker implements LinkerInterface
     private function annotationCrawl(array $annotations, LinkType $link, AbstractObject $current)
     {
         $isList = $this->isList($current->body);
-        $bodyList = $isList ? $current->body : [$current->body];
+        $bodyList = $isList ? $current->body : [ $current->body];
         foreach ($bodyList as &$body) {
             foreach($annotations as $annotation)
             {
@@ -204,8 +196,8 @@ final class Linker implements LinkerInterface
                 /* @var $request Request */
                 $hash = $request->hash();
                 if ($this->cache->contains($hash)) {
-//                    $body[$annotation->rel] =$this->cache->fetch($hash);
-//                    continue;
+                    $body[$annotation->rel] =$this->cache->fetch($hash);
+                    continue;
                 }
                 /* @var $linkedResource AbstractObject */
                 $body[$annotation->rel] = $request()->body;
@@ -225,9 +217,6 @@ final class Linker implements LinkerInterface
      */
     private function isList($value)
     {
-        if (!(is_array($value))) {
-            return false;
-        }
         $value = array_values((array)$value);
         $isMultiColumnList = (count($value) > 1
             && isset($value[0])

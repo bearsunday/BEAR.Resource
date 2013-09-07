@@ -16,6 +16,7 @@ use Ray\Di\EmptyModule;
 
 use BEAR\Resource\Adapter\Nop;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
+use Sandbox\Resource\App\Link\Scalar\Name;
 use Sandbox\Resource\App\Link\User;
 use Sandbox\Resource\App\Marshal\Author;
 
@@ -249,5 +250,31 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
             ),
         );
         $this->assertSame($expected, $result->body);
+    }
+
+
+    /**
+     * @expectedException \BEAR\Resource\Exception\LinkQuery
+     */
+    public function testScalarValueLinkThrowException()
+    {
+        $this->request->links = [new LinkType('greeting', LinkType::NEW_LINK)];
+        $this->request->method = 'get';
+        $ro = new Name;
+        $ro->body = $ro->onGet('koriym');
+        $this->request->ro = $ro;
+        $result = $this->linker->invoke($this->request);
+    }
+    /**
+     * @expectedException \BEAR\Resource\Exception\LinkRel
+     */
+    public function testInvalidRel()
+    {
+        $this->request->links = [new LinkType('xxx', LinkType::NEW_LINK)];
+        $this->request->method = 'get';
+        $ro = new User;
+        $ro->body = $ro->onGet(1);
+        $this->request->ro = $ro;
+        $this->linker->invoke($this->request);
     }
 }

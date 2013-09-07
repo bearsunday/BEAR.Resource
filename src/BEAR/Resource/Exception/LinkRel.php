@@ -7,8 +7,8 @@
 namespace BEAR\Resource\Exception;
 
 /**
- * Invalid resource link request query
+ * Invalid link "rel"
  */
-class LinkQuery extends BadRequest implements ExceptionInterface
+class LinkRel extends BadRequest implements ExceptionInterface
 {
 }
