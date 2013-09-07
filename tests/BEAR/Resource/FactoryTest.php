@@ -67,8 +67,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testNewInstanceApp()
     {
-        $instance = $this->factory->newInstance('app://self/news');
-        $this->assertInstanceOf('Sandbox\Resource\App\News', $instance, get_class($instance));
+        $instance = $this->factory->newInstance('app://self/factory/news');
+        $this->assertInstanceOf('Sandbox\Resource\App\Factory\News', $instance, get_class($instance));
     }
 
     public function testNewInstancePage()

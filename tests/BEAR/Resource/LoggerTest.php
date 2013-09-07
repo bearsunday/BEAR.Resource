@@ -107,7 +107,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
      *
      * @depends testSerialize
      */
-    public function testUnserialize($logStr)
+    public function estUnserialize($logStr)
     {
         $logger = unserialize($logStr);
         $this->assertInstanceOf('BEAR\Resource\Logger', $logger);

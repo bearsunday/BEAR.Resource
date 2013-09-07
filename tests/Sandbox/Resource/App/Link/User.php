@@ -16,7 +16,7 @@ class User extends AbstractObject implements ResourceObject
     ];
 
     /**
-     * @Link(rel="blog", href="app://self/Link/Blog", method="get")
+     * @Link(rel="blog", href="app://self/link/blog", method="get")
      */
     public function onGet($id)
     {

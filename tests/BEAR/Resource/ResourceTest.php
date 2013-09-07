@@ -206,14 +206,6 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual->body);
     }
 
-    public function testP()
-    {
-        $ro = new Link;
-        $actual = $this->resource->get->object($ro)->withQuery(array('id' => 1))->linkSelf('View')->eager->request();
-        $expected = '<html>bear1</html>';
-        $this->assertSame($expected, $actual->body);
-    }
-
     /**
      * @expectedException \BEAR\Resource\Exception\Uri
      */
@@ -222,14 +214,6 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $query = [];
         $request = $this->resource->get->uri($this->nop)->withQuery($query)->request();
         $this->assertInstanceOf('\BEAR\Resource\Request', $request);
-    }
-
-    /**
-     * @expectedException \Sandbox\Resource\App\Shutdown
-     */
-    public function testServiceError()
-    {
-        $this->resource->post->uri('app://self/blog')->eager->request();
     }
 
     public function testSyncHttp()

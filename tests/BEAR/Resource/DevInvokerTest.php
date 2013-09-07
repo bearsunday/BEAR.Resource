@@ -33,7 +33,7 @@ class DevInvokerTest extends \PHPUnit_Framework_TestCase
 
 
         $resource = new User;
-        $resource->uri = 'dummy://self/User';
+        $resource->uri = 'dummy://self/user';
         $this->request = new Request($this->invoker);
         $this->request->method = 'get';
         $this->request->ro = $resource;

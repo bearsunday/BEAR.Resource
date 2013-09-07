@@ -1,6 +1,6 @@
 <?php
 
-namespace Sandbox\Resource\App;
+namespace Sandbox\Resource\App\Factory;
 
 use BEAR\Resource\AbstractObject as Ro;
 
