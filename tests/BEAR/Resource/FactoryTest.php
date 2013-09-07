@@ -84,4 +84,13 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->factory->newInstance('invalid_uri');
     }
+
+    /**
+     * @expectedException \BEAR\Resource\Exception\ResourceNotFound
+     */
+    public function testResourceNotFound()
+    {
+        $this->factory->newInstance('page://self/not_found_XXXX');
+    }
+
 }

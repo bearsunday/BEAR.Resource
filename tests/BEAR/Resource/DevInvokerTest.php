@@ -141,4 +141,24 @@ class DevInvokerTest extends \PHPUnit_Framework_TestCase
             $headers[DevInvoker::HEADER_INTERCEPTORS]
         );
     }
+
+    /**
+     * @expectedException \BEAR\Resource\Exception\MethodNotAllowed
+     */
+    public function testInvokerInterfaceInvalidMethod()
+    {
+        $this->request->method = 'InvalidMethod';
+        $this->invoker->invoke($this->request);
+    }
+
+    public function testOptionsMethod()
+    {
+        $this->request->method = Invoker::OPTIONS;
+        $response = $this->invoker->invoke($this->request);
+        $actual = $response->headers['allow'];
+        $expected = ['get', 'post', 'put', 'delete'];
+        asort($actual);
+        asort($expected);
+        $this->assertSame($actual, $expected);
+    }
 }

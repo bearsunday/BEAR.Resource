@@ -65,6 +65,7 @@ class Tag extends AbstractObject
      * @param id
      *
      * @Link(crawl="tree", rel="tag_name",  href="app://self/marshal/tag/name?tag_id={tag_id}",  method="get")
+     * @Link(crawl="another_tree", rel="xxx",  href="app://path/to/another/resource",  method="get")
      *
      */
     public function onGet($post_id)
