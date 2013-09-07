@@ -65,4 +65,11 @@ interface RequestInterface
      * @return string
      */
     public function toUriWithMethod();
+
+    /**
+     * Return request hash
+     *
+     * @return string
+     */
+    public function hash();
 }

@@ -228,4 +228,12 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
         $iterator = $isArray ? new ArrayIterator($this->result->body) : new ArrayIterator([]);
         return $iterator;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hash()
+    {
+        return md5(get_class($this->ro) . $this->method . serialize($this->query) . serialize($this->links));
+    }
 }
