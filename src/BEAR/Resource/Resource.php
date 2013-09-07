@@ -211,11 +211,7 @@ class Resource implements ResourceInterface
      */
     public function linkSelf($linkKey)
     {
-        $link = new LinkType;
-        $link->key = $linkKey;
-        $link->type = LinkType::SELF_LINK;
-        $this->request->links[] = $link;
-
+        $this->request->links[] = new LinkType($linkKey, LinkType::SELF_LINK);
         return $this;
     }
 
@@ -224,11 +220,7 @@ class Resource implements ResourceInterface
      */
     public function linkNew($linkKey)
     {
-        $link = new LinkType;
-        $link->key = $linkKey;
-        $link->type = LinkType::NEW_LINK;
-        $this->request->links[] = $link;
-
+        $this->request->links[] = new LinkType($linkKey, LinkType::NEW_LINK);
         return $this;
     }
 
@@ -237,11 +229,7 @@ class Resource implements ResourceInterface
      */
     public function linkCrawl($linkKey)
     {
-        $link = new LinkType;
-        $link->key = $linkKey;
-        $link->type = LinkType::CRAWL_LINK;
-        $this->request->links[] = $link;
-
+        $this->request->links[] = new LinkType($linkKey, LinkType::CRAWL_LINK);
         return $this;
     }
 
