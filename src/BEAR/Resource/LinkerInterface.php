@@ -20,11 +20,9 @@ interface LinkerInterface
     /**
      * InvokerInterface link
      *
-     * @param ResourceObject  $ro
      * @param Request         $request
-     * @param mixed           $linkValue
      *
      * @return mixed
      */
-    public function invoke(ResourceObject $ro, Request $request, $linkValue);
+    public function invoke(Request $request);
 }

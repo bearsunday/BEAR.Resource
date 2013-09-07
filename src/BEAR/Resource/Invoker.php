@@ -111,16 +111,18 @@ class Invoker implements InvokerInterface
         // invoke with Named param and Signal param
         $result = $this->params->invoke(new ReflectiveMethodInvocation([$request->ro, $onMethod], $request->query));
 
-        // link
-        completed:
-        if ($request->links) {
-            $result = $this->linker->invoke($request->ro, $request, $result);
-        }
         if (!$result instanceof AbstractObject) {
             $request->ro->body = $result;
             $result = $request->ro;
         }
-        // request / result log
+
+        // link
+        completed:
+        if ($request->links) {
+            $result = $this->linker->invoke($request);
+        }
+
+        // log
         if ($this->logger instanceof LoggerInterface) {
             $this->logger->log($request, $result);
         }
