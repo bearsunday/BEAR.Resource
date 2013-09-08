@@ -282,23 +282,23 @@ class Resource implements ResourceInterface
      */
     public function __get($name)
     {
-        switch (true) {
-            case (in_array($name, ['get', 'post', 'put', 'delete', 'head', 'options'])):
-                $this->request = clone $this->newRequest;
-                $this->request->method = $name;
+        if (in_array($name, ['get', 'post', 'put', 'delete', 'head', 'options'])) {
+            $this->request = clone $this->newRequest;
+            $this->request->method = $name;
 
-                return $this;
-            case (in_array($name, ['lazy', 'eager'])):
-                $this->request->in = $name;
-
-                return $this;
-            case (in_array($name, ['sync', 'poe', 'csrf'])):
-                $this->request->options[$name] = true;
-
-                return $this;
-            default:
-                throw new Exception\BadRequest($name, 400);
+            return $this;
         }
+        if (in_array($name, ['lazy', 'eager'])) {
+            $this->request->in = $name;
+
+            return $this;
+        }
+        if (in_array($name, ['sync'])) {
+            $this->request->options[$name] = $name;
+
+            return $this;
+        }
+        throw new Exception\BadRequest($name, 400);
     }
 
     /**

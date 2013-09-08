@@ -48,7 +48,6 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->request->ro = new Test;
         $this->request->ro->uri = 'test://self/path/to/resource';
         $this->request->query = array('a' => 'koriym', 'b' => 25);
-
     }
 
     public function testNew()
@@ -99,7 +98,6 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $logStr = serialize($this->logger);
         $this->assertInternalType('string', $logStr);
         return $logStr;
-
     }
 
     /**

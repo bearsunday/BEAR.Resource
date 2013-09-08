@@ -99,9 +99,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
      */
     public function test_postInvalidOption()
     {
-        $request = $this->resource->post->object($this->nop)->withQuery(
-            $this->query
-        )->poe->csrf->invalid_option_cause_exception->request();
+        $request = $this->resource->post->object($this->nop)->withQuery($this->query)->poe->csrf->invalid_option_cause_exception->request();
         /** @var $request \BEAR\Resource\Request */
         $expected = "post nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());

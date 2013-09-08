@@ -115,25 +115,6 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $request->toUriWithMethod());
     }
 
-    public function testPostPoeCsrf()
-    {
-        $request = $this->resource->post->object($this->nop)->withQuery($this->query)->poe->csrf->request();
-        $expected = "post nop://self/dummy?id=10&name=Ray&age=43";
-        $this->assertSame($expected, $request->toUriWithMethod());
-    }
-
-    /**
-     * @expectedException \BEAR\Resource\Exception\BadRequest
-     */
-    public function testPostInvalidOption()
-    {
-        $request = $this->resource->post->object($this->nop)->withQuery(
-            $this->query
-        )->poe->csrf->invalid_option_cause_exception->request();
-        $expected = "post nop://self/dummy?id=10&name=Ray&age=43";
-        $this->assertSame($expected, $request->toUriWithMethod());
-    }
-
     public function testPut()
     {
         $request = $this->resource->put->object($this->nop)->withQuery($this->query)->request();
@@ -218,11 +199,21 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
     public function testSyncHttp()
     {
-        $response = $this->resource->get->uri(
-            'http://news.google.com/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss'
-        )->sync->request()->get->uri('http://phpspot.org/blog/index.xml')->eager->sync->request()->get->uri(
-                'http://rss.excite.co.jp/rss/excite/odd'
-            )->eager->request();
+        $response = $this
+            ->resource
+            ->get
+            ->uri('http://news.google.com/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss')
+            ->sync
+            ->request()
+            ->get
+            ->uri('http://phpspot.org/blog/index.xml')
+            ->eager
+            ->sync
+            ->request()
+            ->get
+            ->uri('http://rss.excite.co.jp/rss/excite/odd')
+            ->eager
+            ->request();
         $this->assertSame(3, count($response->body));
     }
 

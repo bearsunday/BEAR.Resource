@@ -102,7 +102,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     *
      * @expectedException \Guzzle\Http\Exception\ClientErrorResponseException
      */
     public function test404()
