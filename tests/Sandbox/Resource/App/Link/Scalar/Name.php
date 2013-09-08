@@ -8,6 +8,7 @@ class Name extends AbstractObject
 {
     /**
      * @Link(rel="greeting", href="app://self/link/scalar/hello?name={value}", method="get")
+     * @Link(rel="no_query", href="app://self/link/scalar/hello", method="get")
      */
     public function onGet($name)
     {

@@ -42,7 +42,6 @@ class Post extends AbstractObject
      */
     public function onGet($author_id)
     {
-        var_dump($author_id);
         $posts = $this->select('author_id', $author_id);
         return $posts;
     }

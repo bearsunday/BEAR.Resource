@@ -277,4 +277,17 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->request->ro = $ro;
         $this->linker->invoke($this->request);
     }
+
+    /**
+     * @expectedException \BEAR\Resource\Exception\LinkQuery
+     */
+    public function testInvalidLinkQuery()
+    {
+        $this->request->links = [new LinkType('no_query', LinkType::NEW_LINK)];
+        $this->request->method = 'get';
+        $ro = new Name;
+        $ro->body = [];
+        $this->request->ro = $ro;
+        $this->linker->invoke($this->request);
+    }
 }

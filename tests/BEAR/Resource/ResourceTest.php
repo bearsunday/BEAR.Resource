@@ -345,4 +345,12 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('', $response->body);
         $this->assertSame('123', $response->headers['x-header-test']);
     }
+
+    /**
+     * @expectedException \BEAR\Resource\Exception\BadRequest
+     */
+    public function testInvalidOption()
+    {
+        $this->resource->invalid_xxx;
+    }
 }

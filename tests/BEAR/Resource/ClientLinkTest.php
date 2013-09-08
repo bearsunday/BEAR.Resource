@@ -84,16 +84,4 @@ class ClientLinkTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(isset($result['post'][0]['tag']));
         $this->assertTrue(isset($result['post'][0]['tag'][0]['tag_name']));
     }
-
-    public function testAnnotationLinkCrawlE()
-    {
-        $user = $this
-            ->resource
-            ->get
-            ->uri('app://self/marshal/author')
-            ->withQuery(['id' => 3])
-            ->linkCrawl("tree")
-            ->eager
-            ->request();
-    }
 }
