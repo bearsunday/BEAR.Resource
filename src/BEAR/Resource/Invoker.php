@@ -102,7 +102,7 @@ class Invoker implements InvokerInterface
     /**
      * {@inheritDoc}
      */
-    public function invoke(Request $request)    
+    public function invoke(Request $request)
     {
         $onMethod = 'on' . ucfirst($request->method);
         if (method_exists($request->ro, $onMethod) !== true) {

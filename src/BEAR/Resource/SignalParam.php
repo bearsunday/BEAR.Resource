@@ -61,6 +61,7 @@ class SignalParam implements SignalParamsInterface
      */
     public function attachParamProvider($varName, ParamProviderInterface $provider)
     {
+        /** @noinspection PhpParamsInspection */
         $this->signal->handler('*', $varName, $provider);
     }
 }

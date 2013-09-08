@@ -27,13 +27,6 @@ use Ray\Di\Di\Inject;
 final class Linker implements LinkerInterface
 {
     /**
-     * Method name
-     *
-     * @var string
-     */
-    private $method;
-
-    /**
      * Resource client
      *
      * @var ResourceInterface
@@ -55,8 +48,8 @@ final class Linker implements LinkerInterface
     public function __construct(
         Reader $reader,
         Cache $cache = null,
-        UriTemplateInterface $uriTemplate = null)
-    {
+        UriTemplateInterface $uriTemplate = null
+    ) {
         $this->reader = $reader;
         $this->cache = $cache ?: new ArrayCache;
         $this->uriTemplate = $uriTemplate ?: new UriTemplate;
@@ -143,12 +136,11 @@ final class Linker implements LinkerInterface
      * @param AbstractObject $current
      *
      * @return AbstractObject
-     * @throws Exception\Link
+     * @throws Exception\LinkRel
      */
     private function annotationRel(array $annotations, LinkType $link, AbstractObject $current)
     {
-        foreach($annotations as $annotation)
-        {
+        foreach ($annotations as $annotation) {
             /* @var $annotation Annotation\Link */
             if ($annotation->rel !== $link->key) {
                 continue;
@@ -180,8 +172,7 @@ final class Linker implements LinkerInterface
         $isList = $this->isList($current->body);
         $bodyList = $isList ? $current->body : [ $current->body];
         foreach ($bodyList as &$body) {
-            foreach($annotations as $annotation)
-            {
+            foreach ($annotations as $annotation) {
                 /* @var $annotation Annotation\Link */
                 if ($annotation->crawl !== $link->key) {
                     continue;

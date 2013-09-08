@@ -55,5 +55,4 @@ final class LinkType
         $this->key = $key;
         $this->type = $type;
     }
-
 }

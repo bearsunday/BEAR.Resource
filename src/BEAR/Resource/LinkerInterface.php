@@ -6,7 +6,6 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\AbstractObject as ResourceObject;
 use Ray\Di\Di\ImplementedBy;
 
 /**
