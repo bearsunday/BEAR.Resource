@@ -275,10 +275,34 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(100, $result->a);
     }
 
-    public function testDocsSample01RestBucks()
+    public function testDocsSample00min()
     {
         ob_start();
-        require dirname(dirname(dirname(__DIR__))) . '/docs/sample/Restbucks/order.php';
+        require dirname(dirname(dirname(__DIR__))) . '/docs/sample/00.min/main.php';
+        $response = ob_get_clean();
+        $this->assertContains('[name] => Aramis', $response);
+    }
+
+//    public function testDocsSample01basic()
+//    {
+//        ob_start();
+//        require dirname(dirname(dirname(__DIR__))) . '/docs/sample/01.basic/main.php ';
+//        $response = ob_get_clean();
+//        $this->assertContains('[name] => Aramis', $response);
+//    }
+//
+//    public function testDocsSample02basic()
+//    {
+//        ob_start();
+//        require dirname(dirname(dirname(__DIR__))) . '/docs/sample/01.basic/main.php ';
+//        $response = ob_get_clean();
+//        $this->assertContains('[name] => Aramis', $response);
+//    }
+
+    public function testDocsSampleRestBucks()
+    {
+        ob_start();
+        require dirname(dirname(dirname(__DIR__))) . '/docs/sample/Restbucks/main.php';
         $response = ob_get_clean();
         $this->assertContains('201: Created', $response);
         $this->assertContains('Order: Success', $response);

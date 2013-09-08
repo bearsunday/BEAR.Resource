@@ -19,14 +19,20 @@ chdir(dirname(dirname(dirname(__DIR__))));
 require __DIR__ . '/src.php';
 $resource = require 'scripts/instance.php';
 
-$injector = Injector::create();
-$scheme = new SchemeCollection;
-$scheme->scheme('app')->host('self')->toAdapter(new App($injector, 'Restbucks', 'Resource\App'));
+$scheme = (new SchemeCollection)
+          ->scheme('app')
+          ->host('self')
+          ->toAdapter(new App(Injector::create(), 'Restbucks', 'Resource\App'));
 $resource->setSchemeCollection($scheme);
 
 // order latte.
 $orderDrink = ['drink' => 'latte'];
-$order = $resource->post->uri('app://self/Order')->withQuery($orderDrink)->eager->request();
+$order = $resource
+             ->post
+             ->uri('app://self/Order')
+             ->withQuery($orderDrink)
+             ->eager
+             ->request();
 
 // get payment uri with hyperlink.
 $a = new A(new UriTemplate);
@@ -39,7 +45,12 @@ $payment = [
 ];
 
 // request payment
-$response = $resource->put->uri($paymentUri)->addQuery($payment)->eager->request();
+$response = $resource
+                ->put
+                ->uri($paymentUri)
+                ->addQuery($payment)
+                ->eager
+                ->request();
 
 // payment done, enjoy coffee !
 $code = new Code;

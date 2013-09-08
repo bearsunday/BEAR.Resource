@@ -5,15 +5,13 @@ use BEAR\Resource\ObjectInterface as ResourceObject;
 use BEAR\Resource\AbstractObject;
 use BEAR\Resource\Annotation\Link;
 
-/** @noinspection PhpUndefinedClassInspection */
 class Author extends AbstractObject implements ResourceObject
 {
 
     protected $users = [
-        ['id' => 0, 'name' => 'Athos'],
-        ['id' => 1, 'name' => 'Aramis'],
-        ['id' => 2, 'name' => 'Porthos'],
-        ['name' => 'Koriym']
+        ['id' => 1, 'name' => 'Athos'],
+        ['id' => 2, 'name' => 'Aramis'],
+        ['id' => 3, 'name' => 'Porthos']
     ];
 
     /**

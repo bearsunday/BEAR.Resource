@@ -2,10 +2,7 @@
 
 namespace Restbucks\Resource\App;
 
-use BEAR\Resource\ObjectInterface as ResourceObject,
-    BEAR\Resource\AbstractObject,
-    BEAR\Resource\Resource,
-    BEAR\Resource\Uri;
+use BEAR\Resource\AbstractObject;
 use Ray\Di\Di\Scope;
 
 /**
@@ -20,11 +17,6 @@ class Order extends AbstractObject
         return $this->orders[$id];
     }
 
-    /**
-     * Post
-     *
-     * @param string $drink
-     */
     public function onPost($drink)
     {
         // data store here

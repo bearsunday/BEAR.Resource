@@ -17,3 +17,16 @@ print_r($result->headers) . PHP_EOL;
 
 print 'body:' . PHP_EOL;
 print_r($result->body) . PHP_EOL;
+
+//    code:200
+//    headers:
+//    Array
+//    (
+//    )
+//    body:
+//    Array
+//    (
+//        [name] => Aramis
+//        [age] => 16
+//        [blog_id] => 1
+//    )

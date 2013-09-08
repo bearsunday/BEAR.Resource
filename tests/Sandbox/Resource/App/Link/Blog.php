@@ -15,8 +15,8 @@ class Blog extends AbstractObject
      *
      * @return array
      */
-    public function onGet($blog_id)
+    public function onGet($id)
     {
-        return $this->repo[$blog_id];
+        return $this->repo[$id];
     }
 }

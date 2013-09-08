@@ -2,12 +2,10 @@
 
 namespace Restbucks\Resource\App;
 
-use BEAR\Resource\ObjectInterface as ResourceObject,
-    BEAR\Resource\AbstractObject,
-    BEAR\Resource\Resource,
-    BEAR\Resource\Uri;
-use BEAR\Resource\Annotation\Link;
+use BEAR\Resource\AbstractObject;
+use BEAR\Resource\Uri;
 use Ray\Di\Di\Scope;
+use BEAR\Resource\Annotation\Link;
 
 /**
  * Order
@@ -34,7 +32,7 @@ class Menu extends AbstractObject
      *
      * @return \testworld\ResourceObject\RestBucks\Menu
      *
-     * @Link(rel="order", href="app://self/Order?drink={dring}")
+     * @Link(rel="order", href="app://self/Order?drink={drink}")
      */
     public function onGet($drink = null)
     {

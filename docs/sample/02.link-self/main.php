@@ -6,21 +6,28 @@ use Ray\Di\Injector;
 
 main: {
     $resource = require __DIR__ . '/scripts/instance.php';
-    $result = $resource
+    list($user, $blog) = $resource
         ->get
         ->uri('app://self/user')
-        ->withQuery(['id' => 1])
+        ->withQuery(['id' => 0])
+        ->linkNew('blog')
         ->eager
         ->request();
     /* @var $result \BEAR\Resource|AbstractObject */
 }
 
 output: {
-    print "code:{$result->code}" . PHP_EOL;
-
-    print 'headers:' . PHP_EOL;
-    print_r($result->headers) . PHP_EOL;
-
-    print 'body:' . PHP_EOL;
-    print_r($result->body) . PHP_EOL;
+    print_r($user) . PHP_EOL;
+    print_r($blog) . PHP_EOL;
 }
+
+//    Array
+//    (
+//        [name] => Athos
+//        [age] => 15
+//        [blog_id] => 0
+//    )
+//    Array
+//    (
+//        [name] => Athos blog
+//    )

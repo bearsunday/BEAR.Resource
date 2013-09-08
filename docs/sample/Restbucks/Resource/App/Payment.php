@@ -2,9 +2,7 @@
 
 namespace Restbucks\Resource\App;
 
-use BEAR\Resource\ObjectInterface as ResourceObject,
-    BEAR\Resource\AbstractObject,
-    BEAR\Resource\Resource;
+use BEAR\Resource\AbstractObject;
 
 class Payment extends AbstractObject
 {

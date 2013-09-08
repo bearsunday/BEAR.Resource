@@ -13,7 +13,7 @@ $loader->add('', dirname(__DIR__));
 
 $resource = require dirname(dirname(dirname(dirname(__DIR__)))) . '/scripts/instance.php';
 /* @var $resource \BEAR\Resource\Resource */
-$scheme = (new SchemeCollection)->scheme('app')->host('self')->toAdapter(new App(Injector::create(), 'Sandbox', 'Resource'));
+$scheme = (new SchemeCollection)->scheme('app')->host('self')->toAdapter(new App(Injector::create(), 'Sandbox', 'Resource\App'));
 $resource->setSchemeCollection($scheme);
 /* @var $resource \BEAR\Resource\Resource */
 return $resource;
