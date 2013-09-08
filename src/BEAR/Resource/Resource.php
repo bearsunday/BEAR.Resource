@@ -160,7 +160,7 @@ class Resource implements ResourceInterface
             if (!$this->request) {
                 throw new Exception\BadRequest('Request method (get/put/post/delete/options) required before uri()');
             }
-            if (!preg_match('|^[a-z]+?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i', $uri)) {
+            if (filter_var($uri, FILTER_VALIDATE_URL) === false) {
                 throw new Exception\Uri($uri);
             }
             // uri with query parsed
