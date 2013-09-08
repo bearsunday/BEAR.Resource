@@ -154,9 +154,9 @@ final class Linker implements LinkerInterface
                     ->eager
                     ->request();
                 /* @var $linkedResource AbstractObject */
-            } catch (Exception\Parameter $e){
+            } catch (Exception\Parameter $e) {
                 $msg = 'class:' . get_class($current) . " link:{$link->key} query:" . json_encode($current->body);
-                throw new Exception\LinkQuery($msg, 0 , $e);
+                throw new Exception\LinkQuery($msg, 0, $e);
             }
             return $linkedResource;
         }
