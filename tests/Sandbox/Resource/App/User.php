@@ -2,9 +2,7 @@
 
 namespace Sandbox\Resource\App;
 
-use BEAR\Resource\ObjectInterface as ResourceObject;
 use BEAR\Resource\AbstractObject;
-use BEAR\Resource\ResourceInterface;
 
 use BEAR\Resource\Annotation\Provides;
 use BEAR\Resource\Annotation\ParamSignal;

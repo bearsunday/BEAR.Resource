@@ -263,7 +263,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $ro = new Name;
         $ro->body = $ro->onGet('koriym');
         $this->request->ro = $ro;
-        $result = $this->linker->invoke($this->request);
+        $this->linker->invoke($this->request);
     }
     /**
      * @expectedException \BEAR\Resource\Exception\LinkRel
