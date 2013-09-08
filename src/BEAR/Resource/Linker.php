@@ -145,11 +145,11 @@ final class Linker implements LinkerInterface
             if ($annotation->rel !== $link->key) {
                 continue;
             }
+            $uri = $this->uriTemplate->expand($annotation->href, $current->body);
             $linkedResource = $this
                 ->resource
                 ->{$annotation->method}
-                ->uri($annotation->href)
-                ->withQuery($current->body)
+                ->uri($uri)
                 ->eager
                 ->request();
             /* @var $linkedResource AbstractObject */
