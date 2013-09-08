@@ -146,13 +146,18 @@ final class Linker implements LinkerInterface
                 continue;
             }
             $uri = $this->uriTemplate->expand($annotation->href, $current->body);
-            $linkedResource = $this
-                ->resource
-                ->{$annotation->method}
-                ->uri($uri)
-                ->eager
-                ->request();
-            /* @var $linkedResource AbstractObject */
+            try {
+                $linkedResource = $this
+                    ->resource
+                    ->{$annotation->method}
+                    ->uri($uri)
+                    ->eager
+                    ->request();
+                /* @var $linkedResource AbstractObject */
+            } catch (Exception\Parameter $e){
+                $msg = 'class:' . get_class($current) . " link:{$link->key} query:" . json_encode($current->body);
+                throw new Exception\LinkQuery($msg, 0 , $e);
+            }
             return $linkedResource;
         }
         throw new Exception\LinkRel("[{$link->key}] in " . get_class($current) . ' is not available.');
