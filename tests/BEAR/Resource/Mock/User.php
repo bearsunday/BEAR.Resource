@@ -4,6 +4,7 @@ namespace BEAR\Resource\Mock;
 
 use BEAR\Resource\ResourceObject;
 use BEAR\Resource;
+use BEAR\Resource\Annotation\Link;
 
 class User extends ResourceObject
 {
@@ -18,9 +19,8 @@ class User extends ResourceObject
     ];
 
     /**
-     * @param id
-     *
-     * @return array
+     * @Link(rel="friend",  href="app://self/friend/{?id}")
+     * @Link(rel="profile", href="app://self/profile{?id}")
      */
     public function onGet($id)
     {

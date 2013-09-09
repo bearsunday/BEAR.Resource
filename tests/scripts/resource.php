@@ -14,6 +14,7 @@ use Ray\Di\Container;
 use Ray\Di\Injector;
 use Ray\Di\EmptyModule;
 use Doctrine\Common\Annotations\AnnotationReader;
+use Guzzle\Parser\UriTemplate\UriTemplate;
 
 $injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition, new AnnotationReader)))), new EmptyModule);
 $scheme = new SchemeCollection;
@@ -33,6 +34,12 @@ $invoker = new Invoker(
     ),
     new Logger
 );
-$resource = new Resource($factory, $invoker, new Request($invoker));
+
+$resource = new Resource(
+    $factory,
+    $invoker,
+    new Request($invoker),
+    new Anchor(new UriTemplate, new AnnotationReader, new Request($invoker))
+);
 
 return $resource;

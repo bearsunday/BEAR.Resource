@@ -64,6 +64,11 @@ class Resource implements ResourceInterface
     private $appName = '';
 
     /**
+     * @var Anchor
+     */
+    private $anchor;
+
+    /**
      * @param $appName
      *
      * @Inject(optional = true)
@@ -107,13 +112,18 @@ class Resource implements ResourceInterface
      *
      * @Inject
      */
-    public function __construct(Factory $factory, InvokerInterface $invoker, Request $request)
-    {
+    public function __construct(
+        Factory $factory,
+        InvokerInterface $invoker,
+        Request $request,
+        Anchor $anchor
+    ) {
         $this->factory = $factory;
         $this->invoker = $invoker;
         $this->newRequest = $request;
         $this->requests = new SplObjectStorage;
         $this->invoker->setResourceClient($this);
+        $this->anchor = $anchor;
     }
 
     /**
@@ -250,6 +260,14 @@ class Resource implements ResourceInterface
         }
 
         return $this->invoke();
+    }
+
+    public function href($rel, array $query = [])
+    {
+        list($method, $uri) = $this->anchor->href($rel, $this->request, $query);
+        $linkedResource = $this->{$method}->uri($uri)->eager->request();
+
+        return $linkedResource;
     }
 
     /**

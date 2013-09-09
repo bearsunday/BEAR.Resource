@@ -6,8 +6,9 @@ use BEAR\Resource\ResourceObject;
 class Blog extends ResourceObject
 {
     private $repo = array(
-        11 => array('name' => "Athos blog"),
-        12 => array('name' => "Aramis blog")
+        11 => ['name' => "Athos blog"],
+        12 => ['name' => "Aramis blog"],
+        99 => ['name' => "BEAR blog"],
     );
 
     /**

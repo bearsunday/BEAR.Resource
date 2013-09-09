@@ -26,7 +26,8 @@ $invoker = new Invoker(
 $resource = new Resource(
     new Factory(new SchemeCollection),
     $invoker,
-    new Request($invoker)
+    new Request($invoker),
+    new Anchor(new UriTemplate, new AnnotationReader, new Request($invoker))
 );
 
 return $resource;

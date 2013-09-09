@@ -99,4 +99,14 @@ interface ResourceInterface
      * @return self
      */
     public function attachParamProvider($varName, ParamProviderInterface $provider);
+
+    /**
+     * Hyper reference (Hypertext As The Engine Of Application State)
+     *
+     * @param string $rel
+     * @param array  $query
+     *
+     * @return mixed
+     */
+    public function href($rel, array $query = []);
 }

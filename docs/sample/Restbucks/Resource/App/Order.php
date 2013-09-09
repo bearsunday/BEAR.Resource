@@ -4,6 +4,7 @@ namespace Restbucks\Resource\App;
 
 use BEAR\Resource\ResourceObject;
 use Ray\Di\Di\Scope;
+use BEAR\Resource\Annotation\Link;
 
 /**
  * Order
@@ -17,6 +18,11 @@ class Order extends ResourceObject
         return $this->orders[$id];
     }
 
+    /**
+     * @param $drink
+     *
+     * @Link(rel="payment", href="app://self/payment{?order_id, credit_card_number, expires, name, amount}", method="put")
+     */
     public function onPost($drink)
     {
         // data store here

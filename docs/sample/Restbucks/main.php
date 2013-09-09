@@ -26,17 +26,13 @@ $scheme = (new SchemeCollection)
 $resource->setSchemeCollection($scheme);
 
 // order latte.
-$orderDrink = ['drink' => 'latte'];
 $order = $resource
-             ->post
-             ->uri('app://self/Order')
-             ->withQuery($orderDrink)
-             ->eager
-             ->request();
+    ->post
+    ->uri('app://self/order')
+    ->withQuery(['drink' => 'latte'])
+    ->eager
+    ->request();
 
-// get payment uri with hyperlink.
-$a = new A(new UriTemplate);
-$paymentUri = $a->href('payment', $order);
 $payment = [
     'credit_card_number' => '123456789',
     'expires' => '07/07',
@@ -44,13 +40,7 @@ $payment = [
     'amount' => '4.00'
 ];
 
-// request payment
-$response = $resource
-                ->put
-                ->uri($paymentUri)
-                ->addQuery($payment)
-                ->eager
-                ->request();
+$response = $resource->href('payment', $payment);
 
 // payment done, enjoy coffee !
 $code = new Code;

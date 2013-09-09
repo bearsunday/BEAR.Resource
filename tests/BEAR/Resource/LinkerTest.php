@@ -6,6 +6,7 @@ use Aura\Signal\Manager;
 use Aura\Signal\HandlerFactory;
 use Aura\Signal\ResultFactory;
 use Aura\Signal\ResultCollection;
+use Guzzle\Parser\UriTemplate\UriTemplate;
 use Ray\Di\Definition;
 use Ray\Di\Annotation;
 use Ray\Di\Config;
@@ -48,7 +49,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
             ->toAdapter(new Adapter\App($injector, 'Sandbox', 'Resource\App')
             );
         $factory = new Factory($scheme);
-        $this->resource = new Resource($factory, $invoker, new Request($invoker));
+        $this->resource = new Resource($factory, $invoker, new Request($invoker), new Anchor(new UriTemplate, new Reader, $this->request));
     }
 
     public function testNew()
