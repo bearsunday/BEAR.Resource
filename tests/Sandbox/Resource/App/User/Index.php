@@ -2,9 +2,9 @@
 
 namespace Sandbox\Resource\App\User;
 
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 
-class Index extends AbstractObject
+class Index extends ResourceObject
 {
     public $class = __CLASS__;
 }

@@ -2,7 +2,7 @@
 
 namespace Sandbox\Resource\App\RestBucks;
 
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Uri;
 use BEAR\Resource\Annotation\Link;
 use Ray\Di\Di\Scope;
@@ -12,7 +12,7 @@ use Ray\Di\Di\Scope;
  *
  * @Scope("singleton")
  */
-class Menu extends AbstractObject
+class Menu extends ResourceObject
 {
     private $menu = [];
 

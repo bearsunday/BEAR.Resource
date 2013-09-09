@@ -2,7 +2,7 @@
 
 namespace Restbucks\Resource\App;
 
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Uri;
 use Ray\Di\Di\Scope;
 use BEAR\Resource\Annotation\Link;
@@ -12,7 +12,7 @@ use BEAR\Resource\Annotation\Link;
  *
  * @Scope("singleton")
  */
-class Menu extends AbstractObject
+class Menu extends ResourceObject
 {
 
     private $menu = array();

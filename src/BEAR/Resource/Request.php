@@ -41,7 +41,7 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
     /**
      * Resource object
      *
-     * @var \BEAR\Resource\AbstractObject
+     * @var \BEAR\Resource\ResourceObject
      */
     public $ro;
 
@@ -100,12 +100,12 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
     /**
      * Set
      *
-     * @param AbstractObject $ro
+     * @param ResourceObject $ro
      * @param string         $uri
      * @param string         $method
      * @param array          $query
      */
-    public function set(AbstractObject $ro, $uri, $method, array $query)
+    public function set(ResourceObject $ro, $uri, $method, array $query)
     {
         $this->ro = $ro;
         $this->uri = $uri;

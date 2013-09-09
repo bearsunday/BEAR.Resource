@@ -1,10 +1,10 @@
 <?php
 namespace Sandbox\Resource\App\Marshal;
 
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Annotation\Link;
 
-class Meta extends AbstractObject
+class Meta extends ResourceObject
 {
     use SelectTrait;
 

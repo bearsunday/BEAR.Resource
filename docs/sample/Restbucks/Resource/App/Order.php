@@ -2,13 +2,13 @@
 
 namespace Restbucks\Resource\App;
 
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 use Ray\Di\Di\Scope;
 
 /**
  * Order
  */
-class Order extends AbstractObject
+class Order extends ResourceObject
 {
     private $orders = [];
 

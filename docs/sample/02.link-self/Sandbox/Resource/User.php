@@ -2,10 +2,10 @@
 
 namespace Sandbox\Resource;
 
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Annotation\Link;
 
-class User extends AbstractObject
+class User extends ResourceObject
 {
     private $users = [
         ['name' => 'Athos', 'age' => 15, 'blog_id' => 0],

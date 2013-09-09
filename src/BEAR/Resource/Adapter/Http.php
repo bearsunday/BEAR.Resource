@@ -6,7 +6,6 @@
  */
 namespace BEAR\Resource\Adapter;
 
-use BEAR\Resource\ObjectInterface;
 use BEAR\Resource\ProviderInterface;
 use BEAR\Resource\Adapter\Http\Guzzle;
 use Guzzle\Service\Client as GuzzleClient;
@@ -17,7 +16,7 @@ use Guzzle\Service\Client as GuzzleClient;
  *
  * @Scope("singleton")
  */
-class Http implements ObjectInterface, ProviderInterface, AdapterInterface
+class Http implements ProviderInterface, AdapterInterface
 {
     public function __construct()
     {

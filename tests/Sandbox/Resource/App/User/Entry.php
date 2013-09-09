@@ -2,11 +2,10 @@
 
 namespace Sandbox\Resource\App\User;
 
-use BEAR\Resource\ObjectInterface as ResourceObject;
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 use BEAR\Resource\ResourceInterface;
 
-class Entry extends AbstractObject
+class Entry extends ResourceObject
 {
 
     /**

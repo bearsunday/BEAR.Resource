@@ -2,9 +2,9 @@
 
 namespace Restbucks\Resource\App;
 
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 
-class Payment extends AbstractObject
+class Payment extends ResourceObject
 {
     /**
      * @param id

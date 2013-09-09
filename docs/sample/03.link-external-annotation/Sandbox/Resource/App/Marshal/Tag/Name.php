@@ -1,11 +1,11 @@
 <?php
 namespace Sandbox\Resource\App\Marshal\Tag;
 
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 use Sandbox\Resource\App\Marshal\SelectTrait;
 use BEAR\Resource\Annotation\Link;
 
-class Name extends AbstractObject
+class Name extends ResourceObject
 {
     use SelectTrait;
 

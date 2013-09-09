@@ -4,7 +4,7 @@
  */
 namespace BEAR\Resource\Adapter\Http;
 
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 use BEAR\Resource\ObjectInterface;
 use BEAR\Resource\Request;
 use Guzzle\Cache\DoctrineCacheAdapter;
@@ -21,7 +21,7 @@ use Ray\Di\Di\Scope;
  *
  * @Scope("singleton")
  */
-class Guzzle extends AbstractObject implements ObjectInterface, HttpClientInterface
+class Guzzle extends ResourceObject implements HttpClientInterface
 {
     /**
      * HTTP Response

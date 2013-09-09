@@ -253,7 +253,7 @@ class Resource implements ResourceInterface
     }
 
     /**
-     * @return AbstractObject|mixed
+     * @return ResourceObject|mixed
      */
     private function invoke()
     {

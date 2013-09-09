@@ -2,7 +2,7 @@
 
 namespace Sandbox\Resource\App\Factory;
 
-use BEAR\Resource\AbstractObject as Ro;
+use BEAR\Resource\ResourceObject as Ro;
 
 class News extends Ro
 {

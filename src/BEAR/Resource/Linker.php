@@ -6,7 +6,6 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\AbstractObject as ResourceObject;
 use BEAR\Resource\Exception;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Cache\ArrayCache;
@@ -83,14 +82,14 @@ final class Linker implements LinkerInterface
      * How next linked resource treated (add ? replace ?)
      *
      * @param LinkType       $link
-     * @param AbstractObject $ro
+     * @param ResourceObject $ro
      * @param $nextResource
      *
-     * @return AbstractObject
+     * @return ResourceObject
      */
     private function nextLink(LinkType $link, ResourceObject $ro, $nextResource)
     {
-        $nextBody = $nextResource instanceof AbstractObject ? $nextResource->body : $nextResource;
+        $nextBody = $nextResource instanceof ResourceObject ? $nextResource->body : $nextResource;
 
         if ($link->type === LinkType::SELF_LINK) {
             $ro->body = $nextBody;
@@ -109,10 +108,10 @@ final class Linker implements LinkerInterface
      * Annotation link
      *
      * @param LinkType       $link
-     * @param AbstractObject $current
+     * @param ResourceObject $current
      * @param Request        $request
      *
-     * @return AbstractObject|mixed
+     * @return ResourceObject|mixed
      * @throws Exception\LinkQuery
      */
     private function annotationLink(LinkType $link, ResourceObject $current, Request $request)
@@ -133,12 +132,12 @@ final class Linker implements LinkerInterface
      *
      * @param array          $annotations
      * @param LinkType       $link
-     * @param AbstractObject $current
+     * @param ResourceObject $current
      *
-     * @return AbstractObject
+     * @return ResourceObject
      * @throws Exception\LinkRel
      */
-    private function annotationRel(array $annotations, LinkType $link, AbstractObject $current)
+    private function annotationRel(array $annotations, LinkType $link, ResourceObject $current)
     {
         foreach ($annotations as $annotation) {
             /* @var $annotation Annotation\Link */
@@ -153,7 +152,7 @@ final class Linker implements LinkerInterface
                     ->uri($uri)
                     ->eager
                     ->request();
-                /* @var $linkedResource AbstractObject */
+                /* @var $linkedResource ResourceObject */
             } catch (Exception\Parameter $e) {
                 $msg = 'class:' . get_class($current) . " link:{$link->key} query:" . json_encode($current->body);
                 throw new Exception\LinkQuery($msg, 0, $e);
@@ -168,11 +167,11 @@ final class Linker implements LinkerInterface
      *
      * @param array          $annotations
      * @param LinkType       $link
-     * @param AbstractObject $current
+     * @param ResourceObject $current
      *
-     * @return AbstractObject
+     * @return ResourceObject
      */
-    private function annotationCrawl(array $annotations, LinkType $link, AbstractObject $current)
+    private function annotationCrawl(array $annotations, LinkType $link, ResourceObject $current)
     {
         $isList = $this->isList($current->body);
         $bodyList = $isList ? $current->body : [ $current->body];
@@ -195,7 +194,7 @@ final class Linker implements LinkerInterface
                     $body[$annotation->rel] =$this->cache->fetch($hash);
                     continue;
                 }
-                /* @var $linkedResource AbstractObject */
+                /* @var $linkedResource ResourceObject */
                 $body[$annotation->rel] = $request()->body;
                 $this->cache->save($hash, $body[$annotation->rel]);
             }

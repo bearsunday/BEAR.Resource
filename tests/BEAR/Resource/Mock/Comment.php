@@ -2,10 +2,10 @@
 
 namespace BEAR\Resource\Mock;
 
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Annotation\Provides;
 
-class Comment extends AbstractObject
+class Comment extends ResourceObject
 {
     /**
      * @param id

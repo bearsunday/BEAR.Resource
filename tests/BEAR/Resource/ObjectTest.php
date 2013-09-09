@@ -10,7 +10,7 @@ use BEAR\Resource\Renderer\TestRenderer;
 class ObjectTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var AbstractObject
+     * @var ResourceObject
      */
     protected $resource;
 

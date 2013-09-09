@@ -66,7 +66,7 @@ Service Code
 ### Order
 ```php
 <?php
-class Order extends AbstractObject
+class Order extends ResourceObject
 {
     private $orders = [];
 
@@ -102,7 +102,7 @@ class Order extends AbstractObject
 
 ```php
 <?php
-class Payment extends AbstractObject
+class Payment extends ResourceObject
 {
     /**
      * @param id

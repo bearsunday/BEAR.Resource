@@ -6,7 +6,6 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\AbstractObject as ResourceObject;
 use BEAR\Resource\Exception\MethodNotAllowed;
 use Ray\Aop\ReflectiveMethodInvocation;
 use Ray\Di\Di\Scope;
@@ -111,7 +110,7 @@ class Invoker implements InvokerInterface
         // invoke with Named param and Signal param
         $result = $this->params->invoke(new ReflectiveMethodInvocation([$request->ro, $onMethod], $request->query));
 
-        if (!$result instanceof AbstractObject) {
+        if (!$result instanceof ResourceObject) {
             $request->ro->body = $result;
             $result = $request->ro;
         }
@@ -203,14 +202,14 @@ class Invoker implements InvokerInterface
     }
 
     /**
-     * @param AbstractObject $ro
+     * @param ResourceObject $ro
      * @param Request        $request
      * @param                $method
      *
-     * @return AbstractObject
+     * @return ResourceObject
      * @throws Exception\MethodNotAllowed
      */
-    private function methodNotExists(AbstractObject $ro, Request $request, $method)
+    private function methodNotExists(ResourceObject $ro, Request $request, $method)
     {
         if ($request->method === self::OPTIONS) {
             return $this->onOptions($ro);
@@ -223,11 +222,11 @@ class Invoker implements InvokerInterface
     }
 
     /**
-     * @param AbstractObject $ro resource object
+     * @param ResourceObject $ro resource object
      *
-     * @return AbstractObject
+     * @return ResourceObject
      */
-    private function onOptions(AbstractObject $ro)
+    private function onOptions(ResourceObject $ro)
     {
         $options = $this->getOptions($ro);
         $ro->headers['allow'] = $options['allow'];
@@ -240,7 +239,7 @@ class Invoker implements InvokerInterface
     /**
      * @param Request $request
      *
-     * @return AbstractObject
+     * @return ResourceObject
      */
     private function onHead(Request $request)
     {

@@ -2,14 +2,14 @@
 
 namespace Sandbox\Resource\App;
 
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 
 use BEAR\Resource\Annotation\Provides;
 use BEAR\Resource\Annotation\ParamSignal;
 
 use Ray\Di\Di\Scope;
 
-class User extends AbstractObject
+class User extends ResourceObject
 {
     public $headers = [
         'x-header-test' => '123'

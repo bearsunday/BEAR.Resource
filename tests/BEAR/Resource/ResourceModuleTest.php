@@ -2,9 +2,9 @@
 
 namespace Sandbox\Resource\Page {
 
-    use BEAR\Resource\AbstractObject;
+    use BEAR\Resource\ResourceObject;
 
-    class Index extends AbstractObject
+    class Index extends ResourceObject
     {
         public $name;
 
@@ -18,9 +18,9 @@ namespace Sandbox\Resource\Page {
 
 namespace Another\Resource\Page {
 
-    use BEAR\Resource\AbstractObject;
+    use BEAR\Resource\ResourceObject;
 
-    class Index extends AbstractObject
+    class Index extends ResourceObject
     {
         public function onGet()
         {

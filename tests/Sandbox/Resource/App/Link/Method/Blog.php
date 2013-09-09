@@ -1,9 +1,9 @@
 <?php
 namespace Sandbox\Resource\App\Link;
 
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 
-class Blog extends AbstractObject
+class Blog extends ResourceObject
 {
     private $repo = array(
         11 => array('name' => "Athos blog"),

@@ -2,10 +2,10 @@
 
 namespace BEAR\Resource\Mock;
 
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 use BEAR\Resource;
 
-class User extends AbstractObject
+class User extends ResourceObject
 {
     public $links = [
         'friend' => [Resource\Link::HREF => 'app://self/friend/{?id}', Resource\Link::TEMPLATED => true],

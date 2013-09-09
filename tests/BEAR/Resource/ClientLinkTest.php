@@ -26,7 +26,7 @@ class ClientLinkTest extends \PHPUnit_Framework_TestCase
 
     public function testNew()
     {
-        $this->assertInstanceOf('\BEAR\Resource\ObjectInterface', $this->user);
+        $this->assertInstanceOf('\BEAR\Resource\ResourceObject', $this->user);
     }
 
     public function testAnnotationLinkSelf()

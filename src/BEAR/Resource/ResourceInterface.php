@@ -25,7 +25,7 @@ interface ResourceInterface
      *
      * @param mixed $ro
      *
-     * @return AbstractObject
+     * @return ResourceObject
      */
     public function object($ro);
 
@@ -59,7 +59,7 @@ interface ResourceInterface
     /**
      * Return Request
      *
-     * @return Request | AbstractObject
+     * @return Request | ResourceObject
      */
     public function request();
 

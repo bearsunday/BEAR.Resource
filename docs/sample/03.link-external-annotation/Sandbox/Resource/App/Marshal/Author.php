@@ -1,11 +1,10 @@
 <?php
 namespace Sandbox\Resource\App\Marshal;
 
-use BEAR\Resource\ObjectInterface as ResourceObject;
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Annotation\Link;
 
-class Author extends AbstractObject implements ResourceObject
+class Author extends ResourceObject implements ResourceObject
 {
 
     protected $users = [

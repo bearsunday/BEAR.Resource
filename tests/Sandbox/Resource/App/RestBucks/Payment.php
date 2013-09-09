@@ -2,9 +2,9 @@
 
 namespace Sandbox\Resource\App\RestBucks;
 
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 
-class Payment extends AbstractObject
+class Payment extends ResourceObject
 {
     public function __construct()
     {

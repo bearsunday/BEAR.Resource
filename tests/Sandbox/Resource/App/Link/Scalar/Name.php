@@ -1,10 +1,10 @@
 <?php
 namespace Sandbox\Resource\App\Link\Scalar;
 
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Annotation\Link;
 
-class Name extends AbstractObject
+class Name extends ResourceObject
 {
     /**
      * @Link(rel="greeting", href="app://self/link/scalar/hello?name={value}", method="get")

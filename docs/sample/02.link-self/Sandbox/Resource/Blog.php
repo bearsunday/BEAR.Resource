@@ -2,10 +2,10 @@
 
 namespace Sandbox\Resource;
 
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Annotation\Link;
 
-class Blog extends AbstractObject
+class Blog extends ResourceObject
 {
     protected $users = [
         ['name' => 'Athos blog'],

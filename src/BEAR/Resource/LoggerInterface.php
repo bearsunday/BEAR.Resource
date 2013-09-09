@@ -7,7 +7,6 @@
 namespace BEAR\Resource;
 
 use IteratorAggregate;
-use BEAR\Resource\AbstractObject as ResourceObject;
 
 /**
  * Interface for resource logger

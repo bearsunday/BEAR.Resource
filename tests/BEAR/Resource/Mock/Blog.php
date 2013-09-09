@@ -2,9 +2,9 @@
 
 namespace BEAR\Resource\Mock;
 
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 
-class Blog extends AbstractObject
+class Blog extends ResourceObject
 {
     /**
      * @param id

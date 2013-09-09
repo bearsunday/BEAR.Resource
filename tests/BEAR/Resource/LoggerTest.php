@@ -14,7 +14,7 @@ use Ray\Di\Injector;
 
 class TestWriter implements LogWriterInterface
 {
-    public function write(RequestInterface $req, AbstractObject $result)
+    public function write(RequestInterface $req, ResourceObject $result)
     {
     }
 }

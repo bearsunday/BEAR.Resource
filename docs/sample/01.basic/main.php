@@ -1,7 +1,7 @@
 <?php
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 use Ray\Di\Injector;
 
 main: {
@@ -12,7 +12,7 @@ main: {
         ->withQuery(['id' => 1])
         ->eager
         ->request();
-    /* @var $result \BEAR\Resource|AbstractObject */
+    /* @var $result \BEAR\Resource|ResourceObject */
 }
 
 output: {

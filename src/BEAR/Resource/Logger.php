@@ -11,7 +11,6 @@ use Any\Serializer\Serializer;
 use ArrayIterator;
 use Countable;
 use Ray\Di\Di\Scope;
-use BEAR\Resource\AbstractObject as ResourceObject;
 use Serializable;
 use Ray\Di\Di\Inject;
 

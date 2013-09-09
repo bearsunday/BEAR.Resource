@@ -2,7 +2,7 @@
 
 namespace Sandbox\Resource\App\RestBucks;
 
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Uri;
 use Ray\Di\Di\Scope;
 
@@ -11,7 +11,7 @@ use Ray\Di\Di\Scope;
  *
  * @Scope("singleton")
  */
-class Order extends AbstractObject
+class Order extends ResourceObject
 {
     private $orders = [];
 
