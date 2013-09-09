@@ -29,7 +29,6 @@ namespace Another\Resource\Page {
     }
 }
 
-
 namespace BEAR\Resource {
 
     use BEAR\Resource\Module\ResourceModule;

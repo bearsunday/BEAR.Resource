@@ -11,7 +11,6 @@ use Ray\Di\Definition;
 use Ray\Di\Injector;
 use Doctrine\Common\Annotations\AnnotationReader;
 
-
 class AnchorTest extends \PHPUnit_Framework_TestCase
 {
     /**

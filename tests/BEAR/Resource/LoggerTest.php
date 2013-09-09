@@ -19,9 +19,6 @@ class TestWriter implements LogWriterInterface
     }
 }
 
-/**
- * Test class for BEAR.Resource.
- */
 class LoggerTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -88,7 +85,6 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame(0, count($this->logger));
     }
-
 
     public function testSerialize()
     {

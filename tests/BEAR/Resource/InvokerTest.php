@@ -27,8 +27,11 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
      * @var Invoker
      */
     protected $invoker;
+
+    /**
+     * @var Request
+     */
     protected $request;
-    protected $query;
 
     protected function setUp()
     {

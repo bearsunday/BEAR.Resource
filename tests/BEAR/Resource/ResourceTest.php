@@ -24,9 +24,6 @@ class varProvider implements ParamProviderInterface
     }
 }
 
-/**
- * Test class for BEAR.Resource.
- */
 class ResourceTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -276,6 +273,9 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(100, $result->a);
     }
 
+    /**
+     * @runTestsInSeparateProcesses
+     */
     public function testDocsSample00min()
     {
         ob_start();
@@ -284,26 +284,24 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('[name] => Aramis', $response);
     }
 
-//    public function testDocsSample01basic()
-//    {
-//        ob_start();
-//        require dirname(dirname(dirname(__DIR__))) . '/docs/sample/01.basic/main.php ';
-//        $response = ob_get_clean();
-//        $this->assertContains('[name] => Aramis', $response);
-//    }
-//
-//    public function testDocsSample02basic()
-//    {
-//        ob_start();
-//        require dirname(dirname(dirname(__DIR__))) . '/docs/sample/01.basic/main.php ';
-//        $response = ob_get_clean();
-//        $this->assertContains('[name] => Aramis', $response);
-//    }
+    /**
+     * @runTestsInSeparateProcesses
+     */
+    public function testDocsSample01basic()
+    {
+        ob_start();
+        require dirname(dirname(dirname(__DIR__))) . '/docs/sample/01.basic/main.php';
+        $response = ob_get_clean();
+        $this->assertContains('[name] => Aramis', $response);
+    }
 
+    /**
+     * @runTestsInSeparateProcesses
+     */
     public function testDocsSampleRestBucks()
     {
         ob_start();
-        require dirname(dirname(dirname(__DIR__))) . '/docs/sample/Restbucks/main.php';
+        require dirname(dirname(dirname(__DIR__))) . '/docs/sample/04.restbucks/main.php';
         $response = ob_get_clean();
         $this->assertContains('201: Created', $response);
         $this->assertContains('Order: Success', $response);
@@ -353,5 +351,22 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     public function testInvalidOption()
     {
         $this->resource->invalid_xxx;
+    }
+
+    public function testAddQueryInRequest()
+    {
+        $request = $this->resource->get->object($this->nop)->withQuery($this->query)->request();
+        $request->addQuery(['age' => 45, 'feel' => 'good']);
+        $expected = "get nop://self/dummy?id=10&name=Ray&age=45&feel=good";
+        $result = $request->toUriWithMethod();
+        $this->assertSame($expected, $result);
+    }
+
+    public function testAddQuery()
+    {
+        $request = $this->resource->get->object($this->nop)->withQuery($this->query)->addQuery(['age' => 45, 'feel' => 'good'])->request();
+        $expected = "get nop://self/dummy?id=10&name=Ray&age=45&feel=good";
+        $result = $request->toUriWithMethod();
+        $this->assertSame($expected, $result);
     }
 }

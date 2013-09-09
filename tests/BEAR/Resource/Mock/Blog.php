@@ -8,8 +8,6 @@ class Blog extends ResourceObject
 {
     /**
      * @param id
-     *
-     * @return array
      */
     public function onGet($id)
     {

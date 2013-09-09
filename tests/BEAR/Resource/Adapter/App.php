@@ -10,9 +10,6 @@ use Ray\Di\Definition;
 use Ray\Di\Injector;
 use Sandbox\Resource\App\Link;
 
-/**
- * Test class for BEAR.Resource.
- */
 class PageTest extends \PHPUnit_Framework_TestCase
 {
     protected function setUp()

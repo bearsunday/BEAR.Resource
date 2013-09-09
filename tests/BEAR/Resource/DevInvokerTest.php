@@ -18,12 +18,20 @@ use Sandbox\Resource\App\User;
 
 class DevInvokerTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Signal
+     */
     protected $signal;
 
     /**
      * @var Invoker
      */
-    protected $invoker;
+    private $invoker;
+
+    /**
+     * @var Request
+     */
+    private $request;
 
     protected function setUp()
     {

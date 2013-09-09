@@ -6,9 +6,6 @@ use Ray\Di\Injector;
 use BEAR\Resource\SchemeCollection;
 use BEAR\Resource\Factory;
 
-/**
- * Test class for BEAR.Resource.
- */
 class HttpTest extends \PHPUnit_Framework_TestCase
 {
     const TEST_SERVER = 'http://www.kumasystem.com/';

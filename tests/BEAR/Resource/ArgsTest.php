@@ -4,6 +4,11 @@ namespace BEAR\Resource;
 
 class ArgsTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Args
+     */
+    private $args;
+
     protected function setUp()
     {
         parent::setUp();

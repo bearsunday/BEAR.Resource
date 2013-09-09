@@ -31,6 +31,15 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
      */
     protected $request;
 
+    /**
+     * @var Linker
+     */
+    private $linker;
+
+    /**
+     * @var Resource
+     */
+    private $resource;
 
     protected function setUp()
     {
