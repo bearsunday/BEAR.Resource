@@ -1,16 +1,25 @@
 <?php
 
-namespace Sandbox\Resource\App\Restbucks;
+namespace Restbucks\Resource\App;
 
 use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Uri;
-use BEAR\Resource\Annotation\Link;
 use Ray\Di\Di\Scope;
+use BEAR\Resource\Annotation\Link;
 
+/**
+ * Order
+ *
+ * @Scope("singleton")
+ */
 class Menu extends ResourceObject
 {
-    private $menu = [];
 
+    private $menu = array();
+
+    /**
+     * @param Resource $resource
+     */
     public function __construct()
     {
         $this->menu = ['coffee' => 300, 'latte' => 400];
@@ -21,9 +30,9 @@ class Menu extends ResourceObject
      *
      * @param string $drink
      *
-     * @return \Sandbox\Resource\App\RestBucks\Menu
+     * @return \testworld\ResourceObject\RestBucks\Menu
      *
-     * @Link(rel="order", href="app://self/restbucks/order?drink={drink}", method="")
+     * @Link(rel="order", href="app://self/Order?drink={drink}")
      */
     public function onGet($drink = null)
     {
@@ -32,8 +41,9 @@ class Menu extends ResourceObject
 
             return $this;
         }
-        $this['drink'] = $drink;
-        $this['price'] = $this->menu[$drink];
+        $this->links['order'] = new Uri('app://self/Order', ['drink' => $drink]);
+        $this->body['drink'] = $drink;
+        $this->body['price'] = $this->menu[$drink];
 
         return $this;
     }

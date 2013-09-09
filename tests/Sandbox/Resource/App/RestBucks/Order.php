@@ -27,8 +27,7 @@ class Order extends ResourceObject
     /**
      * Post
      *
-     * @param string $drink
-     * @return $this
+     * @link(link="payment" rel="app://self/restbucks/payment/?order_id={orderId}" method="put")
      */
     public function onPost($drink)
     {
@@ -39,8 +38,8 @@ class Order extends ResourceObject
 
         // created
         $this->code = 201;
-        $this->headers['Location'] = "app://self/RestBucks/Order/?id=$orderId";
-        $this->links['payment'] = new Uri('app://self/RestBucks/Payment', array('order_id' => $orderId));
+        $this->headers['Location'] = "app://self/restbucks/order/?id=$orderId";
+        $this->links['payment'] = new Uri('app://self/restbucks//payment', ['order_id' => $orderId]);
 
         return $this;
     }
