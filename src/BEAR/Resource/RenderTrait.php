@@ -60,7 +60,7 @@ trait RenderTrait
         if (is_scalar($this->body)) {
             return (string)$this->body;
         }
-        error_log('No renderer set for ' . get_class($this)  . ' in ' . __METHOD__);
+        error_log('No renderer bound for \BEAR\Resource\RenderInterface' . get_class($this)  . ' in ' . __METHOD__);
         return '';
     }
 }

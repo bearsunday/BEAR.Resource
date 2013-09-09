@@ -27,6 +27,7 @@ class ResourceModule extends AbstractModule
         $this->bind('BEAR\Resource\HrefInterface')->to('BEAR\Resource\A');
         $this->bind('BEAR\Resource\SignalParamsInterface')->to('BEAR\Resource\SignalParam');
         $this->bind('BEAR\Resource\FactoryInterface')->to('BEAR\Resource\Factory')->in(Scope::SINGLETON);
+        $this->bind('BEAR\Resource\RenderInterface')->to('BEAR\Resource\Renderer\JsonRenderer');
         $this
             ->bind('BEAR\Resource\SchemeCollectionInterface')
             ->toProvider('BEAR\Resource\Module\SchemeCollectionProvider')
