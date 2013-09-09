@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the BEAR.Package package
+ * This file is part of the BEAR.Resource package
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */

@@ -1,12 +1,11 @@
 <?php
 /**
- * This file is part of the BEAR.Package package
+ * This file is part of the BEAR.Resource package
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
 namespace BEAR\Resource\Renderer;
 
-use BEAR\Resource\AbstractObject;
 use BEAR\Resource\RenderInterface;
 use BEAR\Resource\RequestInterface;
 use BEAR\Resource\ResourceObject;
