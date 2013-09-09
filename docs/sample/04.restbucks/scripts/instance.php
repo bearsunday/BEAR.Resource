@@ -15,7 +15,7 @@ AnnotationReader::addGlobalIgnoredName('noinspection'); // for phpStorm
 
 $injector = Injector::create([new ResourceModule]);
 $resource = $injector->getInstance('BEAR\Resource\ResourceInterface');
-$scheme = (new SchemeCollection)->scheme('app')->host('self')->toAdapter(new App($injector, 'Sandbox', 'Resource'));
+$scheme = (new SchemeCollection)->scheme('app')->host('self')->toAdapter(new App($injector, 'Restbucks', 'Resource'));
 $resource->setSchemeCollection($scheme);
 
 /* @var $resource \BEAR\Resource\ResourceInterface */

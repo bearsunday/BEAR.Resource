@@ -1,6 +1,6 @@
 <?php
 
-namespace Restbucks\Resource\App;
+namespace Restbucks\Resource;
 
 use BEAR\Resource\ResourceObject;
 
