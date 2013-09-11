@@ -8,12 +8,7 @@ use Aura\Signal\ResultFactory;
 use Aura\Signal\ResultCollection;
 use Guzzle\Parser\UriTemplate\UriTemplate;
 use Ray\Di\Definition;
-use Ray\Di\Annotation;
-use Ray\Di\Config;
-use Ray\Di\Forge;
-use Ray\Di\Container;
 use Ray\Di\Injector;
-use Ray\Di\EmptyModule;
 
 use BEAR\Resource\Adapter\Nop;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
@@ -49,7 +44,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $signal = new Manager(new HandlerFactory, new ResultFactory, new ResultCollection);
         $params = new NamedParams(new SignalParam($signal, new Param));
         $invoker = new Invoker($this->linker, $params);
-        $injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition, new Reader)))), new EmptyModule);
+        $injector = $GLOBALS['INJECTOR'];
 
         $this->request = new Request($invoker);
         $scheme = (new SchemeCollection)

@@ -45,16 +45,16 @@
         },
         {
             "name": "aura/di",
-            "version": "1.1.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/auraphp/Aura.Di.git",
-                "reference": "b0dc805a7962c81cd80ba6296e29ee0e5aa3224a"
+                "reference": "d2e9fabef6089cf82160fd97d05a69d1b012ba72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/auraphp/Aura.Di/zipball/b0dc805a7962c81cd80ba6296e29ee0e5aa3224a",
-                "reference": "b0dc805a7962c81cd80ba6296e29ee0e5aa3224a",
+                "url": "https://api.github.com/repos/auraphp/Aura.Di/zipball/d2e9fabef6089cf82160fd97d05a69d1b012ba72",
+                "reference": "d2e9fabef6089cf82160fd97d05a69d1b012ba72",
                 "shasum": ""
             },
             "require": {
@@ -89,10 +89,14 @@
                 {
                     "name": "Kenaniah Cerny",
                     "email": "kenaniah@gmail.com"
+                },
+                {
+                    "name": "Piotr Biedruna",
+                    "email": "p.biedruna@gmail.com"
                 }
             ],
             "description": "The Aura DI package provides a dependency injection container system with native support for constructor- and setter-based injection, lazy-loading of services, and inheritable configuration of setters and constructor params.",
-            "homepage": "http://auraphp.github.com/Aura.Di",
+            "homepage": "http://auraphp.com/Aura.Di",
             "keywords": [
                 "container",
                 "dependency injection",
@@ -100,7 +104,7 @@
                 "di",
                 "di container"
             ],
-            "time": "2013-04-07 00:00:00"
+            "time": "2013-09-09 00:00:00"
         },
         {
             "name": "aura/installer-default",
@@ -145,16 +149,16 @@
         },
         {
             "name": "aura/signal",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/auraphp/Aura.Signal.git",
-                "reference": "d2127cfb10db7cdb39b27c8c12955fcf005e4eb5"
+                "reference": "bc9c3a5ee7feb994195f55dbe6921edbabbedcc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/auraphp/Aura.Signal/zipball/d2127cfb10db7cdb39b27c8c12955fcf005e4eb5",
-                "reference": "d2127cfb10db7cdb39b27c8c12955fcf005e4eb5",
+                "url": "https://api.github.com/repos/auraphp/Aura.Signal/zipball/bc9c3a5ee7feb994195f55dbe6921edbabbedcc3",
+                "reference": "bc9c3a5ee7feb994195f55dbe6921edbabbedcc3",
                 "shasum": ""
             },
             "require": {
@@ -189,11 +193,11 @@
                 {
                     "name": "Akihito Koriyama",
                     "email": "akihito.koriyama@gmail.com",
-                    "role": "Developer"
+                    "role": "Lead"
                 }
             ],
             "description": "A SignalSlots/EventHandler implementation for PHP; with it, we can invoke handlers (\"slots\" or \"hooks\") whenever an object sends a signal (\"notification\" or \"event\") to the signal manager.",
-            "homepage": "http://auraphp.github.com/Aura.Signal",
+            "homepage": "http://auraphp.com/Aura.Signal",
             "keywords": [
                 "event",
                 "event handler",
@@ -201,7 +205,7 @@
                 "signal",
                 "signal slots"
             ],
-            "time": "2013-05-10 00:00:00"
+            "time": "2013-09-10 00:00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -538,12 +542,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Ray.Aop.git",
-                "reference": "506c4fc309c73e058ded49e0910ef88cbc842e75"
+                "reference": "414a4bee4b542791bc41444df98e1908d7ff953c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Ray.Aop/zipball/506c4fc309c73e058ded49e0910ef88cbc842e75",
-                "reference": "506c4fc309c73e058ded49e0910ef88cbc842e75",
+                "url": "https://api.github.com/repos/koriym/Ray.Aop/zipball/414a4bee4b542791bc41444df98e1908d7ff953c",
+                "reference": "414a4bee4b542791bc41444df98e1908d7ff953c",
                 "shasum": ""
             },
             "require": {
@@ -575,7 +579,7 @@
                 "aspect",
                 "method interception"
             ],
-            "time": "2013-09-01 04:37:35"
+            "time": "2013-09-10 09:49:50"
         },
         {
             "name": "ray/di",
@@ -583,12 +587,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Ray.Di.git",
-                "reference": "8680b1f585b5f14b812fb6321a054657ae2bed27"
+                "reference": "f8a9deb081ca1efb3c93f762190a29e06bb1c060"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/8680b1f585b5f14b812fb6321a054657ae2bed27",
-                "reference": "8680b1f585b5f14b812fb6321a054657ae2bed27",
+                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/f8a9deb081ca1efb3c93f762190a29e06bb1c060",
+                "reference": "f8a9deb081ca1efb3c93f762190a29e06bb1c060",
                 "shasum": ""
             },
             "require": {
@@ -597,7 +601,7 @@
                 "doctrine/cache": "1.*",
                 "nikic/php-parser": "*",
                 "php": ">=5.4.0",
-                "ray/aop": "dev-develop#bd2af8655aaf90ce12d09de72ddc62649b24f231"
+                "ray/aop": "dev-develop"
             },
             "type": "library",
             "autoload": {
@@ -614,7 +618,7 @@
                     "name": "Akihito Koriyama",
                     "email": "akihito.koriyama@gmail.com",
                     "homepage": "https://github.com/koriym",
-                    "role": "Developer"
+                    "role": "Lead"
                 },
                 {
                     "name": "Koji Iwasaki",
@@ -633,7 +637,7 @@
                 "guice",
                 "jsr"
             ],
-            "time": "2013-09-01 04:35:30"
+            "time": "2013-09-11 12:38:23"
         },
         {
             "name": "symfony/event-dispatcher",

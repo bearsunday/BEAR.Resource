@@ -4,7 +4,7 @@ namespace BEAR\Resource\Adapter\Nop;
 
 use BEAR\Resource\ResourceObject;
 
-class This extends ResourceObject implements ResourceObject
+class This extends ResourceObject
 {
     public function onGet($a, $b)
     {

@@ -109,6 +109,7 @@ class Resource implements ResourceInterface
      * @param Factory          $factory resource object factory
      * @param InvokerInterface $invoker resource request invoker
      * @param Request          $request resource request
+     * @param Anchor           $anchor  resource linker
      *
      * @Inject
      */

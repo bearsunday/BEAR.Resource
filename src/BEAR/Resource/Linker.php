@@ -135,6 +135,7 @@ final class Linker implements LinkerInterface
      * @param ResourceObject $current
      *
      * @return ResourceObject
+     * @throws Exception\LinkQuery
      * @throws Exception\LinkRel
      */
     private function annotationRel(array $annotations, LinkType $link, ResourceObject $current)

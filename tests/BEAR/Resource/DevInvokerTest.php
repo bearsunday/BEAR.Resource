@@ -103,7 +103,7 @@ class DevInvokerTest extends \PHPUnit_Framework_TestCase
     {
         $bind = new Bind;
         $bind->bindInterceptors('onGet', [new Log]);
-        $weave = (new Compiler)->newInstance('Sandbox\Resource\App\Weave\Book', [], $bind);
+        $weave = $GLOBALS['COMPILER']->newInstance('Sandbox\Resource\App\Weave\Book', [], $bind);
         $this->request->ro = $weave;
         $this->request->method = 'get';
         $this->request->query = ['id' => 1];

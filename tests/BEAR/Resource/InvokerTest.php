@@ -124,7 +124,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     {
         $bind = new Bind;
         $bind->bindInterceptors('onGet', [new Log]);
-        $weave = (new Compiler)->newInstance('Sandbox\Resource\App\Weave\Book', [], $bind);
+        $weave = $GLOBALS['COMPILER']->newInstance('Sandbox\Resource\App\Weave\Book', [], $bind);
         $this->request->ro = $weave;
         $this->request->method = 'get';
         $this->request->query = ['id' => 1];
@@ -159,7 +159,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     public function testOptionsWeaver()
     {
         $this->request->method = Invoker::OPTIONS;
-        $this->request->ro = (new Compiler)->newInstance('Sandbox\Resource\App\RestBucks\Order', [], new Bind);
+        $this->request->ro = $GLOBALS['COMPILER']->newInstance('Sandbox\Resource\App\RestBucks\Order', [], new Bind);
 
         $response = $this->invoker->invoke($this->request);
         $actual = $response->headers['allow'];
