@@ -31,6 +31,7 @@ namespace Another\Resource\Page {
 
 namespace BEAR\Resource {
 
+    use BEAR\Resource\Module\JsonModule;
     use BEAR\Resource\Module\ResourceModule;
     use BEAR\Resource\Adapter\Http as HttpAdapter;
     use Doctrine\Common\Annotations\AnnotationReader;
@@ -39,6 +40,7 @@ namespace BEAR\Resource {
     use Ray\Di\InjectorInterface;
     use Ray\Di\Di\Inject;
     use Ray\Di\Module\InjectorModule;
+    use BEAR\Resource\Module\HalModule;
 
     class AnotherAppModule extends AbstractModule
     {
@@ -104,8 +106,7 @@ namespace BEAR\Resource {
 
         protected function setUp()
         {
-            AnnotationReader::addGlobalIgnoredName('noinspection');
-            $this->module = new InjectorModule(new ResourceModule);
+            $this->module = new ResourceModule;
         }
 
         public function testResourceModule()
@@ -157,5 +158,58 @@ namespace BEAR\Resource {
         {
             $app->resource->get->uri('https://www.example.com')->eager->request();
         }
+
+        public function testEvaluateAsStringWithJsonModule()
+        {
+            $resource = Injector::create([$this->module, new JsonModule])->getInstance('BEAR\Resource\ResourceInterface');
+            $user = $resource->get->uri('app://self/link/user')->withQuery(['id' => 1])->eager->request();
+
+            $expected = '{
+    "name": "Aramis",
+    "age": 16,
+    "blog_id": 12
+}';
+            $this->assertSame($expected, (string)$user);
+        }
+
+        public function testHal()
+        {
+            $resource = Injector::create([new ResourceModule('Sandbox'), new HalModule])->getInstance('BEAR\Resource\ResourceInterface');
+            $user = $resource->get->uri('app://self/link/user')->withQuery(['id' => 1])->eager->request();
+            $expected = '{
+    "name": "Aramis",
+    "age": 16,
+    "blog_id": 12,
+    "_links": {
+        "self": {
+            "href": "app://self/link/user?id=1"
+        }
     }
+}';
+            $this->assertSame($expected, (string)$user);
+
+            return $user;
+        }
+
+        /**
+         * @param $user
+         *
+         * @depends testHal
+         */
+        public function testHalThenBodyElement($user)
+        {
+            $name =  $user['name'];
+            $this->assertSame($name, 'Aramis');
+        }
+
+        /**
+         * @param $user
+         *
+         * @depends testHal
+         */
+        public function testHalThenCode($user)
+        {
+            $this->assertSame($user->code, 200);
+        }
+        }
 }

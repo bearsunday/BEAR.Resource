@@ -21,6 +21,7 @@
         "ray/aop": "dev-develop",
         "any/serializer": "*",
         "doctrine/cache": "1.*",
+        "nocarrier/hal":"*",
         "guzzle/guzzle": "3.3.*"
     },
     "require-dev": {
