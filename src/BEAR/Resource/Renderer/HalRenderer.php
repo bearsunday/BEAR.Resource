@@ -41,7 +41,7 @@ class HalRenderer implements RenderInterface
     }
 
     /**
-     * @param \BEAR\Resource\AbstractObject $ro
+     * @param ResourceObject $ro
      */
     private function valuateElements(ResourceObject &$ro)
     {
@@ -71,11 +71,10 @@ class HalRenderer implements RenderInterface
         foreach ($ro->links as $rel => $link) {
             $title = (isset($link[Link::TITLE])) ? $link[Link::TITLE] : null;
             $attr = (isset($link[Link::TEMPLATED]) && $link[Link::TEMPLATED] === true) ? [Link::TEMPLATED => true] : [];
-            if (isset($link[Link::HREF])) {
-                $hal->addLink($rel, $link[Link::HREF], $title, $attr);
-            } else {
+            if (! isset($link[Link::HREF])) {
                 throw new Exception\HrefNotFound($rel);
             }
+            $hal->addLink($rel, $link[Link::HREF], $title, $attr);
         }
 
         return $hal;
