@@ -5,7 +5,6 @@
 namespace BEAR\Resource\Adapter\Http;
 
 use BEAR\Resource\ResourceObject;
-use BEAR\Resource\ObjectInterface;
 use BEAR\Resource\Request;
 use Guzzle\Cache\DoctrineCacheAdapter;
 use Guzzle\Http\Message\RequestInterface;
