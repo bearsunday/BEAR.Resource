@@ -13,7 +13,7 @@ use Ray\Aop\Bind;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use BEAR\Resource\Interceptor\Log;
 use Sandbox\Resource\App\Link;
-use Sandbox\Resource\App\RestBucks\Order;
+use Sandbox\Resource\App\Restbucks\Order;
 use Sandbox\Resource\App\User;
 
 /**

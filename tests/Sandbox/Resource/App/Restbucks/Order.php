@@ -1,6 +1,6 @@
 <?php
 
-namespace Sandbox\Resource\App\RestBucks;
+namespace Sandbox\Resource\App\Restbucks;
 
 use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Uri;
