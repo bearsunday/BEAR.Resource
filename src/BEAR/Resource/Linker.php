@@ -97,7 +97,7 @@ final class Linker implements LinkerInterface
         }
 
         if ($link->type === LinkType::NEW_LINK) {
-            $ro->body = [$ro->body, $nextBody];
+            $ro->body[$link->key] = $nextBody;
             return $ro;
         }
         // crawl

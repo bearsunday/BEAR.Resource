@@ -88,14 +88,10 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->linker->invoke($this->request);
         $expected = [
-            [
-                'name' => 'Aramis',
-                'age' => 16,
-                'blog_id' => 12,
-            ],
-            [
-                'name' => 'Aramis blog',
-            ],
+            'name' => 'Aramis',
+            'age' => 16,
+            'blog_id' => 12,
+            'blog' => ['name' => 'Aramis blog']
         ];
         $this->assertSame($expected, $result->body);
     }

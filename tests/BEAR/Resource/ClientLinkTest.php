@@ -48,7 +48,7 @@ class ClientLinkTest extends \PHPUnit_Framework_TestCase
 
     public function testAnnotationLinkNew()
     {
-        list($user, $blog) = $this
+        $user = $this
             ->resource
             ->get
             ->uri('app://self/link/user')
@@ -57,15 +57,16 @@ class ClientLinkTest extends \PHPUnit_Framework_TestCase
             ->eager
             ->request()
             ->body;
-        $expectedUser = [
-            'name' => 'Aramis',
-            'age' => 16,
-            'blog_id' => 12
-        ];
         $expectedBlog = [
             'name' => 'Aramis blog',
         ];
-        $this->assertSame([$expectedUser, $expectedBlog], [$user, $blog]);
+        $expectedUser = [
+            'name' => 'Aramis',
+            'age' => 16,
+            'blog_id' => 12,
+            'blog' => $expectedBlog
+        ];
+        $this->assertSame($expectedUser, $user);
     }
 
     public function testAnnotationLinkCrawl()
