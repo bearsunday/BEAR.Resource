@@ -1,85 +1,92 @@
-BEAR.Resource
-=============
-
-RESTful objects framework
--------------------------
+Hypermedia framework for PHP
+============================
 
 [![Latest Stable Version](https://poser.pugx.org/bear/resource/v/stable.png)](https://packagist.org/packages/bear/resource)
-[![Build Status](https://secure.travis-c	i.org/koriym/BEAR.Resource.png)](http://travis-ci.org/koriym/BEAR.git@github.com:koriym/BEAR.Resource.git)
+[![Build Status](https://secure.travis-ci.org/koriym/BEAR.Resource.png)](http://travis-ci.org/koriym/BEAR.git@github.com:koriym/BEAR.Resource.git)
 
-BEAR.Resourceはオブジェクトにリソースの振る舞いを可能にするRESTfulオブジェクトフレームワークです。
-[HATEOAS (Hypermedia as the Engine of Application State)](http://en.wikipedia.org/wiki/HATEOAS)をサポートします。
+**BEAR.Resource** はオブジェクトにリソースの振る舞いを持たす事のできるHypermediaフレームワークです。
+クライアントーサーバー、統一インターフェイス、ステートレス、相互接続したリソース表現、レイヤードコンポーネント等の
+RESTのWebサービスの特徴をオブジェクトに持たす事ができます。
 
- * Service Layer - _Defines an application's boundary with a layer of services that establishes a set of available operations and coordinates the application's response in each operation. (Martin Fowler - PoEAA)_
- * REST Web Services Characteristics - _Client-Server, Stateless, Cache, Uniform interface, Named resources, Interconnected resource representations, and Layered components._
+### リソースオブジェクト
 
-### Resource Obuject
+リソースとして振る舞うオブジェクトがリソースオブジェクトです。
 
-１つのURIを持つリソースはPHPの1クラスにマップされます。リソースオブジェクトはリクエストメソッドに対応したメソッドを持ち、クエリーを名前引き数で受け取ります。
-メソッド内ではリクエストに応じてリソース状態を変更して自身を返します。
+ * １つのURIのリソースがPHPの1クラスにマップされ、リソースクライアントを使ってリクエストします。
+ * 統一されたリソースリクエストに対応したメソッドを持ち名前引き数でリクエストします。
+ * メソッド内ではリクエストに応じてリソース状態を変更して自身を返します。
+
 
 ```php
-namespace Sandbox\Resource;
 
-class User extends ResourceObject
+namespace Sandbox\Blog;
+
+class Author extends ResourceObject
 {
-    protected $users = [
-        ['name' => 'Athos', 'age' => 15, 'blog_id' => 0],
-        ['name' => 'Aramis', 'age' => 16, 'blog_id' => 1],
-        ['name' => 'Porthos', 'age' => 17, 'blog_id' => 2]
+    public $code = 200;
+
+    public $headers = [
+    ];
+
+    public $body = [
+        'id' =>1,
+        'name' => 'koriym'
     ];
 
     /**
-     * @Link(rel="blog", href="app://self/link/blog?blog_id={blog_id}")
+     * @Link(rel="blog", href="app://self/blog/post?author_id={id}")
      */
     public function onGet($id)
     {
-        $this['name'] = $this->users[$id]['name'];
-        $this['age'] = $this->users[$id]['age'];
-        $this['blog_id'] = $this->users[$id]['blog_id'];
-        
         return $this;
     }
-}
-```
-下記のように記述しても同じ値を返します。
-```php
-    public function onGet($id)
+
+    public function onPost($name)
     {
-        $this->body = $this->users[$id];
+        $this->code = 201; // created
+        // ...
         return $this;
     }
-```
 
-```php
-    public function onGet($id)
+    public function onPut($id, $name)
     {
-        return $this->users[$id];
+        //...
+    }
+
+    public function onDelete($id)
+    {
+        //...
     }
 ```
-
-
-
-### Create resource client
+### インスタンスの取得
 
 リソースクライアントはリソースオブジェクトのクライアントです。
-インスタンスを取得するためにディペンデンシーインジェクターを使って依存解決を行いクライアントインスタンスをを取得します。
+インスタンスを取得するために[インスタンススクリプト](https://github.com/koriym/BEAR.Resource/blob/readme/scripts/instance.php)を`require`して
+URIスキーマをクラスにマップします。
 
 ```php
-$injector = Injector::create([new ResourceModule]);
-$resource = $injector->getInstance('BEAR\Resource\ResourceInterface');
-$scheme = (new SchemeCollection)
-  ->scheme('app')
-  ->host('self')
-  ->toAdapter(new App($injector, 'Sandbox', 'Resource'));
-$resource->setSchemeCollection($scheme);
-
+$resource = require '/path/to/BEAR.Resource/scripts/instance.php';
+$resource->setSchemeCollection(
+  (new SchemeCollection)
+    ->scheme('app')
+    ->host('self')
+    ->toAdapter(new Adapter\App($injector, 'Sandbox', 'Resource\App'));
+);
 ```
-これで **Sandbox\Resource\User** クラスは **app://self/user** というURIにマップされます。
 
-### Request resource
+またはインジェクターを使って依存解決を行いクライアントインスタンスを取得します。
 
-URIと変数名を指定した名前付引き数を使ってリソースをリクエストします。
+```php
+$injector = Injector::create([new ResourceModule('Sandbox')])
+$resource = $injector->getInstance('BEAR\Resource\ResourceInterface');
+```
+
+どちらの方法でも **Sandbox\Resource\App\User** クラスが **app://self/user** というURIにマップされたリソースを扱う
+リソースクライアントが準備できます。
+
+### リソースリクエスト
+
+URIとクエリーを使ってリソースをリクエストします。
 
 ```php
 $user = $resource
@@ -89,9 +96,9 @@ $user = $resource
   ->eager
   ->request();
 ```
-このリクエストは **onGet($id)** メソッドに1を渡します。
 
-得られたリソースは **code**, **headers** それに **body**の３つのプロパティを持ちます。
+ * このリクエストは[PSR0](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md)に準拠した *Sandbox\Resource\App\User* クラスの **onGet($id)** メソッドに1を渡します。
+ * 得られたリソースは **code**, **headers** それに **body**の３つのプロパティを持ちます。
 
 ```php
 var_dump($user->body);
@@ -104,22 +111,27 @@ var_dump($user->body);
 //)
 ```
 
-### Resource link
+## Hypermedia
 
-リソースは関連するリソースをリンクで持つ事ができます。 **@Link**アノテーションをメソッドにアノテートします。
+リソースは関連するリソースの [ハイパーリンク](http://en.wikipedia.org/wiki/Hyperlink)を持つ事ができます。 **@Link**アノテーションをメソッドにアノテートします。
 
 ```php
 
 use BEAR\Resource\Annotation\Link;
 
 /**
- * @Link(rel="blog", href="app://self/blog?blog_id={blog_id}")
+ * @Link(rel="blog", href="app://self/blog?author_id={id}")
  */
 ```
 
-#### self link
+**rel** で **リレーション名** を href (hyper reference)でリンク先URIを指定します。
+URIは [URIテンプレート](http://code.google.com/p/uri-templates/)([rfc6570](http://tools.ietf.org/html/rfc6570))を用いて現在のリソースの値をアサインすることができます。
 
-**self link** はリンク先のリソースを取得します。
+リンクには **self**, **new**, **crawl** といくつか種類があり効果的にリソースグラフを作成することができます。
+
+### selfリンク
+
+`linkSelf`はリンク先のリソースを取得します。
 
 ```php
 $blog = $resource
@@ -131,66 +143,74 @@ $blog = $resource
     ->request();
 ```
 **app://self/user** リソースをリクエストした結果で **blog** リンクを辿り **app://self/blog**リソースを取得します。
-Webページでリンクをクリックしたようなものです。次のページに進み表示が入れ替わります。
+Webページでリンクをクリックしたように次のリソースに入れ替わります。
 
-#### new link
+### newリンク
 
-**new link** はリンク先のリソースも追加取得します。
+`linkNew` はリンク先のリソースも追加取得します。
 
 ```php
-list($user, $blog) = $resource
+$user = $resource
     ->get
     ->uri('app://self/user')
     ->withQuery(['id' => 0])
     ->linkNew('blog')
     ->eager
     ->request();
+    
+$blog = $user['blog'];
 ```
-Webページで「新しいウインドウでリンクを表示」を行ったようなものです。
-前のリソースは保持されたまま、リンク名を辿ってリンク先のリソースも取得します。
+
+Webページで「新しいウインドウでリンクを表示」を行うように現在のリソースは保持したまま次のリソースを取得します。
 
 ### crawl
 
-クロールはリスト（配列）になっているリソースを順番にリンクを辿り、複雑なグラフ（ツリー）を構成することができます。
-クローラーがwebページをクロールするようにリンクを辿りリソースグラフを生成します。
+クロールはリスト（配列）になっているリソースを順番にリンクを辿り、複雑なリソースグラフを構成することができます。
+クローラーがwebページをクロールするように、リソースクライアントはハイパーリンクをクロールしソースグラフを生成します。
 
-authorリソース postリソースのリンクがあります
+author, post, meta, tag, tag/name がそれぞれ関連づけられてあるリソースグラフを考えてみます。
+それぞれのリソースはハイパーリンクを持ちます。
+このリソースグラフに **post-tree** という名前を付け、それぞれのリソースの@Linkアノテーションでハイパーリファレンス **href** を指定します。
+
+authorリソースにはpostリソースへのハイパーリンクがあります。1:nの関係です。
 ```php
 /**
- * @Link(crawl="tree", rel="post", href="app://self/post?author_id={id}")
+ * @Link(crawl="post-tree", rel="post", href="app://self/post?author_id={id}")
  */
 public function onGet($id = null)
 ```
 
-postリソース metaリソースとtagリソースのリンクがあります
+postリソースにはmetaリソースとtagリソースのハイパーリンクがあります。1:nの関係です。
 ```php
 /**
- * @Link(crawl="tree", rel="meta", href="app://self/meta?post_id={id}")
- * @Link(crawl="tree", rel="tag",  href="app://self/tag?post_id={id}")
+ * @Link(crawl="post-tree", rel="meta", href="app://self/meta?post_id={id}")
+ * @Link(crawl="post-tree", rel="tag",  href="app://self/tag?post_id={id}")
  */
 public function onGet($author_id)
 {
 ```
 
-tagリソース tag/nameリソースのリンクがあります
+tagリソースはIDだけでそのIDに対応するtag/nameリソースへのハイパーリンクがあります。1:1の関係です。
+
 ```php
 /**
- * @Link(crawl="tree", rel="tag_name",  href="app://self/tag/name?tag_id={tag_id}")
+ * @Link(crawl="post-tree", rel="tag_name",  href="app://self/tag/name?tag_id={tag_id}")
  */
 public function onGet($post_id)
 ```
 
-author/post(meta, tag(tag/name)) このリソースグラフを取得するためにリソースルートを **tree** というクロール名を指定してリクエストします。
+クロール名を指定してリクエストします。
 
 ```php
 $graph = $resource
   ->get
   ->uri('app://self/marshal/author')
-  ->linkCrawl('tree')
+  ->linkCrawl('post-tree')
   ->eager
   ->request();
 ```
-クロール名を発見するとその **rel** 名でリソースを接続してリソースグラフを作成します。
+
+リソースクライアントは@Linkアノテーションに指定されたクロール名を発見するとその **rel** 名でリソースを接続してリソースグラフを作成します。
 
 ```
 var_export($graph->body);
@@ -227,10 +247,10 @@ array (
  ...
 ```
 
-## HETEOAS
+### HETEOAS アプリケーション状態のエンジンとしてのハイパーメディア
 
-リンクはリソースの状態移行に使う事ができます。
-リソースはクライアントの次の動作をリンクとして定義し、クライアントはそのリンクを利用します。
+リソースはクライアントの次の動作をハイパーリンクにして、クライアントはそのリンクを辿りアプリケーションの状態を変更します。
+例えば注文リソースに **POST** して注文を作成、その注文の状態から支払リソースに **PUT**して支払を行います。
 
 orederリソース
 ```php
@@ -262,14 +282,24 @@ public function onPost($drink)
     echo $response->code; // 201
 ```
 
-注文リソースをpostで作成してリンクを辿り支払リソースにリクエストを行っています。
-
-支払の方法は注文リソースからサービスされていて、支払と注文の関係が変わってもクライアントコードに変更はありません。詳しくは[How to GET a Cup of Coffee](http://www.infoq.com/articles/webber-rest-workflow)をご覧ください。
+支払の方法は注文リソースがハイパーリンクと提供しています。
+支払と注文の関係が変更されてもクライアントコードに変更はありません。
+HETEOAS について詳しくは[How to GET a Cup of Coffee](http://www.infoq.com/articles/webber-rest-workflow)をご覧ください。
 
 ### リソース表現
 
-それぞれのリソースオブジェクトにはリソースを表現するためのリソースレンダラーを持っています。
-(string)評価されるとそのそのレンダラーがリソースを描画します。デフォルトではJSONでレンダリングされます。
+リソースはそれぞれ表現のためのレンダラーを自身に持っています。
+このレンダラーはリソースの依存なので、インジェクターを使ってレンダラーをインジェクトして利用します。
+`JsonModule`の他にも[HAL (Hyper Application Laungage)](http://stateless.co/hal_specification.html)レンダラーを使う`HalModule` を利用することもできます。
+
+
+```php
+$modules = [new ResourceModule('Sandbox'), new JsonModule]:
+$resource = Injector::create(modules)
+  ->getInstance('BEAR\Resource\ResourceInterface');
+```
+
+文字列評価されるとリソースはインジェクトされたリソースレンダラーを使ってリソース表現になります。
 
 ```php
 
@@ -282,14 +312,7 @@ echo $user;
 //}
 ```
 
-リソース表現を他のものに（例えばテンプレートエンジンを用いてHTMLに）するには ***BEAR\Resource\RenderInterface***インターフェイスにレンダラーを束縛します。
-
-```php
- $this->bind('BEAR\Resource\RenderInterface')->to('\your\resource\renderer\class');
-```
-### Lazy evaluation
-
-リソースリクエストの結果ではなくリソースリクエストをテンプレートにアサインすると評価を遅延することができます。
+### 遅延評価
 
 ```php
 $user = $resource
@@ -300,20 +323,48 @@ $user = $resource
 
 $smarty->assign('user', $user);
 ```
-テンプレートに{$user}が現れたら、リソースリクエストとリソースレンダリングを行いリソースの文字列表現になります。
+
+`eager`のない`request()`ではリソースリクエストの結果ではなく、リクエストオブジェクトが取得できます。
+テンプレートエンジンにアサインするとテンプレートにリソースリクエスト`{$user}`が現れたタイミングで`リソースリクエスト`と`リソースレンダリング`を行い文字列表現になります。
+
+※ リソース表現はAPI用の他にも、テンプレートエンジンを用いてHTMLにしたりもできます。
+
+### クリーンコーディング
+
+リソースはRay.Diインジェクターでインジェクションとアスペクトの織り込みが行われます。
+関心の分離したクリーンなオブジェクトでリソースを構成できます。
+
+```php
+/**
+ * @Inject
+ */
+public function __consutruct(Dependency $dependency1)
+{
+  // ...
+}
+
+/**
+ * @Log
+ * @Cache
+ * @Db
+ */
+public function onPost($id)
+{
+```
 
 
 Installation
 ============
 
-### Install with Composer
-If you're using [Composer](https://github.com/composer/composer) to manage dependencies, you can add Ray.Aop with it.
+The recommended way to install BEAR.Resource is through [Composer](https://github.com/composer/composer).
 
-	{
-		"require": {
-			"bear/resource": ">=0.1"
-		}
-	}
+```bash
+# Install Composer
+$ curl -sS https://getcomposer.org/installer | php
+
+# Add BEAR.Resource as a dependency
+$ php composer.phar require bear/resource:*
+```
 
 A Resource Oriented Framework
 ============
