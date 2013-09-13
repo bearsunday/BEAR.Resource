@@ -8,16 +8,16 @@ Hypermedia framework for PHP
 クライアントーサーバー、統一インターフェイス、ステートレス、相互接続したリソース表現、レイヤードコンポーネント等の
 RESTのWebサービスの特徴をオブジェクトに持たせる事ができます。
 
-既存のドメインモデルやアプリケーションの持つ情報を柔軟で長期運用を可能にするために、
-アプリケーションをRESTセントリックなものにしAPI駆動開発を可能にします。
+既存のドメインモデルやアプリケーションの持つ情報を柔軟で長期運用が可能なものにするために、
+アプリケーションをRESTで構成された **API-Centric** なものにします。
 
 ### リソースオブジェクト
 
-リソースとして振る舞うオブジェクトがリソースオブジェクトです。
+オブジェクトにリソースとしの振る舞いを持たせたのがリソースオブジェクトです。
 
  * １つのURIのリソースが1クラスにマップされ、リソースクライアントを使ってリクエストします。
  * 統一されたリソースリクエストに対応したメソッドを持ち名前付き引き数でリクエストします。
- * メソッドはリクエストに応じてリソース状態を変更して自身`$this`を返します。
+ * メソッドはリクエストに応じて、自身のリソース状態を変更して`$this`を返します。
 
 
 ```php
@@ -64,8 +64,9 @@ class Author extends ResourceObject
 ### インスタンスの取得
 
 リソースクライアントはリソースオブジェクトのクライアントです。
-インスタンスを取得するために[インスタンススクリプト](https://github.com/koriym/BEAR.Resource/blob/readme/scripts/instance.php)を`require`して
-URIスキーマをクラスにマップし、リソースクライアントがリソースオブジェクトを`URI`で扱えるようにします。
+インスタンスを取得するために[インスタンススクリプト](https://github.com/koriym/BEAR.Resource/blob/readme/scripts/instance.php)を`require`します。
+URIがクラスにマップされ、クライアントがリソースオブジェクトを`URI`で扱えるようになります。
+
 ```php
 $resource = require '/path/to/BEAR.Resource/scripts/instance.php';
 $resource->setSchemeCollection(
@@ -83,11 +84,11 @@ $injector = Injector::create([new ResourceModule('Sandbox')])
 $resource = $injector->getInstance('BEAR\Resource\ResourceInterface');
 ```
 
-どちらの方法でも **Sandbox\Resource\App\User** クラスが **app://self/user** というURIにマップされたリソースを扱うリソースクライアントが準備できます。
+どちらの方法でも **Sandbox\Resource\App\User** クラスが **app://self/user** というURIにマップされたリソースクライアントが利用できます。
 
 ### リソースリクエスト
 
-URIとクエリーを使ってリソースをリクエストします。
+リクエストメソッド(get,put..)とURI、それに名前付き引き数のクエリーを使ってリソースをリクエストします。
 
 ```php
 $user = $resource
@@ -98,8 +99,9 @@ $user = $resource
   ->request();
 ```
 
- * このリクエストは[PSR0](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md)に準拠した **Sandbox\Resource\App\User** クラスの **onGet($id)** メソッドに1を渡します。
+ * このリクエストは[PSR-0](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md)に準拠した **Sandbox\Resource\App\User** クラスの **onGet($id)** メソッドに1を渡します。
  * 得られたリソースは **code**, **headers** それに **body**の３つのプロパティを持ちます。
+ * [HTTPリクエストメソッド](http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Request_methods)に準じたメソッド(get/put/delete/put/options)を使ってwebサービスをリクエストするようにリソースオブジェクトにリクエストします。
 
 ```php
 var_dump($user->body);
@@ -116,7 +118,7 @@ var_dump($user->body);
 ## Hypermedia
 
 リソースは関連するリソースの [ハイパーリンク](http://en.wikipedia.org/wiki/Hyperlink)を持つ事ができます
-**@Link**アノテーションをメソッドにアノテートしてハイパーリンクを表します。
+メソッドに**@Link**アノテーションをアノテート（注記）してハイパーリンクを表します。
 
 ```php
 
@@ -384,10 +386,13 @@ class SessionIdParam implements ParamProviderInterface
      * @return mixed
      */
     public function __invoke(Param $param)
-    {
-        $id = $_SESSION['login_id'];
-
-        return $param->inject(1);
+    {   
+        if (isset($_SESSION['login_id']) {
+            // I konw login_id !
+            return $param->inject($_SESSION['login_id']);
+        }
+        
+        // no idea. ask others...
     }
 }
 ```
@@ -400,7 +405,7 @@ class SessionIdParam implements ParamProviderInterface
 
 ### onProvidesメソッド
 
-変数名を指定しないで`'*'`登録する`OnProvidesParam`はプロバイダーの用意が不要で、同一のクラスでの引き数のインジェクトを可能にします。
+変数名を指定しないで`*`登録する`OnProvidesParam`はプロバイダーの用意が不要で、同一のクラスでの引き数のインジェクトができます。
 
 ```php
 class Post
@@ -467,7 +472,7 @@ Installation
 
 ### Installing via Composer
 
-Ray.Aopをインストールにするには [Composer](http://getcomposer.org)を利用する事を勧めます。
+BEAR.Resourceをインストールにするには [Composer](http://getcomposer.org)を利用する事を勧めます。
 
 ```bash
 # Install Composer
@@ -480,6 +485,6 @@ $ php composer.phar require bear/resource:*
 A Resource Oriented Framework
 -----------------------------
 
-__BEAR.Sunday__ はリソース指向のフレームワークです。BEAR.Resourceに Webでの振る舞いやアプリケーションスタックの機能を、
-Google GuiceスタイルのDI/AOPシステムの[Ray](https://github.com/koriym/Ray.Di)で追加してフルスタックのWebアプリケーションフレームワークとして機能します。
-[BEAR.Sunday GitHub](https://github.com/koriym/BEAR.Sunday)をご覧下さい。
+**BEAR.Sunday**はリソース指向のフレームワークです。BEAR.Resourceに Webでの振る舞いやアプリケーションスタックの機能を、
+Google GuiceスタイルのDI/AOPシステムの[Ray](https://github.com/koriym/Ray.Di)で追加したフルスタックのWebアプリケーションフレームワークです。
+詳しくは[BEAR.Sunday GitHub](https://github.com/koriym/BEAR.Sunday)をご覧下さい。
