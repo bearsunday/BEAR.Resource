@@ -25,6 +25,7 @@ class SignalParam implements SignalParamsInterface
      * @var Param
      */
     private $param;
+
     /**
      * @param Signal $signal
      * @param Param  $param
@@ -43,17 +44,29 @@ class SignalParam implements SignalParamsInterface
     public function getArg(ReflectionParameter $parameter, MethodInvocation $invocation)
     {
         $param = clone $this->param;
-        $results = $this->signal->send(
-            $this,
-            $parameter->name,
-            $param->set($invocation, $parameter)
-        );
-        if (! $results->isStopped()) {
-            $msg = '$' . "{$parameter->name} in " . get_class($invocation->getThis()) . '::' . $invocation->getMethod()->name;
-            throw new Exception\Parameter($msg);
+        $results = $this->sendSignal($parameter->name, $parameter, $param, $invocation, $parameter);
+        if ($results->isStopped()) {
+            return $param->getArg();
         }
+        $results = $this->sendSignal('*', $parameter, $param, $invocation, $parameter);
+        if ($results->isStopped()) {
+            return $param->getArg();
+        }
+        $msg = '$' . "{$parameter->name} in " . get_class($invocation->getThis()) . '::' . $invocation->getMethod()->name;
+        throw new Exception\Parameter($msg);
+    }
 
-        return $param->getArg();
+    private function sendSignal($sigName, $parameter, $param, $invocation, $parameter)
+    {
+        $results = $this
+            ->signal
+            ->send(
+                $this,
+                $sigName,
+                $param->set($invocation, $parameter)
+            );
+
+        return $results;
     }
 
     /**

@@ -7,6 +7,7 @@ use Aura\Signal\Manager;
 use Aura\Signal\ResultCollection;
 use Aura\Signal\ResultFactory;
 use BEAR\Resource\Mock\TestModule;
+use BEAR\Resource\ParamProvider\OnProvidesParam;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\FilesystemCache;
 use Guzzle\Cache\DoctrineCacheAdapter as CacheAdapter;
@@ -368,5 +369,25 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $expected = "get nop://self/dummy?id=10&name=Ray&age=45&feel=good";
         $result = $request->toUriWithMethod();
         $this->assertSame($expected, $result);
+    }
+
+    public function testOnProvides()
+    {
+        $this->resource->attachParamProvider('*', new OnProvidesParam);
+        $actual = $this->resource->get->uri('app://self/param/user')->eager->request();
+        $this->assertSame("author:10", $actual->body);
+
+        return $this->resource;
+    }
+
+    /**
+     * @depends testOnProvides
+     *
+     * @expectedException \BEAR\Resource\Exception\Parameter
+     */
+    public function testOnProvidesFailed(ResourceInterface $resource)
+    {
+        $actual = $resource->delete->uri('app://self/param/user')->eager->request();
+        $this->assertSame("author:10", $actual->body);
     }
 }
