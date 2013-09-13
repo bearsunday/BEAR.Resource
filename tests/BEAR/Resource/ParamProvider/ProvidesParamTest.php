@@ -15,6 +15,6 @@ class ProvidesParamTest extends \PHPUnit_Framework_TestCase
 
     public function testNew()
     {
-        $this->assertInstanceOf('\BEAR\Resource\ParamProvider\ProvidesParam', $this->providePram);
+        $this->assertInstanceOf('\BEAR\Resource\ParamProvider\OnProvidesParam', $this->providePram);
     }
 }
