@@ -4,20 +4,20 @@ Hypermedia framework for PHP
 [![Latest Stable Version](https://poser.pugx.org/bear/resource/v/stable.png)](https://packagist.org/packages/bear/resource)
 [![Build Status](https://secure.travis-ci.org/koriym/BEAR.Resource.png)](http://travis-ci.org/koriym/BEAR.git@github.com:koriym/BEAR.Resource.git)
 
-**BEAR.Resource** はオブジェクトにリソースの振る舞いを持たす事のできるHypermediaフレームワークです。
+**BEAR.Resource** はオブジェクトがリソースの振る舞いを持たせる事のできるHypermediaフレームワークです。
 クライアントーサーバー、統一インターフェイス、ステートレス、相互接続したリソース表現、レイヤードコンポーネント等の
-RESTのWebサービスの特徴をオブジェクトに持たす事ができます。
+RESTのWebサービスの特徴をオブジェクトに持たせる事ができます。
 
-既存のドメインモデルやアプリケーションの持つ情報をより柔軟で長期運用が可能なものにするために、
+既存のドメインモデルやアプリケーションの持つ情報を柔軟で長期運用を可能にするために、
 アプリケーションをRESTセントリックなものにしAPI駆動開発を可能にします。
 
 ### リソースオブジェクト
 
 リソースとして振る舞うオブジェクトがリソースオブジェクトです。
 
- * １つのURIのリソースがPHPの1クラスにマップされ、リソースクライアントを使ってリクエストします。
- * 統一されたリソースリクエストに対応したメソッドを持ち名前引き数でリクエストします。
- * メソッド内ではリクエストに応じてリソース状態を変更して自身を返します。
+ * １つのURIのリソースが1クラスにマップされ、リソースクライアントを使ってリクエストします。
+ * 統一されたリソースリクエストに対応したメソッドを持ち名前付き引き数でリクエストします。
+ * メソッドはリクエストに応じてリソース状態を変更して自身`$this`を返します。
 
 
 ```php
@@ -65,8 +65,7 @@ class Author extends ResourceObject
 
 リソースクライアントはリソースオブジェクトのクライアントです。
 インスタンスを取得するために[インスタンススクリプト](https://github.com/koriym/BEAR.Resource/blob/readme/scripts/instance.php)を`require`して
-URIスキーマをクラスにマップします。
-
+URIスキーマをクラスにマップし、リソースクライアントがリソースオブジェクトを`URI`で扱えるようにします。
 ```php
 $resource = require '/path/to/BEAR.Resource/scripts/instance.php';
 $resource->setSchemeCollection(
@@ -84,8 +83,7 @@ $injector = Injector::create([new ResourceModule('Sandbox')])
 $resource = $injector->getInstance('BEAR\Resource\ResourceInterface');
 ```
 
-どちらの方法でも **Sandbox\Resource\App\User** クラスが **app://self/user** というURIにマップされたリソースを扱う
-リソースクライアントが準備できます。
+どちらの方法でも **Sandbox\Resource\App\User** クラスが **app://self/user** というURIにマップされたリソースを扱うリソースクライアントが準備できます。
 
 ### リソースリクエスト
 
@@ -100,7 +98,7 @@ $user = $resource
   ->request();
 ```
 
- * このリクエストは[PSR0](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md)に準拠した *Sandbox\Resource\App\User* クラスの **onGet($id)** メソッドに1を渡します。
+ * このリクエストは[PSR0](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md)に準拠した **Sandbox\Resource\App\User** クラスの **onGet($id)** メソッドに1を渡します。
  * 得られたリソースは **code**, **headers** それに **body**の３つのプロパティを持ちます。
 
 ```php
@@ -117,7 +115,8 @@ var_dump($user->body);
 
 ## Hypermedia
 
-リソースは関連するリソースの [ハイパーリンク](http://en.wikipedia.org/wiki/Hyperlink)を持つ事ができます。 **@Link**アノテーションをメソッドにアノテートします。
+リソースは関連するリソースの [ハイパーリンク](http://en.wikipedia.org/wiki/Hyperlink)を持つ事ができます
+**@Link**アノテーションをメソッドにアノテートしてハイパーリンクを表します。
 
 ```php
 
@@ -128,7 +127,7 @@ use BEAR\Resource\Annotation\Link;
  */
 ```
 
-**rel** で **リレーション名** を href (hyper reference)でリンク先URIを指定します。
+**rel** でリレーション名を **href** (hyper reference)でリンク先URIを指定します。
 URIは [URIテンプレート](http://code.google.com/p/uri-templates/)([rfc6570](http://tools.ietf.org/html/rfc6570))を用いて現在のリソースの値をアサインすることができます。
 
 リンクには **self**, **new**, **crawl** といくつか種類があり効果的にリソースグラフを作成することができます。
@@ -251,7 +250,7 @@ array (
  ...
 ```
 
-### アプリケーション状態のエンジンとしてのハイパーメディア (HETEOAS)
+### HETEOAS アプリケーション状態のエンジンとしてのハイパーメディア
 
 リソースはクライアントの次の動作をハイパーリンクにして、クライアントはそのリンクを辿りアプリケーションの状態を変更します。
 例えば注文リソースに **POST** して注文を作成、その注文の状態から支払リソースに **PUT**して支払を行います。
