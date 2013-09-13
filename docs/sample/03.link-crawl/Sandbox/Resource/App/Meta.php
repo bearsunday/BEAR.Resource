@@ -1,5 +1,5 @@
 <?php
-namespace Sandbox\Resource\App\Marshal;
+namespace Sandbox\Resource\App;
 
 use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Annotation\Link;

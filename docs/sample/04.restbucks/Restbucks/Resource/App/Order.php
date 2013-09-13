@@ -1,14 +1,11 @@
 <?php
 
-namespace Restbucks\Resource;
+namespace Restbucks\Resource\App;
 
 use BEAR\Resource\ResourceObject;
 use Ray\Di\Di\Scope;
 use BEAR\Resource\Annotation\Link;
 
-/**
- * Order
- */
 class Order extends ResourceObject
 {
     private $orders = [];

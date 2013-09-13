@@ -1,5 +1,5 @@
 <?php
-namespace Sandbox\Resource\App\Marshal;
+namespace Sandbox\Resource\App;
 
 use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Annotation\Link;
@@ -37,8 +37,8 @@ class Post extends ResourceObject
     ];
 
     /**
-     * @Link(crawl="tree", rel="meta", href="app://self/marshal/meta?post_id={id}", method="get")
-     * @Link(crawl="tree", rel="tag",  href="app://self/marshal/tag?post_id={id}",  method="get")
+     * @Link(crawl="tree", rel="meta", href="app://self/meta?post_id={id}", method="get")
+     * @Link(crawl="tree", rel="tag",  href="app://self/tag?post_id={id}",  method="get")
      */
     public function onGet($author_id)
     {

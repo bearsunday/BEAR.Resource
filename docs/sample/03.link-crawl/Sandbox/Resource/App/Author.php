@@ -1,10 +1,10 @@
 <?php
-namespace Sandbox\Resource\App\Marshal;
+namespace Sandbox\Resource\App;
 
 use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Annotation\Link;
 
-class Author extends ResourceObject implements ResourceObject
+class Author extends ResourceObject
 {
 
     protected $users = [
@@ -14,7 +14,7 @@ class Author extends ResourceObject implements ResourceObject
     ];
 
     /**
-     * @Link(crawl="tree", rel="post", href="app://self/marshal/post?author_id={id}", method="get")
+     * @Link(crawl="tree", rel="post", href="app://self/post?author_id={id}", method="get")
      */
     public function onGet($id = null)
     {

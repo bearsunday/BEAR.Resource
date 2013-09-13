@@ -7,11 +7,6 @@ use BEAR\Resource\Uri;
 use Ray\Di\Di\Scope;
 use BEAR\Resource\Annotation\Link;
 
-/**
- * Order
- *
- * @Scope("singleton")
- */
 class Menu extends ResourceObject
 {
 

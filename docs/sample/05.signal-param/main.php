@@ -9,25 +9,26 @@ main: {
     $user = $resource
         ->get
         ->uri('app://self/user')
-        ->withQuery(['id' => 0])
-        ->linkNew('blog')
         ->eager
         ->request();
+
+    $delete = $resource
+        ->delete
+        ->uri('app://self/user')
+        ->eager
+        ->request();
+
     /* @var $result \BEAR\Resource|ResourceObject */
 }
 
 output: {
-    print_r($user->body) . PHP_EOL;
-    print_r($user->body['blog']) . PHP_EOL;
-}
+    echo "code:{$user->code}" . PHP_EOL;
 
-//    Array
-//    (
-//        [name] => Athos
-//        [age] => 15
-//        [blog_id] => 0
-//    )
-//    Array
-//    (
-//        [name] => Athos blog
-//    )
+    echo 'headers:' . PHP_EOL;
+    print_r($user->headers) . PHP_EOL;
+
+    echo 'body:' . PHP_EOL;
+    print_r($user->body) . PHP_EOL;
+
+    echo $delete->code;
+}

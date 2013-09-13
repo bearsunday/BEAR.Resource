@@ -1,6 +1,6 @@
 <?php
 
-namespace Sandbox\Resource;
+namespace Sandbox\Resource\App;
 
 use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Annotation\Link;
@@ -14,11 +14,21 @@ class User extends ResourceObject
         ['name' => 'Porthos', 'age' => 17, 'blog_id' => 2]
     ];
 
-    /**
-     * @Link(rel="blog", href="app://self/link/blog?blog_id={blog_id}", method="get")
-     */
-    public function onGet($id)
+    public function onGet($user_id)
     {
-        return $this->users[$id];
+        return $this->users[$user_id];
+    }
+
+    public function onDelete($delete_id)
+    {
+        unset($this->users[$delete_id]);
+        $this->code = 203;
+
+        return $this;
+    }
+
+    public function onProvidesDeleteId()
+    {
+        return 1;
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace Sandbox\Resource\App\Marshal;
+namespace Sandbox\Resource\App;
 
 use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Annotation\Link;
@@ -64,7 +64,7 @@ class Tag extends ResourceObject
     /**
      * @param id
      *
-     * @Link(crawl="tree", rel="tag_name",  href="app://self/marshal/tag/name?tag_id={tag_id}",  method="get")
+     * @Link(crawl="tree", rel="tag_name",  href="app://self/tag/name?tag_id={tag_id}",  method="get")
      * @Link(crawl="another_tree", rel="xxx",  href="app://path/to/another/resource",  method="get")
      *
      */

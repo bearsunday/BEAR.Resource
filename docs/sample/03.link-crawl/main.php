@@ -8,7 +8,7 @@ main: {
     $resource = require __DIR__ . '/scripts/instance.php';
     $result = $resource
               ->get
-              ->uri('app://self/marshal/author')
+              ->uri('app://self/author')
               ->linkCrawl('tree')
               ->eager
               ->request();
