@@ -4,18 +4,20 @@ Hypermedia framework for PHP
 [![Latest Stable Version](https://poser.pugx.org/bear/resource/v/stable.png)](https://packagist.org/packages/bear/resource)
 [![Build Status](https://secure.travis-ci.org/koriym/BEAR.Resource.png)](http://travis-ci.org/koriym/BEAR.git@github.com:koriym/BEAR.Resource.git)
 
-**BEAR.Resource** Is a Hypermedia framework that allows resources to behave as objects. It allows objects to have RESTful web service benefits such as client-server, uniform interface, statelessness, resource expression with mutual connectivity and layered components.
+**BEAR.Resource** はオブジェクトがリソースの振る舞いを持たせる事のできるHypermediaフレームワークです。
+クライアントーサーバー、統一インターフェイス、ステートレス、相互接続したリソース表現、レイヤードコンポーネント等の
+RESTのWebサービスの特徴をオブジェクトに持たせる事ができます。
 
+既存のドメインモデルやアプリケーションの持つ情報を柔軟で長期運用を可能にするために、
+アプリケーションをRESTセントリックなものにしAPI駆動開発を可能にします。
 
-In order to introduce flexibility and longevity to your existing domain model or application data you can introduce an API as the driving force in your develpment by making your application REST-Centric in it's approach.
+### リソースオブジェクト
 
-### Resource Object
+リソースとして振る舞うオブジェクトがリソースオブジェクトです。
 
-The resource object is an object that has resource behavior.
-
- * 1 URI Resource is mapped to 1 class, it is retrieved by using a resource client.
- * A request is made to a method with named parameters that responds to a uniform resource request.
- * Through the request the method changes the resource state and return itself `$this`.
+ * １つのURIのリソースが1クラスにマップされ、リソースクライアントを使ってリクエストします。
+ * 統一されたリソースリクエストに対応したメソッドを持ち名前付き引き数でリクエストします。
+ * メソッドはリクエストに応じてリソース状態を変更して自身`$this`を返します。
 
 
 ```php
@@ -59,10 +61,11 @@ class Author extends ResourceObject
         //...
     }
 ```
-### Instance retreival
+### インスタンスの取得
 
-The resource client is the resource object client. In order to retrieve an instance `require` the [instance script](https://github.com/koriym/BEAR.Resource/blob/readme/scripts/instance.php), map your class to a URI schema, then the resource client can access the object as a 'URI'.
-
+リソースクライアントはリソースオブジェクトのクライアントです。
+インスタンスを取得するために[インスタンススクリプト](https://github.com/koriym/BEAR.Resource/blob/readme/scripts/instance.php)を`require`して
+URIスキーマをクラスにマップし、リソースクライアントがリソースオブジェクトを`URI`で扱えるようにします。
 ```php
 $resource = require '/path/to/BEAR.Resource/scripts/instance.php';
 $resource->setSchemeCollection(
@@ -73,18 +76,18 @@ $resource->setSchemeCollection(
 );
 ```
 
-You can also retrieve a client instance by using an injector that resolves depenencies.
+またはインジェクターを使って依存解決を行いクライアントインスタンスを取得します。
 
 ```php
 $injector = Injector::create([new ResourceModule('Sandbox')])
 $resource = $injector->getInstance('BEAR\Resource\ResourceInterface');
 ```
 
-By either method the resource client that resolves a URI such as **app://self/user** to the mapped **Sandbox\Resource\App\User** can be provisioned.
+どちらの方法でも **Sandbox\Resource\App\User** クラスが **app://self/user** というURIにマップされたリソースを扱うリソースクライアントが準備できます。
 
-### Resource request
+### リソースリクエスト
 
-Using the URI and a query the resource is requested.
+URIとクエリーを使ってリソースをリクエストします。
 
 ```php
 $user = $resource
@@ -95,8 +98,8 @@ $user = $resource
   ->request();
 ```
 
- * This request passes 1 to the **onGet($id)** method in the **Sandbox\Resource\App\User** class that conforms to [PSR0](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md).
- * The retrieved resource has 3 properties **code**, **headers** and **body**.
+ * このリクエストは[PSR0](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md)に準拠した **Sandbox\Resource\App\User** クラスの **onGet($id)** メソッドに1を渡します。
+ * 得られたリソースは **code**, **headers** それに **body**の３つのプロパティを持ちます。
 
 ```php
 var_dump($user->body);
@@ -112,8 +115,8 @@ var_dump($user->body);
 
 ## Hypermedia
 
-A resource can contain [hyperlinks](http://en.wikipedia.org/wiki/Hyperlink) to other related resources.
-Hyperlinks are shown by methods annotated with **@Link**.
+リソースは関連するリソースの [ハイパーリンク](http://en.wikipedia.org/wiki/Hyperlink)を持つ事ができます
+**@Link**アノテーションをメソッドにアノテートしてハイパーリンクを表します。
 
 ```php
 
@@ -124,15 +127,14 @@ use BEAR\Resource\Annotation\Link;
  */
 ```
 
-The relation name is set by **rel** and link URI's are set by **href** (hyper reference).
-The URI can assign the current resource value using the [URI Template](http://code.google.com/p/uri-templates/)([rfc6570](http://tools.ietf.org/html/rfc6570)).
+**rel** でリレーション名を **href** (hyper reference)でリンク先URIを指定します。
+URIは [URIテンプレート](http://code.google.com/p/uri-templates/)([rfc6570](http://tools.ietf.org/html/rfc6570))を用いて現在のリソースの値をアサインすることができます。
 
+リンクには **self**, **new**, **crawl** といくつか種類があり効果的にリソースグラフを作成することができます。
 
-Within a link their are several types **self**, **new**, **crawl** which can be used to effectively create a resource graph.
+### selfリンク
 
-### linkSelf
-
-`linkSelf` retrieves the linked resource.
+`linkSelf`はリンク先のリソースを取得します。
 
 ```php
 $blog = $resource
@@ -143,12 +145,12 @@ $blog = $resource
     ->eager
     ->request();
 ```
-The result of the  **app://self/user** resource request jumps over the the **blog** link and retrieves the **app://self/blog** resource.
-Just like clicking a link a the webpage it is replaced by the next resource.
+**app://self/user** リソースをリクエストした結果で **blog** リンクを辿り **app://self/blog**リソースを取得します。
+Webページでリンクをクリックしたように次のリソースに入れ替わります。
 
-### linkNew
+### newリンク
 
-`linkNew` adds the linked resource to the response.
+`linkNew` はリンク先のリソースも追加取得します。
 
 ```php
 $user = $resource
