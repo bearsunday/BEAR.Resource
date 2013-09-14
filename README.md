@@ -1,10 +1,10 @@
-Hypermedia framework for PHP
+Hypermedia library for PHP
 ============================
 
 [![Latest Stable Version](https://poser.pugx.org/bear/resource/v/stable.png)](https://packagist.org/packages/bear/resource)
 [![Build Status](https://secure.travis-ci.org/koriym/BEAR.Resource.png)](http://travis-ci.org/koriym/BEAR.git@github.com:koriym/BEAR.Resource.git)
 
-**BEAR.Resource** Is a Hypermedia framework that allows resources to behave as objects. It allows objects to have RESTful web service benefits such as client-server, uniform interface, statelessness, resource expression with mutual connectivity and layered components.
+**BEAR.Resource** Is a Hypermedia library that allows resources to behave as objects. It allows objects to have RESTful web service benefits such as client-server, uniform interface, statelessness, resource expression with mutual connectivity and layered components.
 
 
 In order to introduce flexibility and longevity to your existing domain model or application data you can introduce an API as the driving force in your develpment by making your application REST-Centric in it's approach.
@@ -161,27 +161,24 @@ $user = $resource
     
 $blog = $user['blog'];
 ```
+In a web page this is like 'opening a page in a new window', while passing the current resource but also retreiving the next.
 
-Webページで「新しいウインドウでリンクを表示」を行うように現在のリソースは保持したまま次のリソースを取得します。
+### Crawl
 
-### クロール
+A crawl passes over a list of resources (array) in order retrieving their links, with this you can construct a more complictated resource graph. Just as a crawler crawls a web page, the resource client crawls hyperlinks and creates a resource graph.
 
-クロールはリスト（配列）になっているリソースを順番にリンクを辿り、複雑なリソースグラフを構成することができます。
-クローラーがwebページをクロールするように、リソースクライアントはハイパーリンクをクロールしソースグラフを生成します。
+Let's think of author, post, meta, tag, tag/name and they are all connected together by a resource graph.
+Each resource has a hyperlink. In ths resource graph add the name **post-tree**, on each resource add the hyper-reference *href* in the @link annotation.
 
-author, post, meta, tag, tag/name がそれぞれ関連づけられてあるリソースグラフを考えてみます。
-それぞれのリソースはハイパーリンクを持ちます。
-このリソースグラフに **post-tree** という名前を付け、それぞれのリソースの@Linkアノテーションでハイパーリファレンス **href** を指定します。
-
-authorリソースにはpostリソースへのハイパーリンクがあります。1:nの関係です。
+In the author resource there is a hyperlink to the post resource. This is a 1:n relationship.
 ```php
 /**
  * @Link(crawl="post-tree", rel="post", href="app://self/post?author_id={id}")
  */
 public function onGet($id = null)
 ```
+In the post resource there is a hyperlink to meta and tag resources. This is also a 1:n relationship.
 
-postリソースにはmetaリソースとtagリソースのハイパーリンクがあります。1:nの関係です。
 ```php
 /**
  * @Link(crawl="post-tree", rel="meta", href="app://self/meta?post_id={id}")
@@ -191,7 +188,7 @@ public function onGet($author_id)
 {
 ```
 
-tagリソースはIDだけでそのIDに対応するtag/nameリソースへのハイパーリンクがあります。1:1の関係です。
+There is a hyperlink in the tag resource with only an ID for the tag/name resource that corresponds to that ID. It is a 1:1 relationship.
 
 ```php
 /**
@@ -200,7 +197,7 @@ tagリソースはIDだけでそのIDに対応するtag/nameリソースへの�
 public function onGet($post_id)
 ```
 
-クロール名を指定してリクエストします。
+Set the crawl name and make the request.
 
 ```php
 $graph = $resource
@@ -211,7 +208,7 @@ $graph = $resource
   ->request();
 ```
 
-リソースクライアントは@Linkアノテーションに指定されたクロール名を発見するとその **rel** 名でリソースを接続してリソースグラフを作成します。
+The resource client looks for the crawl name annotated with @link using the **rel** name connects to the resource and creates a resource graph.
 
 ```
 var_export($graph->body);
@@ -248,12 +245,12 @@ array (
  ...
 ```
 
-### HETEOAS アプリケーション状態のエンジンとしてのハイパーメディア
+### HETEOAS Hypermedia as the Engine of Application State
 
-リソースはクライアントの次の動作をハイパーリンクにして、クライアントはそのリンクを辿りアプリケーションの状態を変更します。
-例えば注文リソースに **POST** して注文を作成、その注文の状態から支払リソースに **PUT**して支払を行います。
+The resource client next then takes the next behavior as hyperlink and carrying on from that link changes the application state.
+For example in an order resource by using **POST** the order is created, from that order state to the payment resource using a **PUT** method a payment is made.
 
-orederリソース
+Order resource
 ```php
 /**
  * @Link(rel="payment", href="app://self/payment{?order_id, credit_card_number, expires, name, amount}", method="put")
@@ -261,7 +258,7 @@ orederリソース
 public function onPost($drink)
 ```
 
-クライアントコード
+Client code
 ```php
     $order = $resource
         ->post
@@ -277,21 +274,20 @@ public function onPost($drink)
         'amount' => '4.00'
     ];
 
-    // then use hyper link to pay
+    // Now use a hyperlink to pay
     $response = $resource->href('payment', $payment);
     
     echo $response->code; // 201
 ```
 
-支払の方法は注文リソースがハイパーリンクと提供しています。
-支払と注文の関係が変更されてもクライアントコードに変更はありません。
-HETEOAS について詳しくは[How to GET a Cup of Coffee](http://www.infoq.com/articles/webber-rest-workflow)をご覧ください。
+The payment method is provided by the order resource with the hyperlink.
+There is no change in client code even though the relationship between the order and payment is changed,
+You can checkout more on HETEOAS at [How to GET a Cup of Coffee](http://www.infoq.com/articles/webber-rest-workflow).
 
-### リソース表現
+### Resource Representation
 
-リソースはそれぞれ表現のためのレンダラーを自身に持っています。
-このレンダラーはリソースの依存なので、インジェクターを使ってレンダラーをインジェクトして利用します。
-`JsonModule`の他にも[HAL (Hyper Application Laungage)](http://stateless.co/hal_specification.html)レンダラーを使う`HalModule` を利用することもできます。
+Each resource has a renderer for representation. This renderer is a dependency of the resource, so it is injected in using an injector. 
+Apart from `JsonModule`you can also use the `HalModule` which uses a [HAL (Hyper Application Laungage)](http://stateless.co/hal_specification.html) renderer.
 
 
 ```php
@@ -300,7 +296,7 @@ $resource = Injector::create(modules)
   ->getInstance('BEAR\Resource\ResourceInterface');
 ```
 
-文字列評価されるとリソースはインジェクトされたリソースレンダラーを使ってリソース表現になります。
+When the resource is output as a string the injected resource renderer is used then displayed as the resource representation.
 
 ```php
 echo $user;
@@ -311,8 +307,9 @@ echo $user;
 //     "blog_id": 1
 // }
 ```
-このときの`$user`はレンダラーが内蔵された`ResrourceObject`リソースオブジェクトです。
-文字列ではないので配列やオブジェクトとしても取り扱うことができます。
+
+In this case `$user` is the renderers internal `ResourceObject`. 
+This is not a string so is treated as either an array or an object.
 
 ```php
 
@@ -327,8 +324,8 @@ echo $user->onGet(2);
 //     "age": 15,
 //     "blog_id": 2
 // }
-
-### 遅延評価
+```
+### Lazy Loading
 
 ```php
 $user = $resource
@@ -340,37 +337,36 @@ $user = $resource
 $smarty->assign('user', $user);
 ```
 
-`eager`のない`request()`ではリソースリクエストの結果ではなく、リクエストオブジェクトが取得できます。
-テンプレートエンジンにアサインするとテンプレートにリソースリクエスト`{$user}`が現れたタイミングで`リソースリクエスト`と`リソースレンダリング`を行い文字列表現になります。
-リソース表現はAPI用の他にも、テンプレートエンジンを用いてHTMLにする事もできます。
+In a non `eager` `request()` not the resource request result but a request object is retrieved.
+When this is assigned to the template engine at the timing of the output of a resource request `{$user}` in the template the `resource request` and `resource rendering` is executed and is displayed as a string.
 
-## シグナルパラメーター
 
-メソッドの実行には引き数が必要です。通常は以下の３つの優先順位でで引き数が用意されます。
+## Signal Parameter
 
-  * メソッドを呼び出すコンシュマーが指定 ```$obj->method(1, 2, ...);```
-  * メソッドシグネチャーでデフォルトを指定 ```function method($a1 = 1)```
-  * メソッド内で`null`だったら内部で取得　```function method($cat = null) { $cat = $cat ?: new Cat;```
+In order to execute a method parameters are needed. Normally the following parameters are available in priority order:
 
-引き数の用意の責任をメソッドとコンシュマーから分離したのがシグナルパラメーターです。
-コンシュマーとメソッドが引き数を用意しない場合のみ機能します。
+  * Use of a consumer that calls the method ```$obj->method(1, 2, ...);```
+  * Use of default method signature ```function method($a1 = 1)```
+  * When null is present in a method instantiate internally. ```function method($cat = null) { $cat = $cat ?: new Cat;```
 
-シグナルパラメーターという名前は[シグナル・スロット](http://en.wikipedia.org/wiki/Signals_and_slots)というデザインパターンからのものです。
-引き数が不足したときには変数名で`シグナル`が発信されて`スロット`として登録されているシグナルパラメーターがその不足を解決します。
+In order to seperate the provision responsibility of parameters from the method and consumer we use the `signal parameter`.
+This only fires when the consumer and method does not provision the needed parameters. 
 
-### パラメータープロバイダーの登録
+The name `signal parameter` comes from the [Signal and Slots](http://en.wikipedia.org/wiki/Signals_and_slots) design pattern.
+When a parameter is not available a `signal` is dispatched in the variable name and missing value is resolved by a signal parameter that is registered as a `slot`.
 
-リソースクラインアントに変数名とプロバイダーの登録をします。
+### Registering a Parameter Provider
+
+Assign the variable names and provider in the resource client.
 
 ```php
 $resource = $injector->getInstance('BEAR\Resource\ResourceInterface');
 $resource->attachParamProvider('user_id', new SessionIdParam);
 ```
 
-この登録では`$user_id`という変数名の引き数が必要な時に`SessionIdParam`が呼ばれます。
+In this case the when the parameter that has the variable name `$user_id` is needed, `SessionIdParam` is called.
 
-
-### パラメータープロバイダーの実装
+### Parameter Provider Implementation
 
 ```php
 class SessionIdParam implements ParamProviderInterface
@@ -389,22 +385,20 @@ class SessionIdParam implements ParamProviderInterface
 }
 ```
 
-`SessionIdParam`は`ParamProviderInterface`インターフェイスを実装してパラメーター情報を受け取り、
-**可能であれば**実引き数を用意して`$param->inject($args)`と返します。
+`SessionIdParam` implements the `ParamProviderInterface` interface and recieves parameter data, **when possible** it then prepares the actual parameters and returns them in `$param->inject($args)`.
 
-パラメタープロバイダーは同一の変数名に複数登録でき、登録していたプロバイダーが次々に呼ばれます。
-すべてのプロバイダーが実引き数を用意できないと`BEAR\Resource\Exception\Parameter`例外が投げられます。
+The parameter provider can register multiple parameters with a matching variable name, the registered provider will then be called by each of them. When none of the providers can prepare all parameters then `BEAR\Resource\Exception\Parameter` exception is thrown.
 
-### onProvidesメソッド
+### The `onProvides` Method
 
-変数名を指定しないで`'*'`登録する`OnProvidesParam`はプロバイダーの用意が不要で、同一のクラスでの引き数のインジェクトを可能にします。
+By not setting a variable name and assigning `OnProvidesParam` to '*' then setting up a provided is not needed, it is possible to inject parameters into a class method following a single pattern.
 
 ```php
 class Post
 {
     public function onPost($date)
     {
-        // $date was passed by onProvidesDate method.
+        // $date is passed by the onProvidesDate method.
     }
 
     public function onProvidesDate()
@@ -413,20 +407,18 @@ class Post
     }
 }
 ```
-このリソースでクラインとが`$date`を指定しないと`onProvidesDate`が呼ばれ、返り値が`onPost`に渡されます。
-`onPost`メソッド内では渡されたものだけを使うので、テスタビリティは向上し責任の分離したコードになります。
+In this resource when `$date` is not specified in the client `onProvidesDate` is called, the returned value is passed to the `onPost` method.
+In the `onPost` method only the values passed to it are used, which has a clear separation of concerns and gives you a vast improvement in testability.
 
-onProvidesメソッドの機能を利用するには`OnProvidesParam`パラメータープロバイダーを登録します。
+To use the `onProvides` method functionality simply register the `OnProvidesParam` parameter provider.
 
 ```php
 $resource->attachParamProvider('*', new OnProvidesParam);
 ```
 
+### A Clean Layered Architecture
 
-### クリーンなレイヤード構造
-
-リソースはリソースで構成されます。リソースはサービスでもありますが、リソースのクライアントにもなりリソースはレイヤードの構造になります。
-リソースはRay.Diインジェクターでインジェクションとアスペクトの織り込みが行われ、関心の分離したクリーンなオブジェクトでリソースを構成できます。
+A resource is built up from other resources. Although a resource is a service, a layered architecture can be acheived by the resource also becoming a resource client. A resource is handled with injection and aspect wrapping from the Ray.Di injector, meaning a resource can be built as a clean object with a separation of concerns.
 
 ```php
 
@@ -457,14 +449,14 @@ class News extends ResourceObject
     }```
 }
 ```
-このようにリソースに値`eager'ではなくリクエストを含むリソースでも内包するリソースリクエストの値は遅延評価されます。
+In this way the variables in the resource are not `eager`, even when resource contains a request, the resource request made inside the the resource is lazily loaded.
 
 Installation
 ============
 
 ### Installing via Composer
 
-Ray.Aopをインストールにするには [Composer](http://getcomposer.org)を利用する事を勧めます。
+When installing Ray.Aop we recommend you use [Composer](http://getcomposer.org).
 
 ```bash
 # Install Composer
@@ -477,6 +469,6 @@ $ php composer.phar require bear/resource:*
 A Resource Oriented Framework
 -----------------------------
 
-__BEAR.Sunday__ はリソース指向のフレームワークです。BEAR.Resourceに Webでの振る舞いやアプリケーションスタックの機能を、
-Google GuiceスタイルのDI/AOPシステムの[Ray](https://github.com/koriym/Ray.Di)で追加してフルスタックのWebアプリケーションフレームワークとして機能します。
-[BEAR.Sunday GitHub](https://github.com/koriym/BEAR.Sunday)をご覧下さい。
+__BEAR.Sunday__ is a Resource Oriented Framework. In BEAR.Sunday on top of the web behavior in BEAR.Resource also has the added Google guice style DI/AOP System [Ray](https://github.com/koriym/Ray.Di) and is a full stack web application framework.
+
+Please check out [BEAR.Sunday on GitHub](https://github.com/koriym/BEAR.Sunday).

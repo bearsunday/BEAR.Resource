@@ -255,7 +255,7 @@ array (
 リソースはクライアントの次の動作をハイパーリンクにして、クライアントはそのリンクを辿りアプリケーションの状態を変更します。
 例えば注文リソースに **POST** して注文を作成、その注文の状態から支払リソースに **PUT**して支払を行います。
 
-orederリソース
+Order リソース
 ```php
 /**
  * @Link(rel="payment", href="app://self/payment{?order_id, credit_card_number, expires, name, amount}", method="put")
@@ -313,7 +313,7 @@ echo $user;
 //     "blog_id": 1
 // }
 ```
-このときの`$user`はレンダラーが内蔵された`ResrourceObject`リソースオブジェクトです。
+このときの`$user`はレンダラーが内蔵された`ResourceObject`リソースオブジェクトです。
 文字列ではないので配列やオブジェクトとしても取り扱うことができます。
 
 ```php
@@ -329,6 +329,7 @@ echo $user->onGet(2);
 //     "age": 15,
 //     "blog_id": 2
 // }
+```
 
 ### 遅延評価
 
@@ -406,7 +407,7 @@ class Post
 {
     public function onPost($date)
     {
-        // $date was passed by onProvidesDate method.
+        // $date is passed by the onProvidesDate method.
     }
 
     public function onProvidesDate()
@@ -415,7 +416,7 @@ class Post
     }
 }
 ```
-このリソースでクラインとが`$date`を指定しないと`onProvidesDate`が呼ばれ、返り値が`onPost`に渡されます。
+このリソースでクライアントが`$date`を指定しないと`onProvidesDate`が呼ばれ、返り値が`onPost`に渡されます。
 `onPost`メソッド内では渡されたものだけを使うので、テスタビリティは向上し責任の分離したコードになります。
 
 onProvidesメソッドの機能を利用するには`OnProvidesParam`パラメータープロバイダーを登録します。
@@ -459,7 +460,7 @@ class News extends ResourceObject
     }```
 }
 ```
-このようにリソースに値`eager'ではなくリクエストを含むリソースでも内包するリソースリクエストの値は遅延評価されます。
+このようにリソースに値`eager`ではなくリクエストを含むリソースでも内包するリソースリクエストの値は遅延評価されます。
 
 Installation
 ============
