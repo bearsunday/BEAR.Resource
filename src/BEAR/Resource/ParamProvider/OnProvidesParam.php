@@ -30,5 +30,7 @@ class OnProvidesParam implements ParamProviderInterface
 
             return $param->inject($arg);
         }
+
+        return null;
     }
 }
