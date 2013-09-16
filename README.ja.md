@@ -1,10 +1,10 @@
-Hypermedia framework for PHP
-============================
+Hypermedia framework for object as a service
+--------------------------------------------
 
 [![Latest Stable Version](https://poser.pugx.org/bear/resource/v/stable.png)](https://packagist.org/packages/bear/resource)
 [![Build Status](https://secure.travis-ci.org/koriym/BEAR.Resource.png)](http://travis-ci.org/koriym/BEAR.git@github.com:koriym/BEAR.Resource.git)
 
-**BEAR.Resource** はオブジェクトがリソースの振る舞いを持たせる事のできるHypermediaフレームワークです。
+**BEAR.Resource** はオブジェクトがリソースの振る舞いを持つHypermediaフレームワークです。
 クライアントーサーバー、統一インターフェイス、ステートレス、相互接続したリソース表現、レイヤードコンポーネント等の
 RESTのWebサービスの特徴をオブジェクトに持たせる事ができます。
 

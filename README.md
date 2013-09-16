@@ -1,10 +1,10 @@
-Hypermedia library for PHP
-============================
+Hypermedia framework for object as a service
+--------------------------------------------
 
 [![Latest Stable Version](https://poser.pugx.org/bear/resource/v/stable.png)](https://packagist.org/packages/bear/resource)
 [![Build Status](https://secure.travis-ci.org/koriym/BEAR.Resource.png)](http://travis-ci.org/koriym/BEAR.git@github.com:koriym/BEAR.Resource.git)
 
-**BEAR.Resource** Is a Hypermedia library that allows resources to behave as objects. It allows objects to have RESTful web service benefits such as client-server, uniform interface, statelessness, resource expression with mutual connectivity and layered components.
+**BEAR.Resource** Is a Hypermedia framework that allows resources to behave as objects. It allows objects to have RESTful web service benefits such as client-server, uniform interface, statelessness, resource expression with mutual connectivity and layered components.
 
 
 In order to introduce flexibility and longevity to your existing domain model or application data you can introduce an API as the driving force in your develpment by making your application REST-Centric in it's approach.
@@ -158,7 +158,7 @@ $user = $resource
     ->linkNew('blog')
     ->eager
     ->request();
-    
+
 $blog = $user['blog'];
 ```
 In a web page this is like 'opening a page in a new window', while passing the current resource but also retreiving the next.
@@ -276,7 +276,7 @@ Client code
 
     // Now use a hyperlink to pay
     $response = $resource->href('payment', $payment);
-    
+
     echo $response->code; // 201
 ```
 
@@ -286,7 +286,7 @@ You can checkout more on HETEOAS at [How to GET a Cup of Coffee](http://www.info
 
 ### Resource Representation
 
-Each resource has a renderer for representation. This renderer is a dependency of the resource, so it is injected in using an injector. 
+Each resource has a renderer for representation. This renderer is a dependency of the resource, so it is injected in using an injector.
 Apart from `JsonModule`you can also use the `HalModule` which uses a [HAL (Hyper Application Laungage)](http://stateless.co/hal_specification.html) renderer.
 
 
@@ -308,7 +308,7 @@ echo $user;
 // }
 ```
 
-In this case `$user` is the renderers internal `ResourceObject`. 
+In this case `$user` is the renderers internal `ResourceObject`.
 This is not a string so is treated as either an array or an object.
 
 ```php
@@ -350,7 +350,7 @@ In order to execute a method parameters are needed. Normally the following param
   * When null is present in a method instantiate internally. ```function method($cat = null) { $cat = $cat ?: new Cat;```
 
 In order to seperate the provision responsibility of parameters from the method and consumer we use the `signal parameter`.
-This only fires when the consumer and method does not provision the needed parameters. 
+This only fires when the consumer and method does not provision the needed parameters.
 
 The name `signal parameter` comes from the [Signal and Slots](http://en.wikipedia.org/wiki/Signals_and_slots) design pattern.
 When a parameter is not available a `signal` is dispatched in the variable name and missing value is resolved by a signal parameter that is registered as a `slot`.
