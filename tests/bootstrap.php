@@ -11,7 +11,20 @@ $loader->add('Sandbox', [__DIR__]);
 AnnotationRegistry::registerLoader([$loader, 'loadClass']);
 AnnotationReader::addGlobalIgnoredName('noinspection');
 
-$dir = sys_get_temp_dir();
-ini_set('error_log', $dir . '/error.log');
+$tmp = sys_get_temp_dir();
+ini_set('error_log', $tmp . '/error.log');
+ini_set('xhprof.output_dir', $tmp);
 
 $GLOBALS['RESOURCE'] = require __DIR__ . '/scripts/resource.php';
+$GLOBALS['COMPILER'] = require __DIR__ . '/scripts/compiler.php';
+$GLOBALS['INJECTOR'] = require __DIR__ . '/scripts/injector.php';
+
+$_ENV['BEAR_TMP'] = __DIR__ . '/tmp';
+
+$rm = function ($dir) use (&$rm) {
+    foreach (glob($dir . '/*') as $file) {
+        is_dir($file) ? $rm($file) : unlink($file);
+        @rmdir($file);
+    }
+};
+$rm($_ENV['BEAR_TMP']);

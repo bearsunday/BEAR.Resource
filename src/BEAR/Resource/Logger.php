@@ -6,10 +6,11 @@
  */
 namespace BEAR\Resource;
 
+use Any\Serializer\SerializeInterface;
+use Any\Serializer\Serializer;
 use ArrayIterator;
 use Countable;
 use Ray\Di\Di\Scope;
-use BEAR\Resource\AbstractObject as ResourceObject;
 use Serializable;
 use Ray\Di\Di\Inject;
 
@@ -35,6 +36,13 @@ class Logger implements LoggerInterface, Countable, Serializable
      * @var LogWriterInterface
      */
     private $writer;
+
+    private $serializer;
+
+    public function __construct(SerializeInterface $serializer = null)
+    {
+        $this->serializer = $serializer ?: new Serializer;
+    }
 
     /**
      * Return new resource object instance
@@ -64,6 +72,7 @@ class Logger implements LoggerInterface, Countable, Serializable
      */
     public function write()
     {
+
         if ($this->writer instanceof LogWriterInterface) {
             foreach ($this->logs as $log) {
                 $this->writer->write($log[0], $log[1]);
@@ -94,10 +103,11 @@ class Logger implements LoggerInterface, Countable, Serializable
 
     public function serialize()
     {
-        unset($this->logs);
+        return $this->serializer->serialize($this->logs);
     }
 
     public function unserialize($data)
     {
+        $this->logs = unserialize($data);
     }
 }

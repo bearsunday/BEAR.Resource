@@ -6,24 +6,35 @@ use Aura\Signal\Manager;
 use Aura\Signal\HandlerFactory;
 use Aura\Signal\ResultFactory;
 use Aura\Signal\ResultCollection;
+use Guzzle\Parser\UriTemplate\UriTemplate;
 use Ray\Di\Definition;
-use Ray\Di\Annotation;
-use Ray\Di\Config;
-use Ray\Di\Forge;
-use Ray\Di\Container;
 use Ray\Di\Injector;
-use Ray\Di\EmptyModule;
 
 use BEAR\Resource\Adapter\Nop;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
-use Sandbox\Resource\App\User;
+use Sandbox\Resource\App\Link\Scalar\Name;
+use Sandbox\Resource\App\Link\User;
+use Sandbox\Resource\App\Marshal\Author;
 
 /**
  * Test class for BEAR.Resource.
  */
 class LinkerTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Request
+     */
     protected $request;
+
+    /**
+     * @var Linker
+     */
+    private $linker;
+
+    /**
+     * @var Resource
+     */
+    private $resource;
 
     protected function setUp()
     {
@@ -33,17 +44,16 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $signal = new Manager(new HandlerFactory, new ResultFactory, new ResultCollection);
         $params = new NamedParams(new SignalParam($signal, new Param));
         $invoker = new Invoker($this->linker, $params);
-
-
-        $injector = new Injector(new Container(new Forge(new Config(new Annotation(new Definition, new Reader)))), new EmptyModule);
+        $injector = $GLOBALS['INJECTOR'];
 
         $this->request = new Request($invoker);
-        $scheme = new SchemeCollection;
-        $scheme->scheme('app')->host('self')->toAdapter(
-            new Adapter\App($injector, 'Sandbox', 'Resource\App')
-        );
+        $scheme = (new SchemeCollection)
+            ->scheme('app')
+            ->host('self')
+            ->toAdapter(new Adapter\App($injector, 'Sandbox', 'Resource\App')
+            );
         $factory = new Factory($scheme);
-        $this->resource = new Resource($factory, $invoker, new Request($invoker));
+        $this->resource = new Resource($factory, $invoker, new Request($invoker), new Anchor(new UriTemplate, new Reader, $this->request));
     }
 
     public function testNew()
@@ -51,302 +61,234 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\BEAR\Resource\Linker', $this->linker);
     }
 
-    /**
-     * @expectedException \BEAR\Resource\Exception\BadLinkRequest
-     */
-    public function testLinkException()
+    public function testLinkAnnotationSelf()
     {
-        $ro = new \Sandbox\Resource\App\Link;
-        $link = new LinkType;
-        $link->type = LinkType::SELF_LINK;
-        $link->key = 'UNAVAILABLE';
-        $links = [$link];
-        $this->request->links = $links;
+        $this->request->links = [new LinkType('blog', LinkType::SELF_LINK)];
         $this->request->method = 'get';
-        $this->linker->invoke($ro, $this->request, $ro->onGet(1));
-    }
-
-    public function testLinkSelf1()
-    {
-        $ro = new \Sandbox\Resource\App\Link;
-        $link = new LinkType;
-        $link->type = LinkType::SELF_LINK;
-        $link->key = 'View';
-        $links = [$link];
-        $this->request->links = $links;
-        $this->request->method = 'get';
-        $result = $this->linker->invoke($ro, $this->request, $ro->onGet(1));
-        $expected = '<html>bear1</html>';
-        $this->assertSame($expected, $result);
-    }
-
-    public function testLinkSelf2()
-    {
         $ro = new User;
-        $ro->setResource($this->resource);
-        $link = new LinkType;
-        $link->type = LinkType::SELF_LINK;
-        $link->key = 'Blog';
-        $links = [$link];
-        $this->request->links = $links;
-        $this->request->method = 'get';
-        $result = $this->linker->invoke($ro, $this->request, $ro->onGet(1));
-        //         $expected = '<html><html>bear1</html></html>';
-        $expected = array(
-            'id' => 12,
-            'name' => 'Aramis blog',
-            'inviter' => 2
-        );
-        $this->assertSame($expected, $result);
+        $ro->body = $ro->onGet(1);
+        $this->request->ro = $ro;
+
+        $result = $this->linker->invoke($this->request);
+        $expected = [
+            'name' => 'Aramis blog'
+        ];
+        $this->assertSame($expected, $result->body);
+
+        return $this->request;
     }
 
-    public function testLinkNew1()
+    public function testAnnotationNew()
     {
-        $ro = new User;
-        $ro->setResource($this->resource);
-        $link = new LinkType;
-        $link->type = LinkType::NEW_LINK;
-        $link->key = 'Blog';
-        $links = [$link];
-        $this->request->links = $links;
+        $this->request->links = [new LinkType('blog', LinkType::NEW_LINK)];
         $this->request->method = 'get';
-        $result = $this->linker->invoke($ro, $this->request, $ro->onGet(1));
-        $expected = array(
-            0 => array('id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12),
-            1 => array('id' => 12, 'name' => 'Aramis blog', 'inviter' => 2)
-        );
-        $this->assertSame($expected, $result);
-    }
+        $ro = new User;
+        $ro->body = $ro->onGet(1);
+        $this->request->ro = $ro;
 
-    public function testLinkCrawl()
-    {
-        $ro = new User;
-        $ro->setResource($this->resource);
-        $link = new LinkType;
-        $link->type = LinkType::CRAWL_LINK;
-        $link->key = 'Blog';
-        $links = [$link];
-        $result = $ro->onGet(1);
-        $this->request->links = $links;
-        $this->request->method = 'get';
-        $result = $this->linker->invoke($ro, $this->request, $result);
-        $expected = array(
-            'id' => 2,
+        $result = $this->linker->invoke($this->request);
+        $expected = [
             'name' => 'Aramis',
             'age' => 16,
             'blog_id' => 12,
-            'Blog' => array(
-                'id' => 12,
-                'name' => 'Aramis blog',
-                'inviter' => 2,
-            )
-        );
-        $this->assertSame($expected, $result);
-    }
-
-    public function testSelfLinkSelf()
-    {
-        $ro = new User;
-        $ro->setResource($this->resource);
-        $links = [];
-        $link = new LinkType;
-        $link->type = LinkType::SELF_LINK;
-        $link->key = 'Blog';
-        $links[] = $link;
-        $link = new LinkType;
-        $link->type = LinkType::SELF_LINK;
-        $link->key = 'Inviter';
-        $links[] = $link;
-        $this->request->links = $links;
-        $this->request->method = 'get';
-        $result = $this->linker->invoke($ro, $this->request, $ro->onGet(1));
-        $expected = ['id' => 3, 'name' => 'Porthos', 'age' => 17, 'blog_id' => 0];
-        $this->assertSame($expected, $result);
-    }
-
-    public function testSelfLinkTarget()
-    {
-        $ro = new User;
-        $ro->setResource($this->resource);
-        $links = [];
-        $link = new LinkType;
-        $link->type = LinkType::SELF_LINK;
-        $link->key = 'Blog';
-        $links[] = $link;
-        $link = new LinkType;
-        $link->type = LinkType::NEW_LINK;
-        $link->key = 'Inviter';
-        $links[] = $link;
-        $this->request->links = $links;
-        $this->request->method = 'get';
-        $result = $this->linker->invoke($ro, $this->request, $ro->onGet(1));
-        $expected = [
-            0 => ['id' => 12, 'name' => 'Aramis blog', 'inviter' => 2],
-            1 => ['id' => 3, 'name' => 'Porthos', 'age' => 17, 'blog_id' => 0]
+            'blog' => ['name' => 'Aramis blog']
         ];
-        $this->assertSame($expected, $result);
+        $this->assertSame($expected, $result->body);
     }
 
-    public function testTargetLinkTarget()
+    public function testAnnotationCrawl()
     {
-        $ro = new User;
-        $ro->setResource($this->resource);
-        $links = [];
-        $link = new LinkType;
-        $link->type = LinkType::NEW_LINK;
-        $link->key = 'Blog';
-        $links[] = $link;
-        $link = new LinkType;
-        $link->type = LinkType::NEW_LINK;
-        $link->key = 'Inviter';
-        $links[] = $link;
-        $result = $ro->onGet(1);
-        $this->request->links = $links;
+        $this->request->links = [new LinkType('tree', LinkType::CRAWL_LINK)];
         $this->request->method = 'get';
-        $result = $this->linker->invoke($ro, $this->request, $result);
-        $expected = array(
-            array('id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12),
-            array('id' => 12, 'name' => 'Aramis blog', 'inviter' => 2),
-            array('id' => 3, 'name' => 'Porthos', 'age' => 17, 'blog_id' => 0)
-        );
-        $this->assertSame($expected, $result);
-    }
+        $ro = new Author;
+        $ro->body = $ro->onGet(1);
+        $this->request->ro = $ro;
 
-    public function testTargetLinkSelf()
-    {
-        $ro = new User;
-        $ro->setResource($this->resource);
-        $links = [];
-        $link = new LinkType;
-        $link->type = LinkType::NEW_LINK;
-        $link->key = 'Blog';
-        $links[] = $link;
-        $link = new LinkType;
-        $link->type = LinkType::SELF_LINK;
-        $link->key = 'Inviter';
-        $links[] = $link;
-        $this->request->links = $links;
-        $this->request->method = 'get';
-        $result = $this->linker->invoke($ro, $this->request, $ro->onGet(1));
-        $expected = array(
-            0 => array('id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12),
-            1 => array('id' => 12, 'name' => 'Aramis blog', 'inviter' => 2)
-        );
-        $this->assertSame($expected, $result);
-    }
-
-    public function testListCrawlBasic()
-    {
-        $ro = new User\Entry;
-        $link = new LinkType;
-        $link->type = LinkType::CRAWL_LINK;
-        $link->key = 'Comment';
-        $links = [$link];
-        $result = $ro->onGet(1);
-        $this->request->links = $links;
-        $this->request->method = 'get';
-        $result = $this->linker->invoke($ro, $this->request, $result);
-        $expected = array(
-            100 => array(
-                'id' => 100,
-                'title' => 'Entry1',
-                'Comment' => array(
-                    'comment_id' => 200,
-                    'body' => 'entry 100 comment',
+        $result = $this->linker->invoke($this->request);
+        $expected = array (
+            'id' => 1,
+            'name' => 'Aramis',
+            'post' =>
+            array (
+                0 =>
+                array (
+                    'id' => '1',
+                    'author_id' => '1',
+                    'body' => 'Anna post #1',
+                    'meta' =>
+                    array (
+                        0 =>
+                        array (
+                            'id' => '1',
+                            'post_id' => '1',
+                            'data' => 'meta 1',
+                        ),
+                    ),
+                    'tag' =>
+                    array (
+                        0 =>
+                        array (
+                            'id' => '1',
+                            'post_id' => '1',
+                            'tag_id' => '1',
+                            'tag_name' =>
+                            array (
+                                0 =>
+                                array (
+                                    'id' => '1',
+                                    'name' => 'zim',
+                                ),
+                            ),
+                        ),
+                        1 =>
+                        array (
+                            'id' => '2',
+                            'post_id' => '1',
+                            'tag_id' => '2',
+                            'tag_name' =>
+                            array (
+                                0 =>
+                                array (
+                                    'id' => '2',
+                                    'name' => 'dib',
+                                ),
+                            ),
+                        ),
+                    ),
                 ),
-            ),
-            101 => array(
-                'id' => 101,
-                'title' => 'Entry2',
-                'Comment' => array(
-                    'comment_id' => 201,
-                    'body' => 'entry 101 comment',
+                1 =>
+                array (
+                    'id' => '2',
+                    'author_id' => '1',
+                    'body' => 'Anna post #2',
+                    'meta' =>
+                    array (
+                        0 =>
+                        array (
+                            'id' => '2',
+                            'post_id' => '2',
+                            'data' => 'meta 2',
+                        ),
+                    ),
+                    'tag' =>
+                    array (
+                        0 =>
+                        array (
+                            'id' => '3',
+                            'post_id' => '2',
+                            'tag_id' => '2',
+                            'tag_name' =>
+                            array (
+                                0 =>
+                                array (
+                                    'id' => '2',
+                                    'name' => 'dib',
+                                ),
+                            ),
+                        ),
+                        1 =>
+                        array (
+                            'id' => '4',
+                            'post_id' => '2',
+                            'tag_id' => '3',
+                            'tag_name' =>
+                            array (
+                                0 =>
+                                array (
+                                    'id' => '3',
+                                    'name' => 'gir',
+                                ),
+                            ),
+                        ),
+                    ),
                 ),
-            ),
-            102 => array(
-                'id' => 102,
-                'title' => 'Entry3',
-                'Comment' => array(
-                    'comment_id' => 202,
-                    'body' => 'entry 102 comment',
-                ),
-            )
-        );
-        $this->assertSame($expected, $result);
-    }
-
-    public function testListCrawlThenCrawl()
-    {
-        $ro = new User\Entry;
-        $links = [];
-        $link = new LinkType;
-        $link->type = LinkType::CRAWL_LINK;
-        $link->key = 'Comment';
-        $links[] = $link;
-        $link = new LinkType;
-        $link->type = LinkType::CRAWL_LINK;
-        $link->key = 'ThumbsUp';
-        $links[] = $link;
-        $this->request->links = $links;
-        $this->request->method = 'get';
-        $result = $this->linker->invoke($ro, $this->request, $ro->onGet(1));
-        $expected = array(
-            100 => array(
-                'id' => 100,
-                'title' => 'Entry1',
-                'Comment' => array(
-                    'comment_id' => 200,
-                    'body' => 'entry 100 comment',
-                    'ThumbsUp' => array(
-                        'up' => 30,
-                        'down' => 10,
-                        'body' => 'like for 200 comment',
+                2 =>
+                array (
+                    'id' => '3',
+                    'author_id' => '1',
+                    'body' => 'Anna post #3',
+                    'meta' =>
+                    array (
+                        0 =>
+                        array (
+                            'id' => '3',
+                            'post_id' => '3',
+                            'data' => 'meta 3',
+                        ),
+                    ),
+                    'tag' =>
+                    array (
+                        0 =>
+                        array (
+                            'id' => '5',
+                            'post_id' => '3',
+                            'tag_id' => '3',
+                            'tag_name' =>
+                            array (
+                                0 =>
+                                array (
+                                    'id' => '3',
+                                    'name' => 'gir',
+                                ),
+                            ),
+                        ),
+                        1 =>
+                        array (
+                            'id' => '6',
+                            'post_id' => '3',
+                            'tag_id' => '1',
+                            'tag_name' =>
+                            array (
+                                0 =>
+                                array (
+                                    'id' => '1',
+                                    'name' => 'zim',
+                                ),
+                            ),
+                        ),
                     ),
                 ),
             ),
-            101 => array(
-                'id' => 101,
-                'title' => 'Entry2',
-                'Comment' => array(
-                    'comment_id' => 201,
-                    'body' => 'entry 101 comment',
-                    'ThumbsUp' => array(
-                        'up' => 30,
-                        'down' => 10,
-                        'body' => 'like for 201 comment',
-                    ),
-                ),
-            ),
-            102 => array(
-                'comment_id' => 202,
-                'body' => 'entry 102 comment',
-                'ThumbsUp' => array(
-                    'up' => 30,
-                    'down' => 10,
-                    'body' => 'like for 202 comment',
-                ),
-            ),
         );
-        $this->assertSame($expected, $result);
+        $this->assertSame($expected, $result->body);
+    }
+
+
+    /**
+     * @expectedException \BEAR\Resource\Exception\LinkQuery
+     */
+    public function testScalarValueLinkThrowException()
+    {
+        $this->request->links = [new LinkType('greeting', LinkType::NEW_LINK)];
+        $this->request->method = 'get';
+        $ro = new Name;
+        $ro->body = $ro->onGet('koriym');
+        $this->request->ro = $ro;
+        $this->linker->invoke($this->request);
+    }
+    /**
+     * @expectedException \BEAR\Resource\Exception\LinkRel
+     */
+    public function testInvalidRel()
+    {
+        $this->request->links = [new LinkType('xxx', LinkType::NEW_LINK)];
+        $this->request->method = 'get';
+        $ro = new User;
+        $ro->body = $ro->onGet(1);
+        $this->request->ro = $ro;
+        $this->linker->invoke($this->request);
     }
 
     /**
-     * @expectedException \BEAR\Resource\Exception\Link
+     * @expectedException \BEAR\Resource\Exception\LinkQuery
      */
-    public function testReturnInsideInstanceAfterListLink()
+    public function testInvalidLinkQuery()
     {
-        $ro = new User\Entry;
-        $links = [];
-        $link = new LinkType;
-        $link->type = LinkType::CRAWL_LINK;
-        $link->key = 'Comment';
-        $links[] = $link;
-        $link = new LinkType;
-        $link->type = LinkType::CRAWL_LINK;
-        $link->key = 'Point';
-        $links[] = $link;
-        $this->request->links = $links;
+        $this->request->links = [new LinkType('no_query', LinkType::NEW_LINK)];
         $this->request->method = 'get';
-        $this->linker->invoke($ro, $this->request, $ro->onGet(1));
+        $ro = new Name;
+        $ro->body = [];
+        $this->request->ro = $ro;
+        $this->linker->invoke($this->request);
     }
 }

@@ -48,7 +48,7 @@ interface RequestInterface
      *
      * @param array $query
      *
-     * @return AbstractObject
+     * @return ResourceObject
      */
     public function __invoke(array $query = null);
 
@@ -65,4 +65,11 @@ interface RequestInterface
      * @return string
      */
     public function toUriWithMethod();
+
+    /**
+     * Return request hash
+     *
+     * @return string
+     */
+    public function hash();
 }

@@ -6,12 +6,14 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\AbstractObject as ResourceObject;
-use BEAR\Resource\Annotation\Link as AnnotationLink;
-use BEAR\Resource\Exception\BadLinkRequest;
-use Ray\Di\Di\Scope;
+use BEAR\Resource\Exception;
 use Doctrine\Common\Annotations\Reader;
-use SplQueue;
+use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\Cache\Cache;
+use Guzzle\Parser\UriTemplate\UriTemplate;
+use Guzzle\Parser\UriTemplate\UriTemplateInterface;
+use Ray\Di\AbstractModule;
+use Ray\Di\Di\Scope;
 use ReflectionMethod;
 use Ray\Di\Di\Inject;
 
@@ -24,18 +26,33 @@ use Ray\Di\Di\Inject;
 final class Linker implements LinkerInterface
 {
     /**
-     * Method name
-     *
-     * @var string
-     */
-    private $method;
-
-    /**
      * Resource client
      *
      * @var ResourceInterface
      */
     private $resource;
+
+    /**
+     * @var \Guzzle\Parser\UriTemplate\UriTemplate
+     */
+    private $uriTemplate;
+
+    /**
+     * @param Reader               $reader
+     * @param Cache                $cache
+     * @param UriTemplateInterface $uriTemplate
+     *
+     * @Inject
+     */
+    public function __construct(
+        Reader $reader,
+        Cache $cache = null,
+        UriTemplateInterface $uriTemplate = null
+    ) {
+        $this->reader = $reader;
+        $this->cache = $cache ?: new ArrayCache;
+        $this->uriTemplate = $uriTemplate ?: new UriTemplate;
+    }
 
     /**
      * Set resource
@@ -48,178 +65,163 @@ final class Linker implements LinkerInterface
     }
 
     /**
-     * Constructor
-     *
-     * @param \Doctrine\Common\Annotations\Reader $reader
-     *
-     * @Inject
-     */
-    public function __construct(Reader $reader)
-    {
-        $this->reader = $reader;
-    }
-
-    /**
-     * @param SplQueue $q
-     * @param LinkType $link
-     *
-     * @return array|null
-     * @throws Exception\Link
-     */
-    private function getItem(\SplQueue $q, LinkType $link)
-    {
-        $cnt = $q->count();
-        if ($cnt === 0) {
-            return null;
-        }
-        $item = null;
-        for ($i = 0; $i < $cnt; $i++) {
-            list($item, $ro) = $q->dequeue();
-            $request = $this->getLinkResult($ro, $link->key, (array)$item);
-            if (!($request instanceof Request)) {
-                throw new Exception\Link('From list to instance link is not currently supported.');
-            }
-            $requestResult = $request();
-            /** @var $requestResult AbstractObject */
-            $item[$link->key] = $requestResult->body;
-            $item = (array)$item;
-        }
-
-        return $item;
-    }
-
-    /**
      * {@inheritDoc}
-     * @throws Exception\Link
      */
-    public function invoke(ResourceObject $ro, Request $request, $sourceValue)
+    public function invoke(Request $request)
     {
-        $this->method = 'on' . ucfirst($request->method);
-
-        $links = $request->links;
-        $hasTargeted = false;
-        $refValue = &$sourceValue;
-        $q = new SplQueue;
-        $q->setIteratorMode(\SplQueue::IT_MODE_DELETE);
-        // has links
-        foreach ($links as $link) {
-            $item = $this->getItem($q, $link);
-            if ($item) {
-                continue;
-            }
-            if ($this->isList($refValue)) {
-                foreach ($refValue as &$item) {
-                    $request = $this->getLinkResult($ro, $link->key, $item);
-                    /** @noinspection PhpUndefinedFieldInspection */
-                    $requestResult = is_callable($request) ? $request()->body : $request;
-                    $requestResult = is_array($requestResult) ? new \ArrayObject($requestResult) : $requestResult;
-                    $item[$link->key] = $requestResult;
-                    $q->enqueue([$requestResult, $request->ro]);
-                }
-
-                $refValue = &$requestResult;
-                continue;
-            }
-            $request = $this->getLinkResult($ro, $link->key, $refValue);
-
-            if (!($request instanceof Request)) {
-                return $request;
-            }
-            $ro = $request->ro;
-            $requestResult = $request();
-            /** @var $requestResult \BEAR\Resource\AbstractObject */
-            switch ($link->type) {
-                case LinkType::NEW_LINK:
-                    if (!$hasTargeted) {
-                        $sourceValue = [$sourceValue, $requestResult->body];
-                        $hasTargeted = true;
-                    } else {
-                        $sourceValue[] = $requestResult->body;
-                    }
-                    $refValue = &$requestResult;
-                    break;
-                case LinkType::CRAWL_LINK:
-                    $refValue[$link->key] = $requestResult->body;
-                    $refValue = &$requestResult;
-                    break;
-                case LinkType::SELF_LINK:
-                default:
-                    $refValue = $requestResult->body;
-            }
+        $current = clone $request->ro;
+        foreach ($request->links as $link) {
+            $nextResource = $this->annotationLink($link, $current, $request);
+            $current = $this->nextLink($link, $current, $nextResource);
         }
-        array_walk_recursive(
-            $sourceValue,
-            function (&$in) {
-                if ($in instanceof \ArrayObject) {
-                    $in = (array)$in;
-                }
-            }
-        );
 
-        return $sourceValue;
+        return $current;
     }
 
     /**
-     * Call link method
+     * How next linked resource treated (add ? replace ?)
      *
-     * @param mixed  $ro
-     * @param string $linkKey
-     * @param mixed  $input
+     * @param LinkType       $link
+     * @param ResourceObject $ro
+     * @param $nextResource
      *
-     * @return mixed
-     * @throws BadLinkRequest
+     * @return ResourceObject
      */
-    private function getLinkResult($ro, $linkKey, $input)
+    private function nextLink(LinkType $link, ResourceObject $ro, $nextResource)
     {
-        $method = 'onLink' . ucfirst($linkKey);
-        if (!method_exists($ro, $method)) {
-            $annotations = $this->reader->getMethodAnnotations(new ReflectionMethod($ro, $this->method));
-            foreach ($annotations as $annotation) {
-                if ($annotation instanceof AnnotationLink) {
-                    if ($annotation->rel === $linkKey) {
-                        $uri = $annotation->href;
-                    }
-                    $method = $annotation->method;
-                    if ($input instanceof AbstractObject) {
-                        $input = $input->body;
-                    }
-                    /** @noinspection PhpUndefinedMethodInspection */
-                    /** @noinspection PhpUndefinedVariableInspection */
-                    $result = $this->resource->$method->uri($uri)->withQuery($input)->eager->request();
+        $nextBody = $nextResource instanceof ResourceObject ? $nextResource->body : $nextResource;
 
-                    return $result;
-                }
+        if ($link->type === LinkType::SELF_LINK) {
+            $ro->body = $nextBody;
+            return $ro;
+        }
+
+        if ($link->type === LinkType::NEW_LINK) {
+            $ro->body[$link->key] = $nextBody;
+            return $ro;
+        }
+        // crawl
+        return $ro;
+    }
+
+    /**
+     * Annotation link
+     *
+     * @param LinkType       $link
+     * @param ResourceObject $current
+     * @param Request        $request
+     *
+     * @return ResourceObject|mixed
+     * @throws Exception\LinkQuery
+     */
+    private function annotationLink(LinkType $link, ResourceObject $current, Request $request)
+    {
+        if (!(is_array($current->body))) {
+            throw new Exception\LinkQuery('Only array is allowed for link in ' . get_class($current));
+        }
+        $classMethod = 'on' . ucfirst($request->method);
+        $annotations = $this->reader->getMethodAnnotations(new ReflectionMethod($current, $classMethod));
+        if ($link->type === LinkType::CRAWL_LINK) {
+            return $this->annotationCrawl($annotations, $link, $current);
+        }
+        return $this->annotationRel($annotations, $link, $current)->body;
+    }
+
+    /**
+     * Annotation link (new, self)
+     *
+     * @param array          $annotations
+     * @param LinkType       $link
+     * @param ResourceObject $current
+     *
+     * @return ResourceObject
+     * @throws Exception\LinkQuery
+     * @throws Exception\LinkRel
+     */
+    private function annotationRel(array $annotations, LinkType $link, ResourceObject $current)
+    {
+        foreach ($annotations as $annotation) {
+            /* @var $annotation Annotation\Link */
+            if ($annotation->rel !== $link->key) {
+                continue;
             }
-
-            throw new BadLinkRequest(get_class($ro) . "::{$method}");
+            $uri = $this->uriTemplate->expand($annotation->href, $current->body);
+            try {
+                $linkedResource = $this
+                    ->resource
+                    ->{$annotation->method}
+                    ->uri($uri)
+                    ->eager
+                    ->request();
+                /* @var $linkedResource ResourceObject */
+            } catch (Exception\Parameter $e) {
+                $msg = 'class:' . get_class($current) . " link:{$link->key} query:" . json_encode($current->body);
+                throw new Exception\LinkQuery($msg, 0, $e);
+            }
+            return $linkedResource;
         }
-        if (! $input instanceof AbstractObject) {
-            $ro->body = $input;
-            $input = $ro;
-        }
-        $result = call_user_func([$ro, $method], $input);
+        throw new Exception\LinkRel("[{$link->key}] in " . get_class($current) . ' is not available.');
+    }
 
-        return $result;
+    /**
+     * Link annotation crawl
+     *
+     * @param array          $annotations
+     * @param LinkType       $link
+     * @param ResourceObject $current
+     *
+     * @return ResourceObject
+     */
+    private function annotationCrawl(array $annotations, LinkType $link, ResourceObject $current)
+    {
+        $isList = $this->isList($current->body);
+        $bodyList = $isList ? $current->body : [ $current->body];
+        foreach ($bodyList as &$body) {
+            foreach ($annotations as $annotation) {
+                /* @var $annotation Annotation\Link */
+                if ($annotation->crawl !== $link->key) {
+                    continue;
+                }
+                $uri = $this->uriTemplate->expand($annotation->href, $body);
+                $request = $this
+                    ->resource
+                    ->{$annotation->method}
+                    ->uri($uri)
+                    ->linkCrawl($link->key)
+                    ->request();
+                /* @var $request Request */
+                $hash = $request->hash();
+                if ($this->cache->contains($hash)) {
+                    $body[$annotation->rel] =$this->cache->fetch($hash);
+                    continue;
+                }
+                /* @var $linkedResource ResourceObject */
+                $body[$annotation->rel] = $request()->body;
+                $this->cache->save($hash, $body[$annotation->rel]);
+            }
+        }
+        $current->body = $isList ? $bodyList : $bodyList[0];
+        return $current;
     }
 
     /**
      * Is data list ?
      *
-     * @param mixed $list
+     * @param mixed $value
      *
      * @return boolean
      */
-    private function isList($list)
+    private function isList($value)
     {
-        if (!(is_array($list))) {
-            return false;
-        }
-        $list = array_values((array)$list);
-        $result = (count($list) > 1 && isset($list[0]) && isset($list[1]) && is_array($list[0]) && is_array(
-            $list[1]
-        ) && (array_keys($list[0]) === array_keys($list[1])));
+        $value = array_values((array)$value);
+        $isMultiColumnList = (count($value) > 1
+            && isset($value[0])
+            && isset($value[1])
+            && is_array($value[0])
+            && is_array($value[1])
+            && (array_keys($value[0]) === array_keys($value[1])));
+        $isOneColumnList = (count($value) === 1) && is_array($value[0]);
 
-        return $result;
+        return ($isOneColumnList | $isMultiColumnList);
     }
-
 }

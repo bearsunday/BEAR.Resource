@@ -2,32 +2,18 @@
 
 namespace Sandbox\Resource\App;
 
-use BEAR\Resource\ObjectInterface as ResourceObject;
-use BEAR\Resource\AbstractObject;
-use BEAR\Resource\ResourceInterface;
+use BEAR\Resource\ResourceObject;
 
 use BEAR\Resource\Annotation\Provides;
 use BEAR\Resource\Annotation\ParamSignal;
 
 use Ray\Di\Di\Scope;
 
-/**
- * @Scope("singleton")
- */
-class User extends AbstractObject
+class User extends ResourceObject
 {
     public $headers = [
         'x-header-test' => '123'
     ];
-
-    /**
-     *
-     * @param ResourceInterface $resource
-     */
-    public function setResource(ResourceInterface $resource)
-    {
-        $this->resource = $resource;
-    }
 
     private $users = array(
         array('id' => 1, 'name' => 'Athos', 'age' => 15, 'blog_id' => 11),
@@ -74,11 +60,6 @@ class User extends AbstractObject
     public function onDelete($delete_id)
     {
         return "{$delete_id} deleted";
-    }
-
-    public function onLinkBlog(ResourceObject $resource)
-    {
-        return $this->resource->get->uri('app://self/Blog')->withQuery(['id' => $resource->body['blog_id']])->request();
     }
 
     /**

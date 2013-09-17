@@ -2,9 +2,9 @@
 
 namespace Sandbox\Resource\Page;
 
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 
-class News extends AbstractObject
+class News extends ResourceObject
 {
     /**
      * @param id

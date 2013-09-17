@@ -3,11 +3,11 @@
 namespace BEAR\Resource\Renderer;
 
 use BEAR\Resource\RenderInterface;
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 
 class ErrorRenderer implements RenderInterface
 {
-    public function render(AbstractObject $resourceObject)
+    public function render(ResourceObject $resourceObject)
     {
         throw new \ErrorException;
     }

@@ -14,9 +14,9 @@ interface RenderInterface
     /**
      * Render
      *
-     * @param AbstractObject $resourceObject
+     * @param ResourceObject $resourceObject
      *
      * @return self
      */
-    public function render(AbstractObject $resourceObject);
+    public function render(ResourceObject $resourceObject);
 }

@@ -74,7 +74,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function testToStringWithRenderableResourceObject()
     {
         $ro = (new Test)->setRenderer(new TestRenderer);
-        /**  @var $ro AbstractObject */
+        /**  @var $ro ResourceObject */
         $this->request->set($ro, 'nop://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
         $request = $this->request;
         $actual = $request(['b' => 30])->body['posts'];

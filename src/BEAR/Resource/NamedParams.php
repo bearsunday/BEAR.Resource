@@ -7,7 +7,6 @@
 namespace BEAR\Resource;
 
 use Ray\Aop\MethodInvocation;
-use Ray\Aop\Weave;
 use ReflectionParameter;
 use Ray\Di\Di\Inject;
 
@@ -34,7 +33,7 @@ final class NamedParams implements NamedParamInterface
     /**
      * {@inheritdoc}
      */
-    public function invoke(MethodInvocation $invocation, Weave $weave = null)
+    public function invoke(MethodInvocation $invocation)
     {
         $object = $invocation->getThis();
         $namedArgs = $invocation->getArguments();
@@ -45,13 +44,14 @@ final class NamedParams implements NamedParamInterface
             /** @var $parameter \ReflectionParameter */
             if (isset($namedArgs[$parameter->name])) {
                 $args[] = $namedArgs[$parameter->name];
-            } elseif ($parameter->isDefaultValueAvailable() === true) {
-                $args[] = $parameter->getDefaultValue();
-            } else {
-                $args[] = $this->signalParam->getArg($parameter, $invocation);
+                continue;
             }
+            if ($parameter->isDefaultValueAvailable() === true) {
+                $args[] = $parameter->getDefaultValue();
+                continue;
+            }
+            $args[] = $this->signalParam->getArg($parameter, $invocation);
         }
-        $object = $weave ? : $object;
         $result = call_user_func_array([$object, $method->name], $args);
 
         return $result;

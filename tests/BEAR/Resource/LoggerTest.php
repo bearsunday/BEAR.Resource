@@ -14,14 +14,11 @@ use Ray\Di\Injector;
 
 class TestWriter implements LogWriterInterface
 {
-    public function write(RequestInterface $req, AbstractObject $result)
+    public function write(RequestInterface $req, ResourceObject $result)
     {
     }
 }
 
-/**
- * Test class for BEAR.Resource.
- */
 class LoggerTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -48,7 +45,6 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->request->ro = new Test;
         $this->request->ro->uri = 'test://self/path/to/resource';
         $this->request->query = array('a' => 'koriym', 'b' => 25);
-
     }
 
     public function testNew()
@@ -64,13 +60,17 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->logger->log($this->request, new Test);
         foreach ($this->logger as $log) {
             $this->assertSame(2, count($log));
-            $this->assertSame('get test://self/path/to/resource?a=koriym&b=25', $log[0]->toUriWithMethod());
+            $request = $log[0];
+            /** @var $request \BEAR\Resource\Request */
+            $this->assertSame('get test://self/path/to/resource?a=koriym&b=25', $request->toUriWithMethod());
         }
     }
 
     public function testSetWriter()
     {
         $this->logger->setWriter(new TestWriter);
+        $this->request->set(new Test, 'test://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
+        $this->logger->log($this->request, new Test);
         $result = $this->logger->write($this->request, new Test);
         $this->assertSame(true, $result);
     }
@@ -86,7 +86,6 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(0, count($this->logger));
     }
 
-
     public function testSerialize()
     {
         $request = $this->request;
@@ -94,5 +93,17 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->logger->log($request, new Test);
         $logStr = serialize($this->logger);
         $this->assertInternalType('string', $logStr);
+        return $logStr;
+    }
+
+    /**
+     * @param $logStr
+     *
+     * @depends testSerialize
+     */
+    public function testUnserialize($logStr)
+    {
+        $logger = unserialize($logStr);
+        $this->assertInstanceOf('BEAR\Resource\Logger', $logger);
     }
 }

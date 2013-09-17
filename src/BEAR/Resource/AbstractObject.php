@@ -6,54 +6,9 @@
  */
 namespace BEAR\Resource;
 
-use Ray\Di\Di\Inject;
-use ArrayAccess;
-use Countable;
-use IteratorAggregate;
-
 /**
- * Abstract resource object
+ * @deprecated use ResourceObject instead
  */
-abstract class AbstractObject implements ObjectInterface, ArrayAccess, Countable, IteratorAggregate
+abstract class AbstractObject extends ResourceObject
 {
-    // (array)
-    use BodyArrayAccessTrait;
-
-    // (string)
-    use RenderTrait;
-
-    /**
-     * URI
-     *
-     * @var string
-     */
-    public $uri = '';
-
-    /**
-     * Resource status code
-     *
-     * @var int
-     */
-    public $code = 200;
-
-    /**
-     * Resource header
-     *
-     * @var array
-     */
-    public $headers = [];
-
-    /**
-     * Resource representation
-     *
-     * @var string
-     */
-    public $view;
-
-    /**
-     * Resource links
-     *
-     * @var array
-     */
-    public $links = [];
 }

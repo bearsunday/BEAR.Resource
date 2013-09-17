@@ -1,10 +1,14 @@
 {
     "name": "bear/resource",
-    "description": "RESTful service layer framework",
+    "description": "Hypermedia framework for object as a service",
     "keywords": [
+        "Hypermedia",
+        "Framework",
+        "Object as a service",
         "REST",
         "HATEOAS",
-        "service layer"
+        "Stateless",
+        "Protocol"
     ],
     "homepage": "https://github.com/koriym/BEAR.Resource",
     "license": "BSD-3-Clause",
@@ -17,8 +21,11 @@
     "require": {
         "php": ">=5.4.0",
         "aura/signal": "1.*",
-        "ray/di": "1.0.*",
+        "ray/di": "1.1.*",
+        "ray/aop": "1.1.*",
+        "any/serializer": "*",
         "doctrine/cache": "1.*",
+        "nocarrier/hal":"*",
         "guzzle/guzzle": "3.3.*"
     },
     "require-dev": {

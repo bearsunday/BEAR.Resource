@@ -6,11 +6,10 @@ use Ray\Di\Injector;
 use BEAR\Resource\SchemeCollection;
 use BEAR\Resource\Factory;
 
-/**
- * Test class for BEAR.Resource.
- */
 class HttpTest extends \PHPUnit_Framework_TestCase
 {
+    const TEST_SERVER = 'http://www.kumasystem.com/';
+
     protected $skeleton;
 
     protected function setUp()
@@ -65,22 +64,28 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $ro->headers['Content-Type'][0]);
     }
 
-    /**
-     * @expectedException \Guzzle\Http\Exception\ClientErrorResponseException
-     * @covers BEAR\Resource\Adapter\Http\Guzzle::onPut
-     */
     public function testPut()
     {
-        $this->httpAdapter->onPut();
+        $httpAdapter = $this->factory->newInstance(self::TEST_SERVER . '/fixture/server.php');
+        $ro = $httpAdapter->onPut();
+        $method = $ro->body->REQUEST_METHOD;
+        $this->assertSame('PUT', $method);
     }
 
-    /**
-     * @expectedException \Guzzle\Http\Exception\ClientErrorResponseException
-     * @covers BEAR\Resource\Adapter\Http\Guzzle::onDelete
-     */
     public function testDelete()
     {
-        $this->httpAdapter->onDelete();
+        $httpAdapter = $this->factory->newInstance(self::TEST_SERVER . '/fixture/server.php');
+        $ro = $httpAdapter->onDelete();
+        $method = $ro->body->REQUEST_METHOD;
+        $this->assertSame('DELETE', $method);
+    }
+
+    public function testOptions()
+    {
+        $httpAdapter = $this->factory->newInstance(self::TEST_SERVER . '/fixture/server.php');
+        $ro = $httpAdapter->onOptions();
+        $method = $ro->body->REQUEST_METHOD;
+        $this->assertSame('OPTIONS', $method);
     }
 
     /**
@@ -94,7 +99,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     *
      * @expectedException \Guzzle\Http\Exception\ClientErrorResponseException
      */
     public function test404()

@@ -77,8 +77,6 @@ class Factory implements FactoryInterface
             }
         } catch (NotReadable $e) {
             throw new Exception\ResourceNotFound($uri, 0, $e);
-        } catch (\Exception $e) {
-            throw $e;
         }
         $adapter->uri = $uri;
 

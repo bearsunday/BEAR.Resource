@@ -2,9 +2,14 @@
 
 namespace Sandbox\Resource\App;
 
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 
-class Index extends AbstractObject
+/**
+ * Test class for root resource
+ *
+ * app://self/
+ */
+class Index extends ResourceObject
 {
     public $class = __CLASS__;
 

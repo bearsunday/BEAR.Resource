@@ -10,6 +10,9 @@ use Ray\Di\Injector;
  */
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Factory
+     */
     protected $factory;
 
     protected function setUp()
@@ -64,8 +67,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testNewInstanceApp()
     {
-        $instance = $this->factory->newInstance('app://self/news');
-        $this->assertInstanceOf('Sandbox\Resource\App\News', $instance, get_class($instance));
+        $instance = $this->factory->newInstance('app://self/factory/news');
+        $this->assertInstanceOf('Sandbox\Resource\App\Factory\News', $instance, get_class($instance));
     }
 
     public function testNewInstancePage()
@@ -81,4 +84,13 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->factory->newInstance('invalid_uri');
     }
+
+    /**
+     * @expectedException \BEAR\Resource\Exception\ResourceNotFound
+     */
+    public function testResourceNotFound()
+    {
+        $this->factory->newInstance('page://self/not_found_XXXX');
+    }
+
 }

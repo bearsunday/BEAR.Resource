@@ -2,11 +2,11 @@
 
 namespace Sandbox\Resource\App\Weave;
 
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 use BEAR\Resource\ResourceInterface;
 use BEAR\Resource\Annotation\Log;
 
-class Book extends AbstractObject
+class Book extends ResourceObject
 {
 
     /**
@@ -14,9 +14,6 @@ class Book extends AbstractObject
      */
     public function __construct(ResourceInterface $resource = null)
     {
-        if (is_null($resource)) {
-            $resource = $GLOBALS['RESOURCE'];
-        }
     }
 
     /**

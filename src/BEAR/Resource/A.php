@@ -13,9 +13,6 @@ use Ray\Di\Di\Scope;
 
 /**
  * Anchor
- *
- *
- * @Scope("singleton")
  */
 class A implements HrefInterface
 {
@@ -33,12 +30,12 @@ class A implements HrefInterface
      * Return hyper reference URI
      *
      * @param string         $rel
-     * @param AbstractObject $ro
+     * @param ResourceObject $ro
      *
-     * @return string
+     * @return mixed|string
      * @throws Exception\Link
      */
-    public function href($rel, AbstractObject $ro)
+    public function href($rel, ResourceObject $ro)
     {
         if (!isset($ro->links[$rel])) {
             throw new Exception\Link(get_class($ro) . ':' . $rel);

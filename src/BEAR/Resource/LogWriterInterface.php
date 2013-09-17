@@ -6,8 +6,6 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\AbstractObject as ResourceObject;
-
 /**
  * Interface for resource log writer
  */
@@ -17,7 +15,7 @@ interface LogWriterInterface
      * Resource log write
      *
      * @param RequestInterface $request
-     * @param AbstractObject   $result
+     * @param ResourceObject   $result
      *
      * @return bool true if log written
      */

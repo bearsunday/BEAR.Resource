@@ -20,6 +20,8 @@ class IdProvider implements ParamProviderInterface
 {
     public function __invoke(Param $param)
     {
+        $GLOBALS['method'] = $param->getMethodInvocation();
+        $GLOBALS['param'] = $param->getParameter();
         return $param->inject(1002);
     }
 }
@@ -100,6 +102,22 @@ class SignalParamTest extends \PHPUnit_Framework_TestCase
             new ReflectiveMethodInvocation($callable, [])
         );
         $this->assertSame(1002, $result);
+    }
+
+    /**
+     * @depends testGetArgWithSignal
+     */
+    public function testGetArgWithSignalMethod()
+    {
+        $this->assertInstanceOf('Ray\Aop\ReflectiveMethodInvocation', $GLOBALS['method']);
+    }
+
+    /**
+     * @depends testGetArgWithSignal
+     */
+    public function testGetArgWithSignalParam()
+    {
+        $this->assertInstanceOf('ReflectionParameter', $GLOBALS['param']);
     }
 
     /**

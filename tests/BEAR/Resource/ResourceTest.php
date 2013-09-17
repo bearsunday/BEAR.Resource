@@ -7,17 +7,15 @@ use Aura\Signal\Manager;
 use Aura\Signal\ResultCollection;
 use Aura\Signal\ResultFactory;
 use BEAR\Resource\Mock\TestModule;
+use BEAR\Resource\ParamProvider\OnProvidesParam;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Cache\ApcCache as Cache;
+use Doctrine\Common\Cache\FilesystemCache;
 use Guzzle\Cache\DoctrineCacheAdapter as CacheAdapter;
-use Ray\Di\Annotation;
-use Ray\Di\Config;
-use Ray\Di\Container;
+use Guzzle\Parser\UriTemplate\UriTemplate;
 use Ray\Di\Definition;
-use Ray\Di\EmptyModule;
-use Ray\Di\Forge;
 use Ray\Di\Injector;
 use BEAR\Resource\Renderer\TestRenderer;
+use Sandbox\Resource\App\Link;
 
 class varProvider implements ParamProviderInterface
 {
@@ -27,22 +25,22 @@ class varProvider implements ParamProviderInterface
     }
 }
 
-/**
- * Test class for BEAR.Resource.
- */
 class ResourceTest extends \PHPUnit_Framework_TestCase
 {
-    protected $skeleton;
-
     /**
      * @var CacheAdapter
      */
     protected $cache;
 
     /**
-     * @var Resource
+     * @var \BEAR\Resource\Resource
      */
     private $resource;
+
+    /**
+     * @var \Sandbox\Resource\App\User
+     */
+    private $user;
 
     protected function setUp()
     {
@@ -61,8 +59,9 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $scheme->scheme('test')->host('self')->toAdapter(new Adapter\Test);
         $scheme->scheme('prov')->host('self')->toAdapter(new Adapter\Prov);
         $scheme->scheme('http')->host('*')->toAdapter(new Adapter\Http);
+        $resource = require dirname(dirname(dirname(__DIR__))) . '/scripts/instance.php';
         /** @var $resource \BEAR\Resource\Resource */
-        $this->resource = require dirname(dirname(dirname(__DIR__))) . '/scripts/instance.php';
+        $this->resource = $resource;
         $this->resource->setSchemeCollection($scheme);
 
         // new resource object;
@@ -74,7 +73,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
             'name' => 'Ray',
             'age' => 43
         ];
-        $this->cache = new CacheAdapter(new Cache);
+        $this->cache = new CacheAdapter(new FilesystemCache($_ENV['BEAR_TMP']));
     }
 
     public function testNew()
@@ -111,25 +110,6 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     public function testPost()
     {
         $request = $this->resource->post->object($this->nop)->withQuery($this->query)->request();
-        $expected = "post nop://self/dummy?id=10&name=Ray&age=43";
-        $this->assertSame($expected, $request->toUriWithMethod());
-    }
-
-    public function testPostPoeCsrf()
-    {
-        $request = $this->resource->post->object($this->nop)->withQuery($this->query)->poe->csrf->request();
-        $expected = "post nop://self/dummy?id=10&name=Ray&age=43";
-        $this->assertSame($expected, $request->toUriWithMethod());
-    }
-
-    /**
-     * @expectedException \BEAR\Resource\Exception\BadRequest
-     */
-    public function testPostInvalidOption()
-    {
-        $request = $this->resource->post->object($this->nop)->withQuery(
-            $this->query
-        )->poe->csrf->invalid_option_cause_exception->request();
         $expected = "post nop://self/dummy?id=10&name=Ray&age=43";
         $this->assertSame($expected, $request->toUriWithMethod());
     }
@@ -206,14 +186,6 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual->body);
     }
 
-    public function testP()
-    {
-        $ro = new \Sandbox\Resource\App\Link;
-        $actual = $this->resource->get->object($ro)->withQuery(array('id' => 1))->linkSelf('View')->eager->request();
-        $expected = '<html>bear1</html>';
-        $this->assertSame($expected, $actual->body);
-    }
-
     /**
      * @expectedException \BEAR\Resource\Exception\Uri
      */
@@ -224,21 +196,23 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\BEAR\Resource\Request', $request);
     }
 
-    /**
-     * @expectedException \Sandbox\Resource\App\Shutdown
-     */
-    public function testServiceError()
-    {
-        $this->resource->post->uri('app://self/blog')->eager->request();
-    }
-
     public function testSyncHttp()
     {
-        $response = $this->resource->get->uri(
-            'http://news.google.com/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss'
-        )->sync->request()->get->uri('http://phpspot.org/blog/index.xml')->eager->sync->request()->get->uri(
-                'http://rss.excite.co.jp/rss/excite/odd'
-            )->eager->request();
+        $response = $this
+            ->resource
+            ->get
+            ->uri('http://news.google.com/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss')
+            ->sync
+            ->request()
+            ->get
+            ->uri('http://phpspot.org/blog/index.xml')
+            ->eager
+            ->sync
+            ->request()
+            ->get
+            ->uri('http://rss.excite.co.jp/rss/excite/odd')
+            ->eager
+            ->request();
         $this->assertSame(3, count($response->body));
     }
 
@@ -267,7 +241,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->resource =  require dirname(dirname(dirname(__DIR__))) . '/scripts/instance.php';
 
         $invoker = new Invoker(new Linker(new AnnotationReader), new NamedParams(new SignalParam(new Manager(new HandlerFactory, new ResultFactory, new ResultCollection), new Param)), new Logger);
-        $resource = new Resource(new Factory($scheme), $invoker, new Request($invoker));
+        $resource = new Resource(new Factory($scheme), $invoker, new Request($invoker), new Anchor(new UriTemplate, new AnnotationReader, new Request($invoker)));
         $request = $resource->get->uri('test://self/path/to/example')->withQuery(['a' => 1, 'b' => 2])->request();
         $this->assertSame('{"posts":[1,2]}', (string)$request);
         $this->assertSame(['posts' => [1, 2]], $request()->body);
@@ -300,10 +274,35 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(100, $result->a);
     }
 
-    public function testDocsSample01RestBucks()
+    /**
+     * @runTestsInSeparateProcesses
+     */
+    public function testDocsSample00min()
     {
         ob_start();
-        require dirname(dirname(dirname(__DIR__))) . '/docs/sample/Restbucks/order.php';
+        require dirname(dirname(dirname(__DIR__))) . '/docs/sample/00.min/main.php';
+        $response = ob_get_clean();
+        $this->assertContains('[name] => Aramis', $response);
+    }
+
+    /**
+     * @runTestsInSeparateProcesses
+     */
+    public function testDocsSample01basic()
+    {
+        ob_start();
+        require dirname(dirname(dirname(__DIR__))) . '/docs/sample/01.basic/main.php';
+        $response = ob_get_clean();
+        $this->assertContains('[name] => Aramis', $response);
+    }
+
+    /**
+     * @runTestsInSeparateProcesses
+     */
+    public function testDocsSampleRestBucks()
+    {
+        ob_start();
+        require dirname(dirname(dirname(__DIR__))) . '/docs/sample/04.restbucks/main.php';
         $response = ob_get_clean();
         $this->assertContains('201: Created', $response);
         $this->assertContains('Order: Success', $response);
@@ -345,5 +344,50 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $response = $this->resource->head->uri($uri)->eager->request();
         $this->assertSame('', $response->body);
         $this->assertSame('123', $response->headers['x-header-test']);
+    }
+
+    /**
+     * @expectedException \BEAR\Resource\Exception\BadRequest
+     */
+    public function testInvalidOption()
+    {
+        $this->resource->invalid_xxx;
+    }
+
+    public function testAddQueryInRequest()
+    {
+        $request = $this->resource->get->object($this->nop)->withQuery($this->query)->request();
+        $request->addQuery(['age' => 45, 'feel' => 'good']);
+        $expected = "get nop://self/dummy?id=10&name=Ray&age=45&feel=good";
+        $result = $request->toUriWithMethod();
+        $this->assertSame($expected, $result);
+    }
+
+    public function testAddQuery()
+    {
+        $request = $this->resource->get->object($this->nop)->withQuery($this->query)->addQuery(['age' => 45, 'feel' => 'good'])->request();
+        $expected = "get nop://self/dummy?id=10&name=Ray&age=45&feel=good";
+        $result = $request->toUriWithMethod();
+        $this->assertSame($expected, $result);
+    }
+
+    public function testOnProvides()
+    {
+        $this->resource->attachParamProvider('*', new OnProvidesParam);
+        $actual = $this->resource->get->uri('app://self/param/user')->eager->request();
+        $this->assertSame("author:10", $actual->body);
+
+        return $this->resource;
+    }
+
+    /**
+     * @depends testOnProvides
+     *
+     * @expectedException \BEAR\Resource\Exception\Parameter
+     */
+    public function testOnProvidesFailed(ResourceInterface $resource)
+    {
+        $actual = $resource->delete->uri('app://self/param/user')->eager->request();
+        $this->assertSame("author:10", $actual->body);
     }
 }

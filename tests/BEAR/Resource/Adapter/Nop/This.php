@@ -2,10 +2,9 @@
 
 namespace BEAR\Resource\Adapter\Nop;
 
-use BEAR\Resource\AbstractObject;
-use BEAR\Resource\ObjectInterface as ResourceObject;
+use BEAR\Resource\ResourceObject;
 
-class This extends AbstractObject implements ResourceObject
+class This extends ResourceObject
 {
     public function onGet($a, $b)
     {

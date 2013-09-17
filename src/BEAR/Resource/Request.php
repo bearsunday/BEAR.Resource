@@ -41,7 +41,7 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
     /**
      * Resource object
      *
-     * @var \BEAR\Resource\AbstractObject
+     * @var \BEAR\Resource\ResourceObject
      */
     public $ro;
 
@@ -76,7 +76,7 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
     /**
      * Links
      *
-     * @var array
+     * @var LinkType[]
      */
     public $links = [];
 
@@ -100,12 +100,12 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
     /**
      * Set
      *
-     * @param AbstractObject $ro
+     * @param ResourceObject $ro
      * @param string         $uri
      * @param string         $method
      * @param array          $query
      */
-    public function set(AbstractObject $ro, $uri, $method, array $query)
+    public function set(ResourceObject $ro, $uri, $method, array $query)
     {
         $this->ro = $ro;
         $this->uri = $uri;
@@ -151,15 +151,17 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
      */
     public function toUri()
     {
-        $query = http_build_query($this->query, null, '&', PHP_QUERY_RFC3986);
         $uri = isset($this->ro->uri) && $this->ro->uri ? $this->ro->uri : $this->uri;
-        if (isset(parse_url($uri)['query'])) {
-            $queryString = $uri;
-        } else {
-            $queryString = "{$uri}" . ($query ? '?' : '') . $query;
+        $parsed = parse_url($uri);
+        if ($this->query === []) {
+            return $uri;
         }
+        if (! isset($parsed['scheme'])) {
+            return $uri;
+        }
+        $fullUri = $parsed['scheme'] . '://' . $parsed['host'] . $parsed['path'] . '?' . http_build_query($this->query, null, '&', PHP_QUERY_RFC3986);
 
-        return $queryString;
+        return $fullUri;
     }
 
     /**
@@ -233,5 +235,13 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
         $isArray = (is_array($this->result->body) || $this->result->body instanceof Traversable);
         $iterator = $isArray ? new ArrayIterator($this->result->body) : new ArrayIterator([]);
         return $iterator;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hash()
+    {
+        return md5(get_class($this->ro) . $this->method . serialize($this->query) . serialize($this->links));
     }
 }

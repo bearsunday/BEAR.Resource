@@ -2,10 +2,9 @@
 
 namespace Sandbox\Resource\App\Weave;
 
-use BEAR\Resource\ObjectInterface as ResourceObject;
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 
-class Link extends AbstractObject
+class Link extends ResourceObject
 {
 
     /**

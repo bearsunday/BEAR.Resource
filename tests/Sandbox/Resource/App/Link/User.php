@@ -1,12 +1,11 @@
 <?php
 namespace Sandbox\Resource\App\Link;
 
-use BEAR\Resource\ObjectInterface as ResourceObject;
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Annotation\Link;
 
 /** @noinspection PhpUndefinedClassInspection */
-class User extends AbstractObject implements ResourceObject
+class User extends ResourceObject
 {
 
     private $users = [
@@ -16,7 +15,7 @@ class User extends AbstractObject implements ResourceObject
     ];
 
     /**
-     * @Link(rel="blog", href="app://self/Link/Blog", method="get")
+     * @Link(rel="blog", href="app://self/link/blog?id={blog_id}")
      */
     public function onGet($id)
     {

@@ -6,16 +6,15 @@ use Aura\Signal\Manager;
 use Aura\Signal\HandlerFactory;
 use Aura\Signal\ResultFactory;
 use Aura\Signal\ResultCollection;
+use Ray\Aop\Compiler;
 use Ray\Di\Definition;
 use Ray\Di\Injector;
-use Ray\Aop\Weaver;
 use Ray\Aop\Bind;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use BEAR\Resource\Interceptor\Log;
-use Sandbox\Resource\App\RestBucks\Order;
+use Sandbox\Resource\App\Link;
+use Sandbox\Resource\App\Restbucks\Order;
 use Sandbox\Resource\App\User;
-use Sandbox\Resource\App\Weave\Book;
-use Sandbox\Resource\App\Weave\Link;
 
 /**
  * Test class for BEAR.Resource.
@@ -23,9 +22,16 @@ use Sandbox\Resource\App\Weave\Link;
 class InvokerTest extends \PHPUnit_Framework_TestCase
 {
     protected $signal;
+
+    /**
+     * @var Invoker
+     */
     protected $invoker;
+
+    /**
+     * @var Request
+     */
     protected $request;
-    protected $query;
 
     protected function setUp()
     {
@@ -118,47 +124,13 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     {
         $bind = new Bind;
         $bind->bindInterceptors('onGet', [new Log]);
-        $weave = new Weaver(new Book, $bind);
+        $weave = $GLOBALS['COMPILER']->newInstance('Sandbox\Resource\App\Weave\Book', [], $bind);
         $this->request->ro = $weave;
         $this->request->method = 'get';
         $this->request->query = ['id' => 1];
         $actual = $this->invoker->invoke($this->request)->body;
         $expected = "book id[1][Log] target = Sandbox\\Resource\\App\\Weave\\Book, input = Array\n(\n    [0] => 1\n)\n, result = book id[1]";
         $this->assertSame($expected, $actual);
-    }
-
-    public function testInvokeWeaveWithLink()
-    {
-        $bind = new Bind;
-        $bind->bindInterceptors('onGet', [new Log]);
-        $weave = new Weaver(new Link, $bind);
-        $this->request->ro = $weave;
-        $this->request->method = 'get';
-        $this->request->query = ['animal' => 'bear'];
-        $link = new LinkType;
-        $link->type = LinkType::SELF_LINK;
-        $link->key = 'View';
-        $links = [$link];
-        $this->request->links = $links;
-        $actual = $this->invoker->invoke($this->request)->body;
-        $expected = "<html>Like a bear to a honey pot.[Log] target = Sandbox\\Resource\\App\\Weave\\Link, input = Array\n(\n    [0] => bear\n)\n, result = Like a bear to a honey pot.</html>";
-        $this->assertSame($expected, $actual);
-    }
-
-    public function testInvokerInterfaceLink()
-    {
-
-        $ro = new \Sandbox\Resource\App\Link;
-        $this->request->ro = $ro;
-        $link = new LinkType;
-        $link->type = LinkType::SELF_LINK;
-        $link->key = 'View';
-        $links = [$link];
-        $this->request->links = $links;
-        $this->request->query = ['id' => 1];
-        $actual = $this->invoker->invoke($this->request)->body;
-        $expected = '<html>bear1</html>';
-        $this->assertSame($actual, $expected);
     }
 
     public function testOptionsMethod()
@@ -187,12 +159,19 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     public function testOptionsWeaver()
     {
         $this->request->method = Invoker::OPTIONS;
-        $this->request->ro = new Weaver(new Order, new Bind);
+        $this->request->ro = $GLOBALS['COMPILER']->newInstance('Sandbox\Resource\App\RestBucks\Order', [], new Bind);
+
         $response = $this->invoker->invoke($this->request);
         $actual = $response->headers['allow'];
         $expected = ['get', 'post'];
         asort($actual);
         asort($expected);
         $this->assertSame($actual, $expected);
+    }
+
+    public function testSetResourceLogger()
+    {
+        $invoker = $this->invoker->setResourceLogger(new Logger);
+        $this->assertInstanceOf('BEAR\Resource\Invoker', $invoker);
     }
 }

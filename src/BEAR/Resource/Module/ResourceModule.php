@@ -10,15 +10,29 @@ use Ray\Di\AbstractModule;
 use Ray\Di\Module\InjectorModule;
 use Ray\Di\Scope;
 
-/**
- * This file is part of the BEAR.Package package
- *
- * @license http://opensource.org/licenses/bsd-license.php BSD
- */
 class ResourceModule extends AbstractModule
 {
+    /**
+     * @var string
+     */
+    private $appName;
+
+    public function __construct($appName = 'Sandbox')
+    {
+        $this->appName = $appName;
+    }
+    /**
+     * {@inheritdoc}
+     */
     protected function configure()
     {
+        // install Injector
+        $this->install(new InjectorModule($this));
+
+        // bind app name
+        $this->bind()->annotatedWith('app_name')->toInstance($this->appName);
+
+        // bind resource client component
         $this->bind('BEAR\Resource\ResourceInterface')->to('BEAR\Resource\Resource')->in(Scope::SINGLETON);
         $this->bind('BEAR\Resource\InvokerInterface')->to('BEAR\Resource\Invoker')->in(Scope::SINGLETON);
         $this->bind('BEAR\Resource\LinkerInterface')->to('BEAR\Resource\Linker')->in(Scope::SINGLETON);
@@ -26,16 +40,8 @@ class ResourceModule extends AbstractModule
         $this->bind('BEAR\Resource\HrefInterface')->to('BEAR\Resource\A');
         $this->bind('BEAR\Resource\SignalParamsInterface')->to('BEAR\Resource\SignalParam');
         $this->bind('BEAR\Resource\FactoryInterface')->to('BEAR\Resource\Factory')->in(Scope::SINGLETON);
-        $this
-            ->bind('BEAR\Resource\SchemeCollectionInterface')
-            ->toProvider('BEAR\Resource\Module\SchemeCollectionProvider')
-            ->in(Scope::SINGLETON);
-        $this
-            ->bind('Aura\Signal\Manager')
-            ->toProvider('BEAR\Resource\Module\SignalProvider')
-            ->in(Scope::SINGLETON);
-        $this
-            ->bind('Guzzle\Parser\UriTemplate\UriTemplateInterface')
-            ->to('Guzzle\Parser\UriTemplate\UriTemplate');
+        $this->bind('BEAR\Resource\SchemeCollectionInterface') ->toProvider('BEAR\Resource\Module\SchemeCollectionProvider')->in(Scope::SINGLETON);
+        $this->bind('Aura\Signal\Manager')->toProvider('BEAR\Resource\Module\SignalProvider')->in(Scope::SINGLETON);
+        $this->bind('Guzzle\Parser\UriTemplate\UriTemplateInterface')->to('Guzzle\Parser\UriTemplate\UriTemplate')->in(Scope::SINGLETON);
     }
 }

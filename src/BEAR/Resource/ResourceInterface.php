@@ -25,7 +25,7 @@ interface ResourceInterface
      *
      * @param mixed $ro
      *
-     * @return AbstractObject
+     * @return ResourceObject
      */
     public function object($ro);
 
@@ -41,7 +41,7 @@ interface ResourceInterface
     /**
      * Set named parameter query
      *
-     * @param  array    $query
+     * @param  array $query
      *
      * @return self
      */
@@ -59,7 +59,7 @@ interface ResourceInterface
     /**
      * Return Request
      *
-     * @return mixed ( | Request)
+     * @return Request | ResourceObject
      */
     public function request();
 
@@ -99,4 +99,14 @@ interface ResourceInterface
      * @return self
      */
     public function attachParamProvider($varName, ParamProviderInterface $provider);
+
+    /**
+     * Hyper reference (Hypertext As The Engine Of Application State)
+     *
+     * @param string $rel
+     * @param array  $query
+     *
+     * @return mixed
+     */
+    public function href($rel, array $query = []);
 }

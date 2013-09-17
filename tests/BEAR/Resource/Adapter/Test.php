@@ -2,11 +2,9 @@
 
 namespace BEAR\Resource\Adapter;
 
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 
-use BEAR\Resource\ObjectInterface as ResourceObject;
-
-class Test extends AbstractObject implements ResourceObject, AdapterInterface
+class Test extends ResourceObject implements AdapterInterface
 {
     public function __construct()
     {

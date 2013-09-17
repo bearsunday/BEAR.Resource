@@ -8,19 +8,30 @@ use Aura\Signal\Manager;
 use Aura\Signal\HandlerFactory;
 use Aura\Signal\ResultFactory;
 use Aura\Signal\ResultCollection;
+use Ray\Aop\Compiler;
 use Ray\Di\Definition;
 use Ray\Di\Injector;
-use Ray\Aop\Weaver;
 use Ray\Aop\Bind;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use BEAR\Resource\Interceptor\Log;
 use Sandbox\Resource\App\User;
-use Sandbox\Resource\App\Weave\Book;
 
 class DevInvokerTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Signal
+     */
     protected $signal;
-    protected $invoker;
+
+    /**
+     * @var Invoker
+     */
+    private $invoker;
+
+    /**
+     * @var Request
+     */
+    private $request;
 
     protected function setUp()
     {
@@ -30,7 +41,7 @@ class DevInvokerTest extends \PHPUnit_Framework_TestCase
 
 
         $resource = new User;
-        $resource->uri = 'dummy://self/User';
+        $resource->uri = 'dummy://self/user';
         $this->request = new Request($this->invoker);
         $this->request->method = 'get';
         $this->request->ro = $resource;
@@ -92,13 +103,13 @@ class DevInvokerTest extends \PHPUnit_Framework_TestCase
     {
         $bind = new Bind;
         $bind->bindInterceptors('onGet', [new Log]);
-        $weave = new Weaver(new Book, $bind);
+        $weave = $GLOBALS['COMPILER']->newInstance('Sandbox\Resource\App\Weave\Book', [], $bind);
         $this->request->ro = $weave;
         $this->request->method = 'get';
         $this->request->query = ['id' => 1];
         $this->invoker->invoke($this->request);
 
-        $ro = $this->request->ro->___getObject();
+        $ro = $this->request->ro;
         $this->assertInstanceOf('Sandbox\Resource\App\Weave\Book', $ro);
 
         return $ro->headers;
@@ -137,5 +148,25 @@ class DevInvokerTest extends \PHPUnit_Framework_TestCase
             json_encode(['onGet' => ['BEAR\Resource\Interceptor\Log']]),
             $headers[DevInvoker::HEADER_INTERCEPTORS]
         );
+    }
+
+    /**
+     * @expectedException \BEAR\Resource\Exception\MethodNotAllowed
+     */
+    public function testInvokerInterfaceInvalidMethod()
+    {
+        $this->request->method = 'InvalidMethod';
+        $this->invoker->invoke($this->request);
+    }
+
+    public function testOptionsMethod()
+    {
+        $this->request->method = Invoker::OPTIONS;
+        $response = $this->invoker->invoke($this->request);
+        $actual = $response->headers['allow'];
+        $expected = ['get', 'post', 'put', 'delete'];
+        asort($actual);
+        asort($expected);
+        $this->assertSame($actual, $expected);
     }
 }

@@ -1,13 +1,14 @@
 <?php
 namespace Sandbox\Resource\App\Link;
 
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 
-class Blog extends AbstractObject
+class Blog extends ResourceObject
 {
-    private $blogs = array(
-        11 => array('id' => 11, 'name' => "Athos blog", 'inviter' => 2),
-        12 => array('id' => 12, 'name' => "Aramis blog", 'inviter' => 2)
+    private $repo = array(
+        11 => ['name' => "Athos blog"],
+        12 => ['name' => "Aramis blog"],
+        99 => ['name' => "BEAR blog"],
     );
 
     /**
@@ -15,8 +16,8 @@ class Blog extends AbstractObject
      *
      * @return array
      */
-    public function onGet($blog_id)
+    public function onGet($id)
     {
-        return $this->blogs[$blog_id];
+        return $this->repo[$id];
     }
 }

@@ -2,9 +2,9 @@
 
 namespace Sandbox\Resource\App\Cache;
 
-use BEAR\Resource\AbstractObject;
+use BEAR\Resource\ResourceObject;
 
-class Pdo extends AbstractObject
+class Pdo extends ResourceObject
 {
     public $time;
 

@@ -4,11 +4,13 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Adapter\Nop;
 
-/**
- * Test class for BEAR.Resource.
- */
 class SchemeCollectionTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var SchemeCollection
+     */
+    private $scheme;
+
     protected function setUp()
     {
         parent::setUp();

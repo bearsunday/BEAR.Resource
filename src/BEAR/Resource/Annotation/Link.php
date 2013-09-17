@@ -15,6 +15,11 @@ namespace BEAR\Resource\Annotation;
 final class Link implements AnnotationInterface
 {
     /**
+     * @var string
+     */
+    public $crawl = '';
+
+    /**
      * Relation
      *
      * @var string

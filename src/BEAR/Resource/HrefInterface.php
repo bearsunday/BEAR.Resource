@@ -15,9 +15,9 @@ interface HrefInterface
      * Get hyper reference URI
      *
      * @param                $rel
-     * @param AbstractObject $ro
+     * @param ResourceObject $ro
      *
      * @return mixed
      */
-    public function href($rel, AbstractObject $ro);
+    public function href($rel, ResourceObject $ro);
 }

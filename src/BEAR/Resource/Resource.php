@@ -10,9 +10,10 @@ use BEAR\Resource\Exception;
 use BEAR\Resource\Uri;
 use Guzzle\Cache\CacheAdapterInterface;
 use SplObjectStorage;
+use Ray\Di\Di\Scope;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
-use Ray\Di\Di\Scope;
+
 /**
  * Resource client
  *
@@ -63,6 +64,11 @@ class Resource implements ResourceInterface
     private $appName = '';
 
     /**
+     * @var Anchor
+     */
+    private $anchor;
+
+    /**
      * @param $appName
      *
      * @Inject(optional = true)
@@ -103,16 +109,22 @@ class Resource implements ResourceInterface
      * @param Factory          $factory resource object factory
      * @param InvokerInterface $invoker resource request invoker
      * @param Request          $request resource request
+     * @param Anchor           $anchor  resource linker
      *
      * @Inject
      */
-    public function __construct(Factory $factory, InvokerInterface $invoker, Request $request)
-    {
+    public function __construct(
+        Factory $factory,
+        InvokerInterface $invoker,
+        Request $request,
+        Anchor $anchor
+    ) {
         $this->factory = $factory;
         $this->invoker = $invoker;
         $this->newRequest = $request;
         $this->requests = new SplObjectStorage;
         $this->invoker->setResourceClient($this);
+        $this->anchor = $anchor;
     }
 
     /**
@@ -159,7 +171,7 @@ class Resource implements ResourceInterface
             if (!$this->request) {
                 throw new Exception\BadRequest('Request method (get/put/post/delete/options) required before uri()');
             }
-            if (!preg_match('|^[a-z]+?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i', $uri)) {
+            if (filter_var($uri, FILTER_VALIDATE_URL) === false) {
                 throw new Exception\Uri($uri);
             }
             // uri with query parsed
@@ -210,11 +222,7 @@ class Resource implements ResourceInterface
      */
     public function linkSelf($linkKey)
     {
-        $link = new LinkType;
-        $link->key = $linkKey;
-        $link->type = LinkType::SELF_LINK;
-        $this->request->links[] = $link;
-
+        $this->request->links[] = new LinkType($linkKey, LinkType::SELF_LINK);
         return $this;
     }
 
@@ -223,11 +231,7 @@ class Resource implements ResourceInterface
      */
     public function linkNew($linkKey)
     {
-        $link = new LinkType;
-        $link->key = $linkKey;
-        $link->type = LinkType::NEW_LINK;
-        $this->request->links[] = $link;
-
+        $this->request->links[] = new LinkType($linkKey, LinkType::NEW_LINK);
         return $this;
     }
 
@@ -236,11 +240,7 @@ class Resource implements ResourceInterface
      */
     public function linkCrawl($linkKey)
     {
-        $link = new LinkType;
-        $link->key = $linkKey;
-        $link->type = LinkType::CRAWL_LINK;
-        $this->request->links[] = $link;
-
+        $this->request->links[] = new LinkType($linkKey, LinkType::CRAWL_LINK);
         return $this;
     }
 
@@ -256,24 +256,33 @@ class Resource implements ResourceInterface
 
             return $this;
         }
-        if ($this->request->in === 'eager') {
-            if ($this->requests->count() === 0) {
-                $result = $this->invoker->invoke($this->request);
-            } else {
-                $this->requests->attach($this->request);
-                $result = $this->invoker->invokeSync($this->requests);
-            }
-            if (!($result instanceof ObjectInterface) && isset($this->request->ro)) {
-                $this->request->ro->body = $result;
-                $result = $this->request->ro;
-            }
-
-            return $result;
+        if ($this->request->in !== 'eager') {
+            return $this->request;
         }
 
-        // logs
-        return $this->request;
+        return $this->invoke();
     }
+
+    public function href($rel, array $query = [])
+    {
+        list($method, $uri) = $this->anchor->href($rel, $this->request, $query);
+        $linkedResource = $this->{$method}->uri($uri)->eager->request();
+
+        return $linkedResource;
+    }
+
+    /**
+     * @return ResourceObject|mixed
+     */
+    private function invoke()
+    {
+        if ($this->requests->count() === 0) {
+            return $this->invoker->invoke($this->request);
+        }
+        $this->requests->attach($this->request);
+        return $this->invoker->invokeSync($this->requests);
+    }
+
 
     /**
      * {@inheritDoc}
@@ -292,23 +301,23 @@ class Resource implements ResourceInterface
      */
     public function __get($name)
     {
-        switch (true) {
-            case (in_array($name, ['get', 'post', 'put', 'delete', 'head', 'options'])):
-                $this->request = clone $this->newRequest;
-                $this->request->method = $name;
+        if (in_array($name, ['get', 'post', 'put', 'delete', 'head', 'options'])) {
+            $this->request = clone $this->newRequest;
+            $this->request->method = $name;
 
-                return $this;
-            case (in_array($name, ['lazy', 'eager'])):
-                $this->request->in = $name;
-
-                return $this;
-            case (in_array($name, ['sync', 'poe', 'csrf'])):
-                $this->request->options[$name] = true;
-
-                return $this;
-            default:
-                throw new Exception\BadRequest($name, 400);
+            return $this;
         }
+        if (in_array($name, ['lazy', 'eager'])) {
+            $this->request->in = $name;
+
+            return $this;
+        }
+        if (in_array($name, ['sync'])) {
+            $this->request->options[$name] = $name;
+
+            return $this;
+        }
+        throw new Exception\BadRequest($name, 400);
     }
 
     /**

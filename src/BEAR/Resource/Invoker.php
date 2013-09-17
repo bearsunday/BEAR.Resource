@@ -6,10 +6,8 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\AbstractObject as ResourceObject;
 use BEAR\Resource\Exception\MethodNotAllowed;
 use Ray\Aop\ReflectiveMethodInvocation;
-use Ray\Aop\Weave;
 use Ray\Di\Di\Scope;
 use Ray\Di\Definition;
 use Ray\Di\Di\Inject;
@@ -91,11 +89,13 @@ class Invoker implements InvokerInterface
      *
      * @param LoggerInterface $logger
      *
+     * @return self
      * @Inject(optional=true)
      */
     public function setResourceLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
+        return $this;
     }
 
     /**
@@ -104,30 +104,24 @@ class Invoker implements InvokerInterface
     public function invoke(Request $request)
     {
         $onMethod = 'on' . ucfirst($request->method);
-        $weave = null;
-        $isWeave = $request->ro instanceof Weave;
-        $ro = $isWeave ? $request->ro->___getObject() : $request->ro;
-        $weave = ($isWeave && $request->method !== Invoker::OPTIONS && $request->method !== Invoker::HEAD) ? $request->ro : null;
-        if (method_exists($ro, $onMethod) !== true) {
-            return $this->methodNotExists($ro, $request, $onMethod);
+        if (method_exists($request->ro, $onMethod) !== true) {
+            return $this->methodNotExists($request->ro, $request, $onMethod);
         }
         // invoke with Named param and Signal param
-        $result = $this->params->invoke(new ReflectiveMethodInvocation([$ro, $onMethod], $request->query), $weave);
+        $result = $this->params->invoke(new ReflectiveMethodInvocation([$request->ro, $onMethod], $request->query));
+
+        if (!$result instanceof ResourceObject) {
+            $request->ro->body = $result;
+            $result = $request->ro;
+        }
 
         // link
         completed:
         if ($request->links) {
-            $result = $this->linker->invoke($ro, $request, $result);
+            $result = $this->linker->invoke($request);
         }
-        if (!$result instanceof AbstractObject) {
-            $ro->body = $result;
-            $result = $ro;
-            if ($result instanceof Weave) {
-                $result = $result->___getObject();
-            }
 
-        }
-        // request / result log
+        // log
         if ($this->logger instanceof LoggerInterface) {
             $this->logger->log($request, $result);
         }
@@ -208,31 +202,31 @@ class Invoker implements InvokerInterface
     }
 
     /**
-     * @param AbstractObject $ro
+     * @param ResourceObject $ro
      * @param Request        $request
      * @param                $method
      *
-     * @return AbstractObject
+     * @return ResourceObject
      * @throws Exception\MethodNotAllowed
      */
-    private function methodNotExists(AbstractObject $ro, Request $request, $method)
+    private function methodNotExists(ResourceObject $ro, Request $request, $method)
     {
         if ($request->method === self::OPTIONS) {
             return $this->onOptions($ro);
         }
         if ($method === 'onHead' && method_exists($ro, 'onGet')) {
             return $this->onHead($request);
-        } else {
-            throw new Exception\MethodNotAllowed(get_class($request->ro) . "::$method()", 405);
         }
+
+        throw new Exception\MethodNotAllowed(get_class($request->ro) . "::$method()", 405);
     }
 
     /**
-     * @param AbstractObject $ro resource object
+     * @param ResourceObject $ro resource object
      *
-     * @return AbstractObject
+     * @return ResourceObject
      */
-    private function onOptions(AbstractObject $ro)
+    private function onOptions(ResourceObject $ro)
     {
         $options = $this->getOptions($ro);
         $ro->headers['allow'] = $options['allow'];
@@ -245,18 +239,16 @@ class Invoker implements InvokerInterface
     /**
      * @param Request $request
      *
-     * @return AbstractObject
+     * @return ResourceObject
      */
     private function onHead(Request $request)
     {
-        $ro = ($request->ro instanceof Weave) ? $request->ro->___getObject() :  $request->ro;
-        $weave = ($request->ro instanceof Weave) ? $request->ro : null;
-        if (method_exists($ro, 'onGet')) {
-            $this->params->invoke(new ReflectiveMethodInvocation([$ro, 'onGet'], $request->query), $weave);
+        if (method_exists($request->ro, 'onGet')) {
+            $this->params->invoke(new ReflectiveMethodInvocation([$request->ro, 'onGet'], $request->query));
         }
-        $ro->body = '';
+        $request->ro->body = '';
 
-        return $ro;
+        return $request->ro;
     }
 
     /**
@@ -266,5 +258,4 @@ class Invoker implements InvokerInterface
     {
         $this->params->attachParamProvider($varName, $provider);
     }
-
 }

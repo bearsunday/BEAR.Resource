@@ -8,12 +8,12 @@ use Guzzle\Parser\UriTemplate\UriTemplate;
 use Ray\Di\Definition;
 use Ray\Di\Injector;
 
-/**
- * Test class for BEAR.Resource.
- */
 class RestBucksTest extends \PHPUnit_Framework_TestCase
 {
-    protected $skeleton;
+    /**
+     * @var Request
+     */
+    private $resource;
 
     protected function setUp()
     {
@@ -22,7 +22,7 @@ class RestBucksTest extends \PHPUnit_Framework_TestCase
         $this->resource = require dirname(dirname(dirname(__DIR__))) . '/scripts/instance.php';
         $injector = Injector::create();
         $scheme = new SchemeCollection;
-        $scheme->scheme('app')->host('self')->toAdapter(new App($injector, 'Restbucks', 'Resource\App'));
+        $scheme->scheme('app')->host('self')->toAdapter(new App($injector, 'Sandbox', 'Resource\App'));
         $this->resource->setSchemeCollection($scheme);
     }
 
@@ -33,7 +33,7 @@ class RestBucksTest extends \PHPUnit_Framework_TestCase
 
     public function testOption()
     {
-        $allow = $this->resource->options->uri('app://self/Menu')->eager->request()->headers['allow'];
+        $allow = $this->resource->options->uri('app://self/restbucks/menu')->eager->request()->headers['allow'];
         asort($allow);
         $expected = ['get'];
         $this->assertSame($expected, $allow);
@@ -44,37 +44,17 @@ class RestBucksTest extends \PHPUnit_Framework_TestCase
      */
     public function testOptionDelete()
     {
-        $this->resource->delete->uri('app://self/Menu')->eager->request()->body;
+        $this->resource->delete->uri('app://self/restbucks/menu')->eager->request()->body;
     }
 
     public function tesMenuLinksOrder()
     {
-        $menu = $this->resource->get->uri('app://self/Menu')->withQuery(array('drink' => 'latte'))->eager->request();
+        $menu = $this->resource->get->uri('app://self/restbucks/menu')->withQuery(array('drink' => 'latte'))->eager->request();
         $orderUri = $menu->links['order'];
         $response = $this->resource->post->uri($orderUri)->addQuery(array('drink' => $menu['drink']))->eager->request();
         $expected = 201;
         $this->assertSame($expected, $response->code);
-        $expected = 'app://self/Order/?id=1234';
+        $expected = 'app://self/order/?id=1234';
         $this->assertSame($expected, $response->headers['Location']);
     }
-
-    public function testOrderLinksPaymentAddQuery()
-    {
-        $order = array('drink' => 'latte');
-        $order = $this->resource->post->uri('app://self/Order')->withQuery($order)->eager->request();
-        $a = new A(new UriTemplate);
-        $paymentUri = $a->href('payment', $order);
-        $payment = array(
-            'credit_card_number' => '123456789',
-            'expires' => '07/07',
-            'name' => 'John Citizen',
-            'amount' => '4.00'
-        );
-        $response = $this->resource->put->uri($paymentUri)->addQuery($payment)->eager->request();
-        $expected = 201;
-        $this->assertSame($expected, $response->code);
-        $expected = 'app://self/Order/?id=';
-        $this->assertContains($expected, $response->headers['Location']);
-    }
-
 }

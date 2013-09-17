@@ -26,7 +26,7 @@ trait RenderTrait
      * @param RenderInterface $renderer
      *
      * @return RenderTrait
-     * @Inject(optional = true)
+     * @Ray\Di\Di\Inject(optional = true)
      */
     public function setRenderer(RenderInterface $renderer)
     {
@@ -43,7 +43,7 @@ trait RenderTrait
      */
     public function __toString()
     {
-        /** @var $this AbstractObject */
+        /** @var $this ResourceObject */
         if (is_string($this->view)) {
             return $this->view;
         }
@@ -55,13 +55,12 @@ trait RenderTrait
                 error_log('Exception caught in ' . __METHOD__);
                 error_log((string)$e);
             }
-        } elseif (is_scalar($this->body)) {
-            return (string)$this->body;
-        } else {
-            error_log('No renderer set for ' . get_class($this)  . ' in ' . __METHOD__);
-            $view = '';
+            return $view;
         }
-
-        return $view;
+        if (is_scalar($this->body)) {
+            return (string)$this->body;
+        }
+        error_log('No renderer bound for \BEAR\Resource\RenderInterface' . get_class($this)  . ' in ' . __METHOD__);
+        return '';
     }
 }
