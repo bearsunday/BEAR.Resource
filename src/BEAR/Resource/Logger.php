@@ -103,7 +103,7 @@ class Logger implements LoggerInterface, Countable, Serializable
 
     public function serialize()
     {
-        //return $this->serializer->serialize($this->logs);
+        return $this->serializer->serialize($this->logs);
     }
 
     public function unserialize($data)
