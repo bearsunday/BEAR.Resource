@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "07963ada75ea36fd253fdbe1919c8b02",
+    "hash": "c54abd691fd3d8a56af741eb69b04381",
     "packages": [
         {
             "name": "any/serializer",
@@ -33,8 +33,7 @@
                 {
                     "name": "Akihito Koriyama",
                     "email": "akihito.koriyama@gmail.com",
-                    "homepage": "https://github.com/koriym",
-                    "role": "Developer"
+                    "role": "Lead"
                 }
             ],
             "description": "Serialize any value for logging",
@@ -182,7 +181,7 @@
                     "homepage": "http://paul-m-jones.com"
                 },
                 {
-                    "name": "Hari KT",
+                    "name": "Hari K T",
                     "email": "kthari85@gmail.com",
                     "homepage": "http://harikt.com"
                 },
@@ -333,7 +332,7 @@
                     "email": "kontakt@beberlei.de"
                 },
                 {
-                    "name": "Johannes M. Schmitt",
+                    "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
                     "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
@@ -587,12 +586,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Ray.Aop.git",
-                "reference": "9f0c88bd1af43b3193bb3e12bdb945fcbc25cc6a"
+                "reference": "0a443ea973b8a25382f6e28ecbaa6fafc050877c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Ray.Aop/zipball/9f0c88bd1af43b3193bb3e12bdb945fcbc25cc6a",
-                "reference": "9f0c88bd1af43b3193bb3e12bdb945fcbc25cc6a",
+                "url": "https://api.github.com/repos/koriym/Ray.Aop/zipball/0a443ea973b8a25382f6e28ecbaa6fafc050877c",
+                "reference": "0a443ea973b8a25382f6e28ecbaa6fafc050877c",
                 "shasum": ""
             },
             "require": {
@@ -619,15 +618,14 @@
                     "homepage": "https://github.com/koriym/Ray.Aop/graphs/contributors"
                 }
             ],
-            "description": "Aspect oriented programing framework",
+            "description": "Aspect oriented framework",
             "homepage": "https://github.com/koriym/Ray.Aop",
             "keywords": [
                 "annotation",
                 "aop",
-                "aspect",
-                "method interception"
+                "aspect"
             ],
-            "time": "2013-09-12 07:44:44"
+            "time": "2013-09-16 10:45:36"
         },
         {
             "name": "ray/di",
@@ -635,12 +633,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Ray.Di.git",
-                "reference": "38aabccc7c7a4c7a6fbefdd3edb1d30354757978"
+                "reference": "0c6324ab93dbfc7c888cad34b508d84debe801ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/38aabccc7c7a4c7a6fbefdd3edb1d30354757978",
-                "reference": "38aabccc7c7a4c7a6fbefdd3edb1d30354757978",
+                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/0c6324ab93dbfc7c888cad34b508d84debe801ea",
+                "reference": "0c6324ab93dbfc7c888cad34b508d84debe801ea",
                 "shasum": ""
             },
             "require": {
@@ -679,13 +677,13 @@
             "keywords": [
                 "annotation",
                 "aop",
-                "aspect oriented programming",
-                "dependency injection",
+                "dependency",
                 "di",
                 "guice",
+                "injection",
                 "jsr"
             ],
-            "time": "2013-09-12 07:46:12"
+            "time": "2013-09-17 14:49:53"
         },
         {
             "name": "symfony/event-dispatcher",

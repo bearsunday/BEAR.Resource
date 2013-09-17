@@ -1,10 +1,14 @@
 {
     "name": "bear/resource",
-    "description": "RESTful service layer framework",
+    "description": "Hypermedia framework for object as a service",
     "keywords": [
+        "Hypermedia",
+        "Framework",
+        "Object as a service",
         "REST",
         "HATEOAS",
-        "service layer"
+        "Stateless",
+        "Protocol"
     ],
     "homepage": "https://github.com/koriym/BEAR.Resource",
     "license": "BSD-3-Clause",
