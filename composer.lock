@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "c54abd691fd3d8a56af741eb69b04381",
+    "hash": "cb1bdd5f61ce83703180ec18d8c0f0b3",
     "packages": [
         {
             "name": "any/serializer",
@@ -582,16 +582,16 @@
         },
         {
             "name": "ray/aop",
-            "version": "dev-develop",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Ray.Aop.git",
-                "reference": "0a443ea973b8a25382f6e28ecbaa6fafc050877c"
+                "reference": "7e60468fef778ac9f77024285b04ef289632ad48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Ray.Aop/zipball/0a443ea973b8a25382f6e28ecbaa6fafc050877c",
-                "reference": "0a443ea973b8a25382f6e28ecbaa6fafc050877c",
+                "url": "https://api.github.com/repos/koriym/Ray.Aop/zipball/7e60468fef778ac9f77024285b04ef289632ad48",
+                "reference": "7e60468fef778ac9f77024285b04ef289632ad48",
                 "shasum": ""
             },
             "require": {
@@ -625,20 +625,20 @@
                 "aop",
                 "aspect"
             ],
-            "time": "2013-09-16 10:45:36"
+            "time": "2013-09-15 14:23:51"
         },
         {
             "name": "ray/di",
-            "version": "dev-develop",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Ray.Di.git",
-                "reference": "0c6324ab93dbfc7c888cad34b508d84debe801ea"
+                "reference": "9fe0388db52a7d5be49a8f3594aeeaaaa524a5a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/0c6324ab93dbfc7c888cad34b508d84debe801ea",
-                "reference": "0c6324ab93dbfc7c888cad34b508d84debe801ea",
+                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/9fe0388db52a7d5be49a8f3594aeeaaaa524a5a7",
+                "reference": "9fe0388db52a7d5be49a8f3594aeeaaaa524a5a7",
                 "shasum": ""
             },
             "require": {
@@ -647,7 +647,7 @@
                 "doctrine/cache": "1.*",
                 "nikic/php-parser": "*",
                 "php": ">=5.4.0",
-                "ray/aop": "dev-develop"
+                "ray/aop": "1.1.*"
             },
             "type": "library",
             "autoload": {
@@ -683,7 +683,7 @@
                 "injection",
                 "jsr"
             ],
-            "time": "2013-09-17 14:49:53"
+            "time": "2013-09-17 14:53:41"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -783,8 +783,6 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "ray/di": 20,
-        "ray/aop": 20,
         "facebook/xhprof": 20
     },
     "platform": {
