@@ -378,9 +378,11 @@ class SessionIdParam implements ParamProviderInterface
      */
     public function __invoke(Param $param)
     {
-        $id = $_SESSION['login_id'];
-
-        return $param->inject(1);
+        if (isset($_SESSION['login_id'])) {
+            // found !
+            return $param->inject($_SESSION['login_id']);
+        };
+        // no idea, ask another provider...
     }
 }
 ```
