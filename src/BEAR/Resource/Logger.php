@@ -109,20 +109,10 @@ class Logger implements LoggerInterface, Countable, Serializable
 
     public function serialize()
     {
-        foreach ($this->logs as &$log) {
-            $log[1] = $this->serializer->serialize($log[1]);
-            $log[0] = $this->serializer->serialize($log[0]);
-        }
-        return serialize(
-            [
-                $this->logs,
-                $this->writer
-            ]
-        );
+        unset($this->logs);
     }
 
     public function unserialize($data)
     {
-        list($this->logs, $this->writer) = unserialize($data);
     }
 }
