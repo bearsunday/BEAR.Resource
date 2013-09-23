@@ -21,8 +21,8 @@
     "require": {
         "php": ">=5.4.0",
         "aura/signal": "1.*",
-        "ray/di": "dev-develop",
-        "ray/aop": "dev-develop",
+        "ray/di": "1.1.*",
+        "ray/aop": "1.1.*",
         "any/serializer": "*",
         "doctrine/cache": "1.*",
         "nocarrier/hal":"*",
