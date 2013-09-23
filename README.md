@@ -61,7 +61,7 @@ class Author extends ResourceObject
 ```
 ### Instance retreival
 
-The resource client is the resource object client. In order to retrieve an instance `require` the [instance script](https://github.com/koriym/BEAR.Resource/blob/readme/scripts/instance.php), map your class to a URI schema, then the resource client can access the object as a 'URI'.
+The resource client is the resource object client. In order to retrieve an instance `require` the [instance script](https://github.com/koriym/BEAR.Resource/blob/master/scripts/instance.php), map your class to a URI schema, then the resource client can access the object as a 'URI'.
 
 ```php
 $resource = require '/path/to/BEAR.Resource/scripts/instance.php';
@@ -378,9 +378,11 @@ class SessionIdParam implements ParamProviderInterface
      */
     public function __invoke(Param $param)
     {
-        $id = $_SESSION['login_id'];
-
-        return $param->inject(1);
+        if (isset($_SESSION['login_id'])) {
+            // found !
+            return $param->inject($_SESSION['login_id']);
+        };
+        // no idea, ask another provider...
     }
 }
 ```

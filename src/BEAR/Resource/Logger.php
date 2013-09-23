@@ -15,10 +15,7 @@ use Serializable;
 use Ray\Di\Di\Inject;
 
 /**
- * Interface for resource logger
- *
- *
- * @Scope("singleton")
+ * Resource logger
  */
 class Logger implements LoggerInterface, Countable, Serializable
 {
@@ -37,8 +34,17 @@ class Logger implements LoggerInterface, Countable, Serializable
      */
     private $writer;
 
+
+    /**
+     * @var SerializeInterface
+     */
     private $serializer;
 
+    /**
+     * @param SerializeInterface $serializer
+     *
+     * @Inject(optional=true)
+     */
     public function __construct(SerializeInterface $serializer = null)
     {
         $this->serializer = $serializer ?: new Serializer;
@@ -103,11 +109,12 @@ class Logger implements LoggerInterface, Countable, Serializable
 
     public function serialize()
     {
-        return $this->serializer->serialize($this->logs);
+        unset($this->logs);
+        return serialize([$this->writer, $this->serializer]);
     }
 
     public function unserialize($data)
     {
-        $this->logs = unserialize($data);
+        list($this->writer, $this->serializer) = unserialize($data);
     }
 }
