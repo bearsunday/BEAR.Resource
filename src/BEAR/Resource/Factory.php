@@ -34,7 +34,7 @@ class Factory implements FactoryInterface
      */
     public function __construct(SchemeCollectionInterface $scheme)
     {
-        $this->scheme = $scheme;
+        $this->setSchemeCollection($scheme);
     }
 
     /**
