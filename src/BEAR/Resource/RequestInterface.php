@@ -17,8 +17,6 @@ use Ray\Di\Di\ImplementedBy;
 interface RequestInterface
 {
     /**
-     * Constructor
-     *
      * @param InvokerInterface $invoker
      *
      * @Inject

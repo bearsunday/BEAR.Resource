@@ -11,10 +11,7 @@ use BEAR\Resource\Adapter\Http\Guzzle;
 use Guzzle\Service\Client as GuzzleClient;
 
 /**
- * App resource (app:://self/path/to/resource)
- *
- *
- * @Scope("singleton")
+ * Http resource
  */
 class Http implements ProviderInterface, AdapterInterface
 {

@@ -26,8 +26,6 @@ final class Uri
     public $query;
 
     /**
-     * Constructor
-     *
      * @param string $uri
      * @param array  $query
      */
