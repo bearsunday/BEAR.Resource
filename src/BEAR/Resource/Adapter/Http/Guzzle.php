@@ -37,9 +37,9 @@ class Guzzle extends ResourceObject implements HttpClientInterface
     private $guzzle;
 
     /**
-     * Constructor
-     *
      * @param \Guzzle\Service\Client $guzzle
+     *
+     * @return void
      */
     public function __construct(GuzzleClient $guzzle)
     {

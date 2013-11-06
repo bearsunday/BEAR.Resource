@@ -42,8 +42,6 @@ class App implements ProviderInterface, AdapterInterface
     private $path;
 
     /**
-     * Constructor
-     *
      * @param InjectorInterface $injector  Application dependency injector
      * @param string            $namespace Resource adapter namespace
      * @param string            $path      Resource adapter path

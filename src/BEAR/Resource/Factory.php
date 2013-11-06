@@ -26,8 +26,6 @@ class Factory implements FactoryInterface
     private $scheme = [];
 
     /**
-     * Constructor
-     *
      * @param SchemeCollectionInterface $scheme
      *
      * @Inject
