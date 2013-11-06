@@ -18,7 +18,7 @@ use Ray\Di\Di\Inject;
  *
  * @Scope("prototype")
  */
-class App implements ProviderInterface, AdapterInterface
+class App implements AdapterInterface
 {
     /**
      * Application dependency injector

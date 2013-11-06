@@ -84,7 +84,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     public function testNewInstanceNop()
     {
         $instance = $this->resource->newInstance('nop://self/path/to/dummy');
-        $this->assertInstanceOf('\BEAR\Resource\Adapter\Nop', $instance);
+        $this->assertInstanceOf('\BEAR\Resource\Adapter\NopResource', $instance);
     }
 
     public function testNewInstanceAppWithProvider()
@@ -235,7 +235,6 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     {
         $scheme = new SchemeCollection;
         $testAdapter = new Adapter\Test;
-        $testAdapter->setRenderer(new TestRenderer);
         $scheme->scheme('test')->host('self')->toAdapter($testAdapter);
         $this->factory = new Factory($scheme);
         $this->resource =  require dirname(dirname(dirname(__DIR__))) . '/scripts/instance.php';

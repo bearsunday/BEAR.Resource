@@ -39,7 +39,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testNewInstanceNop()
     {
         $instance = $this->factory->newInstance('nop://self/path/to/dummy');
-        $this->assertInstanceOf('\BEAR\Resource\Adapter\Nop', $instance);
+        $this->assertInstanceOf('\BEAR\Resource\Adapter\NopResource', $instance);
     }
 
     public function testNewInstanceWithProvider()

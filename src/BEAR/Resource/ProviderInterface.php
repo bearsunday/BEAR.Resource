@@ -12,9 +12,11 @@ namespace BEAR\Resource;
 interface ProviderInterface
 {
     /**
-     * Get resource adapter
+     * Return new resource object
      *
      * @param string $uri
+     *
+     * @return ResourceObject
      */
     public function get($uri);
 }

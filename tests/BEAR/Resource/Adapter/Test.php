@@ -3,17 +3,15 @@
 namespace BEAR\Resource\Adapter;
 
 use BEAR\Resource\ResourceObject;
+use BEAR\Resource\Renderer\TestRenderer;
 
-class Test extends ResourceObject implements AdapterInterface
+class Test implements AdapterInterface
 {
-    public function __construct()
+    public function get($uri)
     {
-    }
+        $resource = new TestResource;
+        $resource->setRenderer(new TestRenderer);
 
-    public function onGet($a, $b)
-    {
-        $this['posts'] = [$a, $b];
-
-        return $this;
+        return $resource;
     }
 }
