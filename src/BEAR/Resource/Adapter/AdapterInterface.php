@@ -6,9 +6,11 @@
  */
 namespace BEAR\Resource\Adapter;
 
+use BEAR\Resource\ProviderInterface;
+
 /**
  * Interface for resource adapter
  */
-interface AdapterInterface
+interface AdapterInterface extends ProviderInterface
 {
 }

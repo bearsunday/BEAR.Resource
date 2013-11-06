@@ -8,6 +8,7 @@ use Aura\Signal\ResultCollection;
 use Aura\Signal\ResultFactory;
 use BEAR\Resource\Adapter\Nop;
 use BEAR\Resource\Adapter\Test;
+use BEAR\Resource\Adapter\TestResource;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use Ray\Di\Definition;
 use Ray\Di\Injector;
@@ -42,7 +43,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
         $this->request = new Request($invoker);
         $this->request->method = 'get';
-        $this->request->ro = new Test;
+        $this->request->ro = new TestResource;
         $this->request->ro->uri = 'test://self/path/to/resource';
         $this->request->query = array('a' => 'koriym', 'b' => 25);
     }
@@ -54,10 +55,10 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
     public function testLog()
     {
-        $test = new Test;
+        $test = new TestResource;
         $test->uri = 'test://self/path/to/resource';
         $this->request->set($test, 'test://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
-        $this->logger->log($this->request, new Test);
+        $this->logger->log($this->request, new TestResource);
         foreach ($this->logger as $log) {
             $this->assertSame(2, count($log));
             $request = $log[0];
@@ -69,15 +70,15 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     public function testSetWriter()
     {
         $this->logger->setWriter(new TestWriter);
-        $this->request->set(new Test, 'test://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
-        $this->logger->log($this->request, new Test);
-        $result = $this->logger->write($this->request, new Test);
+        $this->request->set(new TestResource, 'test://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
+        $this->logger->log($this->request, new TestResource);
+        $result = $this->logger->write($this->request, new TestResource);
         $this->assertSame(true, $result);
     }
 
     public function testSetWriter_WhenWriterIsNotSet()
     {
-        $result = $this->logger->write($this->request, new Test);
+        $result = $this->logger->write($this->request, new TestResource);
         $this->assertSame(false, $result);
     }
 
@@ -90,7 +91,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     {
         $request = $this->request;
         $request->closure = function(){};
-        $this->logger->log($request, new Test);
+        $this->logger->log($request, new TestResource);
         $logStr = serialize($this->logger);
         $this->assertInternalType('string', $logStr);
         return $logStr;

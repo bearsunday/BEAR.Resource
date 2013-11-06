@@ -6,9 +6,10 @@ use Aura\Signal\Manager;
 use Aura\Signal\HandlerFactory;
 use Aura\Signal\ResultFactory;
 use Aura\Signal\ResultCollection;
+use BEAR\Resource\Adapter\NopResource;
 use Sandbox\Resource\App\User\Entry;
 use BEAR\Resource\Adapter\Nop;
-use BEAR\Resource\Adapter\Test;
+use BEAR\Resource\Adapter\TestResource;
 use Ray\Di\Definition;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use BEAR\Resource\Renderer\TestRenderer;
@@ -39,21 +40,21 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testToUriWithMethod()
     {
-        $this->request->set(new Test, 'test://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
+        $this->request->set(new TestResource, 'test://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
         $actual = $this->request->toUriWithMethod();
         $this->assertSame('get test://self/path/to/resource?a=koriym&b=25', $actual);
     }
 
     public function testToUri()
     {
-        $this->request->set(new Test, 'test://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
+        $this->request->set(new TestResource, 'test://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
         $actual = $this->request->toUri();
         $this->assertSame('test://self/path/to/resource?a=koriym&b=25', $actual);
     }
 
     public function testInvoke()
     {
-        $this->request->set(new Nop, 'nop://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
+        $this->request->set(new NopResource, 'nop://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
         $request = $this->request;
         $actual = $request()->body;
         $expected = array('koriym', 25);
@@ -63,7 +64,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testInvokeWithQuery()
     {
-        $this->request->set(new Nop, 'nop://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
+        $this->request->set(new NopResource, 'nop://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
         $request = $this->request;
         $actual = $request(['b' => 30])->body;
         $expected = array('koriym', 30);
@@ -73,7 +74,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testToStringWithRenderableResourceObject()
     {
-        $ro = (new Test)->setRenderer(new TestRenderer);
+        $ro = (new TestResource)->setRenderer(new TestRenderer);
         /**  @var $ro ResourceObject */
         $this->request->set($ro, 'nop://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
         $request = $this->request;
@@ -89,7 +90,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function testToStringWithErrorRenderer()
     {
         $this->request->method = 'get';
-        $this->request->ro = new Test;
+        $this->request->ro = new TestResource;
         $renderer = new ErrorRenderer;
         $this->request->ro->setRenderer($renderer);
         $this->request->ro->uri = 'nop://self/path/to/resource';
@@ -102,7 +103,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function testToStringWithoutRender()
     {
         $this->request->method = 'get';
-        $this->request->ro = new Test;
+        $this->request->ro = new TestResource;
         $this->request->ro->uri = 'nop://self/path/to/resource';
         $this->request->query = array('a' => 'koriym', 'b' => 25);
         $request = $this->request;
@@ -200,7 +201,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testWithQuery()
     {
-        $this->request->set(new Test, 'test://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
+        $this->request->set(new TestResource, 'test://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
         $this->request->withQuery(['a' => 'bear']);
         $actual = $this->request->toUriWithMethod();
         $this->assertSame('get test://self/path/to/resource?a=bear', $actual);
@@ -208,7 +209,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testAddQuery()
     {
-        $this->request->set(new Test, 'test://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
+        $this->request->set(new TestResource, 'test://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
         $this->request->addQuery(['a' => 'bear', 'c' => 'kuma']);
         $actual = $this->request->toUriWithMethod();
         $this->assertSame('get test://self/path/to/resource?a=bear&b=25&c=kuma', $actual);

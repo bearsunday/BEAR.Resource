@@ -13,7 +13,7 @@ use Guzzle\Service\Client as GuzzleClient;
 /**
  * Http resource
  */
-class Http implements ProviderInterface, AdapterInterface
+class Http implements AdapterInterface
 {
     public function __construct()
     {

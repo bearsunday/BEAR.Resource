@@ -4,17 +4,10 @@ namespace BEAR\Resource\Adapter;
 
 use BEAR\Resource\ResourceObject;
 
-class Nop extends ResourceObject implements AdapterInterface
+class Nop implements AdapterInterface
 {
-    public $time;
-
-    public function __construct()
+    public function get($uri)
     {
-        $this->time = microtime(true);
-    }
-
-    public function onGet($a, $b)
-    {
-        return array($a, $b);
+        return new NopResource;
     }
 }
