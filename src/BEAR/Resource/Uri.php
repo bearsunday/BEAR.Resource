@@ -6,9 +6,6 @@
  */
 namespace BEAR\Resource;
 
-/**
- * URI
- */
 final class Uri
 {
     /**
@@ -36,7 +33,7 @@ final class Uri
     }
 
     /**
-     * Return URI string.
+     * Return URI string
      *
      * @return string
      */

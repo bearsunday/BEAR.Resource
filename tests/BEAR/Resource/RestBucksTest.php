@@ -11,7 +11,7 @@ use Ray\Di\Injector;
 class RestBucksTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Request
+     * @var Resource
      */
     private $resource;
 

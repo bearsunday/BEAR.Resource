@@ -14,7 +14,7 @@ interface HrefInterface
     /**
      * Get hyper reference URI
      *
-     * @param                $rel
+     * @param string         $rel
      * @param ResourceObject $ro
      *
      * @return mixed

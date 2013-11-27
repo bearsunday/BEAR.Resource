@@ -15,8 +15,7 @@ use Ray\Di\Di\Inject;
 use Ray\Di\Di\Scope;
 
 /**
- * Interface for resource adapter provider.
- *
+ * Interface for resource adapter provider
  *
  * @Scope("prototype")
  */
@@ -156,10 +155,15 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
         if ($this->query === []) {
             return $uri;
         }
-        if (! isset($parsed['scheme'])) {
+        if (!isset($parsed['scheme'])) {
             return $uri;
         }
-        $fullUri = $parsed['scheme'] . '://' . $parsed['host'] . $parsed['path'] . '?' . http_build_query($this->query, null, '&', PHP_QUERY_RFC3986);
+        $fullUri = $parsed['scheme'] . '://' . $parsed['host'] . $parsed['path'] . '?' . http_build_query(
+                $this->query,
+                null,
+                '&',
+                PHP_QUERY_RFC3986
+            );
 
         return $fullUri;
     }
@@ -202,6 +206,7 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
         if (!isset($this->result->body[$offset])) {
             throw new OutOfBoundsException("[$offset] for object[" . get_class($this->result) . "]");
         }
+
         return $this->result->body[$offset];
     }
 
@@ -234,6 +239,7 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
         }
         $isArray = (is_array($this->result->body) || $this->result->body instanceof Traversable);
         $iterator = $isArray ? new ArrayIterator($this->result->body) : new ArrayIterator([]);
+
         return $iterator;
     }
 

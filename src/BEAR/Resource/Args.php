@@ -8,11 +8,6 @@ namespace BEAR\Resource;
 
 use ArrayObject;
 
-/**
- * Args
- *
- * bind args by Provides slot.
- */
 class Args extends ArrayObject
 {
 }

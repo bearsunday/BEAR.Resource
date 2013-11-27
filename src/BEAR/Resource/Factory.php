@@ -13,7 +13,6 @@ use Ray\Di\Exception\NotReadable;
 /**
  * Resource object factory
  *
- *
  * @Scope("singleton")
  */
 class Factory implements FactoryInterface
@@ -70,7 +69,7 @@ class Factory implements FactoryInterface
         }
         try {
             $adapter = $this->scheme[$scheme][$host];
-            /** @var $adapter \BEAR\Resource\AdapterInterface */
+            /** @var $adapter \BEAR\Resource\Adapter\AdapterInterface */
             $resourceObject = $adapter->get($uri);
         } catch (NotReadable $e) {
             throw new Exception\ResourceNotFound($uri, 0, $e);

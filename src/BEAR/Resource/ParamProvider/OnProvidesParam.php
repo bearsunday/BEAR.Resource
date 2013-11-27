@@ -12,7 +12,7 @@ use BEAR\Resource\ParamProviderInterface;
 /**
  * Provides parameter inline 'onProvides' method
  *
- * - 'onProvidesLoginid'method enable to provides $login_id or $loginId parameter in same class.
+ * - 'onProvidesLoginId'method enable to provides $login_id or $loginId parameter in same class.
  */
 class OnProvidesParam implements ParamProviderInterface
 {
