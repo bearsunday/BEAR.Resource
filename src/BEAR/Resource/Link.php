@@ -12,7 +12,10 @@ namespace BEAR\Resource;
 final class Link
 {
     const REL = 'rel';
+
     const HREF = 'href';
+
     const TITLE = 'title';
+
     const TEMPLATED = 'templated';
 }

@@ -20,6 +20,7 @@ use Ray\Di\Di\Inject;
 class Logger implements LoggerInterface, Countable, Serializable
 {
     const LOG_REQUEST = 0;
+
     const LOG_RESULT = 1;
 
     /**
@@ -47,7 +48,7 @@ class Logger implements LoggerInterface, Countable, Serializable
      */
     public function __construct(SerializeInterface $serializer = null)
     {
-        $this->serializer = $serializer ?: new Serializer;
+        $this->serializer = $serializer ? : new Serializer;
     }
 
     /**
@@ -84,8 +85,10 @@ class Logger implements LoggerInterface, Countable, Serializable
                 $this->writer->write($log[0], $log[1]);
             }
             $this->logs = [];
+
             return true;
         }
+
         return false;
     }
 
@@ -110,6 +113,7 @@ class Logger implements LoggerInterface, Countable, Serializable
     public function serialize()
     {
         $this->logs = [];
+
         return serialize([$this->writer, $this->serializer]);
     }
 

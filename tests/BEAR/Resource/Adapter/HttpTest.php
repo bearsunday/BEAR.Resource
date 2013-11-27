@@ -10,7 +10,10 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 {
     const TEST_SERVER = 'http://www.kumasystem.com/';
 
-    protected $skeleton;
+    /**
+     * @var Http\Guzzle
+     */
+    protected $httpAdapter;
 
     protected function setUp()
     {
@@ -67,6 +70,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     public function testPut()
     {
         $httpAdapter = $this->factory->newInstance(self::TEST_SERVER . '/fixture/server.php');
+        /* @var $httpAdapter |BEAR\Resource\Adapter\Http\Guzzle */
         $ro = $httpAdapter->onPut();
         $method = $ro->body->REQUEST_METHOD;
         $this->assertSame('PUT', $method);

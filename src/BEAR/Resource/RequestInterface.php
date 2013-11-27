@@ -9,8 +9,7 @@ namespace BEAR\Resource;
 use Ray\Di\Di\ImplementedBy;
 
 /**
- * Interface for resource client
- *
+ * Interface for resource request
  *
  * @ImplementedBy("BEAR\Resource\Request")
  */

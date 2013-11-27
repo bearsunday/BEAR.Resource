@@ -114,7 +114,7 @@ trait BodyArrayAccessTrait
     public function getIterator()
     {
         return ((is_array(
-            $this->body
-        ) || $this->body instanceof Traversable) ? new ArrayIterator($this->body) : new ArrayIterator([]));
+                $this->body
+            ) || $this->body instanceof Traversable) ? new ArrayIterator($this->body) : new ArrayIterator([]));
     }
 }

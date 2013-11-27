@@ -2,13 +2,11 @@
 
 namespace BEAR\Resource\Renderer;
 
-use Ray\Di\Config;
-use Ray\Di\Annotation;
+use BEAR\Resource\ResourceObject;
 use Ray\Di\Definition;
 use BEAR\Resource\Request;
 use BEAR\Resource\Linker;
 use BEAR\Resource\Invoker;
-use BEAR\Resource\AbstractObject;
 use BEAR\Resource\NamedParams;
 use BEAR\Resource\SignalParam;
 use BEAR\Resource\Param;
@@ -18,7 +16,6 @@ use Aura\Signal\Manager;
 use Aura\Signal\HandlerFactory;
 use Aura\Signal\ResultFactory;
 use Aura\Signal\ResultCollection;
-use BEAR\Resource\Renderer\JsonRenderer;
 
 class RequestSample
 {
@@ -83,7 +80,7 @@ class JsonRendererTest extends \PHPUnit_Framework_TestCase
 
 }
 
-final class Ok extends AbstractObject
+final class Ok extends ResourceObject
 {
     /**
      * Code

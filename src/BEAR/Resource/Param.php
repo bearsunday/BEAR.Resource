@@ -61,6 +61,7 @@ final class Param implements ParamInterface
     public function inject($arg)
     {
         $this->arg = $arg;
+
         return Manager::STOP;
     }
 

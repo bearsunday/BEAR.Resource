@@ -15,16 +15,20 @@ use XHProfRuns_Default;
 /**
  * Resource request invoker
  *
- *
  * @Scope("singleton")
  */
 class DevInvoker extends Invoker implements InvokerInterface
 {
     const HEADER_INTERCEPTORS = 'x-interceptors';
+
     const HEADER_EXECUTION_TIME = 'x-execution-time';
+
     const HEADER_MEMORY_USAGE = 'x-memory-usage';
+
     const HEADER_PROFILE_ID = 'x-profile-id';
+
     const HEADER_PARAMS = 'x-params';
+
     const HEADER_QUERY = 'x-query';
 
     /**
@@ -38,6 +42,7 @@ class DevInvoker extends Invoker implements InvokerInterface
 
         if ($request->method === self::OPTIONS || $request->method === self::HEAD) {
             $result = parent::invoke($request);
+
             return $result;
         }
 
@@ -79,7 +84,7 @@ class DevInvoker extends Invoker implements InvokerInterface
      */
     private function getRo(Request $request)
     {
-        if (! $request->ro instanceof WeavedInterface) {
+        if (!$request->ro instanceof WeavedInterface) {
             return $request->ro;
         }
         $ro = $request->ro;
@@ -90,6 +95,7 @@ class DevInvoker extends Invoker implements InvokerInterface
 
         return $request->ro;
     }
+
     /**
      * @param Bind $binds
      *

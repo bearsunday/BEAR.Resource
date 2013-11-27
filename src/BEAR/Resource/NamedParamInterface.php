@@ -11,7 +11,6 @@ use Ray\Aop\MethodInvocation;
 /**
  * Resource request invoke interface
  *
- *
  * @ImplementedBy("BEAR\Resource\Invoker")
  */
 interface NamedParamInterface

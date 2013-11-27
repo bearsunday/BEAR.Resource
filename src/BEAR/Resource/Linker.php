@@ -20,7 +20,6 @@ use Ray\Di\Di\Inject;
 /**
  * Resource linker
  *
- *
  * @Scope("singleton")
  */
 final class Linker implements LinkerInterface
@@ -50,8 +49,8 @@ final class Linker implements LinkerInterface
         UriTemplateInterface $uriTemplate = null
     ) {
         $this->reader = $reader;
-        $this->cache = $cache ?: new ArrayCache;
-        $this->uriTemplate = $uriTemplate ?: new UriTemplate;
+        $this->cache = $cache ? : new ArrayCache;
+        $this->uriTemplate = $uriTemplate ? : new UriTemplate;
     }
 
     /**
@@ -83,7 +82,7 @@ final class Linker implements LinkerInterface
      *
      * @param LinkType       $link
      * @param ResourceObject $ro
-     * @param $nextResource
+     * @param                $nextResource
      *
      * @return ResourceObject
      */
@@ -93,13 +92,16 @@ final class Linker implements LinkerInterface
 
         if ($link->type === LinkType::SELF_LINK) {
             $ro->body = $nextBody;
+
             return $ro;
         }
 
         if ($link->type === LinkType::NEW_LINK) {
             $ro->body[$link->key] = $nextBody;
+
             return $ro;
         }
+
         // crawl
         return $ro;
     }
@@ -124,6 +126,7 @@ final class Linker implements LinkerInterface
         if ($link->type === LinkType::CRAWL_LINK) {
             return $this->annotationCrawl($annotations, $link, $current);
         }
+
         return $this->annotationRel($annotations, $link, $current)->body;
     }
 
@@ -147,17 +150,13 @@ final class Linker implements LinkerInterface
             }
             $uri = $this->uriTemplate->expand($annotation->href, $current->body);
             try {
-                $linkedResource = $this
-                    ->resource
-                    ->{$annotation->method}
-                    ->uri($uri)
-                    ->eager
-                    ->request();
+                $linkedResource = $this->resource->{$annotation->method}->uri($uri)->eager->request();
                 /* @var $linkedResource ResourceObject */
             } catch (Exception\Parameter $e) {
                 $msg = 'class:' . get_class($current) . " link:{$link->key} query:" . json_encode($current->body);
                 throw new Exception\LinkQuery($msg, 0, $e);
             }
+
             return $linkedResource;
         }
         throw new Exception\LinkRel("[{$link->key}] in " . get_class($current) . ' is not available.');
@@ -175,7 +174,7 @@ final class Linker implements LinkerInterface
     private function annotationCrawl(array $annotations, LinkType $link, ResourceObject $current)
     {
         $isList = $this->isList($current->body);
-        $bodyList = $isList ? $current->body : [ $current->body];
+        $bodyList = $isList ? $current->body : [$current->body];
         foreach ($bodyList as &$body) {
             foreach ($annotations as $annotation) {
                 /* @var $annotation Annotation\Link */
@@ -183,16 +182,11 @@ final class Linker implements LinkerInterface
                     continue;
                 }
                 $uri = $this->uriTemplate->expand($annotation->href, $body);
-                $request = $this
-                    ->resource
-                    ->{$annotation->method}
-                    ->uri($uri)
-                    ->linkCrawl($link->key)
-                    ->request();
+                $request = $this->resource->{$annotation->method}->uri($uri)->linkCrawl($link->key)->request();
                 /* @var $request Request */
                 $hash = $request->hash();
                 if ($this->cache->contains($hash)) {
-                    $body[$annotation->rel] =$this->cache->fetch($hash);
+                    $body[$annotation->rel] = $this->cache->fetch($hash);
                     continue;
                 }
                 /* @var $linkedResource ResourceObject */
@@ -201,6 +195,7 @@ final class Linker implements LinkerInterface
             }
         }
         $current->body = $isList ? $bodyList : $bodyList[0];
+
         return $current;
     }
 
@@ -214,12 +209,9 @@ final class Linker implements LinkerInterface
     private function isList($value)
     {
         $value = array_values((array)$value);
-        $isMultiColumnList = (count($value) > 1
-            && isset($value[0])
-            && isset($value[1])
-            && is_array($value[0])
-            && is_array($value[1])
-            && (array_keys($value[0]) === array_keys($value[1])));
+        $isMultiColumnList = (count($value) > 1 && isset($value[0]) && isset($value[1]) && is_array(
+                $value[0]
+            ) && is_array($value[1]) && (array_keys($value[0]) === array_keys($value[1])));
         $isOneColumnList = (count($value) === 1) && is_array($value[0]);
 
         return ($isOneColumnList | $isMultiColumnList);

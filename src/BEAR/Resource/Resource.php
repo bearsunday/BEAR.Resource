@@ -7,7 +7,6 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception;
-use BEAR\Resource\Uri;
 use Guzzle\Cache\CacheAdapterInterface;
 use SplObjectStorage;
 use Ray\Di\Di\Scope;
@@ -223,6 +222,7 @@ class Resource implements ResourceInterface
     public function linkSelf($linkKey)
     {
         $this->request->links[] = new LinkType($linkKey, LinkType::SELF_LINK);
+
         return $this;
     }
 
@@ -232,6 +232,7 @@ class Resource implements ResourceInterface
     public function linkNew($linkKey)
     {
         $this->request->links[] = new LinkType($linkKey, LinkType::NEW_LINK);
+
         return $this;
     }
 
@@ -241,6 +242,7 @@ class Resource implements ResourceInterface
     public function linkCrawl($linkKey)
     {
         $this->request->links[] = new LinkType($linkKey, LinkType::CRAWL_LINK);
+
         return $this;
     }
 
@@ -280,6 +282,7 @@ class Resource implements ResourceInterface
             return $this->invoker->invoke($this->request);
         }
         $this->requests->attach($this->request);
+
         return $this->invoker->invokeSync($this->requests);
     }
 

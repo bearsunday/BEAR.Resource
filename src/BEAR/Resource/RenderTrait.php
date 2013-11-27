@@ -31,6 +31,7 @@ trait RenderTrait
     public function setRenderer(RenderInterface $renderer)
     {
         $this->renderer = $renderer;
+
         return $this;
     }
 
@@ -55,12 +56,14 @@ trait RenderTrait
                 error_log('Exception caught in ' . __METHOD__);
                 error_log((string)$e);
             }
+
             return $view;
         }
         if (is_scalar($this->body)) {
             return (string)$this->body;
         }
-        error_log('No renderer bound for \BEAR\Resource\RenderInterface' . get_class($this)  . ' in ' . __METHOD__);
+        error_log('No renderer bound for \BEAR\Resource\RenderInterface' . get_class($this) . ' in ' . __METHOD__);
+
         return '';
     }
 }

@@ -14,7 +14,7 @@ use Nocarrier\Hal;
 use BEAR\Resource\Exception;
 
 /**
- * Request renderer
+ * Hal renderer
  */
 class HalRenderer implements RenderInterface
 {
@@ -71,7 +71,7 @@ class HalRenderer implements RenderInterface
         foreach ($ro->links as $rel => $link) {
             $title = (isset($link[Link::TITLE])) ? $link[Link::TITLE] : null;
             $attr = (isset($link[Link::TEMPLATED]) && $link[Link::TEMPLATED] === true) ? [Link::TEMPLATED => true] : [];
-            if (! isset($link[Link::HREF])) {
+            if (!isset($link[Link::HREF])) {
                 throw new Exception\HrefNotFound($rel);
             }
             $hal->addLink($rel, $link[Link::HREF], $title, $attr);

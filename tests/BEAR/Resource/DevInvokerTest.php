@@ -2,15 +2,12 @@
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\DevInvoker;
-
 use Aura\Signal\Manager;
 use Aura\Signal\HandlerFactory;
 use Aura\Signal\ResultFactory;
 use Aura\Signal\ResultCollection;
 use Ray\Aop\Compiler;
 use Ray\Di\Definition;
-use Ray\Di\Injector;
 use Ray\Aop\Bind;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use BEAR\Resource\Interceptor\Log;
@@ -19,7 +16,7 @@ use Sandbox\Resource\App\User;
 class DevInvokerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Signal
+     * @var  \Aura\Signal\Manager
      */
     protected $signal;
 

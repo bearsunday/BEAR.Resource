@@ -16,7 +16,7 @@ use BEAR\Resource\ResourceObject;
 use BEAR\Resource\SignalParam;
 use Doctrine\Common\Annotations\AnnotationReader;
 
-class MockResource extends \BEAR\Resource\ResourceObject
+class MockResource extends ResourceObject
 {
     public $headers = ['head1' => 1];
     public $body = [

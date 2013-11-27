@@ -52,18 +52,22 @@ class SignalParam implements SignalParamsInterface
         if ($results->isStopped()) {
             return $param->getArg();
         }
-        $msg = '$' . "{$parameter->name} in " . get_class($invocation->getThis()) . '::' . $invocation->getMethod()->name;
+        $msg = '$' . "{$parameter->name} in " . get_class($invocation->getThis()) . '::' . $invocation->getMethod(
+            )->name;
         throw new Exception\Parameter($msg);
     }
 
-    private function sendSignal($sigName, $parameter, $param, $invocation, $parameter)
-    {
-        $results = $this
-            ->signal
-            ->send(
-                $this,
-                $sigName,
-                $param->set($invocation, $parameter)
+    private function sendSignal(
+        $sigName,
+        ReflectionParameter $parameter,
+        Param $param,
+        MethodInvocation $invocation,
+        ReflectionParameter $parameter
+    ) {
+        $results = $this->signal->send(
+                                $this,
+                                    $sigName,
+                                    $param->set($invocation, $parameter)
             );
 
         return $results;

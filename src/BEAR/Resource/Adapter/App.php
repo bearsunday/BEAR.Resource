@@ -6,17 +6,13 @@
  */
 namespace BEAR\Resource\Adapter;
 
-use BEAR\Resource\ProviderInterface;
 use Ray\Di\InjectorInterface;
-use Ray\Di\Di\Scope;
 use RuntimeException;
 use Ray\Di\Di\Inject;
+use Ray\Di\Di\Scope;
 
 /**
- * App resource (app:://self/path/to/resource)
- *
- *
- * @Scope("prototype")
+ * Application resource
  */
 class App implements AdapterInterface
 {

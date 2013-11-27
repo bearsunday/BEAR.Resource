@@ -11,7 +11,6 @@ use Ray\Di\Di\ImplementedBy;
 /**
  * Resource request invoke interface
  *
- *
  * @ImplementedBy("BEAR\Resource\Invoker")
  */
 interface InvokerInterface

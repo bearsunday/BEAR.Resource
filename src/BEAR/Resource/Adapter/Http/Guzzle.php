@@ -15,8 +15,7 @@ use Ray\Di\AbstractModule;
 use Ray\Di\Di\Scope;
 
 /**
- * App resource (app:://self/path/to/resource)
- *
+ * Http resource
  *
  * @Scope("singleton")
  */
@@ -37,9 +36,7 @@ class Guzzle extends ResourceObject implements HttpClientInterface
     private $guzzle;
 
     /**
-     * @param \Guzzle\Service\Client $guzzle
-     *
-     * @return void
+     * @param GuzzleClient $guzzle
      */
     public function __construct(GuzzleClient $guzzle)
     {

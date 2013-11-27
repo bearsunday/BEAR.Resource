@@ -16,20 +16,19 @@ use Ray\Di\Di\Named;
 /**
  * Resource request invoker
  *
- *
  * @Scope("singleton")
  */
 class Invoker implements InvokerInterface
 {
     /**
-     * @var \BEAR\Resource\Linker
+     * @var Linker
      */
     private $linker;
 
     /**
      * Logger
      *
-     * @var \BEAR\Resource\Logger
+     * @var Logger
      */
     private $logger;
 
@@ -95,6 +94,7 @@ class Invoker implements InvokerInterface
     public function setResourceLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
+
         return $this;
     }
 

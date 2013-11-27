@@ -6,8 +6,6 @@
  */
 namespace BEAR\Resource\Adapter;
 
-use BEAR\Resource\ProviderInterface;
-use BEAR\Resource\Adapter\Http\Guzzle;
 use Guzzle\Service\Client as GuzzleClient;
 
 /**
@@ -15,10 +13,6 @@ use Guzzle\Service\Client as GuzzleClient;
  */
 class Http implements AdapterInterface
 {
-    public function __construct()
-    {
-    }
-
     /**
      * {@inheritdoc}
      */
