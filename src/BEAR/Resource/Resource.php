@@ -131,9 +131,6 @@ class Resource implements ResourceInterface
      */
     public function newInstance($uri)
     {
-        if (substr($uri, -1) === '/') {
-            $uri .= 'index';
-        }
         $useCache = $this->cache instanceof CacheAdapterInterface;
         if ($useCache === true) {
             $key = $this->appName . 'res-' . str_replace('/', '-', $uri);
