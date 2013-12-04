@@ -72,9 +72,26 @@ class Factory implements FactoryInterface
             /** @var $adapter \BEAR\Resource\Adapter\AdapterInterface */
             $resourceObject = $adapter->get($uri);
         } catch (NotReadable $e) {
+            $resourceObject = $this->indexRequest($uri, $e);
+        }
+
+        $resourceObject->uri = $uri;
+
+        return $resourceObject;
+    }
+
+    /**
+     * @param $uri
+     *
+     * @return ResourceObject
+     * @throws Exception\ResourceNotFound
+     */
+    private function indexRequest($uri, NotReadable $e)
+    {
+        if (substr($uri, -1) !== '/') {
             throw new Exception\ResourceNotFound($uri, 0, $e);
         }
-        $resourceObject->uri = $uri;
+        $resourceObject = $this->newInstance($uri . 'index');
 
         return $resourceObject;
     }
