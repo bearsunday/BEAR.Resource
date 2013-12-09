@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "95db4890ae45d67647e6cfdc7233dc9e",
+    "hash": "c54abd691fd3d8a56af741eb69b04381",
     "packages": [
         {
             "name": "any/serializer",
@@ -605,7 +605,7 @@
         },
         {
             "name": "ray/aop",
-            "version": "1.2.1",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Ray.Aop.git",
@@ -652,16 +652,16 @@
         },
         {
             "name": "ray/di",
-            "version": "1.2.1",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Ray.Di.git",
-                "reference": "8eebd03d0cd01c901c5f1c823e8a7360542c4d49"
+                "reference": "7537685ccce68605ab708c27390b51f36234320f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/8eebd03d0cd01c901c5f1c823e8a7360542c4d49",
-                "reference": "8eebd03d0cd01c901c5f1c823e8a7360542c4d49",
+                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/7537685ccce68605ab708c27390b51f36234320f",
+                "reference": "7537685ccce68605ab708c27390b51f36234320f",
                 "shasum": ""
             },
             "require": {
@@ -670,7 +670,7 @@
                 "doctrine/cache": "1.*",
                 "nikic/php-parser": "*",
                 "php": ">=5.4.0",
-                "ray/aop": "1.2.*"
+                "ray/aop": "dev-develop"
             },
             "type": "library",
             "autoload": {
@@ -705,7 +705,7 @@
                 "injection",
                 "jsr"
             ],
-            "time": "2013-12-09 06:46:48"
+            "time": "2013-12-09 07:00:24"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -805,6 +805,8 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
+        "ray/di": 20,
+        "ray/aop": 20,
         "facebook/xhprof": 20
     },
     "platform": {
