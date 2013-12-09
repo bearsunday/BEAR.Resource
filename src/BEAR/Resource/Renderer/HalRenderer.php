@@ -69,12 +69,11 @@ class HalRenderer implements RenderInterface
     {
         $hal = new Hal($ro->uri, $data);
         foreach ($ro->links as $rel => $link) {
-            $title = (isset($link[Link::TITLE])) ? $link[Link::TITLE] : null;
             $attr = (isset($link[Link::TEMPLATED]) && $link[Link::TEMPLATED] === true) ? [Link::TEMPLATED => true] : [];
             if (!isset($link[Link::HREF])) {
                 throw new Exception\HrefNotFound($rel);
             }
-            $hal->addLink($rel, $link[Link::HREF], $title, $attr);
+            $hal->addLink($rel, $link[Link::HREF], $attr);
         }
 
         return $hal;

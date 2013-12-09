@@ -13,7 +13,7 @@ class Log implements MethodInterceptor
     {
         $result = $invocation->proceed();
         $class = get_class($invocation->getThis());
-        $input = $invocation->getArguments();
+        $input = (array)$invocation->getArguments();
         $input = print_r($input, true);
         $class = get_parent_class($class);
         $result .= "[Log] target = $class, input = $input, result = $result";
