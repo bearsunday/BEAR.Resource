@@ -292,5 +292,4 @@ class Invoker implements InvokerInterface
     {
         $this->exceptionHandler = $exceptionHandler;
     }
-
 }

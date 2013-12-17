@@ -158,12 +158,12 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
         if (!isset($parsed['scheme'])) {
             return $uri;
         }
-        $fullUri = $parsed['scheme'] . '://' . $parsed['host'] . $parsed['path'] . '?' . http_build_query(
-                $this->query,
-                null,
-                '&',
-                PHP_QUERY_RFC3986
-            );
+        $fullUri = $parsed['scheme'] . "://{$parsed['host']}{$parsed['path']}?" . http_build_query(
+            $this->query,
+            null,
+            '&',
+            PHP_QUERY_RFC3986
+        );
 
         return $fullUri;
     }
