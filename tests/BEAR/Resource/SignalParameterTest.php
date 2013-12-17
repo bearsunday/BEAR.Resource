@@ -61,10 +61,10 @@ class Provider implements ParamProviderInterface
     }
 }
 
-class SignalParamTest extends \PHPUnit_Framework_TestCase
+class SignalParameterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var SignalParam
+     * @var SignalParameter
      */
     private $param;
 
@@ -76,12 +76,12 @@ class SignalParamTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->signal = new Manager(new HandlerFactory, new ResultFactory, new ResultCollection);
-        $this->param = new SignalParam($this->signal, new Param);
+        $this->param = new SignalParameter($this->signal, new Param);
     }
 
     public function testNew()
     {
-        $this->assertInstanceOf('BEAR\Resource\SignalParam', $this->param);
+        $this->assertInstanceOf('BEAR\Resource\SignalParameter', $this->param);
     }
 
     /**

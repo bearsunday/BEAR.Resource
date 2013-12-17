@@ -26,7 +26,7 @@ class NamedParameterTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $signal = new Manager(new HandlerFactory, new ResultFactory, new ResultCollection);
-        $this->params = new NamedParameter(new SignalParam($signal, new Param));
+        $this->params = new NamedParameter(new SignalParameter($signal, new Param));
     }
 
     public function testNew()

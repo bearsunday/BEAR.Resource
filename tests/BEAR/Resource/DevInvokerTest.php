@@ -33,7 +33,7 @@ class DevInvokerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $signal = new Manager(new HandlerFactory, new ResultFactory, new ResultCollection);
-        $params = new NamedParameter(new SignalParam($signal, new Param));
+        $params = new NamedParameter(new SignalParameter($signal, new Param));
         $this->invoker = new DevInvoker(new Linker(new Reader), $params);
 
 

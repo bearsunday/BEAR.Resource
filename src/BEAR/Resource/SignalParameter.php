@@ -7,9 +7,7 @@
 namespace BEAR\Resource;
 
 use Aura\Signal\Manager as Signal;
-use BEAR\Resource\Exception\BadRequest;
-use BEAR\Resource\Exception\Parameter;
-use BEAR\Resource\Exception\SignalParameter;
+use BEAR\Resource\Exception;
 use Ray\Aop\MethodInvocation;
 use ReflectionParameter;
 use Ray\Di\Di\Inject;
@@ -17,10 +15,10 @@ use Ray\Di\Di\Inject;
 /**
  * Signal Parameter
  */
-class SignalParam implements SignalParamsInterface
+class SignalParameter implements SignalParamsInterface
 {
     /**
-     * @var \Aura\Signal\Manager
+     * @var Signal
      */
     private $signal;
 

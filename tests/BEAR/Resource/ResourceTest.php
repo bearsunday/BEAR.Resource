@@ -249,7 +249,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->factory = new Factory($scheme);
         $this->resource =  require dirname(dirname(dirname(__DIR__))) . '/scripts/instance.php';
 
-        $invoker = new Invoker(new Linker(new AnnotationReader), new NamedParameter(new SignalParam(new Manager(new HandlerFactory, new ResultFactory, new ResultCollection), new Param)), new Logger);
+        $invoker = new Invoker(new Linker(new AnnotationReader), new NamedParameter(new SignalParameter(new Manager(new HandlerFactory, new ResultFactory, new ResultCollection), new Param)), new Logger);
         $resource = new Resource(new Factory($scheme), $invoker, new Request($invoker), new Anchor(new UriTemplate, new AnnotationReader, new Request($invoker)));
         $request = $resource->get->uri('test://self/path/to/example')->withQuery(['a' => 1, 'b' => 2])->request();
         $this->assertSame('{"posts":[1,2]}', (string)$request);

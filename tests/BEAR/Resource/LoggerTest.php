@@ -38,7 +38,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->logger = new Logger;
 
         $signal = new Manager(new HandlerFactory, new ResultFactory, new ResultCollection);
-        $params = new NamedParameter(new SignalParam($signal, new Param));
+        $params = new NamedParameter(new SignalParameter($signal, new Param));
         $invoker = new Invoker(new Linker(new Reader), $params);
 
         $this->request = new Request($invoker);

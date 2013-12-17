@@ -46,7 +46,7 @@ $factory = new Factory($scheme);
 $invoker = new Invoker(
     new Linker(new AnnotationReader),
     new NamedParameter(
-        new SignalParam(
+        new SignalParameter(
             new Manager(new HandlerFactory, new ResultFactory, new ResultCollection),
             new Param
         )

@@ -34,7 +34,7 @@ class AnchorTest extends \PHPUnit_Framework_TestCase
         $this->resource = clone $GLOBALS['resource'];
 
         $signal = new Manager(new HandlerFactory, new ResultFactory, new ResultCollection);
-        $params = new NamedParameter(new SignalParam($signal, new Param));
+        $params = new NamedParameter(new SignalParameter($signal, new Param));
         $invoker = new Invoker(new Linker(new AnnotationReader), $params);
         $this->request = new Request($invoker);
 

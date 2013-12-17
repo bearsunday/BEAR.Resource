@@ -10,12 +10,12 @@ use Aura\Signal\HandlerFactory;
 use Aura\Signal\Manager;
 use Aura\Signal\ResultCollection;
 use Aura\Signal\ResultFactory;
-use Ray\Di\ProviderInterface as Provide;
+use Ray\Di\ProviderInterface;
 
 /**
  * Signal provider
  */
-class SignalProvider implements Provide
+class SignalProvider implements ProviderInterface
 {
     /**
      * Return instance
@@ -24,6 +24,7 @@ class SignalProvider implements Provide
      */
     public function get()
     {
+        echo 1;exit;
         return new Manager(new HandlerFactory, new ResultFactory, new ResultCollection);
     }
 }
