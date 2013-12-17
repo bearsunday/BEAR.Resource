@@ -16,22 +16,22 @@ class ReflectiveParamsTestClass
     }
 }
 
-class NamedParamsTest extends \PHPUnit_Framework_TestCase
+class NamedParameterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var NamedParams
+     * @var NamedParameter
      */
     private $params;
 
     public function setUp()
     {
         $signal = new Manager(new HandlerFactory, new ResultFactory, new ResultCollection);
-        $this->params = new NamedParams(new SignalParam($signal, new Param));
+        $this->params = new NamedParameter(new SignalParam($signal, new Param));
     }
 
     public function testNew()
     {
-        $this->assertInstanceOf('\BEAR\Resource\NamedParams', $this->params);
+        $this->assertInstanceOf('\BEAR\Resource\NamedParameter', $this->params);
     }
 
     public function testGetParams()
@@ -39,8 +39,8 @@ class NamedParamsTest extends \PHPUnit_Framework_TestCase
         $object = new ReflectiveParamsTestClass;
         $namedArgs = ['id' => 1, 'name' => 'koriym'];
 
-        $result = $this->params->invoke(new ReflectiveMethodInvocation([$object, 'onGet'], $namedArgs));
-        $this->assertSame("1 koriym", $result);
+        $args = $this->params->getArgs([$object, 'onGet'], $namedArgs);
+        $this->assertSame([1, 'koriym'], $args);
     }
 
     public function testGetParamsOrderChanged()
@@ -48,7 +48,7 @@ class NamedParamsTest extends \PHPUnit_Framework_TestCase
         $object = new ReflectiveParamsTestClass;
         $namedArgs = ['name' => 'koriym', 'id' => 1];
 
-        $result = $this->params->invoke(new ReflectiveMethodInvocation([$object, 'onGet'], $namedArgs));
-        $this->assertSame("1 koriym", $result);
+        $args = $this->params->getArgs([$object, 'onGet'], $namedArgs);
+        $this->assertSame([1, 'koriym'], $args);
     }
 }

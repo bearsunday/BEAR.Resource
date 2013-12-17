@@ -14,7 +14,7 @@ use Ray\Di\Injector;
 
 $invoker = new Invoker(
     new Linker(new AnnotationReader, new ArrayCache, new UriTemplate),
-    new NamedParams(
+    new NamedParameter(
         new SignalParam(
             new Manager(new HandlerFactory, new ResultFactory, new ResultCollection),
             new Param

@@ -8,37 +8,37 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Exception;
 use Ray\Aop\MethodInvocation;
+use Ray\Aop\ReflectiveMethodInvocation;
 use ReflectionParameter;
 use Ray\Di\Di\Inject;
 
 /**
  * Reflective Parameter
  */
-final class NamedParams implements NamedParamInterface
+final class NamedParameter implements NamedParameterInterface
 {
     /**
      * @var SignalParamsInterface
      */
-    private $signalParam;
+    private $signalParameter;
 
     /**
-     * @param SignalParamsInterface $signalParam
+     * @param SignalParamsInterface $signalParameter
      *
      * @Inject(optional=true)
      */
-    public function __construct(SignalParamsInterface $signalParam = null)
+    public function __construct(SignalParamsInterface $signalParameter = null)
     {
-        $this->signalParam = $signalParam;
+        $this->signalParameter = $signalParameter;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function invoke(MethodInvocation $invocation)
+    public function getArgs(array $callable, array $query)
     {
-        $object = $invocation->getThis();
-        $namedArgs = $invocation->getArguments();
-        $method = $invocation->getMethod();
+        $namedArgs = $query;
+        $method = new \ReflectionMethod($callable[0], $callable[1]);
         $parameters = $method->getParameters();
         $args = [];
         foreach ($parameters as $parameter) {
@@ -51,21 +51,16 @@ final class NamedParams implements NamedParamInterface
                 $args[] = $parameter->getDefaultValue();
                 continue;
             }
-            if ($this->signalParam) {
-                $args[] = $this->signalParam->getArg($parameter, $invocation);
+            if ($this->signalParameter) {
+                $invocation = new ReflectiveMethodInvocation($callable, $query);
+                $args[] = $this->signalParameter->getArg($parameter, $invocation);
                 continue;
             }
-            $msg = '$' . "{$parameter->name} in " . get_class($invocation->getThis()) . '::' . $invocation->getMethod()->name;
+            $msg = '$' . "{$parameter->name} in " . get_class($callable[0]) . '::' . $callable[1] . '()';
             throw new Exception\Parameter($msg);
         }
 
-        try {
-            $result = call_user_func_array([$object, $method->name], $args);
-        } catch (Exception\Parameter $e) {
-            throw new Exception\ParameterInService('', 0, $e);
-        }
-
-        return $result;
+        return $args;
     }
 
     /**
@@ -73,6 +68,6 @@ final class NamedParams implements NamedParamInterface
      */
     public function attachParamProvider($varName, ParamProviderInterface $provider)
     {
-        $this->signalParam->attachParamProvider($varName, $provider);
+        $this->signalParameter->attachParamProvider($varName, $provider);
     }
 }

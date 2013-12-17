@@ -33,7 +33,7 @@ class Invoker implements InvokerInterface
     private $logger;
 
     /**
-     * @var NamedParams
+     * @var NamedParameter
      */
     protected $params;
 
@@ -60,14 +60,14 @@ class Invoker implements InvokerInterface
 
     /**
      * @param LinkerInterface $linker
-     * @param NamedParams     $params
+     * @param NamedParameter     $params
      * @param LoggerInterface $logger
      *
      * @Inject
      */
     public function __construct(
         LinkerInterface $linker,
-        NamedParams $params,
+        NamedParameter  $params,
         LoggerInterface $logger = null
     ) {
         $this->linker = $linker;
@@ -108,7 +108,13 @@ class Invoker implements InvokerInterface
             return $this->methodNotExists($request->ro, $request, $onMethod);
         }
         // invoke with Named param and Signal param
-        $result = $this->params->invoke(new ReflectiveMethodInvocation([$request->ro, $onMethod], $request->query));
+        $args = $this->params->getArgs([$request->ro, $onMethod], $request->query);
+
+        try {
+            $result = call_user_func_array([$request->ro, $onMethod], $args);
+        } catch (Exception\Parameter $e) {
+            throw new Exception\ParameterInService('', 0, $e);
+        }
 
         if (!$result instanceof ResourceObject) {
             $request->ro->body = $result;
@@ -240,11 +246,18 @@ class Invoker implements InvokerInterface
      * @param Request $request
      *
      * @return ResourceObject
+     * @throws Exception\ParameterInService
      */
     private function onHead(Request $request)
     {
         if (method_exists($request->ro, 'onGet')) {
-            $this->params->invoke(new ReflectiveMethodInvocation([$request->ro, 'onGet'], $request->query));
+            // invoke with Named param and Signal param
+            $args = $this->params->getArgs([$request->ro, 'onGet'], $request->query);
+            try {
+                call_user_func_array([$request->ro, 'onGet'], $args);
+            } catch (Exception\Parameter $e) {
+                throw new Exception\ParameterInService('', 0, $e);
+            }
         }
         $request->ro->body = '';
 

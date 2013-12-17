@@ -7,7 +7,7 @@ use Ray\Di\Definition;
 use BEAR\Resource\Request;
 use BEAR\Resource\Linker;
 use BEAR\Resource\Invoker;
-use BEAR\Resource\NamedParams;
+use BEAR\Resource\NamedParameter;
 use BEAR\Resource\SignalParam;
 use BEAR\Resource\Param;
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -37,7 +37,7 @@ class JsonRendererTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $invoker = new Invoker(
             new Linker(new AnnotationReader),
-            new NamedParams(
+            new NamedParameter(
                 new SignalParam(
                     new Manager(new HandlerFactory, new ResultFactory, new ResultCollection),
                     new Param

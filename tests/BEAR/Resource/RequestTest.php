@@ -28,7 +28,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $signal = new Manager(new HandlerFactory, new ResultFactory, new ResultCollection);
-        $params = new NamedParams(new SignalParam($signal, new Param));
+        $params = new NamedParameter(new SignalParam($signal, new Param));
         $invoker = new Invoker(new Linker(new Reader), $params);
         $this->request = new Request($invoker);
     }

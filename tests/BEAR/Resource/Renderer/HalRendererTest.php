@@ -9,7 +9,7 @@ use Aura\Signal\ResultFactory;
 use BEAR\Resource\Invoker;
 use BEAR\Resource\Linker;
 use BEAR\Resource\Logger;
-use BEAR\Resource\NamedParams;
+use BEAR\Resource\NamedParameter;
 use BEAR\Resource\Param;
 use BEAR\Resource\Request;
 use BEAR\Resource\ResourceObject;
@@ -113,7 +113,7 @@ class HalRendererTest extends \PHPUnit_Framework_TestCase
     {
         $invoker = new Invoker(
             new Linker(new AnnotationReader),
-            new NamedParams(
+            new NamedParameter(
                 new SignalParam(
                     new Manager(new HandlerFactory, new ResultFactory, new ResultCollection),
                     new Param
