@@ -7,6 +7,9 @@
 namespace BEAR\Resource;
 
 use Aura\Signal\Manager as Signal;
+use BEAR\Resource\Exception\BadRequest;
+use BEAR\Resource\Exception\Parameter;
+use BEAR\Resource\Exception\SignalParameter;
 use Ray\Aop\MethodInvocation;
 use ReflectionParameter;
 use Ray\Di\Di\Inject;
@@ -43,20 +46,37 @@ class SignalParam implements SignalParamsInterface
      */
     public function getArg(ReflectionParameter $parameter, MethodInvocation $invocation)
     {
-        $param = clone $this->param;
-        $results = $this->sendSignal($parameter->name, $parameter, $param, $invocation, $parameter);
-        if ($results->isStopped()) {
-            return $param->getArg();
+        try {
+            $param = clone $this->param;
+            $results = $this->sendSignal($parameter->name, $parameter, $param, $invocation, $parameter);
+            if ($results->isStopped()) {
+                return $param->getArg();
+            }
+            $results = $this->sendSignal('*', $parameter, $param, $invocation, $parameter);
+            if ($results->isStopped()) {
+                return $param->getArg();
+            }
+
+            // parameter not found
+            $msg = '$' . "{$parameter->name} in " . get_class($invocation->getThis()) . '::' . $invocation->getMethod()->name;
+            throw new Exception\Parameter($msg);
+        } catch (\Exception $e) {
+            // exception in provider
+            throw new Exception\SignalParameter($e->getMessage(), 0, $e);
         }
-        $results = $this->sendSignal('*', $parameter, $param, $invocation, $parameter);
-        if ($results->isStopped()) {
-            return $param->getArg();
-        }
-        $msg = '$' . "{$parameter->name} in " . get_class($invocation->getThis()) . '::' . $invocation->getMethod(
-            )->name;
-        throw new Exception\Parameter($msg);
     }
 
+    /**
+     * Send signal parameter
+     *
+     * @param string              $sigName
+     * @param ReflectionParameter $parameter
+     * @param Param               $param
+     * @param MethodInvocation    $invocation
+     * @param ReflectionParameter $parameter
+     *
+     * @return \Aura\Signal\ResultCollection
+     */
     private function sendSignal(
         $sigName,
         ReflectionParameter $parameter,
@@ -65,10 +85,10 @@ class SignalParam implements SignalParamsInterface
         ReflectionParameter $parameter
     ) {
         $results = $this->signal->send(
-                                $this,
-                                    $sigName,
-                                    $param->set($invocation, $parameter)
-            );
+            $this,
+            $sigName,
+            $param->set($invocation, $parameter)
+        );
 
         return $results;
     }

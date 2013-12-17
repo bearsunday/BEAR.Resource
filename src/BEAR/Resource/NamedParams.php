@@ -6,6 +6,7 @@
  */
 namespace BEAR\Resource;
 
+use BEAR\Resource\Exception;
 use Ray\Aop\MethodInvocation;
 use ReflectionParameter;
 use Ray\Di\Di\Inject;
@@ -23,9 +24,9 @@ final class NamedParams implements NamedParamInterface
     /**
      * @param SignalParamsInterface $signalParam
      *
-     * @Inject
+     * @Inject(optional=true)
      */
-    public function __construct(SignalParamsInterface $signalParam)
+    public function __construct(SignalParamsInterface $signalParam = null)
     {
         $this->signalParam = $signalParam;
     }
@@ -50,9 +51,19 @@ final class NamedParams implements NamedParamInterface
                 $args[] = $parameter->getDefaultValue();
                 continue;
             }
-            $args[] = $this->signalParam->getArg($parameter, $invocation);
+            if ($this->signalParam) {
+                $args[] = $this->signalParam->getArg($parameter, $invocation);
+                continue;
+            }
+            $msg = '$' . "{$parameter->name} in " . get_class($invocation->getThis()) . '::' . $invocation->getMethod()->name;
+            throw new Exception\Parameter($msg);
         }
-        $result = call_user_func_array([$object, $method->name], $args);
+
+        try {
+            $result = call_user_func_array([$object, $method->name], $args);
+        } catch (Exception\Parameter $e) {
+            throw new Exception\ParameterInService('', 0, $e);
+        }
 
         return $result;
     }
