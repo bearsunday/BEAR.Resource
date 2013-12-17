@@ -294,6 +294,13 @@ class Resource implements ResourceInterface
         return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function addExceptionHandler(ExceptionHandlerInterface $exceptionHandler)
+    {
+        $this->invoker->addExceptionHandler($exceptionHandler);
+    }
 
     /**
      * {@inheritDoc}

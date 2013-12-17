@@ -58,4 +58,13 @@ interface InvokerInterface
      * @return self
      */
     public function attachParamProvider($varName, ParamProviderInterface $provider);
+
+    /**
+     * Add resource invoker exception handler
+     *
+     * @param ExceptionHandlerInterface $exceptionHandler
+     *
+     * @return mixed
+     */
+    public function addExceptionHandler(ExceptionHandlerInterface $exceptionHandler);
 }

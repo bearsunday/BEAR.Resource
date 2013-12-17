@@ -7,8 +7,16 @@ use Ray\Di\Di\Scope;
 
 class User extends ResourceObject
 {
+    const PARAMETER_IN_SERVICE_EXCEPTION = 0;
+
     public function onGet($author_id)
     {
+        if ($author_id === self::PARAMETER_IN_SERVICE_EXCEPTION) {
+            // this cause exception
+            $resource = $GLOBALS['RESOURCE'];
+            /** @var $resource \BEAR\Resource\ResourceInterface */
+            $resource->put->uri('app://self/param/user')->withQuery([])->eager->request();
+        }
         return "author:{$author_id}";
     }
 

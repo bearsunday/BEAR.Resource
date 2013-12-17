@@ -109,4 +109,13 @@ interface ResourceInterface
      * @return mixed
      */
     public function href($rel, array $query = []);
+
+    /**
+     * Add resource invoker exception handler
+     *
+     * @param ExceptionHandlerInterface $exceptionHandler
+     *
+     * @return mixed
+     */
+    public function addExceptionHandler(ExceptionHandlerInterface $exceptionHandler);
 }

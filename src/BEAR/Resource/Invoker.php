@@ -38,6 +38,11 @@ class Invoker implements InvokerInterface
     protected $params;
 
     /**
+     * @var ExceptionHandlerInterface
+     */
+    private $exceptionHandler;
+
+    /**
      * Method OPTIONS
      *
      * @var string
@@ -58,22 +63,6 @@ class Invoker implements InvokerInterface
      */
     const ANNOTATION_PROVIDES = 'Provides';
 
-    /**
-     * @param LinkerInterface $linker
-     * @param NamedParameter     $params
-     * @param LoggerInterface $logger
-     *
-     * @Inject
-     */
-    public function __construct(
-        LinkerInterface $linker,
-        NamedParameter  $params,
-        LoggerInterface $logger = null
-    ) {
-        $this->linker = $linker;
-        $this->params = $params;
-        $this->logger = $logger;
-    }
 
     /**
      * {@inheritDoc}
@@ -99,6 +88,26 @@ class Invoker implements InvokerInterface
     }
 
     /**
+     * @param LinkerInterface           $linker
+     * @param NamedParameter            $params
+     * @param LoggerInterface           $logger
+     * @param ExceptionHandlerInterface $exceptionHandler
+     *
+     * @Inject
+     */
+    public function __construct(
+        LinkerInterface $linker,
+        NamedParameter  $params,
+        LoggerInterface $logger = null,
+        ExceptionHandlerInterface $exceptionHandler = null
+    ) {
+        $this->linker = $linker;
+        $this->params = $params;
+        $this->logger = $logger;
+        $this->exceptionHandler = $exceptionHandler ?: new ExceptionHandler;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function invoke(Request $request)
@@ -110,10 +119,14 @@ class Invoker implements InvokerInterface
         // invoke with Named param and Signal param
         $args = $this->params->getArgs([$request->ro, $onMethod], $request->query);
 
+        $result = null;
         try {
             $result = call_user_func_array([$request->ro, $onMethod], $args);
         } catch (Exception\Parameter $e) {
-            throw new Exception\ParameterInService('', 0, $e);
+            $e =  new Exception\ParameterInService('', 0, $e);
+            $this->exceptionHandler->handle($e);
+        } catch (\Exception $e) {
+            $this->exceptionHandler->handle($e);
         }
 
         if (!$result instanceof ResourceObject) {
@@ -271,4 +284,13 @@ class Invoker implements InvokerInterface
     {
         $this->params->attachParamProvider($varName, $provider);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addExceptionHandler(ExceptionHandlerInterface $exceptionHandler)
+    {
+        $this->exceptionHandler = $exceptionHandler;
+    }
+
 }

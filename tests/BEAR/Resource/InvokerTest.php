@@ -15,18 +15,22 @@ use BEAR\Resource\Interceptor\Log;
 use Sandbox\Resource\App\Link;
 use Sandbox\Resource\App\Restbucks\Order;
 use Sandbox\Resource\App\User;
+use Sandbox\Resource\App\Param\User as ParamUser;
 
 /**
  * Test class for BEAR.Resource.
  */
 class InvokerTest extends \PHPUnit_Framework_TestCase
 {
-    protected $signal;
-
     /**
      * @var Invoker
      */
     protected $invoker;
+
+    /**
+     * @var array
+     */
+    protected $query = [];
 
     /**
      * @var Request
@@ -173,5 +177,26 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     {
         $invoker = $this->invoker->setResourceLogger(new Logger);
         $this->assertInstanceOf('BEAR\Resource\Invoker', $invoker);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testInvokeExceptionHandle()
+    {
+        $outOfRangeId = 4;
+        $this->request->query = ['id' => $outOfRangeId];
+        $this->invoker->invoke($this->request)->body;
+    }
+
+    /**
+     * @expectedException \BEAR\Resource\Exception\ParameterInService
+     */
+    public function testInvokeExceptionHandleHead()
+    {
+        $this->request->ro = new ParamUser;
+        $this->request->query = ['author_id' => ParamUser::PARAMETER_IN_SERVICE_EXCEPTION];
+        $this->request->method = 'head';
+        $this->invoker->invoke($this->request)->body;
     }
 }

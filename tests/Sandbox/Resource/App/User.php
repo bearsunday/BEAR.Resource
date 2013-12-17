@@ -47,7 +47,6 @@ class User extends ResourceObject
      */
     public function onPut($noProvide)
     {
-        //return "put user[{$id} {$name} {$age}]";
         return "$noProvide";
     }
 

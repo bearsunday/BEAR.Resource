@@ -26,6 +26,14 @@ class varProvider implements ParamProviderInterface
     }
 }
 
+class TestExceptionHandler implements ExceptionHandlerInterface
+{
+    public function handle(\Exception $e)
+    {
+        throw new \RuntimeException('', 0, $e);
+    }
+}
+
 class ResourceTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -449,5 +457,15 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
         $insufficientParams = [];
         $resource->put->uri('app://self/param/user')->withQuery($insufficientParams)->eager->request();
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testAddExceptionHandler()
+    {
+        $this->resource->addExceptionHandler(new TestExceptionHandler);
+        $validParams = ['id' => 0];
+        $this->resource->put->uri('app://self/param/user')->withQuery($validParams)->eager->request();
     }
 }
