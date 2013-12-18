@@ -8,7 +8,7 @@ use BEAR\Resource\SchemeCollection;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use Ray\Di\Definition;
 use Ray\Di\Injector;
-use Sandbox\Resource\App\Link;
+use TestVendor\Sandbox\Resource\App\Link;
 
 class PageTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,7 +21,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $scheme->scheme('nop')->host('self')->toAdapter(new Nop);
         $scheme->scheme('prov')->host('self')->toAdapter(new Prov);
         $scheme->scheme('app')->host('self')->toAdapter(
-            new App($injector, 'Sandbox', 'Resource\App')
+            new App($injector, 'TestVendor\Sandbox', 'Resource\App')
         );
         $this->resource = $GLOBALS['RESOURCE'];
         $this->resource->setSchemeCollection($scheme);

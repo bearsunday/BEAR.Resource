@@ -38,9 +38,9 @@ $injector = new Injector(
 
 $scheme = new SchemeCollection;
 $scheme
-->scheme('app')
-->host('self')
-->toAdapter(new Adapter\App($injector, 'Sandbox', 'Resource\App'));
+    ->scheme('app')
+    ->host('self')
+    ->toAdapter(new Adapter\App($injector, 'TestVendor\Sandbox', 'Resource\App'));
 $factory = new Factory($scheme);
 
 $invoker = new Invoker(

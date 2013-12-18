@@ -12,9 +12,9 @@ use Ray\Di\Injector;
 
 use BEAR\Resource\Adapter\Nop;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
-use Sandbox\Resource\App\Link\Scalar\Name;
-use Sandbox\Resource\App\Link\User;
-use Sandbox\Resource\App\Marshal\Author;
+use TestVendor\Sandbox\Resource\App\Link\Scalar\Name;
+use TestVendor\Sandbox\Resource\App\Link\User;
+use TestVendor\Sandbox\Resource\App\Marshal\Author;
 
 /**
  * Test class for BEAR.Resource.
@@ -50,7 +50,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $scheme = (new SchemeCollection)
             ->scheme('app')
             ->host('self')
-            ->toAdapter(new Adapter\App($injector, 'Sandbox', 'Resource\App')
+            ->toAdapter(new Adapter\App($injector, 'TestVendor\Sandbox', 'Resource\App')
             );
         $factory = new Factory($scheme);
         $this->resource = new Resource($factory, $invoker, new Request($invoker), new Anchor(new UriTemplate, new Reader, $this->request));

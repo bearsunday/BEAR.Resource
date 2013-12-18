@@ -12,10 +12,10 @@ use Ray\Di\Injector;
 use Ray\Aop\Bind;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use BEAR\Resource\Interceptor\Log;
-use Sandbox\Resource\App\Link;
-use Sandbox\Resource\App\Restbucks\Order;
-use Sandbox\Resource\App\User;
-use Sandbox\Resource\App\Param\User as ParamUser;
+use TestVendor\Sandbox\Resource\App\Link;
+use TestVendor\Sandbox\Resource\App\Restbucks\Order;
+use TestVendor\Sandbox\Resource\App\User;
+use TestVendor\Sandbox\Resource\App\Param\User as ParamUser;
 
 /**
  * Test class for BEAR.Resource.
@@ -128,12 +128,12 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     {
         $bind = new Bind;
         $bind->bindInterceptors('onGet', [new Log]);
-        $weave = $GLOBALS['COMPILER']->newInstance('Sandbox\Resource\App\Weave\Book', [], $bind);
+        $weave = $GLOBALS['COMPILER']->newInstance('TestVendor\Sandbox\Resource\App\Weave\Book', [], $bind);
         $this->request->ro = $weave;
         $this->request->method = 'get';
         $this->request->query = ['id' => 1];
         $actual = $this->invoker->invoke($this->request)->body;
-        $expected = "book id[1][Log] target = Sandbox\\Resource\\App\\Weave\\Book, input = Array\n(\n    [0] => 1\n)\n, result = book id[1]";
+        $expected = "book id[1][Log] target = TestVendor\\Sandbox\\Resource\\App\\Weave\\Book, input = Array\n(\n    [0] => 1\n)\n, result = book id[1]";
         $this->assertSame($expected, $actual);
     }
 
@@ -163,7 +163,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     public function testOptionsWeaver()
     {
         $this->request->method = Invoker::OPTIONS;
-        $this->request->ro = $GLOBALS['COMPILER']->newInstance('Sandbox\Resource\App\RestBucks\Order', [], new Bind);
+        $this->request->ro = $GLOBALS['COMPILER']->newInstance('TestVendor\Sandbox\Resource\App\RestBucks\Order', [], new Bind);
 
         $response = $this->invoker->invoke($this->request);
         $actual = $response->headers['allow'];

@@ -15,7 +15,7 @@ use Guzzle\Parser\UriTemplate\UriTemplate;
 use Ray\Di\Definition;
 use Ray\Di\Injector;
 use BEAR\Resource\Renderer\TestRenderer;
-use Sandbox\Resource\App\Link;
+use TestVendor\Sandbox\Resource\App\Link;
 use Doctrine\Common\Cache\ArrayCache;
 
 class varProvider implements ParamProviderInterface
@@ -59,10 +59,10 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $injector = Injector::create([new TestModule]);
         $scheme = new SchemeCollection;
         $scheme->scheme('app')->host('self')->toAdapter(
-            new Adapter\App($injector, 'Sandbox', 'Resource\App')
+            new Adapter\App($injector, 'TestVendor\Sandbox', 'Resource\App')
         );
         $scheme->scheme('page')->host('self')->toAdapter(
-            new Adapter\App($injector, 'Sandbox', 'Resource\Page')
+            new Adapter\App($injector, 'TestVendor\Sandbox', 'Resource\Page')
         );
         $scheme->scheme('nop')->host('self')->toAdapter(new Adapter\Nop);
         $scheme->scheme('test')->host('self')->toAdapter(new Adapter\Test);
@@ -259,13 +259,13 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     public function testIndexIsDefaultIfUriEndsWithSlash()
     {
         $user = $this->resource->newInstance('app://self/user/');
-        $this->assertSame($user->class, 'Sandbox\Resource\App\User\Index');
+        $this->assertSame($user->class, 'TestVendor\Sandbox\Resource\App\User\Index');
     }
 
     public function testIndexIsDefaultIfUriEndsWithSlashInRoot()
     {
         $user = $this->resource->newInstance('app://self/');
-        $this->assertSame($user->class, 'Sandbox\Resource\App\Index');
+        $this->assertSame($user->class, 'TestVendor\Sandbox\Resource\App\Index');
     }
 
     /**
@@ -442,7 +442,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $injector = Injector::create([new TestModule]);
         $scheme = new SchemeCollection;
         $scheme->scheme('app')->host('self')->toAdapter(
-            new Adapter\App($injector, 'Sandbox', 'Resource\App')
+            new Adapter\App($injector, 'TestVendor\Sandbox', 'Resource\App')
         );
         $invoker = new Invoker(
             new Linker(new AnnotationReader, new ArrayCache, new UriTemplate),

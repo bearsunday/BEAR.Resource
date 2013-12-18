@@ -20,7 +20,7 @@ The resource object is an object that has resource behavior.
 
 ```php
 
-namespace Sandbox\Blog;
+namespace MyVendor\Sandbox\Blog;
 
 class Author extends ResourceObject
 {
@@ -69,14 +69,14 @@ $resource->setSchemeCollection(
   (new SchemeCollection)
     ->scheme('app')
     ->host('self')
-    ->toAdapter(new Adapter\App($injector, 'Sandbox', 'Resource\App'));
+    ->toAdapter(new Adapter\App($injector, 'MyVendor\Sandbox', 'Resource\App'));
 );
 ```
 
 You can also retrieve a client instance by using an injector that resolves depenencies.
 
 ```php
-$injector = Injector::create([new ResourceModule('Sandbox')])
+$injector = Injector::create([new ResourceModule('MyVendor\Sandbox')])
 $resource = $injector->getInstance('BEAR\Resource\ResourceInterface');
 ```
 
@@ -291,7 +291,7 @@ Apart from `JsonModule`you can also use the `HalModule` which uses a [HAL (Hyper
 
 
 ```php
-$modules = [new ResourceModule('Sandbox'), new JsonModule]:
+$modules = [new ResourceModule('MyVendor\Sandbox'), new JsonModule]:
 $resource = Injector::create(modules)
   ->getInstance('BEAR\Resource\ResourceInterface');
 ```

@@ -20,7 +20,7 @@ class ResourceModule extends AbstractModule
     /**
      * @param string $appName
      */
-    public function __construct($appName = 'Sandbox')
+    public function __construct($appName)
     {
         $this->appName = $appName;
     }

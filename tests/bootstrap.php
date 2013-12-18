@@ -7,7 +7,7 @@ use Doctrine\Common\Annotations\AnnotationReader;
 $loader = require dirname(__DIR__) . '/vendor/autoload.php';
 /** @var $loader \Composer\Autoload\ClassLoader */
 $loader->add('BEAR\Resource', [__DIR__]);
-$loader->add('Sandbox', [__DIR__]);
+$loader->add('TestVendor\Sandbox', [__DIR__]);
 AnnotationRegistry::registerLoader([$loader, 'loadClass']);
 AnnotationReader::addGlobalIgnoredName('noinspection');
 

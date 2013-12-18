@@ -21,10 +21,10 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $injector = Injector::create();
         $scheme = new SchemeCollection;
         $scheme->scheme('app')->host('self')->toAdapter(
-            new Adapter\App($injector, 'Sandbox', 'Resource\App')
+            new Adapter\App($injector, 'TestVendor\Sandbox', 'Resource\App')
         );
         $scheme->scheme('page')->host('self')->toAdapter(
-            new Adapter\App($injector, 'Sandbox', 'Resource\Page')
+            new Adapter\App($injector, 'TestVendor\Sandbox', 'Resource\Page')
         );
         $scheme->scheme('nop')->host('self')->toAdapter(new Adapter\Nop);
         $scheme->scheme('prov')->host('self')->toAdapter(new Adapter\Prov);
@@ -68,13 +68,13 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testNewInstanceApp()
     {
         $instance = $this->factory->newInstance('app://self/factory/news');
-        $this->assertInstanceOf('Sandbox\Resource\App\Factory\News', $instance, get_class($instance));
+        $this->assertInstanceOf('TestVendor\Sandbox\Resource\App\Factory\News', $instance, get_class($instance));
     }
 
     public function testNewInstancePage()
     {
         $instance = $this->factory->newInstance('page://self/news');
-        $this->assertInstanceOf('Sandbox\Resource\Page\News', $instance);
+        $this->assertInstanceOf('TestVendor\Sandbox\Resource\Page\News', $instance);
     }
 
     /**

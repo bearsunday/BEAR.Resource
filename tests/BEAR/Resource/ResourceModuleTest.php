@@ -1,6 +1,6 @@
 <?php
 
-namespace Sandbox\Resource\Page {
+namespace MyVendor\Sandbox\Resource\Page {
 
     use BEAR\Resource\ResourceObject;
 
@@ -47,7 +47,7 @@ namespace BEAR\Resource {
         protected function configure()
         {
             $this->bind()->annotatedWith('app_name')->toInstance('Another');
-            $this->install(new ResourceModule);
+            $this->install(new ResourceModule('MyVendor\Sandbox'));
         }
     }
 
@@ -55,7 +55,7 @@ namespace BEAR\Resource {
     {
         protected function configure()
         {
-            $this->install(new InjectorModule(new ResourceModule));
+            $this->install(new InjectorModule(new ResourceModule('MyVendor\Sandbox')));
             $this->requestInjection(__NAMESPACE__ . '\Modify')->modify();
         }
     }
@@ -106,7 +106,7 @@ namespace BEAR\Resource {
 
         protected function setUp()
         {
-            $this->module = new ResourceModule;
+            $this->module = new ResourceModule('MyVendor\Sandbox');
         }
 
         public function testResourceModule()
@@ -121,7 +121,7 @@ namespace BEAR\Resource {
         {
             $resource = Injector::create([$this->module])->getInstance('BEAR\Resource\ResourceInterface');
             $page = $resource->get->uri('page://self/index')->withQuery(['name' => 'koriym'])->eager->request();
-            $this->assertInstanceOf('Sandbox\Resource\Page\Index', $page);
+            $this->assertInstanceOf('MyVendor\Sandbox\Resource\Page\Index', $page);
 
             return $page;
         }
@@ -146,7 +146,7 @@ namespace BEAR\Resource {
             $app = Injector::create([new InjectorModule(new SchemeModifyModule)])->getInstance('BEAR\Resource\MyApp');
             /** @var $app \BEAR\Resource\MyApp */
             $page = $app->resource->get->uri('page://self/index')->withQuery(['name' => 'koriym'])->eager->request();
-            $this->assertInstanceOf('Sandbox\Resource\Page\Index', $page);
+            $this->assertInstanceOf('MyVendor\Sandbox\Resource\Page\Index', $page);
 
             return $app;
         }
@@ -161,7 +161,7 @@ namespace BEAR\Resource {
 
         public function testEvaluateAsStringWithJsonModule()
         {
-            $resource = Injector::create([$this->module, new JsonModule])->getInstance('BEAR\Resource\ResourceInterface');
+            $resource = Injector::create([new ResourceModule('TestVendor\Sandbox'), new JsonModule])->getInstance('BEAR\Resource\ResourceInterface');
             $user = $resource->get->uri('app://self/link/user')->withQuery(['id' => 1])->eager->request();
 
             $expected = '{
@@ -174,7 +174,7 @@ namespace BEAR\Resource {
 
         public function testHal()
         {
-            $resource = Injector::create([new ResourceModule('Sandbox'), new HalModule])->getInstance('BEAR\Resource\ResourceInterface');
+            $resource = Injector::create([new ResourceModule('TestVendor\Sandbox'), new HalModule])->getInstance('BEAR\Resource\ResourceInterface');
             $user = $resource->get->uri('app://self/link/user')->withQuery(['id' => 1])->eager->request();
             $expected = '{
     "name": "Aramis",

@@ -7,7 +7,7 @@ use Aura\Signal\HandlerFactory;
 use Aura\Signal\ResultFactory;
 use Aura\Signal\ResultCollection;
 use BEAR\Resource\Adapter\NopResource;
-use Sandbox\Resource\App\User\Entry;
+use TestVendor\Sandbox\Resource\App\User\Entry;
 use BEAR\Resource\Adapter\Nop;
 use BEAR\Resource\Adapter\TestResource;
 use Ray\Di\Definition;
