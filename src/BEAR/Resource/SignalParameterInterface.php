@@ -13,7 +13,7 @@ use Ray\Aop\MethodInvocation;
 /**
  * Interface for signal Parameter
  */
-interface SignalParamsInterface
+interface SignalParameterInterface
 {
     /**
      * Return single argument by signal

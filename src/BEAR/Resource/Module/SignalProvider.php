@@ -24,7 +24,6 @@ class SignalProvider implements ProviderInterface
      */
     public function get()
     {
-        echo 1;exit;
         return new Manager(new HandlerFactory, new ResultFactory, new ResultCollection);
     }
 }

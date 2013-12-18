@@ -15,7 +15,7 @@ use Ray\Di\Di\Inject;
 /**
  * Signal Parameter
  */
-class SignalParameter implements SignalParamsInterface
+class SignalParameter implements SignalParameterInterface
 {
     /**
      * @var Signal

@@ -18,16 +18,16 @@ use Ray\Di\Di\Inject;
 final class NamedParameter implements NamedParameterInterface
 {
     /**
-     * @var SignalParamsInterface
+     * @var SignalParameterInterface
      */
     private $signalParameter;
 
     /**
-     * @param SignalParamsInterface $signalParameter
+     * @param SignalParameterInterface $signalParameter
      *
      * @Inject(optional=true)
      */
-    public function __construct(SignalParamsInterface $signalParameter = null)
+    public function __construct(SignalParameterInterface $signalParameter = null)
     {
         $this->signalParameter = $signalParameter;
     }
