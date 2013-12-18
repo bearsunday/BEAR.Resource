@@ -6,8 +6,11 @@
  */
 namespace BEAR\Resource;
 
+use Ray\Di\Di\ImplementedBy;
+
 /**
  * Interface for resource client
+ *
  */
 interface ResourceInterface
 {
@@ -117,5 +120,5 @@ interface ResourceInterface
      *
      * @return mixed
      */
-    public function addExceptionHandler(ExceptionHandlerInterface $exceptionHandler);
+    public function setExceptionHandler(ExceptionHandlerInterface $exceptionHandler);
 }

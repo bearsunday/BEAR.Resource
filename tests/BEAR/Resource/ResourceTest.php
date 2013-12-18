@@ -28,7 +28,7 @@ class varProvider implements ParamProviderInterface
 
 class TestExceptionHandler implements ExceptionHandlerInterface
 {
-    public function handle(\Exception $e)
+    public function handle(\Exception $e, Request $request)
     {
         throw new \RuntimeException('', 0, $e);
     }
@@ -464,7 +464,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddExceptionHandler()
     {
-        $this->resource->addExceptionHandler(new TestExceptionHandler);
+        $this->resource->setExceptionHandler(new TestExceptionHandler);
         $validParams = ['id' => 0];
         $this->resource->put->uri('app://self/param/user')->withQuery($validParams)->eager->request();
     }

@@ -12,11 +12,12 @@ namespace BEAR\Resource;
 interface ExceptionHandlerInterface
 {
     /**
-     * Handle exception
+     * Resource request invoke handle exception
      *
      * @param \Exception $e
+     * @param Request    $request
      *
-     * @return void
+     * @return resource object or its body
      */
-    public function handle(\Exception $e);
+    public function handle(\Exception $e, Request $request);
 }

@@ -66,5 +66,5 @@ interface InvokerInterface
      *
      * @return mixed
      */
-    public function addExceptionHandler(ExceptionHandlerInterface $exceptionHandler);
+    public function setExceptionHandler(ExceptionHandlerInterface $exceptionHandler);
 }

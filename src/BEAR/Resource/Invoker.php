@@ -124,9 +124,9 @@ class Invoker implements InvokerInterface
             $result = call_user_func_array([$request->ro, $onMethod], $args);
         } catch (Exception\Parameter $e) {
             $e =  new Exception\ParameterInService('', 0, $e);
-            $this->exceptionHandler->handle($e);
+            $result = $this->exceptionHandler->handle($e, $request);
         } catch (\Exception $e) {
-            $this->exceptionHandler->handle($e);
+            $result = $this->exceptionHandler->handle($e, $request);
         }
 
         if (!$result instanceof ResourceObject) {
@@ -288,7 +288,7 @@ class Invoker implements InvokerInterface
     /**
      * {@inheritdoc}
      */
-    public function addExceptionHandler(ExceptionHandlerInterface $exceptionHandler)
+    public function setExceptionHandler(ExceptionHandlerInterface $exceptionHandler)
     {
         $this->exceptionHandler = $exceptionHandler;
     }

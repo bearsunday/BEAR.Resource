@@ -10,7 +10,11 @@ namespace BEAR\Resource;
  */
 class ExceptionHandler implements ExceptionHandlerInterface
 {
-    public function handle(\Exception $e)
+    /**
+     * {@inheritdoc}
+     * @throws \Exception
+     */
+    public function handle(\Exception $e, Request $request)
     {
         throw $e;
     }

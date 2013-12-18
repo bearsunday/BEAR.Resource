@@ -32,7 +32,6 @@ class ResourceModule extends AbstractModule
     {
         // install Injector
         $this->install(new InjectorModule($this));
-
         // bind app name
         $this->bind()->annotatedWith('app_name')->toInstance($this->appName);
 
@@ -47,5 +46,6 @@ class ResourceModule extends AbstractModule
         $this->bind('BEAR\Resource\SchemeCollectionInterface')->toProvider('BEAR\Resource\Module\SchemeCollectionProvider')->in(Scope::SINGLETON);
         $this->bind('Aura\Signal\Manager')->toProvider('BEAR\Resource\Module\SignalProvider')->in(Scope::SINGLETON);
         $this->bind('Guzzle\Parser\UriTemplate\UriTemplateInterface')->to('Guzzle\Parser\UriTemplate\UriTemplate')->in(Scope::SINGLETON);
+        $this->bind('Ray\Di\InjectorInterface')->toInstance($this->dependencyInjector);
     }
 }

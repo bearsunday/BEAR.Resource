@@ -297,9 +297,9 @@ class Resource implements ResourceInterface
     /**
      * {@inheritdoc}
      */
-    public function addExceptionHandler(ExceptionHandlerInterface $exceptionHandler)
+    public function setExceptionHandler(ExceptionHandlerInterface $exceptionHandler)
     {
-        $this->invoker->addExceptionHandler($exceptionHandler);
+        $this->invoker->setExceptionHandler($exceptionHandler);
     }
 
     /**
