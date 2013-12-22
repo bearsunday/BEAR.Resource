@@ -250,7 +250,7 @@ array (
  ...
 ```
 
-### HETEOAS アプリケーション状態のエンジンとしてのハイパーメディア
+### HATEOAS アプリケーション状態のエンジンとしてのハイパーメディア
 
 リソースはクライアントの次の動作をハイパーリンクにして、クライアントはそのリンクを辿りアプリケーションの状態を変更します。
 例えば注文リソースに **POST** して注文を作成、その注文の状態から支払リソースに **PUT**して支払を行います。
@@ -287,7 +287,7 @@ public function onPost($drink)
 
 支払の方法は注文リソースがハイパーリンクと提供しています。
 支払と注文の関係が変更されてもクライアントコードに変更はありません。
-HETEOAS について詳しくは[How to GET a Cup of Coffee](http://www.infoq.com/articles/webber-rest-workflow)をご覧ください。
+HATEOAS について詳しくは[How to GET a Cup of Coffee](http://www.infoq.com/articles/webber-rest-workflow)をご覧ください。
 
 ### リソース表現
 
