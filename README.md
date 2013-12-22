@@ -245,7 +245,7 @@ array (
  ...
 ```
 
-### HETEOAS Hypermedia as the Engine of Application State
+### HATEOAS Hypermedia as the Engine of Application State
 
 The resource client next then takes the next behavior as hyperlink and carrying on from that link changes the application state.
 For example in an order resource by using **POST** the order is created, from that order state to the payment resource using a **PUT** method a payment is made.
@@ -282,7 +282,7 @@ Client code
 
 The payment method is provided by the order resource with the hyperlink.
 There is no change in client code even though the relationship between the order and payment is changed,
-You can checkout more on HETEOAS at [How to GET a Cup of Coffee](http://www.infoq.com/articles/webber-rest-workflow).
+You can checkout more on HATEOAS at [How to GET a Cup of Coffee](http://www.infoq.com/articles/webber-rest-workflow).
 
 ### Resource Representation
 
