@@ -6,8 +6,8 @@
  */
 namespace BEAR\Resource\Adapter;
 
-use Ray\Di\InjectorInterface;
 use BEAR\Resource\Exception\AppNamespace;
+use Ray\Di\InjectorInterface;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Scope;
 

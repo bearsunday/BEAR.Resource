@@ -6,8 +6,8 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Adapter\AdapterInterface;
 use ArrayObject;
+use BEAR\Resource\Adapter\AdapterInterface;
 
 /**
  * Resource scheme collection

@@ -12,10 +12,9 @@ use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\Cache;
 use Guzzle\Parser\UriTemplate\UriTemplate;
 use Guzzle\Parser\UriTemplate\UriTemplateInterface;
-use Ray\Di\AbstractModule;
-use Ray\Di\Di\Scope;
 use ReflectionMethod;
 use Ray\Di\Di\Inject;
+use Ray\Di\Di\Scope;
 
 /**
  * Resource linker

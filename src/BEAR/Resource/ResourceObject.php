@@ -6,10 +6,10 @@
  */
 namespace BEAR\Resource;
 
-use Ray\Di\Di\Inject;
 use ArrayAccess;
 use Countable;
 use IteratorAggregate;
+use Ray\Di\Di\Inject;
 
 /**
  * Abstract resource object

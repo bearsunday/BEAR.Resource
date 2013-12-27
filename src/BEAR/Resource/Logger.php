@@ -10,9 +10,9 @@ use Any\Serializer\SerializeInterface;
 use Any\Serializer\Serializer;
 use ArrayIterator;
 use Countable;
-use Ray\Di\Di\Scope;
 use Serializable;
 use Ray\Di\Di\Inject;
+use Ray\Di\Di\Scope;
 
 /**
  * Resource logger

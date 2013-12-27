@@ -6,8 +6,6 @@
  */
 namespace BEAR\Resource;
 
-use ArrayObject;
-
-class Args extends ArrayObject
+class Args extends \ArrayObject
 {
 }

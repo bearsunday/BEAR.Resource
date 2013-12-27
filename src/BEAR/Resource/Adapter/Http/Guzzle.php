@@ -6,14 +6,13 @@
  */
 namespace BEAR\Resource\Adapter\Http;
 
-use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Request;
+use BEAR\Resource\ResourceObject;
 use Guzzle\Cache\DoctrineCacheAdapter;
 use Guzzle\Http\Message\RequestInterface;
 use Guzzle\Http\Message\Response;
 use Guzzle\Plugin\Cache\CachePlugin;
 use Guzzle\Service\Client as GuzzleClient;
-use Ray\Di\AbstractModule;
 use Ray\Di\Di\Scope;
 
 /**

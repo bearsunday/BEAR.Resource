@@ -6,8 +6,6 @@
  */
 namespace BEAR\Resource;
 
-use Ray\Aop\MethodInvocation;
-
 interface NamedParameterInterface
 {
     /**

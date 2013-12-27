@@ -9,8 +9,8 @@ namespace BEAR\Resource;
 use Ray\Aop\Weave;
 use Ray\Aop\Bind;
 use Ray\Aop\WeavedInterface;
-use Ray\Di\Di\Scope;
 use XHProfRuns_Default;
+use Ray\Di\Di\Scope;
 
 /**
  * Resource request invoker
