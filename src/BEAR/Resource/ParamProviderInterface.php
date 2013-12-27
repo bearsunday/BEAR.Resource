@@ -12,9 +12,9 @@ namespace BEAR\Resource;
 interface ParamProviderInterface
 {
     /**
-     * @param Param $param
+     * @param ParamInterface $param
      *
      * @return mixed
      */
-    public function __invoke(Param $param);
+    public function __invoke(ParamInterface $param);
 }

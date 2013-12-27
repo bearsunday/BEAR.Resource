@@ -18,7 +18,7 @@ class ByProviderTestClass
 
 class IdProvider implements ParamProviderInterface
 {
-    public function __invoke(Param $param)
+    public function __invoke(ParamInterface $param)
     {
         $GLOBALS['method'] = $param->getMethodInvocation();
         $GLOBALS['param'] = $param->getParameter();
@@ -28,7 +28,7 @@ class IdProvider implements ParamProviderInterface
 
 class IdProviderSkip implements ParamProviderInterface
 {
-    public function __invoke(Param $param)
+    public function __invoke(ParamInterface $param)
     {
         return;
     }
@@ -55,7 +55,7 @@ class ByProviderMethodClass
 
 class Provider implements ParamProviderInterface
 {
-    public function __invoke(Param $param)
+    public function __invoke(ParamInterface $param)
     {
         return $param->inject(1002);
     }

@@ -28,12 +28,12 @@ class SignalParameter implements SignalParameterInterface
     private $param;
 
     /**
-     * @param Signal $signal
-     * @param Param  $param
+     * @param Signal         $signal
+     * @param ParamInterface $param
      *
      * @Inject
      */
-    public function __construct(Signal $signal, Param $param)
+    public function __construct(Signal $signal, ParamInterface $param)
     {
         $this->signal = $signal;
         $this->param = $param;
@@ -78,7 +78,7 @@ class SignalParameter implements SignalParameterInterface
     private function sendSignal(
         $sigName,
         ReflectionParameter $parameter,
-        Param $param,
+        ParamInterface $param,
         MethodInvocation $invocation,
         ReflectionParameter $parameter
     ) {

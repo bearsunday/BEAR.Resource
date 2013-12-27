@@ -20,7 +20,7 @@ use Doctrine\Common\Cache\ArrayCache;
 
 class varProvider implements ParamProviderInterface
 {
-    public function __invoke(Param $param)
+    public function __invoke(ParamInterface $param)
     {
         return $param->inject(1);
     }

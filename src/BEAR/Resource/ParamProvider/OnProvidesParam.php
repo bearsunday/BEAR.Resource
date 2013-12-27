@@ -6,7 +6,7 @@
  */
 namespace BEAR\Resource\ParamProvider;
 
-use BEAR\Resource\Param;
+use BEAR\Resource\ParamInterface;
 use BEAR\Resource\ParamProviderInterface;
 
 /**
@@ -17,11 +17,11 @@ use BEAR\Resource\ParamProviderInterface;
 class OnProvidesParam implements ParamProviderInterface
 {
     /**
-     * @param Param $param
+     * @param ParamInterface $param
      *
      * @return mixed
      */
-    public function __invoke(Param $param)
+    public function __invoke(ParamInterface $param)
     {
         $provideMethod = 'onProvides' . ucfirst(str_replace('_', '', $param->getParameter()->name));
         $object = $param->getMethodInvocation()->getThis();

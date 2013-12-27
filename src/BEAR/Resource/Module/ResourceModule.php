@@ -47,5 +47,6 @@ class ResourceModule extends AbstractModule
         $this->bind('Aura\Signal\Manager')->toProvider('BEAR\Resource\Module\SignalProvider')->in(Scope::SINGLETON);
         $this->bind('Guzzle\Parser\UriTemplate\UriTemplateInterface')->to('Guzzle\Parser\UriTemplate\UriTemplate')->in(Scope::SINGLETON);
         $this->bind('Ray\Di\InjectorInterface')->toInstance($this->dependencyInjector);
+        $this->bind('BEAR\Resource\ParamInterface')->to('BEAR\Resource\Param');
     }
 }
