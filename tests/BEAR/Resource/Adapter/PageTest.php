@@ -28,9 +28,9 @@ namespace BEAR\Resource\Adapter {
         }
 
         /**
-         * @expectedException \RuntimeException
+         * @expectedException \BEAR\Resource\Exception\AppNamespace
          */
-        public function test_NewInvalidNamespace()
+        public function test_NewNamespace()
         {
             new AppAdapter($this->injector, [], '');
         }

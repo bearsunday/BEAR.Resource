@@ -39,7 +39,7 @@ interface ParamInterface
     /**
      * Inject argument
      *
-     * @param $arg
+     * @param mixed $arg
      *
      * @return string 'Aura\Signal\Manager::STOP'
      */

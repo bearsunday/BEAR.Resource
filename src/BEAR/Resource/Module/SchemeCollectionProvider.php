@@ -8,6 +8,7 @@ namespace BEAR\Resource\Module;
 
 use BEAR\Resource\Adapter\App as AppAdapter;
 use BEAR\Resource\Adapter\Http as HttpAdapter;
+use BEAR\Resource\Exception\AppName;
 use BEAR\Resource\SchemeCollection;
 use Ray\Di\ProviderInterface as Provide;
 use Ray\Di\InjectorInterface;
@@ -19,16 +20,19 @@ use Ray\Di\Di\Named;
  */
 class SchemeCollectionProvider implements Provide
 {
-    private $appName = 'Sandbox';
+    private $appName;
 
     /**
      * @param string $appName
      *
-     * @Inject(optional=true)
+     * @Inject
      * @Named("app_name")
      */
     public function setAppName($appName)
     {
+        if (is_null($appName)) {
+            throw new AppName($appName);
+        }
         $this->appName = $appName;
     }
 

@@ -6,9 +6,6 @@
  */
 namespace BEAR\Resource\Exception;
 
-/**
- * Resource service exception
- */
-class Service extends \Exception implements ExceptionInterface
+class AppName extends LogicException implements ExceptionInterface
 {
 }

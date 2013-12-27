@@ -7,7 +7,7 @@
 namespace BEAR\Resource\Adapter;
 
 use Ray\Di\InjectorInterface;
-use RuntimeException;
+use BEAR\Resource\Exception\AppNamespace;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Scope;
 
@@ -43,7 +43,7 @@ class App implements AdapterInterface
      * @param string            $path      Resource adapter path
      *
      * @Inject
-     * @throws RuntimeException
+     * @throws Namespace
      */
     public function __construct(
         InjectorInterface $injector,
@@ -51,7 +51,7 @@ class App implements AdapterInterface
         $path
     ) {
         if (!is_string($namespace)) {
-            throw new RuntimeException('namespace not string');
+            throw new AppNamespace(gettype($namespace));
         }
         $this->injector = $injector;
         $this->namespace = $namespace;
