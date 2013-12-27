@@ -13,9 +13,6 @@ use BEAR\Resource\RequestInterface;
 use Nocarrier\Hal;
 use BEAR\Resource\Exception;
 
-/**
- * Hal renderer
- */
 class HalRenderer implements RenderInterface
 {
     /**

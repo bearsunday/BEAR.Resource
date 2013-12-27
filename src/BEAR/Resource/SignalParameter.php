@@ -67,9 +67,9 @@ class SignalParameter implements SignalParameterInterface
     /**
      * Send signal parameter
      *
-     * @param string              $sigName
+     * @param string               $sigName
      * @param ReflectionParameter $parameter
-     * @param Param               $param
+     * @param ParamInterface      $param
      * @param MethodInvocation    $invocation
      * @param ReflectionParameter $parameter
      *

@@ -6,9 +6,6 @@
  */
 namespace BEAR\Resource;
 
-/**
- * Link type
- */
 final class LinkType
 {
     /**

@@ -12,14 +12,9 @@ use Aura\Signal\ResultCollection;
 use Aura\Signal\ResultFactory;
 use Ray\Di\ProviderInterface;
 
-/**
- * Signal provider
- */
 class SignalProvider implements ProviderInterface
 {
     /**
-     * Return instance
-     *
      * @return Manager
      */
     public function get()

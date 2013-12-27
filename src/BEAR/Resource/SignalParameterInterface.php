@@ -4,15 +4,11 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-
 namespace BEAR\Resource;
 
 use ReflectionParameter;
 use Ray\Aop\MethodInvocation;
 
-/**
- * Interface for signal Parameter
- */
 interface SignalParameterInterface
 {
     /**
@@ -31,7 +27,7 @@ interface SignalParameterInterface
      * @param string                 $varName
      * @param ParamProviderInterface $provider
      *
-     * @return self
+     * @return $this
      */
     public function attachParamProvider($varName, ParamProviderInterface $provider);
 }

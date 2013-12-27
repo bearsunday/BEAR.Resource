@@ -27,7 +27,7 @@ interface RequestInterface
      *
      * @param array $query
      *
-     * @return self
+     * @return $this
      */
     public function withQuery(array $query);
 
@@ -36,7 +36,7 @@ interface RequestInterface
      *
      * @param array $query
      *
-     * @return self
+     * @return $this
      */
     public function addQuery(array $query);
 

@@ -6,9 +6,6 @@
  */
 namespace BEAR\Resource\Exception;
 
-/**
- * Invalid host
- */
 class Host extends BadRequest implements ExceptionInterface
 {
 }

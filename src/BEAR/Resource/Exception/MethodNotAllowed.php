@@ -6,9 +6,6 @@
  */
 namespace BEAR\Resource\Exception;
 
-/**
- * Bad request (405)
- */
 class MethodNotAllowed extends BadRequest implements ExceptionInterface
 {
 }

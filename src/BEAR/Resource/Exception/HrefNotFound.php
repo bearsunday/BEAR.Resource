@@ -7,7 +7,7 @@
 namespace BEAR\Resource\Exception;
 
 /**
- * Href not found in (HAL renderer)
+ * Href not found in (HAL renderer) exception
  */
 class HrefNotFound extends \RuntimeException implements ExceptionInterface
 {

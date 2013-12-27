@@ -6,9 +6,6 @@
  */
 namespace BEAR\Resource\Exception;
 
-/**
- * Invalid scheme
- */
 class Scheme extends BadRequest implements ExceptionInterface
 {
 }

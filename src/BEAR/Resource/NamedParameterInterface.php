@@ -8,11 +8,6 @@ namespace BEAR\Resource;
 
 use Ray\Aop\MethodInvocation;
 
-/**
- * Resource request invoke interface
- *
- * @ImplementedBy("BEAR\Resource\Invoker")
- */
 interface NamedParameterInterface
 {
     /**

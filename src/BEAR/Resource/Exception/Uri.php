@@ -6,9 +6,6 @@
  */
 namespace BEAR\Resource\Exception;
 
-/**
- * Invalid resource URI
- */
 class Uri extends BadRequest implements ExceptionInterface
 {
 }

@@ -7,8 +7,6 @@
 namespace BEAR\Resource\Annotation;
 
 /**
- * Provides
- *
  * @Annotation
  * @Target("METHOD")
  */

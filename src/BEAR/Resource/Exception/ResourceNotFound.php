@@ -7,7 +7,7 @@
 namespace BEAR\Resource\Exception;
 
 /**
- * Not found (404)
+ * Resource Not found (404)
  */
 class ResourceNotFound extends BadRequest implements ExceptionInterface
 {

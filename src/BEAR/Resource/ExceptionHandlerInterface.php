@@ -7,7 +7,7 @@
 namespace BEAR\Resource;
 
 /**
- * Resource request invoker exception handler
+ * Interface for Resource request invoker
  */
 interface ExceptionHandlerInterface
 {

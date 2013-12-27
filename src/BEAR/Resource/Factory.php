@@ -81,7 +81,8 @@ class Factory implements FactoryInterface
     }
 
     /**
-     * @param $uri
+     * @param string      $uri
+     * @param NotReadable $e
      *
      * @return ResourceObject
      * @throws Exception\ResourceNotFound

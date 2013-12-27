@@ -55,7 +55,7 @@ interface InvokerInterface
      * @param string                 $varName
      * @param ParamProviderInterface $provider
      *
-     * @return self
+     * @return $this
      */
     public function attachParamProvider($varName, ParamProviderInterface $provider);
 

@@ -12,9 +12,6 @@ use Ray\Aop\ReflectiveMethodInvocation;
 use ReflectionParameter;
 use Ray\Di\Di\Inject;
 
-/**
- * Reflective Parameter
- */
 final class NamedParameter implements NamedParameterInterface
 {
     /**

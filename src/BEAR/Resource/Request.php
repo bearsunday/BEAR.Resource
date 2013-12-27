@@ -14,11 +14,6 @@ use Traversable;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Scope;
 
-/**
- * Interface for resource adapter provider
- *
- * @Scope("prototype")
- */
 final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
 {
     use BodyArrayAccessTrait;

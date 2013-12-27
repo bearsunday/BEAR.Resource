@@ -20,11 +20,17 @@ use Ray\Di\Di\Named;
  */
 class SchemeCollectionProvider implements Provide
 {
+    /**
+     * @var string
+     */
     private $appName;
 
     /**
      * @param string $appName
      *
+     * @return void
+     *
+     * @throws \BEAR\Resource\Exception\InvalidAppName
      * @Inject
      * @Named("app_name")
      */

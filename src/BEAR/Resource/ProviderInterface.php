@@ -6,9 +6,6 @@
  */
 namespace BEAR\Resource;
 
-/**
- * Interface for resource adapter provider.
- */
 interface ProviderInterface
 {
     /**

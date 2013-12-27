@@ -8,10 +8,6 @@ namespace BEAR\Resource;
 
 use Ray\Di\Di\ImplementedBy;
 
-/**
- * Interface for resource client
- *
- */
 interface ResourceInterface
 {
     /**
@@ -19,7 +15,7 @@ interface ResourceInterface
      *
      * @param string $uri
      *
-     * @return self
+     * @return $this
      */
     public function newInstance($uri);
 
@@ -37,7 +33,7 @@ interface ResourceInterface
      *
      * @param string $uri
      *
-     * @return self
+     * @return $this
      */
     public function uri($uri);
 
@@ -46,7 +42,7 @@ interface ResourceInterface
      *
      * @param  array $query
      *
-     * @return self
+     * @return $this
      */
     public function withQuery(array $query);
 
@@ -55,7 +51,7 @@ interface ResourceInterface
      *
      * @param array $query
      *
-     * @return self
+     * @return $this
      */
     public function addQuery(array $query);
 
@@ -71,7 +67,7 @@ interface ResourceInterface
      *
      * @param string $linkKey
      *
-     * @return self
+     * @return $this
      */
     public function linkSelf($linkKey);
 
@@ -80,7 +76,7 @@ interface ResourceInterface
      *
      * @param string $linkKey
      *
-     * @return self
+     * @return $this
      */
     public function linkNew($linkKey);
 
@@ -89,7 +85,7 @@ interface ResourceInterface
      *
      * @param string $linkKey
      *
-     * @return self
+     * @return $this
      */
     public function linkCrawl($linkKey);
 
@@ -99,7 +95,7 @@ interface ResourceInterface
      * @param                        $varName
      * @param ParamProviderInterface $provider
      *
-     * @return self
+     * @return $this
      */
     public function attachParamProvider($varName, ParamProviderInterface $provider);
 

@@ -6,9 +6,6 @@
  */
 namespace BEAR\Resource\Exception;
 
-/**
- * Bad link request
- */
 class BadLinkRequest extends \BadMethodCallException implements ExceptionInterface
 {
 }

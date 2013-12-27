@@ -6,9 +6,6 @@
  */
 namespace BEAR\Resource;
 
-/**
- * Resource Links
- */
 final class Link
 {
     const REL = 'rel';

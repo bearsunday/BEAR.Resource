@@ -6,9 +6,6 @@
  */
 namespace BEAR\Resource\Exception;
 
-/**
- * Resource service exception
- */
 class ParameterInService extends Service implements ExceptionInterface
 {
 }

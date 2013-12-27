@@ -6,9 +6,6 @@
  */
 namespace BEAR\Resource;
 
-/**
- * Interface for ParamProvider
- */
 interface ParamProviderInterface
 {
     /**

@@ -16,7 +16,7 @@ interface RenderInterface
      *
      * @param ResourceObject $resourceObject
      *
-     * @return self
+     * @return $this
      */
     public function render(ResourceObject $resourceObject);
 }

@@ -7,8 +7,6 @@
 namespace BEAR\Resource\Annotation;
 
 /**
- * Signal
- *
  * @Annotation
  * @Target("METHOD")
  */

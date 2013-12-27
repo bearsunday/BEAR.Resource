@@ -9,7 +9,7 @@ namespace BEAR\Resource\Adapter;
 use Guzzle\Service\Client as GuzzleClient;
 
 /**
- * Http resource
+ * Http resource adapter
  */
 class Http implements AdapterInterface
 {

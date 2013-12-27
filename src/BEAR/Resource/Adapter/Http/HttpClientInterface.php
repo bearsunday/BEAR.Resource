@@ -14,42 +14,42 @@ interface HttpClientInterface
     /**
      * Get
      *
-     * @return self
+     * @return $this
      */
     public function onGet();
 
     /**
      * Post
      *
-     * @return self
+     * @return $this
      */
     public function onPost();
 
     /**
      * Put
      *
-     * @return self
+     * @return $this
      */
     public function onPut();
 
     /**
      * Delete
      *
-     * @return self
+     * @return $this
      */
     public function onDelete();
 
     /**
      * Options
      *
-     * @return self
+     * @return $this
      */
     public function onOptions();
 
     /**
      * Head
      *
-     * @return self
+     * @return $this
      */
     public function onHead();
 }

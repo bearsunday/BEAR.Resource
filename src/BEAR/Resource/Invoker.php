@@ -77,7 +77,7 @@ class Invoker implements InvokerInterface
      *
      * @param LoggerInterface $logger
      *
-     * @return self
+     * @return $this
      * @Inject(optional=true)
      */
     public function setResourceLogger(LoggerInterface $logger)

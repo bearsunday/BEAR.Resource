@@ -6,9 +6,6 @@
  */
 namespace BEAR\Resource\Exception;
 
-/**
- * Invalid request
- */
 class Request extends BadRequest implements ExceptionInterface
 {
 }

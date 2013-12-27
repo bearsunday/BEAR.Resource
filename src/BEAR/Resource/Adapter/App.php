@@ -12,7 +12,7 @@ use Ray\Di\Di\Inject;
 use Ray\Di\Di\Scope;
 
 /**
- * Application resource
+ * Application resource adapter
  */
 class App implements AdapterInterface
 {

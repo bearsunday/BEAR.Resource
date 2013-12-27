@@ -6,9 +6,6 @@
  */
 namespace BEAR\Resource\Annotation;
 
-/**
- * Annotation
- */
 interface AnnotationInterface
 {
 }
