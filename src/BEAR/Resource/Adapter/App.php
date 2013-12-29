@@ -43,7 +43,7 @@ class App implements AdapterInterface
      * @param string            $path      Resource adapter path
      *
      * @Inject
-     * @throws Namespace
+     * @throws AppNamespace
      */
     public function __construct(
         InjectorInterface $injector,
