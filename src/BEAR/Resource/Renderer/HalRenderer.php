@@ -40,7 +40,7 @@ class HalRenderer implements RenderInterface
     /**
      * @param ResourceObject $ro
      */
-    private function valuateElements(ResourceObject &$ro)
+    private function valuateElements(ResourceObject $ro)
     {
         array_walk_recursive(
             $ro->body,
