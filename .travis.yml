@@ -4,8 +4,8 @@ php:
   - 5.4
 
 env:
-  - GUZZLE_VERSION="3.1.*"
-  - GUZZLE_VERSION="3.8.*"
+  - GUZZLE_VERSION="3.0.*"
+  - GUZZLE_VERSION="~3.0"
 
 before_install:
  - composer selfupdate
