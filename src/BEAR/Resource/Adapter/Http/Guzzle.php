@@ -121,7 +121,7 @@ class Guzzle extends ResourceObject implements HttpClientInterface
     {
         /* @var $response \Guzzle\Http\Message\Response */
         $code = $response->getStatusCode();
-        $headers = $response->getHeaders()->getAll();
+        $headers = $response->getHeaders()->toArray();
         $body = $response->getBody(true);
         if (strpos($headers['Content-Type'][0], 'xml') !== false && $body) {
             $body = new \SimpleXMLElement($body);
