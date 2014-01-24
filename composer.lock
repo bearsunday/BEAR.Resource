@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "1ed239e042248150fa646afacff7a29b",
+    "hash": "bdc58bd1f695225129ad34b5d4b13b21",
     "packages": [
         {
             "name": "any/serializer",
@@ -656,12 +656,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Ray.Di.git",
-                "reference": "eafdb09e20c58b29dd1b443e747a31f02f053cd3"
+                "reference": "13f00a2a277133752b161e5c13c6d71de462e60b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/eafdb09e20c58b29dd1b443e747a31f02f053cd3",
-                "reference": "eafdb09e20c58b29dd1b443e747a31f02f053cd3",
+                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/13f00a2a277133752b161e5c13c6d71de462e60b",
+                "reference": "13f00a2a277133752b161e5c13c6d71de462e60b",
                 "shasum": ""
             },
             "require": {
@@ -706,7 +706,7 @@
                 "injection",
                 "jsr"
             ],
-            "time": "2014-01-18 11:48:52"
+            "time": "2014-01-21 16:26:38"
         },
         {
             "name": "symfony/event-dispatcher",

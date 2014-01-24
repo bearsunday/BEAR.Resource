@@ -44,7 +44,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             $ro = $this->httpAdapter->onGet();
         }
         /** @noinspection PhpUndefinedVariableInspection */
-        $this->assertSame($ro->headers['Content-Type'][0], 'application/xml; charset=UTF-8');
+        $this->assertSame($ro->headers['content-type'][0], 'application/xml; charset=UTF-8');
     }
 
     /**

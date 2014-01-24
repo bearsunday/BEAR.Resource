@@ -5,6 +5,13 @@ php:
 
 env:
   - GUZZLE_VERSION="3.0.*"
+  - GUZZLE_VERSION="3.1.*"
+  - GUZZLE_VERSION="3.2.*"
+  - GUZZLE_VERSION="3.3.*"
+  - GUZZLE_VERSION="3.4.*"
+  - GUZZLE_VERSION="3.5.*"
+  - GUZZLE_VERSION="3.6.*"
+  - GUZZLE_VERSION="3.7.*"
   - GUZZLE_VERSION="~3.0"
 
 before_install:
