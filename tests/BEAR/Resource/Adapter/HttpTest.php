@@ -35,7 +35,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     public function testGetHeader()
     {
         $ro = $this->httpAdapter->onGet();
-        $this->assertSame($ro->headers['Content-Type'][0], 'application/xml; charset=UTF-8');
+        $this->assertSame($ro->headers['content-type'][0], 'application/xml; charset=UTF-8');
     }
 
     public function testGetHeaderRepeatWithCache()
@@ -64,7 +64,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     {
         $ro = $this->httpAdapter->onHead();
         $expected = 'application/xml; charset=UTF-8';
-        $this->assertSame($expected, $ro->headers['Content-Type'][0]);
+        $this->assertSame($expected, $ro->headers['content-type'][0]);
     }
 
     public function testPut()
@@ -99,7 +99,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     {
         $ro = $this->httpAdapter->onPost();
         $expected = 'application/xml; charset=UTF-8';
-        $this->assertSame($expected, $ro->headers['Content-Type'][0]);
+        $this->assertSame($expected, $ro->headers['content-type'][0]);
     }
 
     /**
