@@ -163,34 +163,31 @@ class Resource implements ResourceInterface
      */
     public function uri($uri)
     {
-        if (is_string($uri)) {
-            if (!$this->request) {
-                throw new Exception\BadRequest('Request method (get/put/post/delete/options) required before uri()');
-            }
-            if (filter_var($uri, FILTER_VALIDATE_URL) === false) {
-                throw new Exception\Uri($uri);
-            }
-            // uri with query parsed
-            if (strpos($uri, '?') !== false) {
-                $parsed = parse_url($uri);
-                $uri = $parsed['scheme'] . '://' . $parsed['host'] . $parsed['path'];
-                if (isset($parsed['query'])) {
-                    parse_str($parsed['query'], $query);
-                    $this->withQuery($query);
-                }
-            }
-            $this->request->ro = $this->newInstance($uri);
-            $this->request->uri = $uri;
-
-            return $this;
-        }
         if ($uri instanceof Uri) {
             $this->request->ro = $this->newInstance($uri->uri);
             $this->withQuery($uri->query);
 
             return $this;
         }
-        throw new Exception\Uri;
+        if (! $this->request) {
+            throw new Exception\BadRequest('Request method (get/put/post/delete/options) required before uri()');
+        }
+        if (filter_var($uri, FILTER_VALIDATE_URL) === false) {
+            throw new Exception\Uri($uri);
+        }
+        // uri with query parsed
+        if (strpos($uri, '?') !== false) {
+            $parsed = parse_url($uri);
+            $uri = $parsed['scheme'] . '://' . $parsed['host'] . $parsed['path'];
+            if (isset($parsed['query'])) {
+                parse_str($parsed['query'], $query);
+                $this->withQuery($query);
+            }
+        }
+        $this->request->ro = $this->newInstance($uri);
+        $this->request->uri = $uri;
+
+        return $this;
     }
 
     /**

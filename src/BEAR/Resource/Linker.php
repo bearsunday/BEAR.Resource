@@ -175,27 +175,37 @@ final class Linker implements LinkerInterface
         $isList = $this->isList($current->body);
         $bodyList = $isList ? $current->body : [$current->body];
         foreach ($bodyList as &$body) {
-            foreach ($annotations as $annotation) {
-                /* @var $annotation Annotation\Link */
-                if ($annotation->crawl !== $link->key) {
-                    continue;
-                }
-                $uri = $this->uriTemplate->expand($annotation->href, $body);
-                $request = $this->resource->{$annotation->method}->uri($uri)->linkCrawl($link->key)->request();
-                /* @var $request Request */
-                $hash = $request->hash();
-                if ($this->cache->contains($hash)) {
-                    $body[$annotation->rel] = $this->cache->fetch($hash);
-                    continue;
-                }
-                /* @var $linkedResource ResourceObject */
-                $body[$annotation->rel] = $request()->body;
-                $this->cache->save($hash, $body[$annotation->rel]);
-            }
+            $this->crawl($annotations, $link, $body);
         }
         $current->body = $isList ? $bodyList : $bodyList[0];
 
         return $current;
+    }
+
+    /**
+     * @param array    $annotations
+     * @param LinkType $link
+     * @param array    $body
+     */
+    private function crawl(array $annotations, LinkType $link, array &$body)
+    {
+        foreach ($annotations as $annotation) {
+            /* @var $annotation Annotation\Link */
+            if ($annotation->crawl !== $link->key) {
+                continue;
+            }
+            $uri = $this->uriTemplate->expand($annotation->href, $body);
+            $request = $this->resource->{$annotation->method}->uri($uri)->linkCrawl($link->key)->request();
+            /* @var $request Request */
+            $hash = $request->hash();
+            if ($this->cache->contains($hash)) {
+                $body[$annotation->rel] = $this->cache->fetch($hash);
+                continue;
+            }
+            /* @var $linkedResource ResourceObject */
+            $body[$annotation->rel] = $request()->body;
+            $this->cache->save($hash, $body[$annotation->rel]);
+        }
     }
 
     /**
