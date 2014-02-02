@@ -256,7 +256,7 @@ class Resource implements ResourceInterface
             return $this;
         }
         if ($this->request->in !== 'eager') {
-            return $this->request;
+            return clone $this->request;
         }
 
         return $this->invoke();
