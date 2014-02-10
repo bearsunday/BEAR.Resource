@@ -18,6 +18,10 @@ use Ray\Di\Di\Scope;
  */
 class Invoker implements InvokerInterface
 {
+    const METHOD_SYNC = 'onSync';
+
+    const METHOD_FINAL_SYNC = 'onFinalSync';
+
     /**
      * @var Linker
      */
@@ -166,18 +170,17 @@ class Invoker implements InvokerInterface
     public function invokeSync(\SplObjectStorage $requests)
     {
         $requests->rewind();
-        $data = new \ArrayObject();
+        $data = new \ArrayObject;
+        $request = null;
         while ($requests->valid()) {
             // each sync request method call.
             $request = $requests->current();
-            if (method_exists($request->ro, 'onSync')) {
-                call_user_func([$request->ro, 'onSync'], $request, $data);
+            if (method_exists($request->ro, self::METHOD_SYNC)) {
+                call_user_func([$request->ro, self::METHOD_SYNC], $request, $data);
             }
             $requests->next();
         }
-        // onFinalSync summarize all sync request data.
-        /** @noinspection PhpUndefinedVariableInspection */
-        $result = call_user_func([$request->ro, 'onFinalSync'], $request, $data);
+        $result = call_user_func([$request->ro, self::METHOD_FINAL_SYNC], $request, $data);
 
         return $result;
     }
