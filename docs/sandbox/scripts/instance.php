@@ -13,7 +13,7 @@ $loader->add('', dirname(__DIR__));
 AnnotationRegistry::registerLoader([$loader, 'loadClass']);
 AnnotationReader::addGlobalIgnoredName('noinspection'); // for phpStorm
 
-$injector = Injector::create([new ResourceModule]);
+$injector = Injector::create([new ResourceModule('sandbox')]);
 $resource = $injector->getInstance('BEAR\Resource\ResourceInterface');
 $scheme = (new SchemeCollection)->scheme('app')->host('self')->toAdapter(new App($injector, 'Sandbox', 'Resource'));
 $resource->setSchemeCollection($scheme);
