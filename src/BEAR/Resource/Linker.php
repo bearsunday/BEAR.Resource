@@ -36,6 +36,16 @@ final class Linker implements LinkerInterface
     private $uriTemplate;
 
     /**
+     * @var Reader
+     */
+    private $reader;
+
+    /**
+     * @var Cache
+     */
+    private $cache;
+
+    /**
      * @param Reader               $reader
      * @param Cache                $cache
      * @param UriTemplateInterface $uriTemplate
