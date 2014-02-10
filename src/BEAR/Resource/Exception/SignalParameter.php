@@ -6,8 +6,6 @@
  */
 namespace BEAR\Resource\Exception;
 
-use RuntimeException;
-
 class SignalParameter extends Parameter implements ExceptionInterface
 {
 }
