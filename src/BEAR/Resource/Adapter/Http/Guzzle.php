@@ -42,11 +42,9 @@ class Guzzle extends ResourceObject implements HttpClientInterface
     public function __construct(GuzzleClient $guzzle)
     {
         $this->guzzle = $guzzle;
-        $cacheAdapter = (function_exists(
-            'apc_cache_info'
-        )) ? 'Doctrine\Common\Cache\ApcCache' : 'Doctrine\Common\Cache\ArrayCache';
+        $cacheAdapter = (function_exists('apc_cache_info')) ? 'Doctrine\Common\Cache\ApcCache' : 'Doctrine\Common\Cache\ArrayCache';
         $adapter = new DoctrineCacheAdapter(new $cacheAdapter());
-        $cache = new CachePlugin($adapter, true);
+        $cache = new CachePlugin($adapter);
         $this->guzzle->getEventDispatcher()->addSubscriber($cache);
     }
 
