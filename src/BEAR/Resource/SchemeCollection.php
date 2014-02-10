@@ -31,7 +31,7 @@ class SchemeCollection extends ArrayObject implements SchemeCollectionInterface
     /**
      * Set scheme
      *
-     * @param $scheme
+     * @param string $scheme
      *
      * @return SchemeCollection
      */
@@ -45,7 +45,7 @@ class SchemeCollection extends ArrayObject implements SchemeCollectionInterface
     /**
      * Set host
      *
-     * @param $host
+     * @param string $host
      *
      * @return SchemeCollection
      */
