@@ -17,7 +17,7 @@ class SessionIdParam implements ParamProviderInterface
         // $id = $_SESSION['login_id'];
         $id = 1;
 
-        return $param->inject(1);
+        return $param->inject($id);
     }
 }
 
