@@ -17,6 +17,11 @@ use Ray\Di\Di\Scope;
 class A implements HrefInterface
 {
     /**
+     * @var UriTemplateInterface
+     */
+    protected $uriTemplate;
+
+    /**
      * @param UriTemplateInterface $uriTemplate
      *
      * @Inject
