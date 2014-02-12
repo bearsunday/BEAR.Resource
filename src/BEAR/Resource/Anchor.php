@@ -21,12 +21,17 @@ class Anchor
     /**
      * @var AnnotationReader
      */
-    private $reader;
+    protected $reader;
 
     /**
      * @var Request
      */
-    private $request;
+    protected $request;
+
+    /**
+     * @var UriTemplateInterface
+     */
+    protected $uriTemplate;
 
     /**
      * @param UriTemplateInterface $uriTemplate

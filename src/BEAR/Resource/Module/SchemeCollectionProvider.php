@@ -23,7 +23,12 @@ class SchemeCollectionProvider implements Provide
     /**
      * @var string
      */
-    private $appName;
+    protected $appName;
+
+    /**
+     * @var InjectorInterface
+     */
+    protected $injector;
 
     /**
      * @param string $appName
