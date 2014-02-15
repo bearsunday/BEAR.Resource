@@ -160,7 +160,7 @@ class DevInvokerTest extends \PHPUnit_Framework_TestCase
         $this->request->method = Invoker::OPTIONS;
         $response = $this->invoker->invoke($this->request);
         $actual = $response->headers['allow'];
-        $expected = ['get', 'post', 'put', 'delete'];
+        $expected = ['get', 'post', 'put', 'patch', 'delete'];
         asort($actual);
         asort($expected);
         $this->assertSame($actual, $expected);

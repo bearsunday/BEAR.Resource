@@ -50,6 +50,11 @@ class User extends ResourceObject
         return "$noProvide";
     }
 
+    public function onPatch($id, $name = 'default_name', $age = 99)
+    {
+        return "patch user[{$id} {$name} {$age}]";
+    }
+
     /**
      * @param $delete_id
      *

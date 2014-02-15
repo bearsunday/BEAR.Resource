@@ -327,7 +327,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     public function testVerbOptions()
     {
         $response = $this->resource->options->uri('app://self/user')->eager->request();
-        $expected = ['get', 'post', 'put', 'delete'];
+        $expected = ['get', 'post', 'put', 'patch', 'delete'];
         $this->assertSame($expected, $response->headers['allow']);
     }
 
@@ -468,4 +468,12 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $validParams = ['id' => 0];
         $this->resource->put->uri('app://self/param/user')->withQuery($validParams)->eager->request();
     }
+
+    public function testPatchMethod()
+    {
+        $actual = $this->resource->patch->object($this->user)->withQuery($this->query)->eager->request();
+        $expected = "patch user[10 Ray 43]";
+        $this->assertSame($expected, $actual->body);
+    }
+
 }

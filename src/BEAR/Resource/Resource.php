@@ -305,7 +305,7 @@ class Resource implements ResourceInterface
      */
     public function __get($name)
     {
-        if (in_array($name, ['get', 'post', 'put', 'delete', 'head', 'options'])) {
+        if (in_array($name, ['get', 'post', 'put', 'patch', 'delete', 'head', 'options'])) {
             $this->request = clone $this->newRequest;
             $this->request->method = $name;
 
