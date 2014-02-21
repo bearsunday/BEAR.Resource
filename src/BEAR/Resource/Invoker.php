@@ -209,7 +209,7 @@ class Invoker implements InvokerInterface
             $parameters = $refMethod->getParameters();
             $paramArray = [];
             foreach ($parameters as $parameter) {
-                $name = $parameter->getName();
+                $name = $parameter->name;
                 $param = $parameter->isOptional() ? "({$name})" : $name;
                 $paramArray[] = $param;
             }
