@@ -42,6 +42,10 @@ class HalRenderer implements RenderInterface
      */
     private function valuateElements(ResourceObject $ro)
     {
+        $isIteratable = is_array($ro->body) || $ro->body instanceof \Iterator;
+        if (! $isIteratable) {
+            return;
+        }
         array_walk_recursive(
             $ro->body,
             function (&$element) {
