@@ -79,8 +79,7 @@ class SignalParameter implements SignalParameterInterface
         $sigName,
         ReflectionParameter $parameter,
         ParamInterface $param,
-        MethodInvocation $invocation,
-        ReflectionParameter $parameter
+        MethodInvocation $invocation
     ) {
         $results = $this->signal->send(
             $this,
