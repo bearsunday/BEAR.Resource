@@ -9,6 +9,9 @@ namespace BEAR\Resource;
 use ArrayAccess;
 use Countable;
 use IteratorAggregate;
+use Exception;
+use ArrayIterator;
+use Traversable;
 use Ray\Di\Di\Inject;
 
 /**
@@ -16,12 +19,6 @@ use Ray\Di\Di\Inject;
  */
 abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggregate
 {
-    // (array)
-    use BodyArrayAccessTrait;
-
-    // (string)
-    use RenderTrait;
-
     /**
      * URI
      *
@@ -56,4 +53,161 @@ abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggrega
      * @var array
      */
     public $links = [];
+
+    /**
+     * Body
+     *
+     * @var mixed
+     */
+    public $body;
+
+    /**
+     * Returns the body value at the specified index
+     *
+     * @param mixed $offset offset
+     *
+     * @return mixed
+     * @ignore
+     */
+    public function offsetGet($offset)
+    {
+        return $this->body[$offset];
+    }
+
+    /**
+     * Sets the body value at the specified index to renew
+     *
+     * @param mixed $offset offset
+     * @param mixed $value  value
+     *
+     * @return void
+     * @ignore
+     */
+    public function offsetSet($offset, $value)
+    {
+        $this->body[$offset] = $value;
+    }
+
+    /**
+     * Returns whether the requested index in body exists
+     *
+     * @param mixed $offset offset
+     *
+     * @return bool
+     * @ignore
+     */
+    public function offsetExists($offset)
+    {
+        return isset($this->body[$offset]);
+    }
+
+    /**
+     * Set the value at the specified index
+     *
+     * @param mixed $offset offset
+     *
+     * @return void
+     * @ignore
+     */
+    public function offsetUnset($offset)
+    {
+        unset($this->body[$offset]);
+    }
+
+    /**
+     * Get the number of public properties in the ArrayObject
+     *
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->body);
+    }
+
+    /**
+     * Sort the entries by key
+     *
+     * @return bool
+     * @ignore
+     */
+    public function ksort()
+    {
+        return ksort($this->body);
+    }
+
+    /**
+     * Sort the entries by key
+     *
+     * @return bool
+     * @ignore
+     */
+    public function asort()
+    {
+        return asort($this->body);
+    }
+
+    /**
+     * Get array iterator
+     *
+     * @return \ArrayIterator
+     */
+    public function getIterator()
+    {
+        $isTraversal = (is_array($this->body) || $this->body instanceof Traversable);
+        return ($isTraversal ? new ArrayIterator($this->body) : new ArrayIterator([]));
+    }
+
+    /**
+     * Renderer
+     *
+     * @var \BEAR\Resource\RenderInterface
+     */
+    protected $renderer;
+
+    /**
+     * Set renderer
+     *
+     * @param RenderInterface $renderer
+     *
+     * @return RenderTrait
+     * @Ray\Di\Di\Inject(optional = true)
+     */
+    public function setRenderer(RenderInterface $renderer)
+    {
+        $this->renderer = $renderer;
+
+        return $this;
+    }
+
+    /**
+     * Return representational string
+     *
+     * Return object hash if representation renderer is not set.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        /** @var $this ResourceObject */
+        if (is_string($this->view)) {
+            return $this->view;
+        }
+        if ($this->renderer instanceof RenderInterface) {
+            try {
+                $view = $this->renderer->render($this);
+            } catch (Exception $e) {
+                $view = '';
+                error_log('Exception caught in ' . __METHOD__);
+                error_log((string)$e);
+            }
+
+            return $view;
+        }
+        if (is_scalar($this->body)) {
+            return (string)$this->body;
+        }
+        error_log('No renderer bound for \BEAR\Resource\RenderInterface' . get_class($this) . ' in ' . __METHOD__);
+
+        return '';
+    }
 }
