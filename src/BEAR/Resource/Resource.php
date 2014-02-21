@@ -68,6 +68,11 @@ class Resource implements ResourceInterface
     private $anchor;
 
     /**
+     * @var Request
+     */
+    private $newRequest;
+
+    /**
      * @param $appName
      *
      * @Inject(optional = true)

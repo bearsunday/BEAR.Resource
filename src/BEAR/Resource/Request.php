@@ -82,6 +82,11 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
     private $result;
 
     /**
+     * @var InvokerInterface
+     */
+    private $invoker;
+
+    /**
      * {@inheritDoc}
      *
      * @Inject
