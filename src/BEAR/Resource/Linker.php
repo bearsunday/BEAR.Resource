@@ -182,6 +182,7 @@ final class Linker implements LinkerInterface
     {
         $isList = $this->isList($current->body);
         $bodyList = $isList ? $current->body : [$current->body];
+        /** @var $bodyList array */
         foreach ($bodyList as &$body) {
             $this->crawl($annotations, $link, $body);
         }
