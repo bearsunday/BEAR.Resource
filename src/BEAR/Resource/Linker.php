@@ -63,9 +63,7 @@ final class Linker implements LinkerInterface
     }
 
     /**
-     * Set resource
-     *
-     * @param $resource $resource
+     * {@inheritdoc}
      */
     public function setResource(ResourceInterface $resource)
     {
