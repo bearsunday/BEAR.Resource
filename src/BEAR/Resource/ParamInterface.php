@@ -44,4 +44,11 @@ interface ParamInterface
      * @return string 'Aura\Signal\Manager::STOP'
      */
     public function inject($arg);
+
+    /**
+     * Return arguments
+     *
+     * @return mixed
+     */
+    public function getArg();
 }
