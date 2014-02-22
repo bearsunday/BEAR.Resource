@@ -7,7 +7,7 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception;
-use Guzzle\Cache\CacheAdapterInterface;
+use Doctrine\Common\Cache\Cache;
 use SplObjectStorage;
 use Ray\Di\Di\Scope;
 use Ray\Di\Di\Inject;
@@ -53,7 +53,7 @@ class Resource implements ResourceInterface
     /**
      * Cache
      *
-     * @var CacheAdapterInterface
+     * @var Cache
      */
     private $cache;
 
@@ -87,12 +87,12 @@ class Resource implements ResourceInterface
     /**
      * Set cache adapter
      *
-     * @param CacheAdapterInterface $cache
+     * @param Cache $cache
      *
      * @Inject(optional = true)
      * @Named("resource_cache")
      */
-    public function setCacheAdapter(CacheAdapterInterface $cache)
+    public function setCacheAdapter(Cache $cache)
     {
         $this->cache = $cache;
     }
@@ -136,7 +136,7 @@ class Resource implements ResourceInterface
      */
     public function newInstance($uri)
     {
-        $useCache = $this->cache instanceof CacheAdapterInterface;
+        $useCache = $this->cache instanceof Cache;
         if ($useCache === true) {
             $key = $this->appName . 'res-' . str_replace('/', '-', $uri);
             $cached = $this->cache->fetch($key);

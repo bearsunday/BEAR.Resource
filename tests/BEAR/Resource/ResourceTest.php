@@ -83,7 +83,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
             'name' => 'Ray',
             'age' => 43
         ];
-        $this->cache = new CacheAdapter(new FilesystemCache($_ENV['BEAR_TMP']));
+        $this->cache = new ArrayCache;
     }
 
     public function testNew()
