@@ -21,10 +21,7 @@ class HalRenderer implements RenderInterface
     public function render(ResourceObject $ro)
     {
         // evaluate all request in body.
-        $isArrayAccess = is_array($ro->body) || $ro->body instanceof \Traversable;
-        if ($isArrayAccess) {
-            $this->valuateElements($ro);
-        }
+        $this->valuateElements($ro);
         // HAL
         $data = $ro->body ? : [];
         if (is_scalar($data)) {
