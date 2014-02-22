@@ -14,9 +14,6 @@ use ArrayIterator;
 use Traversable;
 use Ray\Di\Di\Inject;
 
-/**
- * Abstract resource object
- */
 abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggregate
 {
     /**
@@ -55,9 +52,16 @@ abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggrega
     public $links = [];
 
     /**
+     * Renderer
+     *
+     * @var \BEAR\Resource\RenderInterface
+     */
+    protected $renderer;
+
+    /**
      * Body
      *
-     * @var mixed
+     * @var array
      */
     public $body;
 
@@ -67,7 +71,6 @@ abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggrega
      * @param mixed $offset offset
      *
      * @return mixed
-     * @ignore
      */
     public function offsetGet($offset)
     {
@@ -81,7 +84,6 @@ abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggrega
      * @param mixed $value  value
      *
      * @return void
-     * @ignore
      */
     public function offsetSet($offset, $value)
     {
@@ -94,7 +96,6 @@ abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggrega
      * @param mixed $offset offset
      *
      * @return bool
-     * @ignore
      */
     public function offsetExists($offset)
     {
@@ -107,7 +108,6 @@ abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggrega
      * @param mixed $offset offset
      *
      * @return void
-     * @ignore
      */
     public function offsetUnset($offset)
     {
@@ -128,48 +128,41 @@ abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggrega
      * Sort the entries by key
      *
      * @return bool
-     * @ignore
      */
     public function ksort()
     {
-        return ksort($this->body);
+        $isTraversal = (is_array($this->body) || $this->body instanceof \Traversable);
+        return $isTraversal ? ksort($this->body): [$this->body];
     }
 
     /**
      * Sort the entries by key
      *
      * @return bool
-     * @ignore
      */
     public function asort()
     {
-        return asort($this->body);
+        $isTraversal = (is_array($this->body) || $this->body instanceof \Traversable);
+        return $isTraversal ? asort($this->body): [$this->body];
     }
 
     /**
      * Get array iterator
      *
-     * @return \ArrayIterator
+     * @return ArrayIterator
      */
     public function getIterator()
     {
-        $isTraversal = (is_array($this->body) || $this->body instanceof Traversable);
-        return ($isTraversal ? new ArrayIterator($this->body) : new ArrayIterator([]));
+        $isTraversal = (is_array($this->body) || $this->body instanceof \Traversable);
+        return ($isTraversal ? new \ArrayIterator($this->body) : new \ArrayIterator([]));
     }
-
-    /**
-     * Renderer
-     *
-     * @var \BEAR\Resource\RenderInterface
-     */
-    protected $renderer;
 
     /**
      * Set renderer
      *
      * @param RenderInterface $renderer
      *
-     * @return RenderTrait
+     * @return $this
      * @Ray\Di\Di\Inject(optional = true)
      */
     public function setRenderer(RenderInterface $renderer)
