@@ -67,7 +67,8 @@ class Anchor
         foreach ($annotations as $annotation) {
             $isValidLinkAnnotation = $annotation instanceof Annotation\Link && isset($annotation->rel) && $annotation->rel === $rel;
             if ($isValidLinkAnnotation) {
-                $query = array_merge($request->ro->body, $query);
+                $body = $request->ro->body;
+                $query = is_array($body) ? array_merge($body, $query) : [];
                 $uri = $this->uriTemplate->expand($annotation->href, $query);
 
                 return [$annotation->method, $uri];

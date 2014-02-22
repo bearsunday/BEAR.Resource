@@ -6,25 +6,14 @@
  */
 namespace BEAR\Resource;
 
-use ArrayAccess;
-use ArrayIterator;
-use IteratorAggregate;
 use OutOfBoundsException;
-use Traversable;
+use ArrayAccess;
+use IteratorAggregate;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Scope;
 
-final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
+final class Request implements RequestInterface, \ArrayAccess, \IteratorAggregate
 {
-    use BodyArrayAccessTrait;
-
-    /**
-     * object URI scheme
-     *
-     * @var string
-     */
-    const SCHEME_OBJECT = 'object';
-
     /**
      * URI
      *
@@ -183,10 +172,7 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
      */
     public function __toString()
     {
-        if (is_null($this->result)) {
-            $this->result = $this->__invoke();
-        }
-
+        $this->invoke();
         return (string)$this->result;
     }
 
@@ -200,9 +186,7 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
      */
     public function offsetGet($offset)
     {
-        if (is_null($this->result)) {
-            $this->result = $this->__invoke();
-        }
+        $this->invoke();
         if (!isset($this->result->body[$offset])) {
             throw new OutOfBoundsException("[$offset] for object[" . get_class($this->result) . "]");
         }
@@ -220,12 +204,33 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
      */
     public function offsetExists($offset)
     {
-        if (is_null($this->result)) {
-            $this->result = $this->__invoke();
-        }
-
+        $this->invoke();
         return isset($this->result->body[$offset]);
     }
+
+    /**
+     * @param mixed $offset
+     * @param mixed $value
+     *
+     * @return void
+     */
+    public function offsetSet($offset, $value)
+    {
+        $this->invoke();
+        $this->result->body[$offset] = $value;
+    }
+
+    /**
+     * @param mixed $offset
+     *
+     * @return void
+     */
+    public function offsetUnset($offset)
+    {
+        $this->invoke();
+        unset($this->result->body[$offset]);
+    }
+
 
     /**
      * Get array iterator
@@ -234,11 +239,9 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
      */
     public function getIterator()
     {
-        if (is_null($this->result)) {
-            $this->result = $this->__invoke();
-        }
-        $isArray = (is_array($this->result->body) || $this->result->body instanceof Traversable);
-        $iterator = $isArray ? new ArrayIterator($this->result->body) : new ArrayIterator([]);
+        $this->invoke();
+        $isArray = (is_array($this->result->body) || $this->result->body instanceof \Traversable);
+        $iterator = $isArray ? new \ArrayIterator($this->result->body) : new \ArrayIterator([]);
 
         return $iterator;
     }
@@ -249,5 +252,12 @@ final class Request implements RequestInterface, ArrayAccess, IteratorAggregate
     public function hash()
     {
         return md5(get_class($this->ro) . $this->method . serialize($this->query) . serialize($this->links));
+    }
+
+    private function invoke()
+    {
+        if (is_null($this->result)) {
+            $this->result = $this->__invoke();
+        }
     }
 }
