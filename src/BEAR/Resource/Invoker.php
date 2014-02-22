@@ -6,9 +6,7 @@
  */
 namespace BEAR\Resource;
 
-use Ray\Di\Definition;
 use Ray\Di\Di\Inject;
-use Ray\Di\Di\Named;
 use Ray\Di\Di\Scope;
 
 /**
@@ -224,7 +222,7 @@ class Invoker implements InvokerInterface
     /**
      * @param ResourceObject $ro
      * @param Request        $request
-     * @param                $method
+     * @param                string $method
      *
      * @return ResourceObject
      * @throws Exception\MethodNotAllowed

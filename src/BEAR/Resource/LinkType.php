@@ -45,7 +45,7 @@ final class LinkType
 
     /**
      * @param $type
-     * @param $key
+     * @param string $key
      */
     public function __construct($key, $type)
     {

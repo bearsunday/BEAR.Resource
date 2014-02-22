@@ -20,7 +20,7 @@ interface FactoryInterface
      *
      * @param string $uri resource URI
      *
-     * @return \BEAR\Resource\ResourceObject;
+     * @return ResourceObject
      */
     public function newInstance($uri);
 }

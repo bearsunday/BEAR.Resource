@@ -80,7 +80,7 @@ class DevInvoker extends Invoker implements InvokerInterface
     /**
      * @param Request $request
      *
-     * @return ResourceObject|WeavedInterface
+     * @return ResourceObject
      */
     private function getRo(Request $request)
     {

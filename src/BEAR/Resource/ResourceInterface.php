@@ -6,8 +6,6 @@
  */
 namespace BEAR\Resource;
 
-use Ray\Di\Di\ImplementedBy;
-
 interface ResourceInterface
 {
     /**

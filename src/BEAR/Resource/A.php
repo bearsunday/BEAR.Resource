@@ -9,7 +9,6 @@ namespace BEAR\Resource;
 use BEAR\Resource\Exception;
 use Guzzle\Parser\UriTemplate\UriTemplateInterface;
 use Ray\Di\Di\Inject;
-use Ray\Di\Di\Scope;
 
 /**
  * Anchor

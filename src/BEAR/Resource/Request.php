@@ -10,7 +10,6 @@ use OutOfBoundsException;
 use ArrayAccess;
 use IteratorAggregate;
 use Ray\Di\Di\Inject;
-use Ray\Di\Di\Scope;
 
 final class Request implements RequestInterface, \ArrayAccess, \IteratorAggregate
 {

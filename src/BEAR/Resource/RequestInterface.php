@@ -19,6 +19,7 @@ interface RequestInterface
      * @param InvokerInterface $invoker
      *
      * @Inject
+     * @return void
      */
     public function __construct(InvokerInterface $invoker);
 

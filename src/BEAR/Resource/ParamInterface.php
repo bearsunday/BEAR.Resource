@@ -18,7 +18,7 @@ interface ParamInterface
      * @param MethodInvocation    $invocation
      * @param ReflectionParameter $parameter
      *
-     * @return mixed
+     * @return Param
      */
     public function set(MethodInvocation $invocation, ReflectionParameter $parameter);
 

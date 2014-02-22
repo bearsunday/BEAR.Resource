@@ -9,7 +9,6 @@ namespace BEAR\Resource;
 use BEAR\Resource\Exception;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Guzzle\Parser\UriTemplate\UriTemplateInterface;
-use Ray\Di\Di\Scope;
 use BEAR\Resource\Annotation;
 use Ray\Di\Di\Inject;
 

@@ -20,7 +20,7 @@ interface LinkerInterface
      *
      * @param Request $request
      *
-     * @return mixed
+     * @return ResourceObject
      */
     public function invoke(Request $request);
 
@@ -28,6 +28,7 @@ interface LinkerInterface
      * Set resource
      *
      * @param $resource $resource
+     * @return void
      */
     public function setResource(ResourceInterface $resource);
 }

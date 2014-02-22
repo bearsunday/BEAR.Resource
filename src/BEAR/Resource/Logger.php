@@ -12,7 +12,6 @@ use ArrayIterator;
 use Countable;
 use Serializable;
 use Ray\Di\Di\Inject;
-use Ray\Di\Di\Scope;
 
 /**
  * Resource logger

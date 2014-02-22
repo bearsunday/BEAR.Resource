@@ -11,7 +11,7 @@ interface ParamProviderInterface
     /**
      * @param ParamInterface $param
      *
-     * @return mixed
+     * @return string|null
      */
     public function __invoke(ParamInterface $param);
 }
