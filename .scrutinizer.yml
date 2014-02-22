@@ -1,5 +1,5 @@
 filter:
-    excluded_paths: [docs/*, vendor/*, tests/*]
+    excluded_paths: [docs/*, vendor/*, tests/*, src/DevInvoker]
     paths: [src/*]
 
 before_commands:
