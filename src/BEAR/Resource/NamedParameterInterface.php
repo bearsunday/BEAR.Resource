@@ -17,4 +17,12 @@ interface NamedParameterInterface
      * @return array
      */
     public function getArgs(array $callable, array $query);
+
+    /**
+     * @param string                 $varName
+     * @param ParamProviderInterface $provider
+     *
+     * @return mixed
+     */
+    public function attachParamProvider($varName, ParamProviderInterface $provider);
 }
