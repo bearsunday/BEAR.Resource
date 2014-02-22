@@ -68,7 +68,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $scheme->scheme('test')->host('self')->toAdapter(new Adapter\Test);
         $scheme->scheme('prov')->host('self')->toAdapter(new Adapter\Prov);
         $scheme->scheme('http')->host('*')->toAdapter(new Adapter\Http);
-        $resource = require dirname(dirname(dirname(__DIR__))) . '/scripts/instance.php';
+        $resource = require $_ENV['PACKAGE_DIR'] . '/scripts/instance.php';
         /** @var $resource \BEAR\Resource\Resource */
         $this->resource = $resource;
         $this->resource->setSchemeCollection($scheme);
@@ -249,7 +249,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $testAdapter = new Adapter\Test;
         $scheme->scheme('test')->host('self')->toAdapter($testAdapter);
         $this->factory = new Factory($scheme);
-        $this->resource =  require dirname(dirname(dirname(__DIR__))) . '/scripts/instance.php';
+        $this->resource = require $_ENV['PACKAGE_DIR'] . '/scripts/instance.php';
 
         $invoker = new Invoker(new Linker(new AnnotationReader), new NamedParameter(new SignalParameter(new Manager(new HandlerFactory, new ResultFactory, new ResultCollection), new Param)), new Logger);
         $resource = new Resource(new Factory($scheme), $invoker, new Request($invoker), new Anchor(new UriTemplate, new AnnotationReader, new Request($invoker)));
@@ -291,7 +291,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     public function testDocsSample00min()
     {
         ob_start();
-        require dirname(dirname(dirname(__DIR__))) . '/docs/sample/00.min/main.php';
+        require $_ENV['PACKAGE_DIR'] . '/docs/sample/00.min/main.php';
         $response = ob_get_clean();
         $this->assertContains('[name] => Aramis', $response);
     }
@@ -302,7 +302,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     public function testDocsSample01basic()
     {
         ob_start();
-        require dirname(dirname(dirname(__DIR__))) . '/docs/sample/01.basic/main.php';
+        require $_ENV['PACKAGE_DIR'] . '/docs/sample/01.basic/main.php';
         $response = ob_get_clean();
         $this->assertContains('[name] => Aramis', $response);
     }
@@ -313,7 +313,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     public function testDocsSampleRestBucks()
     {
         ob_start();
-        require dirname(dirname(dirname(__DIR__))) . '/docs/sample/04.restbucks/main.php';
+        require $_ENV['PACKAGE_DIR'] . '/docs/sample/04.restbucks/main.php';
         $response = ob_get_clean();
         $this->assertContains('201: Created', $response);
         $this->assertContains('Order: Success', $response);

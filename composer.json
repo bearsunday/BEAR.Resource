@@ -32,8 +32,8 @@
         "facebook/xhprof": "dev-master"
     },
     "autoload": {
-        "psr-0": {
-            "BEAR\\Resource": "src/"
+        "psr-4": {
+            "BEAR\\Resource\\": "src/"
         }
     }
 }
