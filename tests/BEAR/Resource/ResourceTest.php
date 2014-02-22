@@ -236,8 +236,10 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     public function testSetCacheAdapter()
     {
         $this->resource->setCacheAdapter($this->cache);
-        $instance1 = $this->resource->newInstance('nop://self/path/to/dummy');
-        $instance2 = $this->resource->newInstance('nop://self/path/to/dummy');
+        $resource1 = clone $this->resource;
+        $resource2 = clone $this->resource;
+        $instance1 = $resource1->newInstance('nop://self/path/to/dummy');
+        $instance2 = $resource2->newInstance('nop://self/path/to/dummy');
         $this->assertSame($instance1->time, $instance2->time);
     }
 

@@ -73,6 +73,11 @@ class Resource implements ResourceInterface
     private $newRequest;
 
     /**
+     * @var ResourceObject[]
+     */
+    private $resourceObjects;
+
+    /**
      * @param $appName
      *
      * @Inject(optional = true)
@@ -136,6 +141,10 @@ class Resource implements ResourceInterface
      */
     public function newInstance($uri)
     {
+        if (isset($this->resourceObjects[$uri])) {
+            return clone $this->resourceObjects[$uri];
+        }
+
         $useCache = $this->cache instanceof Cache;
         if ($useCache === true) {
             $key = $this->appName . 'res-' . str_replace('/', '-', $uri);
@@ -149,6 +158,7 @@ class Resource implements ResourceInterface
             /** @noinspection PhpUndefinedVariableInspection */
             $this->cache->save($key, $instance);
         }
+        $this->resourceObjects[$uri] = $instance;
 
         return $instance;
     }
