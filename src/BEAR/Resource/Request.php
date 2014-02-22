@@ -6,6 +6,7 @@
  */
 namespace BEAR\Resource;
 
+use BEAR\Resource\Exception\LogicException;
 use OutOfBoundsException;
 use ArrayAccess;
 use IteratorAggregate;
@@ -215,8 +216,7 @@ final class Request implements RequestInterface, \ArrayAccess, \IteratorAggregat
      */
     public function offsetSet($offset, $value)
     {
-        $this->invoke();
-        $this->result->body[$offset] = $value;
+        throw new LogicException(__METHOD__ . ' is unavailable.');
     }
 
     /**
@@ -226,8 +226,7 @@ final class Request implements RequestInterface, \ArrayAccess, \IteratorAggregat
      */
     public function offsetUnset($offset)
     {
-        $this->invoke();
-        unset($this->result->body[$offset]);
+        throw new LogicException(__METHOD__ . ' is unavailable.');
     }
 
 

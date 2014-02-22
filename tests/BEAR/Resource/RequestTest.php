@@ -62,6 +62,26 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual);
     }
 
+    /**
+     * @expectedException \BEAR\Resource\Exception\LogicException
+     */
+    public function testOffsetSet()
+    {
+        $this->request->set(new NopResource, 'nop://self/path/to/resource', 'put', ['key' => 'animal', 'value' => 'kuma']);
+        $request = $this->request;
+        $request['animal'] = 'cause_exception';
+    }
+
+    /**
+     * @expectedException \BEAR\Resource\Exception\LogicException
+     */
+    public function testOffsetUnset()
+    {
+        $this->request->set(new NopResource, 'nop://self/path/to/resource', 'put', ['key' => 'animal', 'value' => 'kuma']);
+        $request = $this->request;
+        unset($request['animal']);
+    }
+
     public function testInvokeWithQuery()
     {
         $this->request->set(new NopResource, 'nop://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
