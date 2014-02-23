@@ -11,10 +11,6 @@ $loader->addPsr4('TestVendor\Sandbox\Resource\\', __DIR__ . '/TestVendor');
 AnnotationRegistry::registerLoader([$loader, 'loadClass']);
 AnnotationReader::addGlobalIgnoredName('noinspection');
 
-$tmp = sys_get_temp_dir();
-ini_set('error_log', $tmp . '/error.log');
-ini_set('xhprof.output_dir', $tmp);
-
 $GLOBALS['RESOURCE'] = require __DIR__ . '/scripts/resource.php';
 $GLOBALS['COMPILER'] = require __DIR__ . '/scripts/compiler.php';
 $GLOBALS['INJECTOR'] = require __DIR__ . '/scripts/injector.php';
