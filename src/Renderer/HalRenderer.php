@@ -20,38 +20,13 @@ class HalRenderer implements RenderInterface
      */
     public function render(ResourceObject $ro)
     {
-        // evaluate all request in body.
-        $this->valuateElements($ro);
+        $data = $ro->jsonSerialize();
         // HAL
-        $data = $ro->body ? : [];
-        if (is_scalar($data)) {
-            $data = ['value' => $data];
-        }
         $hal = $this->getHal($ro, $data);
         $ro->view = $hal->asJson(true);
         $ro->headers['content-type'] = 'application/hal+json; charset=UTF-8';
 
         return $ro->view;
-    }
-
-    /**
-     * @param ResourceObject $ro
-     */
-    private function valuateElements(ResourceObject $ro)
-    {
-        $isIteratable = is_array($ro->body) || $ro->body instanceof \Iterator;
-        if (! $isIteratable) {
-            return;
-        }
-        array_walk_recursive(
-            $ro->body,
-            function (&$element) {
-                if ($element instanceof RequestInterface) {
-                    /** @var $element callable */
-                    $element = $element();
-                }
-            }
-        );
     }
 
     /**

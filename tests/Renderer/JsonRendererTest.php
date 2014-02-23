@@ -45,7 +45,7 @@ class JsonRendererTest extends \PHPUnit_Framework_TestCase
     {
         $this->ro->body = 1;
         $data = (string)$this->ro;
-        $expected = '1';
+        $expected = '{"value":1}';
         $this->assertSame($expected, $data);
     }
 

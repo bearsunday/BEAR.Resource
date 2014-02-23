@@ -210,7 +210,7 @@ abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggrega
         $body = $this->body;
         $isTraversable = is_array($body) || $body instanceof \Traversable;
         if (! $isTraversable) {
-            return $this->body;
+            return ['value' => $this->body];
         }
         foreach ($body as &$value) {
             if ($value instanceof RequestInterface) {
