@@ -163,12 +163,8 @@ namespace BEAR\Resource {
         {
             $resource = Injector::create([new ResourceModule('TestVendor\Sandbox'), new JsonModule])->getInstance('BEAR\Resource\ResourceInterface');
             $user = $resource->get->uri('app://self/link/user')->withQuery(['id' => 1])->eager->request();
-
-            $expected = '{
-    "name": "Aramis",
-    "age": 16,
-    "blog_id": 12
-}';
+            $j = (string)$user;
+            $expected = '{"name":"Aramis","age":16,"blog_id":12}';
             $this->assertSame($expected, (string)$user);
         }
 

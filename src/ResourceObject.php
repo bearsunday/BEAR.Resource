@@ -12,9 +12,10 @@ use IteratorAggregate;
 use Exception;
 use ArrayIterator;
 use Traversable;
+use JsonSerializable;
 use Ray\Di\Di\Inject;
 
-abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggregate
+abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggregate, JsonSerializable
 {
     /**
      * URI
@@ -203,4 +204,22 @@ abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggrega
 
         return '';
     }
+
+    public function jsonSerialize()
+    {
+        $body = $this->body;
+        $isTraversable = is_array($body) || $body instanceof \Traversable;
+        if (! $isTraversable) {
+            return $this->body;
+        }
+        foreach ($body as &$value) {
+            if ($value instanceof RequestInterface) {
+                $result = $value();
+                $value = $result->body;
+            }
+        }
+
+        return $body;
+    }
+
 }

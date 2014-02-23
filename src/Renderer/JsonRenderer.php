@@ -7,7 +7,6 @@
 namespace BEAR\Resource\Renderer;
 
 use BEAR\Resource\RenderInterface;
-use BEAR\Resource\RequestInterface;
 use BEAR\Resource\ResourceObject;
 
 class JsonRenderer implements RenderInterface
@@ -17,19 +16,12 @@ class JsonRenderer implements RenderInterface
      */
     public function render(ResourceObject $ro)
     {
-        // evaluate all request in body.
-        if (is_array($ro->body) || $ro->body instanceof \Traversable) {
-            array_walk_recursive(
-                $ro->body,
-                function (&$element) {
-                    if ($element instanceof RequestInterface) {
-                        /** @var $element callable */
-                        $element = $element();
-                    }
-                }
-            );
+        $ro->view = @json_encode($ro);
+        $e = json_last_error();
+        if ($e) {
+            error_log('json_encode error: ' . json_last_error_msg() . ' in ' . __METHOD__);
+            return '';
         }
-        $ro->view = @json_encode($ro->body, JSON_PRETTY_PRINT);
 
         return $ro->view;
     }
