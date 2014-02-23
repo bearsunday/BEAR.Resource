@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "bdc58bd1f695225129ad34b5d4b13b21",
+    "hash": "1b2b92248592f74662ca656bcd3d5e1f",
     "packages": [
         {
             "name": "any/serializer",
@@ -34,7 +34,7 @@
                     "name": "Akihito Koriyama",
                     "email": "akihito.koriyama@gmail.com",
                     "homepage": "https://github.com/koriym",
-                    "role": "Lead"
+                    "role": "Developer"
                 }
             ],
             "description": "Serialize any value for logging",
@@ -79,7 +79,7 @@
                     "homepage": "http://paul-m-jones.com"
                 },
                 {
-                    "name": "Hari K T",
+                    "name": "Hari KT",
                     "email": "kthari85@gmail.com",
                     "homepage": "http://harikt.com"
                 },
@@ -183,7 +183,7 @@
                     "homepage": "http://paul-m-jones.com"
                 },
                 {
-                    "name": "Hari KT",
+                    "name": "Hari K T",
                     "email": "kthari85@gmail.com",
                     "homepage": "http://harikt.com"
                 },
@@ -246,10 +246,9 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan H. Wage",
+                    "name": "Jonathan Wage",
                     "email": "jonwage@gmail.com",
-                    "homepage": "http://www.jwage.com/",
-                    "role": "Creator"
+                    "homepage": "http://www.jwage.com/"
                 },
                 {
                     "name": "Guilherme Blanco",
@@ -408,16 +407,16 @@
         },
         {
             "name": "guzzle/guzzle",
-            "version": "v3.8.0",
+            "version": "v3.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "b4a3ce8c05e777fa18b802956d5d0e38ad338a69"
+                "reference": "4de0618a01b34aa1c8c33a3f13f396dcd3882eba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/b4a3ce8c05e777fa18b802956d5d0e38ad338a69",
-                "reference": "b4a3ce8c05e777fa18b802956d5d0e38ad338a69",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/4de0618a01b34aa1c8c33a3f13f396dcd3882eba",
+                "reference": "4de0618a01b34aa1c8c33a3f13f396dcd3882eba",
                 "shasum": ""
             },
             "require": {
@@ -455,8 +454,8 @@
                 "phpunit/phpunit": "3.7.*",
                 "psr/log": "1.0.*",
                 "symfony/class-loader": "*",
-                "zendframework/zend-cache": "2.0.*",
-                "zendframework/zend-log": "2.0.*"
+                "zendframework/zend-cache": "<2.3",
+                "zendframework/zend-log": "<2.3"
             },
             "type": "library",
             "extra": {
@@ -466,8 +465,8 @@
             },
             "autoload": {
                 "psr-0": {
-                    "Guzzle\\Tests": "tests/",
-                    "Guzzle": "src/"
+                    "Guzzle": "src/",
+                    "Guzzle\\Tests": "tests/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -496,7 +495,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2013-12-05 23:39:20"
+            "time": "2014-01-28 22:29:15"
         },
         {
             "name": "nikic/php-parser",
@@ -609,12 +608,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Ray.Aop.git",
-                "reference": "b8b5347d913e9af2c57916b54e5146ff078a244f"
+                "reference": "cb6791ae652df539a6cedc8481968d1d1ece2ff9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Ray.Aop/zipball/b8b5347d913e9af2c57916b54e5146ff078a244f",
-                "reference": "b8b5347d913e9af2c57916b54e5146ff078a244f",
+                "url": "https://api.github.com/repos/koriym/Ray.Aop/zipball/cb6791ae652df539a6cedc8481968d1d1ece2ff9",
+                "reference": "cb6791ae652df539a6cedc8481968d1d1ece2ff9",
                 "shasum": ""
             },
             "require": {
@@ -627,8 +626,8 @@
             },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "Ray\\Aop": "src/"
+                "psr-4": {
+                    "Ray\\Aop\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -648,7 +647,7 @@
                 "aop",
                 "aspect"
             ],
-            "time": "2014-01-18 11:02:51"
+            "time": "2014-02-21 07:41:51"
         },
         {
             "name": "ray/di",
@@ -656,12 +655,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Ray.Di.git",
-                "reference": "13f00a2a277133752b161e5c13c6d71de462e60b"
+                "reference": "4ad5ca9df76e8f068dde1a673bf38ea04105ee2b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/13f00a2a277133752b161e5c13c6d71de462e60b",
-                "reference": "13f00a2a277133752b161e5c13c6d71de462e60b",
+                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/4ad5ca9df76e8f068dde1a673bf38ea04105ee2b",
+                "reference": "4ad5ca9df76e8f068dde1a673bf38ea04105ee2b",
                 "shasum": ""
             },
             "require": {
@@ -674,8 +673,8 @@
             },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "Ray\\Di": "src/"
+                "psr-4": {
+                    "Ray\\Di\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -706,21 +705,21 @@
                 "injection",
                 "jsr"
             ],
-            "time": "2014-01-21 16:26:38"
+            "time": "2014-02-22 05:03:17"
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.4.1",
+            "version": "v2.4.2",
             "target-dir": "Symfony/Component/EventDispatcher",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/EventDispatcher.git",
-                "reference": "e3ba42f6a70554ed05749e61b829550f6ac33601"
+                "reference": "4708b8cd41984a5ba29fe7dd40716f7f761ac501"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/e3ba42f6a70554ed05749e61b829550f6ac33601",
-                "reference": "e3ba42f6a70554ed05749e61b829550f6ac33601",
+                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/4708b8cd41984a5ba29fe7dd40716f7f761ac501",
+                "reference": "4708b8cd41984a5ba29fe7dd40716f7f761ac501",
                 "shasum": ""
             },
             "require": {
@@ -751,7 +750,9 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
                 },
                 {
                     "name": "Symfony Community",
@@ -760,7 +761,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "http://symfony.com",
-            "time": "2013-12-28 08:12:03"
+            "time": "2014-02-11 13:52:09"
         }
     ],
     "packages-dev": [
