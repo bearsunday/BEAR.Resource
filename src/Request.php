@@ -212,6 +212,7 @@ final class Request implements RequestInterface, \ArrayAccess, \IteratorAggregat
      * @param mixed $offset
      * @param mixed $value
      *
+     * @throws Exception\LogicException
      * @return void
      */
     public function offsetSet($offset, $value)
@@ -222,6 +223,7 @@ final class Request implements RequestInterface, \ArrayAccess, \IteratorAggregat
     /**
      * @param mixed $offset
      *
+     * @throws Exception\LogicException
      * @return void
      */
     public function offsetUnset($offset)
