@@ -7,7 +7,7 @@
 namespace BEAR\Resource\Adapter;
 
 use BEAR\Resource\Exception\AppNamespace;
-use Ray\Di\InjectorInterface;
+use Ray\Di\InstanceInterface;
 use Ray\Di\Di\Inject;
 
 /**
@@ -37,7 +37,7 @@ class App implements AdapterInterface
     private $path;
 
     /**
-     * @param InjectorInterface $injector  Application dependency injector
+     * @param InstanceInterface $injector  Application dependency injector
      * @param string            $namespace Resource adapter namespace
      * @param string            $path      Resource adapter path
      *
@@ -45,7 +45,7 @@ class App implements AdapterInterface
      * @throws AppNamespace
      */
     public function __construct(
-        InjectorInterface $injector,
+        InstanceInterface $injector,
         $namespace,
         $path
     ) {

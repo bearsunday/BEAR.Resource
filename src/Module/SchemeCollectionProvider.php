@@ -11,7 +11,7 @@ use BEAR\Resource\Adapter\Http as HttpAdapter;
 use BEAR\Resource\Exception\AppName;
 use BEAR\Resource\SchemeCollection;
 use Ray\Di\ProviderInterface as Provide;
-use Ray\Di\InjectorInterface;
+use Ray\Di\InstanceInterface;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
 
@@ -26,7 +26,7 @@ class SchemeCollectionProvider implements Provide
     protected $appName;
 
     /**
-     * @var InjectorInterface
+     * @var InstanceInterface
      */
     protected $injector;
 
@@ -48,11 +48,11 @@ class SchemeCollectionProvider implements Provide
     }
 
     /**
-     * @param InjectorInterface $injector
+     * @param InstanceInterface $injector
      *
      * @Inject
      */
-    public function setInjector(InjectorInterface $injector)
+    public function setInjector(InstanceInterface $injector)
     {
         $this->injector = $injector;
     }

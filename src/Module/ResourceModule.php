@@ -50,6 +50,6 @@ class ResourceModule extends AbstractModule
         $this->bind('Guzzle\Parser\UriTemplate\UriTemplateInterface')->to('Guzzle\Parser\UriTemplate\UriTemplate')->in(Scope::SINGLETON);
         $this->bind('BEAR\Resource\ParamInterface')->to('BEAR\Resource\Param');
         $this->bind('BEAR\Resource\Renderer\RendererInterface')->to('BEAR\Resource\Renderer\JsonRenderer');
-        $this->bind('Ray\Di\InjectorInterface')->toInstance($this->dependencyInjector);
+        $this->bind('Ray\Di\InstanceInterface')->toInstance($this->dependencyInjector);
     }
 }
