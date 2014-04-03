@@ -21,19 +21,19 @@
     "require": {
         "php": ">=5.4.0",
         "aura/signal": "1.*",
-        "ray/di": "1.2.*",
-        "ray/aop": "1.2.*",
+        "ray/di": "1.*",
+        "ray/aop": "1.*",
         "any/serializer": "*",
         "doctrine/cache": "1.*",
         "nocarrier/hal":"*",
-        "guzzle/guzzle": "3.3.*"
+        "guzzle/guzzle": "3.*"
     },
     "require-dev": {
         "facebook/xhprof": "dev-master"
     },
     "autoload": {
-        "psr-0": {
-            "BEAR\\Resource": "src/"
+        "psr-4": {
+            "BEAR\\Resource\\": "src/"
         }
     }
 }

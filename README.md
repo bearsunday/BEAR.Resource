@@ -3,6 +3,8 @@ Hypermedia framework for object as a service
 
 [![Latest Stable Version](https://poser.pugx.org/bear/resource/v/stable.png)](https://packagist.org/packages/bear/resource)
 [![Build Status](https://secure.travis-ci.org/koriym/BEAR.Resource.png?branch=master)](http://travis-ci.org/koriym/BEAR.git@github.com:koriym/BEAR.Resource.git)
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/koriym/BEAR.Resource/badges/quality-score.png?s=fa3351a652dc4a425a3bbb32c71438ce2dbb62c1)](https://scrutinizer-ci.com/g/koriym/BEAR.Resource/)
+[![Code Coverage](https://scrutinizer-ci.com/g/koriym/BEAR.Resource/badges/coverage.png?s=56c3b44894ab8c7287c19e47bb6d98571e0e3309)](https://scrutinizer-ci.com/g/koriym/BEAR.Resource/)
 
 **BEAR.Resource** Is a Hypermedia framework that allows resources to behave as objects. It allows objects to have RESTful web service benefits such as client-server, uniform interface, statelessness, resource expression with mutual connectivity and layered components.
 
@@ -20,7 +22,7 @@ The resource object is an object that has resource behavior.
 
 ```php
 
-namespace Sandbox\Blog;
+namespace MyVendor\Sandbox\Blog;
 
 class Author extends ResourceObject
 {
@@ -69,14 +71,14 @@ $resource->setSchemeCollection(
   (new SchemeCollection)
     ->scheme('app')
     ->host('self')
-    ->toAdapter(new Adapter\App($injector, 'Sandbox', 'Resource\App'));
+    ->toAdapter(new Adapter\App($injector, 'MyVendor\Sandbox', 'Resource\App'));
 );
 ```
 
 You can also retrieve a client instance by using an injector that resolves depenencies.
 
 ```php
-$injector = Injector::create([new ResourceModule('Sandbox')])
+$injector = Injector::create([new ResourceModule('MyVendor\Sandbox')])
 $resource = $injector->getInstance('BEAR\Resource\ResourceInterface');
 ```
 
@@ -245,7 +247,7 @@ array (
  ...
 ```
 
-### HETEOAS Hypermedia as the Engine of Application State
+### HATEOAS Hypermedia as the Engine of Application State
 
 The resource client next then takes the next behavior as hyperlink and carrying on from that link changes the application state.
 For example in an order resource by using **POST** the order is created, from that order state to the payment resource using a **PUT** method a payment is made.
@@ -282,7 +284,7 @@ Client code
 
 The payment method is provided by the order resource with the hyperlink.
 There is no change in client code even though the relationship between the order and payment is changed,
-You can checkout more on HETEOAS at [How to GET a Cup of Coffee](http://www.infoq.com/articles/webber-rest-workflow).
+You can checkout more on HATEOAS at [How to GET a Cup of Coffee](http://www.infoq.com/articles/webber-rest-workflow).
 
 ### Resource Representation
 
@@ -291,7 +293,7 @@ Apart from `JsonModule`you can also use the `HalModule` which uses a [HAL (Hyper
 
 
 ```php
-$modules = [new ResourceModule('Sandbox'), new JsonModule]:
+$modules = [new ResourceModule('MyVendor\Sandbox'), new JsonModule]:
 $resource = Injector::create(modules)
   ->getInstance('BEAR\Resource\ResourceInterface');
 ```
