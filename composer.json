@@ -26,7 +26,7 @@
         "any/serializer": "*",
         "doctrine/cache": "1.*",
         "nocarrier/hal":"*",
-        "guzzle/guzzle": "3.*"
+        "guzzlehttp/guzzle": "~4.0"
     },
     "require-dev": {
         "facebook/xhprof": "dev-master"

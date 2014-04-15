@@ -6,7 +6,7 @@
  */
 namespace BEAR\Resource\Adapter;
 
-use Guzzle\Service\Client as GuzzleClient;
+use GuzzleHttp\Client;
 
 /**
  * Http resource adapter
@@ -18,7 +18,9 @@ class Http implements AdapterInterface
      */
     public function get($uri)
     {
-        $instance = new Http\Guzzle(new GuzzleClient($uri));
+        $instance = new Http\Guzzle(
+            new Client(['base_url' => [$uri, []]])
+        );
 
         return $instance;
     }
