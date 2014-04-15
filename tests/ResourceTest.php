@@ -11,7 +11,6 @@ use BEAR\Resource\ParamProvider\OnProvidesParam;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\FilesystemCache;
 use Guzzle\Cache\DoctrineCacheAdapter as CacheAdapter;
-use Guzzle\Parser\UriTemplate\UriTemplate;
 use Ray\Di\Definition;
 use Ray\Di\Injector;
 use BEAR\Resource\Renderer\TestRenderer;
@@ -252,7 +251,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->resource = require $_ENV['PACKAGE_DIR'] . '/scripts/instance.php';
 
         $invoker = new Invoker(new Linker(new AnnotationReader), new NamedParameter(new SignalParameter(new Manager(new HandlerFactory, new ResultFactory, new ResultCollection), new Param)), new Logger);
-        $resource = new Resource(new Factory($scheme), $invoker, new Request($invoker), new Anchor(new UriTemplate, new AnnotationReader, new Request($invoker)));
+        $resource = new Resource(new Factory($scheme), $invoker, new Request($invoker), new Anchor(new AnnotationReader, new Request($invoker)));
         $request = $resource->get->uri('test://self/path/to/example')->withQuery(['a' => 1, 'b' => 2])->request();
         $this->assertSame('{"posts":[1,2]}', (string)$request);
         $this->assertSame(['posts' => [1, 2]], $request()->body);
@@ -447,14 +446,14 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
             new Adapter\App($injector, 'TestVendor\Sandbox', 'Resource\App')
         );
         $invoker = new Invoker(
-            new Linker(new AnnotationReader, new ArrayCache, new UriTemplate),
+            new Linker(new AnnotationReader, new ArrayCache),
             new NamedParameter()
         );
         $resource = new Resource(
             new Factory($scheme),
             $invoker,
             new Request($invoker),
-            new Anchor(new UriTemplate, new AnnotationReader, new Request($invoker))
+            new Anchor(new AnnotationReader, new Request($invoker))
         );
 
         $insufficientParams = [];

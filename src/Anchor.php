@@ -8,7 +8,6 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Exception;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Guzzle\Parser\UriTemplate\UriTemplateInterface;
 use BEAR\Resource\Annotation;
 use Ray\Di\Di\Inject;
 
@@ -28,23 +27,15 @@ class Anchor
     protected $request;
 
     /**
-     * @var UriTemplateInterface
-     */
-    protected $uriTemplate;
-
-    /**
-     * @param UriTemplateInterface $uriTemplate
      * @param AnnotationReader     $reader
      * @param Request              $request
      *
      * @Inject
      */
     public function __construct(
-        UriTemplateInterface $uriTemplate,
         AnnotationReader $reader,
         Request $request
     ) {
-        $this->uriTemplate = $uriTemplate;
         $this->reader = $reader;
         $this->request = $request;
     }
@@ -68,7 +59,7 @@ class Anchor
             if ($isValidLinkAnnotation) {
                 $body = $request->ro->body;
                 $query = is_array($body) ? array_merge($body, $query) : [];
-                $uri = $this->uriTemplate->expand($annotation->href, $query);
+                $uri = \GuzzleHttp\uri_template($annotation->href, $query);
 
                 return [$annotation->method, $uri];
             }
