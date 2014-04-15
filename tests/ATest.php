@@ -2,7 +2,6 @@
 
 namespace BEAR\Resource;
 
-use Guzzle\Parser\UriTemplate\UriTemplate;
 use TestVendor\Sandbox\Resource\App\User;
 
 class ATest extends \PHPUnit_Framework_TestCase
@@ -10,7 +9,7 @@ class ATest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->a = new A(new UriTemplate);
+        $this->a = new A;
     }
 
     public function testNew()

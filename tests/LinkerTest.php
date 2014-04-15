@@ -53,7 +53,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
             ->toAdapter(new Adapter\App($injector, 'TestVendor\Sandbox', 'Resource\App')
             );
         $factory = new Factory($scheme);
-        $this->resource = new Resource($factory, $invoker, new Request($invoker), new Anchor(new UriTemplate, new Reader, $this->request));
+        $this->resource = new Resource($factory, $invoker, new Request($invoker), new Anchor(new Reader, $this->request));
     }
 
     public function testNew()

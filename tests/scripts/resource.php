@@ -14,7 +14,7 @@ use Ray\Di\Container;
 use Ray\Di\Injector;
 use Ray\Di\EmptyModule;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Guzzle\Parser\UriTemplate\UriTemplate;
+use GuzzleHttp\UriTemplate;
 use Ray\Aop\Bind;
 use Ray\Aop\Compiler;
 use PHPParser_PrettyPrinter_Default;
@@ -58,7 +58,7 @@ $resource = new Resource(
     $factory,
     $invoker,
     new Request($invoker),
-    new Anchor(new UriTemplate, new AnnotationReader, new Request($invoker))
+    new Anchor(new AnnotationReader, new Request($invoker))
 );
 
 return $resource;

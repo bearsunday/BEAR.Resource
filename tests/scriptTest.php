@@ -29,7 +29,7 @@ class scriptTest extends \PHPUnit_Framework_TestCase
         $scheme = (new SchemeCollection)->scheme('http')->host('*')->toAdapter(new Http);
         $this->resource->setSchemeCollection($scheme);
         $result = $this->resource->get->uri('http://rss.excite.co.jp/rss/excite/odd')->eager->request();
-        $this->assertSame(200, $result->code);
+        $this->assertSame('200', $result->code);
     }
 
     public function testSetSchemeApp()
