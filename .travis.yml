@@ -11,7 +11,8 @@ matrix:
     - php: hhvm
 
 before_install:
- - composer selfupdate
+ - composer self-update
+ - composer install
  - wget http://cs.sensiolabs.org/get/php-cs-fixer.phar
  - wget https://scrutinizer-ci.com/ocular.phar
 
