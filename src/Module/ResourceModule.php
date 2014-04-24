@@ -17,12 +17,15 @@ class ResourceModule extends AbstractModule
      */
     private $appName;
 
+    private $resourceDir;
+
     /**
      * @param string $appName
      */
-    public function __construct($appName)
+    public function __construct($appName, $resourceDir = '')
     {
         $this->appName = $appName;
+        $this->resourceDir = $resourceDir;
     }
 
     /**
@@ -33,9 +36,8 @@ class ResourceModule extends AbstractModule
         // install Injector
         $this->install(new InjectorModule($this));
         // bind app name
-        if ($this->appName) {
-            $this->bind()->annotatedWith('app_name')->toInstance($this->appName);
-        }
+        $this->bind()->annotatedWith('app_name')->toInstance($this->appName);
+        $this->bind()->annotatedWith('resource_dir')->toInstance($this->resourceDir);
 
         // bind resource client component
         $this->bind('BEAR\Resource\ResourceInterface')->to('BEAR\Resource\Resource')->in(Scope::SINGLETON);

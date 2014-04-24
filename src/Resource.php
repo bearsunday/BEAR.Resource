@@ -12,6 +12,7 @@ use SplObjectStorage;
 use Ray\Di\Di\Scope;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
+use Traversable;
 
 /**
  * Resource client
@@ -347,5 +348,15 @@ class Resource implements ResourceInterface
     public function __toString()
     {
         return $this->request->toUri();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \ArrayIterator|\MultipleIterator|Traversable
+     */
+    public function getIterator()
+    {
+        return $this->factory->getIterator();
     }
 }

@@ -11,7 +11,7 @@ use BEAR\Resource\Adapter\AdapterInterface;
 /**
  * Interface for resource client
  */
-interface SchemeCollectionInterface
+interface SchemeCollectionInterface extends \IteratorAggregate
 {
     /**
      * Set scheme

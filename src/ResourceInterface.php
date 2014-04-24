@@ -6,7 +6,7 @@
  */
 namespace BEAR\Resource;
 
-interface ResourceInterface
+interface ResourceInterface extends \IteratorAggregate
 {
     /**
      * Return new resource object instance

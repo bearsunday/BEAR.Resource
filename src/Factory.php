@@ -9,13 +9,14 @@ namespace BEAR\Resource;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Scope;
 use Ray\Di\Exception\NotReadable;
+use Traversable;
 
 /**
  * Resource object factory
  *
  * @Scope("singleton")
  */
-class Factory implements FactoryInterface
+class Factory implements FactoryInterface, \IteratorAggregate
 {
     /**
      * Resource adapter biding config
@@ -95,5 +96,15 @@ class Factory implements FactoryInterface
         $resourceObject = $this->newInstance($uri . 'index');
 
         return $resourceObject;
+    }
+
+    /**
+     * {@inheritdoc}
+     * 
+     * @return \ArrayIterator|\MultipleIterator|Traversable
+     */
+    public function getIterator()
+    {
+        return $this->scheme->getIterator();
     }
 }

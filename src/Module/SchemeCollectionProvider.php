@@ -25,6 +25,8 @@ class SchemeCollectionProvider implements Provide
      */
     protected $appName;
 
+    protected $resourceDir;
+
     /**
      * @var InstanceInterface
      */
@@ -35,16 +37,17 @@ class SchemeCollectionProvider implements Provide
      *
      * @return void
      *
-     * @throws \BEAR\Resource\Exception\InvalidAppName
+     * @throws \BEAR\Resource\Exception\AppName
      * @Inject
-     * @Named("app_name")
+     * @Named("appName=app_name, resourceDir=resource_dir")
      */
-    public function setAppName($appName)
+    public function setAppName($appName, $resourceDir = '')
     {
         if (is_null($appName)) {
             throw new AppName($appName);
         }
         $this->appName = $appName;
+        $this->resourceDir = $resourceDir;
     }
 
     /**
@@ -65,8 +68,8 @@ class SchemeCollectionProvider implements Provide
     public function get()
     {
         $schemeCollection = new SchemeCollection;
-        $pageAdapter = new AppAdapter($this->injector, $this->appName, 'Resource\Page');
-        $appAdapter = new AppAdapter($this->injector, $this->appName, 'Resource\App');
+        $pageAdapter = new AppAdapter($this->injector, $this->appName, 'Resource\Page', $this->resourceDir . '/Page');
+        $appAdapter = new AppAdapter($this->injector, $this->appName, 'Resource\App', $this->resourceDir . '/App');
         $schemeCollection->scheme('page')->host('self')->toAdapter($pageAdapter);
         $schemeCollection->scheme('app')->host('self')->toAdapter($appAdapter);
         $schemeCollection->scheme('http')->host('*')->toAdapter(new HttpAdapter);

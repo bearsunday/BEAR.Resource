@@ -186,10 +186,9 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends request
      * @expectedException \OutOfBoundsException
      */
-    public function testArrayAccessNotExists(Request $request)
+    public function testArrayAccessNotExists()
     {
         $this->request->method = 'get';
         $this->request->ro = new Entry;
@@ -206,10 +205,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($result);
     }
 
-    /**
-     * @depends request
-     */
-    public function testIsSetNot(Request $request)
+    public function testIsSetNot()
     {
         $this->request->method = 'get';
         $this->request->ro = new Entry;
@@ -234,4 +230,5 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $actual = $this->request->toUriWithMethod();
         $this->assertSame('get test://self/path/to/resource?a=bear&b=25&c=kuma', $actual);
     }
+
 }

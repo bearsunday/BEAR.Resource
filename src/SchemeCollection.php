@@ -70,4 +70,25 @@ class SchemeCollection extends ArrayObject implements SchemeCollectionInterface
 
         return $this;
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \ArrayIterator|\MultipleIterator|\Traversable
+     */
+    public function getIterator()
+    {
+        $iterator = new \AppendIterator;
+        $schemeCollection = $this->getArrayCopy();
+        foreach($schemeCollection as $scheme) {
+            foreach ($scheme as $adapter) {
+                if ($adapter instanceof \IteratorAggregate) {
+                    /** @var $adapter \IteratorAggregate */
+                    $iterator->append($adapter->getIterator());
+                }
+            }
+        }
+
+        return $iterator;
+    }
 }

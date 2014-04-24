@@ -8,12 +8,13 @@ namespace BEAR\Resource\Adapter;
 
 use BEAR\Resource\Exception\AppNamespace;
 use Ray\Di\InstanceInterface;
+use BEAR\Resource\Adapter\Iterator\AppIterator;
 use Ray\Di\Di\Inject;
 
 /**
  * Application resource adapter
  */
-class App implements AdapterInterface
+class App implements AdapterInterface, \IteratorAggregate
 {
     /**
      * Application dependency injector
@@ -37,9 +38,15 @@ class App implements AdapterInterface
     private $path;
 
     /**
+     * @var string
+     */
+    private $resourceDir;
+
+    /**
      * @param InstanceInterface $injector  Application dependency injector
      * @param string            $namespace Resource adapter namespace
      * @param string            $path      Resource adapter path
+     * @param null              $resourceDir
      *
      * @Inject
      * @throws AppNamespace
@@ -47,7 +54,8 @@ class App implements AdapterInterface
     public function __construct(
         InstanceInterface $injector,
         $namespace,
-        $path
+        $path,
+        $resourceDir = null
     ) {
         if (!is_string($namespace)) {
             throw new AppNamespace(gettype($namespace));
@@ -55,6 +63,7 @@ class App implements AdapterInterface
         $this->injector = $injector;
         $this->namespace = $namespace;
         $this->path = $path;
+        $this->resourceDir = $resourceDir;
     }
 
     /**
@@ -70,5 +79,13 @@ class App implements AdapterInterface
         $instance = $this->injector->getInstance($className);
 
         return $instance;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIterator()
+    {
+        return $this->resourceDir ? new AppIterator($this->resourceDir) : new \ArrayIterator([]);
     }
 }
