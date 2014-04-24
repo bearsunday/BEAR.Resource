@@ -479,40 +479,8 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     {
         $i = 0;
         foreach($this->resource as $meta) {
-            var_dump($meta);
             $this->assertInstanceOf('BEAR\Resource\Meta', $meta);
             $i++;
         }
     }
 }
-
-
-//class BEAR\Resource\Meta#271 (4) {
-//  public $uri =>
-//  string(26) "app://self/restbucks/order"
-//  public $options =>
-//  class BEAR\Resource\Options#209 (2) {
-//    public $allow =>
-//    array(2) {
-//      [0] =>
-//      string(3) "get"
-//      [1] =>
-//      string(4) "post"
-//    }
-//    public $params =>
-//    array(1) {
-//      [0] =>
-//      class BEAR\Resource\Params#210 (3) {
-//        public $method =>
-//        string(4) "post"
-//        public $required =>
-//        array(1) {
-//          [0] =>
-//          string(5) "drink"
-//        }
-//        public $optional =>
-//        array(0) {
-//        }
-//      }
-//    }
-//  }
