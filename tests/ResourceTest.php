@@ -9,13 +9,11 @@ use Aura\Signal\ResultFactory;
 use BEAR\Resource\Mock\TestModule;
 use BEAR\Resource\ParamProvider\OnProvidesParam;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Cache\FilesystemCache;
-use Guzzle\Cache\DoctrineCacheAdapter as CacheAdapter;
 use Ray\Di\Definition;
 use Ray\Di\Injector;
-use BEAR\Resource\Renderer\TestRenderer;
 use TestVendor\Sandbox\Resource\App\Link;
 use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\Cache\Cache as CacheAdapter;
 
 class varProvider implements ParamProviderInterface
 {
@@ -58,10 +56,10 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $injector = Injector::create([new TestModule]);
         $scheme = new SchemeCollection;
         $scheme->scheme('app')->host('self')->toAdapter(
-            new Adapter\App($injector, 'TestVendor\Sandbox', 'Resource\App')
+            new Adapter\App($injector, 'TestVendor\Sandbox', 'Resource\App', $_ENV['TEST_DIR'] . '/TestVendor/App')
         );
         $scheme->scheme('page')->host('self')->toAdapter(
-            new Adapter\App($injector, 'TestVendor\Sandbox', 'Resource\Page')
+            new Adapter\App($injector, 'TestVendor\Sandbox', 'Resource\Page', $_ENV['TEST_DIR'] . '/TestVendor/Page')
         );
         $scheme->scheme('nop')->host('self')->toAdapter(new Adapter\Nop);
         $scheme->scheme('test')->host('self')->toAdapter(new Adapter\Test);
@@ -477,4 +475,12 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual->body);
     }
 
+    public function testIterator()
+    {
+        $i = 0;
+        foreach($this->resource as $meta) {
+            $this->assertInstanceOf('BEAR\Resource\Meta', $meta);
+            $i++;
+        }
+    }
 }
