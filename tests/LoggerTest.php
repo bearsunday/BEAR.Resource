@@ -90,7 +90,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     public function testSerialize()
     {
         $request = $this->request;
-        $request->closure = function(){};
+        $request->closure = function () {};
         $this->logger->log($request, new TestResource);
         $logStr = serialize($this->logger);
         $this->assertInternalType('string', $logStr);
