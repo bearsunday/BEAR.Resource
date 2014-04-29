@@ -100,7 +100,7 @@ class Factory implements FactoryInterface, \IteratorAggregate
 
     /**
      * {@inheritdoc}
-     * 
+     *
      * @return \ArrayIterator|\MultipleIterator|Traversable
      */
     public function getIterator()

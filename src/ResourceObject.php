@@ -221,5 +221,4 @@ abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggrega
 
         return $body;
     }
-
 }

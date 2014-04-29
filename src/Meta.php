@@ -23,8 +23,8 @@ final class Meta
      */
     public $extras = [];
 
-    CONST EXTRAS_VENDOR = 'vendor';
-    CONST EXTRAS_PACKAGE = 'package';
+    const EXTRAS_VENDOR = 'vendor';
+    const EXTRAS_PACKAGE = 'package';
 
     /**
      * @param string $class

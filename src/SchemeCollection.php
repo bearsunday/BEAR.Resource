@@ -80,7 +80,7 @@ class SchemeCollection extends ArrayObject implements SchemeCollectionInterface
     {
         $iterator = new \AppendIterator;
         $schemeCollection = $this->getArrayCopy();
-        foreach($schemeCollection as $scheme) {
+        foreach ($schemeCollection as $scheme) {
             foreach ($scheme as $adapter) {
                 if ($adapter instanceof \IteratorAggregate) {
                     /** @var $adapter \IteratorAggregate */
