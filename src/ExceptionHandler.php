@@ -16,6 +16,9 @@ class ExceptionHandler implements ExceptionHandlerInterface
      */
     public function handle(\Exception $e, Request $request)
     {
+        error_log($request->toUriWithMethod());
+        error_log(get_class($e) . ' in ' . __FILE__ . ' on line ' . __LINE__ . ' ' . $e);
+
         throw $e;
     }
 }

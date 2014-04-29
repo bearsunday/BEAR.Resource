@@ -168,11 +168,17 @@ final class Request implements RequestInterface, \ArrayAccess, \IteratorAggregat
     /**
      * Render view
      *
+     * Exception will be handled in exception handler in Invoker
+     *
      * @return string
      */
     public function __toString()
     {
-        $this->invoke();
+        try {
+            $this->invoke();
+        } catch (\Exception $e) {
+            return '';
+        }
         return (string)$this->result;
     }
 
