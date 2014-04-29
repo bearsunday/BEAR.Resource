@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "a02a8495fff91bf163bf5c9f13cbdeee",
+    "hash": "c9d87e95574e05ecf2b095670535e21d",
     "packages": [
         {
             "name": "any/serializer",
@@ -79,7 +79,7 @@
                     "homepage": "http://paul-m-jones.com"
                 },
                 {
-                    "name": "Hari KT",
+                    "name": "Hari K T",
                     "email": "kthari85@gmail.com",
                     "homepage": "http://harikt.com"
                 },
@@ -246,9 +246,10 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan Wage",
+                    "name": "Jonathan H. Wage",
                     "email": "jonwage@gmail.com",
-                    "homepage": "http://www.jwage.com/"
+                    "homepage": "http://www.jwage.com/",
+                    "role": "Creator"
                 },
                 {
                     "name": "Guilherme Blanco",
@@ -320,7 +321,7 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan H. Wage",
+                    "name": "Jonathan Wage",
                     "email": "jonwage@gmail.com",
                     "homepage": "http://www.jwage.com/",
                     "role": "Creator"
@@ -407,16 +408,16 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "4.0.1",
+            "version": "4.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "c1cf6c8630b71fa7c9b8f7e769758bb1d9147dae"
+                "reference": "40db53833aaea528347994acd4578d7b9b2211ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/c1cf6c8630b71fa7c9b8f7e769758bb1d9147dae",
-                "reference": "c1cf6c8630b71fa7c9b8f7e769758bb1d9147dae",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/40db53833aaea528347994acd4578d7b9b2211ee",
+                "reference": "40db53833aaea528347994acd4578d7b9b2211ee",
                 "shasum": ""
             },
             "require": {
@@ -464,7 +465,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2014-04-04 20:43:50"
+            "time": "2014-04-16 17:33:22"
         },
         {
             "name": "guzzlehttp/streams",
@@ -673,16 +674,16 @@
         },
         {
             "name": "ray/di",
-            "version": "1.3.0",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Ray.Di.git",
-                "reference": "2224d647087fe1bd0555418fc5869d9539fb4f4a"
+                "reference": "50a949b0e0c17a087f61058274d4d1eb6298459c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/2224d647087fe1bd0555418fc5869d9539fb4f4a",
-                "reference": "2224d647087fe1bd0555418fc5869d9539fb4f4a",
+                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/50a949b0e0c17a087f61058274d4d1eb6298459c",
+                "reference": "50a949b0e0c17a087f61058274d4d1eb6298459c",
                 "shasum": ""
             },
             "require": {
@@ -727,7 +728,7 @@
                 "injection",
                 "jsr"
             ],
-            "time": "2014-03-31 00:06:54"
+            "time": "2014-04-29 05:33:18"
         }
     ],
     "packages-dev": [
@@ -737,12 +738,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/facebook/xhprof.git",
-                "reference": "bdc69faaa78dc8177ea487fded84ae1efffb2986"
+                "reference": "0a7a5f69f5d762c34056164eb08dd13d41156015"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/facebook/xhprof/zipball/bdc69faaa78dc8177ea487fded84ae1efffb2986",
-                "reference": "bdc69faaa78dc8177ea487fded84ae1efffb2986",
+                "url": "https://api.github.com/repos/facebook/xhprof/zipball/0a7a5f69f5d762c34056164eb08dd13d41156015",
+                "reference": "0a7a5f69f5d762c34056164eb08dd13d41156015",
                 "shasum": ""
             },
             "require": {
@@ -765,7 +766,7 @@
                 "performance",
                 "profiling"
             ],
-            "time": "2014-04-11 01:04:10"
+            "time": "2014-04-22 20:02:16"
         }
     ],
     "aliases": [
@@ -773,6 +774,7 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
+        "ray/di": 20,
         "facebook/xhprof": 20
     },
     "platform": {
