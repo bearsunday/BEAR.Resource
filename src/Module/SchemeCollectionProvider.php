@@ -39,9 +39,9 @@ class SchemeCollectionProvider implements Provide
      *
      * @throws \BEAR\Resource\Exception\AppName
      * @Inject
-     * @Named("appName=app_name, resourceDir=resource_dir")
+     * @Named("appName=app_name,resourceDir=resource_dir")
      */
-    public function setAppName($appName, $resourceDir = '')
+    public function setAppName($appName, $resourceDir)
     {
         if (is_null($appName)) {
             throw new AppName($appName);
