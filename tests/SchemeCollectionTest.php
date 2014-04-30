@@ -34,7 +34,7 @@ class SchemeCollectionTest extends \PHPUnit_Framework_TestCase
     public function testSchemeCollectionProvider()
     {
         $provider = new SchemeCollectionProvider;
-        $provider->setAppName(null);
+        $provider->setAppName(null, '');
     }
 
     public function testIterator()

@@ -14,6 +14,27 @@ use Ray\Di\Definition;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use BEAR\Resource\Renderer\TestRenderer;
 use BEAR\Resource\Renderer\ErrorRenderer;
+use Traversable;
+
+class ExceptionLogger implements LoggerInterface
+{
+    public function getIterator()
+    {
+    }
+
+    public function log(RequestInterface $request, ResourceObject $result)
+    {
+        throw new \LogicException;
+    }
+
+    public function setWriter(LogWriterInterface $writer)
+    {
+    }
+
+    public function write()
+    {
+    }
+}
 
 /**
  * Test class for BEAR.Resource.
@@ -229,6 +250,18 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->request->addQuery(['a' => 'bear', 'c' => 'kuma']);
         $actual = $this->request->toUriWithMethod();
         $this->assertSame('get test://self/path/to/resource?a=bear&b=25&c=kuma', $actual);
+    }
+
+    public function testToStringException()
+    {
+        $signal = new Manager(new HandlerFactory, new ResultFactory, new ResultCollection);
+        $params = new NamedParameter(new SignalParameter($signal, new Param));
+        $invoker = new Invoker(new Linker(new Reader), $params);
+        $invoker->setResourceLogger(new ExceptionLogger);
+        $request = new Request($invoker);
+        $request->set(new TestResource, 'test://self/path/to/resource', 'put', []);
+        $string = (string) $request;
+        $this->assertSame('', $string);
     }
 
 }
