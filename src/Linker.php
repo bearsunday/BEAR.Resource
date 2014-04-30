@@ -6,7 +6,6 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\Cache;
@@ -39,8 +38,8 @@ final class Linker implements LinkerInterface
     private $cache;
 
     /**
-     * @param Reader               $reader
-     * @param Cache                $cache
+     * @param Reader $reader
+     * @param Cache  $cache
      *
      * @Inject
      */
@@ -216,7 +215,7 @@ final class Linker implements LinkerInterface
      */
     private function isList($value)
     {
-        $value = array_values((array)$value);
+        $value = array_values((array) $value);
         $isMultiColumnList = (count($value) > 1
             && isset($value[0])
             && isset($value[1])

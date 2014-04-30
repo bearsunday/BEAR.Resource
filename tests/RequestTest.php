@@ -10,11 +10,9 @@ use BEAR\Resource\Adapter\NopResource;
 use TestVendor\Sandbox\Resource\App\User\Entry;
 use BEAR\Resource\Adapter\Nop;
 use BEAR\Resource\Adapter\TestResource;
-use Ray\Di\Definition;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use BEAR\Resource\Renderer\TestRenderer;
 use BEAR\Resource\Renderer\ErrorRenderer;
-use Traversable;
 
 class ExceptionLogger implements LoggerInterface
 {
@@ -124,7 +122,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual);
         $this->assertInstanceOf('\BEAR\Resource\Request', $this->request);
         $request = $this->request;
-        $result = (string)$request;
+        $result = (string) $request;
         $this->assertSame('{"posts":["koriym",30]}', $result);
     }
 
@@ -137,7 +135,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->request->ro->uri = 'nop://self/path/to/resource';
         $this->request->query = array('a' => 'koriym', 'b' => 25);
         $request = $this->request;
-        $result = (string)$request;
+        $result = (string) $request;
         $this->assertSame($result, '');
     }
 
@@ -149,7 +147,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->request->query = array('a' => 'koriym', 'b' => 25);
         $request = $this->request;
         $this->assertInstanceOf('\BEAR\Resource\Request', $this->request);
-        $result = (string)$request;
+        $result = (string) $request;
         $this->assertSame('', $result);
     }
 

@@ -25,7 +25,7 @@ class AppIteratorTest extends \PHPUnit_Framework_TestCase
         $this->appIterator = new AppIterator($_ENV['TEST_DIR'] . '/MyVendor');
         foreach ($this->appIterator as $key => $meta) {
             $uri = filter_var($meta->uri, FILTER_VALIDATE_URL);
-            $this->assertTrue((bool)$uri); // valid uri
+            $this->assertTrue((bool) $uri); // valid uri
             $this->assertInstanceOf('BEAR\Resource\Meta', $meta);
         }
     }

@@ -2,7 +2,6 @@
 
 namespace BEAR\Resource;
 
-use Ray\Di\Definition;
 use Ray\Di\Injector;
 
 /**
@@ -63,7 +62,6 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->factory->newInstance('app://invalid_host/news');
     }
-
 
     public function testNewInstanceApp()
     {

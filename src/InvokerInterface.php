@@ -18,7 +18,7 @@ interface InvokerInterface
     /**
      * Invoke resource request
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @return ResourceObject
      */
@@ -29,7 +29,7 @@ interface InvokerInterface
      *
      * invoke callable
      *
-     * @param \Traversable $requests
+     * @param  \Traversable $requests
      * @return \Traversable
      */
     public function invokeTraversal(\Traversable $requests);
@@ -46,7 +46,7 @@ interface InvokerInterface
     /**
      * Set resource client
      *
-     * @param ResourceInterface $resource
+     * @param  ResourceInterface $resource
      * @return void
      */
     public function setResourceClient(ResourceInterface $resource);

@@ -63,7 +63,6 @@ class Invoker implements InvokerInterface
      */
     const ANNOTATION_PROVIDES = 'Provides';
 
-
     /**
      * {@inheritDoc}
      */
@@ -222,7 +221,7 @@ class Invoker implements InvokerInterface
     /**
      * @param ResourceObject $ro
      * @param Request        $request
-     * @param                string $method
+     * @param string         $method
      *
      * @return ResourceObject
      * @throws Exception\MethodNotAllowed

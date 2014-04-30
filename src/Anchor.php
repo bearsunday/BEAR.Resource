@@ -6,9 +6,7 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception;
 use Doctrine\Common\Annotations\AnnotationReader;
-use BEAR\Resource\Annotation;
 use Ray\Di\Di\Inject;
 
 /**
@@ -27,8 +25,8 @@ class Anchor
     protected $request;
 
     /**
-     * @param AnnotationReader     $reader
-     * @param Request              $request
+     * @param AnnotationReader $reader
+     * @param Request          $request
      *
      * @Inject
      */

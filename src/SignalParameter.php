@@ -7,7 +7,6 @@
 namespace BEAR\Resource;
 
 use Aura\Signal\Manager as Signal;
-use BEAR\Resource\Exception;
 use Ray\Aop\MethodInvocation;
 use ReflectionParameter;
 use Ray\Di\Di\Inject;
@@ -67,7 +66,7 @@ class SignalParameter implements SignalParameterInterface
     /**
      * Send signal parameter
      *
-     * @param string               $sigName
+     * @param string              $sigName
      * @param ReflectionParameter $parameter
      * @param ParamInterface      $param
      * @param MethodInvocation    $invocation

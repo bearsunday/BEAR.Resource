@@ -6,9 +6,6 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception;
-use Ray\Di\Di\Inject;
-
 /**
  * Anchor
  */

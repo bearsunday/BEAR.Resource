@@ -179,7 +179,8 @@ final class Request implements RequestInterface, \ArrayAccess, \IteratorAggregat
         } catch (\Exception $e) {
             return '';
         }
-        return (string)$this->result;
+
+        return (string) $this->result;
     }
 
     /**
@@ -200,7 +201,6 @@ final class Request implements RequestInterface, \ArrayAccess, \IteratorAggregat
         return $this->result->body[$offset];
     }
 
-
     /**
      * Returns whether the requested index in body exists
      *
@@ -211,6 +211,7 @@ final class Request implements RequestInterface, \ArrayAccess, \IteratorAggregat
     public function offsetExists($offset)
     {
         $this->invoke();
+
         return isset($this->result->body[$offset]);
     }
 
@@ -236,7 +237,6 @@ final class Request implements RequestInterface, \ArrayAccess, \IteratorAggregat
     {
         throw new LogicException(__METHOD__ . ' is unavailable.');
     }
-
 
     /**
      * Get array iterator

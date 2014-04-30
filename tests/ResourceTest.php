@@ -9,9 +9,7 @@ use Aura\Signal\ResultFactory;
 use BEAR\Resource\Mock\TestModule;
 use BEAR\Resource\ParamProvider\OnProvidesParam;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Ray\Di\Definition;
 use Ray\Di\Injector;
-use TestVendor\Sandbox\Resource\App\Link;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\Cache as CacheAdapter;
 
@@ -183,7 +181,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->resource->get->uri('nop://self/dummy')->withQuery($this->query);
         $expected = "nop://self/dummy?id=10&name=Ray&age=43";
-        $this->assertSame($expected, (string)$client);
+        $this->assertSame($expected, (string) $client);
     }
 
     public function testPutWithDefaultParameter()
@@ -251,7 +249,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $invoker = new Invoker(new Linker(new AnnotationReader), new NamedParameter(new SignalParameter(new Manager(new HandlerFactory, new ResultFactory, new ResultCollection), new Param)), new Logger);
         $resource = new Resource(new Factory($scheme), $invoker, new Request($invoker), new Anchor(new AnnotationReader, new Request($invoker)));
         $request = $resource->get->uri('test://self/path/to/example')->withQuery(['a' => 1, 'b' => 2])->request();
-        $this->assertSame('{"posts":[1,2]}', (string)$request);
+        $this->assertSame('{"posts":[1,2]}', (string) $request);
         $this->assertSame(['posts' => [1, 2]], $request()->body);
     }
 
@@ -420,6 +418,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
             $resource->put->uri('app://self/param/user')->withQuery($validParams)->eager->request();
         } catch (\Exception $e) {
             $this->assertInstanceOf('BEAR\Resource\Exception\ParameterInService', $e);
+
             return $e;
         }
     }
@@ -478,7 +477,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     public function testIterator()
     {
         $i = 0;
-        foreach($this->resource as $meta) {
+        foreach ($this->resource as $meta) {
             $this->assertInstanceOf('BEAR\Resource\Meta', $meta);
             $i++;
         }

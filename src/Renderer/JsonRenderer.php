@@ -21,6 +21,7 @@ class JsonRenderer implements RenderInterface
         if ($e) {
             // @codeCoverageIgnoreStart
             error_log('json_encode error: ' . json_last_error_msg() . ' in ' . __METHOD__);
+
             return '';
             // @codeCoverageIgnoreEnd
         }

@@ -6,12 +6,9 @@ use Aura\Signal\HandlerFactory;
 use Aura\Signal\Manager;
 use Aura\Signal\ResultCollection;
 use Aura\Signal\ResultFactory;
-use BEAR\Resource\Adapter\Nop;
 use BEAR\Resource\Adapter\Test;
 use BEAR\Resource\Adapter\TestResource;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
-use Ray\Di\Definition;
-use Ray\Di\Injector;
 
 class TestWriter implements LogWriterInterface
 {
@@ -94,6 +91,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->logger->log($request, new TestResource);
         $logStr = serialize($this->logger);
         $this->assertInternalType('string', $logStr);
+
         return $logStr;
     }
 

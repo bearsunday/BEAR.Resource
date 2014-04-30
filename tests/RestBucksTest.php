@@ -3,9 +3,6 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Adapter\App;
-use BEAR\Resource\SchemeCollection;
-use Guzzle\Parser\UriTemplate\UriTemplate;
-use Ray\Di\Definition;
 use Ray\Di\Injector;
 
 class RestBucksTest extends \PHPUnit_Framework_TestCase

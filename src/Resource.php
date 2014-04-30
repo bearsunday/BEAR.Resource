@@ -6,7 +6,6 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception;
 use Doctrine\Common\Cache\Cache;
 use SplObjectStorage;
 use Ray\Di\Di\Scope;
@@ -295,7 +294,6 @@ class Resource implements ResourceInterface
 
         return $this->invoker->invokeSync($this->requests);
     }
-
 
     /**
      * {@inheritDoc}

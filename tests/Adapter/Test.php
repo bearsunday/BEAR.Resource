@@ -2,7 +2,6 @@
 
 namespace BEAR\Resource\Adapter;
 
-use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Renderer\TestRenderer;
 
 class Test implements AdapterInterface

@@ -3,9 +3,7 @@
 namespace TestVendor\Sandbox\Resource\App\Restbucks;
 
 use BEAR\Resource\ResourceObject;
-use BEAR\Resource\Uri;
 use BEAR\Resource\Annotation\Link;
-use Ray\Di\Di\Scope;
 
 class Menu extends ResourceObject
 {

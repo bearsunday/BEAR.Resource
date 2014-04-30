@@ -55,7 +55,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     public function testGetBody()
     {
         $ro = $this->httpAdapter->onGet();
-        $actual = (string)($ro->body->channel->title[0]);
+        $actual = (string) ($ro->body->channel->title[0]);
         $expected = 'Top Stories - Google News';
         $this->assertSame($expected, $actual);
     }

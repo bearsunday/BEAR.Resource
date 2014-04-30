@@ -6,7 +6,6 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception;
 use Ray\Aop\ReflectiveMethodInvocation;
 use ReflectionParameter;
 use Ray\Di\Di\Inject;

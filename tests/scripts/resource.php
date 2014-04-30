@@ -14,7 +14,6 @@ use Ray\Di\Container;
 use Ray\Di\Injector;
 use Ray\Di\EmptyModule;
 use Doctrine\Common\Annotations\AnnotationReader;
-use GuzzleHttp\UriTemplate;
 use Ray\Aop\Bind;
 use Ray\Aop\Compiler;
 use PHPParser_PrettyPrinter_Default;

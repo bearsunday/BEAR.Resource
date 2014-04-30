@@ -38,7 +38,7 @@ interface ResourceInterface extends \IteratorAggregate
     /**
      * Set named parameter query
      *
-     * @param  array $query
+     * @param array $query
      *
      * @return $this
      */

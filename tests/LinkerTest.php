@@ -6,11 +6,8 @@ use Aura\Signal\Manager;
 use Aura\Signal\HandlerFactory;
 use Aura\Signal\ResultFactory;
 use Aura\Signal\ResultCollection;
-use Guzzle\Parser\UriTemplate\UriTemplate;
-use Ray\Di\Definition;
 use Ray\Di\Injector;
 
-use BEAR\Resource\Adapter\Nop;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use TestVendor\Sandbox\Resource\App\Link\Scalar\Name;
 use TestVendor\Sandbox\Resource\App\Link\User;
@@ -252,7 +249,6 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertSame($expected, $result->body);
     }
-
 
     /**
      * @expectedException \BEAR\Resource\Exception\LinkQuery

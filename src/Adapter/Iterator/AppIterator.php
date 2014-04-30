@@ -6,7 +6,6 @@
  */
 namespace BEAR\Resource\Adapter\Iterator;
 
-use BEAR\Resource\Exception\LogicException;
 use BEAR\Resource\Exception\ResourceDir;
 use BEAR\Resource\Meta;
 use RecursiveDirectoryIterator;
@@ -134,6 +133,7 @@ final class AppIterator implements \Iterator
             $parent = (new \ReflectionClass($newClass))->getParentClass();
             if ($parent && $parent->name === 'BEAR\Resource\ResourceObject') {
                 $cache[$pathName] = $newClass;
+
                 return $newClass;
             }
         }
