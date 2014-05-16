@@ -9,9 +9,6 @@ namespace BEAR\Resource;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Ray\Di\Di\Inject;
 
-/**
- * Anchor
- */
 class Anchor
 {
     /**
@@ -26,13 +23,13 @@ class Anchor
 
     /**
      * @param AnnotationReader $reader
-     * @param Request          $request
+     * @param RequestInterface $request
      *
      * @Inject
      */
     public function __construct(
         AnnotationReader $reader,
-        Request $request
+        RequestInterface $request
     ) {
         $this->reader = $reader;
         $this->request = $request;
@@ -41,14 +38,14 @@ class Anchor
     /**
      * Return linked request with hyper reference
      *
-     * @param string  $rel
-     * @param array   $query
-     * @param Request $request
+     * @param string           $rel
+     * @param RequestInterface $request
+     * @param array            $query
      *
-     * @return Request
+     * @return array [$method, $uri];
      * @throws Exception\Link
      */
-    public function href($rel, Request $request, array $query)
+    public function href($rel, RequestInterface $request, array $query)
     {
         $classMethod = 'on' . ucfirst($request->method);
         $annotations = $this->reader->getMethodAnnotations(new \ReflectionMethod($request->ro, $classMethod));
