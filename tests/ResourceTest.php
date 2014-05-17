@@ -23,7 +23,7 @@ class varProvider implements ParamProviderInterface
 
 class TestExceptionHandler implements ExceptionHandlerInterface
 {
-    public function handle(\Exception $e, Request $request)
+    public function handle(\Exception $e, AbstractRequest $request)
     {
         throw new \RuntimeException('', 0, $e);
     }

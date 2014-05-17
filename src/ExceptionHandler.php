@@ -14,7 +14,7 @@ class ExceptionHandler implements ExceptionHandlerInterface
      * {@inheritdoc}
      * @throws \Exception
      */
-    public function handle(\Exception $e, Request $request)
+    public function handle(\Exception $e, AbstractRequest $request)
     {
         error_log(
             sprintf(

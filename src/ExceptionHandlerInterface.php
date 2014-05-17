@@ -19,5 +19,5 @@ interface ExceptionHandlerInterface
      *
      * @return resource object or its body
      */
-    public function handle(\Exception $e, Request $request);
+    public function handle(\Exception $e, AbstractRequest $request);
 }
