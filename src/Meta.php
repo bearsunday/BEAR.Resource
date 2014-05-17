@@ -91,7 +91,6 @@ final class Meta
     {
         $refMethod = new \ReflectionMethod($ro, 'on' . $method);
         $parameters = $refMethod->getParameters();
-        $params = [];
         $optionalParams = $requiredParams = [];
         foreach ($parameters as $parameter) {
             $name = $parameter->name;
