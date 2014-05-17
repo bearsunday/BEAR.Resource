@@ -232,14 +232,14 @@ class Invoker implements InvokerInterface
     }
 
     /**
-     * @param ResourceObject $ro
-     * @param Request        $request
-     * @param string         $method
+     * @param ResourceObject  $ro
+     * @param AbstractRequest $request
+     * @param string          $method
      *
      * @return ResourceObject
      * @throws Exception\MethodNotAllowed
      */
-    private function methodNotExists(ResourceObject $ro, Request $request, $method)
+    private function methodNotExists(ResourceObject $ro, AbstractRequest $request, $method)
     {
         if ($request->method === self::OPTIONS) {
             return $this->onOptions($ro);
@@ -272,7 +272,7 @@ class Invoker implements InvokerInterface
      * @return ResourceObject
      * @throws Exception\ParameterInService
      */
-    private function onHead(Request $request)
+    private function onHead(AbstractRequest $request)
     {
         if (method_exists($request->ro, 'onGet')) {
             // invoke with Named param and Signal param
