@@ -8,11 +8,9 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\LogicException;
 use OutOfBoundsException;
-use ArrayAccess;
-use IteratorAggregate;
 use Ray\Di\Di\Inject;
 
-final class Request implements RequestInterface, \ArrayAccess, \IteratorAggregate
+final class Request extends AbstractRequest
 {
     /**
      * URI

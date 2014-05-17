@@ -45,7 +45,7 @@ class Anchor
      * @return array [$method, $uri];
      * @throws Exception\Link
      */
-    public function href($rel, RequestInterface $request, array $query)
+    public function href($rel, AbstractRequest $request, array $query)
     {
         $classMethod = 'on' . ucfirst($request->method);
         $annotations = $this->reader->getMethodAnnotations(new \ReflectionMethod($request->ro, $classMethod));
