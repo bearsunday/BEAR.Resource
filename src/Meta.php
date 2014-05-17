@@ -74,22 +74,34 @@ final class Meta
         }
         $params = [];
         foreach ($allow as $method) {
-            $refMethod = new \ReflectionMethod($ro, 'on' . $method);
-            $parameters = $refMethod->getParameters();
-            $params = [];
-            $optionalParams = $requiredParams = [];
-            foreach ($parameters as $parameter) {
-                $name = $parameter->name;
-                if ($parameter->isOptional()) {
-                    $optionalParams[] = $name;
-                    continue;
-                }
-                $requiredParams[] = $name;
-            }
-            $params[] = new Params($method, $requiredParams, $optionalParams);
+            $params[] = $this->getParams($ro, $method);
         }
         $options = new Options($allow, $params);
 
         return $options;
+    }
+
+    /**
+     * @param string $ro
+     * @param string $method
+     *
+     * @return Params
+     */
+    private function getParams($ro, $method)
+    {
+        $refMethod = new \ReflectionMethod($ro, 'on' . $method);
+        $parameters = $refMethod->getParameters();
+        $params = [];
+        $optionalParams = $requiredParams = [];
+        foreach ($parameters as $parameter) {
+            $name = $parameter->name;
+            if ($parameter->isOptional()) {
+                $optionalParams[] = $name;
+                continue;
+            }
+            $requiredParams[] = $name;
+        }
+
+        return new Params($method, $requiredParams, $optionalParams);
     }
 }
