@@ -7,7 +7,7 @@
 namespace BEAR\Resource\Renderer;
 
 use BEAR\Resource\Exception;
-use BEAR\Resource\Link;
+use BEAR\Resource\Annotation\Link;
 use BEAR\Resource\RenderInterface;
 use BEAR\Resource\ResourceObject;
 use Nocarrier\Hal;
