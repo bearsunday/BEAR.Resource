@@ -200,22 +200,35 @@ class Invoker implements InvokerInterface
                 $allow[] = strtolower(substr($method->name, 2));
             }
         }
-        $params = [];
         foreach ($allow as $method) {
-            $refMethod = new \ReflectionMethod($ro, 'on' . $method);
-            $parameters = $refMethod->getParameters();
-            $paramArray = [];
-            foreach ($parameters as $parameter) {
-                $name = $parameter->name;
-                $param = $parameter->isOptional() ? "({$name})" : $name;
-                $paramArray[] = $param;
-            }
-            $key = "param-{$method}";
-            $params[$key] = implode(',', $paramArray);
+            $params = $this->getParams($ro, $method);
         }
         $result = ['allow' => $allow, 'params' => $params];
 
         return $result;
+    }
+
+    /**
+     * @param $ro
+     * @param $method
+     *
+     * @return string[]
+     */
+    private function getParams($ro, $method)
+    {
+        $params = [];
+        $refMethod = new \ReflectionMethod($ro, 'on' . $method);
+        $parameters = $refMethod->getParameters();
+        $paramArray = [];
+        foreach ($parameters as $parameter) {
+            $name = $parameter->name;
+            $param = $parameter->isOptional() ? "({$name})" : $name;
+            $paramArray[] = $param;
+        }
+        $key = "param-{$method}";
+        $params[$key] = implode(',', $paramArray);
+
+        return $params;
     }
 
     /**
