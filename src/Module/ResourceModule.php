@@ -53,5 +53,6 @@ class ResourceModule extends AbstractModule
         $this->bind('BEAR\Resource\ParamInterface')->to('BEAR\Resource\Param');
         $this->bind('BEAR\Resource\Renderer\RendererInterface')->to('BEAR\Resource\Renderer\JsonRenderer');
         $this->bind('Ray\Di\InstanceInterface')->toInstance($this->dependencyInjector);
+        $this->install(new EmbedResourceModule($this));
     }
 }
