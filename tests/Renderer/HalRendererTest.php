@@ -15,6 +15,8 @@ use BEAR\Resource\Request;
 use BEAR\Resource\ResourceObject;
 use BEAR\Resource\SignalParameter;
 use Doctrine\Common\Annotations\AnnotationReader;
+use Ray\Di\Injector;
+use BEAR\Resource\Module\ResourceModule;
 
 class MockResource extends ResourceObject
 {
@@ -127,5 +129,47 @@ class HalRendererTest extends \PHPUnit_Framework_TestCase
         $this->resource->setRenderer($this->halRenderer);
         $this->halRenderer->render($this->resource);
         $this->assertContains('"greeting": "hello"', $this->resource->view);
+    }
+
+    public function testEmbedResource()
+    {
+        $resource = Injector::create([new ResourceModule('TestVendor\Sandbox')])->getInstance('BEAR\Resource\ResourceInterface');
+        $resourceObject = $resource
+            ->get
+            ->uri('app://self/bird/birds')
+            ->withQuery(['id' => 1])
+            ->eager
+            ->request();
+        $resourceObject->setRenderer($this->halRenderer);
+        $hal = (string) $resourceObject;
+        $this->assertSame('{
+    "_links": {
+        "self": {
+            "href": "app://self/bird/birds?id=1"
+        }
+    },
+    "_embedded": {
+        "bird1": [
+            {
+                "name": "chill kun",
+                "_links": {
+                    "self": {
+                        "href": "app://self/bird/canary"
+                    }
+                }
+            }
+        ],
+        "bird2": [
+            {
+                "sparrow_id": "1",
+                "_links": {
+                    "self": {
+                        "href": "app://self/bird/sparrow?id=1"
+                    }
+                }
+            }
+        ]
+    }
+}', $hal);
     }
 }
