@@ -221,6 +221,7 @@ final class Request implements RequestInterface, \ArrayAccess, \IteratorAggregat
      *
      * @throws Exception\LogicException
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function offsetSet($offset, $value)
     {
@@ -232,6 +233,7 @@ final class Request implements RequestInterface, \ArrayAccess, \IteratorAggregat
      *
      * @throws Exception\LogicException
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function offsetUnset($offset)
     {
