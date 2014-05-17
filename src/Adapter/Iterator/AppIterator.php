@@ -14,11 +14,6 @@ use RecursiveIteratorIterator;
 final class AppIterator implements \Iterator
 {
     /**
-     * @var \RecursiveIteratorIterator
-     */
-    private $iterator;
-
-    /**
      * @var int
      */
     private $i = 0;

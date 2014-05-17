@@ -105,7 +105,6 @@ class EmbedInterceptorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('app://self/bird/sparrow?id=100&option=yes', $request->toUri());
     }
 
-
     /**
      * @expectedException \BEAR\Resource\Exception\Embed
      */
