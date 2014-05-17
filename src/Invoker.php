@@ -142,18 +142,24 @@ class Invoker implements InvokerInterface
             $result = $this->exceptionHandler->handle($e, $request);
         }
 
+        return $this->postRequest($request, $result);
+    }
+
+    /**
+     * @param AbstractRequest $request
+     * @param mixed           $result
+     *
+     * @return ResourceObject
+     */
+    private function postRequest(AbstractRequest $request, $result)
+    {
         if (!$result instanceof ResourceObject) {
             $request->ro->body = $result;
             $result = $request->ro;
         }
-
-        // link
-        completed:
         if ($request->links) {
             $result = $this->linker->invoke($request);
         }
-
-        // log
         if ($this->logger instanceof LoggerInterface) {
             $this->logger->log($request, $result);
         }
