@@ -43,6 +43,11 @@ class Invoker implements InvokerInterface
     private $exceptionHandler;
 
     /**
+     * @var
+     */
+    private $optionProvider;
+
+    /**
      * Method OPTIONS
      *
      * @var string
@@ -87,6 +92,15 @@ class Invoker implements InvokerInterface
     }
 
     /**
+     * @param OptionProviderInterface $optionProvider
+     * @Inject(optional=true)
+     */
+    public function setOptionProvider(OptionProviderInterface $optionProvider)
+    {
+        $this->optionProvider = $optionProvider;
+    }
+
+    /**
      * @param LinkerInterface           $linker
      * @param NamedParameter            $params
      * @param LoggerInterface           $logger
@@ -113,7 +127,7 @@ class Invoker implements InvokerInterface
     {
         $onMethod = 'on' . ucfirst($request->method);
         if (method_exists($request->ro, $onMethod) !== true) {
-            return $this->methodNotExists($request->ro, $request, $onMethod);
+            return $this->extraMethod($request->ro, $request, $onMethod);
         }
         // invoke with Named param and Signal param
         $args = $this->params->getArgs([$request->ro, $onMethod], $request->query);
@@ -182,56 +196,10 @@ class Invoker implements InvokerInterface
         return $result;
     }
 
-    /**
-     * Return available resource request method
-     *
-     * @param ResourceObject $ro
-     *
-     * @return array
-     */
-    protected function getOptions(ResourceObject $ro)
-    {
-        $ref = new \ReflectionClass($ro);
-        $methods = $ref->getMethods();
-        $allow = $params = [];
-        foreach ($methods as $method) {
-            $isRequestMethod = (substr($method->name, 0, 2) === 'on') && (substr($method->name, 0, 6) !== 'onLink');
-            if ($isRequestMethod) {
-                $allow[] = strtolower(substr($method->name, 2));
-            }
-        }
-        foreach ($allow as $method) {
-            $params = $this->getParams($ro, $method);
-        }
-        $result = ['allow' => $allow, 'params' => $params];
-
-        return $result;
-    }
 
     /**
-     * @param ResourceObject $ro
-     * @param string         $method
+     * OPTIONS or HEAD
      *
-     * @return string[]
-     */
-    private function getParams($ro, $method)
-    {
-        $params = [];
-        $refMethod = new \ReflectionMethod($ro, 'on' . $method);
-        $parameters = $refMethod->getParameters();
-        $paramArray = [];
-        foreach ($parameters as $parameter) {
-            $name = $parameter->name;
-            $param = $parameter->isOptional() ? "({$name})" : $name;
-            $paramArray[] = $param;
-        }
-        $key = "param-{$method}";
-        $params[$key] = implode(',', $paramArray);
-
-        return $params;
-    }
-
-    /**
      * @param ResourceObject  $ro
      * @param AbstractRequest $request
      * @param string          $method
@@ -239,10 +207,11 @@ class Invoker implements InvokerInterface
      * @return ResourceObject
      * @throws Exception\MethodNotAllowed
      */
-    private function methodNotExists(ResourceObject $ro, AbstractRequest $request, $method)
+    private function extraMethod(ResourceObject $ro, AbstractRequest $request, $method)
     {
         if ($request->method === self::OPTIONS) {
-            return $this->onOptions($ro);
+            $optionProvider = $this->optionProvider ?: new OptionProvider;
+            return $optionProvider->get($ro);
         }
         if ($method === 'onHead' && method_exists($ro, 'onGet')) {
             return $this->onHead($request);
@@ -250,22 +219,6 @@ class Invoker implements InvokerInterface
 
         throw new Exception\MethodNotAllowed(get_class($request->ro) . "::$method()", 405);
     }
-
-    /**
-     * @param ResourceObject $ro resource object
-     *
-     * @return ResourceObject
-     */
-    private function onOptions(ResourceObject $ro)
-    {
-        $options = $this->getOptions($ro);
-        $ro->headers['allow'] = $options['allow'];
-        $ro->headers += $options['params'];
-        $ro->body = null;
-
-        return $ro;
-    }
-
     /**
      * @param Request $request
      *
