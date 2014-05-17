@@ -214,31 +214,6 @@ final class Request extends AbstractRequest
     }
 
     /**
-     * @param mixed $offset
-     * @param mixed $value
-     *
-     * @throws Exception\LogicException
-     * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function offsetSet($offset, $value)
-    {
-        throw new LogicException(__METHOD__ . ' is unavailable.');
-    }
-
-    /**
-     * @param mixed $offset
-     *
-     * @throws Exception\LogicException
-     * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function offsetUnset($offset)
-    {
-        throw new LogicException(__METHOD__ . ' is unavailable.');
-    }
-
-    /**
      * Get array iterator
      *
      * @return \ArrayIterator

@@ -6,6 +6,8 @@
  */
 namespace BEAR\Resource;
 
+use BEAR\Resource\Exception\LogicException;
+
 abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \IteratorAggregate
 {
     /**
@@ -56,4 +58,29 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
      * @var \BEAR\Resource\LinkType[]
      */
     public $links = [];
+
+    /**
+     * @param mixed $offset
+     * @param mixed $value
+     *
+     * @throws Exception\LogicException
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function offsetSet($offset, $value)
+    {
+        throw new LogicException(__METHOD__ . ' is unavailable.');
+    }
+
+    /**
+     * @param mixed $offset
+     *
+     * @throws Exception\LogicException
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function offsetUnset($offset)
+    {
+        throw new LogicException(__METHOD__ . ' is unavailable.');
+    }
 }
