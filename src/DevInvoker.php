@@ -57,7 +57,7 @@ class DevInvoker extends Invoker implements InvokerInterface
      * @param ResourceObject   $resource
      * @param RequestInterface $request
      *
-     * @return ResourceObject|mixed|null|resource|void
+     * @return ResourceObject
      */
     private function devInvoke(ResourceObject $resource, AbstractRequest $request)
     {
