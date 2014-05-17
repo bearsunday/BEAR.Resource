@@ -21,10 +21,11 @@
     "require": {
         "php": ">=5.4.0",
         "aura/signal": "1.*",
-        "ray/di": "dev-develop",
-        "any/serializer": "*",
+        "ray/aop": "1.2.*@dev",
+        "ray/di": "1.3.*@dev",
+        "any/serializer": "0.*",
         "doctrine/cache": "1.*",
-        "nocarrier/hal":"*",
+        "nocarrier/hal":"0.*",
         "guzzlehttp/guzzle": "~4.0"
     },
     "require-dev": {
