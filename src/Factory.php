@@ -53,15 +53,7 @@ class Factory implements FactoryInterface, \IteratorAggregate
      */
     public function newInstance($uri)
     {
-        $parsedUrl = parse_url($uri);
-        if (!(isset($parsedUrl['scheme']) && isset($parsedUrl['scheme']))) {
-            throw new Exception\Uri;
-        }
-        $scheme = $parsedUrl['scheme'];
-        $host = $parsedUrl['host'];
-        if (!isset($this->scheme[$scheme])) {
-            throw new Exception\Scheme($uri);
-        }
+        list($scheme, $host) = $this->parseUri($uri);
         if (!isset($this->scheme[$scheme][$host])) {
             if (!(isset($this->scheme[$scheme]['*']))) {
                 throw new Exception\Scheme($uri);
@@ -79,6 +71,28 @@ class Factory implements FactoryInterface, \IteratorAggregate
         $resourceObject->uri = $uri;
 
         return $resourceObject;
+    }
+
+    /**
+     * @param $uri
+     *
+     * @return array [$scheme, $host]
+     * @throws Exception\Uri
+     * @throws Exception\Scheme
+     */
+    private function parseUri($uri)
+    {
+        $parsedUrl = parse_url($uri);
+        if (!(isset($parsedUrl['scheme']) && isset($parsedUrl['scheme']))) {
+            throw new Exception\Uri;
+        }
+        $scheme = $parsedUrl['scheme'];
+        $host = $parsedUrl['host'];
+        if (!isset($this->scheme[$scheme])) {
+            throw new Exception\Scheme($uri);
+        }
+
+        return [$scheme, $host];
     }
 
     /**
