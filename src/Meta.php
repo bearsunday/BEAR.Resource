@@ -23,6 +23,11 @@ final class Meta
      */
     public $extras = [];
 
+    /**
+     * @var string
+     */
+    private $class;
+
     const EXTRAS_VENDOR = 'vendor';
     const EXTRAS_PACKAGE = 'package';
 
