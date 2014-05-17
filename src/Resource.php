@@ -146,8 +146,8 @@ class Resource implements ResourceInterface
         }
 
         $useCache = $this->cache instanceof Cache;
+        $key = $this->appName . 'res-' . str_replace('/', '-', $uri);
         if ($useCache === true) {
-            $key = $this->appName . 'res-' . str_replace('/', '-', $uri);
             $cached = $this->cache->fetch($key);
             if ($cached) {
                 return $cached;
@@ -155,7 +155,6 @@ class Resource implements ResourceInterface
         }
         $instance = $this->factory->newInstance($uri);
         if ($useCache === true) {
-            /** @noinspection PhpUndefinedVariableInspection */
             $this->cache->save($key, $instance);
         }
         $this->resourceObjects[$uri] = $instance;
