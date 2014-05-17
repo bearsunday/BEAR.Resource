@@ -34,7 +34,7 @@ class DevInvoker extends Invoker implements InvokerInterface
     /**
      * {@inheritDoc}
      */
-    public function invoke(Request $request)
+    public function invoke(AbstractRequest $request)
     {
         $method = 'on' . ucfirst($request->method);
 
@@ -59,7 +59,7 @@ class DevInvoker extends Invoker implements InvokerInterface
      *
      * @return ResourceObject|mixed|null|resource|void
      */
-    private function devInvoke(ResourceObject $resource, RequestInterface $request)
+    private function devInvoke(ResourceObject $resource, AbstractRequest $request)
     {
         $resource->headers[self::HEADER_QUERY] = json_encode($request->query);
         $time = microtime(true);
@@ -93,7 +93,7 @@ class DevInvoker extends Invoker implements InvokerInterface
      *
      * @return ResourceObject
      */
-    private function getRo(Request $request)
+    private function getRo(AbstractRequest $request)
     {
         if (!$request->ro instanceof WeavedInterface) {
             return $request->ro;

@@ -22,7 +22,7 @@ interface InvokerInterface
      *
      * @return ResourceObject
      */
-    public function invoke(Request $request);
+    public function invoke(AbstractRequest $request);
 
     /**
      * Invoke traversal
