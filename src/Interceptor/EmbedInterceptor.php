@@ -14,11 +14,7 @@ use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
 use Ray\Aop\NamedArgsInterface;
 use BEAR\Resource\Exception\Embed as EmbedException;
-
-use BEAR\Resource\Exception\LogicException;
-
 use Ray\Di\Di\Inject;
-use Ray\Di\Di\Named;
 
 final class EmbedInterceptor implements MethodInterceptor
 {

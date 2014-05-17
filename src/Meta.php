@@ -37,7 +37,7 @@ final class Meta
     }
 
     /**
-     * @param $class
+     * @param string $class
      *
      * @return string
      */
@@ -59,7 +59,7 @@ final class Meta
      *
      * @param ResourceObject $ro
      *
-     * @return array
+     * @return Options
      */
     private function getOptions($ro)
     {

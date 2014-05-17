@@ -46,7 +46,7 @@ class App implements AdapterInterface, \IteratorAggregate
      * @param InstanceInterface $injector    Application dependency injector
      * @param string            $namespace   Resource adapter namespace
      * @param string            $path        Resource adapter path
-     * @param null              $resourceDir
+     * @param string            $resourceDir Resource root dir path
      *
      * @Inject
      * @throws AppNamespace

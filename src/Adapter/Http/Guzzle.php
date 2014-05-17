@@ -11,7 +11,6 @@ use BEAR\Resource\ResourceObject;
 use GuzzleHttp\Message\ResponseInterface;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Subscriber\History;
-
 use Ray\Di\Di\Scope;
 
 /**

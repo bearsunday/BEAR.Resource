@@ -209,8 +209,8 @@ class Invoker implements InvokerInterface
     }
 
     /**
-     * @param $ro
-     * @param $method
+     * @param ResourceObject $ro
+     * @param string         $method
      *
      * @return string[]
      */
