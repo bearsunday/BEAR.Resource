@@ -193,7 +193,7 @@ class Invoker implements InvokerInterface
     {
         $ref = new \ReflectionClass($ro);
         $methods = $ref->getMethods();
-        $allow = [];
+        $allow = $params = [];
         foreach ($methods as $method) {
             $isRequestMethod = (substr($method->name, 0, 2) === 'on') && (substr($method->name, 0, 6) !== 'onLink');
             if ($isRequestMethod) {
