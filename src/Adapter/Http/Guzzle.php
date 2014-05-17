@@ -6,6 +6,7 @@
  */
 namespace BEAR\Resource\Adapter\Http;
 
+use BEAR\Resource\AbstractRequest;
 use BEAR\Resource\Request;
 use BEAR\Resource\ResourceObject;
 use GuzzleHttp\Message\ResponseInterface;
@@ -145,7 +146,7 @@ class Guzzle extends ResourceObject implements HttpClientInterface
      *
      * @return void
      */
-    public function onSync(Request $request, \ArrayObject $syncData)
+    public function onSync(AbstractRequest $request, \ArrayObject $syncData)
     {
         $syncData[] = $request;
     }
@@ -158,7 +159,7 @@ class Guzzle extends ResourceObject implements HttpClientInterface
      *
      * @return \BEAR\Resource\Adapter\Http\Guzzle
      */
-    public function onFinalSync(Request $request, \ArrayObject $syncData)
+    public function onFinalSync(AbstractRequest $request, \ArrayObject $syncData)
     {
         unset($request);
 

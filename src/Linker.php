@@ -62,7 +62,7 @@ final class Linker implements LinkerInterface
     /**
      * {@inheritDoc}
      */
-    public function invoke(Request $request)
+    public function invoke(AbstractRequest $request)
     {
         $current = clone $request->ro;
         foreach ($request->links as $link) {

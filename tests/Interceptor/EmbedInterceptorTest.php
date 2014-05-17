@@ -2,6 +2,7 @@
 
 namespace BEAR\Resource\Interceptor;
 
+use BEAR\Resource\AbstractRequest;
 use BEAR\Resource\Module\ResourceModule;
 use BEAR\Resource\Renderer\JsonRenderer;
 use BEAR\Resource\Request;
@@ -97,7 +98,7 @@ class EmbedInterceptorTest extends \PHPUnit_Framework_TestCase
      *
      * @depends testEmbedAnnotation
      */
-    public function testEmbedChangeQuery(Request $request)
+    public function testEmbedChangeQuery(AbstractRequest $request)
     {
         $request->withQuery(['id' => 100]);
         $this->assertSame('app://self/bird/sparrow?id=100', $request->toUri());

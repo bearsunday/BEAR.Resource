@@ -168,7 +168,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends request
      */
-    public function testIterator(Request $request)
+    public function testIterator(AbstractRequest $request)
     {
         $result = [];
         foreach ($request as $row) {
@@ -194,7 +194,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends request
      */
-    public function testArrayAccess(Request $request)
+    public function testArrayAccess(AbstractRequest $request)
     {
         $result = $request[100];
         $expected = array(
@@ -218,7 +218,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends request
      */
-    public function testIsSet(Request $request)
+    public function testIsSet(AbstractRequest $request)
     {
         $result = isset($request[100]);
         $this->assertTrue($result);
