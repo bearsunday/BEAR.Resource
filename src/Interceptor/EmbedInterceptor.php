@@ -35,6 +35,11 @@ final class EmbedInterceptor implements MethodInterceptor
     private $reader;
 
     /**
+     * @var \Ray\Aop\NamedArgsInterface
+     */
+    private $namedArgs;
+
+    /**
      * @param ResourceInterface $resource
      *
      * @Inject
