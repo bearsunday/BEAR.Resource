@@ -23,11 +23,6 @@ final class Meta
      */
     public $extras = [];
 
-    /**
-     * @var string
-     */
-    private $class;
-
     const EXTRAS_VENDOR = 'vendor';
     const EXTRAS_PACKAGE = 'package';
 
@@ -36,7 +31,6 @@ final class Meta
      */
     public function __construct($class)
     {
-        $this->class = $class;
         $this->uri = $this->getUri($class);
         $this->options = $this->getOptions($class);
     }
@@ -62,13 +56,13 @@ final class Meta
     /**
      * Return available resource request method
      *
-     * @param ResourceObject $ro
+     * @param string $class
      *
      * @return Options
      */
-    private function getOptions($ro)
+    private function getOptions($class)
     {
-        $ref = new \ReflectionClass($ro);
+        $ref = new \ReflectionClass($class);
         $methods = $ref->getMethods();
         $allow = [];
         foreach ($methods as $method) {
@@ -79,7 +73,7 @@ final class Meta
         }
         $params = [];
         foreach ($allow as $method) {
-            $params[] = $this->getParams($ro, $method);
+            $params[] = $this->getParams($class, $method);
         }
         $options = new Options($allow, $params);
 
@@ -87,14 +81,14 @@ final class Meta
     }
 
     /**
-     * @param string $ro
+     * @param string $class
      * @param string $method
      *
      * @return Params
      */
-    private function getParams($ro, $method)
+    private function getParams($class, $method)
     {
-        $refMethod = new \ReflectionMethod($ro, 'on' . $method);
+        $refMethod = new \ReflectionMethod($class, 'on' . $method);
         $parameters = $refMethod->getParameters();
         $optionalParams = $requiredParams = [];
         foreach ($parameters as $parameter) {
