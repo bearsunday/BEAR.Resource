@@ -72,7 +72,7 @@ final class EmbedInterceptor implements MethodInterceptor
                 throw new EmbedException($embed->src, 500, $e);
             } catch (ResourceNotFound $e) {
                 throw new EmbedException($embed->src, 500, $e);
-        }
+            }
         }
         return $result;
     }
