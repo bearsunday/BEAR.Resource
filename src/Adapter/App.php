@@ -82,7 +82,7 @@ class App implements AdapterInterface, \IteratorAggregate
     }
 
     /**
-     * {@inheritdoc}
+     * @return \Iterator
      */
     public function getIterator()
     {
