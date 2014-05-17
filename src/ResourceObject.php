@@ -133,8 +133,12 @@ abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggrega
     public function ksort()
     {
         $isTraversal = (is_array($this->body) || $this->body instanceof \Traversable);
+        if (! $isTraversal) {
+            return $this->body;
+        }
+        $body = (array) $this->body;
 
-        return $isTraversal ? ksort($this->body): [$this->body];
+        return ksort($body);
     }
 
     /**
@@ -145,8 +149,12 @@ abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggrega
     public function asort()
     {
         $isTraversal = (is_array($this->body) || $this->body instanceof \Traversable);
+        if (! $isTraversal) {
+            return $this->body;
+        }
+        $body = (array) $this->body;
 
-        return $isTraversal ? asort($this->body): [$this->body];
+        return asort($body);
     }
 
     /**
