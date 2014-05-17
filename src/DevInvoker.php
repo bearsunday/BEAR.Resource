@@ -50,6 +50,17 @@ class DevInvoker extends Invoker implements InvokerInterface
         if ((!$request->ro instanceof Weave) && method_exists($request->ro, $method) !== true) {
             throw new Exception\MethodNotAllowed(get_class($request->ro) . "::$method()", 405);
         }
+        return $this->devInvoke($resource, $request);
+    }
+
+    /**
+     * @param ResourceObject   $resource
+     * @param RequestInterface $request
+     *
+     * @return ResourceObject|mixed|null|resource|void
+     */
+    private function devInvoke(ResourceObject $resource, RequestInterface $request)
+    {
         $resource->headers[self::HEADER_QUERY] = json_encode($request->query);
         $time = microtime(true);
         $memory = memory_get_usage();
