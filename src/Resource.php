@@ -195,6 +195,7 @@ class Resource implements ResourceInterface
             $uri = $parsed['scheme'] . '://' . $parsed['host'] . $parsed['path'];
             if (isset($parsed['query'])) {
                 parse_str($parsed['query'], $query);
+                /** @var $query array */
                 $this->withQuery($query);
             }
         }
