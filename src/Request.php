@@ -6,7 +6,6 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\LogicException;
 use OutOfBoundsException;
 use Ray\Di\Di\Inject;
 

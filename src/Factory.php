@@ -74,7 +74,7 @@ class Factory implements FactoryInterface, \IteratorAggregate
     }
 
     /**
-     * @param $uri
+     * @param string $uri
      *
      * @return array [$scheme, $host]
      * @throws Exception\Uri
