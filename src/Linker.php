@@ -105,14 +105,14 @@ final class Linker implements LinkerInterface
     /**
      * Annotation link
      *
-     * @param LinkType       $link
-     * @param ResourceObject $current
-     * @param Request        $request
+     * @param LinkType        $link
+     * @param ResourceObject  $current
+     * @param AbstractRequest $request
      *
      * @return ResourceObject|mixed
      * @throws Exception\LinkQuery
      */
-    private function annotationLink(LinkType $link, ResourceObject $current, Request $request)
+    private function annotationLink(LinkType $link, ResourceObject $current, AbstractRequest $request)
     {
         if (!(is_array($current->body))) {
             throw new Exception\LinkQuery('Only array is allowed for link in ' . get_class($current));
