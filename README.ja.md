@@ -21,7 +21,6 @@ RESTのWebサービスの特徴をオブジェクトに持たせる事ができ�
 
 
 ```php
-
 namespace MyVendor\Sandbox\Blog;
 
 class Author extends ResourceObject
@@ -449,7 +448,6 @@ class News extends ResourceObject
 
 このNewsリソースでは`headline`と`sports`と同様に`weather`というリソースのリクエストを埋め込みます。
 
-```
 ### HAL (Hypertext Application Language)
 
 HAL Moduleを使うとリソース表現が[HAL](http://stateless.co/hal_specification.html)になります。リソースに埋め込まれたリクエストはHALでも埋め込みリソースとして評価されます。
