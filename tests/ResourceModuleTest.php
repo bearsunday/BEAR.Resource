@@ -178,7 +178,7 @@ namespace BEAR\Resource {
     "blog_id": 12,
     "_links": {
         "self": {
-            "href": "app://self/link/user?id=1"
+            "href": "/api/link/user?id=1"
         }
     }
 }';

@@ -11,17 +11,30 @@ use BEAR\Resource\Exception;
 use BEAR\Resource\Annotation\Link;
 use BEAR\Resource\RenderInterface;
 use BEAR\Resource\ResourceObject;
+use BEAR\Resource\UriMapperInterface;
 use Nocarrier\Hal;
+use Ray\Di\Di\Inject;
 
 class HalRenderer implements RenderInterface
 {
+    /**
+     * @var UriMapperInterface
+     */
+    private $mapper;
+
     /**
      * @var \SplObjectStorage
      */
     private $embed;
 
-    public function __construct()
+    /**
+     * @param UriMapperInterface $reverseMap
+     *
+     * @Inject
+     */
+    public function __construct(UriMapperInterface $mapper)
     {
+        $this->mapper = $mapper;
         $this->embed = new \SplObjectStorage;
     }
 
@@ -52,13 +65,15 @@ class HalRenderer implements RenderInterface
      */
     private function getHal(ResourceObject $ro, $data)
     {
-        $hal = new Hal($ro->uri, $data);
+        $uri = $this->mapper->reverseMap($ro->uri);
+        $hal = new Hal($uri, $data);
         foreach ($ro->links as $rel => $link) {
             $attr = (isset($link[Link::TEMPLATED]) && $link[Link::TEMPLATED] === true) ? [Link::TEMPLATED => true] : [];
             if (!isset($link[Link::HREF])) {
                 throw new Exception\HrefNotFound($rel);
             }
-            $hal->addLink($rel, $link[Link::HREF], $attr);
+            $link = $this->mapper->reverseMap($link[Link::HREF]);
+            $hal->addLink($rel, $link, $attr);
         }
 
         return $hal;
@@ -93,7 +108,8 @@ class HalRenderer implements RenderInterface
             $rel = $this->embed[$request];
             $ro = $request();
             $data = $ro->jsonSerialize();
-            $embedHal = new Hal($ro->uri, $data);
+            $uri = $this->mapper->reverseMap($ro->uri);
+            $embedHal = new Hal($uri, $data);
             $hal->addResource($rel, $embedHal);
         }
     }

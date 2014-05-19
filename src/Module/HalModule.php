@@ -16,6 +16,7 @@ class HalModule extends AbstractModule
      */
     protected function configure()
     {
+        $this->bind('BEAR\Resource\UriMapperInterface')->to('BEAR\Resource\UriMapper');
         $this->bind('BEAR\Resource\RenderInterface')->to('BEAR\Resource\Renderer\HalRenderer')->in(Scope::SINGLETON);
     }
 }
