@@ -37,4 +37,12 @@ class UriMapperTest extends \PHPUnit_Framework_TestCase
         $href = $this->uriMapper->reverseMap('app://blog/posts');
         $this->assertSame('/api_base/posts', $href);
     }
+
+    /**
+     * @expectedException \BEAR\Resource\Exception\Uri
+     */
+    public function testReverseException()
+    {
+        $this->uriMapper->reverseMap('invalid_uri');
+    }
 }
