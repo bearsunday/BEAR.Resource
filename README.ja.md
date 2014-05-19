@@ -428,41 +428,73 @@ $resource->attachParamProvider('*', new OnProvidesParam);
 ```
 
 
-### クリーンなレイヤード構造
+### 埋め込みリソース
 
-リソースはリソースで構成されます。リソースはサービスでもありますが、リソースのクライアントにもなりリソースはレイヤードの構造になります。
-リソースはRay.Diインジェクターでインジェクションとアスペクトの織り込みが行われ、関心の分離したクリーンなオブジェクトでリソースを構成できます。
+`@Embed`アノテーションを使って他のリソースを自身のリソースに埋め込む事が出来ます。`HTML`の`<img src="image_url">`や`<iframe src="content_url">`と同じ様に`src`で埋め込むリソースを指定します。
 
 ```php
-
 class News extends ResourceObject
 {
     /**
-     * @Inject
-     */
-    public function __construct(ResourceInterface $resource)
-    {
-        $this->resource = $resource;
-    }
-
-    /**
-     * @Auth
-     * @Cache(60)
+     * @Embed(rel="weather",src="app://self/weather/today")
      */
     public function onGet()
     {
-        $this['domestic'] = $this->resource->get->uri('app://self/news/domestic')->request();
-        $this['international'] = $this->resource->get->uri('app://news/international/')->request();
-        $this['breaking'] = [
-            $this->resource->get->uri('app://self/news/domestic/breaking')->request();
-            $this->resource->get->uri('app://self/news/international/breaking')->request();
-        ];
-
+        $this['headline'] = "...";
+        $this['sports'] = "...";
+        
         return $this;
-    }```
+    }
 }
+このNewsリソースでは`headline`と`sports`と同様に`weather`というリソースのリクエストを埋め込みます。リクエストは表になるときに遅延評価されます。
+
 ```
-このようにリソースに値`eager`ではなくリクエストを含むリソースでも内包するリソースリクエストの値は遅延評価されます。
+### HAL (Hypertext Application Language)
+
+HAL Moduleを使うとリソース表現が[HAL](http://stateless.co/hal_specification.html)になります。リソースに埋め込まれたリクエストはHALでも埋め込みリソースとして評価されます。
+
+```php
+    // create resource client with HalModule
+    $resource = Injector::create([new ResourceModule('MyVendor\MyApp'), new HalModule])->getInstance('BEAR\Resource\ResourceInterface');
+    // request
+    $news = $resource
+        ->get
+        ->uri('app://self/news')
+        ->withQuery(['date' => 'today'])
+        ->request();
+    // output
+    echo $news . PHP_EOL;
+
+```
+
+結果
+```javascript
+{
+    "headline": "40th anniversary of Rubik's Cube invention.",
+    "sports": "Pieter Weening wins Giro d'Italia.",
+    "_links": {
+        "self": {
+            "href": "/api/news?date=today"
+        }
+    },
+    "_embedded": {
+        "weather": [
+            {
+                "today": "the weather of today is sunny",
+                "_links": {
+                    "self": {
+                        "href": "/api/weather?date=today"
+                    },
+                    "tomorrow": {
+                        "href": "/api/weather/tomorrow"
+                    }
+                }
+            }
+        ]
+    }
+}
+
+```
 
 Installation
 ============
