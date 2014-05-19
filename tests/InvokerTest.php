@@ -39,6 +39,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $signal = new Manager(new HandlerFactory, new ResultFactory, new ResultCollection);
         $params = new NamedParameter(new SignalParameter($signal, new Param));
         $this->invoker = new Invoker(new Linker(new Reader), $params);
+        $this->invoker->setOptionProvider(new OptionProvider);
 
         $resource = new User;
         $resource->uri = 'dummy://self/User';

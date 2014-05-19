@@ -212,9 +212,6 @@ abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggrega
 
     public function jsonSerialize()
     {
-        if ($this->renderer instanceof RenderInterface && $this->renderer instanceof JsonSerializable) {
-            return $this->renderer->jsonSerialize();
-        }
         $body = $this->body;
         $isTraversable = is_array($body) || $body instanceof \Traversable;
         if (! $isTraversable) {

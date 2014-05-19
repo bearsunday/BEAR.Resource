@@ -17,7 +17,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->resource = new Mock\Entry();
+        $this->resource = new Mock\Entry;
         $this->resource[0] = 'entry1';
         $this->resource[1] = 'entry2';
         $this->resource[2] = 'entry3';
@@ -52,7 +52,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
 
     public function testKsort()
     {
-        $this->resource = new Mock\Entry();
+        $this->resource = new Mock\Entry;
         $this->resource['d'] = 'lemon';
         $this->resource['a'] = 'orange';
         $this->resource['b'] = 'banana';
@@ -63,7 +63,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
 
     public function testAsort()
     {
-        $this->resource = new Mock\Entry();
+        $this->resource = new Mock\Entry;
         $this->resource['d'] = 'lemon';
         $this->resource['a'] = 'orange';
         $this->resource['b'] = 'banana';
@@ -71,6 +71,23 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $expected = array('b' => 'banana', 'd' => 'lemon', 'a' => 'orange');
         $this->assertSame($expected, (array) $this->resource->body);
     }
+
+    public function testAsortDisable()
+    {
+        $resource = new Mock\Entry;
+        $resource->body = 1;
+        $resource->asort();
+        $this->assertSame(1, $resource->body);
+    }
+
+    public function testKsortDisable()
+    {
+        $resource = new Mock\Entry;
+        $resource->body = 1;
+        $resource->ksort();
+        $this->assertSame(1, $resource->body);
+    }
+
 
     public function testAppend()
     {
