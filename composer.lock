@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "07da7c9aa649f8d01ef6936fe8c119b9",
+    "hash": "4b8303e42c3586dc2d4f23e3edc88a35",
     "packages": [
         {
             "name": "any/serializer",
@@ -613,21 +613,21 @@
         },
         {
             "name": "ray/aop",
-            "version": "1.2.4",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Ray.Aop.git",
-                "reference": "8a6fcdb80725288b8ac6829ee138031a67d698e1"
+                "reference": "cc114558bf76ed91474b7f857183d03ab8bffb4a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Ray.Aop/zipball/8a6fcdb80725288b8ac6829ee138031a67d698e1",
-                "reference": "8a6fcdb80725288b8ac6829ee138031a67d698e1",
+                "url": "https://api.github.com/repos/koriym/Ray.Aop/zipball/cc114558bf76ed91474b7f857183d03ab8bffb4a",
+                "reference": "cc114558bf76ed91474b7f857183d03ab8bffb4a",
                 "shasum": ""
             },
             "require": {
-                "doctrine/annotations": "~1.1",
-                "nikic/php-parser": "~0.9",
+                "doctrine/annotations": "1.*",
+                "nikic/php-parser": "0.*",
                 "php": ">=5.4.0"
             },
             "suggest": {
@@ -636,7 +636,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.2.x-dev"
+                    "dev-master": "1.2-dev"
                 }
             },
             "autoload": {
@@ -661,20 +661,20 @@
                 "aop",
                 "aspect"
             ],
-            "time": "2014-05-19 10:06:55"
+            "time": "2014-05-16 03:32:30"
         },
         {
             "name": "ray/di",
-            "version": "1.3.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Ray.Di.git",
-                "reference": "cb01e44b806cc2ab19d6d3d2a55d3538bc599d50"
+                "reference": "7a6985d3436d5c934c83bc7e182999b784f26239"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/cb01e44b806cc2ab19d6d3d2a55d3538bc599d50",
-                "reference": "cb01e44b806cc2ab19d6d3d2a55d3538bc599d50",
+                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/7a6985d3436d5c934c83bc7e182999b784f26239",
+                "reference": "7a6985d3436d5c934c83bc7e182999b784f26239",
                 "shasum": ""
             },
             "require": {
@@ -722,7 +722,7 @@
                 "guice",
                 "jsr"
             ],
-            "time": "2014-05-12 15:43:58"
+            "time": "2014-05-12 15:47:10"
         }
     ],
     "packages-dev": [
@@ -768,6 +768,8 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
+        "ray/aop": 20,
+        "ray/di": 20,
         "facebook/xhprof": 20
     },
     "platform": {
