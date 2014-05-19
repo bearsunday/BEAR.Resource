@@ -159,6 +159,9 @@ class HalRendererTest extends \PHPUnit_Framework_TestCase
                 "_links": {
                     "self": {
                         "href": "/api/bird/canary"
+                    },
+                    "friend": {
+                        "href": "/api/bird/friend"
                     }
                 }
             }

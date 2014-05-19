@@ -105,12 +105,16 @@ class HalRenderer implements RenderInterface
     private function addEmbedResource(Hal $hal)
     {
         foreach ($this->embed as $request) {
-            $rel = $this->embed[$request];
+            $embedRel = $this->embed[$request];
             $ro = $request();
             $data = $ro->jsonSerialize();
             $uri = $this->mapper->reverseMap($ro->uri);
             $embedHal = new Hal($uri, $data);
-            $hal->addResource($rel, $embedHal);
+            foreach ($ro->links as $rel => $link) {
+                $mappedLink = $this->mapper->reverseMap($link);
+                $embedHal->addLink($rel, $mappedLink);
+            }
+            $hal->addResource($embedRel, $embedHal);
         }
     }
 }
