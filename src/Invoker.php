@@ -43,6 +43,11 @@ class Invoker implements InvokerInterface
     private $exceptionHandler;
 
     /**
+     * @var
+     */
+    private $optionProvider;
+
+    /**
      * Method OPTIONS
      *
      * @var string
@@ -62,7 +67,6 @@ class Invoker implements InvokerInterface
      * @var string
      */
     const ANNOTATION_PROVIDES = 'Provides';
-
 
     /**
      * {@inheritDoc}
@@ -88,6 +92,15 @@ class Invoker implements InvokerInterface
     }
 
     /**
+     * @param OptionProviderInterface $optionProvider
+     * @Inject(optional=true)
+     */
+    public function setOptionProvider(OptionProviderInterface $optionProvider)
+    {
+        $this->optionProvider = $optionProvider;
+    }
+
+    /**
      * @param LinkerInterface           $linker
      * @param NamedParameter            $params
      * @param LoggerInterface           $logger
@@ -110,11 +123,11 @@ class Invoker implements InvokerInterface
     /**
      * {@inheritDoc}
      */
-    public function invoke(Request $request)
+    public function invoke(AbstractRequest $request)
     {
         $onMethod = 'on' . ucfirst($request->method);
         if (method_exists($request->ro, $onMethod) !== true) {
-            return $this->methodNotExists($request->ro, $request, $onMethod);
+            return $this->extraMethod($request->ro, $request, $onMethod);
         }
         // invoke with Named param and Signal param
         $args = $this->params->getArgs([$request->ro, $onMethod], $request->query);
@@ -129,18 +142,24 @@ class Invoker implements InvokerInterface
             $result = $this->exceptionHandler->handle($e, $request);
         }
 
+        return $this->postRequest($request, $result);
+    }
+
+    /**
+     * @param AbstractRequest $request
+     * @param mixed           $result
+     *
+     * @return ResourceObject
+     */
+    private function postRequest(AbstractRequest $request, $result)
+    {
         if (!$result instanceof ResourceObject) {
             $request->ro->body = $result;
             $result = $request->ro;
         }
-
-        // link
-        completed:
         if ($request->links) {
             $result = $this->linker->invoke($request);
         }
-
-        // log
         if ($this->logger instanceof LoggerInterface) {
             $this->logger->log($request, $result);
         }
@@ -183,54 +202,22 @@ class Invoker implements InvokerInterface
         return $result;
     }
 
-    /**
-     * Return available resource request method
-     *
-     * @param ResourceObject $ro
-     *
-     * @return array
-     */
-    protected function getOptions(ResourceObject $ro)
-    {
-        $ref = new \ReflectionClass($ro);
-        $methods = $ref->getMethods();
-        $allow = [];
-        foreach ($methods as $method) {
-            $isRequestMethod = (substr($method->name, 0, 2) === 'on') && (substr($method->name, 0, 6) !== 'onLink');
-            if ($isRequestMethod) {
-                $allow[] = strtolower(substr($method->name, 2));
-            }
-        }
-        $params = [];
-        foreach ($allow as $method) {
-            $refMethod = new \ReflectionMethod($ro, 'on' . $method);
-            $parameters = $refMethod->getParameters();
-            $paramArray = [];
-            foreach ($parameters as $parameter) {
-                $name = $parameter->name;
-                $param = $parameter->isOptional() ? "({$name})" : $name;
-                $paramArray[] = $param;
-            }
-            $key = "param-{$method}";
-            $params[$key] = implode(',', $paramArray);
-        }
-        $result = ['allow' => $allow, 'params' => $params];
-
-        return $result;
-    }
 
     /**
-     * @param ResourceObject $ro
-     * @param Request        $request
-     * @param                string $method
+     * OPTIONS or HEAD
+     *
+     * @param ResourceObject  $ro
+     * @param AbstractRequest $request
+     * @param string          $method
      *
      * @return ResourceObject
      * @throws Exception\MethodNotAllowed
      */
-    private function methodNotExists(ResourceObject $ro, Request $request, $method)
+    private function extraMethod(ResourceObject $ro, AbstractRequest $request, $method)
     {
         if ($request->method === self::OPTIONS) {
-            return $this->onOptions($ro);
+            $optionProvider = $this->optionProvider ?: new OptionProvider;
+            return $optionProvider->get($ro);
         }
         if ($method === 'onHead' && method_exists($ro, 'onGet')) {
             return $this->onHead($request);
@@ -238,29 +225,13 @@ class Invoker implements InvokerInterface
 
         throw new Exception\MethodNotAllowed(get_class($request->ro) . "::$method()", 405);
     }
-
-    /**
-     * @param ResourceObject $ro resource object
-     *
-     * @return ResourceObject
-     */
-    private function onOptions(ResourceObject $ro)
-    {
-        $options = $this->getOptions($ro);
-        $ro->headers['allow'] = $options['allow'];
-        $ro->headers += $options['params'];
-        $ro->body = null;
-
-        return $ro;
-    }
-
     /**
      * @param Request $request
      *
      * @return ResourceObject
      * @throws Exception\ParameterInService
      */
-    private function onHead(Request $request)
+    private function onHead(AbstractRequest $request)
     {
         if (method_exists($request->ro, 'onGet')) {
             // invoke with Named param and Signal param

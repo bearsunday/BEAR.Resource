@@ -34,7 +34,6 @@ class Logger implements LoggerInterface, Countable, Serializable
      */
     private $writer;
 
-
     /**
      * @var SerializeInterface
      */

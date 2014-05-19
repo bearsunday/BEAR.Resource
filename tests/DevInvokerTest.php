@@ -7,7 +7,6 @@ use Aura\Signal\HandlerFactory;
 use Aura\Signal\ResultFactory;
 use Aura\Signal\ResultCollection;
 use Ray\Aop\Compiler;
-use Ray\Di\Definition;
 use Ray\Aop\Bind;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use BEAR\Resource\Interceptor\Log;
@@ -139,7 +138,7 @@ class DevInvokerTest extends \PHPUnit_Framework_TestCase
     public function testInvokeWeavedResourceLogInObjectHeaderContents(array $headers)
     {
         /** @noinspection PhpExpressionResultUnusedInspection */
-        (array)$headers[DevInvoker::HEADER_INTERCEPTORS];
+        (array) $headers[DevInvoker::HEADER_INTERCEPTORS];
         $this->assertSame(
             json_encode(['onGet' => ['BEAR\Resource\Interceptor\Log']]),
             $headers[DevInvoker::HEADER_INTERCEPTORS]

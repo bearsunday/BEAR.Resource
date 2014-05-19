@@ -14,11 +14,17 @@ use BEAR\Resource\Param;
 use BEAR\Resource\Request;
 use BEAR\Resource\ResourceObject;
 use BEAR\Resource\SignalParameter;
+use BEAR\Resource\UriMapper;
 use Doctrine\Common\Annotations\AnnotationReader;
+use Ray\Di\Injector;
+use BEAR\Resource\Module\ResourceModule;
 
 class MockResource extends ResourceObject
 {
+    public $uri = 'app://self/mock';
+
     public $headers = ['head1' => 1];
+
     public $body = [
         'greeting' => 'hello'
     ];
@@ -46,7 +52,7 @@ class HalRendererTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->halRenderer = new HalRenderer;
+        $this->halRenderer = new HalRenderer(new UriMapper('api'));
         $this->resource = new MockResource;
         $this->resource->uri = 'dummy://self/index';
 
@@ -89,10 +95,10 @@ class HalRendererTest extends \PHPUnit_Framework_TestCase
         $this->halRenderer->render($this->resource);
         $links = '"_links": {
         "self": {
-            "href": "dummy://self/index"
+            "href": "/api/index"
         },
         "rel1": {
-            "href": "page://self/rel1"
+            "href": "/api/rel1"
         }
     }';
         $this->assertContains($links, $this->resource->view);
@@ -127,5 +133,50 @@ class HalRendererTest extends \PHPUnit_Framework_TestCase
         $this->resource->setRenderer($this->halRenderer);
         $this->halRenderer->render($this->resource);
         $this->assertContains('"greeting": "hello"', $this->resource->view);
+    }
+
+    public function testEmbedResource()
+    {
+        $resource = Injector::create([new ResourceModule('TestVendor\Sandbox')])->getInstance('BEAR\Resource\ResourceInterface');
+        $resourceObject = $resource
+            ->get
+            ->uri('app://self/bird/birds')
+            ->withQuery(['id' => 1])
+            ->eager
+            ->request();
+        $resourceObject->setRenderer($this->halRenderer);
+        $hal = (string) $resourceObject;
+        $this->assertSame('{
+    "_links": {
+        "self": {
+            "href": "/api/bird/birds?id=1"
+        }
+    },
+    "_embedded": {
+        "bird1": [
+            {
+                "name": "chill kun",
+                "_links": {
+                    "self": {
+                        "href": "/api/bird/canary"
+                    },
+                    "friend": {
+                        "href": "/api/bird/friend"
+                    }
+                }
+            }
+        ],
+        "bird2": [
+            {
+                "sparrow_id": "1",
+                "_links": {
+                    "self": {
+                        "href": "/api/bird/sparrow?id=1"
+                    }
+                }
+            }
+        ]
+    }
+}', $hal);
     }
 }

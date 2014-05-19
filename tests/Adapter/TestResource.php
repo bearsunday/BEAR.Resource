@@ -12,4 +12,8 @@ class TestResource extends ResourceObject
 
         return $this;
     }
+
+    public function onPut()
+    {
+    }
 }

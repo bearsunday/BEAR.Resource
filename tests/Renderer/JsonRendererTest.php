@@ -3,7 +3,6 @@
 namespace BEAR\Resource\Renderer;
 
 use BEAR\Resource\ResourceObject;
-use Ray\Di\Definition;
 
 class Root extends ResourceObject
 {
@@ -11,6 +10,7 @@ class Root extends ResourceObject
     {
         $this['one'] = 1;
         $this['two'] = $GLOBALS['RESOURCE']->get->object(new Child)->request();
+
         return $this;
     }
 }
@@ -20,10 +20,10 @@ class Child extends ResourceObject
     public function onGet()
     {
         $this['tree'] = 3;
+
         return $this;
     }
 }
-
 
 class JsonRendererTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,7 +36,7 @@ class JsonRendererTest extends \PHPUnit_Framework_TestCase
     public function testRender()
     {
         $ro = $this->ro->onGet();
-        $data = (string)$ro;
+        $data = (string) $ro;
         $expected = '{"one":1,"two":{"tree":3}}';
         $this->assertSame($expected, $data);
     }
@@ -44,7 +44,7 @@ class JsonRendererTest extends \PHPUnit_Framework_TestCase
     public function testRenderScalar()
     {
         $this->ro->body = 1;
-        $data = (string)$this->ro;
+        $data = (string) $this->ro;
         $expected = '{"value":1}';
         $this->assertSame($expected, $data);
     }
@@ -52,7 +52,7 @@ class JsonRendererTest extends \PHPUnit_Framework_TestCase
     public function testError()
     {
         $this->ro['inf'] = log(0);
-        $data = (string)$this->ro;
+        $data = (string) $this->ro;
         $this->assertInternalType('string', $data);
     }
 }

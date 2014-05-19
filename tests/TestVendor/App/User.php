@@ -7,8 +7,6 @@ use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Annotation\Provides;
 use BEAR\Resource\Annotation\ParamSignal;
 
-use Ray\Di\Di\Scope;
-
 class User extends ResourceObject
 {
     public $headers = [
@@ -42,7 +40,7 @@ class User extends ResourceObject
     }
 
     /**
-     * @param string $noProvide
+     * @param  string $noProvide
      * @return string
      */
     public function onPut($noProvide)

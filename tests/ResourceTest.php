@@ -9,14 +9,9 @@ use Aura\Signal\ResultFactory;
 use BEAR\Resource\Mock\TestModule;
 use BEAR\Resource\ParamProvider\OnProvidesParam;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Cache\FilesystemCache;
-use Guzzle\Cache\DoctrineCacheAdapter as CacheAdapter;
-use Guzzle\Parser\UriTemplate\UriTemplate;
-use Ray\Di\Definition;
 use Ray\Di\Injector;
-use BEAR\Resource\Renderer\TestRenderer;
-use TestVendor\Sandbox\Resource\App\Link;
 use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\Cache\Cache as CacheAdapter;
 
 class varProvider implements ParamProviderInterface
 {
@@ -28,7 +23,7 @@ class varProvider implements ParamProviderInterface
 
 class TestExceptionHandler implements ExceptionHandlerInterface
 {
-    public function handle(\Exception $e, Request $request)
+    public function handle(\Exception $e, AbstractRequest $request)
     {
         throw new \RuntimeException('', 0, $e);
     }
@@ -59,10 +54,10 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $injector = Injector::create([new TestModule]);
         $scheme = new SchemeCollection;
         $scheme->scheme('app')->host('self')->toAdapter(
-            new Adapter\App($injector, 'TestVendor\Sandbox', 'Resource\App')
+            new Adapter\App($injector, 'TestVendor\Sandbox', 'Resource\App', $_ENV['TEST_DIR'] . '/TestVendor/App')
         );
         $scheme->scheme('page')->host('self')->toAdapter(
-            new Adapter\App($injector, 'TestVendor\Sandbox', 'Resource\Page')
+            new Adapter\App($injector, 'TestVendor\Sandbox', 'Resource\Page', $_ENV['TEST_DIR'] . '/TestVendor/Page')
         );
         $scheme->scheme('nop')->host('self')->toAdapter(new Adapter\Nop);
         $scheme->scheme('test')->host('self')->toAdapter(new Adapter\Test);
@@ -186,7 +181,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->resource->get->uri('nop://self/dummy')->withQuery($this->query);
         $expected = "nop://self/dummy?id=10&name=Ray&age=43";
-        $this->assertSame($expected, (string)$client);
+        $this->assertSame($expected, (string) $client);
     }
 
     public function testPutWithDefaultParameter()
@@ -252,9 +247,9 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->resource = require $_ENV['PACKAGE_DIR'] . '/scripts/instance.php';
 
         $invoker = new Invoker(new Linker(new AnnotationReader), new NamedParameter(new SignalParameter(new Manager(new HandlerFactory, new ResultFactory, new ResultCollection), new Param)), new Logger);
-        $resource = new Resource(new Factory($scheme), $invoker, new Request($invoker), new Anchor(new UriTemplate, new AnnotationReader, new Request($invoker)));
+        $resource = new Resource(new Factory($scheme), $invoker, new Request($invoker), new Anchor(new AnnotationReader, new Request($invoker)));
         $request = $resource->get->uri('test://self/path/to/example')->withQuery(['a' => 1, 'b' => 2])->request();
-        $this->assertSame('{"posts":[1,2]}', (string)$request);
+        $this->assertSame('{"posts":[1,2]}', (string) $request);
         $this->assertSame(['posts' => [1, 2]], $request()->body);
     }
 
@@ -423,6 +418,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
             $resource->put->uri('app://self/param/user')->withQuery($validParams)->eager->request();
         } catch (\Exception $e) {
             $this->assertInstanceOf('BEAR\Resource\Exception\ParameterInService', $e);
+
             return $e;
         }
     }
@@ -447,14 +443,14 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
             new Adapter\App($injector, 'TestVendor\Sandbox', 'Resource\App')
         );
         $invoker = new Invoker(
-            new Linker(new AnnotationReader, new ArrayCache, new UriTemplate),
+            new Linker(new AnnotationReader, new ArrayCache),
             new NamedParameter()
         );
         $resource = new Resource(
             new Factory($scheme),
             $invoker,
             new Request($invoker),
-            new Anchor(new UriTemplate, new AnnotationReader, new Request($invoker))
+            new Anchor(new AnnotationReader, new Request($invoker))
         );
 
         $insufficientParams = [];
@@ -478,4 +474,12 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual->body);
     }
 
+    public function testIterator()
+    {
+        $i = 0;
+        foreach ($this->resource as $meta) {
+            $this->assertInstanceOf('BEAR\Resource\Meta', $meta);
+            $i++;
+        }
+    }
 }

@@ -3,7 +3,6 @@
 namespace TestVendor\Sandbox\Resource\App\Param;
 
 use BEAR\Resource\ResourceObject;
-use Ray\Di\Di\Scope;
 
 class User extends ResourceObject
 {
@@ -17,6 +16,7 @@ class User extends ResourceObject
             /** @var $resource \BEAR\Resource\ResourceInterface */
             $resource->put->uri('app://self/param/user')->withQuery([])->eager->request();
         }
+
         return "author:{$author_id}";
     }
 

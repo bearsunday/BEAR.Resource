@@ -6,30 +6,11 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception;
-use Guzzle\Parser\UriTemplate\UriTemplateInterface;
-use Ray\Di\Di\Inject;
-
 /**
  * Anchor
  */
 class A implements HrefInterface
 {
-    /**
-     * @var UriTemplateInterface
-     */
-    protected $uriTemplate;
-
-    /**
-     * @param UriTemplateInterface $uriTemplate
-     *
-     * @Inject
-     */
-    public function __construct(UriTemplateInterface $uriTemplate)
-    {
-        $this->uriTemplate = $uriTemplate;
-    }
-
     /**
      * Return hyper reference URI
      *
@@ -46,7 +27,7 @@ class A implements HrefInterface
         }
         $link = $ro->links[$rel];
         $isTemplated = (isset($link[Link::TEMPLATED]) && $link[Link::TEMPLATED] === true);
-        $uri = $isTemplated ? $this->uriTemplate->expand($link[Link::HREF], $ro->body) : $link[Link::HREF];
+        $uri = $isTemplated ? \GuzzleHttp\uri_template($link[Link::HREF], $ro->body) : $link[Link::HREF];
 
         return $uri;
     }

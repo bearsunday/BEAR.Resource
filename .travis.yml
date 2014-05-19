@@ -10,20 +10,8 @@ matrix:
   allow_failures:
     - php: hhvm
 
-env:
-  - GUZZLE_VERSION="3.0.*"
-  - GUZZLE_VERSION="3.1.*"
-  - GUZZLE_VERSION="3.2.*"
-  - GUZZLE_VERSION="3.3.*"
-  - GUZZLE_VERSION="3.4.*"
-  - GUZZLE_VERSION="3.5.*"
-  - GUZZLE_VERSION="3.6.*"
-  - GUZZLE_VERSION="3.7.*"
-  - GUZZLE_VERSION="~3.0"
-
 before_install:
- - composer selfupdate
- - composer require guzzle/guzzle:${GUZZLE_VERSION}
+ - composer self-update
  - composer install
  - wget http://cs.sensiolabs.org/get/php-cs-fixer.phar
  - wget https://scrutinizer-ci.com/ocular.phar

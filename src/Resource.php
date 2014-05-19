@@ -6,12 +6,12 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception;
 use Doctrine\Common\Cache\Cache;
 use SplObjectStorage;
 use Ray\Di\Di\Scope;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
+use Traversable;
 
 /**
  * Resource client
@@ -146,8 +146,8 @@ class Resource implements ResourceInterface
         }
 
         $useCache = $this->cache instanceof Cache;
+        $key = $this->appName . 'res-' . str_replace('/', '-', $uri);
         if ($useCache === true) {
-            $key = $this->appName . 'res-' . str_replace('/', '-', $uri);
             $cached = $this->cache->fetch($key);
             if ($cached) {
                 return $cached;
@@ -155,7 +155,6 @@ class Resource implements ResourceInterface
         }
         $instance = $this->factory->newInstance($uri);
         if ($useCache === true) {
-            /** @noinspection PhpUndefinedVariableInspection */
             $this->cache->save($key, $instance);
         }
         $this->resourceObjects[$uri] = $instance;
@@ -196,6 +195,7 @@ class Resource implements ResourceInterface
             $uri = $parsed['scheme'] . '://' . $parsed['host'] . $parsed['path'];
             if (isset($parsed['query'])) {
                 parse_str($parsed['query'], $query);
+                /** @var $query array */
                 $this->withQuery($query);
             }
         }
@@ -295,7 +295,6 @@ class Resource implements ResourceInterface
         return $this->invoker->invokeSync($this->requests);
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -347,5 +346,15 @@ class Resource implements ResourceInterface
     public function __toString()
     {
         return $this->request->toUri();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \ArrayIterator|\MultipleIterator|Traversable
+     */
+    public function getIterator()
+    {
+        return $this->factory->getIterator();
     }
 }

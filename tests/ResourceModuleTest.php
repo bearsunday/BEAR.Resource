@@ -11,6 +11,7 @@ namespace MyVendor\Sandbox\Resource\Page {
         public function onGet($name)
         {
             $this->name = $name;
+
             return $this;
         }
     }
@@ -96,7 +97,6 @@ namespace BEAR\Resource {
         }
     }
 
-
     class ResourceModuleTest extends \PHPUnit_Framework_TestCase
     {
         /**
@@ -163,9 +163,9 @@ namespace BEAR\Resource {
         {
             $resource = Injector::create([new ResourceModule('TestVendor\Sandbox'), new JsonModule])->getInstance('BEAR\Resource\ResourceInterface');
             $user = $resource->get->uri('app://self/link/user')->withQuery(['id' => 1])->eager->request();
-            $j = (string)$user;
+            $j = (string) $user;
             $expected = '{"name":"Aramis","age":16,"blog_id":12}';
-            $this->assertSame($expected, (string)$user);
+            $this->assertSame($expected, (string) $user);
         }
 
         public function testHal()
@@ -178,11 +178,11 @@ namespace BEAR\Resource {
     "blog_id": 12,
     "_links": {
         "self": {
-            "href": "app://self/link/user?id=1"
+            "href": "/api/link/user?id=1"
         }
     }
 }';
-            $this->assertSame($expected, (string)$user);
+            $this->assertSame($expected, (string) $user);
 
             return $user;
         }

@@ -9,13 +9,14 @@ namespace BEAR\Resource;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Scope;
 use Ray\Di\Exception\NotReadable;
+use Traversable;
 
 /**
  * Resource object factory
  *
  * @Scope("singleton")
  */
-class Factory implements FactoryInterface
+class Factory implements FactoryInterface, \IteratorAggregate
 {
     /**
      * Resource adapter biding config
@@ -52,15 +53,7 @@ class Factory implements FactoryInterface
      */
     public function newInstance($uri)
     {
-        $parsedUrl = parse_url($uri);
-        if (!(isset($parsedUrl['scheme']) && isset($parsedUrl['scheme']))) {
-            throw new Exception\Uri;
-        }
-        $scheme = $parsedUrl['scheme'];
-        $host = $parsedUrl['host'];
-        if (!isset($this->scheme[$scheme])) {
-            throw new Exception\Scheme($uri);
-        }
+        list($scheme, $host) = $this->parseUri($uri);
         if (!isset($this->scheme[$scheme][$host])) {
             if (!(isset($this->scheme[$scheme]['*']))) {
                 throw new Exception\Scheme($uri);
@@ -81,6 +74,28 @@ class Factory implements FactoryInterface
     }
 
     /**
+     * @param string $uri
+     *
+     * @return array [$scheme, $host]
+     * @throws Exception\Uri
+     * @throws Exception\Scheme
+     */
+    private function parseUri($uri)
+    {
+        $parsedUrl = parse_url($uri);
+        if (!(isset($parsedUrl['scheme']) && isset($parsedUrl['scheme']))) {
+            throw new Exception\Uri;
+        }
+        $scheme = $parsedUrl['scheme'];
+        $host = $parsedUrl['host'];
+        if (!isset($this->scheme[$scheme])) {
+            throw new Exception\Scheme($uri);
+        }
+
+        return [$scheme, $host];
+    }
+
+    /**
      * @param string      $uri
      * @param NotReadable $e
      *
@@ -95,5 +110,15 @@ class Factory implements FactoryInterface
         $resourceObject = $this->newInstance($uri . 'index');
 
         return $resourceObject;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \ArrayIterator|\MultipleIterator|Traversable
+     */
+    public function getIterator()
+    {
+        return $this->scheme->getIterator();
     }
 }

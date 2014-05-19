@@ -12,6 +12,16 @@ namespace BEAR\Resource\Annotation;
  */
 final class Link implements AnnotationInterface
 {
+    const REL = 'rel';
+
+    const SRC = 'src';
+
+    const HREF = 'href';
+
+    const TITLE = 'title';
+
+    const TEMPLATED = 'templated';
+
     /**
      * @var string
      */
@@ -25,7 +35,7 @@ final class Link implements AnnotationInterface
     public $rel;
 
     /**
-     * Hyper reference
+     * Hyper reference uri
      *
      * @var string
      */
@@ -37,4 +47,11 @@ final class Link implements AnnotationInterface
      * @var string
      */
     public $method = 'get';
+
+    /**
+     * Embed resource uri
+     *
+     * @var string
+     */
+    public $src;
 }

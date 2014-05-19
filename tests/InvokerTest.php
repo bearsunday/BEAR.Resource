@@ -7,12 +7,9 @@ use Aura\Signal\HandlerFactory;
 use Aura\Signal\ResultFactory;
 use Aura\Signal\ResultCollection;
 use Ray\Aop\Compiler;
-use Ray\Di\Definition;
-use Ray\Di\Injector;
 use Ray\Aop\Bind;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use BEAR\Resource\Interceptor\Log;
-use TestVendor\Sandbox\Resource\App\Link;
 use TestVendor\Sandbox\Resource\App\Restbucks\Order;
 use TestVendor\Sandbox\Resource\App\User;
 use TestVendor\Sandbox\Resource\App\Param\User as ParamUser;
@@ -42,6 +39,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $signal = new Manager(new HandlerFactory, new ResultFactory, new ResultCollection);
         $params = new NamedParameter(new SignalParameter($signal, new Param));
         $this->invoker = new Invoker(new Linker(new Reader), $params);
+        $this->invoker->setOptionProvider(new OptionProvider);
 
         $resource = new User;
         $resource->uri = 'dummy://self/User';
@@ -121,7 +119,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         ]);
         $actual = $this->invoker->invokeTraversal($body);
         $expected = new \ArrayObject(['a' => 1, 'b' => 2]);
-        $this->assertSame((array)$expected, (array)$actual);
+        $this->assertSame((array) $expected, (array) $actual);
     }
 
     public function testInvokeWeave()

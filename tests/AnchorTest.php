@@ -2,13 +2,10 @@
 
 namespace BEAR\Resource;
 
-use Guzzle\Parser\UriTemplate\UriTemplate;
 use Aura\Signal\Manager;
 use Aura\Signal\HandlerFactory;
 use Aura\Signal\ResultFactory;
 use Aura\Signal\ResultCollection;
-use Ray\Di\Definition;
-use Ray\Di\Injector;
 use Doctrine\Common\Annotations\AnnotationReader;
 
 class AnchorTest extends \PHPUnit_Framework_TestCase
@@ -38,7 +35,7 @@ class AnchorTest extends \PHPUnit_Framework_TestCase
         $invoker = new Invoker(new Linker(new AnnotationReader), $params);
         $this->request = new Request($invoker);
 
-        $this->anchor = new Anchor(new UriTemplate, new AnnotationReader, $this->request);
+        $this->anchor = new Anchor(new AnnotationReader, $this->request);
     }
 
     public function testNew()

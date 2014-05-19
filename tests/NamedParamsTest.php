@@ -2,7 +2,6 @@
 
 namespace BEAR\Resource;
 
-use Ray\Aop\ReflectiveMethodInvocation;
 use Aura\Signal\Manager;
 use Aura\Signal\HandlerFactory;
 use Aura\Signal\ResultFactory;

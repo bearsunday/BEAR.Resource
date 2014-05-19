@@ -420,54 +420,90 @@ To use the `onProvides` method functionality simply register the `OnProvidesPara
 $resource->attachParamProvider('*', new OnProvidesParam);
 ```
 
-### A Clean Layered Architecture
+## Embedding resources
 
-A resource is built up from other resources. Although a resource is a service, a layered architecture can be acheived by the resource also becoming a resource client. A resource is handled with injection and aspect wrapping from the Ray.Di injector, meaning a resource can be built as a clean object with a separation of concerns.
+`@Embed` annotations makes easier to embed external resource to its own. Like `<img src="image_url">` or `<iframe src="content_url">` in HTML, Embedded resource is specified by `src` field.
 
 ```php
-
 class News extends ResourceObject
 {
     /**
-     * @Inject
-     */
-    public function __construct(ResourceInterface $resource)
-    {
-        $this->resource = $resource;
-    }
-
-    /**
-     * @Auth
-     * @Cache(60)
+     * @Embed(rel="weather",src="app://self/weather/today")
      */
     public function onGet()
     {
-        $this['domestic'] = $this->resource->get->uri('app://self/news/domestic')->request();
-        $this['international'] = $this->resource->get->uri('app://news/international/')->request();
-        $this['breaking'] = [
-            $this->resource->get->uri('app://self/news/domestic/breaking')->request();
-            $this->resource->get->uri('app://self/news/international/breaking')->request();
-        ];
-
+        $this['headline'] = "...";
+        $this['sports'] = "...";
+        
         return $this;
-    }```
+    }
 }
 ```
-In this way the variables in the resource are not `eager`, even when resource contains a request, the resource request made inside the the resource is lazily loaded.
 
-Installation
-============
+`weather` resource ie embedded like as `headline` or `sports` in this `News` resource.
 
-### Installing via Composer
+### HAL (Hypertext Application Language)
 
-When installing Ray.Aop we recommend you use [Composer](http://getcomposer.org).
+`HAL Module` changes resource representatin as [HAL](http://stateless.co/hal_specification.html).
 
-```bash
-# Install Composer
-$ curl -sS https://getcomposer.org/installer | php
+Embedded resource evaluete when it is present.
 
-# Add BEAR.Resource as a dependency
-$ php composer.phar require bear/resource:*
+
+```php
+    // create resource client with HalModule
+    $resource = Injector::create([new ResourceModule('MyVendor\MyApp'), new HalModule])->getInstance('BEAR\Resource\ResourceInterface');
+    // request
+    $news = $resource
+        ->get
+        ->uri('app://self/news')
+        ->withQuery(['date' => 'today'])
+        ->request();
+    // output
+    echo $news . PHP_EOL;
+```
+
+Result
+
+```javascript
+    "headline": "40th anniversary of Rubik's Cube invention.",
+    "sports": "Pieter Weening wins Giro d'Italia.",
+    "_links": {
+        "self": {
+            "href": "/api/news?date=today"
+        }
+    },
+    "_embedded": {
+        "weather": [
+            {
+                "today": "the weather of today is sunny",
+                "_links": {
+                    "self": {
+                        "href": "/api/weather?date=today"
+                    },
+                    "tomorrow": {
+                        "href": "/api/weather/tomorrow"
+                    }
+                }
+            }
+        ]
+    }
+}
+
+```
+
+ [A demo code](https://github.com/koriym/BEAR.Resource/tree/develop/docs/sample/06.HAL) is available. 
+
+### Requirements
+ * PHP 5.4+
+
+### Installation
+
+```javascript
+{
+    "require": {
+        "bear/resource": "~0.11"
+    }
+}
 ```
 
 A Resource Oriented Framework

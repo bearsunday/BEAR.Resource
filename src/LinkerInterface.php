@@ -22,7 +22,7 @@ interface LinkerInterface
      *
      * @return ResourceObject
      */
-    public function invoke(Request $request);
+    public function invoke(AbstractRequest $request);
 
     /**
      * Set resource

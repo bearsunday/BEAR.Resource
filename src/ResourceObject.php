@@ -128,23 +128,27 @@ abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggrega
     /**
      * Sort the entries by key
      *
-     * @return bool
+     * @return void
      */
     public function ksort()
     {
-        $isTraversal = (is_array($this->body) || $this->body instanceof \Traversable);
-        return $isTraversal ? ksort($this->body): [$this->body];
+        if (! is_array($this->body)) {
+            return;
+        }
+        ksort($this->body);
     }
 
     /**
      * Sort the entries by key
      *
-     * @return bool
+     * @return void
      */
     public function asort()
     {
-        $isTraversal = (is_array($this->body) || $this->body instanceof \Traversable);
-        return $isTraversal ? asort($this->body): [$this->body];
+        if (! is_array($this->body)) {
+            return;
+        }
+        asort($this->body);
     }
 
     /**
@@ -155,6 +159,7 @@ abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggrega
     public function getIterator()
     {
         $isTraversal = (is_array($this->body) || $this->body instanceof \Traversable);
+
         return ($isTraversal ? new \ArrayIterator($this->body) : new \ArrayIterator([]));
     }
 
@@ -192,13 +197,13 @@ abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggrega
             } catch (Exception $e) {
                 $view = '';
                 error_log('Exception caught in ' . __METHOD__);
-                error_log((string)$e);
+                error_log((string) $e);
             }
 
             return $view;
         }
         if (is_scalar($this->body)) {
-            return (string)$this->body;
+            return (string) $this->body;
         }
         error_log('No renderer bound for \BEAR\Resource\RenderInterface' . get_class($this) . ' in ' . __METHOD__);
 
@@ -221,5 +226,4 @@ abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggrega
 
         return $body;
     }
-
 }

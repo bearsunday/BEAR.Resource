@@ -1,7 +1,6 @@
 <?php
 namespace Ray\Di;
 
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Ray\Aop\Compiler;
 use Ray\Aop\Bind;

@@ -2,7 +2,6 @@
 namespace TestVendor\Sandbox\Resource\App\Marshal;
 
 use BEAR\Resource\ResourceObject;
-use BEAR\Resource\Annotation\Link;
 
 class Meta extends ResourceObject
 {

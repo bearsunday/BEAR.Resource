@@ -14,8 +14,20 @@ class ExceptionHandler implements ExceptionHandlerInterface
      * {@inheritdoc}
      * @throws \Exception
      */
-    public function handle(\Exception $e, Request $request)
+    public function handle(\Exception $e, AbstractRequest $request)
     {
+        error_log(
+            sprintf(
+                "%s(%s) in %s on line %s (%s)" . PHP_EOL . "%s",
+                get_class($e),
+                $e->getMessage(),
+                __FILE__,
+                __LINE__,
+                $request->toUriWithMethod(),
+                $e->getTraceAsString()
+            )
+        );
+
         throw $e;
     }
 }

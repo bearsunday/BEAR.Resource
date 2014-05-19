@@ -18,7 +18,7 @@ class Order extends ResourceObject
     /**
      * @param $drink
      *
-     * @Link(rel="payment", href="app://self/payment{?order_id, credit_card_number, expires, name, amount}", method="put")
+     * @Link(rel="payment", href="app://self/payment{?order_id,credit_card_number,expires,name,amount}", method="put")
      */
     public function onPost($drink)
     {
@@ -36,3 +36,4 @@ class Order extends ResourceObject
         return $this;
     }
 }
+

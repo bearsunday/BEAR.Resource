@@ -22,6 +22,7 @@ class IdProvider implements ParamProviderInterface
     {
         $GLOBALS['method'] = $param->getMethodInvocation();
         $GLOBALS['param'] = $param->getParameter();
+
         return $param->inject(1002);
     }
 }

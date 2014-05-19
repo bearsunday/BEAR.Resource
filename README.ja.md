@@ -3,6 +3,8 @@ Hypermedia framework for object as a service
 
 [![Latest Stable Version](https://poser.pugx.org/bear/resource/v/stable.png)](https://packagist.org/packages/bear/resource)
 [![Build Status](https://secure.travis-ci.org/koriym/BEAR.Resource.png?branch=master)](http://travis-ci.org/koriym/BEAR.git@github.com:koriym/BEAR.Resource.git)
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/koriym/BEAR.Resource/badges/quality-score.png?s=fa3351a652dc4a425a3bbb32c71438ce2dbb62c1)](https://scrutinizer-ci.com/g/koriym/BEAR.Resource/)
+[![Code Coverage](https://scrutinizer-ci.com/g/koriym/BEAR.Resource/badges/coverage.png?s=56c3b44894ab8c7287c19e47bb6d98571e0e3309)](https://scrutinizer-ci.com/g/koriym/BEAR.Resource/)
 
 **BEAR.Resource** はオブジェクトがリソースの振る舞いを持つHypermediaフレームワークです。
 クライアントーサーバー、統一インターフェイス、ステートレス、相互接続したリソース表現、レイヤードコンポーネント等の
@@ -21,7 +23,6 @@ RESTのWebサービスの特徴をオブジェクトに持たせる事ができ�
 
 
 ```php
-
 namespace MyVendor\Sandbox\Blog;
 
 class Author extends ResourceObject
@@ -293,7 +294,6 @@ HATEOAS について詳しくは[How to GET a Cup of Coffee](http://www.infoq.co
 
 リソースはそれぞれ表現のためのレンダラーを自身に持っています。
 このレンダラーはリソースの依存なので、インジェクターを使ってレンダラーをインジェクトして利用します。
-`JsonModule`の他にも[HAL (Hyper Application Laungage)](http://stateless.co/hal_specification.html)レンダラーを使う`HalModule` を利用することもできます。
 
 
 ```php
@@ -428,59 +428,92 @@ $resource->attachParamProvider('*', new OnProvidesParam);
 ```
 
 
-### クリーンなレイヤード構造
+## 埋め込みリソース
 
-リソースはリソースで構成されます。リソースはサービスでもありますが、リソースのクライアントにもなりリソースはレイヤードの構造になります。
-リソースはRay.Diインジェクターでインジェクションとアスペクトの織り込みが行われ、関心の分離したクリーンなオブジェクトでリソースを構成できます。
+`@Embed`アノテーションを使って他のリソースを自身のリソースに埋め込む事が出来ます。`HTML`の`<img src="image_url">`や`<iframe src="content_url">`と同じ様に`src`で埋め込むリソースを指定します。
 
 ```php
-
 class News extends ResourceObject
 {
     /**
-     * @Inject
-     */
-    public function __construct(ResourceInterface $resource)
-    {
-        $this->resource = $resource;
-    }
-
-    /**
-     * @Auth
-     * @Cache(60)
+     * @Embed(rel="weather",src="app://self/weather/today")
      */
     public function onGet()
     {
-        $this['domestic'] = $this->resource->get->uri('app://self/news/domestic')->request();
-        $this['international'] = $this->resource->get->uri('app://news/international/')->request();
-        $this['breaking'] = [
-            $this->resource->get->uri('app://self/news/domestic/breaking')->request();
-            $this->resource->get->uri('app://self/news/international/breaking')->request();
-        ];
-
+        $this['headline'] = "...";
+        $this['sports'] = "...";
+        
         return $this;
-    }```
+    }
 }
 ```
-このようにリソースに値`eager`ではなくリクエストを含むリソースでも内包するリソースリクエストの値は遅延評価されます。
 
-Installation
-============
+このNewsリソースでは`headline`と`sports`と同様に`weather`というリソースのリクエストを埋め込みます。
 
-### Installing via Composer
+### HAL (Hypertext Application Language)
 
-Ray.Aopをインストールにするには [Composer](http://getcomposer.org)を利用する事を勧めます。
+HAL Moduleを使うとリソース表現が[HAL](http://stateless.co/hal_specification.html)になります。リソースに埋め込まれたリクエストはHALでも埋め込みリソースとして評価されます。
 
-```bash
-# Install Composer
-$ curl -sS https://getcomposer.org/installer | php
+```php
+    // create resource client with HalModule
+    $resource = Injector::create([new ResourceModule('MyVendor\MyApp'), new HalModule])->getInstance('BEAR\Resource\ResourceInterface');
+    // request
+    $news = $resource
+        ->get
+        ->uri('app://self/news')
+        ->withQuery(['date' => 'today'])
+        ->request();
+    // output
+    echo $news . PHP_EOL;
 
-# Add BEAR.Resource as a dependency
-$ php composer.phar require bear/resource:*
 ```
 
-A Resource Oriented Framework
------------------------------
+結果
+```javascript
+{
+    "headline": "40th anniversary of Rubik's Cube invention.",
+    "sports": "Pieter Weening wins Giro d'Italia.",
+    "_links": {
+        "self": {
+            "href": "/api/news?date=today"
+        }
+    },
+    "_embedded": {
+        "weather": [
+            {
+                "today": "the weather of today is sunny",
+                "_links": {
+                    "self": {
+                        "href": "/api/weather?date=today"
+                    },
+                    "tomorrow": {
+                        "href": "/api/weather/tomorrow"
+                    }
+                }
+            }
+        ]
+    }
+}
+
+```
+
+[デモコード](https://github.com/koriym/BEAR.Resource/tree/develop/docs/sample/06.HAL)をご覧下さい。
+
+
+### Requirements
+ * PHP 5.4+
+
+### Installation
+
+```javascript
+{
+    "require": {
+        "bear/resource": "~0.11"
+    }
+}
+```
+
+### A Resource Oriented Framework
 
 __BEAR.Sunday__ はリソース指向のフレームワークです。BEAR.Resourceに Webでの振る舞いやアプリケーションスタックの機能を、
 Google GuiceスタイルのDI/AOPシステムの[Ray](https://github.com/koriym/Ray.Di)で追加してフルスタックのWebアプリケーションフレームワークとして機能します。

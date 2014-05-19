@@ -6,13 +6,10 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\LogicException;
 use OutOfBoundsException;
-use ArrayAccess;
-use IteratorAggregate;
 use Ray\Di\Di\Inject;
 
-final class Request implements RequestInterface, \ArrayAccess, \IteratorAggregate
+final class Request extends AbstractRequest
 {
     /**
      * URI
@@ -168,12 +165,19 @@ final class Request implements RequestInterface, \ArrayAccess, \IteratorAggregat
     /**
      * Render view
      *
+     * Exception will be handled in exception handler in Invoker
+     *
      * @return string
      */
     public function __toString()
     {
-        $this->invoke();
-        return (string)$this->result;
+        try {
+            $this->invoke();
+        } catch (\Exception $e) {
+            return '';
+        }
+
+        return (string) $this->result;
     }
 
     /**
@@ -194,7 +198,6 @@ final class Request implements RequestInterface, \ArrayAccess, \IteratorAggregat
         return $this->result->body[$offset];
     }
 
-
     /**
      * Returns whether the requested index in body exists
      *
@@ -205,32 +208,9 @@ final class Request implements RequestInterface, \ArrayAccess, \IteratorAggregat
     public function offsetExists($offset)
     {
         $this->invoke();
+
         return isset($this->result->body[$offset]);
     }
-
-    /**
-     * @param mixed $offset
-     * @param mixed $value
-     *
-     * @throws Exception\LogicException
-     * @return void
-     */
-    public function offsetSet($offset, $value)
-    {
-        throw new LogicException(__METHOD__ . ' is unavailable.');
-    }
-
-    /**
-     * @param mixed $offset
-     *
-     * @throws Exception\LogicException
-     * @return void
-     */
-    public function offsetUnset($offset)
-    {
-        throw new LogicException(__METHOD__ . ' is unavailable.');
-    }
-
 
     /**
      * Get array iterator

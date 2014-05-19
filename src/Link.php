@@ -6,6 +6,9 @@
  */
 namespace BEAR\Resource;
 
+/**
+ * @deprecated use Link class instead
+ */
 final class Link
 {
     const REL = 'rel';

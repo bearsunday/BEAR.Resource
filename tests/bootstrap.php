@@ -17,6 +17,7 @@ $GLOBALS['INJECTOR'] = require __DIR__ . '/scripts/injector.php';
 
 $_ENV['BEAR_TMP'] = __DIR__ . '/tmp';
 $_ENV['PACKAGE_DIR'] = dirname(__DIR__);
+$_ENV['TEST_DIR'] = __DIR__;
 $rm = function ($dir) use (&$rm) {
     foreach (glob($dir . '/*') as $file) {
         is_dir($file) ? $rm($file) : unlink($file);

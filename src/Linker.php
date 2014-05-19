@@ -6,12 +6,9 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\Cache;
-use Guzzle\Parser\UriTemplate\UriTemplate;
-use Guzzle\Parser\UriTemplate\UriTemplateInterface;
 use ReflectionMethod;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Scope;
@@ -31,11 +28,6 @@ final class Linker implements LinkerInterface
     private $resource;
 
     /**
-     * @var \Guzzle\Parser\UriTemplate\UriTemplate
-     */
-    private $uriTemplate;
-
-    /**
      * @var Reader
      */
     private $reader;
@@ -46,20 +38,17 @@ final class Linker implements LinkerInterface
     private $cache;
 
     /**
-     * @param Reader               $reader
-     * @param Cache                $cache
-     * @param UriTemplateInterface $uriTemplate
+     * @param Reader $reader
+     * @param Cache  $cache
      *
      * @Inject
      */
     public function __construct(
         Reader $reader,
-        Cache $cache = null,
-        UriTemplateInterface $uriTemplate = null
+        Cache $cache = null
     ) {
         $this->reader = $reader;
         $this->cache = $cache ? : new ArrayCache;
-        $this->uriTemplate = $uriTemplate ? : new UriTemplate;
     }
 
     /**
@@ -73,7 +62,7 @@ final class Linker implements LinkerInterface
     /**
      * {@inheritDoc}
      */
-    public function invoke(Request $request)
+    public function invoke(AbstractRequest $request)
     {
         $current = clone $request->ro;
         foreach ($request->links as $link) {
@@ -116,14 +105,14 @@ final class Linker implements LinkerInterface
     /**
      * Annotation link
      *
-     * @param LinkType       $link
-     * @param ResourceObject $current
-     * @param Request        $request
+     * @param LinkType        $link
+     * @param ResourceObject  $current
+     * @param AbstractRequest $request
      *
      * @return ResourceObject|mixed
      * @throws Exception\LinkQuery
      */
-    private function annotationLink(LinkType $link, ResourceObject $current, Request $request)
+    private function annotationLink(LinkType $link, ResourceObject $current, AbstractRequest $request)
     {
         if (!(is_array($current->body))) {
             throw new Exception\LinkQuery('Only array is allowed for link in ' . get_class($current));
@@ -155,7 +144,7 @@ final class Linker implements LinkerInterface
             if ($annotation->rel !== $link->key) {
                 continue;
             }
-            $uri = $this->uriTemplate->expand($annotation->href, $current->body);
+            $uri = \GuzzleHttp\uri_template($annotation->href, $current->body);
             try {
                 $linkedResource = $this->resource->{$annotation->method}->uri($uri)->eager->request();
                 /* @var $linkedResource ResourceObject */
@@ -203,7 +192,7 @@ final class Linker implements LinkerInterface
             if ($annotation->crawl !== $link->key) {
                 continue;
             }
-            $uri = $this->uriTemplate->expand($annotation->href, $body);
+            $uri = \GuzzleHttp\uri_template($annotation->href, $body);
             $request = $this->resource->{$annotation->method}->uri($uri)->linkCrawl($link->key)->request();
             /* @var $request Request */
             $hash = $request->hash();
@@ -226,7 +215,7 @@ final class Linker implements LinkerInterface
      */
     private function isList($value)
     {
-        $value = array_values((array)$value);
+        $value = array_values((array) $value);
         $isMultiColumnList = (count($value) > 1
             && isset($value[0])
             && isset($value[1])

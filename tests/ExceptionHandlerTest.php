@@ -2,20 +2,21 @@
 
 namespace ExceptionTest {
 
+    use BEAR\Resource\AbstractRequest;
     use BEAR\Resource\ExceptionHandlerInterface;
-    use BEAR\Resource\Request;
 
     class MyHandler implements ExceptionHandlerInterface
     {
         /**
          * {@inheritdoc}
          */
-        public function handle(\Exception $e, Request $request)
+        public function handle(\Exception $e, AbstractRequest $request)
         {
             return  'handled:' . $request->toUri();
         }
     }
 }
+
 namespace ExceptionTest\Resource\Page {
 
     use BEAR\Resource\ResourceInterface;

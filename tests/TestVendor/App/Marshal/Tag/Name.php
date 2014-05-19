@@ -3,7 +3,6 @@ namespace TestVendor\Sandbox\Resource\App\Marshal\Tag;
 
 use BEAR\Resource\ResourceObject;
 use TestVendor\Sandbox\Resource\App\Marshal\SelectTrait;
-use BEAR\Resource\Annotation\Link;
 
 class Name extends ResourceObject
 {
