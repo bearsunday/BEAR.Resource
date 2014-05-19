@@ -293,7 +293,6 @@ HATEOAS について詳しくは[How to GET a Cup of Coffee](http://www.infoq.co
 
 リソースはそれぞれ表現のためのレンダラーを自身に持っています。
 このレンダラーはリソースの依存なので、インジェクターを使ってレンダラーをインジェクトして利用します。
-`JsonModule`の他にも[HAL (Hyper Application Laungage)](http://stateless.co/hal_specification.html)レンダラーを使う`HalModule` を利用することもできます。
 
 
 ```php
@@ -428,7 +427,7 @@ $resource->attachParamProvider('*', new OnProvidesParam);
 ```
 
 
-### 埋め込みリソース
+## 埋め込みリソース
 
 `@Embed`アノテーションを使って他のリソースを自身のリソースに埋め込む事が出来ます。`HTML`の`<img src="image_url">`や`<iframe src="content_url">`と同じ様に`src`で埋め込むリソースを指定します。
 
@@ -446,7 +445,9 @@ class News extends ResourceObject
         return $this;
     }
 }
-このNewsリソースでは`headline`と`sports`と同様に`weather`というリソースのリクエストを埋め込みます。リクエストは表になるときに遅延評価されます。
+```
+
+このNewsリソースでは`headline`と`sports`と同様に`weather`というリソースのリクエストを埋め込みます。
 
 ```
 ### HAL (Hypertext Application Language)
@@ -496,23 +497,20 @@ HAL Moduleを使うとリソース表現が[HAL](http://stateless.co/hal_specifi
 
 ```
 
-Installation
-============
+### Requirements
+ * PHP 5.4+
 
-### Installing via Composer
+### Installation
 
-Ray.Aopをインストールにするには [Composer](http://getcomposer.org)を利用する事を勧めます。
-
-```bash
-# Install Composer
-$ curl -sS https://getcomposer.org/installer | php
-
-# Add BEAR.Resource as a dependency
-$ php composer.phar require bear/resource:*
+```javascript
+{
+    "require": {
+        "bear/resource": "~0.11"
+    }
+}
 ```
 
-A Resource Oriented Framework
------------------------------
+### A Resource Oriented Framework
 
 __BEAR.Sunday__ はリソース指向のフレームワークです。BEAR.Resourceに Webでの振る舞いやアプリケーションスタックの機能を、
 Google GuiceスタイルのDI/AOPシステムの[Ray](https://github.com/koriym/Ray.Di)で追加してフルスタックのWebアプリケーションフレームワークとして機能します。
