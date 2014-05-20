@@ -3,8 +3,47 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "2f710264a8214e17f7bab89cd46ace28",
+    "hash": "d33d496e939c0cedc975ff0e66d78721",
     "packages": [
+        {
+            "name": "any/serializer",
+            "version": "0.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/koriym/Any.Serializer.git",
+                "reference": "cc9ef96fa131d45d28c87818e3239c916f157a12"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/koriym/Any.Serializer/zipball/cc9ef96fa131d45d28c87818e3239c916f157a12",
+                "reference": "cc9ef96fa131d45d28c87818e3239c916f157a12",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Any\\Serializer": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Akihito Koriyama",
+                    "email": "akihito.koriyama@gmail.com",
+                    "homepage": "https://github.com/koriym",
+                    "role": "Lead"
+                }
+            ],
+            "description": "Serialize any value for logging",
+            "keywords": [
+                "make it possible",
+                "serialize"
+            ],
+            "time": "2013-09-20 05:52:42"
+        },
         {
             "name": "aura/di",
             "version": "1.1.1",
