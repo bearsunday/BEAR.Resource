@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "5c22c35dd87092a03b2d33be778fadfe",
+    "hash": "2f710264a8214e17f7bab89cd46ace28",
     "packages": [
         {
             "name": "aura/di",
@@ -709,16 +709,16 @@
         },
         {
             "name": "ray/di",
-            "version": "dev-master",
+            "version": "1.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Ray.Di.git",
-                "reference": "e5ca4fccf049afd4bbcdc6acb32a147343540200"
+                "reference": "cb01e44b806cc2ab19d6d3d2a55d3538bc599d50"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/e5ca4fccf049afd4bbcdc6acb32a147343540200",
-                "reference": "e5ca4fccf049afd4bbcdc6acb32a147343540200",
+                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/cb01e44b806cc2ab19d6d3d2a55d3538bc599d50",
+                "reference": "cb01e44b806cc2ab19d6d3d2a55d3538bc599d50",
                 "shasum": ""
             },
             "require": {
@@ -727,7 +727,7 @@
                 "doctrine/cache": "1.*",
                 "nikic/php-parser": "0.*",
                 "php": ">=5.4.0",
-                "ray/aop": "1.*@dev"
+                "ray/aop": "1.*"
             },
             "type": "library",
             "extra": {
@@ -766,7 +766,7 @@
                 "guice",
                 "jsr"
             ],
-            "time": "2014-05-19 10:36:11"
+            "time": "2014-05-12 15:43:58"
         }
     ],
     "packages-dev": [
@@ -812,7 +812,6 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "ray/di": 20,
         "facebook/xhprof": 20
     },
     "platform": {

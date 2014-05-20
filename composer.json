@@ -21,7 +21,7 @@
     "require": {
         "php": ">=5.4.0",
         "aura/signal": "~1.0",
-        "ray/di": "~1.3@dev",
+        "ray/di": "~1.3",
         "doctrine/cache": "~1.3",
         "nocarrier/hal":"~0.9",
         "guzzlehttp/guzzle": "~4.0",
