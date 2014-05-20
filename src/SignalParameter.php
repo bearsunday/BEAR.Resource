@@ -70,7 +70,6 @@ class SignalParameter implements SignalParameterInterface
      * @param ReflectionParameter $parameter
      * @param ParamInterface      $param
      * @param MethodInvocation    $invocation
-     * @param ReflectionParameter $parameter
      *
      * @return \Aura\Signal\ResultCollection
      */

@@ -90,7 +90,7 @@ interface ResourceInterface extends \IteratorAggregate
     /**
      * Attach parameter provider
      *
-     * @param                        $varName
+     * @param string                 $varName
      * @param ParamProviderInterface $provider
      *
      * @return $this

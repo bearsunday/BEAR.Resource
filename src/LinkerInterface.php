@@ -28,6 +28,7 @@ interface LinkerInterface
      * Set resource
      *
      * @param $resource $resource
+     *
      * @return void
      */
     public function setResource(ResourceInterface $resource);

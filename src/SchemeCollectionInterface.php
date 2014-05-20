@@ -16,7 +16,7 @@ interface SchemeCollectionInterface extends \IteratorAggregate
     /**
      * Set scheme
      *
-     * @param $scheme
+     * @param string $scheme
      *
      * @return SchemeCollection
      */
@@ -25,7 +25,7 @@ interface SchemeCollectionInterface extends \IteratorAggregate
     /**
      * Set host
      *
-     * @param $host
+     * @param string $host
      *
      * @return SchemeCollection
      */
