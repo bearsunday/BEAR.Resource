@@ -93,6 +93,7 @@ class Invoker implements InvokerInterface
 
     /**
      * @param OptionProviderInterface $optionProvider
+     *
      * @Inject(optional=true)
      */
     public function setOptionProvider(OptionProviderInterface $optionProvider)

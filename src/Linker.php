@@ -78,7 +78,7 @@ final class Linker implements LinkerInterface
      *
      * @param LinkType       $link
      * @param ResourceObject $ro
-     * @param                $nextResource
+     * @param mixed          $nextResource
      *
      * @return ResourceObject
      */
@@ -183,7 +183,7 @@ final class Linker implements LinkerInterface
     /**
      * @param array    $annotations
      * @param LinkType $link
-     * @param array    $body
+     * @param array    &$body
      */
     private function crawl(array $annotations, LinkType $link, array &$body)
     {

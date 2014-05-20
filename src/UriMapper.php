@@ -19,7 +19,7 @@ class UriMapper implements UriMapperInterface
     private $apiPath = 'api';
 
     /**
-     * @param string $httpHost
+     * @param string $apiPath
      *
      * @Inject(optional = true)
      * @Named("api_path")
@@ -49,11 +49,12 @@ class UriMapper implements UriMapperInterface
      */
     public function reverseMap($internalUri)
     {
-        if(! filter_var($internalUri, FILTER_VALIDATE_URL)) {
+        if (! filter_var($internalUri, FILTER_VALIDATE_URL)) {
             throw new Uri($internalUri);
         }
         $parsedUrl = parse_url($internalUri);
-        $uri = sprintf('/%s%s',
+        $uri = sprintf(
+            '/%s%s',
             $this->apiPath,
             $parsedUrl['path']
         );

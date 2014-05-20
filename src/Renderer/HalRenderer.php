@@ -28,7 +28,7 @@ class HalRenderer implements RenderInterface
     private $embed;
 
     /**
-     * @param UriMapperInterface $reverseMap
+     * @param UriMapperInterface $mapper
      *
      * @Inject
      */
@@ -58,7 +58,7 @@ class HalRenderer implements RenderInterface
      * Return HAL
      *
      * @param ResourceObject $ro
-     * @param                $data
+     * @param mixed          $data
      *
      * @return Hal
      * @throws Exception\HrefNotFound

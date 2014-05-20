@@ -25,8 +25,8 @@ final class Params
 
     /**
      * @param string $method
-     * @param array $required
-     * @param array $optional
+     * @param array  $required
+     * @param array  $optional
      */
     public function __construct($method, array $required, array $optional)
     {

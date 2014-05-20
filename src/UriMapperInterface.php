@@ -10,14 +10,14 @@ namespace BEAR\Resource;
 interface UriMapperInterface
 {
     /**
-     * @param $externalUri "/blog/posts"
+     * @param string $externalUri "/blog/posts"
      *
      * @return string internal URI
      */
     public function map($externalUri);
 
     /**
-     * @param string $internalUri
+     * @param string $internalUri "app://self/blog/posts"
      *
      * @return string external URI
      */

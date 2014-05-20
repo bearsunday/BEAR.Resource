@@ -78,7 +78,7 @@ class Resource implements ResourceInterface
     private $resourceObjects;
 
     /**
-     * @param $appName
+     * @param string $appName
      *
      * @Inject(optional = true)
      * @Named("app_name")
