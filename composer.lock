@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "d33d496e939c0cedc975ff0e66d78721",
+    "hash": "8f3bdabd3ed743ee94d3b084d2b8a481",
     "packages": [
         {
             "name": "any/serializer",
@@ -248,8 +248,7 @@
                 {
                     "name": "Jonathan Wage",
                     "email": "jonwage@gmail.com",
-                    "homepage": "http://www.jwage.com/",
-                    "role": "Creator"
+                    "homepage": "http://www.jwage.com/"
                 },
                 {
                     "name": "Guilherme Blanco",
@@ -748,16 +747,16 @@
         },
         {
             "name": "ray/di",
-            "version": "1.3.1",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Ray.Di.git",
-                "reference": "cb01e44b806cc2ab19d6d3d2a55d3538bc599d50"
+                "reference": "748b5ede7fa7f4145143bae4ba0b370348e3213c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/cb01e44b806cc2ab19d6d3d2a55d3538bc599d50",
-                "reference": "cb01e44b806cc2ab19d6d3d2a55d3538bc599d50",
+                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/748b5ede7fa7f4145143bae4ba0b370348e3213c",
+                "reference": "748b5ede7fa7f4145143bae4ba0b370348e3213c",
                 "shasum": ""
             },
             "require": {
@@ -766,7 +765,7 @@
                 "doctrine/cache": "1.*",
                 "nikic/php-parser": "0.*",
                 "php": ">=5.4.0",
-                "ray/aop": "1.*"
+                "ray/aop": "1.*@dev"
             },
             "type": "library",
             "extra": {
@@ -805,7 +804,7 @@
                 "guice",
                 "jsr"
             ],
-            "time": "2014-05-12 15:43:58"
+            "time": "2014-05-19 10:29:17"
         }
     ],
     "packages-dev": [
@@ -846,17 +845,14 @@
             "time": "2014-04-22 20:02:16"
         }
     ],
-    "aliases": [
-
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "ray/di": 20,
         "facebook/xhprof": 20
     },
     "platform": {
         "php": ">=5.4.0"
     },
-    "platform-dev": [
-
-    ]
+    "platform-dev": []
 }
