@@ -7,7 +7,6 @@
 namespace BEAR\Resource\Module;
 
 use Ray\Di\AbstractModule;
-use BEAR\Resource\Module\NamedArgsModule;
 
 class EmbedResourceModule extends AbstractModule
 {
