@@ -25,6 +25,9 @@ class SchemeCollectionProvider implements Provide
      */
     protected $appName;
 
+    /**
+     * @var string
+     */
     protected $resourceDir;
 
     /**
