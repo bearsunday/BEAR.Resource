@@ -9,7 +9,7 @@ namespace BEAR\Resource\Interceptor;
 use BEAR\Resource\Annotation\Embed;
 use BEAR\Resource\Exception\BadRequest;
 use BEAR\Resource\ResourceInterface;
-use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\Reader;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
 use Ray\Aop\NamedArgsInterface;
@@ -26,7 +26,7 @@ final class EmbedInterceptor implements MethodInterceptor
     private $resource;
 
     /**
-     * @var \Doctrine\Common\Annotations\AnnotationReader
+     * @var Reader
      */
     private $reader;
 
@@ -40,7 +40,7 @@ final class EmbedInterceptor implements MethodInterceptor
      *
      * @Inject
      */
-    public function __construct(ResourceInterface $resource, AnnotationReader $reader, NamedArgsInterface $namedArgs)
+    public function __construct(ResourceInterface $resource, Reader $reader, NamedArgsInterface $namedArgs)
     {
         $this->resource = $resource;
         $this->reader = $reader;

@@ -6,13 +6,13 @@
  */
 namespace BEAR\Resource;
 
-use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\Reader;
 use Ray\Di\Di\Inject;
 
 class Anchor
 {
     /**
-     * @var AnnotationReader
+     * @var Reader
      */
     protected $reader;
 
@@ -22,13 +22,13 @@ class Anchor
     protected $request;
 
     /**
-     * @param AnnotationReader $reader
+     * @param Reader           $reader
      * @param RequestInterface $request
      *
      * @Inject
      */
     public function __construct(
-        AnnotationReader $reader,
+        Reader           $reader,
         RequestInterface $request
     ) {
         $this->reader = $reader;
