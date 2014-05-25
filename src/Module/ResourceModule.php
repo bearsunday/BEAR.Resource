@@ -36,6 +36,6 @@ class ResourceModule extends AbstractModule
     {
         $this->install(new NamedArgsModule);
         $this->install(new ResourceClientModule($this->appName, $this->resourceDir));
-//        $this->install(new EmbedResourceModule($this));
+        $this->install(new EmbedResourceModule($this));
     }
 }
