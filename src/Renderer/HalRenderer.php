@@ -92,7 +92,9 @@ class HalRenderer implements RenderInterface
         foreach ($ro->body as $rel => $request) {
             if ($request instanceof AbstractRequest) {
                 $this->embed->attach($request, $rel);
-                unset($ro->body[$rel]);
+                if (isset($ro->body[$rel])) {
+                    unset($ro->body[$rel]);
+                }
             }
         }
 
