@@ -62,7 +62,7 @@ abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggrega
     /**
      * Body
      *
-     * @var array
+     * @var mixed
      */
     public $body;
 

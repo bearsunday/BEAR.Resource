@@ -7,8 +7,6 @@
 namespace BEAR\Resource\Module;
 
 use Ray\Di\AbstractModule;
-use Ray\Di\Module\InjectorModule;
-use Ray\Di\Scope;
 
 class ResourceModule extends AbstractModule
 {
@@ -17,6 +15,9 @@ class ResourceModule extends AbstractModule
      */
     private $appName;
 
+    /**
+     * @var string
+     */
     private $resourceDir;
 
     /**
@@ -33,26 +34,8 @@ class ResourceModule extends AbstractModule
      */
     protected function configure()
     {
-        // install Injector
-        $this->install(new InjectorModule($this));
-        // bind app name
-        $this->bind()->annotatedWith('app_name')->toInstance($this->appName);
-        $this->bind()->annotatedWith('resource_dir')->toInstance($this->resourceDir);
-
-        // bind resource client component
-        $this->bind('BEAR\Resource\ResourceInterface')->to('BEAR\Resource\Resource')->in(Scope::SINGLETON);
-        $this->bind('BEAR\Resource\InvokerInterface')->to('BEAR\Resource\Invoker')->in(Scope::SINGLETON);
-        $this->bind('BEAR\Resource\LinkerInterface')->to('BEAR\Resource\Linker')->in(Scope::SINGLETON);
-        $this->bind('BEAR\Resource\LoggerInterface')->annotatedWith("resource_logger")->to('BEAR\Resource\Logger');
-        $this->bind('BEAR\Resource\HrefInterface')->to('BEAR\Resource\A');
-        $this->bind('BEAR\Resource\SignalParameterInterface')->to('BEAR\Resource\SignalParameter');
-        $this->bind('BEAR\Resource\FactoryInterface')->to('BEAR\Resource\Factory')->in(Scope::SINGLETON);
-        $this->bind('BEAR\Resource\SchemeCollectionInterface')->toProvider('BEAR\Resource\Module\SchemeCollectionProvider')->in(Scope::SINGLETON);
-        $this->bind('Aura\Signal\Manager')->toProvider('BEAR\Resource\Module\SignalProvider')->in(Scope::SINGLETON);
-        $this->bind('Guzzle\Parser\UriTemplate\UriTemplateInterface')->to('Guzzle\Parser\UriTemplate\UriTemplate')->in(Scope::SINGLETON);
-        $this->bind('BEAR\Resource\ParamInterface')->to('BEAR\Resource\Param');
-        $this->bind('BEAR\Resource\Renderer\RendererInterface')->to('BEAR\Resource\Renderer\JsonRenderer');
-        $this->bind('Ray\Di\InstanceInterface')->toInstance($this->dependencyInjector);
+        $this->install(new NamedArgsModule);
+        $this->install(new ResourceClientModule($this->appName, $this->resourceDir));
         $this->install(new EmbedResourceModule($this));
     }
 }

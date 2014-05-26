@@ -25,6 +25,9 @@ class SchemeCollectionProvider implements Provide
      */
     protected $appName;
 
+    /**
+     * @var string
+     */
     protected $resourceDir;
 
     /**
@@ -43,7 +46,7 @@ class SchemeCollectionProvider implements Provide
      */
     public function setAppName($appName, $resourceDir)
     {
-        if (is_null($appName)) {
+        if (! is_string($appName)) {
             throw new AppName($appName);
         }
         $this->appName = $appName;

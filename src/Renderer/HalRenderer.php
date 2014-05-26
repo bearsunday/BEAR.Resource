@@ -86,7 +86,7 @@ class HalRenderer implements RenderInterface
      */
     private function pushEmbedResource(ResourceObject $ro)
     {
-        if (is_scalar($ro->body)) {
+        if (! is_array($ro->body)) {
             return $ro;
         }
         foreach ($ro->body as $rel => $request) {
