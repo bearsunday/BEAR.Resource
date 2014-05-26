@@ -7,7 +7,7 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\Uri;
+use BEAR\Resource\Exception;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
 
@@ -50,7 +50,7 @@ class UriMapper implements UriMapperInterface
     public function reverseMap($internalUri)
     {
         if (! filter_var($internalUri, FILTER_VALIDATE_URL)) {
-            throw new Uri($internalUri);
+            throw new Exception\Uri($internalUri);
         }
         $parsedUrl = parse_url($internalUri);
         $uri = sprintf(
