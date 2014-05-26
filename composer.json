@@ -31,7 +31,6 @@
     "require-dev": {
         "facebook/xhprof": "dev-master"
     },
-    "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
             "BEAR\\Resource\\": "src/"
