@@ -11,47 +11,28 @@ namespace BEAR\Resource;
  */
 final class Code
 {
-    /**
-     * 200 OK
-     *
-     * @var int
-     */
+    // 20X Success
     const OK = 200;
-
-    /**
-     * 400 Bad Request - Client Error
-     *
-     * @var int
-     */
-    const BAD_REQUEST = 400;
-
-    /**
-     * 500 Resource Error
-     *
-     * @var int
-     */
-    const ERROR = 500;
-
-    // 20X
     const CREATED = 201;
-
     const ACCEPTED = 202;
-
     const NO_CONTENT = 204;
 
-    // 30X
+    // 30X Redirection
     const MOVED_PERMANENTLY = 301;
-
+    const FOUND = 302;
     const SEE_OTHER = 303;
-
     const NOT_MODIFIED = 304;
+    const TEMPORARY_REDIRECT = 307;
+    const PERMANENT_REDIRECT = 308;
 
-    // 40X
+    // 40X Client Error
+    const BAD_REQUEST = 400;
     const UNAUTHORIZED = 401;
-
     const NOT_FOUND = 404;
 
-    const CONFLICT = 409;
+    // 50X Service Error
+    const ERROR = 500;
+    const SERVICE_UNAVAILABLE = 503;
 
     /**
      * Hypertext Transfer Protocol (HTTP) Status Code Registry
