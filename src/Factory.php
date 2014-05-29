@@ -6,6 +6,7 @@
  */
 namespace BEAR\Resource;
 
+use BEAR\Resource\Exception\ResourceNotFound;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Scope;
 use Ray\Di\Exception\NotReadable;
@@ -53,6 +54,9 @@ class Factory implements FactoryInterface, \IteratorAggregate
      */
     public function newInstance($uri)
     {
+        if (substr($uri, -1) === '/') {
+            $uri .= 'index';
+        }
         list($scheme, $host) = $this->parseUri($uri);
         if (!isset($this->scheme[$scheme][$host])) {
             if (!(isset($this->scheme[$scheme]['*']))) {
@@ -60,12 +64,12 @@ class Factory implements FactoryInterface, \IteratorAggregate
             }
             $host = '*';
         }
-        try {
-            $adapter = $this->scheme[$scheme][$host];
+        $adapter = $this->scheme[$scheme][$host];
             /** @var $adapter \BEAR\Resource\Adapter\AdapterInterface */
+        try {
             $resourceObject = $adapter->get($uri);
         } catch (NotReadable $e) {
-            $resourceObject = $this->indexRequest($uri, $e);
+            throw new ResourceNotFound($uri, 0 , $e);
         }
 
         $resourceObject->uri = $uri;
@@ -93,23 +97,6 @@ class Factory implements FactoryInterface, \IteratorAggregate
         }
 
         return [$scheme, $host];
-    }
-
-    /**
-     * @param string      $uri
-     * @param NotReadable $e
-     *
-     * @return ResourceObject
-     * @throws Exception\ResourceNotFound
-     */
-    private function indexRequest($uri, NotReadable $e)
-    {
-        if (substr($uri, -1) !== '/') {
-            throw new Exception\ResourceNotFound($uri, 0, $e);
-        }
-        $resourceObject = $this->newInstance($uri . 'index');
-
-        return $resourceObject;
     }
 
     /**
