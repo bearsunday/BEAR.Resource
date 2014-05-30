@@ -16,7 +16,7 @@ use Ray\Di\Di\Scope;
 /**
  * Resource linker
  *
- * @Scope("singleton")
+ * @Scope("Singleton")
  */
 final class Linker implements LinkerInterface
 {

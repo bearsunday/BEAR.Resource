@@ -25,7 +25,7 @@ use Ray\Di\Di\Scope;
 /**
  * Web resource
  *
- * @Scope("singleton")
+ * @Scope("Singleton")
  */
 class WebClient extends ResourceObject implements HttpClientInterface
 {

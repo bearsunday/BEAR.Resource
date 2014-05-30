@@ -12,7 +12,7 @@ use Ray\Di\Di\Scope;
 /**
  * Resource request invoker
  *
- * @Scope("singleton")
+ * @Scope("Singleton")
  */
 class Invoker implements InvokerInterface
 {

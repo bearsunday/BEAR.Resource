@@ -18,7 +18,7 @@ use Traversable;
  *
  * @SuppressWarnings(PHPMD.TooManyMethods)
  *
- * @Scope("singleton")
+ * @Scope("Singleton")
  */
 class Resource implements ResourceInterface
 {
