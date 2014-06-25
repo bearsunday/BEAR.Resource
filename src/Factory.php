@@ -15,7 +15,7 @@ use Traversable;
 /**
  * Resource object factory
  *
- * @Scope("singleton")
+ * @Scope("Singleton")
  */
 class Factory implements FactoryInterface, \IteratorAggregate
 {

@@ -94,7 +94,7 @@ class EmbedInterceptorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param ResourceObject $resourceObject
+     * @param AbstractRequest $request
      *
      * @depends testEmbedAnnotation
      */
@@ -126,4 +126,29 @@ class EmbedInterceptorTest extends \PHPUnit_Framework_TestCase
         $invocation->proceed();
     }
 
+    public function testEmbedAnnotaionResource()
+    {
+        $request = $this->resource
+            ->get
+            ->uri('app://self/bird/sparrows')
+            ->withQuery(['id_request' => 3, 'id_object' => 5, 'id_eager_request' => 7])
+            ->request();
+
+        $this->assertSame('app://self/bird/sparrows?id_request=3&id_object=5&id_eager_request=7', $request->toUri());
+
+        /** @var $request Request */
+        $resourceObject = $request();
+        $birdRequest = $resourceObject['birdRequest'];
+        $birdObject = $resourceObject['birdObject'];
+        $eagerRequestedBird = $resourceObject['eagerRequestedBird'];
+
+        $this->assertInstanceOf('BEAR\Resource\Request', $birdRequest);
+        $this->assertSame('get app://self/bird/sparrow?id=3', $birdRequest->toUriWithMethod());
+
+        $this->assertInstanceOf('TestVendor\Sandbox\Resource\App\Bird\Sparrow', $birdObject);
+        $this->assertSame(serialize($birdObject->body), serialize(['sparrow_id' => 5]));
+
+        $this->assertInstanceOf('TestVendor\Sandbox\Resource\App\Bird\Sparrow', $eagerRequestedBird);
+        $this->assertSame(serialize($eagerRequestedBird->body), serialize(['sparrow_id' => 7]));
+    }
 }

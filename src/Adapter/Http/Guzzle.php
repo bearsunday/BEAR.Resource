@@ -17,7 +17,7 @@ use Ray\Di\Di\Scope;
 /**
  * Http resource
  *
- * @Scope("singleton")
+ * @Scope("Singleton")
  */
 class Guzzle extends ResourceObject implements HttpClientInterface
 {

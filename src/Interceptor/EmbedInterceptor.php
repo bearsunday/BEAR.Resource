@@ -52,9 +52,6 @@ final class EmbedInterceptor implements MethodInterceptor
      */
     public function invoke(MethodInvocation $invocation)
     {
-
-        $result =  $invocation->proceed();
-
         $resourceObject = $invocation->getThis();
         $method = $invocation->getMethod();
         $query = $this->namedArgs->get($invocation);
@@ -65,14 +62,27 @@ final class EmbedInterceptor implements MethodInterceptor
             if (! $embed instanceof Embed) {
                 continue;
             }
+
             try {
                 $uri = \GuzzleHttp\uri_template($embed->src, $query);
-                $resourceObject->body[$embed->rel] = $this->resource->get->uri($uri)->request();
+                $resourceObject->body[$embed->rel] = clone $this->resource->get->uri($uri);
             } catch (BadRequest $e) {
                 // wrap ResourceNotFound or Uri exception
                 throw new EmbedException($embed->src, 500, $e);
             }
         }
+
+        $result =  $invocation->proceed();
+
+        foreach ($embeds as $embed) {
+            /** @var $embed Embed */
+            if (! $embed instanceof Embed || ! ($resourceObject->body[$embed->rel] instanceof ResourceInterface) ) {
+                continue;
+            }
+
+            $resourceObject->body[$embed->rel] = $resourceObject->body[$embed->rel]->request();
+        }
+
         return $result;
     }
 }

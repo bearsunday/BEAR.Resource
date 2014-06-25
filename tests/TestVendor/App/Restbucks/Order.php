@@ -9,7 +9,7 @@ use Ray\Di\Di\Scope;
 /**
  * Order
  *
- * @Scope("singleton")
+ * @Scope("Singleton")
  */
 class Order extends ResourceObject
 {

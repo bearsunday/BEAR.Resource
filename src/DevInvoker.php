@@ -15,7 +15,7 @@ use Ray\Di\Di\Scope;
 /**
  * Resource request invoker
  *
- * @Scope("singleton")
+ * @Scope("Singleton")
  */
 class DevInvoker extends Invoker implements InvokerInterface
 {
