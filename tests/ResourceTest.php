@@ -51,7 +51,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         // build resource client
-        $injector = Injector::create([new TestModule]);
+        $injector = new Injector(new TestModule);
         $scheme = new SchemeCollection;
         $scheme->scheme('app')->host('self')->toAdapter(
             new Adapter\App($injector, 'TestVendor\Sandbox', 'Resource\App', $_ENV['TEST_DIR'] . '/TestVendor/App')
@@ -437,7 +437,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
      */
     public function testInsufficientParametersWithoutSignalParameter()
     {
-        $injector = Injector::create([new TestModule]);
+        $injector = new Injector(new TestModule);
         $scheme = new SchemeCollection;
         $scheme->scheme('app')->host('self')->toAdapter(
             new Adapter\App($injector, 'TestVendor\Sandbox', 'Resource\App')

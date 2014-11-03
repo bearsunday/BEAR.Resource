@@ -11,7 +11,7 @@ use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\Cache;
 use ReflectionMethod;
 use Ray\Di\Di\Inject;
-use Ray\Di\Di\Scope;
+use Ray\Di\Scope;
 
 /**
  * Resource linker

@@ -8,10 +8,9 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\ResourceNotFound;
 use Ray\Di\Di\Inject;
-use Ray\Di\Di\Scope;
-use Ray\Di\Exception\NotReadable;
+use Ray\Di\Scope;
 use Traversable;
-
+use Ray\Di\Exception\Unbound;
 /**
  * Resource object factory
  *
@@ -68,7 +67,7 @@ class Factory implements FactoryInterface, \IteratorAggregate
             /** @var $adapter \BEAR\Resource\Adapter\AdapterInterface */
         try {
             $resourceObject = $adapter->get($uri);
-        } catch (NotReadable $e) {
+        } catch (Unbound $e) {
             throw new ResourceNotFound($uri, 0 , $e);
         }
 

@@ -18,7 +18,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->injector = Injector::create([]);
+        $this->injector = new Injector;
         $scheme = new SchemeCollection;
         $scheme->scheme('http')->host('*')->toAdapter(new Http);
         $this->factory = new Factory($scheme);

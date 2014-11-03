@@ -21,7 +21,7 @@ namespace BEAR\Resource\Adapter {
         protected function setUp()
         {
             parent::setUp();
-            $this->injector = Injector::create([]);
+            $this->injector = new Injector;
             $this->namespace = 'testworld';
         }
 
@@ -53,7 +53,7 @@ namespace BEAR\Resource\Adapter {
 
         public function testIterator()
         {
-            $injector = Injector::create();
+            $injector = new Injector;
             $resourceDir = $_ENV['TEST_DIR'] . '/MyVendor';
             $app = new App($injector, 'MyVendor\Sandbox', '', $resourceDir);
             foreach ($app as $meta) {

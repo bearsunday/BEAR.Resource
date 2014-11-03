@@ -17,7 +17,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $injector = Injector::create();
+        $injector = new Injector;
         $scheme = new SchemeCollection;
         $scheme->scheme('app')->host('self')->toAdapter(
             new Adapter\App($injector, 'TestVendor\Sandbox', 'Resource\App')

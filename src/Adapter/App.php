@@ -7,7 +7,7 @@
 namespace BEAR\Resource\Adapter;
 
 use BEAR\Resource\Exception\AppNamespace;
-use Ray\Di\InstanceInterface;
+use Ray\Di\InjectorInterface;
 use BEAR\Resource\Adapter\Iterator\AppIterator;
 use Ray\Di\Di\Inject;
 
@@ -43,7 +43,7 @@ class App implements AdapterInterface, \IteratorAggregate
     private $resourceDir;
 
     /**
-     * @param InstanceInterface $injector    Application dependency injector
+     * @param InjectorInterface $injector    Application dependency injector
      * @param string            $namespace   Resource adapter namespace
      * @param string            $path        Resource adapter path
      * @param string            $resourceDir Resource root dir path
@@ -52,7 +52,7 @@ class App implements AdapterInterface, \IteratorAggregate
      * @throws AppNamespace
      */
     public function __construct(
-        InstanceInterface $injector,
+        InjectorInterface $injector,
         $namespace,
         $path,
         $resourceDir = null

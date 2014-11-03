@@ -7,7 +7,7 @@
 namespace BEAR\Resource\Module;
 
 use Ray\Di\AbstractModule;
-use Ray\Di\Di\Scope;
+use Ray\Di\Scope;
 
 class NamedArgsModule extends AbstractModule
 {
@@ -16,6 +16,6 @@ class NamedArgsModule extends AbstractModule
      */
     protected function configure()
     {
-        $this->bind('Ray\Aop\NamedArgsInterface')->to('Ray\Aop\NamedArgs')->in(Scope::SINGLETON);
+        $this->bind('BEAR\Resource\NamedArgsInterface')->to('BEAR\Resource\NamedArgs')->in(Scope::SINGLETON);
     }
 }

@@ -12,7 +12,7 @@ use BEAR\Resource\ResourceInterface;
 use Doctrine\Common\Annotations\Reader;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
-use Ray\Aop\NamedArgsInterface;
+use BEAR\Resource\NamedArgsInterface;
 use BEAR\Resource\Exception\Embed as EmbedException;
 use Ray\Di\Di\Inject;
 
@@ -31,7 +31,7 @@ final class EmbedInterceptor implements MethodInterceptor
     private $reader;
 
     /**
-     * @var \Ray\Aop\NamedArgsInterface
+     * @var \BEAR\Resource\NamedArgsInterface
      */
     private $namedArgs;
 

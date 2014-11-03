@@ -6,6 +6,7 @@ use Aura\Signal\HandlerFactory;
 use Aura\Signal\Manager;
 use Aura\Signal\ResultCollection;
 use Aura\Signal\ResultFactory;
+use Ray\Aop\Arguments;
 use Ray\Aop\ReflectiveMethodInvocation;
 
 class ByProviderTestClass
@@ -18,10 +19,12 @@ class ByProviderTestClass
 
 class IdProvider implements ParamProviderInterface
 {
+    static $data = [];
+
     public function __invoke(ParamInterface $param)
     {
-        $GLOBALS['method'] = $param->getMethodInvocation();
-        $GLOBALS['param'] = $param->getParameter();
+        self::$data['method'] = $param->getMethodInvocation();
+        self::$data['param'] = $param->getParameter();
 
         return $param->inject(1002);
     }
@@ -91,7 +94,7 @@ class SignalParameterTest extends \PHPUnit_Framework_TestCase
     public function testGetArg()
     {
         $callable = [new ByProviderTestClass, 'onGet'];
-        $this->param->getArg(new \ReflectionParameter($callable, 'id'), new ReflectiveMethodInvocation($callable, []));
+        $this->param->getArg(new \ReflectionParameter($callable, 'id'), new ReflectiveMethodInvocation($callable[0], new \ReflectionMethod($callable[0], $callable[1]), new Arguments([])));
     }
 
     public function testGetArgWithSignal()
@@ -100,7 +103,7 @@ class SignalParameterTest extends \PHPUnit_Framework_TestCase
         $callable = [new ByProviderTestClass, 'onGet'];
         $result = $this->param->getArg(
             new \ReflectionParameter($callable, 'id'),
-            new ReflectiveMethodInvocation($callable, [])
+            new ReflectiveMethodInvocation($callable[0], new \ReflectionMethod($callable[0], $callable[1]), new Arguments([]))
         );
         $this->assertSame(1002, $result);
     }
@@ -110,7 +113,7 @@ class SignalParameterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetArgWithSignalMethod()
     {
-        $this->assertInstanceOf('Ray\Aop\ReflectiveMethodInvocation', $GLOBALS['method']);
+        $this->assertInstanceOf('Ray\Aop\ReflectiveMethodInvocation', IdProvider::$data['method']);
     }
 
     /**
@@ -118,7 +121,7 @@ class SignalParameterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetArgWithSignalParam()
     {
-        $this->assertInstanceOf('ReflectionParameter', $GLOBALS['param']);
+        $this->assertInstanceOf('ReflectionParameter', IdProvider::$data['param']);
     }
 
     /**
@@ -130,7 +133,7 @@ class SignalParameterTest extends \PHPUnit_Framework_TestCase
         $callable = [new ByProviderTestClass, 'onGet'];
         $result = $this->param->getArg(
             new \ReflectionParameter($callable, 'id'),
-            new ReflectiveMethodInvocation($callable, [])
+            new ReflectiveMethodInvocation($callable[0], new \ReflectionMethod($callable[0], $callable[1]), new Arguments([]))
         );
         $this->assertSame(1002, $result);
     }
@@ -142,7 +145,7 @@ class SignalParameterTest extends \PHPUnit_Framework_TestCase
         $callable = [new ByProviderTestClass, 'onGet'];
         $result = $this->param->getArg(
             new \ReflectionParameter($callable, 'id'),
-            new ReflectiveMethodInvocation($callable, [])
+            new ReflectiveMethodInvocation($callable[0], new \ReflectionMethod($callable[0], $callable[1]), new Arguments([]))
         );
         $this->assertSame(1002, $result);
     }

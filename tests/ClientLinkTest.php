@@ -18,7 +18,7 @@ class ClientLinkTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $this->resource = $GLOBALS['RESOURCE'];
         $scheme = new SchemeCollection;
-        $injector = Injector::create([new ResourceModule('TestVendor\Sandbox')]);
+        $injector = new Injector(new ResourceModule('TestVendor\Sandbox'), $_ENV['BEAR_TMP']);
         $scheme->scheme('app')->host('self')->toAdapter(new Adapter\App($injector, 'TestVendor\Sandbox', 'Resource\App'));
         $this->resource->setSchemeCollection($scheme);
         $this->user = $this->resource->newInstance('app://self/link/user');

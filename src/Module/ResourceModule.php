@@ -27,6 +27,7 @@ class ResourceModule extends AbstractModule
     {
         $this->appName = $appName;
         $this->resourceDir = $resourceDir;
+        parent::__construct();
     }
 
     /**
@@ -37,5 +38,6 @@ class ResourceModule extends AbstractModule
         $this->install(new NamedArgsModule);
         $this->install(new ResourceClientModule($this->appName, $this->resourceDir));
         $this->install(new EmbedResourceModule($this));
+        $this->bind('TestVendor\Sandbox\Resource\App\Bird\Birds');
     }
 }

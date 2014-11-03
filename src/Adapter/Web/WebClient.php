@@ -20,7 +20,7 @@ use GuzzleHttp\Command\Guzzle\GuzzleClientInterface;
 use BEAR\Resource\Exception\WebApiOperationNotFound;
 use BEAR\Resource\Adapter\Http\HttpClientInterface;
 
-use Ray\Di\Di\Scope;
+use Ray\Di\Scope;
 
 /**
  * Web resource

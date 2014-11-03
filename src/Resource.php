@@ -8,7 +8,7 @@ namespace BEAR\Resource;
 
 use Doctrine\Common\Cache\Cache;
 use SplObjectStorage;
-use Ray\Di\Di\Scope;
+use Ray\Di\Scope;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
 use Traversable;

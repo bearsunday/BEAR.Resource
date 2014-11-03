@@ -6,6 +6,7 @@
  */
 namespace BEAR\Resource;
 
+use Ray\Aop\Arguments;
 use Ray\Aop\ReflectiveMethodInvocation;
 use ReflectionParameter;
 use Ray\Di\Di\Inject;
@@ -47,7 +48,7 @@ final class NamedParameter implements NamedParameterInterface
                 continue;
             }
             if ($this->signalParameter) {
-                $invocation = new ReflectiveMethodInvocation($callable, $query);
+                $invocation = new ReflectiveMethodInvocation($callable[0], new \ReflectionMethod($callable[0], $callable[1]), new Arguments($query));
                 $args[] = $this->signalParameter->getArg($parameter, $invocation);
                 continue;
             }

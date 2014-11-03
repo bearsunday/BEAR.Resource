@@ -39,7 +39,7 @@ class SchemeCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testIterator()
     {
-        $injector = Injector::create();
+        $injector = new Injector;
         $resourceDir = $_ENV['TEST_DIR'] . '/MyVendor';
         $app = new App($injector, 'MyVendor\Sandbox', '', $resourceDir);
 

@@ -4,7 +4,6 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Module\NamedArgsModule;
 use Ray\Di\Injector;
-use Ray\Aop\NamedArgsInterface;
 use Ray\Di\Di\Inject;
 
 class Dependent
@@ -24,7 +23,7 @@ class NamedArgsTest extends \PHPUnit_Framework_TestCase
 {
     public function testCacheApc()
     {
-        $app = Injector::create([new NamedArgsModule])->getInstance(__NAMESPACE__ . '\Dependent');
-        $this->assertInstanceOf('Ray\Aop\NamedArgsInterface' , $app->namedArgs);
+        $app = (new Injector(new NamedArgsModule))->getInstance(__NAMESPACE__ . '\Dependent');
+        $this->assertInstanceOf('BEAR\Resource\NamedArgsInterface' , $app->namedArgs);
     }
 }

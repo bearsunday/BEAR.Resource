@@ -10,7 +10,7 @@ use Ray\Aop\Weave;
 use Ray\Aop\Bind;
 use Ray\Aop\WeavedInterface;
 use XHProfRuns_Default;
-use Ray\Di\Di\Scope;
+use Ray\Di\Scope;
 
 /**
  * Resource request invoker
@@ -99,9 +99,7 @@ class DevInvoker extends Invoker implements InvokerInterface
             return $request->ro;
         }
         $ro = $request->ro;
-        $bind = $ro->rayAopBind;
-        /** @noinspection PhpUndefinedMethodInspection */
-        $interceptors = $this->getBindInfo($bind);
+        $interceptors = $this->getBindInfo($ro->bindings);
         $ro->headers[self::HEADER_INTERCEPTORS] = json_encode($interceptors);
 
         return $request->ro;
@@ -112,20 +110,15 @@ class DevInvoker extends Invoker implements InvokerInterface
      *
      * @return array
      */
-    public function getBindInfo(Bind $binds)
+    public function getBindInfo(array $bindings)
     {
-        $result = [];
-        $iterator = $binds->getIterator();
-        while ($iterator->valid()) {
-            $method = $iterator->key();
-            $interceptors = array_values($binds[$method]);
+        $info = $bindings;
+        foreach ($info as $method => &$interceptors) {
             foreach ($interceptors as &$interceptor) {
                 $interceptor = get_class($interceptor);
             }
-            $result[$method] = $interceptors;
-            $iterator->next();
         }
 
-        return $result;
+        return $info;
     }
 }

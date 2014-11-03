@@ -7,7 +7,7 @@
 namespace BEAR\Resource;
 
 use Ray\Di\Di\Inject;
-use Ray\Di\Di\Scope;
+use Ray\Di\Scope;
 
 /**
  * Resource request invoker

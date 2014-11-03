@@ -15,11 +15,11 @@ class EmbedResourceModule extends AbstractModule
      */
     protected function configure()
     {
-        $this->install(new NamedArgsModule);
+        $this->bind('Doctrine\Common\Annotations\Reader')->to('Doctrine\Common\Annotations\AnnotationReader');
         $this->bindInterceptor(
             $this->matcher->any(),
             $this->matcher->annotatedWith('BEAR\Resource\Annotation\Embed'),
-            [$this->requestInjection('BEAR\Resource\Interceptor\EmbedInterceptor')]
+            ['BEAR\Resource\Interceptor\EmbedInterceptor']
         );
     }
 }

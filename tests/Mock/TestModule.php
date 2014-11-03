@@ -12,7 +12,7 @@ class TestModule extends AbstractModule
         $this->bindInterceptor(
             $this->matcher->any(),
             $this->matcher->annotatedWith('BEAR\Resource\Annotation\Log'),
-            [new Log]
+            ['BEAR\Resource\Interceptor\Log']
         );
     }
 }

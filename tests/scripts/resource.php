@@ -6,35 +6,10 @@ use Aura\Signal\Manager;
 use Aura\Signal\HandlerFactory;
 use Aura\Signal\ResultFactory;
 use Aura\Signal\ResultCollection;
-use Ray\Di\Definition;
-use Ray\Di\Annotation;
-use Ray\Di\Config;
-use Ray\Di\Forge;
-use Ray\Di\Container;
-use Ray\Di\Injector;
-use Ray\Di\EmptyModule;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Ray\Aop\Bind;
-use Ray\Aop\Compiler;
-use PHPParser_PrettyPrinter_Default;
-use PHPParser_Parser;
-use PHPParser_Lexer;
-use PHPParser_BuilderFactory;
-use Ray\Di\Logger as DiLogger;
+use Ray\Di\Injector;
 
-$injector = new Injector(
-    new Container(new Forge(new Config(new Annotation(new Definition, new AnnotationReader)))),
-    new EmptyModule,
-    new Bind,
-    new Compiler(
-        sys_get_temp_dir(),
-        new PHPParser_PrettyPrinter_Default,
-        new PHPParser_Parser(new PHPParser_Lexer),
-        new PHPParser_BuilderFactory
-    ),
-    new DiLogger
-);
-
+$injector = new Injector;
 $scheme = new SchemeCollection;
 $scheme
     ->scheme('app')

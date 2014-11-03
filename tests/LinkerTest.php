@@ -41,7 +41,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $signal = new Manager(new HandlerFactory, new ResultFactory, new ResultCollection);
         $params = new NamedParameter(new SignalParameter($signal, new Param));
         $invoker = new Invoker($this->linker, $params);
-        $injector = $GLOBALS['INJECTOR'];
+        $injector = new Injector;
 
         $this->request = new Request($invoker);
         $scheme = (new SchemeCollection)

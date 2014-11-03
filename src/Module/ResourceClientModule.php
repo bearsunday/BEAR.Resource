@@ -30,6 +30,7 @@ class ResourceClientModule extends AbstractModule
         }
         $this->appName = $appName;
         $this->resourceDir = $resourceDir;
+        parent::__construct();
     }
 
     /**
@@ -37,8 +38,6 @@ class ResourceClientModule extends AbstractModule
      */
     protected function configure()
     {
-        // install Injector
-        $this->install(new InjectorModule($this));
         // bind app name
         $this->bind()->annotatedWith('app_name')->toInstance($this->appName);
         $this->bind()->annotatedWith('resource_dir')->toInstance($this->resourceDir);
@@ -54,7 +53,6 @@ class ResourceClientModule extends AbstractModule
         $this->bind('BEAR\Resource\SchemeCollectionInterface')->toProvider('BEAR\Resource\Module\SchemeCollectionProvider')->in(Scope::SINGLETON);
         $this->bind('Aura\Signal\Manager')->toProvider('BEAR\Resource\Module\SignalProvider')->in(Scope::SINGLETON);
         $this->bind('BEAR\Resource\ParamInterface')->to('BEAR\Resource\Param');
-        $this->bind('BEAR\Resource\Renderer\RendererInterface')->to('BEAR\Resource\Renderer\JsonRenderer');
-        $this->bind('Ray\Di\InstanceInterface')->toInstance($this->dependencyInjector);
+        $this->bind('BEAR\Resource\RequestInterface')->to('BEAR\Resource\Request');
     }
 }

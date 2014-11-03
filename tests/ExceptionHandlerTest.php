@@ -56,7 +56,7 @@ namespace BEAR\Resource {
 
         public function setUp()
         {
-            $this->resource = Injector::create([new ResourceModule('ExceptionTest')])->getInstance('BEAR\Resource\ResourceInterface');
+            $this->resource = (new Injector(new ResourceModule('ExceptionTest')))->getInstance('BEAR\Resource\ResourceInterface');
         }
 
         public function testException()
