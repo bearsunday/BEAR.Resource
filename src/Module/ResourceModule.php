@@ -6,7 +6,9 @@
  */
 namespace BEAR\Resource\Module;
 
+use BEAR\Resource\Renderer\JsonRenderer;
 use Ray\Di\AbstractModule;
+use BEAR\Resource\RenderInterface;
 
 class ResourceModule extends AbstractModule
 {
@@ -38,6 +40,6 @@ class ResourceModule extends AbstractModule
         $this->install(new NamedArgsModule);
         $this->install(new ResourceClientModule($this->appName, $this->resourceDir));
         $this->install(new EmbedResourceModule($this));
-        $this->bind('TestVendor\Sandbox\Resource\App\Bird\Birds');
+        $this->bind('BEAR\Resource\RenderInterface')->to('BEAR\Resource\Renderer\JsonRenderer');
     }
 }

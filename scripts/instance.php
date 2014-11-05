@@ -8,7 +8,6 @@ use Aura\Signal\ResultCollection;
 use Aura\Signal\ResultFactory;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
-use Ray\Di\Definition;
 use Ray\Di\Injector;
 
 $invoker = new Invoker(

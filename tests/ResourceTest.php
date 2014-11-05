@@ -286,7 +286,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     public function testDocsSample00min()
     {
         ob_start();
-        require $_ENV['PACKAGE_DIR'] . '/docs/sample/00.min/main.php';
+        require $_ENV['PACKAGE_DIR'] . '/docs/demo/00.min/main.php';
         $response = ob_get_clean();
         $this->assertContains('[name] => Aramis', $response);
     }
@@ -297,7 +297,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     public function testDocsSample01basic()
     {
         ob_start();
-        require $_ENV['PACKAGE_DIR'] . '/docs/sample/01.basic/main.php';
+        require $_ENV['PACKAGE_DIR'] . '/docs/demo/01.basic/main.php';
         $response = ob_get_clean();
         $this->assertContains('[name] => Aramis', $response);
     }
@@ -308,7 +308,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     public function testDocsSampleRestBucks()
     {
         ob_start();
-        require $_ENV['PACKAGE_DIR'] . '/docs/sample/04.restbucks/main.php';
+        require $_ENV['PACKAGE_DIR'] . '/docs/demo/04.restbucks/main.php';
         $response = ob_get_clean();
         $this->assertContains('201: Created', $response);
         $this->assertContains('Order: Success', $response);
