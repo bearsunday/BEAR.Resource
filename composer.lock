@@ -556,16 +556,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v1.0.1",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "b9a60372f26356feb85b4b9ca50a395a5f0d7f34"
+                "reference": "a8ffc6fcfcbae268656c8acf1298e378ac1ee5f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/b9a60372f26356feb85b4b9ca50a395a5f0d7f34",
-                "reference": "b9a60372f26356feb85b4b9ca50a395a5f0d7f34",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/a8ffc6fcfcbae268656c8acf1298e378ac1ee5f1",
+                "reference": "a8ffc6fcfcbae268656c8acf1298e378ac1ee5f1",
                 "shasum": ""
             },
             "require": {
@@ -597,7 +597,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2014-10-14 19:40:07"
+            "time": "2014-11-04 22:12:46"
         },
         {
             "name": "nocarrier/hal",
@@ -653,12 +653,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Ray.Aop.git",
-                "reference": "1f901a86f91c4b0cf6793aaf75aadf602b3e6677"
+                "reference": "b4bab490ebb273b8fc5269a904b27657a29e1ad1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Ray.Aop/zipball/1f901a86f91c4b0cf6793aaf75aadf602b3e6677",
-                "reference": "1f901a86f91c4b0cf6793aaf75aadf602b3e6677",
+                "url": "https://api.github.com/repos/koriym/Ray.Aop/zipball/b4bab490ebb273b8fc5269a904b27657a29e1ad1",
+                "reference": "b4bab490ebb273b8fc5269a904b27657a29e1ad1",
                 "shasum": ""
             },
             "require": {
@@ -699,7 +699,7 @@
                 "code gen",
                 "method invocation"
             ],
-            "time": "2014-10-31 06:21:54"
+            "time": "2014-11-05 02:31:41"
         },
         {
             "name": "ray/di",
@@ -707,12 +707,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Ray.Di.git",
-                "reference": "166bc0e17cad9742ccce06b39bc26703a9a64a97"
+                "reference": "99ac2316219e856ad64b3092bba6853f01c108a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/166bc0e17cad9742ccce06b39bc26703a9a64a97",
-                "reference": "166bc0e17cad9742ccce06b39bc26703a9a64a97",
+                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/99ac2316219e856ad64b3092bba6853f01c108a8",
+                "reference": "99ac2316219e856ad64b3092bba6853f01c108a8",
                 "shasum": ""
             },
             "require": {
@@ -748,7 +748,7 @@
                 "di",
                 "guice"
             ],
-            "time": "2014-11-03 05:16:22"
+            "time": "2014-11-04 16:39:45"
         }
     ],
     "packages-dev": [
