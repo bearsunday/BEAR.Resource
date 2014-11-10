@@ -6,64 +6,43 @@
  */
 namespace BEAR\Resource;
 
-use Ray\Aop\Arguments;
-use Ray\Aop\ReflectiveMethodInvocation;
 use ReflectionParameter;
-use Ray\Di\Di\Inject;
 
 final class NamedParameter implements NamedParameterInterface
 {
     /**
-     * @var SignalParameterInterface
-     */
-    private $signalParameter;
-
-    /**
-     * @param SignalParameterInterface $signalParameter
-     *
-     * @Inject(optional=true)
-     */
-    public function __construct(SignalParameterInterface $signalParameter = null)
-    {
-        $this->signalParameter = $signalParameter;
-    }
-
-    /**
      * {@inheritdoc}
      */
-    public function getArgs(array $callable, array $query)
+    public function getParameters(array $callable, array $query)
     {
         $namedArgs = $query;
         $method = new \ReflectionMethod($callable[0], $callable[1]);
-        $parameters = $method->getParameters();
-        $args = [];
-        foreach ($parameters as $parameter) {
-            /** @var $parameter \ReflectionParameter */
+        $refParameters = $method->getParameters();
+        $parameters = [];
+        foreach ($refParameters as $parameter) {
             if (isset($namedArgs[$parameter->name])) {
-                $args[] = $namedArgs[$parameter->name];
+                $parameters[] = $namedArgs[$parameter->name];
                 continue;
             }
-            if ($parameter->isDefaultValueAvailable() === true) {
-                $args[] = $parameter->getDefaultValue();
-                continue;
-            }
-            if ($this->signalParameter) {
-                $invocation = new ReflectiveMethodInvocation($callable[0], new \ReflectionMethod($callable[0], $callable[1]), new Arguments($query));
-                $args[] = $this->signalParameter->getArg($parameter, $invocation);
-                continue;
-            }
-            $msg = '$' . "{$parameter->name} in " . get_class($callable[0]) . '::' . $callable[1] . '()';
-            throw new Exception\Parameter($msg);
+            $parameters[] = $this->getParameter($callable, $parameter);
         }
 
-        return $args;
+        return $parameters;
     }
 
     /**
-     * {@inheritdoc}
+     * @param array               $callable
+     * @param ReflectionParameter $parameter
+     *
+     * @return mixed
      */
-    public function attachParamProvider($varName, ParamProviderInterface $provider)
+    private function getParameter(array $callable, \ReflectionParameter $parameter)
     {
-        $this->signalParameter->attachParamProvider($varName, $provider);
+        if ($parameter->isDefaultValueAvailable() === true) {
+
+            return $parameter->getDefaultValue();
+        }
+        $msg = '$' . "{$parameter->name} in " . get_class($callable[0]) . '::' . $callable[1] . '()';
+        throw new Exception\Parameter($msg);
     }
 }

@@ -14,9 +14,6 @@ use TestVendor\Sandbox\Resource\App\Restbucks\Order;
 use TestVendor\Sandbox\Resource\App\User;
 use TestVendor\Sandbox\Resource\App\Param\User as ParamUser;
 
-/**
- * Test class for BEAR.Resource.
- */
 class InvokerTest extends \PHPUnit_Framework_TestCase
 {
     /**

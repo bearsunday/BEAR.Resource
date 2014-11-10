@@ -131,7 +131,7 @@ class Invoker implements InvokerInterface
             return $this->extraMethod($request->ro, $request, $onMethod);
         }
         // invoke with Named param and Signal param
-        $args = $this->params->getArgs([$request->ro, $onMethod], $request->query);
+        $args = $this->params->getParameters([$request->ro, $onMethod], $request->query);
 
         $result = null;
         try {
@@ -236,7 +236,7 @@ class Invoker implements InvokerInterface
     {
         if (method_exists($request->ro, 'onGet')) {
             // invoke with Named param and Signal param
-            $args = $this->params->getArgs([$request->ro, 'onGet'], $request->query);
+            $args = $this->params->getParameters([$request->ro, 'onGet'], $request->query);
             try {
                 call_user_func_array([$request->ro, 'onGet'], $args);
             } catch (Exception\Parameter $e) {
