@@ -8,17 +8,14 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Adapter\AdapterInterface;
 
-/**
- * Interface for resource client
- */
-interface SchemeCollectionInterface extends \IteratorAggregate
+interface SchemeCollectionInterface
 {
     /**
      * Set scheme
      *
      * @param string $scheme
      *
-     * @return SchemeCollection
+     * @return $this
      */
     public function scheme($scheme);
 
@@ -27,7 +24,7 @@ interface SchemeCollectionInterface extends \IteratorAggregate
      *
      * @param string $host
      *
-     * @return SchemeCollection
+     * @return $this
      */
     public function host($host);
 
@@ -36,7 +33,7 @@ interface SchemeCollectionInterface extends \IteratorAggregate
      *
      * @param AdapterInterface $adapter
      *
-     * @return SchemeCollection
+     * @return $this
      */
     public function toAdapter(AdapterInterface $adapter);
 }

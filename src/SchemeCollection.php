@@ -6,34 +6,32 @@
  */
 namespace BEAR\Resource;
 
-use ArrayObject;
 use BEAR\Resource\Adapter\AdapterInterface;
+use BEAR\Resource\Exception\Scheme;
 
-/**
- * Resource scheme collection
- */
-class SchemeCollection extends ArrayObject implements SchemeCollectionInterface
+final class SchemeCollection implements SchemeCollectionInterface
 {
     /**
      * Scheme
      *
      * @var string
      */
-    private $scheme;
+    private $scheme = '';
 
     /**
-     * Host
+     * Application name
      *
      * @var string
      */
-    private $host;
+    private $app = '';
 
     /**
-     * Set scheme
-     *
-     * @param string $scheme
-     *
-     * @return SchemeCollection
+     * @var AdapterInterface[]
+     */
+    private $collection = [];
+
+    /**
+     * {@inheritdoc}
      */
     public function scheme($scheme)
     {
@@ -43,52 +41,34 @@ class SchemeCollection extends ArrayObject implements SchemeCollectionInterface
     }
 
     /**
-     * Set host
-     *
-     * @param string $host
-     *
-     * @return SchemeCollection
+     * {@inheritdoc}
      */
     public function host($host)
     {
-        $this->host = $host;
-
-        return $this;
-    }
-
-    /**
-     * Set resource adapter
-     *
-     * @param AdapterInterface $adapter
-     *
-     * @return SchemeCollection
-     */
-    public function toAdapter(AdapterInterface $adapter)
-    {
-        $this[$this->scheme][$this->host] = $adapter;
-        $this->scheme = $this->host = null;
+        $this->app = $host;
 
         return $this;
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return \ArrayIterator|\MultipleIterator|\Traversable
      */
-    public function getIterator()
+    public function toAdapter(AdapterInterface $adapter)
     {
-        $iterator = new \AppendIterator;
-        $schemeCollection = $this->getArrayCopy();
-        foreach ($schemeCollection as $scheme) {
-            foreach ($scheme as $adapter) {
-                if ($adapter instanceof \IteratorAggregate) {
-                    /** @var $adapter \IteratorAggregate */
-                    $iterator->append($adapter->getIterator());
-                }
-            }
-        }
+        $this->collection[$this->scheme . '://' . $this->app] = $adapter;
 
-        return $iterator;
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAdapter(AbstractUri $uri)
+    {
+        $schemeIndex = $uri->scheme . '://' . $uri->host;
+        if (! isset($this->collection[$schemeIndex])) {
+            throw new Scheme($uri->scheme . '://' . $uri->host);
+        }
+        return $this->collection[$schemeIndex];
     }
 }
