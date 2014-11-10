@@ -6,40 +6,35 @@
  */
 namespace BEAR\Resource;
 
-final class Uri
+use BEAR\Resource\Exception\Uri as UriException;
+
+final class Uri extends AbstractUri
 {
-    /**
-     * URI ($schema://$host/$path)
-     *
-     * @var string
-     */
-    public $uri;
-
-    /**
-     * Query
-     *
-     * @var array
-     */
-    public $query;
-
     /**
      * @param string $uri
      * @param array  $query
      */
     public function __construct($uri, array $query = [])
     {
-        $this->uri = $uri;
-        $this->query = $query;
+        if (! filter_var($uri, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED)) {
+            throw new UriException($uri);
+        }
+        $parsedUrl = parse_url($uri);
+        list($this->scheme, $this->host, $this->path) = array_values($parsedUrl);
+        if (isset($parsedUrl['query'])) {
+            parse_str($parsedUrl['query'], $this->query);
+        }
+        if ($query) {
+            $this->query = $query + $this->query;
+        }
     }
 
     /**
-     * Return URI string
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function __toString()
     {
-        $uriWithQuery = $this->uri . ($this->query ? '?' . http_build_query($this->query) : '');
+        $uriWithQuery = "{$this->scheme}://{$this->host}{$this->path}" . ($this->query ? '?' . http_build_query($this->query) : '');
 
         return $uriWithQuery;
     }
