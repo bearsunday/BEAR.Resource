@@ -11,24 +11,19 @@ use Ray\Di\Di\Inject;
 use Ray\Di\Scope;
 use Traversable;
 use Ray\Di\Exception\Unbound;
-/**
- * Resource object factory
- *
- * @Scope("Singleton")
- */
-class Factory implements FactoryInterface, \IteratorAggregate
+use BEAR\Resource\Exception\Uri as UriException;
+
+class Factory implements FactoryInterface
 {
     /**
      * Resource adapter biding config
      *
      * @var SchemeCollection
      */
-    private $scheme = [];
+    private $scheme;
 
     /**
      * @param SchemeCollectionInterface $scheme
-     *
-     * @Inject
      */
     public function __construct(SchemeCollectionInterface $scheme)
     {
@@ -41,6 +36,7 @@ class Factory implements FactoryInterface, \IteratorAggregate
      * @param SchemeCollectionInterface $scheme
      *
      * @Inject(optional = true)
+     * @codeCoverageIgnore
      */
     public function setSchemeCollection(SchemeCollectionInterface $scheme)
     {
@@ -49,62 +45,40 @@ class Factory implements FactoryInterface, \IteratorAggregate
 
     /**
      * {@inheritDoc}
-     * @throws Exception\Scheme
      */
     public function newInstance($uri)
     {
-        if (substr($uri, -1) === '/') {
-            $uri .= 'index';
+        if (is_string($uri)) {
+            $uri = new Uri($uri);
         }
-        list($scheme, $host) = $this->parseUri($uri);
-        if (!isset($this->scheme[$scheme][$host])) {
-            if (!(isset($this->scheme[$scheme]['*']))) {
-                throw new Exception\Scheme($uri);
-            }
-            $host = '*';
+        if (is_scalar($uri) || ! $uri instanceof Uri) {
+            $msg = is_object($uri) ? get_class($uri) : gettype($uri);
+            throw new UriException($msg);
         }
-        $adapter = $this->scheme[$scheme][$host];
-            /** @var $adapter \BEAR\Resource\Adapter\AdapterInterface */
+        $adapter = $this->scheme->getAdapter($uri);
         try {
             $resourceObject = $adapter->get($uri);
         } catch (Unbound $e) {
-            throw new ResourceNotFound($uri, 0 , $e);
+            $resourceObject = $this->retryWithIndexSuffix($e, $uri);
         }
-
         $resourceObject->uri = $uri;
 
         return $resourceObject;
     }
 
     /**
-     * @param string $uri
+     * @param Unbound $e
+     * @param Uri     $uri
      *
-     * @return array [$scheme, $host]
-     * @throws Exception\Uri
-     * @throws Exception\Scheme
+     * @return ResourceObject
      */
-    private function parseUri($uri)
+    private function retryWithIndexSuffix(Unbound $e, Uri $uri)
     {
-        $parsedUrl = parse_url($uri);
-        if (!(isset($parsedUrl['scheme']) && isset($parsedUrl['scheme']))) {
-            throw new Exception\Uri;
+        if (substr($uri->path, -1) !== '/' || substr($uri->path, -6) === '/index') {
+            throw new ResourceNotFound($uri, 404, $e);
         }
-        $scheme = $parsedUrl['scheme'];
-        $host = $parsedUrl['host'];
-        if (!isset($this->scheme[$scheme])) {
-            throw new Exception\Scheme($uri);
-        }
+        $uri .= 'index';
 
-        return [$scheme, $host];
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return \ArrayIterator|\MultipleIterator|Traversable
-     */
-    public function getIterator()
-    {
-        return $this->scheme->getIterator();
+        return $this->newInstance((string) $uri);
     }
 }
