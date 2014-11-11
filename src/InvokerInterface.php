@@ -6,13 +6,6 @@
  */
 namespace BEAR\Resource;
 
-use Ray\Di\Di\ImplementedBy;
-
-/**
- * Resource request invoke interface
- *
- * @ImplementedBy("BEAR\Resource\Invoker")
- */
 interface InvokerInterface
 {
     /**
@@ -25,26 +18,6 @@ interface InvokerInterface
     public function invoke(AbstractRequest $request);
 
     /**
-     * Invoke traversal
-     *
-     * invoke callable
-     *
-     * @param \Traversable $requests
-     *
-     * @return \Traversable
-     */
-    public function invokeTraversal(\Traversable $requests);
-
-    /**
-     * Invoke Sync
-     *
-     * @param \SplObjectStorage $requests
-     *
-     * @return mixed
-     */
-    public function invokeSync(\SplObjectStorage $requests);
-
-    /**
      * Set resource client
      *
      * @param ResourceInterface $resource
@@ -52,23 +25,4 @@ interface InvokerInterface
      * @return void
      */
     public function setResourceClient(ResourceInterface $resource);
-
-    /**
-     * Attach parameter provider
-     *
-     * @param string                 $varName
-     * @param ParamProviderInterface $provider
-     *
-     * @return $this
-     */
-    public function attachParamProvider($varName, ParamProviderInterface $provider);
-
-    /**
-     * Add resource invoker exception handler
-     *
-     * @param ExceptionHandlerInterface $exceptionHandler
-     *
-     * @return mixed
-     */
-    public function setExceptionHandler(ExceptionHandlerInterface $exceptionHandler);
 }

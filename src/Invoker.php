@@ -9,17 +9,8 @@ namespace BEAR\Resource;
 use Ray\Di\Di\Inject;
 use Ray\Di\Scope;
 
-/**
- * Resource request invoker
- *
- * @Scope("Singleton")
- */
 class Invoker implements InvokerInterface
 {
-    const METHOD_SYNC = 'onSync';
-
-    const METHOD_FINAL_SYNC = 'onFinalSync';
-
     /**
      * @var Linker
      */
@@ -77,21 +68,6 @@ class Invoker implements InvokerInterface
     }
 
     /**
-     * Resource logger setter
-     *
-     * @param LoggerInterface $logger
-     *
-     * @return $this
-     * @Inject(optional=true)
-     */
-    public function setResourceLogger(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-
-        return $this;
-    }
-
-    /**
      * @param OptionProviderInterface $optionProvider
      *
      * @Inject(optional=true)
@@ -102,23 +78,12 @@ class Invoker implements InvokerInterface
     }
 
     /**
-     * @param LinkerInterface           $linker
-     * @param NamedParameter            $params
-     * @param LoggerInterface           $logger
-     * @param ExceptionHandlerInterface $exceptionHandler
-     *
-     * @Inject
+     * @param LinkerInterface $linker
+     * @param NamedParameter  $params
      */
-    public function __construct(
-        LinkerInterface $linker,
-        NamedParameter  $params,
-        LoggerInterface $logger = null,
-        ExceptionHandlerInterface $exceptionHandler = null
-    ) {
+    public function __construct(LinkerInterface $linker, NamedParameter $params) {
         $this->linker = $linker;
         $this->params = $params;
-        $this->logger = $logger;
-        $this->exceptionHandler = $exceptionHandler ?: new ExceptionHandler;
     }
 
     /**
@@ -128,20 +93,11 @@ class Invoker implements InvokerInterface
     {
         $onMethod = 'on' . ucfirst($request->method);
         if (method_exists($request->ro, $onMethod) !== true) {
+
             return $this->extraMethod($request->ro, $request, $onMethod);
         }
-        // invoke with Named param and Signal param
         $args = $this->params->getParameters([$request->ro, $onMethod], $request->query);
-
-        $result = null;
-        try {
-            $result = call_user_func_array([$request->ro, $onMethod], $args);
-        } catch (Exception\Parameter $e) {
-            $e =  new Exception\ParameterInService('', 0, $e);
-            $result = $this->exceptionHandler->handle($e, $request);
-        } catch (\Exception $e) {
-            $result = $this->exceptionHandler->handle($e, $request);
-        }
+        $result = call_user_func_array([$request->ro, $onMethod], $args);
 
         return $this->postRequest($request, $result);
     }
@@ -161,48 +117,9 @@ class Invoker implements InvokerInterface
         if ($request->links) {
             $result = $this->linker->invoke($request);
         }
-        if ($this->logger instanceof LoggerInterface) {
-            $this->logger->log($request, $result);
-        }
 
         return $result;
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function invokeTraversal(\Traversable $requests)
-    {
-        foreach ($requests as &$element) {
-            if ($element instanceof Request || is_callable($element)) {
-                $element = $element();
-            }
-        }
-
-        return $requests;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function invokeSync(\SplObjectStorage $requests)
-    {
-        $requests->rewind();
-        $data = new \ArrayObject;
-        $request = null;
-        while ($requests->valid()) {
-            // each sync request method call.
-            $request = $requests->current();
-            if (method_exists($request->ro, self::METHOD_SYNC)) {
-                call_user_func([$request->ro, self::METHOD_SYNC], $request, $data);
-            }
-            $requests->next();
-        }
-        $result = call_user_func([$request->ro, self::METHOD_FINAL_SYNC], $request, $data);
-
-        return $result;
-    }
-
 
     /**
      * OPTIONS or HEAD
@@ -246,21 +163,5 @@ class Invoker implements InvokerInterface
         $request->ro->body = '';
 
         return $request->ro;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function attachParamProvider($varName, ParamProviderInterface $provider)
-    {
-        $this->params->attachParamProvider($varName, $provider);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setExceptionHandler(ExceptionHandlerInterface $exceptionHandler)
-    {
-        $this->exceptionHandler = $exceptionHandler;
     }
 }

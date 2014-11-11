@@ -17,6 +17,7 @@ final class Request extends AbstractRequest
     const PATCH = 'patch';
     const DELETE = 'delete';
     const HEAD = 'head';
+    const OPTIONS = 'options';
 
     /**
      * URI
@@ -90,7 +91,7 @@ final class Request extends AbstractRequest
     ) {
         $this->invoker = $invoker;
         $this->ro = $ro;
-        if (! in_array($method, [self::GET, self::POST, self::PUT, self::PATCH, self::DELETE, self::HEAD])) {
+        if (! in_array($method, [self::GET, self::POST, self::PUT, self::PATCH, self::DELETE, self::HEAD, self::OPTIONS])) {
             throw new Method($method);
         }
         $this->method = $method;
