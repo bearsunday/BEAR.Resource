@@ -6,13 +6,6 @@
  */
 namespace BEAR\Resource;
 
-use Ray\Di\Di\ImplementedBy;
-
-/**
- * Interface for resource link
- *
- * @ImplementedBy("BEAR\Resource\Linker")
- */
 interface LinkerInterface
 {
     /**

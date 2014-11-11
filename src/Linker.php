@@ -7,17 +7,9 @@
 namespace BEAR\Resource;
 
 use Doctrine\Common\Annotations\Reader;
-use Doctrine\Common\Cache\ArrayCache;
-use Doctrine\Common\Cache\Cache;
 use ReflectionMethod;
 use Ray\Di\Di\Inject;
-use Ray\Di\Scope;
 
-/**
- * Resource linker
- *
- * @Scope("Singleton")
- */
 final class Linker implements LinkerInterface
 {
     /**
@@ -33,22 +25,18 @@ final class Linker implements LinkerInterface
     private $reader;
 
     /**
-     * @var Cache
+     * @var array
      */
-    private $cache;
+    private $cache = [];
 
     /**
      * @param Reader $reader
-     * @param Cache  $cache
      *
      * @Inject
      */
-    public function __construct(
-        Reader $reader,
-        Cache $cache = null
-    ) {
+    public function __construct(Reader $reader)
+    {
         $this->reader = $reader;
-        $this->cache = $cache ? : new ArrayCache;
     }
 
     /**
@@ -187,6 +175,7 @@ final class Linker implements LinkerInterface
      */
     private function crawl(array $annotations, LinkType $link, array &$body)
     {
+        $this->cache = [];
         foreach ($annotations as $annotation) {
             /* @var $annotation Annotation\Link */
             if ($annotation->crawl !== $link->key) {
@@ -196,19 +185,17 @@ final class Linker implements LinkerInterface
             $request = $this->resource->{$annotation->method}->uri($uri)->linkCrawl($link->key)->request();
             /* @var $request Request */
             $hash = $request->hash();
-            if ($this->cache->contains($hash)) {
-                $body[$annotation->rel] = $this->cache->fetch($hash);
+            if (isset($this->cache[$hash])) {
+                $body[$annotation->rel] = $this->cache[$hash];
                 continue;
             }
             /* @var $linkedResource ResourceObject */
             $body[$annotation->rel] = $request()->body;
-            $this->cache->save($hash, $body[$annotation->rel]);
+            $this->cache[$hash] = $body[$annotation->rel];
         }
     }
 
     /**
-     * Is data list ?
-     *
      * @param mixed $value
      *
      * @return boolean

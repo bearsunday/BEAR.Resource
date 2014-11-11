@@ -2,31 +2,26 @@
 
 namespace BEAR\Resource;
 
-use Aura\Signal\Manager;
-use Aura\Signal\HandlerFactory;
-use Aura\Signal\ResultFactory;
-use Aura\Signal\ResultCollection;
 use Ray\Di\Injector;
 
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use TestVendor\Sandbox\Resource\App\Link\Scalar\Name;
 use TestVendor\Sandbox\Resource\App\Link\User;
 use TestVendor\Sandbox\Resource\App\Marshal\Author;
+use BEAR\Resource\Exception\LinkQuery;
 
-/**
- * Test class for BEAR.Resource.
- */
 class LinkerTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Linker
+     */
+    private $linker;
+
     /**
      * @var Request
      */
     protected $request;
 
-    /**
-     * @var Linker
-     */
-    private $linker;
 
     /**
      * @var Resource
@@ -36,26 +31,16 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-
         $this->linker = new Linker(new Reader);
-        $signal = new Manager(new HandlerFactory, new ResultFactory, new ResultCollection);
-        $params = new NamedParameter(new SignalParameter($signal, new Param));
-        $invoker = new Invoker($this->linker, $params);
+        $invoker = new Invoker($this->linker, new NamedParameter);
         $injector = new Injector;
-
         $this->request = new Request($invoker);
         $scheme = (new SchemeCollection)
             ->scheme('app')
             ->host('self')
-            ->toAdapter(new Adapter\App($injector, 'TestVendor\Sandbox', 'Resource\App')
-            );
+            ->toAdapter(new Adapter\App($injector, 'TestVendor\Sandbox', 'Resource\App'));
         $factory = new Factory($scheme);
         $this->resource = new Resource($factory, $invoker, new Request($invoker), new Anchor(new Reader, $this->request));
-    }
-
-    public function testNew()
-    {
-        $this->assertInstanceOf('\BEAR\Resource\Linker', $this->linker);
     }
 
     public function testLinkAnnotationSelf()
@@ -100,7 +85,6 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $ro = new Author;
         $ro->body = $ro->onGet(1);
         $this->request->ro = $ro;
-
         $result = $this->linker->invoke($this->request);
         $expected = array (
             'id' => 1,
@@ -250,11 +234,9 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $result->body);
     }
 
-    /**
-     * @expectedException \BEAR\Resource\Exception\LinkQuery
-     */
     public function testScalarValueLinkThrowException()
     {
+        $this->setExpectedException(LinkQuery::class);
         $this->request->links = [new LinkType('greeting', LinkType::NEW_LINK)];
         $this->request->method = 'get';
         $ro = new Name;
@@ -262,11 +244,10 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->request->ro = $ro;
         $this->linker->invoke($this->request);
     }
-    /**
-     * @expectedException \BEAR\Resource\Exception\LinkRel
-     */
+
     public function testInvalidRel()
     {
+        $this->setExpectedException(LinkQuery::class);
         $this->request->links = [new LinkType('xxx', LinkType::NEW_LINK)];
         $this->request->method = 'get';
         $ro = new User;
@@ -275,11 +256,9 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $this->linker->invoke($this->request);
     }
 
-    /**
-     * @expectedException \BEAR\Resource\Exception\LinkQuery
-     */
     public function testInvalidLinkQuery()
     {
+        $this->setExpectedException(LinkQuery::class);
         $this->request->links = [new LinkType('no_query', LinkType::NEW_LINK)];
         $this->request->method = 'get';
         $ro = new Name;
