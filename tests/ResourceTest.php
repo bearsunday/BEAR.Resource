@@ -59,9 +59,9 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $scheme->scheme('page')->host('self')->toAdapter(
             new Adapter\App($injector, 'FakeVendor\Sandbox', 'Resource\Page', $_ENV['TEST_DIR'] . '/FakeVendor/Page')
         );
-        $scheme->scheme('nop')->host('self')->toAdapter(new Adapter\Nop);
-        $scheme->scheme('test')->host('self')->toAdapter(new Adapter\Test);
-        $scheme->scheme('prov')->host('self')->toAdapter(new Adapter\Prov);
+        $scheme->scheme('nop')->host('self')->toAdapter(new Adapter\FakeNop);
+        $scheme->scheme('test')->host('self')->toAdapter(new Adapter\FakeTest);
+        $scheme->scheme('prov')->host('self')->toAdapter(new Adapter\FakeProv);
         $scheme->scheme('http')->host('*')->toAdapter(new Adapter\Http);
         $resource = require $_ENV['PACKAGE_DIR'] . '/scripts/instance.php';
         /** @var $resource \BEAR\Resource\Resource */
@@ -241,7 +241,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     public function testLazyRequestResultAsString()
     {
         $scheme = new SchemeCollection;
-        $testAdapter = new Adapter\Test;
+        $testAdapter = new Adapter\FakeTest;
         $scheme->scheme('test')->host('self')->toAdapter($testAdapter);
         $this->factory = new Factory($scheme);
         $this->resource = require $_ENV['PACKAGE_DIR'] . '/scripts/instance.php';

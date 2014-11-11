@@ -2,11 +2,11 @@
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Adapter\Nop;
+use BEAR\Resource\Adapter\FakeNop;
 use Ray\Di\Injector;
 use BEAR\Resource\Exception\Scheme;
 use BEAR\Resource\Exception\ResourceNotFound;
-use BEAR\Resource\Adapter\NopResource;
+use BEAR\Resource\Adapter\FakeNopResource;
 use FakeVendor\Sandbox\Resource\App\Factory\News;
 use FakeVendor\Sandbox\Resource\App\User\Index;
 use FakeVendor\Sandbox\Resource\Page\News as PageNews;
@@ -27,15 +27,15 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $scheme = (new SchemeCollection)
             ->scheme('app')->host('self')->toAdapter(new Adapter\App($injector, 'FakeVendor\Sandbox', 'Resource\App'))
             ->scheme('page')->host('self')->toAdapter(new Adapter\App($injector, 'FakeVendor\Sandbox', 'Resource\Page'))
-            ->scheme('prov')->host('self')->toAdapter(new Adapter\Prov)
-            ->scheme('nop')->host('self')->toAdapter(new Nop);
+            ->scheme('prov')->host('self')->toAdapter(new Adapter\FakeProv)
+            ->scheme('nop')->host('self')->toAdapter(new FakeNop);
         $this->factory = new Factory($scheme);
     }
 
     public function testNewInstanceNop()
     {
         $instance = $this->factory->newInstance('nop://self/path/to/dummy');
-        $this->assertInstanceOf(NopResource::class, $instance);
+        $this->assertInstanceOf(FakeNopResource::class, $instance);
     }
 
     public function testNewInstanceWithProvider()

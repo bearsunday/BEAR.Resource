@@ -2,7 +2,7 @@
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Adapter\Nop;
+use BEAR\Resource\Adapter\FakeNop;
 use BEAR\Resource\Exception\Scheme;
 
 class SchemeCollectionTest extends \PHPUnit_Framework_TestCase
@@ -20,9 +20,9 @@ class SchemeCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testScheme()
     {
-        $this->scheme->scheme('app')->host('self')->toAdapter(new Nop);
+        $this->scheme->scheme('app')->host('self')->toAdapter(new FakeNop);
         $adapter = $this->scheme->getAdapter(new Uri('app://self/'));
-        $this->assertInstanceOf(Nop::class, $adapter);
+        $this->assertInstanceOf(FakeNop::class, $adapter);
     }
 
     public function testInvalidScheme()

@@ -4,7 +4,7 @@ namespace BEAR\Resource\Adapter;
 
 use BEAR\Resource\ResourceObject;
 
-class NopResource extends ResourceObject
+class FakeNopResource extends ResourceObject
 {
     public $time;
 
@@ -15,6 +15,6 @@ class NopResource extends ResourceObject
 
     public function onGet($a, $b)
     {
-        return array($a, $b);
+        return [$a, $b];
     }
 }

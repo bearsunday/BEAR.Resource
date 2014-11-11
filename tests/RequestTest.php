@@ -2,12 +2,13 @@
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Adapter\Nop;
-use BEAR\Resource\Adapter\NopResource;
+use BEAR\Resource\Adapter\FakeNop;
+use BEAR\Resource\Adapter\FakeNopResource;
 use BEAR\Resource\Exception\LogicException;
 use BEAR\Resource\Exception\OutOfBounds;
-use BEAR\Resource\Renderer\ErrorRenderer;
-use BEAR\Resource\Renderer\TestRenderer;
+use BEAR\Resource\Exception\Method;
+use BEAR\Resource\Renderer\FakeErrorRenderer;
+use BEAR\Resource\Renderer\FakeTestRenderer;
 use Doctrine\Common\Annotations\AnnotationReader;
 use FakeVendor\Sandbox\Resource\App\User\Entry;
 
@@ -58,7 +59,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $request = new Request(
             $this->invoker,
-            new NopResource,
+            new FakeNopResource,
             Request::GET,
             ['a' => 'koriym', 'b' => 25]
         );
@@ -70,7 +71,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException(OutOfBounds::class);
         $request = new Request(
             $this->invoker,
-            new NopResource,
+            new FakeNopResource,
             Request::GET,
             ['key' => 'animal', 'value' => 'kuma']
         );
@@ -82,7 +83,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException(OutOfBounds::class);
         $request = new Request(
             $this->invoker,
-            new NopResource,
+            new FakeNopResource,
             Request::PUT,
             ['key' => 'animal', 'value' => 'kuma']
         );
@@ -93,7 +94,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $request = new Request(
             $this->invoker,
-            new NopResource,
+            new FakeNopResource,
             'get', ['a' => 'koriym', 'b' => 25]
         );
         $this->assertSame(['koriym', 30], $request(['b' => 30])->body);
@@ -101,7 +102,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testToStringWithRenderableResourceObject()
     {
-        $ro = (new FakeResource)->setRenderer(new TestRenderer);
+        $ro = (new FakeResource)->setRenderer(new FakeTestRenderer);
         $request = new Request(
             $this->invoker,
             $ro,
@@ -114,7 +115,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testToStringWithErrorRenderer()
     {
-        $ro = (new FakeResource)->setRenderer(new ErrorRenderer);
+        $ro = (new FakeResource)->setRenderer(new FakeErrorRenderer);
         $request = new Request(
             $this->invoker,
             $ro,
@@ -201,5 +202,16 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->request->addQuery(['a' => 'bear', 'c' => 'kuma']);
         $actual = $this->request->toUriWithMethod();
         $this->assertSame('get test://self/path/to/resource?a=bear&b=25&c=kuma', $actual);
+    }
+
+    public function testInvalidMethod()
+    {
+        $this->setExpectedException(Method::class);
+        new Request($this->invoker, new Entry, 'invalid-method');
+    }
+
+    public function testHash()
+    {
+        $this->assertInternalType('string', $this->request->hash());
     }
 }

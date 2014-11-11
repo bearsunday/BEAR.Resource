@@ -6,7 +6,7 @@ use Aura\Signal\HandlerFactory;
 use Aura\Signal\Manager;
 use Aura\Signal\ResultCollection;
 use Aura\Signal\ResultFactory;
-use BEAR\Resource\Adapter\Test;
+use BEAR\Resource\Adapter\FakeTest;
 use BEAR\Resource\Adapter\FakeResource;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 

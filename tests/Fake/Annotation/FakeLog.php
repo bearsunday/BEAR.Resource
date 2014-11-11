@@ -5,6 +5,6 @@ namespace BEAR\Resource\Annotation;
 /**
  * @Annotation
  */
-final class Log
+final class FakeLog
 {
 }

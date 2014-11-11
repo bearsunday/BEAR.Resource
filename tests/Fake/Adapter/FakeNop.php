@@ -2,10 +2,10 @@
 
 namespace BEAR\Resource\Adapter;
 
-class Nop implements AdapterInterface
+class FakeNop implements AdapterInterface
 {
     public function get($uri)
     {
-        return new NopResource;
+        return new FakeNopResource;
     }
 }

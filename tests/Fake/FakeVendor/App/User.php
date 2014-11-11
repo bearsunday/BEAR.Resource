@@ -9,6 +9,8 @@ use BEAR\Resource\Annotation\ParamSignal;
 
 class User extends ResourceObject
 {
+    public $uri = 'dummy://self/User';
+
     public $headers = [
         'x-header-test' => '123'
     ];

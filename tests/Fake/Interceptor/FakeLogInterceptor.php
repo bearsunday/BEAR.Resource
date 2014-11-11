@@ -4,10 +4,7 @@ namespace BEAR\Resource\Interceptor;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
 
-/**
- * Log Interceptor
- */
-class Log implements MethodInterceptor
+class FakeLogInterceptor implements MethodInterceptor
 {
     public function invoke(MethodInvocation $invocation)
     {

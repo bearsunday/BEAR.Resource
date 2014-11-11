@@ -4,7 +4,7 @@ namespace BEAR\Resource\Adapter;
 
 use BEAR\Resource\ProviderInterface;
 
-class Prov implements ProviderInterface, AdapterInterface
+class FakeProv implements ProviderInterface, AdapterInterface
 {
     public function __construct()
     {

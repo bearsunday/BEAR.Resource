@@ -2,7 +2,7 @@
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Renderer\TestRenderer;
+use BEAR\Resource\Renderer\FakeTestRenderer;
 
 /**
  * Test class for BEAR.Resource.
@@ -144,7 +144,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
 
     public function testToStringWithRenderer()
     {
-        $renderer = new TestRenderer;
+        $renderer = new FakeTestRenderer;
         $this->resource->setRenderer($renderer);
         $result = (string) ($this->resource);
         $this->assertSame('["entry1","entry2","entry3"]', $result);
