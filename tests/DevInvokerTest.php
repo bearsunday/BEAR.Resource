@@ -10,7 +10,7 @@ use Ray\Aop\Compiler;
 use Ray\Aop\Bind;
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use BEAR\Resource\Interceptor\Log;
-use TestVendor\Sandbox\Resource\App\User;
+use FakeVendor\Sandbox\Resource\App\User;
 
 class DevInvokerTest extends \PHPUnit_Framework_TestCase
 {
@@ -98,14 +98,14 @@ class DevInvokerTest extends \PHPUnit_Framework_TestCase
     {
         $bind = new Bind;
         $bind->bindInterceptors('onGet', [new Log]);
-        $weave = $GLOBALS['COMPILER']->newInstance('TestVendor\Sandbox\Resource\App\Weave\Book', [], $bind);
+        $weave = $GLOBALS['COMPILER']->newInstance('FakeVendor\Sandbox\Resource\App\Weave\Book', [], $bind);
         $this->request->ro = $weave;
         $this->request->method = 'get';
         $this->request->query = ['id' => 1];
         $this->invoker->invoke($this->request);
 
         $ro = $this->request->ro;
-        $this->assertInstanceOf('TestVendor\Sandbox\Resource\App\Weave\Book', $ro);
+        $this->assertInstanceOf('FakeVendor\Sandbox\Resource\App\Weave\Book', $ro);
 
         return $ro->headers;
     }

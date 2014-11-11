@@ -1,6 +1,6 @@
 <?php
 
-namespace TestVendor\Sandbox\Resource\Foo;
+namespace FakeVendor\Sandbox\Resource\Foo;
 
 use BEAR\Resource\ResourceObject;
 

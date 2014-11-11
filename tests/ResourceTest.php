@@ -54,10 +54,10 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $injector = new Injector(new TestModule);
         $scheme = new SchemeCollection;
         $scheme->scheme('app')->host('self')->toAdapter(
-            new Adapter\App($injector, 'TestVendor\Sandbox', 'Resource\App', $_ENV['TEST_DIR'] . '/TestVendor/App')
+            new Adapter\App($injector, 'FakeVendor\Sandbox', 'Resource\App', $_ENV['TEST_DIR'] . '/FakeVendor/App')
         );
         $scheme->scheme('page')->host('self')->toAdapter(
-            new Adapter\App($injector, 'TestVendor\Sandbox', 'Resource\Page', $_ENV['TEST_DIR'] . '/TestVendor/Page')
+            new Adapter\App($injector, 'FakeVendor\Sandbox', 'Resource\Page', $_ENV['TEST_DIR'] . '/FakeVendor/Page')
         );
         $scheme->scheme('nop')->host('self')->toAdapter(new Adapter\Nop);
         $scheme->scheme('test')->host('self')->toAdapter(new Adapter\Test);
@@ -256,13 +256,13 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     public function testIndexIsDefaultIfUriEndsWithSlash()
     {
         $user = $this->resource->newInstance('app://self/user/');
-        $this->assertSame($user->class, 'TestVendor\Sandbox\Resource\App\User\Index');
+        $this->assertSame($user->class, 'FakeVendor\Sandbox\Resource\App\User\Index');
     }
 
     public function testIndexIsDefaultIfUriEndsWithSlashInRoot()
     {
         $user = $this->resource->newInstance('app://self/');
-        $this->assertSame($user->class, 'TestVendor\Sandbox\Resource\App\Index');
+        $this->assertSame($user->class, 'FakeVendor\Sandbox\Resource\App\Index');
     }
 
     /**
@@ -440,7 +440,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $injector = new Injector(new TestModule);
         $scheme = new SchemeCollection;
         $scheme->scheme('app')->host('self')->toAdapter(
-            new Adapter\App($injector, 'TestVendor\Sandbox', 'Resource\App')
+            new Adapter\App($injector, 'FakeVendor\Sandbox', 'Resource\App')
         );
         $invoker = new Invoker(
             new Linker(new AnnotationReader, new ArrayCache),

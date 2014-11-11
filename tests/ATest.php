@@ -2,7 +2,7 @@
 
 namespace BEAR\Resource;
 
-use TestVendor\Sandbox\Resource\App\User;
+use FakeVendor\Sandbox\Resource\App\User;
 
 class ATest extends \PHPUnit_Framework_TestCase
 {

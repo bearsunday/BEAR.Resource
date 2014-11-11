@@ -4,7 +4,7 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Module\ResourceModule;
 use Ray\Di\Injector;
-use TestVendor\Sandbox\Resource\App\User;
+use FakeVendor\Sandbox\Resource\App\User;
 
 class ClientLinkTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,8 +18,8 @@ class ClientLinkTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $this->resource = $GLOBALS['RESOURCE'];
         $scheme = new SchemeCollection;
-        $injector = new Injector(new ResourceModule('TestVendor\Sandbox'), $_ENV['BEAR_TMP']);
-        $scheme->scheme('app')->host('self')->toAdapter(new Adapter\App($injector, 'TestVendor\Sandbox', 'Resource\App'));
+        $injector = new Injector(new ResourceModule('FakeVendor\Sandbox'), $_ENV['BEAR_TMP']);
+        $scheme->scheme('app')->host('self')->toAdapter(new Adapter\App($injector, 'FakeVendor\Sandbox', 'Resource\App'));
         $this->resource->setSchemeCollection($scheme);
         $this->user = $this->resource->newInstance('app://self/link/user');
     }

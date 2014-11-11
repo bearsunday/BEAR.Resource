@@ -34,7 +34,7 @@ class scriptTest extends \PHPUnit_Framework_TestCase
 
     public function testSetSchemeApp()
     {
-        $app = new App(new Injector, 'TestVendor\Sandbox', 'Resource\App');
+        $app = new App(new Injector, 'FakeVendor\Sandbox', 'Resource\App');
         $scheme = (new SchemeCollection)->scheme('app')->host('self')->toAdapter($app);
         $this->resource->setSchemeCollection($scheme);
         $result = $this->resource->get->uri('app://self/index')->eager->request();

@@ -161,7 +161,7 @@
 //
 //        public function testEvaluateAsStringWithJsonModule()
 //        {
-//            $resource = (new Injector(new JsonModule(new ResourceModule('TestVendor\Sandbox'))))->getInstance('BEAR\Resource\ResourceInterface');
+//            $resource = (new Injector(new JsonModule(new ResourceModule('FakeVendor\Sandbox'))))->getInstance('BEAR\Resource\ResourceInterface');
 //            $user = $resource->get->uri('app://self/link/user')->withQuery(['id' => 1])->eager->request();
 //            $j = (string) $user;
 //            $expected = '{"name":"Aramis","age":16,"blog_id":12}';
@@ -170,7 +170,7 @@
 //
 //        public function testHal()
 //        {
-//            $resource = (new Injector(new HalModule(new ResourceModule('TestVendor\Sandbox'))))->getInstance('BEAR\Resource\ResourceInterface');
+//            $resource = (new Injector(new HalModule(new ResourceModule('FakeVendor\Sandbox'))))->getInstance('BEAR\Resource\ResourceInterface');
 //            $user = $resource->get->uri('app://self/link/user')->withQuery(['id' => 1])->eager->request();
 //            $expected = '{
 //    "name": "Aramis",

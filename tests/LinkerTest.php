@@ -2,13 +2,13 @@
 
 namespace BEAR\Resource;
 
-use Ray\Di\Injector;
-
-use Doctrine\Common\Annotations\AnnotationReader as Reader;
-use TestVendor\Sandbox\Resource\App\Link\Scalar\Name;
-use TestVendor\Sandbox\Resource\App\Link\User;
-use TestVendor\Sandbox\Resource\App\Marshal\Author;
 use BEAR\Resource\Exception\LinkQuery;
+use BEAR\Resource\Exception\LinkRel;
+use Doctrine\Common\Annotations\AnnotationReader;
+use Ray\Di\Injector;
+use FakeVendor\Sandbox\Resource\App\Link\Scalar\Name;
+use FakeVendor\Sandbox\Resource\App\Link\User;
+use FakeVendor\Sandbox\Resource\App\Marshal\Author;
 
 class LinkerTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,7 +22,6 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
      */
     protected $request;
 
-
     /**
      * @var Resource
      */
@@ -31,16 +30,16 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->linker = new Linker(new Reader);
+        $this->linker = new Linker(new AnnotationReader);
         $invoker = new Invoker($this->linker, new NamedParameter);
         $injector = new Injector;
         $this->request = new Request($invoker);
         $scheme = (new SchemeCollection)
             ->scheme('app')
             ->host('self')
-            ->toAdapter(new Adapter\App($injector, 'TestVendor\Sandbox', 'Resource\App'));
+            ->toAdapter(new Adapter\App($injector, 'FakeVendor\Sandbox', 'Resource\App'));
         $factory = new Factory($scheme);
-        $this->resource = new Resource($factory, $invoker, new Request($invoker), new Anchor(new Reader, $this->request));
+        $this->resource = new Resource($factory, $invoker, new Request($invoker), new Anchor(new AnnotationReader, $this->request));
     }
 
     public function testLinkAnnotationSelf()
@@ -247,7 +246,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
 
     public function testInvalidRel()
     {
-        $this->setExpectedException(LinkQuery::class);
+        $this->setExpectedException(LinkRel::class);
         $this->request->links = [new LinkType('xxx', LinkType::NEW_LINK)];
         $this->request->method = 'get';
         $ro = new User;

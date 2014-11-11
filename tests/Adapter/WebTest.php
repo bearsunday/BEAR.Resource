@@ -18,7 +18,7 @@ class WebTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $webDirs = [$_ENV['TEST_DIR'] . '/TestVendor/Web'];
+        $webDirs = [$_ENV['TEST_DIR'] . '/FakeVendor/Web'];
         $this->webAdapter = new Web($webDirs);
 
     }

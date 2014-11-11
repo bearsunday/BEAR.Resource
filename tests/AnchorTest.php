@@ -50,7 +50,7 @@ class AnchorTest extends \PHPUnit_Framework_TestCase
         $query = [];
         $blog = $this->resource->href('blog', $query);
 
-        $this->assertInstanceOf('\TestVendor\Sandbox\Resource\App\Link\Blog', $blog);
+        $this->assertInstanceOf('\FakeVendor\Sandbox\Resource\App\Link\Blog', $blog);
         $this->assertSame(['name' => "Athos blog"], $blog->body);
 
         return $this->resource;
@@ -62,7 +62,7 @@ class AnchorTest extends \PHPUnit_Framework_TestCase
         $query = ['blog_id' => 99];
         $blog = $this->resource->href('blog', $query);
 
-        $this->assertInstanceOf('\TestVendor\Sandbox\Resource\App\Link\Blog', $blog);
+        $this->assertInstanceOf('\FakeVendor\Sandbox\Resource\App\Link\Blog', $blog);
         $this->assertSame(['name' => "BEAR blog"], $blog->body);
     }
 

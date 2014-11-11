@@ -8,7 +8,7 @@ class Test implements AdapterInterface
 {
     public function get($uri)
     {
-        $resource = new TestResource;
+        $resource = new FakeResource;
         $resource->setRenderer(new TestRenderer);
 
         return $resource;

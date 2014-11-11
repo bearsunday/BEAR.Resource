@@ -2,43 +2,22 @@
 
 namespace BEAR\Resource;
 
-use Aura\Signal\Manager;
-use Aura\Signal\HandlerFactory;
-use Aura\Signal\ResultFactory;
-use Aura\Signal\ResultCollection;
-use BEAR\Resource\Adapter\NopResource;
-use TestVendor\Sandbox\Resource\App\User\Entry;
 use BEAR\Resource\Adapter\Nop;
-use BEAR\Resource\Adapter\TestResource;
-use Doctrine\Common\Annotations\AnnotationReader as Reader;
-use BEAR\Resource\Renderer\TestRenderer;
+use BEAR\Resource\Adapter\NopResource;
+use BEAR\Resource\Exception\LogicException;
+use BEAR\Resource\Exception\OutOfBounds;
 use BEAR\Resource\Renderer\ErrorRenderer;
+use BEAR\Resource\Renderer\TestRenderer;
+use Doctrine\Common\Annotations\AnnotationReader;
+use FakeVendor\Sandbox\Resource\App\User\Entry;
 
-class ExceptionLogger implements LoggerInterface
-{
-    public function getIterator()
-    {
-    }
-
-    public function log(RequestInterface $request, ResourceObject $result)
-    {
-        throw new \LogicException;
-    }
-
-    public function setWriter(LogWriterInterface $writer)
-    {
-    }
-
-    public function write()
-    {
-    }
-}
-
-/**
- * Test class for BEAR.Resource.
- */
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Invoker
+     */
+    private $invoker;
+
     /**
      * @var Request
      */
@@ -46,197 +25,171 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $signal = new Manager(new HandlerFactory, new ResultFactory, new ResultCollection);
-        $params = new NamedParameter(new SignalParameter($signal, new Param));
-        $invoker = new Invoker(new Linker(new Reader), $params);
-        $this->request = new Request($invoker);
-    }
-
-    public function testNew()
-    {
-        $this->assertInstanceOf('\BEAR\Resource\Request', $this->request);
+        parent::setUp();
+        $this->invoker = new Invoker(new Linker(new AnnotationReader), new NamedParameter);
+        $this->request = new Request($this->invoker, new Entry);
     }
 
     public function testToUriWithMethod()
     {
-        $this->request->set(new TestResource, 'test://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
-        $actual = $this->request->toUriWithMethod();
+        $request = new Request(
+            $this->invoker,
+            new FakeResource,
+            Request::GET,
+            ['a' => 'koriym', 'b' => 25]
+        );
+        $actual = $request->toUriWithMethod();
         $this->assertSame('get test://self/path/to/resource?a=koriym&b=25', $actual);
     }
 
     public function testToUri()
     {
-        $this->request->set(new TestResource, 'test://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
-        $actual = $this->request->toUri();
+        $request = new Request(
+            $this->invoker,
+            new FakeResource,
+            Request::GET,
+            ['a' => 'koriym', 'b' => 25]
+        );
+        $actual = $request->toUri();
         $this->assertSame('test://self/path/to/resource?a=koriym&b=25', $actual);
     }
 
     public function testInvoke()
     {
-        $this->request->set(new NopResource, 'nop://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
-        $request = $this->request;
-        $actual = $request()->body;
-        $expected = array('koriym', 25);
-        $this->assertInstanceOf('\BEAR\Resource\Request', $this->request);
-        $this->assertSame($expected, $actual);
+        $request = new Request(
+            $this->invoker,
+            new NopResource,
+            Request::GET,
+            ['a' => 'koriym', 'b' => 25]
+        );
+        $this->assertSame(['koriym', 25], $request()->body);
     }
 
-    /**
-     * @expectedException \BEAR\Resource\Exception\LogicException
-     */
     public function testOffsetSet()
     {
-        $this->request->set(new NopResource, 'nop://self/path/to/resource', 'put', ['key' => 'animal', 'value' => 'kuma']);
-        $request = $this->request;
+        $this->setExpectedException(OutOfBounds::class);
+        $request = new Request(
+            $this->invoker,
+            new NopResource,
+            Request::GET,
+            ['key' => 'animal', 'value' => 'kuma']
+        );
         $request['animal'] = 'cause_exception';
     }
 
-    /**
-     * @expectedException \BEAR\Resource\Exception\LogicException
-     */
     public function testOffsetUnset()
     {
-        $this->request->set(new NopResource, 'nop://self/path/to/resource', 'put', ['key' => 'animal', 'value' => 'kuma']);
-        $request = $this->request;
+        $this->setExpectedException(OutOfBounds::class);
+        $request = new Request(
+            $this->invoker,
+            new NopResource,
+            Request::PUT,
+            ['key' => 'animal', 'value' => 'kuma']
+        );
         unset($request['animal']);
     }
 
     public function testInvokeWithQuery()
     {
-        $this->request->set(new NopResource, 'nop://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
-        $request = $this->request;
-        $actual = $request(['b' => 30])->body;
-        $expected = array('koriym', 30);
-        $this->assertInstanceOf('\BEAR\Resource\Request', $this->request);
-        $this->assertSame($expected, $actual);
+        $request = new Request(
+            $this->invoker,
+            new NopResource,
+            'get', ['a' => 'koriym', 'b' => 25]
+        );
+        $this->assertSame(['koriym', 30], $request(['b' => 30])->body);
     }
 
     public function testToStringWithRenderableResourceObject()
     {
-        $ro = (new TestResource)->setRenderer(new TestRenderer);
-        /**  @var $ro ResourceObject */
-        $this->request->set($ro, 'nop://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
-        $request = $this->request;
-        $actual = $request(['b' => 30])->body['posts'];
-        $expected = ['koriym', 30];
-        $this->assertSame($expected, $actual);
-        $this->assertInstanceOf('\BEAR\Resource\Request', $this->request);
-        $request = $this->request;
-        $result = (string) $request;
-        $this->assertSame('{"posts":["koriym",30]}', $result);
+        $ro = (new FakeResource)->setRenderer(new TestRenderer);
+        $request = new Request(
+            $this->invoker,
+            $ro,
+            Request::GET,
+            ['a' => 'koriym', 'b' => 25]
+        );
+        $this->assertSame(['koriym', 30], $request(['b' => 30])->body['posts']);
+        $this->assertSame('{"posts":["koriym",30]}', (string) $request);
     }
 
     public function testToStringWithErrorRenderer()
     {
-        $this->request->method = 'get';
-        $this->request->ro = new TestResource;
-        $renderer = new ErrorRenderer;
-        $this->request->ro->setRenderer($renderer);
-        $this->request->ro->uri = 'nop://self/path/to/resource';
-        $this->request->query = array('a' => 'koriym', 'b' => 25);
-        $request = $this->request;
-        $result = (string) $request;
-        $this->assertSame($result, '');
+        $ro = (new FakeResource)->setRenderer(new ErrorRenderer);
+        $request = new Request(
+            $this->invoker,
+            $ro,
+            Request::GET,
+            ['a' => 'koriym', 'b' => 25]
+        );
+        $this->assertSame('', (string) $request);
     }
 
     public function testToStringWithoutRender()
     {
-        $this->request->method = 'get';
-        $this->request->ro = new TestResource;
-        $this->request->ro->uri = 'nop://self/path/to/resource';
-        $this->request->query = array('a' => 'koriym', 'b' => 25);
-        $request = $this->request;
-        $this->assertInstanceOf('\BEAR\Resource\Request', $this->request);
+        $request = new Request(
+            $this->invoker,
+            new FakeResource,
+            Request::GET,
+            ['a' => 'koriym', 'b' => 25]
+        );
         $result = (string) $request;
         $this->assertSame('', $result);
     }
 
-    /**
-     * @test
-     */
-    public function request()
+    public function testIterator()
     {
-        $this->request->method = 'get';
-        $this->request->ro = new Entry;
-        $this->request->ro->uri = 'nop://self/path/to/resource';
-        $this->request->query = [];
-        $this->assertInstanceOf('\BEAR\Resource\Request', $this->request);
-
-        return $this->request;
-    }
-
-    /**
-     * @depends request
-     */
-    public function testIterator(AbstractRequest $request)
-    {
-        $result = [];
+        $request = new Request($this->invoker, new Entry);
         foreach ($request as $row) {
             $result[] = $row;
         }
-        $expected = array(
-            0 => array(
-                'id' => 100,
-                'title' => 'Entry1',
-            ),
-            1 => array(
-                'id' => 101,
-                'title' => 'Entry2',
-            ),
-            2 => array(
-                'id' => 102,
-                'title' => 'Entry3',
-            ),
-        );
+        $expected = [
+            0 => ['id' => 100, 'title' => 'Entry1'],
+            1 => ['id' => 101, 'title' => 'Entry2'],
+            2 => ['id' => 102, 'title' => 'Entry3']
+        ];
         $this->assertSame($expected, $result);
     }
 
-    /**
-     * @depends request
-     */
-    public function testArrayAccess(AbstractRequest $request)
+    public function testArrayAccess()
     {
+        $request = new Request($this->invoker, new Entry);
         $result = $request[100];
-        $expected = array(
+        $expected = [
             'id' => 100,
-            'title' => 'Entry1',
-        );
+            'title' => 'Entry1'
+        ];
         $this->assertSame($expected, $result);
     }
 
-    /**
-     * @expectedException \OutOfBoundsException
-     */
     public function testArrayAccessNotExists()
     {
-        $this->request->method = 'get';
-        $this->request->ro = new Entry;
-        $request = $this->request;
+        $this->setExpectedException(OutOfBounds::class);
+        $request = new Request(
+            $this->invoker,
+            new Entry
+        );
         $request[0];
     }
 
-    /**
-     * @depends request
-     */
-    public function testIsSet(AbstractRequest $request)
+    public function testIsSet()
     {
+        $request = new Request($this->invoker, new Entry);
         $result = isset($request[100]);
         $this->assertTrue($result);
     }
 
     public function testIsSetNot()
     {
-        $this->request->method = 'get';
-        $this->request->ro = new Entry;
-        $this->request->query = [];
-        $request = $this->request;
+        $request = new Request(
+            $this->invoker,
+            new Entry
+        );
         $result = isset($request[0]);
         $this->assertFalse($result);
     }
 
     public function testWithQuery()
     {
-        $this->request->set(new TestResource, 'test://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
         $this->request->withQuery(['a' => 'bear']);
         $actual = $this->request->toUriWithMethod();
         $this->assertSame('get test://self/path/to/resource?a=bear', $actual);
@@ -244,22 +197,9 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testAddQuery()
     {
-        $this->request->set(new TestResource, 'test://self/path/to/resource', 'get', ['a' => 'koriym', 'b' => 25]);
+        $this->request->withQuery(['a' => 'original', 'b' => 25]);
         $this->request->addQuery(['a' => 'bear', 'c' => 'kuma']);
         $actual = $this->request->toUriWithMethod();
         $this->assertSame('get test://self/path/to/resource?a=bear&b=25&c=kuma', $actual);
     }
-
-    public function testToStringException()
-    {
-        $signal = new Manager(new HandlerFactory, new ResultFactory, new ResultCollection);
-        $params = new NamedParameter(new SignalParameter($signal, new Param));
-        $invoker = new Invoker(new Linker(new Reader), $params);
-        $invoker->setResourceLogger(new ExceptionLogger);
-        $request = new Request($invoker);
-        $request->set(new TestResource, 'test://self/path/to/resource', 'put', []);
-        $string = (string) $request;
-        $this->assertSame('', $string);
-    }
-
 }

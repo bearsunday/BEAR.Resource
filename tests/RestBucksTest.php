@@ -19,7 +19,7 @@ class RestBucksTest extends \PHPUnit_Framework_TestCase
         $this->resource = require $_ENV['PACKAGE_DIR'] . '/scripts/instance.php';
         $injector = new Injector;
         $scheme = new SchemeCollection;
-        $scheme->scheme('app')->host('self')->toAdapter(new App($injector, 'TestVendor\Sandbox', 'Resource\App'));
+        $scheme->scheme('app')->host('self')->toAdapter(new App($injector, 'FakeVendor\Sandbox', 'Resource\App'));
         $this->resource->setSchemeCollection($scheme);
     }
 

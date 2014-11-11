@@ -137,7 +137,7 @@ class HalRendererTest extends \PHPUnit_Framework_TestCase
 
     public function testEmbedResource()
     {
-        $resource = (new Injector(new ResourceModule('TestVendor\Sandbox')))->getInstance('BEAR\Resource\ResourceInterface');
+        $resource = (new Injector(new ResourceModule('FakeVendor\Sandbox')))->getInstance('BEAR\Resource\ResourceInterface');
         $resourceObject = $resource
             ->get
             ->uri('app://self/bird/birds')
