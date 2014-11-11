@@ -196,7 +196,7 @@ abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggrega
                 $view = $this->renderer->render($this);
             } catch (Exception $e) {
                 $view = '';
-                error_log('Exception caught in ' . __METHOD__);
+                error_log('Exception caught in ' . get_class($this)) . '::__toString() ';
                 error_log((string) $e);
             }
 
@@ -205,7 +205,7 @@ abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggrega
         if (is_scalar($this->body)) {
             return (string) $this->body;
         }
-        error_log('No renderer bound for \BEAR\Resource\RenderInterface' . get_class($this) . ' in ' . __METHOD__);
+        // No renderer bound for \BEAR\Resource\RenderInterface
 
         return '';
     }
