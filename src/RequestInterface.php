@@ -16,13 +16,6 @@ use Ray\Di\Di\ImplementedBy;
 interface RequestInterface
 {
     /**
-     * @param InvokerInterface $invoker
-     *
-     * @return void
-     */
-    public function __construct(InvokerInterface $invoker);
-
-    /**
      * Set query
      *
      * @param array $query

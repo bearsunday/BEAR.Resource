@@ -7,6 +7,7 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\LogicException;
+use BEAR\Resource\Exception\OutOfBounds;
 
 abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \IteratorAggregate
 {
@@ -69,7 +70,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
      */
     public function offsetSet($offset, $value)
     {
-        throw new LogicException(__METHOD__ . ' is unavailable.');
+        throw new OutOfBounds(__METHOD__ . ' is unavailable.');
     }
 
     /**
@@ -81,6 +82,6 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
      */
     public function offsetUnset($offset)
     {
-        throw new LogicException(__METHOD__ . ' is unavailable.');
+        throw new OutOfBounds(__METHOD__ . ' is unavailable.');
     }
 }
