@@ -54,5 +54,6 @@ class ResourceClientModule extends AbstractModule
         $this->bind('Aura\Signal\Manager')->toProvider('BEAR\Resource\Module\SignalProvider')->in(Scope::SINGLETON);
         $this->bind('BEAR\Resource\ParamInterface')->to('BEAR\Resource\Param');
         $this->bind('BEAR\Resource\RequestInterface')->to('BEAR\Resource\Request');
+        $this->bind('BEAR\Resource\AnchorInterface')->to('BEAR\Resource\Anchor');
     }
 }

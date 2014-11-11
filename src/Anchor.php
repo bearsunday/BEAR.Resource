@@ -9,7 +9,7 @@ namespace BEAR\Resource;
 use Doctrine\Common\Annotations\Reader;
 use Ray\Di\Di\Inject;
 
-class Anchor
+class Anchor implements AnchorInterface
 {
     /**
      * @var Reader
@@ -36,14 +36,7 @@ class Anchor
     }
 
     /**
-     * Return linked request with hyper reference
-     *
-     * @param string           $rel
-     * @param RequestInterface $request
-     * @param array            $query
-     *
-     * @return array [$method, $uri];
-     * @throws Exception\Link
+     * {@inheritdoc}
      */
     public function href($rel, AbstractRequest $request, array $query)
     {
