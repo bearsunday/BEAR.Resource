@@ -8,11 +8,13 @@ namespace BEAR\Resource\Adapter\Iterator;
 
 use BEAR\Resource\Exception\ResourceDir;
 use BEAR\Resource\Meta;
+use BEAR\Resource\ResourceObject;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
 final class AppIterator implements \Iterator
 {
+
     /**
      * @var int
      */
@@ -33,10 +35,13 @@ final class AppIterator implements \Iterator
      */
     public function __construct($resourceDir)
     {
-        if (! file_exists($resourceDir)) {
+        if (!file_exists($resourceDir)) {
             throw new ResourceDir($resourceDir);
         }
-        $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($resourceDir), RecursiveIteratorIterator::SELF_FIRST);
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($resourceDir),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
         $this->metaCollection = $this->getMetaCollection($iterator);
         $this->keys = array_keys($this->metaCollection);
     }
@@ -46,7 +51,7 @@ final class AppIterator implements \Iterator
      */
     public function current()
     {
-            return $this->metaCollection[$this->keys[$this->i]];
+        return $this->metaCollection[$this->keys[$this->i]];
     }
 
     /**
@@ -91,10 +96,11 @@ final class AppIterator implements \Iterator
         $metaCollection = [];
         foreach ($iterator as $item) {
             /** @var $item \SplFileInfo */
-            $isPhp = $item->isFile()
-                && $item->getExtension() === 'php'
-                && (strpos($item->getBasename('.php'), '.') === false);
-            if (! $isPhp) {
+            $isPhp = $item->isFile() && $item->getExtension() === 'php' && (strpos(
+                        $item->getBasename('.php'),
+                        '.'
+                    ) === false);
+            if (!$isPhp) {
                 continue;
             }
             $resourceClass = $this->getResourceClassName($item);
@@ -126,7 +132,7 @@ final class AppIterator implements \Iterator
         $newClasses = array_values(array_diff_key(get_declared_classes(), $declaredClasses));
         foreach ($newClasses as $newClass) {
             $parent = (new \ReflectionClass($newClass))->getParentClass();
-            if ($parent && $parent->name === 'BEAR\Resource\ResourceObject') {
+            if ($parent && $parent->name === ResourceObject::class) {
                 $cache[$pathName] = $newClass;
 
                 return $newClass;

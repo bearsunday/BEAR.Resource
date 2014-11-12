@@ -2,6 +2,9 @@
 
 namespace BEAR\Resource\Adapter\Iterator;
 
+use BEAR\Resource\Meta;
+use  BEAR\Resource\Exception\ResourceDir;
+
 class AppIteratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -11,30 +14,22 @@ class AppIteratorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $resourceDir = $_ENV['TEST_DIR'] . '/MyVendor';
+        $resourceDir = $_ENV['TEST_DIR'] . '/Fake/MyVendor';
         $this->appIterator = new AppIterator($resourceDir);
-    }
-
-    public function testNew()
-    {
-        $this->assertInstanceOf('BEAR\Resource\Adapter\Iterator\AppIterator', $this->appIterator);
     }
 
     public function testForEach()
     {
-        $this->appIterator = new AppIterator($_ENV['TEST_DIR'] . '/MyVendor');
         foreach ($this->appIterator as $key => $meta) {
-            $uri = filter_var($meta->uri, FILTER_VALIDATE_URL);
-            $this->assertTrue((bool) $uri); // valid uri
-            $this->assertInstanceOf('BEAR\Resource\Meta', $meta);
+            $isValidUri = filter_var($meta->uri, FILTER_VALIDATE_URL);
+            $this->assertTrue((bool) $isValidUri);
+            $this->assertInstanceOf(Meta::class, $meta);
         }
     }
 
-    /**
-     * @expectedException \BEAR\Resource\Exception\ResourceDir
-     */
-    public function testException()
+    public function testResourceDirException()
     {
+        $this->setExpectedException(ResourceDir::class);
         new AppIterator('/invalid');
     }
 }
