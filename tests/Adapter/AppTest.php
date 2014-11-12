@@ -14,5 +14,3 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('BEAR\Resource\Resource\Foo', $resourceObject);
     }
 }
-
-

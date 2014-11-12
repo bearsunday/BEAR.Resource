@@ -119,7 +119,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         asort($expected);
         $this->assertSame($actual, $expected);
     }
-    
+
     public function testInvokeExceptionHandle()
     {
         $this->setExpectedException(\InvalidArgumentException::class);

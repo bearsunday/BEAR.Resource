@@ -91,7 +91,7 @@
 //        public function __construct(
 //            InjectorInterface $injector,
 //            ResourceInterface $resource
-//        ) {
+//) {
 //            $this->injector = $injector;
 //            $this->resource = $resource;
 //        }

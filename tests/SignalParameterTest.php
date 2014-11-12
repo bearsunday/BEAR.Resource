@@ -19,7 +19,7 @@ class ByProviderTestClass
 
 class IdProvider implements ParamProviderInterface
 {
-    static $data = [];
+    public static $data = [];
 
     public function __invoke(ParamInterface $param)
     {
