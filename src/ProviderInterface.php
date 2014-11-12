@@ -11,9 +11,9 @@ interface ProviderInterface
     /**
      * Return new resource object
      *
-     * @param string $uri
+     * @param AbstractUri $uri
      *
      * @return ResourceObject
      */
-    public function get($uri);
+    public function get(AbstractUri $uri);
 }
