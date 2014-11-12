@@ -2,11 +2,9 @@
 
 namespace BEAR\Resource;
 
-use Aura\Signal\Manager;
-use Aura\Signal\HandlerFactory;
-use Aura\Signal\ResultFactory;
-use Aura\Signal\ResultCollection;
 use Doctrine\Common\Annotations\AnnotationReader;
+use FakeVendor\Sandbox\Resource\App\Link\User;
+use BEAR\Resource\Exception\Link;
 
 class AnchorTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,50 +26,24 @@ class AnchorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->resource = clone $GLOBALS['resource'];
-
-        $signal = new Manager(new HandlerFactory, new ResultFactory, new ResultCollection);
-        $params = new NamedParameter(new SignalParameter($signal, new Param));
-        $invoker = new Invoker(new Linker(new AnnotationReader), $params);
-        $this->request = new Request($invoker);
-
+        $invoker = new Invoker(new Linker(new AnnotationReader), new NamedParameter);
+        $ro = new User;
+        $ro->body['blog_id'] = 1;
+        $this->request = new Request($invoker, $ro);
         $this->anchor = new Anchor(new AnnotationReader, $this->request);
-    }
-
-    public function testNew()
-    {
-        $this->assertInstanceOf('\BEAR\Resource\Anchor', $this->anchor);
     }
 
     public function testHref()
     {
-        $this->resource->get->uri('app://self/link/user')->withQuery(['id' => 0])->eager->request();
-
-        $query = [];
-        $blog = $this->resource->href('blog', $query);
-
-        $this->assertInstanceOf('\FakeVendor\Sandbox\Resource\App\Link\Blog', $blog);
-        $this->assertSame(['name' => "Athos blog"], $blog->body);
-
-        return $this->resource;
+        list($method, $uri) = $this->anchor->href('blog', $this->request, []);
+        $this->assertSame(Request::GET, $method);
+        $this->assertSame('app://self/link/blog?id=1',$uri);
     }
 
-    public function testHrefOverRide()
+    public function testInvalid()
     {
-        $this->resource->get->uri('app://self/link/user')->withQuery(['id' => 0])->eager->request();
-        $query = ['blog_id' => 99];
-        $blog = $this->resource->href('blog', $query);
+        $this->setExpectedException(Link::class);
+        $this->anchor->href('invalid', $this->request, []);
 
-        $this->assertInstanceOf('\FakeVendor\Sandbox\Resource\App\Link\Blog', $blog);
-        $this->assertSame(['name' => "BEAR blog"], $blog->body);
-    }
-
-    /**
-     * @expectedException \BEAR\Resource\Exception\Link
-     */
-    public function testInvalidHref()
-    {
-        $this->resource->get->uri('app://self/link/user')->withQuery(['id' => 0])->eager->request();
-        $this->resource->href('xxx', []);
     }
 }

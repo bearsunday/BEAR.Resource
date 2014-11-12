@@ -6,21 +6,12 @@
  */
 namespace BEAR\Resource;
 
+use BEAR\Resource\Exception\Link;
 use Doctrine\Common\Annotations\Reader;
 use Ray\Di\Di\Inject;
 
 class Anchor implements AnchorInterface
 {
-    /**
-     * @var Reader
-     */
-    protected $reader;
-
-    /**
-     * @var Request
-     */
-    protected $request;
-
     /**
      * @param Reader           $reader
      * @param RequestInterface $request
@@ -28,11 +19,9 @@ class Anchor implements AnchorInterface
      * @Inject
      */
     public function __construct(
-        Reader           $reader,
-        RequestInterface $request
+        Reader           $reader
     ) {
         $this->reader = $reader;
-        $this->request = $request;
     }
 
     /**
@@ -53,6 +42,6 @@ class Anchor implements AnchorInterface
             }
         }
 
-        throw new Exception\Link("rel:{$rel} class:" . get_class($request->ro));
+        throw new Link("rel:{$rel} class:" . get_class($request->ro));
     }
 }
