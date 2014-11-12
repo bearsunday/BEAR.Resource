@@ -6,20 +6,13 @@
  */
 namespace BEAR\Resource\Adapter;
 
-use BEAR\Resource\Exception\AppNamespace;
+use BEAR\Resource\AbstractUri;
 use Ray\Di\InjectorInterface;
-use BEAR\Resource\Adapter\Iterator\AppIterator;
-use Ray\Di\Di\Inject;
 
-/**
- * Application resource adapter
- */
-class App implements AdapterInterface, \IteratorAggregate
+class App implements AdapterInterface
 {
     /**
-     * Application dependency injector
-     *
-     * @var \Ray\Di\Injector
+     * @var InjectorInterface
      */
     private $injector;
 
@@ -33,59 +26,28 @@ class App implements AdapterInterface, \IteratorAggregate
     /**
      * Resource adapter path
      *
-     * @var array
+     * @var string
      */
     private $path;
 
     /**
-     * @var string
-     */
-    private $resourceDir;
-
-    /**
      * @param InjectorInterface $injector    Application dependency injector
      * @param string            $namespace   Resource adapter namespace
-     * @param string            $path        Resource adapter path
-     * @param string            $resourceDir Resource root dir path
-     *
-     * @Inject
-     * @throws AppNamespace
      */
-    public function __construct(
-        InjectorInterface $injector,
-        $namespace,
-        $path,
-        $resourceDir = null
-    ) {
-        if (!is_string($namespace)) {
-            throw new AppNamespace(gettype($namespace));
-        }
+    public function __construct(InjectorInterface $injector, $namespace)
+    {
         $this->injector = $injector;
         $this->namespace = $namespace;
-        $this->path = $path;
-        $this->resourceDir = $resourceDir;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function get($uri)
+    public function get(AbstractUri $uri)
     {
-        $parsedUrl = parse_url($uri);
-        $path = str_replace('/', ' ', $parsedUrl['path']);
-        $path = ucwords($path);
-        $path = str_replace(' ', '\\', $path);
-        $className = "{$this->namespace}\\{$this->path}{$path}";
-        $instance = $this->injector->getInstance($className);
+        $class = $this->namespace . $this->path . str_replace(' ', '\\', ucwords(str_replace('/', ' ', $uri->path)));
+        $instance = $this->injector->getInstance($class);
 
         return $instance;
-    }
-
-    /**
-     * @return \Iterator
-     */
-    public function getIterator()
-    {
-        return $this->resourceDir ? new AppIterator($this->resourceDir) : new \ArrayIterator([]);
     }
 }

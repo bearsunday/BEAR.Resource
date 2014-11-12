@@ -6,11 +6,17 @@
  */
 namespace BEAR\Resource\Adapter;
 
-use BEAR\Resource\ProviderInterface;
+use BEAR\Resource\AbstractUri;
+use BEAR\Resource\ResourceObject;
 
-/**
- * Interface for resource adapter
- */
-interface AdapterInterface extends ProviderInterface
+interface AdapterInterface
 {
+    /**
+     * Return new resource object
+     *
+     * @param AbstractUri $uri
+     *
+     * @return ResourceObject
+     */
+    public function get(AbstractUri $uri);
 }
