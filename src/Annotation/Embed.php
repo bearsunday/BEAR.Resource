@@ -10,7 +10,7 @@ namespace BEAR\Resource\Annotation;
  * @Annotation
  * @Target("METHOD")
  */
-final class Embed implements AnnotationInterface
+final class Embed
 {
     /**
      * Relation

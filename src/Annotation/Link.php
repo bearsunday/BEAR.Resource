@@ -10,7 +10,7 @@ namespace BEAR\Resource\Annotation;
  * @Annotation
  * @Target("METHOD")
  */
-final class Link implements AnnotationInterface
+final class Link
 {
     const REL = 'rel';
 
