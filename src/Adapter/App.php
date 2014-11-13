@@ -45,7 +45,7 @@ class App implements AdapterInterface
      */
     public function get(AbstractUri $uri)
     {
-        $class = $this->namespace . $this->path . str_replace(' ', '\\', ucwords(str_replace('/', ' ', $uri->path)));
+        $class = $this->namespace . $this->path . '\Resource' . str_replace(' ', '\\', ucwords(str_replace('/', ' ', ' ' . $uri->scheme . $uri->path)));
         $instance = $this->injector->getInstance($class);
 
         return $instance;
