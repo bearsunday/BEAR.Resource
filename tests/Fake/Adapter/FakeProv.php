@@ -2,15 +2,11 @@
 
 namespace BEAR\Resource\Adapter;
 
-use BEAR\Resource\ProviderInterface;
+use BEAR\Resource\AbstractUri;
 
-class FakeProv implements ProviderInterface, AdapterInterface
+class FakeProv implements AdapterInterface
 {
-    public function __construct()
-    {
-    }
-
-    public function get($path)
+    public function get(AbstractUri $uri)
     {
         return new \StdClass;
     }

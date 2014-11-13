@@ -6,4 +6,8 @@ use BEAR\Resource\ResourceObject;
 
 class Index extends ResourceObject
 {
+    public function onGet($id = 0)
+    {
+        return $id;
+    }
 }

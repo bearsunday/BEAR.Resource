@@ -4,9 +4,6 @@ namespace FakeVendor\Sandbox\Resource\App;
 
 use BEAR\Resource\ResourceObject;
 
-use BEAR\Resource\Annotation\Provides;
-use BEAR\Resource\Annotation\ParamSignal;
-
 class User extends ResourceObject
 {
     public $uri = 'dummy://self/User';
@@ -21,12 +18,6 @@ class User extends ResourceObject
         array('id' => 3, 'name' => 'Porthos', 'age' => 17, 'blog_id' => 0)
     );
 
-    /**
-     * @param $id
-     *
-     * @return mixed
-     * @throws \InvalidArgumentException
-     */
     public function onGet($id)
     {
         if (!isset($this->users[$id])) {
@@ -55,30 +46,4 @@ class User extends ResourceObject
         return "patch user[{$id} {$name} {$age}]";
     }
 
-    /**
-     * @param $delete_id
-     *
-     * @return string
-     * @ParamSignal("login_id")
-     */
-    public function onDelete($delete_id)
-    {
-        return "{$delete_id} deleted";
-    }
-
-    /**
-     * @Provides("id")
-     */
-    public function provideId()
-    {
-        return 1;
-    }
-
-    /**
-     * @Provides("name")
-     */
-    public function provideName()
-    {
-        return "koriym";
-    }
 }
