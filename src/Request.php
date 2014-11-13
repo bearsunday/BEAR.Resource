@@ -19,6 +19,8 @@ final class Request extends AbstractRequest
     const HEAD = 'head';
     const OPTIONS = 'options';
 
+    const LAZY = 'lazy';
+
     /**
      * URI
      *
@@ -87,7 +89,8 @@ final class Request extends AbstractRequest
         InvokerInterface $invoker,
         ResourceObject $ro,
         $method = self::GET,
-        array $query = []
+        array $query = [],
+        array $links = []
     ) {
         $this->invoker = $invoker;
         $this->ro = $ro;
@@ -96,6 +99,7 @@ final class Request extends AbstractRequest
         }
         $this->method = $method;
         $this->query = $query;
+        $this->links = $links;
     }
 
     /**
