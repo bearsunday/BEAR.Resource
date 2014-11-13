@@ -26,6 +26,10 @@ abstract class AbstractUri
     public $path;
 
     /**
+     * @var string
+     */
+    public $fullPath;
+    /**
      * Associative query array
      *
      * @var array
@@ -33,9 +37,12 @@ abstract class AbstractUri
     public $query = [];
 
     /**
-     * Return URI string
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    abstract public function __toString();
+    public function __toString()
+    {
+        $uriWithQuery = "{$this->scheme}://{$this->host}{$this->path}" . ($this->query ? '?' . http_build_query($this->query) : '');
+
+        return $uriWithQuery;
+    }
 }

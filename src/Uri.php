@@ -28,14 +28,4 @@ final class Uri extends AbstractUri
             $this->query = $query + $this->query;
         }
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __toString()
-    {
-        $uriWithQuery = "{$this->scheme}://{$this->host}{$this->path}" . ($this->query ? '?' . http_build_query($this->query) : '');
-
-        return $uriWithQuery;
-    }
 }
