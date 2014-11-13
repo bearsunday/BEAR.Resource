@@ -96,8 +96,8 @@ class Invoker implements InvokerInterface
 
             return $this->extraMethod($request->ro, $request, $onMethod);
         }
-        $args = $this->params->getParameters([$request->ro, $onMethod], $request->query);
-        $result = call_user_func_array([$request->ro, $onMethod], $args);
+        $params = $this->params->getParameters([$request->ro, $onMethod], $request->query);
+        $result = call_user_func_array([$request->ro, $onMethod], $params);
 
         return $this->postRequest($request, $result);
     }
