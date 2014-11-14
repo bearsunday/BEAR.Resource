@@ -81,8 +81,7 @@ class Invoker implements InvokerInterface
      * @param LinkerInterface $linker
      * @param NamedParameter  $params
      */
-    public function __construct(LinkerInterface $linker, NamedParameter $params) {
-        $this->linker = $linker;
+    public function __construct(NamedParameter $params) {
         $this->params = $params;
     }
 
@@ -113,9 +112,6 @@ class Invoker implements InvokerInterface
         if (!$result instanceof ResourceObject) {
             $request->ro->body = $result;
             $result = $request->ro;
-        }
-        if ($request->links) {
-            $result = $this->linker->invoke($request);
         }
 
         return $result;
