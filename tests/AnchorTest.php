@@ -3,7 +3,7 @@
 namespace BEAR\Resource;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use FakeVendor\Sandbox\Resource\App\Link\User;
+use FakeVendor\Sandbox\Resource\App\Author;
 use BEAR\Resource\Exception\Link;
 
 class AnchorTest extends \PHPUnit_Framework_TestCase
@@ -26,10 +26,10 @@ class AnchorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $invoker = new Invoker(new Linker(new AnnotationReader), new NamedParameter);
-        $ro = new User;
-        $ro->body['blog_id'] = 1;
-        $this->request = new Request($invoker, $ro);
+        $invoker = new Invoker(new NamedParameter);
+        $author = new Author;
+        $author->onGet(1);
+        $this->request = new Request($invoker, $author, Request::GET, ['id' => 1]);
         $this->anchor = new Anchor(new AnnotationReader, $this->request);
     }
 
@@ -37,7 +37,7 @@ class AnchorTest extends \PHPUnit_Framework_TestCase
     {
         list($method, $uri) = $this->anchor->href('blog', $this->request, []);
         $this->assertSame(Request::GET, $method);
-        $this->assertSame('app://self/link/blog?id=1',$uri);
+        $this->assertSame('app://self/blog?id=12' ,$uri);
     }
 
     public function testInvalid()

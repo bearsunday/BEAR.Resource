@@ -18,6 +18,7 @@ use BEAR\Resource\UriMapper;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Ray\Di\Injector;
 use BEAR\Resource\Module\ResourceModule;
+use BEAR\Resource\ResourceInterface;
 
 class MockResource extends ResourceObject
 {
@@ -117,18 +118,12 @@ class HalRendererTest extends \PHPUnit_Framework_TestCase
 
     public function testBodyHasRequest()
     {
-        $invoker = new Invoker(
-            new Linker(new AnnotationReader),
-            new NamedParameter(
-                new SignalParameter(
-                    new Manager(new HandlerFactory, new ResultFactory, new ResultCollection),
-                    new Param
-                )
-            ),
-            new Logger
+        $request = new Request(
+            new Invoker(new NamedParameter),
+            new MockResource,
+            Request::GET,
+            ['a'=>1, 'b'=>2]
         );
-        $request = new Request($invoker);
-        $request->set(new MockResource, 'nop://mock', 'get', ['a'=>1, 'b'=>2]);
         $this->resource->body['req'] = $request;
         $this->resource->setRenderer($this->halRenderer);
         $this->halRenderer->render($this->resource);
@@ -137,7 +132,7 @@ class HalRendererTest extends \PHPUnit_Framework_TestCase
 
     public function testEmbedResource()
     {
-        $resource = (new Injector(new ResourceModule('FakeVendor\Sandbox')))->getInstance('BEAR\Resource\ResourceInterface');
+        $resource = (new Injector(new ResourceModule('FakeVendor\Sandbox')))->getInstance(ResourceInterface::class);
         $resourceObject = $resource
             ->get
             ->uri('app://self/bird/birds')

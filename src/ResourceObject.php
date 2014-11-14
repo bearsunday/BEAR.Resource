@@ -18,7 +18,7 @@ use Ray\Di\Di\Inject;
 abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggregate, JsonSerializable
 {
     /**
-     * URI
+     * AbstractUri
      *
      * @var string
      */

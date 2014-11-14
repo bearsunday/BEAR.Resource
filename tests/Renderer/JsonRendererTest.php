@@ -2,6 +2,9 @@
 
 namespace BEAR\Resource\Renderer;
 
+use BEAR\Resource\Invoker;
+use BEAR\Resource\NamedParameter;
+use BEAR\Resource\Request;
 use BEAR\Resource\ResourceObject;
 
 class Root extends ResourceObject
@@ -9,7 +12,10 @@ class Root extends ResourceObject
     public function onGet()
     {
         $this['one'] = 1;
-        $this['two'] = $GLOBALS['RESOURCE']->get->object(new Child)->request();
+        $this['two'] = new Request(
+            new Invoker(new NamedParameter),
+            new Child
+        );
 
         return $this;
     }
@@ -27,6 +33,12 @@ class Child extends ResourceObject
 
 class JsonRendererTest extends \PHPUnit_Framework_TestCase
 {
+
+    /**
+     * @var
+     */
+    private $ro;
+
     protected function setUp()
     {
         $this->ro = new Root;

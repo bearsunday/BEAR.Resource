@@ -9,6 +9,7 @@ namespace BEAR\Resource\Module;
 use BEAR\Resource\Renderer\JsonRenderer;
 use Ray\Di\AbstractModule;
 use BEAR\Resource\RenderInterface;
+use Ray\Di\Di\Named;
 
 class ResourceModule extends AbstractModule
 {
@@ -24,11 +25,13 @@ class ResourceModule extends AbstractModule
 
     /**
      * @param string $appName
+     *
+     * @Inject
+     * @Named("appName=app_dir")
      */
-    public function __construct($appName, $resourceDir = '')
+    public function __construct($appName)
     {
         $this->appName = $appName;
-        $this->resourceDir = $resourceDir;
         parent::__construct();
     }
 
@@ -38,7 +41,7 @@ class ResourceModule extends AbstractModule
     protected function configure()
     {
         $this->install(new NamedArgsModule);
-        $this->install(new ResourceClientModule($this->appName, $this->resourceDir));
+        $this->install(new ResourceClientModule($this->appName));
         $this->install(new EmbedResourceModule($this));
         $this->bind('BEAR\Resource\RenderInterface')->to('BEAR\Resource\Renderer\JsonRenderer');
     }

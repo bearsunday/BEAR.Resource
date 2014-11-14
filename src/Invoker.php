@@ -78,10 +78,9 @@ class Invoker implements InvokerInterface
     }
 
     /**
-     * @param LinkerInterface $linker
-     * @param NamedParameter  $params
+     * @param NamedParameterInterface $params
      */
-    public function __construct(NamedParameter $params) {
+    public function __construct(NamedParameterInterface $params) {
         $this->params = $params;
     }
 
@@ -96,6 +95,9 @@ class Invoker implements InvokerInterface
             return $this->extraMethod($request->ro, $request, $onMethod);
         }
         $params = $this->params->getParameters([$request->ro, $onMethod], $request->query);
+        if (isset($request->ro->uri->query)) {
+            $request->ro->uri->query = $request->query;
+        }
         $result = call_user_func_array([$request->ro, $onMethod], $params);
 
         return $this->postRequest($request, $result);

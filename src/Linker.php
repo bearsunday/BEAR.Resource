@@ -27,9 +27,9 @@ final class Linker implements LinkerInterface
     private $factory;
 
     /**
-     * @param Reader $reader
-     *
-     * @Inject
+     * @param Reader           $reader
+     * @param InvokerInterface $invoker
+     * @param FactoryInterface $factory
      */
     public function __construct(
         Reader $reader,

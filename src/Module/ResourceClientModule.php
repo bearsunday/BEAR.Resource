@@ -7,8 +7,9 @@
 namespace BEAR\Resource\Module;
 
 use BEAR\Resource\Exception\AppName;
+use BEAR\Resource\NamedParameterInterface;
+use BEAR\Resource\NamedParameter;
 use Ray\Di\AbstractModule;
-use Ray\Di\Module\InjectorModule;
 use Ray\Di\Scope;
 
 class ResourceClientModule extends AbstractModule
@@ -23,13 +24,12 @@ class ResourceClientModule extends AbstractModule
     /**
      * @param string $appName
      */
-    public function __construct($appName, $resourceDir = '')
+    public function __construct($appName)
     {
         if (! is_string($appName)) {
             throw new AppName(gettype($appName));
         }
         $this->appName = $appName;
-        $this->resourceDir = $resourceDir;
         parent::__construct();
     }
 
@@ -46,14 +46,11 @@ class ResourceClientModule extends AbstractModule
         $this->bind('BEAR\Resource\ResourceInterface')->to('BEAR\Resource\Resource')->in(Scope::SINGLETON);
         $this->bind('BEAR\Resource\InvokerInterface')->to('BEAR\Resource\Invoker')->in(Scope::SINGLETON);
         $this->bind('BEAR\Resource\LinkerInterface')->to('BEAR\Resource\Linker')->in(Scope::SINGLETON);
-        $this->bind('BEAR\Resource\LoggerInterface')->annotatedWith("resource_logger")->to('BEAR\Resource\Logger');
-        $this->bind('BEAR\Resource\HrefInterface')->to('BEAR\Resource\A');
-        $this->bind('BEAR\Resource\SignalParameterInterface')->to('BEAR\Resource\SignalParameter');
+        $this->bind('BEAR\Resource\HrefInterface')->to('BEAR\Resource\A')->in(Scope::SINGLETON);
+        $this->bind('BEAR\Resource\SignalParameterInterface')->to('BEAR\Resource\SignalParameter')->in(Scope::SINGLETON);
         $this->bind('BEAR\Resource\FactoryInterface')->to('BEAR\Resource\Factory')->in(Scope::SINGLETON);
         $this->bind('BEAR\Resource\SchemeCollectionInterface')->toProvider('BEAR\Resource\Module\SchemeCollectionProvider')->in(Scope::SINGLETON);
-        $this->bind('Aura\Signal\Manager')->toProvider('BEAR\Resource\Module\SignalProvider')->in(Scope::SINGLETON);
-        $this->bind('BEAR\Resource\ParamInterface')->to('BEAR\Resource\Param');
-        $this->bind('BEAR\Resource\RequestInterface')->to('BEAR\Resource\Request');
-        $this->bind('BEAR\Resource\AnchorInterface')->to('BEAR\Resource\Anchor');
+        $this->bind('BEAR\Resource\AnchorInterface')->to('BEAR\Resource\Anchor')->in(Scope::SINGLETON);
+        $this->bind(NamedParameterInterface::class)->to(NamedParameter::class);
     }
 }

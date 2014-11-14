@@ -6,21 +6,18 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\Link;
 use Doctrine\Common\Annotations\Reader;
 use Ray\Di\Di\Inject;
+use BEAR\Resource\Exception\Link as LinkException;
+use BEAR\Resource\Annotation\Link as LinkAnnotation;
 
 class Anchor implements AnchorInterface
 {
     /**
-     * @param Reader           $reader
-     * @param RequestInterface $request
-     *
-     * @Inject
+     * @param Reader $reader
      */
-    public function __construct(
-        Reader           $reader
-    ) {
+    public function __construct(Reader $reader)
+    {
         $this->reader = $reader;
     }
 
@@ -32,7 +29,7 @@ class Anchor implements AnchorInterface
         $classMethod = 'on' . ucfirst($request->method);
         $annotations = $this->reader->getMethodAnnotations(new \ReflectionMethod($request->ro, $classMethod));
         foreach ($annotations as $annotation) {
-            $isValidLinkAnnotation = $annotation instanceof Annotation\Link && isset($annotation->rel) && $annotation->rel === $rel;
+            $isValidLinkAnnotation = $annotation instanceof LinkAnnotation && isset($annotation->rel) && $annotation->rel === $rel;
             if ($isValidLinkAnnotation) {
                 $body = $request->ro->body;
                 $query = is_array($body) ? array_merge($body, $query) : [];
@@ -42,6 +39,6 @@ class Anchor implements AnchorInterface
             }
         }
 
-        throw new Link("rel:{$rel} class:" . get_class($request->ro));
+        throw new LinkException("rel:{$rel} class:" . get_class($request->ro));
     }
 }

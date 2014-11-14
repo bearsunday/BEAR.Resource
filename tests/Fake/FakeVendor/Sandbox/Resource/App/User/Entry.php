@@ -14,9 +14,6 @@ class Entry extends ResourceObject
      */
     public function __construct(ResourceInterface $resource = null)
     {
-        if (is_null($resource)) {
-            $resource = $GLOBALS['RESOURCE'];
-        }
         $this->resource = $resource;
     }
 

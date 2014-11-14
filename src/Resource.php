@@ -56,14 +56,14 @@ class Resource implements ResourceInterface
     private $request;
 
     /**
-     * @param Factory          $factory
+     * @param FactoryInterface $factory
      * @param InvokerInterface $invoker
-     * @param Anchor           $anchor
+     * @param AnchorInterface  $anchor
      */
     public function __construct(
-        Factory $factory,
+        FactoryInterface $factory,
         InvokerInterface $invoker,
-        Anchor $anchor
+        AnchorInterface  $anchor
     ) {
         $this->factory = $factory;
         $this->invoker = $invoker;
@@ -165,7 +165,6 @@ class Resource implements ResourceInterface
             $this->query,
             $this->links
         );
-
         $result = ($this->when === 'eager') ? $this->invoke($this->request) : $this->request;
         $this->query = [];
         $this->method = $this->when = '';

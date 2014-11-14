@@ -27,7 +27,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->invoker = new Invoker(new Linker(new AnnotationReader), new NamedParameter);
+        $this->invoker = new Invoker(new NamedParameter);
         $this->request = new Request($this->invoker, new Entry);
     }
 
