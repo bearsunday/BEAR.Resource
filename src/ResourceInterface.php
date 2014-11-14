@@ -6,7 +6,7 @@
  */
 namespace BEAR\Resource;
 
-interface ResourceInterface extends \IteratorAggregate
+interface ResourceInterface
 {
     /**
      * Return new resource object instance
@@ -29,7 +29,7 @@ interface ResourceInterface extends \IteratorAggregate
     /**
      * Set resource object created by URI.
      *
-     * @param string $uri
+     * @param string | AbstractUri $uri
      *
      * @return $this
      */
@@ -88,16 +88,6 @@ interface ResourceInterface extends \IteratorAggregate
     public function linkCrawl($linkKey);
 
     /**
-     * Attach parameter provider
-     *
-     * @param string                 $varName
-     * @param ParamProviderInterface $provider
-     *
-     * @return $this
-     */
-    public function attachParamProvider($varName, ParamProviderInterface $provider);
-
-    /**
      * Hyper reference (Hypertext As The Engine Of Application State)
      *
      * @param string $rel
@@ -106,13 +96,4 @@ interface ResourceInterface extends \IteratorAggregate
      * @return mixed
      */
     public function href($rel, array $query = []);
-
-    /**
-     * Add resource invoker exception handler
-     *
-     * @param ExceptionHandlerInterface $exceptionHandler
-     *
-     * @return mixed
-     */
-    public function setExceptionHandler(ExceptionHandlerInterface $exceptionHandler);
 }

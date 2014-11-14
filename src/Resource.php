@@ -6,61 +6,17 @@
  */
 namespace BEAR\Resource;
 
-use Doctrine\Common\Cache\Cache;
-use SplObjectStorage;
-use Ray\Di\Scope;
-use Ray\Di\Di\Inject;
-use Ray\Di\Di\Named;
-use Traversable;
-
-/**
- * Resource client
- *
- * @SuppressWarnings(PHPMD.TooManyMethods)
- *
- * @Scope("Singleton")
- */
 class Resource implements ResourceInterface
 {
     /**
-     * Resource factory
-     *
      * @var Factory
      */
     private $factory;
 
     /**
-     * Resource request invoker
-     *
      * @var Invoker
      */
     private $invoker;
-
-    /**
-     * Resource request
-     *
-     * @var Request
-     */
-    private $request;
-
-    /**
-     * Requests
-     *
-     * @var \SplObjectStorage
-     */
-    private $requests;
-
-    /**
-     * Cache
-     *
-     * @var Cache
-     */
-    private $cache;
-
-    /**
-     * @var string
-     */
-    private $appName = '';
 
     /**
      * @var Anchor
@@ -68,71 +24,49 @@ class Resource implements ResourceInterface
     private $anchor;
 
     /**
+     * @var ResourceObject
+     */
+    private $resourceObject;
+
+    /**
+     * [method, eager|lazy, links]
+     *
+     * @var string
+     */
+    private $method = '';
+
+    /**
+     * @var string
+     */
+    private $when = 'lazy';
+
+    /**
+     * @var array
+     */
+    private $query = [];
+
+    /**
+     * @var
+     */
+    private $links = [];
+
+    /**
      * @var Request
      */
-    private $newRequest;
+    private $request;
 
     /**
-     * @var ResourceObject[]
-     */
-    private $resourceObjects;
-
-    /**
-     * @param string $appName
-     *
-     * @Inject(optional = true)
-     * @Named("app_name")
-     *
-     */
-    public function setAppName($appName)
-    {
-        $this->appName = $appName;
-    }
-
-    /**
-     * Set cache adapter
-     *
-     * @param Cache $cache
-     *
-     * @Inject(optional = true)
-     * @Named("resource_cache")
-     */
-    public function setCacheAdapter(Cache $cache)
-    {
-        $this->cache = $cache;
-    }
-
-    /**
-     * Set scheme collection
-     *
-     * @param SchemeCollectionInterface $scheme
-     *
-     * @Inject(optional = true)
-     */
-    public function setSchemeCollection(SchemeCollectionInterface $scheme)
-    {
-        $this->factory->setSchemeCollection($scheme);
-    }
-
-    /**
-     * @param Factory          $factory resource object factory
-     * @param InvokerInterface $invoker resource request invoker
-     * @param Request          $request resource request
-     * @param Anchor           $anchor  resource linker
-     *
-     * @Inject
+     * @param Factory          $factory
+     * @param InvokerInterface $invoker
+     * @param Anchor           $anchor
      */
     public function __construct(
         Factory $factory,
         InvokerInterface $invoker,
-        Request $request,
         Anchor $anchor
     ) {
         $this->factory = $factory;
         $this->invoker = $invoker;
-        $this->newRequest = $request;
-        $this->requests = new SplObjectStorage;
-        $this->invoker->setResourceClient($this);
         $this->anchor = $anchor;
     }
 
@@ -141,33 +75,15 @@ class Resource implements ResourceInterface
      */
     public function newInstance($uri)
     {
-        if (isset($this->resourceObjects[$uri])) {
-            return clone $this->resourceObjects[$uri];
-        }
-
-        $useCache = $this->cache instanceof Cache;
-        $key = $this->appName . 'res-' . str_replace('/', '-', $uri);
-        if ($useCache === true) {
-            $cached = $this->cache->fetch($key);
-            if ($cached) {
-                return $cached;
-            }
-        }
-        $instance = $this->factory->newInstance($uri);
-        if ($useCache === true) {
-            $this->cache->save($key, $instance);
-        }
-        $this->resourceObjects[$uri] = $instance;
-
-        return $instance;
+        return $this->factory->newInstance($uri);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function object($ro)
+    public function object($resourceObject)
     {
-        $this->request->ro = $ro;
+        $this->resourceObject = $resourceObject;
 
         return $this;
     }
@@ -177,30 +93,11 @@ class Resource implements ResourceInterface
      */
     public function uri($uri)
     {
-        if ($uri instanceof Uri) {
-            $this->request->ro = $this->newInstance($uri->uri);
-            $this->withQuery($uri->query);
-
-            return $this;
+        if (is_string($uri)) {
+            $uri = new Uri($uri);
         }
-        if (! $this->request) {
-            throw new Exception\BadRequest('Request method (get/put/post/delete/options) required before uri()');
-        }
-        if (filter_var($uri, FILTER_VALIDATE_URL) === false) {
-            throw new Exception\Uri($uri);
-        }
-        // uri with query parsed
-        if (strpos($uri, '?') !== false) {
-            $parsed = parse_url($uri);
-            $uri = $parsed['scheme'] . '://' . $parsed['host'] . $parsed['path'];
-            if (isset($parsed['query'])) {
-                parse_str($parsed['query'], $query);
-                /** @var $query array */
-                $this->withQuery($query);
-            }
-        }
-        $this->request->ro = $this->newInstance($uri);
-        $this->request->uri = $uri;
+        $this->resourceObject = $this->newInstance($uri);
+        $this->query = $uri->query;
 
         return $this;
     }
@@ -210,7 +107,7 @@ class Resource implements ResourceInterface
      */
     public function withQuery(array $query)
     {
-        $this->request->query = $query;
+        $this->query = $query;
 
         return $this;
     }
@@ -220,7 +117,7 @@ class Resource implements ResourceInterface
      */
     public function addQuery(array $query)
     {
-        $this->request->query = array_merge($this->request->query, $query);
+        $this->query = $query + $this->query;
 
         return $this;
     }
@@ -230,7 +127,7 @@ class Resource implements ResourceInterface
      */
     public function linkSelf($linkKey)
     {
-        $this->request->links[] = new LinkType($linkKey, LinkType::SELF_LINK);
+        $this->links[] = new LinkType($linkKey, LinkType::SELF_LINK);
 
         return $this;
     }
@@ -240,7 +137,7 @@ class Resource implements ResourceInterface
      */
     public function linkNew($linkKey)
     {
-        $this->request->links[] = new LinkType($linkKey, LinkType::NEW_LINK);
+        $this->links[] = new LinkType($linkKey, LinkType::NEW_LINK);
 
         return $this;
     }
@@ -250,7 +147,7 @@ class Resource implements ResourceInterface
      */
     public function linkCrawl($linkKey)
     {
-        $this->request->links[] = new LinkType($linkKey, LinkType::CRAWL_LINK);
+        $this->links[] = new LinkType($linkKey, LinkType::CRAWL_LINK);
 
         return $this;
     }
@@ -260,101 +157,58 @@ class Resource implements ResourceInterface
      */
     public function request()
     {
-        $this->request->ro->uri = $this->request->toUri();
-        if (isset($this->request->options['sync'])) {
-            $this->requests->attach($this->request);
-            $this->request = clone $this->newRequest;
+        $method = $this->method ?: Request::GET;
+        $this->request = new Request(
+            $this->invoker,
+            $this->resourceObject,
+            $method,
+            $this->query,
+            $this->links
+        );
 
-            return $this;
-        }
-        if ($this->request->in !== 'eager') {
-            return clone $this->request;
-        }
+        $result = ($this->when === 'eager') ? $this->invoke($this->request) : $this->request;
+        $this->query = [];
+        $this->method = $this->when = '';
 
-        return $this->invoke();
+        return $result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function href($rel, array $query = [])
     {
         list($method, $uri) = $this->anchor->href($rel, $this->request, $query);
-        $linkedResource = $this->{$method}->uri($uri)->eager->request();
+        $target = $this->{$method}->uri($uri)->eager->request();
 
-        return $linkedResource;
+        return $target;
     }
 
     /**
-     * @return ResourceObject|mixed
+     * @param $request
+     *
+     * @return ResourceObject
      */
-    private function invoke()
+    private function invoke($request)
     {
-        if ($this->requests->count() === 0) {
-            return $this->invoker->invoke($this->request);
-        }
-        $this->requests->attach($this->request);
-
-        return $this->invoker->invokeSync($this->requests);
+        return $this->invoker->invoke($request);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function attachParamProvider($varName, ParamProviderInterface $provider)
-    {
-        $this->invoker->attachParamProvider($varName, $provider);
-
-        return $this;
-    }
 
     /**
-     * {@inheritdoc}
-     */
-    public function setExceptionHandler(ExceptionHandlerInterface $exceptionHandler)
-    {
-        $this->invoker->setExceptionHandler($exceptionHandler);
-    }
-
-    /**
-     * {@inheritDoc}
-     * @throws Exception\Request
+     * @param string $name
+     *
+     * @return $this
      */
     public function __get($name)
     {
-        if (in_array($name, ['get', 'post', 'put', 'patch', 'delete', 'head', 'options'])) {
-            $this->request = clone $this->newRequest;
-            $this->request->method = $name;
+        if ($this->method === '') {
+            $this->method = $name;
 
             return $this;
         }
-        if (in_array($name, ['lazy', 'eager'])) {
-            $this->request->in = $name;
+        $this->when = $name;
 
-            return $this;
-        }
-        if (in_array($name, ['sync'])) {
-            $this->request->options[$name] = $name;
-
-            return $this;
-        }
-        throw new Exception\BadRequest($name, 400);
-    }
-
-    /**
-     * Return request string
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->request->toUri();
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return \ArrayIterator|\MultipleIterator|Traversable
-     */
-    public function getIterator()
-    {
-        return $this->factory->getIterator();
+        return $this;
     }
 }
