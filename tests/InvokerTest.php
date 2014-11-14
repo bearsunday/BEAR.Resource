@@ -32,8 +32,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->invoker = new Invoker(new NamedParameter);
-        $this->invoker->setOptionProvider(new OptionProvider);
+        $this->invoker = new Invoker(new NamedParameter, new OptionProvider);
     }
 
     public function testInvoke()

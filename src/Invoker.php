@@ -27,28 +27,12 @@ class Invoker implements InvokerInterface
     private $optionProvider;
 
     /**
-     * {@inheritDoc}
-     */
-    public function setResourceClient(ResourceInterface $resource)
-    {
-        $this->linker->setResource($resource);
-    }
-
-    /**
-     * @param OptionProviderInterface $optionProvider
-     *
-     * @Inject(optional=true)
-     */
-    public function setOptionProvider(OptionProviderInterface $optionProvider)
-    {
-        $this->optionProvider = $optionProvider;
-    }
-
-    /**
      * @param NamedParameterInterface $params
+     * @param OptionProviderInterface $optionProvider
      */
-    public function __construct(NamedParameterInterface $params) {
+    public function __construct(NamedParameterInterface $params, OptionProviderInterface $optionProvider = null) {
         $this->params = $params;
+        $this->optionProvider ?: new OptionProvider;
     }
 
     /**
