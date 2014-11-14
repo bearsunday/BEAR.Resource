@@ -3,17 +3,15 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\Parameter;
-use BEAR\Resource\Exception\ParameterInService;
 use BEAR\Resource\Interceptor\FakeLogInterceptor;
 use BEAR\Resource\Interceptor\Log;
 use BEAR\Resource\Mock\Comment;
-use Doctrine\Common\Annotations\AnnotationReader;
-use FakeVendor\Sandbox\Resource\App\Param\User as ParamUser;
 use FakeVendor\Sandbox\Resource\App\Restbucks\Order;
 use FakeVendor\Sandbox\Resource\App\User;
 use FakeVendor\Sandbox\Resource\App\Weave\Book;
 use Ray\Aop\Bind;
 use Ray\Aop\Compiler;
+use BEAR\Resource\Exception\MethodNotAllowed;
 
 class InvokerTest extends \PHPUnit_Framework_TestCase
 {
@@ -126,5 +124,13 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $outOfRangeId = 4;
         $request = new Request($this->invoker, new User, Request::GET, ['id' => $outOfRangeId]);
         $this->invoker->invoke($request);
+    }
+
+    public function testInvalidMethod()
+    {
+        $this->setExpectedException(MethodNotAllowed::class);
+        $request = new Request($this->invoker, new Order, Request::DELETE);
+        $this->invoker->invoke($request);
+
     }
 }

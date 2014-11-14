@@ -7,7 +7,7 @@
 namespace BEAR\Resource;
 
 use Ray\Di\Di\Inject;
-use Ray\Di\Scope;
+use BEAR\Resource\Exception\MethodNotAllowed;
 
 class Invoker implements InvokerInterface
 {
@@ -17,47 +17,14 @@ class Invoker implements InvokerInterface
     private $linker;
 
     /**
-     * Logger
-     *
-     * @var Logger
-     */
-    private $logger;
-
-    /**
      * @var NamedParameter
      */
     protected $params;
 
     /**
-     * @var ExceptionHandlerInterface
-     */
-    private $exceptionHandler;
-
-    /**
      * @var
      */
     private $optionProvider;
-
-    /**
-     * Method OPTIONS
-     *
-     * @var string
-     */
-    const OPTIONS = 'options';
-
-    /**
-     * Method HEAD
-     *
-     * @var string
-     */
-    const HEAD = 'head';
-
-    /**
-     * ProviderInterface annotation
-     *
-     * @var string
-     */
-    const ANNOTATION_PROVIDES = 'Provides';
 
     /**
      * {@inheritDoc}
@@ -131,8 +98,8 @@ class Invoker implements InvokerInterface
      */
     private function extraMethod(ResourceObject $ro, AbstractRequest $request, $method)
     {
-        if ($request->method !== self::OPTIONS) {
-            throw new Exception\MethodNotAllowed(get_class($request->ro) . "::$method()", 405);
+        if ($request->method !== Request::OPTIONS) {
+            throw new MethodNotAllowed(get_class($request->ro) . "::$method()", 405);
         }
         $optionProvider = $this->optionProvider ?: new OptionProvider;
 
