@@ -6,7 +6,7 @@
  */
 namespace BEAR\Resource;
 
-use ReflectionParameter;
+use BEAR\Resource\Exception\Parameter;
 
 final class NamedParameter implements NamedParameterInterface
 {
@@ -31,8 +31,8 @@ final class NamedParameter implements NamedParameterInterface
     }
 
     /**
-     * @param array               $callable
-     * @param ReflectionParameter $parameter
+     * @param array                $callable
+     * @param \ReflectionParameter $parameter
      *
      * @return mixed
      */
@@ -43,6 +43,6 @@ final class NamedParameter implements NamedParameterInterface
             return $parameter->getDefaultValue();
         }
         $msg = '$' . "{$parameter->name} in " . get_class($callable[0]) . '::' . $callable[1] . '()';
-        throw new Exception\Parameter($msg);
+        throw new Parameter($msg);
     }
 }
