@@ -127,14 +127,4 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $request = new Request($this->invoker, new User, Request::GET, ['id' => $outOfRangeId]);
         $this->invoker->invoke($request);
     }
-
-    /**
-     * @todo implement later at resource class is available.
-     */
-    public function testInvokeExceptionHandleHead()
-    {
-//        $this->setExpectedException(ParameterInService::class);
-//        $request = new Request($this->invoker, new ParamUser, Request::HEAD, ['author_id' => ParamUser::PARAMETER_IN_SERVICE_EXCEPTION]);
-//        $this->invoker->invoke($request);
-    }
 }

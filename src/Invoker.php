@@ -120,7 +120,7 @@ class Invoker implements InvokerInterface
     }
 
     /**
-     * OPTIONS or HEAD
+     * OPTIONS
      *
      * @param ResourceObject  $ro
      * @param AbstractRequest $request
@@ -131,35 +131,11 @@ class Invoker implements InvokerInterface
      */
     private function extraMethod(ResourceObject $ro, AbstractRequest $request, $method)
     {
-        if ($request->method === self::OPTIONS) {
-            $optionProvider = $this->optionProvider ?: new OptionProvider;
-            return $optionProvider->get($ro);
+        if ($request->method !== self::OPTIONS) {
+            throw new Exception\MethodNotAllowed(get_class($request->ro) . "::$method()", 405);
         }
-        if ($method === 'onHead' && method_exists($ro, 'onGet')) {
-            return $this->onHead($request);
-        }
+        $optionProvider = $this->optionProvider ?: new OptionProvider;
 
-        throw new Exception\MethodNotAllowed(get_class($request->ro) . "::$method()", 405);
-    }
-    /**
-     * @param Request $request
-     *
-     * @return ResourceObject
-     * @throws Exception\ParameterInService
-     */
-    private function onHead(AbstractRequest $request)
-    {
-        if (method_exists($request->ro, 'onGet')) {
-            // invoke with Named param and Signal param
-            $args = $this->params->getParameters([$request->ro, 'onGet'], $request->query);
-            try {
-                call_user_func_array([$request->ro, 'onGet'], $args);
-            } catch (Exception\Parameter $e) {
-                throw new Exception\ParameterInService('', 0, $e);
-            }
-        }
-        $request->ro->body = '';
-
-        return $request->ro;
+        return $optionProvider->get($ro);
     }
 }
