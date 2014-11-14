@@ -20,14 +20,9 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "aura/signal": "~1.0",
-        "any/serializer": "~0.1",
         "ray/di": "~2.0@dev",
         "ray/aop": "~2.0@dev",
-        "doctrine/cache": "~1.3",
-        "nocarrier/hal":"~0.9",
-        "guzzlehttp/guzzle": "~4.0",
-        "guzzlehttp/guzzle-services": "~0.2"
+        "nocarrier/hal":"~0.9"
     },
     "require-dev": {
         "facebook/xhprof": "dev-master"
