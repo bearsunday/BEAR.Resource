@@ -29,20 +29,14 @@ final class EmbedInterceptor implements MethodInterceptor
     private $reader;
 
     /**
-     * @var \BEAR\Resource\NamedArgsInterface
-     */
-    private $namedArgs;
-
-    /**
      * @param ResourceInterface $resource
      *
      * @Inject
      */
-    public function __construct(ResourceInterface $resource, Reader $reader, NamedArgsInterface $namedArgs)
+    public function __construct(ResourceInterface $resource, Reader $reader)
     {
         $this->resource = $resource;
         $this->reader = $reader;
-        $this->namedArgs = $namedArgs;
     }
 
     /**
@@ -52,7 +46,7 @@ final class EmbedInterceptor implements MethodInterceptor
     {
         $resourceObject = $invocation->getThis();
         $method = $invocation->getMethod();
-        $query = $this->namedArgs->get($invocation);
+        $query = $this->getArgsByInvocation($invocation);
 
         $embeds = $this->reader->getMethodAnnotations($method);
         foreach ($embeds as $embed) {
@@ -82,5 +76,25 @@ final class EmbedInterceptor implements MethodInterceptor
         }
 
         return $result;
+    }
+
+    /**
+     * @param MethodInvocation $invocation
+     *
+     * @return array
+     */
+    private function getArgsByInvocation(MethodInvocation $invocation)
+    {
+        $args = $invocation->getArguments()->getArrayCopy();
+        $params = $invocation->getMethod()->getParameters();
+        $namedParameters = [];
+        foreach ($params as $param) {
+            if (isset($namedParameters[$param->name])) {
+                throw new \InvalidArgumentException($param->name);
+            }
+            $namedParameters[$param->name] = array_shift($args);
+        }
+
+        return $namedParameters;
     }
 }

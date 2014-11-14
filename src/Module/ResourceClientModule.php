@@ -51,6 +51,5 @@ class ResourceClientModule extends AbstractModule
         $this->bind('BEAR\Resource\FactoryInterface')->to('BEAR\Resource\Factory')->in(Scope::SINGLETON);
         $this->bind('BEAR\Resource\SchemeCollectionInterface')->toProvider('BEAR\Resource\Module\SchemeCollectionProvider')->in(Scope::SINGLETON);
         $this->bind('BEAR\Resource\AnchorInterface')->to('BEAR\Resource\Anchor')->in(Scope::SINGLETON);
-        $this->bind(NamedParameterInterface::class)->to(NamedParameter::class);
     }
 }

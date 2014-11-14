@@ -38,7 +38,6 @@ class ResourceModule extends AbstractModule
      */
     protected function configure()
     {
-        $this->install(new NamedArgsModule);
         $this->install(new ResourceClientModule($this->appName));
         $this->install(new EmbedResourceModule($this));
         $this->bind('BEAR\Resource\RenderInterface')->to('BEAR\Resource\JsonRenderer');
