@@ -3,21 +3,14 @@
 use \Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\AnnotationReader;
 
-// vendor & annotation
 $loader = require dirname(__DIR__) . '/vendor/autoload.php';
 /** @var $loader \Composer\Autoload\ClassLoader */
 $loader->addPsr4('BEAR\Resource\\', __DIR__);
 $loader->addPsr4('BEAR\Resource\\', __DIR__ . '/Fake');
-$loader->addPsr4('FakeVendor\Sandbox\Resource\\', __DIR__ . '/Fake/FakeVendor');
-
+$loader->addPsr4('FakeVendor\Sandbox\\', __DIR__ . '/Fake/FakeVendor/Sandbox');
 AnnotationRegistry::registerLoader([$loader, 'loadClass']);
-AnnotationReader::addGlobalIgnoredName('noinspection');
 
-$GLOBALS['RESOURCE'] = require __DIR__ . '/scripts/resource.php';
-$GLOBALS['COMPILER'] = require __DIR__ . '/scripts/compiler.php';
-$GLOBALS['INJECTOR'] = require __DIR__ . '/scripts/injector.php';
-
-$_ENV['BEAR_TMP'] = __DIR__ . '/tmp';
+$_ENV['TMP_DIR'] = __DIR__ . '/tmp';
 $_ENV['PACKAGE_DIR'] = dirname(__DIR__);
 $_ENV['TEST_DIR'] = __DIR__;
 $rm = function ($dir) use (&$rm) {
@@ -26,4 +19,4 @@ $rm = function ($dir) use (&$rm) {
         @rmdir($file);
     }
 };
-$rm($_ENV['BEAR_TMP']);
+$rm($_ENV['TMP_DIR']);
