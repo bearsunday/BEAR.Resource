@@ -1,11 +1,6 @@
 <?php
 
-namespace BEAR\Resource\Renderer;
-
-use BEAR\Resource\Invoker;
-use BEAR\Resource\NamedParameter;
-use BEAR\Resource\Request;
-use BEAR\Resource\ResourceObject;
+namespace BEAR\Resource;
 
 class Root extends ResourceObject
 {

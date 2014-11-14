@@ -19,7 +19,7 @@ class EmbedResourceModule extends AbstractModule
         $this->bindInterceptor(
             $this->matcher->any(),
             $this->matcher->annotatedWith('BEAR\Resource\Annotation\Embed'),
-            ['BEAR\Resource\Interceptor\EmbedInterceptor']
+            ['BEAR\Resource\EmbedInterceptor']
         );
     }
 }

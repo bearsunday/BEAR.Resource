@@ -4,11 +4,9 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace BEAR\Resource\Adapter\Iterator;
+namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\ResourceDir;
-use BEAR\Resource\Meta;
-use BEAR\Resource\ResourceObject;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 

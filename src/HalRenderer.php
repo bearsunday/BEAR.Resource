@@ -4,14 +4,10 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace BEAR\Resource\Renderer;
+namespace BEAR\Resource;
 
-use BEAR\Resource\AbstractRequest;
 use BEAR\Resource\Exception;
-use BEAR\Resource\Annotation\Link;
-use BEAR\Resource\RenderInterface;
-use BEAR\Resource\ResourceObject;
-use BEAR\Resource\UriMapperInterface;
+use BEAR\Resource\Annotation\Link as LinkAnnotation;
 use Nocarrier\Hal;
 use Ray\Di\Di\Inject;
 
@@ -68,11 +64,11 @@ class HalRenderer implements RenderInterface
         $uri = $this->mapper->reverseMap($ro->uri);
         $hal = new Hal($uri, $data);
         foreach ($ro->links as $rel => $link) {
-            $attr = (isset($link[Link::TEMPLATED]) && $link[Link::TEMPLATED] === true) ? [Link::TEMPLATED => true] : [];
-            if (!isset($link[Link::HREF])) {
+            $attr = (isset($link[LinkAnnotation::TEMPLATED]) && $link[LinkAnnotation::TEMPLATED] === true) ? [LinkAnnotation::TEMPLATED => true] : [];
+            if (!isset($link[LinkAnnotation::HREF])) {
                 throw new Exception\HrefNotFound($rel);
             }
-            $link = $this->mapper->reverseMap($link[Link::HREF]);
+            $link = $this->mapper->reverseMap($link[LinkAnnotation::HREF]);
             $hal->addLink($rel, $link, $attr);
         }
 

@@ -4,10 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace BEAR\Resource\Renderer;
-
-use BEAR\Resource\RenderInterface;
-use BEAR\Resource\ResourceObject;
+namespace BEAR\Resource;
 
 class JsonRenderer implements RenderInterface
 {

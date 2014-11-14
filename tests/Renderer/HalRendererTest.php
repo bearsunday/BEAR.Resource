@@ -1,24 +1,9 @@
 <?php
 
-namespace BEAR\Resource\Renderer;
+namespace BEAR\Resource;
 
-use Aura\Signal\HandlerFactory;
-use Aura\Signal\Manager;
-use Aura\Signal\ResultCollection;
-use Aura\Signal\ResultFactory;
-use BEAR\Resource\Invoker;
-use BEAR\Resource\Linker;
-use BEAR\Resource\Logger;
-use BEAR\Resource\NamedParameter;
-use BEAR\Resource\Param;
-use BEAR\Resource\Request;
-use BEAR\Resource\ResourceObject;
-use BEAR\Resource\SignalParameter;
-use BEAR\Resource\UriMapper;
-use Doctrine\Common\Annotations\AnnotationReader;
 use Ray\Di\Injector;
 use BEAR\Resource\Module\ResourceModule;
-use BEAR\Resource\ResourceInterface;
 
 class MockResource extends ResourceObject
 {
@@ -57,11 +42,6 @@ class HalRendererTest extends \PHPUnit_Framework_TestCase
         $this->resource = new MockResource;
         $this->resource->uri = 'dummy://self/index';
 
-    }
-
-    public function testNew()
-    {
-        $this->assertInstanceOf('\BEAR\Resource\Renderer\HalRenderer', $this->halRenderer);
     }
 
     public function testRender()

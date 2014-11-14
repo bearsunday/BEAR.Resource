@@ -4,15 +4,13 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace BEAR\Resource\Interceptor;
+namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\Embed;
 use BEAR\Resource\Exception\BadRequest;
-use BEAR\Resource\ResourceInterface;
 use Doctrine\Common\Annotations\Reader;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
-use BEAR\Resource\NamedArgsInterface;
 use BEAR\Resource\Exception\Embed as EmbedException;
 use Ray\Di\Di\Inject;
 

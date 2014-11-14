@@ -1,8 +1,7 @@
 <?php
 
-namespace BEAR\Resource\Adapter\Iterator;
+namespace BEAR\Resource;
 
-use BEAR\Resource\Meta;
 use  BEAR\Resource\Exception\ResourceDir;
 
 class AppIteratorTest extends \PHPUnit_Framework_TestCase
