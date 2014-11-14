@@ -16,13 +16,4 @@ interface LinkerInterface
      * @return ResourceObject
      */
     public function invoke(AbstractRequest $request);
-
-    /**
-     * Set resource
-     *
-     * @param $resource $resource
-     *
-     * @return void
-     */
-    public function setResource(ResourceInterface $resource);
 }

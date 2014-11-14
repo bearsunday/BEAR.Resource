@@ -6,30 +6,28 @@ use BEAR\Resource\Annotation\Link;
 
 class Post extends ResourceObject
 {
-    use SelectTrait;
-
     private $repo = [
-        [
+        'blog11' => [
             'id' => '1',
             'author_id' => '1',
             'body' => 'Anna post #1',
         ],
-        [
+        'blog12' => [
             'id' => '2',
             'author_id' => '1',
             'body' => 'Anna post #2',
         ],
-        [
+        'blog13' => [
             'id' => '3',
             'author_id' => '1',
             'body' => 'Anna post #3',
         ],
-        [
+        'blog14' => [
             'id' => '4',
             'author_id' => '2',
             'body' => 'Clara post #1',
         ],
-        [
+        'blog15' => [
             'id' => '5',
             'author_id' => '2',
             'body' => 'Clara post #2',
@@ -37,13 +35,13 @@ class Post extends ResourceObject
     ];
 
     /**
-     * @Link(crawl="tree", rel="meta", href="app://self/marshal/meta?post_id={id}", method="get")
-     * @Link(crawl="tree", rel="tag",  href="app://self/marshal/tag?post_id={id}",  method="get")
+     * @Link(rel="meta", href="app://self/marshal/meta?post_id={id}", crawl="tree")
+     * @Link(rel="tag",  href="app://self/marshal/tag?post_id={id}", crawl="tree")
      */
-    public function onGet($author_id)
+    public function onGet($blog_id)
     {
-        $posts = $this->select('author_id', $author_id);
+        $this->body = $this->repo['blog' . $blog_id];
 
-        return $posts;
+        return $this;
     }
 }

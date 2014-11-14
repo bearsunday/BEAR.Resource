@@ -7,44 +7,38 @@
 namespace BEAR\Resource;
 
 use Doctrine\Common\Annotations\Reader;
-use ReflectionMethod;
-use Ray\Di\Di\Inject;
+use BEAR\Resource\Exception\LinkRel;
 
 final class Linker implements LinkerInterface
 {
-    /**
-     * Resource client
-     *
-     * @var ResourceInterface
-     */
-    private $resource;
-
     /**
      * @var Reader
      */
     private $reader;
 
     /**
-     * @var array
+     * @var InvokerInterface
      */
-    private $cache = [];
+    private $invoker;
+
+    /**
+     * @var FactoryInterface
+     */
+    private $factory;
 
     /**
      * @param Reader $reader
      *
      * @Inject
      */
-    public function __construct(Reader $reader)
-    {
+    public function __construct(
+        Reader $reader,
+        InvokerInterface $invoker,
+        FactoryInterface $factory
+    ) {
         $this->reader = $reader;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setResource(ResourceInterface $resource)
-    {
-        $this->resource = $resource;
+        $this->invoker = $invoker;
+        $this->factory = $factory;
     }
 
     /**
@@ -52,6 +46,7 @@ final class Linker implements LinkerInterface
      */
     public function invoke(AbstractRequest $request)
     {
+        $this->invoker->invoke($request);
         $current = clone $request->ro;
         foreach ($request->links as $link) {
             $nextResource = $this->annotationLink($link, $current, $request);
@@ -106,7 +101,7 @@ final class Linker implements LinkerInterface
             throw new Exception\LinkQuery('Only array is allowed for link in ' . get_class($current));
         }
         $classMethod = 'on' . ucfirst($request->method);
-        $annotations = $this->reader->getMethodAnnotations(new ReflectionMethod($current, $classMethod));
+        $annotations = $this->reader->getMethodAnnotations(new \ReflectionMethod($current, $classMethod));
         if ($link->type === LinkType::CRAWL_LINK) {
             return $this->annotationCrawl($annotations, $link, $current);
         }
@@ -117,9 +112,9 @@ final class Linker implements LinkerInterface
     /**
      * Annotation link (new, self)
      *
-     * @param array          $annotations
-     * @param LinkType       $link
-     * @param ResourceObject $current
+     * @param \BEAR\Resource\Annotation\Link[] $annotations
+     * @param LinkType                         $link
+     * @param ResourceObject                   $current
      *
      * @return ResourceObject
      * @throws Exception\LinkQuery
@@ -128,22 +123,17 @@ final class Linker implements LinkerInterface
     private function annotationRel(array $annotations, LinkType $link, ResourceObject $current)
     {
         foreach ($annotations as $annotation) {
-            /* @var $annotation Annotation\Link */
             if ($annotation->rel !== $link->key) {
                 continue;
             }
             $uri = \GuzzleHttp\uri_template($annotation->href, $current->body);
-            try {
-                $linkedResource = $this->resource->{$annotation->method}->uri($uri)->eager->request();
-                /* @var $linkedResource ResourceObject */
-            } catch (Exception\Parameter $e) {
-                $msg = 'class:' . get_class($current) . " link:{$link->key} query:" . json_encode($current->body);
-                throw new Exception\LinkQuery($msg, 0, $e);
-            }
+            $rel = $this->factory->newInstance($uri);
+            $request = new Request($this->invoker, $rel, Request::GET, (new Uri($uri))->query);
+            $linkedResource = $this->invoker->invoke($request);
 
             return $linkedResource;
         }
-        throw new Exception\LinkRel("[{$link->key}] in " . get_class($current) . ' is not available.');
+        throw new LinkRel("rel:{$link->key} class:" . get_class($current));
     }
 
     /**
@@ -169,28 +159,21 @@ final class Linker implements LinkerInterface
     }
 
     /**
-     * @param array    $annotations
+     * @param Link[]   $annotations
      * @param LinkType $link
      * @param array    &$body
      */
     private function crawl(array $annotations, LinkType $link, array &$body)
     {
-        $this->cache = [];
         foreach ($annotations as $annotation) {
-            /* @var $annotation Annotation\Link */
             if ($annotation->crawl !== $link->key) {
                 continue;
             }
             $uri = \GuzzleHttp\uri_template($annotation->href, $body);
-            $request = $this->resource->{$annotation->method}->uri($uri)->linkCrawl($link->key)->request();
-            /* @var $request Request */
+            $rel = $this->factory->newInstance($uri);
+            $request = new Request($this->invoker, $rel, Request::GET, (new Uri($uri))->query, [$link]);
             $hash = $request->hash();
-            if (isset($this->cache[$hash])) {
-                $body[$annotation->rel] = $this->cache[$hash];
-                continue;
-            }
-            /* @var $linkedResource ResourceObject */
-            $body[$annotation->rel] = $request()->body;
+            $body[$annotation->rel] = $this->invoke($request)->body;
             $this->cache[$hash] = $body[$annotation->rel];
         }
     }
@@ -212,6 +195,6 @@ final class Linker implements LinkerInterface
         );
         $isOneColumnList = (count($value) === 1) && is_array($value[0]);
 
-        return ($isOneColumnList | $isMultiColumnList);
+        return ($isOneColumnList || $isMultiColumnList);
     }
 }

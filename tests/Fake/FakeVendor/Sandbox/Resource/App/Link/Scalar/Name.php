@@ -7,8 +7,8 @@ use BEAR\Resource\Annotation\Link;
 class Name extends ResourceObject
 {
     /**
-     * @Link(rel="greeting", href="app://self/link/scalar/hello?name={value}", method="get")
-     * @Link(rel="no_query", href="app://self/link/scalar/hello", method="get")
+     * @Link(rel="greeting", href="app://self/link/scalar/hello?name={value}")
+     * @Link(rel="no_query", href="app://self/link/scalar/hello")
      */
     public function onGet($name)
     {

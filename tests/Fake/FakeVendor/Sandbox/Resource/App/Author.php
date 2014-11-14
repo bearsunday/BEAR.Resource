@@ -1,11 +1,10 @@
 <?php
-namespace FakeVendor\Sandbox\Resource\App\Link;
+namespace FakeVendor\Sandbox\Resource\App;
 
 use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Annotation\Link;
 
-/** @noinspection PhpUndefinedClassInspection */
-class User extends ResourceObject
+class Author extends ResourceObject
 {
 
     private $users = [
@@ -15,10 +14,12 @@ class User extends ResourceObject
     ];
 
     /**
-     * @Link(rel="blog", href="app://self/link/blog?id={blog_id}")
+     * @Link(rel="blog", href="app://self/blog?id={blog_id}")
      */
     public function onGet($id)
     {
-        return $this->users[$id];
+        $this->body = $this->users[$id];
+
+        return $this;
     }
 }

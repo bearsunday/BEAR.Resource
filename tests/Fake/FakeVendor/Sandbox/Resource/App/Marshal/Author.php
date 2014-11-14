@@ -4,7 +4,6 @@ namespace FakeVendor\Sandbox\Resource\App\Marshal;
 use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Annotation\Link;
 
-/** @noinspection PhpUndefinedClassInspection */
 class Author extends ResourceObject
 {
 

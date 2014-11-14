@@ -8,7 +8,8 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Ray\Di\Injector;
 use FakeVendor\Sandbox\Resource\App\Link\Scalar\Name;
 use FakeVendor\Sandbox\Resource\App\Link\User;
-use FakeVendor\Sandbox\Resource\App\Marshal\Author;
+use FakeVendor\Sandbox\Resource\App\Author;
+use FakeVendor\Sandbox\Resource\App\Blog;
 
 class LinkerTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,239 +31,132 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->linker = new Linker(new AnnotationReader);
-        $invoker = new Invoker($this->linker, new NamedParameter);
-        $injector = new Injector;
-        $this->request = new Request($invoker);
-        $scheme = (new SchemeCollection)
+        $schemeCollection = (new SchemeCollection)
             ->scheme('app')
             ->host('self')
-            ->toAdapter(new Adapter\App($injector, 'FakeVendor\Sandbox', 'Resource\App'));
-        $factory = new Factory($scheme);
-        $this->resource = new Resource($factory, $invoker, new Request($invoker), new Anchor(new AnnotationReader, $this->request));
+            ->toAdapter(new Adapter\App(new Injector, 'FakeVendor\Sandbox', 'Resource\App'));
+        $this->linker = new Linker(
+            new AnnotationReader,
+            new Invoker(new NamedParameter),
+            new Factory($schemeCollection)
+        );
     }
 
     public function testLinkAnnotationSelf()
     {
-        $this->request->links = [new LinkType('blog', LinkType::SELF_LINK)];
-        $this->request->method = 'get';
-        $ro = new User;
-        $ro->body = $ro->onGet(1);
-        $this->request->ro = $ro;
-
-        $result = $this->linker->invoke($this->request);
+        $request = new Request(
+            new Invoker(new NamedParameter),
+            new Author,
+            Request::GET,
+            ['id' => 1],
+            [new LinkType('blog', LinkType::SELF_LINK)]
+        );
+        $result = $this->linker->invoke($request);
         $expected = [
+            'id' => 12,
             'name' => 'Aramis blog'
         ];
         $this->assertSame($expected, $result->body);
-
-        return $this->request;
     }
 
     public function testAnnotationNew()
     {
-        $this->request->links = [new LinkType('blog', LinkType::NEW_LINK)];
-        $this->request->method = 'get';
-        $ro = new User;
-        $ro->body = $ro->onGet(1);
-        $this->request->ro = $ro;
-
-        $result = $this->linker->invoke($this->request);
+        $request = new Request(
+            new Invoker(new NamedParameter),
+            new Author,
+            Request::GET,
+            ['id' => 1],
+            [new LinkType('blog', LinkType::NEW_LINK)]
+        );
+        $result = $this->linker->invoke($request);
         $expected = [
             'name' => 'Aramis',
             'age' => 16,
             'blog_id' => 12,
-            'blog' => ['name' => 'Aramis blog']
+            'blog' => [
+                'id' => 12,
+                'name' => 'Aramis blog'
+            ]
         ];
         $this->assertSame($expected, $result->body);
     }
 
     public function testAnnotationCrawl()
     {
-        $this->request->links = [new LinkType('tree', LinkType::CRAWL_LINK)];
-        $this->request->method = 'get';
-        $ro = new Author;
-        $ro->body = $ro->onGet(1);
-        $this->request->ro = $ro;
-        $result = $this->linker->invoke($this->request);
-        $expected = array (
-            'id' => 1,
-            'name' => 'Aramis',
-            'post' =>
-            array (
-                0 =>
-                array (
-                    'id' => '1',
-                    'author_id' => '1',
-                    'body' => 'Anna post #1',
-                    'meta' =>
-                    array (
-                        0 =>
-                        array (
-                            'id' => '1',
-                            'post_id' => '1',
-                            'data' => 'meta 1',
-                        ),
-                    ),
-                    'tag' =>
-                    array (
-                        0 =>
-                        array (
-                            'id' => '1',
-                            'post_id' => '1',
-                            'tag_id' => '1',
-                            'tag_name' =>
-                            array (
-                                0 =>
-                                array (
-                                    'id' => '1',
-                                    'name' => 'zim',
-                                ),
-                            ),
-                        ),
-                        1 =>
-                        array (
-                            'id' => '2',
-                            'post_id' => '1',
-                            'tag_id' => '2',
-                            'tag_name' =>
-                            array (
-                                0 =>
-                                array (
-                                    'id' => '2',
-                                    'name' => 'dib',
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-                1 =>
-                array (
-                    'id' => '2',
-                    'author_id' => '1',
-                    'body' => 'Anna post #2',
-                    'meta' =>
-                    array (
-                        0 =>
-                        array (
-                            'id' => '2',
-                            'post_id' => '2',
-                            'data' => 'meta 2',
-                        ),
-                    ),
-                    'tag' =>
-                    array (
-                        0 =>
-                        array (
-                            'id' => '3',
-                            'post_id' => '2',
-                            'tag_id' => '2',
-                            'tag_name' =>
-                            array (
-                                0 =>
-                                array (
-                                    'id' => '2',
-                                    'name' => 'dib',
-                                ),
-                            ),
-                        ),
-                        1 =>
-                        array (
-                            'id' => '4',
-                            'post_id' => '2',
-                            'tag_id' => '3',
-                            'tag_name' =>
-                            array (
-                                0 =>
-                                array (
-                                    'id' => '3',
-                                    'name' => 'gir',
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-                2 =>
-                array (
-                    'id' => '3',
-                    'author_id' => '1',
-                    'body' => 'Anna post #3',
-                    'meta' =>
-                    array (
-                        0 =>
-                        array (
-                            'id' => '3',
-                            'post_id' => '3',
-                            'data' => 'meta 3',
-                        ),
-                    ),
-                    'tag' =>
-                    array (
-                        0 =>
-                        array (
-                            'id' => '5',
-                            'post_id' => '3',
-                            'tag_id' => '3',
-                            'tag_name' =>
-                            array (
-                                0 =>
-                                array (
-                                    'id' => '3',
-                                    'name' => 'gir',
-                                ),
-                            ),
-                        ),
-                        1 =>
-                        array (
-                            'id' => '6',
-                            'post_id' => '3',
-                            'tag_id' => '1',
-                            'tag_name' =>
-                            array (
-                                0 =>
-                                array (
-                                    'id' => '1',
-                                    'name' => 'zim',
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
+        $request = new Request(
+            new Invoker(new NamedParameter),
+            new Blog,
+            Request::GET,
+            ['id' => 11],
+            [new LinkType('tree', LinkType::CRAWL_LINK)]
         );
+        $result = $this->linker->invoke($request);
+        $expected = [
+            'id' => 11,
+            'name' => 'Athos blog',
+            'post' => [
+                'id' => '1',
+                'author_id' => '1',
+                'body' => 'Anna post #1',
+                'meta' => [
+                    0 => [
+                        'id' => '1',
+                        'post_id' => '1',
+                        'data' => 'meta 1'
+                    ],
+                ],
+                'tag' => [
+                    0 => [
+                        'id' => '1',
+                        'post_id' => '1',
+                        'tag_id' => '1',
+                        'tag_name' => [
+                            0 => [
+                                'id' => '1',
+                                'name' => 'zim'
+                            ],
+                        ],
+                    ],
+                    1 => [
+                        'id' => '2',
+                        'post_id' => '1',
+                        'tag_id' => '2',
+                        'tag_name' => [
+                            0 =>[
+                                'id' => '2',
+                                'name' => 'dib'
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
         $this->assertSame($expected, $result->body);
     }
 
     public function testScalarValueLinkThrowException()
     {
         $this->setExpectedException(LinkQuery::class);
-        $this->request->links = [new LinkType('greeting', LinkType::NEW_LINK)];
-        $this->request->method = 'get';
-        $ro = new Name;
-        $ro->body = $ro->onGet('koriym');
-        $this->request->ro = $ro;
-        $this->linker->invoke($this->request);
+        $request = new Request(
+            new Invoker(new NamedParameter),
+            new Name,
+            Request::GET,
+            ['name' => 'bear'],
+            [new LinkType('blog', LinkType::SELF_LINK)]
+        );
+        $this->linker->invoke($request);
     }
 
     public function testInvalidRel()
     {
         $this->setExpectedException(LinkRel::class);
-        $this->request->links = [new LinkType('xxx', LinkType::NEW_LINK)];
-        $this->request->method = 'get';
-        $ro = new User;
-        $ro->body = $ro->onGet(1);
-        $this->request->ro = $ro;
-        $this->linker->invoke($this->request);
-    }
-
-    public function testInvalidLinkQuery()
-    {
-        $this->setExpectedException(LinkQuery::class);
-        $this->request->links = [new LinkType('no_query', LinkType::NEW_LINK)];
-        $this->request->method = 'get';
-        $ro = new Name;
-        $ro->body = [];
-        $this->request->ro = $ro;
-        $this->linker->invoke($this->request);
+        $request = new Request(
+            new Invoker(new NamedParameter),
+            new Author,
+            Request::GET,
+            ['id' => '1'],
+            [new LinkType('invalid-link', LinkType::SELF_LINK)]
+        );
+        $this->linker->invoke($request);
     }
 }
