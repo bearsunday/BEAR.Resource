@@ -2,7 +2,6 @@
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Adapter\FakeNop;
 use BEAR\Resource\Exception\Scheme;
 
 class SchemeCollectionTest extends \PHPUnit_Framework_TestCase

@@ -1,6 +1,6 @@
 <?php
 
-use BEAR\Resource\Adapter\App;
+use BEAR\Resource\AppAdapter;
 use BEAR\Resource\SchemeCollection;
 use Ray\Di\Injector;
 use Doctrine\Common\Annotations\AnnotationRegistry;
@@ -15,7 +15,7 @@ AnnotationReader::addGlobalIgnoredName('noinspection'); // for phpStorm
 
 $injector = new Injector(new ResourceModule('sandbox'));
 $resource = $injector->getInstance('BEAR\Resource\ResourceInterface');
-$scheme = (new SchemeCollection)->scheme('app')->host('self')->toAdapter(new App($injector, 'Sandbox', 'Resource'));
+$scheme = (new SchemeCollection)->scheme('app')->host('self')->toAdapter(new AppAdapter($injector, 'Sandbox', 'Resource'));
 $resource->setSchemeCollection($scheme);
 
 /* @var $resource \BEAR\Resource\ResourceInterface */

@@ -6,7 +6,6 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Adapter\AdapterInterface;
 use BEAR\Resource\Exception\Scheme;
 
 final class SchemeCollection implements SchemeCollectionInterface

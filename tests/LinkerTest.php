@@ -34,7 +34,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
         $schemeCollection = (new SchemeCollection)
             ->scheme('app')
             ->host('self')
-            ->toAdapter(new Adapter\App(new Injector, 'FakeVendor\Sandbox', 'Resource\App'));
+            ->toAdapter(new AppAdapter(new Injector, 'FakeVendor\Sandbox', 'Resource\App'));
         $this->linker = new Linker(
             new AnnotationReader,
             new Invoker(new NamedParameter),

@@ -2,14 +2,10 @@
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Adapter\FakeNop;
-use BEAR\Resource\Adapter\FakeNopResource;
-use BEAR\Resource\Exception\LogicException;
 use BEAR\Resource\Exception\OutOfBounds;
 use BEAR\Resource\Exception\Method;
 use BEAR\Resource\Renderer\FakeErrorRenderer;
 use BEAR\Resource\Renderer\FakeTestRenderer;
-use Doctrine\Common\Annotations\AnnotationReader;
 use FakeVendor\Sandbox\Resource\App\User\Entry;
 
 class RequestTest extends \PHPUnit_Framework_TestCase

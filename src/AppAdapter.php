@@ -4,12 +4,11 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace BEAR\Resource\Adapter;
+namespace BEAR\Resource;
 
-use BEAR\Resource\AbstractUri;
 use Ray\Di\InjectorInterface;
 
-class App implements AdapterInterface
+class AppAdapter implements AdapterInterface
 {
     /**
      * @var InjectorInterface

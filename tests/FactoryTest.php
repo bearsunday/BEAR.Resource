@@ -2,13 +2,10 @@
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Adapter\FakeNop;
 use Ray\Di\Injector;
 use BEAR\Resource\Exception\Scheme;
 use BEAR\Resource\Exception\ResourceNotFound;
-use BEAR\Resource\Adapter\FakeNopResource;
 use FakeVendor\Sandbox\Resource\App\Factory\News;
-use FakeVendor\Sandbox\Resource\App\User\Index;
 use FakeVendor\Sandbox\Resource\Page\News as PageNews;
 use BEAR\Resource\Exception\Uri as UriException;
 use FakeVendor\Sandbox\Resource\Page\Index as IndexPage;
@@ -25,9 +22,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $injector = new Injector;
         $scheme = (new SchemeCollection)
-            ->scheme('app')->host('self')->toAdapter(new Adapter\App($injector, 'FakeVendor\Sandbox', 'Resource\App'))
-            ->scheme('page')->host('self')->toAdapter(new Adapter\App($injector, 'FakeVendor\Sandbox', 'Resource\Page'))
-            ->scheme('prov')->host('self')->toAdapter(new Adapter\FakeProv)
+            ->scheme('app')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\App'))
+            ->scheme('page')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\Page'))
+            ->scheme('prov')->host('self')->toAdapter(new FakeProv)
             ->scheme('nop')->host('self')->toAdapter(new FakeNop);
         $this->factory = new Factory($scheme);
     }

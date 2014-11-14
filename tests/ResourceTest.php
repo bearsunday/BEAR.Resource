@@ -5,7 +5,7 @@ namespace BEAR\Resource;
 use Doctrine\Common\Annotations\AnnotationReader;
 use FakeVendor\Sandbox\Resource\Page\Index;
 use Ray\Di\Injector;
-use BEAR\Resource\Adapter\App;
+use BEAR\Resource\AppAdapter;
 use FakeVendor\Sandbox\Resource\App\Blog;
 
 class ResourceTest extends \PHPUnit_Framework_TestCase
@@ -20,9 +20,9 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $injector = new Injector;
         $scheme = (new SchemeCollection)
-        ->scheme('app')->host('self')->toAdapter(new App($injector, 'FakeVendor\Sandbox', 'Resource\App'))
-        ->scheme('page')->host('self')->toAdapter(new App($injector, 'FakeVendor\Sandbox', 'Resource\Page'))
-        ->scheme('nop')->host('self')->toAdapter(new Adapter\FakeNop);
+        ->scheme('app')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\App'))
+        ->scheme('page')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\Page'))
+        ->scheme('nop')->host('self')->toAdapter(new FakeNop);
         $reader = new AnnotationReader;
         $invoker = new Invoker(new NamedParameter);
         $factory = new Factory($scheme);

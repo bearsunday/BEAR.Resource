@@ -6,19 +6,15 @@
  */
 namespace BEAR\Resource\Module;
 
-use BEAR\Resource\Adapter\App as AppAdapter;
-use BEAR\Resource\Adapter\Http as HttpAdapter;
+use BEAR\Resource\AppAdapter;
 use BEAR\Resource\Exception\AppName;
 use BEAR\Resource\SchemeCollection;
-use Ray\Di\ProviderInterface as Provide;
+use Ray\Di\ProviderInterface;
 use Ray\Di\InjectorInterface;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
 
-/**
- * SchemeCollection provider
- */
-class SchemeCollectionProvider implements Provide
+class SchemeCollectionProvider implements ProviderInterface
 {
     /**
      * @var string

@@ -1,8 +1,6 @@
 <?php
 
-namespace BEAR\Resource\Adapter;
-
-use BEAR\Resource\ResourceObject;
+namespace BEAR\Resource;
 
 class FakeNopResource extends ResourceObject
 {

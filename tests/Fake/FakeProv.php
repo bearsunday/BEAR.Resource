@@ -1,8 +1,6 @@
 <?php
 
-namespace BEAR\Resource\Adapter;
-
-use BEAR\Resource\AbstractUri;
+namespace BEAR\Resource;
 
 class FakeProv implements AdapterInterface
 {

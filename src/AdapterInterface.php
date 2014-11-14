@@ -4,10 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace BEAR\Resource\Adapter;
-
-use BEAR\Resource\AbstractUri;
-use BEAR\Resource\ResourceObject;
+namespace BEAR\Resource;
 
 interface AdapterInterface
 {
