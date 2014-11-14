@@ -47,9 +47,9 @@ class ResourceClientModule extends AbstractModule
         $this->bind('BEAR\Resource\InvokerInterface')->to('BEAR\Resource\Invoker')->in(Scope::SINGLETON);
         $this->bind('BEAR\Resource\LinkerInterface')->to('BEAR\Resource\Linker')->in(Scope::SINGLETON);
         $this->bind('BEAR\Resource\HrefInterface')->to('BEAR\Resource\A')->in(Scope::SINGLETON);
-        $this->bind('BEAR\Resource\SignalParameterInterface')->to('BEAR\Resource\SignalParameter')->in(Scope::SINGLETON);
         $this->bind('BEAR\Resource\FactoryInterface')->to('BEAR\Resource\Factory')->in(Scope::SINGLETON);
         $this->bind('BEAR\Resource\SchemeCollectionInterface')->toProvider('BEAR\Resource\Module\SchemeCollectionProvider')->in(Scope::SINGLETON);
         $this->bind('BEAR\Resource\AnchorInterface')->to('BEAR\Resource\Anchor')->in(Scope::SINGLETON);
+        $this->bind(NamedParameterInterface::class)->to(NamedParameter::class);
     }
 }
