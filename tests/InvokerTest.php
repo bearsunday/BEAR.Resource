@@ -34,7 +34,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->invoker = new Invoker(new Linker(new AnnotationReader), new NamedParameter);
+        $this->invoker = new Invoker(new NamedParameter);
         $this->invoker->setOptionProvider(new OptionProvider);
     }
 
@@ -91,7 +91,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $request = new Request($this->invoker, new User, Request::OPTIONS);
         $response = $this->invoker->invoke($request);
         $actual = $response->headers['allow'];
-        $expected = ['get', 'post', 'put', 'patch', 'delete'];
+        $expected = ['get', 'post', 'put', 'patch'];
         asort($actual);
         asort($expected);
         $this->assertSame($actual, $expected);
