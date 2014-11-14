@@ -16,13 +16,4 @@ interface InvokerInterface
      * @return ResourceObject
      */
     public function invoke(AbstractRequest $request);
-
-    /**
-     * Set resource client
-     *
-     * @param ResourceInterface $resource
-     *
-     * @return void
-     */
-    public function setResourceClient(ResourceInterface $resource);
 }
