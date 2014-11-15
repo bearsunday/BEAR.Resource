@@ -32,7 +32,7 @@ class Invoker implements InvokerInterface
     public function __construct(NamedParameterInterface $params, OptionProviderInterface $optionProvider = null)
     {
         $this->params = $params;
-        $this->optionProvider ?: new OptionProvider;
+        $this->optionProvider = $optionProvider ?: new OptionProvider;
     }
 
     /**

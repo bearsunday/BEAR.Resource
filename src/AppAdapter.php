@@ -30,8 +30,8 @@ class AppAdapter implements AdapterInterface
     private $path;
 
     /**
-     * @param InjectorInterface $injector    Application dependency injector
-     * @param string            $namespace   Resource adapter namespace
+     * @param InjectorInterface $injector  Application dependency injector
+     * @param string            $namespace Resource adapter namespace
      */
     public function __construct(InjectorInterface $injector, $namespace)
     {

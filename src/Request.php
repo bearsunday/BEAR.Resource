@@ -86,7 +86,7 @@ final class Request extends AbstractRequest
      * @param InvokerInterface $invoker
      * @param ResourceObject   $ro
      * @param string           $method
-     * @param array            $query  associative array
+     * @param array            $query
      * @param LinkType[]       $links
      */
     public function __construct(

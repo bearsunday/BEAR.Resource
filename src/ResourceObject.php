@@ -209,6 +209,9 @@ abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggrega
         return '';
     }
 
+    /**
+     * @return mixed
+     */
     public function jsonSerialize()
     {
         $body = $this->body;

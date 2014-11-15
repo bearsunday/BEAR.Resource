@@ -93,10 +93,9 @@ final class AppIterator implements \Iterator
         $metaCollection = [];
         foreach ($iterator as $item) {
             /** @var $item \SplFileInfo */
-            $isPhp = $item->isFile() && $item->getExtension() === 'php' && (strpos(
-                        $item->getBasename('.php'),
-                        '.'
-                    ) === false);
+            $isPhp = $item->isFile()
+                && $item->getExtension() === 'php'
+                && (strpos($item->getBasename('.php'), '.') === false);
             if (!$isPhp) {
                 continue;
             }

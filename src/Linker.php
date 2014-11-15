@@ -8,6 +8,7 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\LinkRel;
 use Doctrine\Common\Annotations\Reader;
+use BEAR\Resource\Annotation\Link;
 
 final class Linker implements LinkerInterface
 {
@@ -161,7 +162,7 @@ final class Linker implements LinkerInterface
     /**
      * @param Link[]   $annotations
      * @param LinkType $link
-     * @param array    &$body
+     * @param array    $body
      */
     private function crawl(array $annotations, LinkType $link, array &$body)
     {

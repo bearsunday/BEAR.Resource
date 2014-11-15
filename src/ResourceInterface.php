@@ -27,9 +27,9 @@ interface ResourceInterface
     public function object($ro);
 
     /**
-     * Set resource object created by URI.
+     * Set URI
      *
-     * @param string | AbstractUri $uri
+     * @param string|AbstractUri $uri
      *
      * @return $this
      */
