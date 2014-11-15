@@ -17,15 +17,9 @@ class ResourceModule extends AbstractModule
     private $appName;
 
     /**
-     * @var string
-     */
-    private $resourceDir;
-
-    /**
      * @param string $appName
      *
-     * @Inject
-     * @Named("appName=app_dir")
+     * @Named("appName=appName")
      */
     public function __construct($appName)
     {
