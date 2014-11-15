@@ -7,8 +7,6 @@ use BEAR\Resource\ResourceObject;
 
 class Entry extends ResourceObject
 {
-    public $uri = 'test://self/path/to/resource';
-
     /**
      * @param \BEAR\Resource\ResourceInterface $resource
      */

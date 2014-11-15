@@ -25,7 +25,6 @@ class MockResource extends ResourceObject
 
 class HalRendererTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var HalRenderer
      */
@@ -41,7 +40,6 @@ class HalRendererTest extends \PHPUnit_Framework_TestCase
         $this->halRenderer = new HalRenderer(new UriMapper('api'));
         $this->resource = new MockResource;
         $this->resource->uri = 'dummy://self/index';
-
     }
 
     public function testRender()
@@ -93,7 +91,6 @@ class HalRendererTest extends \PHPUnit_Framework_TestCase
         $this->resource->links = ['rel1' => 'page://self/rel1'];
         $this->resource->setRenderer($this->halRenderer);
         $this->halRenderer->render($this->resource);
-
     }
 
     public function testBodyHasRequest()

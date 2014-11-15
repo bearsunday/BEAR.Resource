@@ -6,7 +6,6 @@ use BEAR\Resource\ResourceObject;
 
 class Author extends ResourceObject
 {
-
     protected $users = [
         ['id' => 0, 'name' => 'Athos'],
         ['id' => 1, 'name' => 'Aramis'],

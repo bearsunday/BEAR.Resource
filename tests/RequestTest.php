@@ -20,18 +20,27 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     protected $request;
 
+    /**
+     * @var FakeResource
+     */
+    private $fake;
+
     protected function setUp()
     {
         parent::setUp();
         $this->invoker = new Invoker(new NamedParameter);
-        $this->request = new Request($this->invoker, new Entry);
+        $entry = new Entry;
+        $entry->uri = new Uri('test://self/path/to/resource');
+        $this->request = new Request($this->invoker, $entry);
+        $this->fake = new FakeResource;
+        $this->fake->uri = new Uri('test://self/path/to/resource');
     }
 
     public function testToUriWithMethod()
     {
         $request = new Request(
             $this->invoker,
-            new FakeResource,
+            $this->fake,
             Request::GET,
             ['a' => 'koriym', 'b' => 25]
         );
@@ -43,7 +52,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $request = new Request(
             $this->invoker,
-            new FakeResource,
+            $this->fake,
             Request::GET,
             ['a' => 'koriym', 'b' => 25]
         );
@@ -125,7 +134,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $request = new Request(
             $this->invoker,
-            new FakeResource,
+            $this->fake,
             Request::GET,
             ['a' => 'koriym', 'b' => 25]
         );

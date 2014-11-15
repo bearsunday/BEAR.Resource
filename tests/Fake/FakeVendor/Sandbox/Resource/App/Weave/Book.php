@@ -8,7 +8,6 @@ use BEAR\Resource\ResourceObject;
 
 class Book extends ResourceObject
 {
-
     /**
      * @param \BEAR\Resource\ResourceInterface $resource
      */

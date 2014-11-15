@@ -45,5 +45,4 @@ class User extends ResourceObject
     {
         return "patch user[{$id} {$name} {$age}]";
     }
-
 }

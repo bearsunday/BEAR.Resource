@@ -7,7 +7,6 @@
 
 namespace BEAR\Resource;
 
-
 abstract class AbstractUri
 {
     /**

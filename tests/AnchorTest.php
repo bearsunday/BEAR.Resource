@@ -37,13 +37,12 @@ class AnchorTest extends \PHPUnit_Framework_TestCase
     {
         list($method, $uri) = $this->anchor->href('blog', $this->request, []);
         $this->assertSame(Request::GET, $method);
-        $this->assertSame('app://self/blog?id=12' ,$uri);
+        $this->assertSame('app://self/blog?id=12', $uri);
     }
 
     public function testInvalid()
     {
         $this->setExpectedException(Link::class);
         $this->anchor->href('invalid', $this->request, []);
-
     }
 }

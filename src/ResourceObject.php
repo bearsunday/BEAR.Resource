@@ -17,14 +17,14 @@ use Traversable;
 abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggregate, JsonSerializable
 {
     /**
-     * AbstractUri
+     * Uri
      *
-     * @var string
+     * @var AbstractUri
      */
-    public $uri = '';
+    public $uri;
 
     /**
-     * Resource status code
+     * Status code
      *
      * @var int
      */

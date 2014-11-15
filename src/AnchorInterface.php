@@ -19,5 +19,4 @@ interface AnchorInterface
      * @throws Exception\Link
      */
     public function href($rel, AbstractRequest $request, array $query);
-
 }

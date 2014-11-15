@@ -12,7 +12,6 @@ use RecursiveIteratorIterator;
 
 final class AppIterator implements \Iterator
 {
-
     /**
      * @var int
      */

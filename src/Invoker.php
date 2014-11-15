@@ -21,7 +21,7 @@ class Invoker implements InvokerInterface
     protected $params;
 
     /**
-     * @var
+     * @var OptionProviderInterface
      */
     private $optionProvider;
 
@@ -29,7 +29,8 @@ class Invoker implements InvokerInterface
      * @param NamedParameterInterface $params
      * @param OptionProviderInterface $optionProvider
      */
-    public function __construct(NamedParameterInterface $params, OptionProviderInterface $optionProvider = null) {
+    public function __construct(NamedParameterInterface $params, OptionProviderInterface $optionProvider = null)
+    {
         $this->params = $params;
         $this->optionProvider ?: new OptionProvider;
     }
@@ -41,12 +42,11 @@ class Invoker implements InvokerInterface
     {
         $onMethod = 'on' . ucfirst($request->method);
         if (method_exists($request->ro, $onMethod) !== true) {
-
             return $this->extraMethod($request->ro, $request, $onMethod);
         }
         $params = $this->params->getParameters([$request->ro, $onMethod], $request->query);
         if (isset($request->ro->uri->query)) {
-            $request->ro->uri->query = $request->query;
+//            $request->ro->uri->query = $request->query;
         }
         $result = call_user_func_array([$request->ro, $onMethod], $params);
 

@@ -141,9 +141,9 @@ final class Request extends AbstractRequest
      */
     public function toUri()
     {
-        $query = $this->query === [] ? '' : '?' . http_build_query($this->query, null, '&',  PHP_QUERY_RFC3986);
+        $this->ro->uri->query = $this->query;
 
-        return $this->ro->uri . $query;
+        return (string) $this->ro->uri;
     }
 
     /**

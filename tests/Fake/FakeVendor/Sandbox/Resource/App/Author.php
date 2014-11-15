@@ -6,7 +6,6 @@ use BEAR\Resource\ResourceObject;
 
 class Author extends ResourceObject
 {
-
     private $users = [
         0 => ['name' => 'Athos', 'age' => 15, 'blog_id' => 11],
         1 => ['name' => 'Aramis', 'age' => 16, 'blog_id' => 12],

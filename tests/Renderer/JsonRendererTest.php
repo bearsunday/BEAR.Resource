@@ -28,7 +28,6 @@ class Child extends ResourceObject
 
 class JsonRendererTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var
      */

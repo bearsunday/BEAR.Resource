@@ -27,6 +27,6 @@ class SchemeCollectionTest extends \PHPUnit_Framework_TestCase
     public function testInvalidScheme()
     {
         $this->setExpectedException(Scheme::class);
-         $this->scheme->getAdapter(new Uri('app://self/'));
+        $this->scheme->getAdapter(new Uri('app://self/'));
     }
 }

@@ -130,6 +130,5 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException(MethodNotAllowed::class);
         $request = new Request($this->invoker, new Order, Request::DELETE);
         $this->invoker->invoke($request);
-
     }
 }

@@ -12,5 +12,4 @@ class Sparrow extends ResourceObject
 
         return $this;
     }
-
 }

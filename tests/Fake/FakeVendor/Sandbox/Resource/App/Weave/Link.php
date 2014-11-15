@@ -6,7 +6,6 @@ use BEAR\Resource\ResourceObject;
 
 class Link extends ResourceObject
 {
-
     /**
      * @param animal
      *

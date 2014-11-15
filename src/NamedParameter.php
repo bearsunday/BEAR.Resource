@@ -39,7 +39,6 @@ final class NamedParameter implements NamedParameterInterface
     private function getParameter(array $callable, \ReflectionParameter $parameter)
     {
         if ($parameter->isDefaultValueAvailable() === true) {
-
             return $parameter->getDefaultValue();
         }
         $msg = '$' . "{$parameter->name} in " . get_class($callable[0]) . '::' . $callable[1] . '()';

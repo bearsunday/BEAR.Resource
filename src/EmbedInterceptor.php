@@ -68,7 +68,7 @@ final class EmbedInterceptor implements MethodInterceptor
 
         foreach ($embeds as $embed) {
             /** @var $embed Embed */
-            if (! $embed instanceof Embed || ! ($resourceObject->body[$embed->rel] instanceof ResourceInterface) ) {
+            if (! $embed instanceof Embed || ! ($resourceObject->body[$embed->rel] instanceof ResourceInterface)) {
                 continue;
             }
 
