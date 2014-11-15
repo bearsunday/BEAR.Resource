@@ -2,8 +2,8 @@
 
 namespace BEAR\Resource;
 
-use Ray\Di\Injector;
 use FakeVendor\Sandbox\Resource\Page\Index;
+use Ray\Di\Injector;
 
 class AppTest extends \PHPUnit_Framework_TestCase
 {

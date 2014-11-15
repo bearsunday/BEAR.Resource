@@ -6,8 +6,8 @@
  */
 namespace BEAR\Resource;
 
-use Doctrine\Common\Annotations\Reader;
 use BEAR\Resource\Exception\LinkRel;
+use Doctrine\Common\Annotations\Reader;
 
 final class Linker implements LinkerInterface
 {

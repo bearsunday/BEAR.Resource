@@ -2,8 +2,8 @@
 
 namespace FakeVendor\Sandbox\Resource\App\Restbucks;
 
-use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Annotation\Link;
+use BEAR\Resource\ResourceObject;
 
 class Menu extends ResourceObject
 {

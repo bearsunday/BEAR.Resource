@@ -3,9 +3,9 @@
 namespace Module;
 
 use BEAR\Resource\Module\ResourceModule;
-use Ray\Di\Injector;
 use BEAR\Resource\Resource;
 use BEAR\Resource\ResourceInterface;
+use Ray\Di\Injector;
 
 class ResourceModuleTest extends \PHPUnit_Framework_TestCase
 {

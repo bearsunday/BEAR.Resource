@@ -184,7 +184,7 @@ class Resource implements ResourceInterface
     }
 
     /**
-     * @param $request
+     * @param Request $request
      *
      * @return ResourceObject
      */

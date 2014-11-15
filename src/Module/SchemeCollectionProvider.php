@@ -9,10 +9,10 @@ namespace BEAR\Resource\Module;
 use BEAR\Resource\AppAdapter;
 use BEAR\Resource\Exception\AppName;
 use BEAR\Resource\SchemeCollection;
-use Ray\Di\ProviderInterface;
-use Ray\Di\InjectorInterface;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
+use Ray\Di\InjectorInterface;
+use Ray\Di\ProviderInterface;
 
 class SchemeCollectionProvider implements ProviderInterface
 {

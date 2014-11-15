@@ -2,13 +2,13 @@
 
 namespace BEAR\Resource;
 
-use Ray\Di\Injector;
-use BEAR\Resource\Exception\Scheme;
 use BEAR\Resource\Exception\ResourceNotFound;
-use FakeVendor\Sandbox\Resource\App\Factory\News;
-use FakeVendor\Sandbox\Resource\Page\News as PageNews;
+use BEAR\Resource\Exception\Scheme;
 use BEAR\Resource\Exception\Uri as UriException;
+use FakeVendor\Sandbox\Resource\App\Factory\News;
 use FakeVendor\Sandbox\Resource\Page\Index as IndexPage;
+use FakeVendor\Sandbox\Resource\Page\News as PageNews;
+use Ray\Di\Injector;
 
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {

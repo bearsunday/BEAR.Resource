@@ -3,10 +3,9 @@
 namespace BEAR\Resource;
 
 use Doctrine\Common\Annotations\AnnotationReader;
+use FakeVendor\Sandbox\Resource\App\Blog;
 use FakeVendor\Sandbox\Resource\Page\Index;
 use Ray\Di\Injector;
-use BEAR\Resource\AppAdapter;
-use FakeVendor\Sandbox\Resource\App\Blog;
 
 class ResourceTest extends \PHPUnit_Framework_TestCase
 {

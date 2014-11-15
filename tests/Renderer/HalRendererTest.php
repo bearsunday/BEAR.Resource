@@ -2,8 +2,8 @@
 
 namespace BEAR\Resource;
 
-use Ray\Di\Injector;
 use BEAR\Resource\Module\ResourceModule;
+use Ray\Di\Injector;
 
 class MockResource extends ResourceObject
 {

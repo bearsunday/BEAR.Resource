@@ -2,7 +2,6 @@
 namespace FakeVendor\Sandbox\Resource\App\Link\Scalar;
 
 use BEAR\Resource\ResourceObject;
-use BEAR\Resource\Annotation\Link;
 
 class Hello extends ResourceObject
 {

@@ -2,9 +2,9 @@
 
 namespace FakeVendor\Sandbox\Resource\App\Weave;
 
-use BEAR\Resource\ResourceObject;
-use BEAR\Resource\ResourceInterface;
 use BEAR\Resource\Annotation\Log;
+use BEAR\Resource\ResourceInterface;
+use BEAR\Resource\ResourceObject;
 
 class Book extends ResourceObject
 {

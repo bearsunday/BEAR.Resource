@@ -2,9 +2,9 @@
 
 namespace BEAR\Resource;
 
+use BEAR\Resource\Exception\Link;
 use Doctrine\Common\Annotations\AnnotationReader;
 use FakeVendor\Sandbox\Resource\App\Author;
-use BEAR\Resource\Exception\Link;
 
 class AnchorTest extends \PHPUnit_Framework_TestCase
 {

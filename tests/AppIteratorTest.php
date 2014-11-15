@@ -2,7 +2,7 @@
 
 namespace BEAR\Resource;
 
-use  BEAR\Resource\Exception\ResourceDir;
+use BEAR\Resource\Exception\ResourceDir;
 
 class AppIteratorTest extends \PHPUnit_Framework_TestCase
 {

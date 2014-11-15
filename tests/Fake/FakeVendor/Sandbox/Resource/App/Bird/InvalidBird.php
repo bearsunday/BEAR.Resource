@@ -2,8 +2,8 @@
 
 namespace FakeVendor\Sandbox\Resource\App\Bird;
 
-use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Annotation\Embed;
+use BEAR\Resource\ResourceObject;
 use Ray\Di\Di\Named;
 
 class InvalidBird extends ResourceObject

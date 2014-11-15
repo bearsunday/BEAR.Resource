@@ -1,8 +1,8 @@
 <?php
 namespace FakeVendor\Sandbox\Resource\App\Marshal;
 
-use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Annotation\Link;
+use BEAR\Resource\ResourceObject;
 
 class Author extends ResourceObject
 {

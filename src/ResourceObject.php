@@ -7,13 +7,12 @@
 namespace BEAR\Resource;
 
 use ArrayAccess;
-use Countable;
-use IteratorAggregate;
-use Exception;
 use ArrayIterator;
-use Traversable;
+use Countable;
+use Exception;
+use IteratorAggregate;
 use JsonSerializable;
-use Ray\Di\Di\Inject;
+use Traversable;
 
 abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggregate, JsonSerializable
 {

@@ -6,7 +6,6 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\LogicException;
 use BEAR\Resource\Exception\OutOfBounds;
 
 abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \IteratorAggregate

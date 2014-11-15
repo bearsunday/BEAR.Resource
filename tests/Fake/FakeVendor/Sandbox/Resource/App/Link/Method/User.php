@@ -1,8 +1,8 @@
 <?php
 namespace FakeVendor\Sandbox\Resource\App\Link\Method;
 
-use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Annotation\Link;
+use BEAR\Resource\ResourceObject;
 
 /** @noinspection PhpUndefinedClassInspection */
 class User extends ResourceObject

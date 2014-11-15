@@ -2,8 +2,8 @@
 
 namespace BEAR\Resource\Mock;
 
-use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Annotation\Provides;
+use BEAR\Resource\ResourceObject;
 
 class Comment extends ResourceObject
 {

@@ -7,8 +7,8 @@
 namespace BEAR\Resource\Module;
 
 use BEAR\Resource\Exception\AppName;
-use BEAR\Resource\NamedParameterInterface;
 use BEAR\Resource\NamedParameter;
+use BEAR\Resource\NamedParameterInterface;
 use Ray\Di\AbstractModule;
 use Ray\Di\Scope;
 

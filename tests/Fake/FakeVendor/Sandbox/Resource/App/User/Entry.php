@@ -2,8 +2,8 @@
 
 namespace FakeVendor\Sandbox\Resource\App\User;
 
-use BEAR\Resource\ResourceObject;
 use BEAR\Resource\ResourceInterface;
+use BEAR\Resource\ResourceObject;
 
 class Entry extends ResourceObject
 {

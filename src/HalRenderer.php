@@ -6,8 +6,8 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception;
 use BEAR\Resource\Annotation\Link as LinkAnnotation;
+use BEAR\Resource\Exception;
 use Nocarrier\Hal;
 use Ray\Di\Di\Inject;
 

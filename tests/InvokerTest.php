@@ -2,6 +2,7 @@
 
 namespace BEAR\Resource;
 
+use BEAR\Resource\Exception\MethodNotAllowed;
 use BEAR\Resource\Exception\Parameter;
 use BEAR\Resource\Interceptor\FakeLogInterceptor;
 use BEAR\Resource\Interceptor\Log;
@@ -11,7 +12,6 @@ use FakeVendor\Sandbox\Resource\App\User;
 use FakeVendor\Sandbox\Resource\App\Weave\Book;
 use Ray\Aop\Bind;
 use Ray\Aop\Compiler;
-use BEAR\Resource\Exception\MethodNotAllowed;
 
 class InvokerTest extends \PHPUnit_Framework_TestCase
 {

@@ -7,11 +7,9 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\ResourceNotFound;
-use Ray\Di\Di\Inject;
-use Ray\Di\Scope;
-use Traversable;
-use Ray\Di\Exception\Unbound;
 use BEAR\Resource\Exception\Uri as UriException;
+use Ray\Di\Di\Inject;
+use Ray\Di\Exception\Unbound;
 
 class Factory implements FactoryInterface
 {

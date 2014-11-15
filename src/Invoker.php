@@ -6,7 +6,6 @@
  */
 namespace BEAR\Resource;
 
-use Ray\Di\Di\Inject;
 use BEAR\Resource\Exception\MethodNotAllowed;
 
 class Invoker implements InvokerInterface

@@ -2,8 +2,8 @@
 
 namespace BEAR\Resource\Mock;
 
-use Ray\Di\AbstractModule;
 use BEAR\Resource\Interceptor\FakeLogInterceptor;
+use Ray\Di\AbstractModule;
 
 class FakeLoggerModule extends AbstractModule
 {

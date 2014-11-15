@@ -2,8 +2,8 @@
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\OutOfBounds;
 use BEAR\Resource\Exception\Method;
+use BEAR\Resource\Exception\OutOfBounds;
 use BEAR\Resource\Renderer\FakeErrorRenderer;
 use BEAR\Resource\Renderer\FakeTestRenderer;
 use FakeVendor\Sandbox\Resource\App\User\Entry;
