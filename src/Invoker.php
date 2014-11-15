@@ -11,11 +11,6 @@ use BEAR\Resource\Exception\MethodNotAllowed;
 class Invoker implements InvokerInterface
 {
     /**
-     * @var Linker
-     */
-    private $linker;
-
-    /**
      * @var NamedParameter
      */
     protected $params;
