@@ -158,6 +158,7 @@ class Resource implements ResourceInterface
     public function request()
     {
         $method = $this->method ?: Request::GET;
+        $this->resourceObject->uri->query = $this->query;
         $this->request = new Request(
             $this->invoker,
             $this->resourceObject,

@@ -66,6 +66,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     public function testObject()
     {
         $resourceObject = new Index;
+        $resourceObject->uri = new Uri('page://self/index');
         $instance = $this->resource->get->object($resourceObject)->eager->request();
         $this->assertInstanceOf(Index::class, $instance);
     }
