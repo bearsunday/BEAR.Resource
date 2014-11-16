@@ -3,7 +3,7 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\LinkQueryException;
-use BEAR\Resource\Exception\LinkRel;
+use BEAR\Resource\Exception\LinkRelException;
 use Doctrine\Common\Annotations\AnnotationReader;
 use FakeVendor\Sandbox\Resource\App\Author;
 use FakeVendor\Sandbox\Resource\App\Blog;
@@ -149,7 +149,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
 
     public function testInvalidRel()
     {
-        $this->setExpectedException(LinkRel::class);
+        $this->setExpectedException(LinkRelException::class);
         $request = new Request(
             new Invoker(new NamedParameter),
             new Author,

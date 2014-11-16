@@ -6,7 +6,7 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\LinkRel;
+use BEAR\Resource\Exception\LinkRelException;
 use Doctrine\Common\Annotations\Reader;
 
 final class Linker implements LinkerInterface
@@ -118,7 +118,7 @@ final class Linker implements LinkerInterface
      *
      * @return ResourceObject
      * @throws Exception\LinkQueryException
-     * @throws Exception\LinkRel
+     * @throws Exception\LinkRelException
      */
     private function annotationRel(array $annotations, LinkType $link, ResourceObject $current)
     {
@@ -133,7 +133,7 @@ final class Linker implements LinkerInterface
 
             return $linkedResource;
         }
-        throw new LinkRel("rel:{$link->key} class:" . get_class($current));
+        throw new LinkRelException("rel:{$link->key} class:" . get_class($current));
     }
 
     /**
