@@ -93,12 +93,12 @@ final class Linker implements LinkerInterface
      * @param AbstractRequest $request
      *
      * @return ResourceObject|mixed
-     * @throws Exception\LinkQuery
+     * @throws Exception\LinkQueryException
      */
     private function annotationLink(LinkType $link, ResourceObject $current, AbstractRequest $request)
     {
         if (!(is_array($current->body))) {
-            throw new Exception\LinkQuery('Only array is allowed for link in ' . get_class($current));
+            throw new Exception\LinkQueryException('Only array is allowed for link in ' . get_class($current));
         }
         $classMethod = 'on' . ucfirst($request->method);
         $annotations = $this->reader->getMethodAnnotations(new \ReflectionMethod($current, $classMethod));
@@ -117,7 +117,7 @@ final class Linker implements LinkerInterface
      * @param ResourceObject                   $current
      *
      * @return ResourceObject
-     * @throws Exception\LinkQuery
+     * @throws Exception\LinkQueryException
      * @throws Exception\LinkRel
      */
     private function annotationRel(array $annotations, LinkType $link, ResourceObject $current)

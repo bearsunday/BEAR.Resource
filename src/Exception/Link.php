@@ -6,9 +6,6 @@
  */
 namespace BEAR\Resource\Exception;
 
-/**
- * Resource link exception
- */
 class Link extends BadRequestException implements ExceptionInterface
 {
 }

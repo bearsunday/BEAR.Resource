@@ -2,7 +2,7 @@
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\LinkQuery;
+use BEAR\Resource\Exception\LinkQueryException;
 use BEAR\Resource\Exception\LinkRel;
 use Doctrine\Common\Annotations\AnnotationReader;
 use FakeVendor\Sandbox\Resource\App\Author;
@@ -136,7 +136,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
 
     public function testScalarValueLinkThrowException()
     {
-        $this->setExpectedException(LinkQuery::class);
+        $this->setExpectedException(LinkQueryException::class);
         $request = new Request(
             new Invoker(new NamedParameter),
             new Name,
