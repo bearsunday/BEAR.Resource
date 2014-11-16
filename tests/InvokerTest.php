@@ -2,7 +2,7 @@
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\MethodNotAllowed;
+use BEAR\Resource\Exception\MethodNotAllowedException;
 use BEAR\Resource\Exception\Parameter;
 use BEAR\Resource\Interceptor\FakeLogInterceptor;
 use BEAR\Resource\Interceptor\Log;
@@ -127,7 +127,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
 
     public function testInvalidMethod()
     {
-        $this->setExpectedException(MethodNotAllowed::class);
+        $this->setExpectedException(MethodNotAllowedException::class);
         $request = new Request($this->invoker, new Order, Request::DELETE);
         $this->invoker->invoke($request);
     }

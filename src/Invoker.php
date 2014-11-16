@@ -6,7 +6,7 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\MethodNotAllowed;
+use BEAR\Resource\Exception\MethodNotAllowedException;
 
 class Invoker implements InvokerInterface
 {
@@ -72,12 +72,12 @@ class Invoker implements InvokerInterface
      * @param string          $method
      *
      * @return ResourceObject
-     * @throws Exception\MethodNotAllowed
+     * @throws Exception\MethodNotAllowedException
      */
     private function extraMethod(ResourceObject $ro, AbstractRequest $request, $method)
     {
         if ($request->method !== Request::OPTIONS) {
-            throw new MethodNotAllowed(get_class($request->resourceObject) . "::$method()", 405);
+            throw new MethodNotAllowedException(get_class($request->resourceObject) . "::$method()", 405);
         }
         $optionProvider = $this->optionProvider ?: new OptionProvider;
 
