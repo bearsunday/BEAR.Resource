@@ -2,7 +2,7 @@
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\Link;
+use BEAR\Resource\Exception\LinkException;
 use Doctrine\Common\Annotations\AnnotationReader;
 use FakeVendor\Sandbox\Resource\App\Author;
 
@@ -42,7 +42,7 @@ class AnchorTest extends \PHPUnit_Framework_TestCase
 
     public function testInvalid()
     {
-        $this->setExpectedException(Link::class);
+        $this->setExpectedException(LinkException::class);
         $this->anchor->href('invalid', $this->request, []);
     }
 }

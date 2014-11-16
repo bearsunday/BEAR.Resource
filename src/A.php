@@ -18,12 +18,12 @@ class A implements HrefInterface
      * @param ResourceObject $ro
      *
      * @return mixed|string
-     * @throws Exception\Link
+     * @throws Exception\LinkException
      */
     public function href($rel, ResourceObject $ro)
     {
         if (!isset($ro->links[$rel])) {
-            throw new Exception\Link(get_class($ro) . ':' . $rel);
+            throw new Exception\LinkException(get_class($ro) . ':' . $rel);
         }
         $link = $ro->links[$rel];
         $isTemplated = (isset($link[Link::TEMPLATED]) && $link[Link::TEMPLATED] === true);

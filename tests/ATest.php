@@ -18,7 +18,7 @@ class ATest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \BEAR\Resource\Exception\Link
+     * @expectedException \BEAR\Resource\Exception\LinkException
      */
     public function testHrefInvalidRel()
     {
