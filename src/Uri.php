@@ -6,7 +6,7 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\Uri as UriException;
+use BEAR\Resource\Exception\UriException;
 
 final class Uri extends AbstractUri
 {

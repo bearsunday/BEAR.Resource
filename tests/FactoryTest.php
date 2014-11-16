@@ -4,7 +4,7 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\ResourceNotFoundException;
 use BEAR\Resource\Exception\SchemeException;
-use BEAR\Resource\Exception\Uri as UriException;
+use BEAR\Resource\Exception\UriException;
 use FakeVendor\Sandbox\Resource\App\Factory\News;
 use FakeVendor\Sandbox\Resource\Page\Index as IndexPage;
 use FakeVendor\Sandbox\Resource\Page\News as PageNews;

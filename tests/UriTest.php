@@ -2,7 +2,7 @@
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\Uri as UriException;
+use BEAR\Resource\Exception\UriException;
 
 class UriTest extends \PHPUnit_Framework_TestCase
 {

@@ -39,7 +39,7 @@ class UriMapperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \BEAR\Resource\Exception\Uri
+     * @expectedException \BEAR\Resource\Exception\UriException
      */
     public function testReverseException()
     {

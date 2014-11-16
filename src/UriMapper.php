@@ -50,7 +50,7 @@ class UriMapper implements UriMapperInterface
     public function reverseMap($internalUri)
     {
         if (! filter_var($internalUri, FILTER_VALIDATE_URL)) {
-            throw new Exception\Uri($internalUri);
+            throw new Exception\UriException($internalUri);
         }
         $parsedUrl = parse_url($internalUri);
         $uri = sprintf(
