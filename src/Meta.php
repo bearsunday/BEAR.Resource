@@ -63,21 +63,31 @@ final class Meta
     private function getOptions($class)
     {
         $ref = new \ReflectionClass($class);
-        $methods = $ref->getMethods();
-        $allow = [];
+        $allows = $this->getAllows($ref->getMethods());
+        foreach ($allows as $method) {
+            $params[] = $this->getParams($class, $method);
+        }
+        $options = new Options($allows, $params);
+
+        return $options;
+    }
+
+    /**
+     * @param array $methods
+     *
+     * @return array
+     */
+    private function getAllows(array $methods)
+    {
+        $allows = [];
         foreach ($methods as $method) {
             $isRequestMethod = (substr($method->name, 0, 2) === 'on') && (substr($method->name, 0, 6) !== 'onLink');
             if ($isRequestMethod) {
-                $allow[] = strtolower(substr($method->name, 2));
+                $allows[] = strtolower(substr($method->name, 2));
             }
         }
-        $params = [];
-        foreach ($allow as $method) {
-            $params[] = $this->getParams($class, $method);
-        }
-        $options = new Options($allow, $params);
 
-        return $options;
+        return $allows;
     }
 
     /**
