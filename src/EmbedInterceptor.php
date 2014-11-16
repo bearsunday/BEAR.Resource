@@ -16,8 +16,6 @@ use Ray\Di\Di\Inject;
 
 final class EmbedInterceptor implements MethodInterceptor
 {
-    const LINK_ANNOTATION = 'BEAR\Resource\Annotation\Link';
-
     /**
      * @var \BEAR\Resource\ResourceInterface
      */
@@ -47,8 +45,21 @@ final class EmbedInterceptor implements MethodInterceptor
         $resourceObject = $invocation->getThis();
         $method = $invocation->getMethod();
         $query = $this->getArgsByInvocation($invocation);
-
         $embeds = $this->reader->getMethodAnnotations($method);
+        $this->embedResource($embeds, $resourceObject, $query);
+        $result =  $invocation->proceed();
+        $this->evaluateEmbedResources($embeds, $resourceObject);
+
+        return $result;
+    }
+
+    /**
+     * @param Embed[]        $embeds
+     * @param ResourceObject $resourceObject
+     * @param array          $query
+     */
+    private function embedResource(array $embeds, ResourceObject $resourceObject, array $query)
+    {
         foreach ($embeds as $embed) {
             /** @var $embed Embed */
             if (! $embed instanceof Embed) {
@@ -64,18 +75,22 @@ final class EmbedInterceptor implements MethodInterceptor
             }
         }
 
-        $result =  $invocation->proceed();
+    }
 
+    /**
+     * @param Embed[]        $embeds
+     * @param ResourceObject $resourceObject
+     */
+    private function evaluateEmbedResources(array $embeds, ResourceObject $resourceObject)
+    {
         foreach ($embeds as $embed) {
             /** @var $embed Embed */
             if (! $embed instanceof Embed || ! ($resourceObject->body[$embed->rel] instanceof ResourceInterface)) {
                 continue;
             }
-
             $resourceObject->body[$embed->rel] = $resourceObject->body[$embed->rel]->request();
         }
 
-        return $result;
     }
 
     /**
