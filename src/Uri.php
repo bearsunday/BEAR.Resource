@@ -30,7 +30,7 @@ final class Uri extends AbstractUri
     }
 
     /**
-     * @param mixed $uri
+     * @param string $uri
      */
     private function invalidUri($uri)
     {

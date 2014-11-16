@@ -73,7 +73,7 @@ final class Meta
     }
 
     /**
-     * @param array $methods
+     * @param \ReflectionMethod[] $methods
      *
      * @return array
      */

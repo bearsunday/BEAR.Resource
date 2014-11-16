@@ -7,7 +7,6 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\ResourceNotFoundException;
-use BEAR\Resource\Exception\UriException;
 use Ray\Di\Di\Inject;
 use Ray\Di\Exception\Unbound;
 
