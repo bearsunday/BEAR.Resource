@@ -36,11 +36,14 @@ class Invoker implements InvokerInterface
     public function invoke(AbstractRequest $request)
     {
         $onMethod = 'on' . ucfirst($request->method);
-        if (method_exists($request->ro, $onMethod) !== true) {
-            return $this->extraMethod($request->ro, $request, $onMethod);
+        if (method_exists($request->resourceObject, $onMethod) !== true) {
+            return $this->extraMethod($request->resourceObject, $request, $onMethod);
         }
-        $params = $this->params->getParameters([$request->ro, $onMethod], $request->query);
-        $result = call_user_func_array([$request->ro, $onMethod], $params);
+        if (isset($request->resourceObject->uri) && $request->resourceObject->uri instanceof AbstractUri) {
+            $request->resourceObject->uri->query = $request->query;
+        }
+        $params = $this->params->getParameters([$request->resourceObject, $onMethod], $request->query);
+        $result = call_user_func_array([$request->resourceObject, $onMethod], $params);
 
         return $this->postRequest($request, $result);
     }
@@ -54,8 +57,8 @@ class Invoker implements InvokerInterface
     private function postRequest(AbstractRequest $request, $result)
     {
         if (!$result instanceof ResourceObject) {
-            $request->ro->body = $result;
-            $result = $request->ro;
+            $request->resourceObject->body = $result;
+            $result = $request->resourceObject;
         }
 
         return $result;
@@ -74,7 +77,7 @@ class Invoker implements InvokerInterface
     private function extraMethod(ResourceObject $ro, AbstractRequest $request, $method)
     {
         if ($request->method !== Request::OPTIONS) {
-            throw new MethodNotAllowed(get_class($request->ro) . "::$method()", 405);
+            throw new MethodNotAllowed(get_class($request->resourceObject) . "::$method()", 405);
         }
         $optionProvider = $this->optionProvider ?: new OptionProvider;
 

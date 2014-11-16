@@ -26,11 +26,11 @@ class Anchor implements AnchorInterface
     public function href($rel, AbstractRequest $request, array $query)
     {
         $classMethod = 'on' . ucfirst($request->method);
-        $annotations = $this->reader->getMethodAnnotations(new \ReflectionMethod($request->ro, $classMethod));
+        $annotations = $this->reader->getMethodAnnotations(new \ReflectionMethod($request->resourceObject, $classMethod));
         foreach ($annotations as $annotation) {
             $isValidLinkAnnotation = $annotation instanceof LinkAnnotation && isset($annotation->rel) && $annotation->rel === $rel;
             if ($isValidLinkAnnotation) {
-                $body = $request->ro->body;
+                $body = $request->resourceObject->body;
                 $query = is_array($body) ? array_merge($body, $query) : [];
                 $uri = \GuzzleHttp\uri_template($annotation->href, $query);
 
@@ -38,6 +38,6 @@ class Anchor implements AnchorInterface
             }
         }
 
-        throw new LinkException("rel:{$rel} class:" . get_class($request->ro));
+        throw new LinkException("rel:{$rel} class:" . get_class($request->resourceObject));
     }
 }

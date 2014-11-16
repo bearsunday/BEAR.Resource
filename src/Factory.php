@@ -59,7 +59,6 @@ class Factory implements FactoryInterface
         } catch (Unbound $e) {
             $resourceObject = $this->retryWithIndexSuffix($e, $uri);
         }
-        $resourceObject->uri = $uri;
 
         return $resourceObject;
     }

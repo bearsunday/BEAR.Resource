@@ -36,58 +36,6 @@ interface ResourceInterface
     public function uri($uri);
 
     /**
-     * Set named parameter query
-     *
-     * @param array $query
-     *
-     * @return $this
-     */
-    public function withQuery(array $query);
-
-    /**
-     * Add query
-     *
-     * @param array $query
-     *
-     * @return $this
-     */
-    public function addQuery(array $query);
-
-    /**
-     * Return Request
-     *
-     * @return Request | ResourceObject
-     */
-    public function request();
-
-    /**
-     * Link self
-     *
-     * @param string $linkKey
-     *
-     * @return $this
-     */
-    public function linkSelf($linkKey);
-
-    /**
-     * Link new
-     *
-     * @param string $linkKey
-     *
-     * @return $this
-     */
-    public function linkNew($linkKey);
-
-    /**
-     * Link crawl
-     *
-     * @param string $linkKey
-     *
-     * @return $this
-     */
-    public function linkCrawl($linkKey);
-
-    /**
      * Hyper reference (Hypertext As The Engine Of Application State)
      *
      * @param string $rel

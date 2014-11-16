@@ -24,33 +24,6 @@ class Resource implements ResourceInterface
     private $anchor;
 
     /**
-     * @var ResourceObject
-     */
-    private $resourceObject;
-
-    /**
-     * [method, eager|lazy, links]
-     *
-     * @var string
-     */
-    private $method = '';
-
-    /**
-     * @var string
-     */
-    private $when = 'lazy';
-
-    /**
-     * @var array
-     */
-    private $query = [];
-
-    /**
-     * @var
-     */
-    private $links = [];
-
-    /**
      * @var Request
      */
     private $request;
@@ -83,9 +56,11 @@ class Resource implements ResourceInterface
      */
     public function object($resourceObject)
     {
-        $this->resourceObject = $resourceObject;
-
-        return $this;
+        return new Request(
+            $this->invoker,
+            $resourceObject,
+            $this->method
+        );
     }
 
     /**
@@ -96,81 +71,16 @@ class Resource implements ResourceInterface
         if (is_string($uri)) {
             $uri = new Uri($uri);
         }
-        $this->resourceObject = $this->newInstance($uri);
-        $this->query = $uri->query;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function withQuery(array $query)
-    {
-        $this->query = $query;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function addQuery(array $query)
-    {
-        $this->query = $query + $this->query;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function linkSelf($linkKey)
-    {
-        $this->links[] = new LinkType($linkKey, LinkType::SELF_LINK);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function linkNew($linkKey)
-    {
-        $this->links[] = new LinkType($linkKey, LinkType::NEW_LINK);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function linkCrawl($linkKey)
-    {
-        $this->links[] = new LinkType($linkKey, LinkType::CRAWL_LINK);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function request()
-    {
-        $method = $this->method ?: Request::GET;
-        $this->resourceObject->uri->query = $this->query;
+        $resourceObject = $this->newInstance($uri);
+        $resourceObject->uri = $uri;
         $this->request = new Request(
             $this->invoker,
-            $this->resourceObject,
-            $method,
-            $this->query,
-            $this->links
+            $resourceObject,
+            $this->method,
+            $uri->query
         );
-        $result = ($this->when === 'eager') ? $this->invoke($this->request) : $this->request;
-        $this->query = [];
-        $this->method = $this->when = '';
 
-        return $result;
+        return $this->request;
     }
 
     /**
@@ -185,29 +95,13 @@ class Resource implements ResourceInterface
     }
 
     /**
-     * @param Request $request
-     *
-     * @return ResourceObject
-     */
-    private function invoke($request)
-    {
-        return $this->invoker->invoke($request);
-    }
-
-
-    /**
      * @param string $name
      *
      * @return $this
      */
     public function __get($name)
     {
-        if ($this->method === '') {
-            $this->method = $name;
-
-            return $this;
-        }
-        $this->when = $name;
+        $this->method = $name;
 
         return $this;
     }

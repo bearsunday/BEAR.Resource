@@ -6,9 +6,6 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\Method;
-use BEAR\Resource\Exception\OutOfBounds;
-
 final class Request extends AbstractRequest
 {
     const GET = 'get';
@@ -19,50 +16,6 @@ final class Request extends AbstractRequest
     const HEAD = 'head';
     const OPTIONS = 'options';
 
-    const LAZY = 'lazy';
-
-    /**
-     * URI
-     *
-     * @var string
-     */
-    public $uri;
-
-    /**
-     * Resource object
-     *
-     * @var \BEAR\Resource\ResourceObject
-     */
-    public $ro;
-
-    /**
-     * Method
-     *
-     * @var string
-     */
-    public $method = '';
-
-    /**
-     * Query
-     *
-     * @var array
-     */
-    public $query = [];
-
-    /**
-     * Options
-     *
-     * @var array
-     */
-    public $options = [];
-
-    /**
-     * Request option (eager or lazy)
-     *
-     * @var string
-     */
-    public $in;
-
     /**
      * Links
      *
@@ -71,40 +24,16 @@ final class Request extends AbstractRequest
     public $links = [];
 
     /**
-     * Request Result
-     *
-     * @var Object
-     */
-    private $result;
-
-    /**
      * @var InvokerInterface
      */
-    private $invoker;
+    protected $invoker;
 
     /**
-     * @param InvokerInterface $invoker
-     * @param ResourceObject   $ro
-     * @param string           $method
-     * @param array            $query
-     * @param LinkType[]       $links
+     * Request option (eager or lazy)
+     *
+     * @var string
      */
-    public function __construct(
-        InvokerInterface $invoker,
-        ResourceObject $ro,
-        $method = self::GET,
-        array $query = [],
-        array $links = []
-    ) {
-        $this->invoker = $invoker;
-        $this->ro = $ro;
-        if (! in_array($method, [self::GET, self::POST, self::PUT, self::PATCH, self::DELETE, self::HEAD, self::OPTIONS])) {
-            throw new Method($method);
-        }
-        $this->method = $method;
-        $this->query = $query;
-        $this->links = $links;
-    }
+    public $in = 'lazy';
 
     /**
      * {@inheritdoc}
@@ -141,84 +70,51 @@ final class Request extends AbstractRequest
      */
     public function toUri()
     {
-        $this->ro->uri->query = $this->query;
+        $this->resourceObject->uri->query = $this->query;
 
-        return (string) $this->ro->uri;
+        return (string) $this->resourceObject->uri;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        $this->invoke();
-
-        return (string) $this->result;
-    }
 
     /**
-     * @return mixed
+     * {@inheritDoc}
      */
-    private function invoke()
+    public function linkSelf($linkKey)
     {
-        if (is_null($this->result)) {
-            $this->result = $this->__invoke();
-        }
+        $this->links[] = new LinkType($linkKey, LinkType::SELF_LINK);
+
+        return $this;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function __invoke(array $query = null)
+    public function linkNew($linkKey)
     {
-        if (!is_null($query)) {
-            $this->query = array_merge($this->query, $query);
-        }
-        $result = $this->invoker->invoke($this);
+        $this->links[] = new LinkType($linkKey, LinkType::NEW_LINK);
 
-        return $result;
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function offsetGet($offset)
+    public function linkCrawl($linkKey)
     {
-        $this->invoke();
-        if (!isset($this->result->body[$offset])) {
-            throw new OutOfBounds("[$offset] for object[" . get_class($this->result) . "]");
-        }
+        $this->links[] = new LinkType($linkKey, LinkType::CRAWL_LINK);
 
-        return $this->result->body[$offset];
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $name
+     *
+     * @return $this
      */
-    public function offsetExists($offset)
+    public function __get($name)
     {
-        $this->invoke();
+        $this->in = $name;
 
-        return isset($this->result->body[$offset]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getIterator()
-    {
-        $this->invoke();
-        $isArray = (is_array($this->result->body) || $this->result->body instanceof \Traversable);
-        $iterator = $isArray ? new \ArrayIterator($this->result->body) : new \ArrayIterator([]);
-
-        return $iterator;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function hash()
-    {
-        return md5(get_class($this->ro) . $this->method . serialize($this->query) . serialize($this->links));
+        return $this;
     }
 }

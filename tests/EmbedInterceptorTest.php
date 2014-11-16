@@ -11,6 +11,7 @@ use FakeVendor\Sandbox\Resource\App\Bird\NotFoundBird;
 use Ray\Aop\Arguments;
 use Ray\Aop\ReflectiveMethodInvocation;
 use Ray\Di\Injector;
+use FakeVendor\Sandbox\Resource\App\Bird\Sparrow;
 
 class EmbedInterceptorTest extends \PHPUnit_Framework_TestCase
 {
@@ -132,12 +133,11 @@ class EmbedInterceptorTest extends \PHPUnit_Framework_TestCase
         $resourceObject = $request();
         $birdRequest = $resourceObject['birdRequest'];
         $birdObject = $resourceObject['birdObject'];
-        $eagerRequestedBird = $resourceObject['eagerRequestedBird'];
-        $this->assertInstanceOf('BEAR\Resource\Request', $birdRequest);
+
+        $this->assertInstanceOf(Request::class, $birdRequest);
         $this->assertSame('get app://self/bird/sparrow?id=3', $birdRequest->toUriWithMethod());
-        $this->assertInstanceOf('FakeVendor\Sandbox\Resource\App\Bird\Sparrow', $birdObject);
+
+        $this->assertInstanceOf(Sparrow::class, $birdObject);
         $this->assertSame(serialize($birdObject->body), serialize(['sparrow_id' => 5]));
-        $this->assertInstanceOf('FakeVendor\Sandbox\Resource\App\Bird\Sparrow', $eagerRequestedBird);
-        $this->assertSame(serialize($eagerRequestedBird->body), serialize(['sparrow_id' => 7]));
     }
 }
