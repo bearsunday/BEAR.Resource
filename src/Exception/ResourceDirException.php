@@ -6,6 +6,6 @@
  */
 namespace BEAR\Resource\Exception;
 
-class RequestException extends BadRequestException implements ExceptionInterface
+class ResourceDirException extends \InvalidArgumentException implements ExceptionInterface
 {
 }

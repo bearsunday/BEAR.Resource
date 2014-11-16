@@ -6,7 +6,7 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\ResourceDir;
+use BEAR\Resource\Exception\ResourceDirException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
@@ -33,7 +33,7 @@ final class AppIterator implements \Iterator
     public function __construct($resourceDir)
     {
         if (!file_exists($resourceDir)) {
-            throw new ResourceDir($resourceDir);
+            throw new ResourceDirException($resourceDir);
         }
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($resourceDir),

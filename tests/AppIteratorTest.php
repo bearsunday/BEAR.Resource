@@ -2,7 +2,7 @@
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\ResourceDir;
+use BEAR\Resource\Exception\ResourceDirException;
 
 class AppIteratorTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,7 +28,7 @@ class AppIteratorTest extends \PHPUnit_Framework_TestCase
 
     public function testResourceDirException()
     {
-        $this->setExpectedException(ResourceDir::class);
+        $this->setExpectedException(ResourceDirException::class);
         new AppIterator('/invalid');
     }
 }
