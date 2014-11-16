@@ -3,7 +3,7 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\ResourceNotFoundException;
-use BEAR\Resource\Exception\Scheme;
+use BEAR\Resource\Exception\SchemeException;
 use BEAR\Resource\Exception\Uri as UriException;
 use FakeVendor\Sandbox\Resource\App\Factory\News;
 use FakeVendor\Sandbox\Resource\Page\Index as IndexPage;
@@ -43,13 +43,13 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testNewInstanceScheme()
     {
-        $this->setExpectedException(Scheme::class);
+        $this->setExpectedException(SchemeException::class);
         $this->factory->newInstance('bad://self/news');
     }
 
     public function testNewInstanceSchemes()
     {
-        $this->setExpectedException(Scheme::class);
+        $this->setExpectedException(SchemeException::class);
         $this->factory->newInstance('app://invalid_host/news');
     }
 

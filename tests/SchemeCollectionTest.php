@@ -2,7 +2,7 @@
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\Scheme;
+use BEAR\Resource\Exception\SchemeException;
 
 class SchemeCollectionTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +26,7 @@ class SchemeCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testInvalidScheme()
     {
-        $this->setExpectedException(Scheme::class);
+        $this->setExpectedException(SchemeException::class);
         $this->scheme->getAdapter(new Uri('app://self/'));
     }
 }

@@ -6,7 +6,7 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\Scheme;
+use BEAR\Resource\Exception\SchemeException;
 
 final class SchemeCollection implements SchemeCollectionInterface
 {
@@ -66,7 +66,7 @@ final class SchemeCollection implements SchemeCollectionInterface
     {
         $schemeIndex = $uri->scheme . '://' . $uri->host;
         if (! isset($this->collection[$schemeIndex])) {
-            throw new Scheme($uri->scheme . '://' . $uri->host);
+            throw new SchemeException($uri->scheme . '://' . $uri->host);
         }
         return $this->collection[$schemeIndex];
     }
