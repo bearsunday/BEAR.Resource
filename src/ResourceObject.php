@@ -224,9 +224,20 @@ abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggrega
     {
         $body = $this->body;
         $isTraversable = is_array($body) || $body instanceof \Traversable;
-        if (! $isTraversable) {
-            return ['value' => $this->body];
+        if ($isTraversable) {
+            return $this->evaluate($body);
         }
+
+        return ['value' => $this->body];
+    }
+
+    /**
+     * @param $body
+     *
+     * @return mixed
+     */
+    private function evaluate($body)
+    {
         foreach ($body as &$value) {
             if ($value instanceof RequestInterface) {
                 $result = $value();
