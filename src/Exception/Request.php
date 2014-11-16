@@ -6,6 +6,6 @@
  */
 namespace BEAR\Resource\Exception;
 
-class Request extends BadRequest implements ExceptionInterface
+class RequestException extends BadRequestException implements ExceptionInterface
 {
 }

@@ -9,6 +9,6 @@ namespace BEAR\Resource\Exception;
 /**
  * Resource link request query exception
  */
-class LinkQuery extends BadRequest implements ExceptionInterface
+class LinkQuery extends BadRequestException implements ExceptionInterface
 {
 }

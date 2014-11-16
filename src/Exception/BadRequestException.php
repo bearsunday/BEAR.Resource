@@ -6,9 +6,6 @@
  */
 namespace BEAR\Resource\Exception;
 
-/**
- * Bad request (400)
- */
-class BadRequest extends \BadMethodCallException implements ExceptionInterface
+class BadRequestException extends \BadMethodCallException implements ExceptionInterface
 {
 }

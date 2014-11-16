@@ -6,6 +6,6 @@
  */
 namespace BEAR\Resource\Exception;
 
-class Scheme extends BadRequest implements ExceptionInterface
+class Scheme extends BadRequestException implements ExceptionInterface
 {
 }

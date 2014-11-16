@@ -9,6 +9,6 @@ namespace BEAR\Resource\Exception;
 /**
  * Web API Not found (404)
  */
-class WebApiOperationNotFound extends BadRequest implements ExceptionInterface
+class WebApiOperationNotFound extends BadRequestException implements ExceptionInterface
 {
 }

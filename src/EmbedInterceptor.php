@@ -7,7 +7,7 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\Embed;
-use BEAR\Resource\Exception\BadRequest;
+use BEAR\Resource\Exception\BadRequestException;
 use BEAR\Resource\Exception\EmbedException;
 use Doctrine\Common\Annotations\Reader;
 use Ray\Aop\MethodInterceptor;
@@ -58,7 +58,7 @@ final class EmbedInterceptor implements MethodInterceptor
             try {
                 $uri = \GuzzleHttp\uri_template($embed->src, $query);
                 $resourceObject->body[$embed->rel] = clone $this->resource->get->uri($uri);
-            } catch (BadRequest $e) {
+            } catch (BadRequestException $e) {
                 // wrap ResourceNotFound or Uri exception
                 throw new EmbedException($embed->src, 500, $e);
             }
