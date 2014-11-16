@@ -24,29 +24,39 @@ final class OptionProvider implements OptionProviderInterface
     /**
      * Return available resource request method
      *
-     * @param ResourceObject $ro
+     * @param ResourceObject $resourceObject
      *
      * @return array
      */
-    private function getOptions(ResourceObject $ro)
+    private function getOptions(ResourceObject $resourceObject)
     {
-        $ref = new \ReflectionClass($ro);
-        $methods = $ref->getMethods();
-        $allow = $params = [];
-        foreach ($methods as $method) {
-            $isRequestMethod = (substr($method->name, 0, 2) === 'on') && (substr($method->name, 0, 6) !== 'onLink');
-            if ($isRequestMethod) {
-                $allow[] = strtolower(substr($method->name, 2));
-            }
+        $allows = $this->getAllows((new \ReflectionClass($resourceObject))->getMethods());
+        $params = [];
+        foreach ($allows as $method) {
+            $params[] = $this->getParams($resourceObject, $method);
         }
-        foreach ($allow as $method) {
-            $params = $this->getParams($ro, $method);
-        }
-        $result = ['allow' => $allow, 'params' => $params];
+        $result = ['allow' => $allows, 'params' => $params];
 
         return $result;
     }
 
+    /**
+     * @param array $methods
+     *
+     * @return array
+     */
+    private function getAllows(array $methods)
+    {
+        $allows = [];
+        foreach ($methods as $method) {
+            $isRequestMethod = (substr($method->name, 0, 2) === 'on') && (substr($method->name, 0, 6) !== 'onLink');
+            if ($isRequestMethod) {
+                $allows[] = strtolower(substr($method->name, 2));
+            }
+        }
+
+        return $allows;
+    }
 
     /**
      * @param ResourceObject $ro
