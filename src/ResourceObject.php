@@ -186,10 +186,6 @@ abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggrega
      */
     public function __toString()
     {
-        /** @var $this ResourceObject */
-        if (is_string($this->view)) {
-            return $this->view;
-        }
         if ($this->renderer instanceof RenderInterface) {
             try {
                 $view = $this->renderer->render($this);
@@ -201,10 +197,22 @@ abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggrega
 
             return $view;
         }
+
+        return $this->toExtraString();
+    }
+
+    /**
+     * @return string
+     */
+    private function toExtraString()
+    {
+        /** @var $this ResourceObject */
+        if (is_string($this->view)) {
+            return $this->view;
+        }
         if (is_scalar($this->body)) {
             return (string) $this->body;
         }
-        // No renderer bound for \BEAR\Resource\RenderInterface
 
         return '';
     }
