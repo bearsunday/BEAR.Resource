@@ -7,7 +7,7 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\MethodException;
-use BEAR\Resource\Exception\OutOfBounds;
+use BEAR\Resource\Exception\OutOfBoundsException;
 
 abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \IteratorAggregate
 {
@@ -114,18 +114,18 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
      */
     public function offsetSet($offset, $value)
     {
-        throw new OutOfBounds(__METHOD__ . ' is unavailable.');
+        throw new OutOfBoundsException(__METHOD__ . ' is unavailable.');
     }
 
     /**
      * @param mixed $offset
      *
-     * @throws OutOfBounds
+     * @throws OutOfBoundsException
      */
     public function offsetUnset($offset)
     {
         unset($offset);
-        throw new OutOfBounds(__METHOD__ . ' is unavailable.');
+        throw new OutOfBoundsException(__METHOD__ . ' is unavailable.');
     }
 
     /**
@@ -184,7 +184,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     {
         $this->invoke();
         if (!isset($this->result->body[$offset])) {
-            throw new OutOfBounds("[$offset] for object[" . get_class($this->result) . "]");
+            throw new OutOfBoundsException("[$offset] for object[" . get_class($this->result) . "]");
         }
 
         return $this->result->body[$offset];

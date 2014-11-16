@@ -3,7 +3,7 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\MethodException;
-use BEAR\Resource\Exception\OutOfBounds;
+use BEAR\Resource\Exception\OutOfBoundsException;
 use BEAR\Resource\Renderer\FakeErrorRenderer;
 use BEAR\Resource\Renderer\FakeTestRenderer;
 use FakeVendor\Sandbox\Resource\App\User\Entry;
@@ -73,7 +73,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testOffsetSet()
     {
-        $this->setExpectedException(OutOfBounds::class);
+        $this->setExpectedException(OutOfBoundsException::class);
         $request = new Request(
             $this->invoker,
             new FakeNopResource,
@@ -85,7 +85,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testOffsetUnset()
     {
-        $this->setExpectedException(OutOfBounds::class);
+        $this->setExpectedException(OutOfBoundsException::class);
         $request = new Request(
             $this->invoker,
             new FakeNopResource,
@@ -169,7 +169,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayAccessNotExists()
     {
-        $this->setExpectedException(OutOfBounds::class);
+        $this->setExpectedException(OutOfBoundsException::class);
         $request = new Request(
             $this->invoker,
             new Entry
