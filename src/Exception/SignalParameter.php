@@ -6,6 +6,6 @@
  */
 namespace BEAR\Resource\Exception;
 
-class SignalParameter extends Parameter implements ExceptionInterface
+class SignalParameterException extends ParameterException implements ExceptionInterface
 {
 }

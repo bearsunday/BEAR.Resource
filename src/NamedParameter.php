@@ -6,7 +6,7 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\Parameter;
+use BEAR\Resource\Exception\ParameterException;
 
 final class NamedParameter implements NamedParameterInterface
 {
@@ -42,6 +42,6 @@ final class NamedParameter implements NamedParameterInterface
             return $parameter->getDefaultValue();
         }
         $msg = '$' . "{$parameter->name} in " . get_class($callable[0]) . '::' . $callable[1] . '()';
-        throw new Parameter($msg);
+        throw new ParameterException($msg);
     }
 }

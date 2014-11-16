@@ -2,7 +2,7 @@
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\Parameter;
+use BEAR\Resource\Exception\ParameterException;
 
 class ReflectiveParamsTestClass
 {
@@ -43,7 +43,7 @@ class NamedParameterTest extends \PHPUnit_Framework_TestCase
 
     public function testParameterException()
     {
-        $this->setExpectedException(Parameter::class);
+        $this->setExpectedException(ParameterException::class);
         $object = new ReflectiveParamsTestClass;
         $namedArgs = [];
         $this->params->getParameters([$object, 'onGet'], $namedArgs);

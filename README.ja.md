@@ -398,7 +398,7 @@ class SessionIdParam implements ParamProviderInterface
 **可能であれば**実引き数を用意して`$param->inject($args)`と返します。
 
 パラメタープロバイダーは同一の変数名に複数登録でき、登録していたプロバイダーが次々に呼ばれます。
-すべてのプロバイダーが実引き数を用意できないと`BEAR\Resource\Exception\Parameter`例外が投げられます。
+すべてのプロバイダーが実引き数を用意できないと`BEAR\Resource\Exception\ParameterException`例外が投げられます。
 
 ### onProvidesメソッド
 

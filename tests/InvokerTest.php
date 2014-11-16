@@ -3,7 +3,7 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\MethodNotAllowedException;
-use BEAR\Resource\Exception\Parameter;
+use BEAR\Resource\Exception\ParameterException;
 use BEAR\Resource\Interceptor\FakeLogInterceptor;
 use BEAR\Resource\Interceptor\Log;
 use BEAR\Resource\Mock\Comment;
@@ -53,21 +53,21 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
 
     public function testInvokerInterfaceDefaultParamWithNoProvider()
     {
-        $this->setExpectedException(Parameter::class);
+        $this->setExpectedException(ParameterException::class);
         $request = new Request($this->invoker, new User, Request::PUT);
         $this->invoker->invoke($request);
     }
 
     public function testInvokerInterfaceWithNoProvider()
     {
-        $this->setExpectedException(Parameter::class);
+        $this->setExpectedException(ParameterException::class);
         $request = new Request($this->invoker, new Mock\Blog, Request::GET, []);
         $this->invoker->invoke($request);
     }
 
     public function testInvokerInterfaceWithUnspecificProviderButNoResult()
     {
-        $this->setExpectedException(Parameter::class);
+        $this->setExpectedException(ParameterException::class);
         $request = new Request($this->invoker, new Comment);
         $actual = $this->invoker->invoke($request);
         $this->assertSame('entry1', $actual);

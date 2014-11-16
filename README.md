@@ -391,7 +391,7 @@ class SessionIdParam implements ParamProviderInterface
 
 `SessionIdParam` implements the `ParamProviderInterface` interface and recieves parameter data, **when possible** it then prepares the actual parameters and returns them in `$param->inject($args)`.
 
-The parameter provider can register multiple parameters with a matching variable name, the registered provider will then be called by each of them. When none of the providers can prepare all parameters then `BEAR\Resource\Exception\Parameter` exception is thrown.
+The parameter provider can register multiple parameters with a matching variable name, the registered provider will then be called by each of them. When none of the providers can prepare all parameters then `BEAR\Resource\Exception\ParameterException` exception is thrown.
 
 ### The `onProvides` Method
 
