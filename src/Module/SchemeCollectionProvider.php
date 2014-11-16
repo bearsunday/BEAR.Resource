@@ -7,7 +7,7 @@
 namespace BEAR\Resource\Module;
 
 use BEAR\Resource\AppAdapter;
-use BEAR\Resource\Exception\AppName;
+use BEAR\Resource\Exception\InvalidAppNameException;
 use BEAR\Resource\SchemeCollection;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
@@ -36,14 +36,14 @@ class SchemeCollectionProvider implements ProviderInterface
      *
      * @return void
      *
-     * @throws \BEAR\Resource\Exception\AppName
+     * @throws \BEAR\Resource\Exception\InvalidAppNameException
      * @Inject
      * @Named("appName=app_name,resourceDir=resource_dir")
      */
     public function setAppName($appName, $resourceDir)
     {
         if (! is_string($appName)) {
-            throw new AppName($appName);
+            throw new InvalidAppNameException($appName);
         }
         $this->appName = $appName;
         $this->resourceDir = $resourceDir;

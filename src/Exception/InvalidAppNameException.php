@@ -6,6 +6,6 @@
  */
 namespace BEAR\Resource\Exception;
 
-class AppName extends LogicException implements ExceptionInterface
+class InvalidAppNameException extends \InvalidArgumentException implements ExceptionInterface
 {
 }

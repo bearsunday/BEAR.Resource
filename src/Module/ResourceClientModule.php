@@ -6,7 +6,7 @@
  */
 namespace BEAR\Resource\Module;
 
-use BEAR\Resource\Exception\AppName;
+use BEAR\Resource\Exception\InvalidAppNameException;
 use BEAR\Resource\NamedParameter;
 use BEAR\Resource\NamedParameterInterface;
 use Ray\Di\AbstractModule;
@@ -27,7 +27,7 @@ class ResourceClientModule extends AbstractModule
     public function __construct($appName)
     {
         if (! is_string($appName)) {
-            throw new AppName(gettype($appName));
+            throw new InvalidAppNameException(gettype($appName));
         }
         $this->appName = $appName;
         parent::__construct();
