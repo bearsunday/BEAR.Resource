@@ -6,6 +6,6 @@
  */
 namespace BEAR\Resource\Exception;
 
-class Host extends BadRequest implements ExceptionInterface
+class EmbedException extends LogicException implements ExceptionInterface
 {
 }

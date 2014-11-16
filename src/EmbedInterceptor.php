@@ -8,7 +8,7 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\Embed;
 use BEAR\Resource\Exception\BadRequest;
-use BEAR\Resource\Exception\Embed as EmbedException;
+use BEAR\Resource\Exception\EmbedException;
 use Doctrine\Common\Annotations\Reader;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;

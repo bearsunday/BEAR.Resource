@@ -2,7 +2,7 @@
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\Embed;
+use BEAR\Resource\Exception\EmbedException;
 use BEAR\Resource\Module\ResourceModule;
 use Doctrine\Common\Annotations\AnnotationReader;
 use FakeVendor\Sandbox\Resource\App\Bird\Birds;
@@ -103,7 +103,7 @@ class EmbedInterceptorTest extends \PHPUnit_Framework_TestCase
 
     public function testNotFoundSrc()
     {
-        $this->setExpectedException(Embed::class);
+        $this->setExpectedException(EmbedException::class);
         $mock = new NotFoundBird;
         $invocation = new ReflectiveMethodInvocation($mock, new \ReflectionMethod($mock, 'onGet'), new Arguments(['id' => 1]), [$this->embedInterceptor]);
         $invocation->proceed();
@@ -111,7 +111,7 @@ class EmbedInterceptorTest extends \PHPUnit_Framework_TestCase
 
     public function testNotInvalidSrc()
     {
-        $this->setExpectedException(Embed::class);
+        $this->setExpectedException(EmbedException::class);
         $mock = new InvalidBird;
         $invocation = new ReflectiveMethodInvocation($mock, new \ReflectionMethod($mock, 'onGet'), new Arguments(['id' => 1]), [$this->embedInterceptor]);
         $invocation->proceed();
