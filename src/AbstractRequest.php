@@ -6,7 +6,7 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\Method;
+use BEAR\Resource\Exception\MethodException;
 use BEAR\Resource\Exception\OutOfBounds;
 
 abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \IteratorAggregate
@@ -97,7 +97,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
         $this->invoker = $invoker;
         $this->resourceObject = $ro;
         if (! in_array($method, [self::GET, self::POST, self::PUT, self::PATCH, self::DELETE, self::HEAD, self::OPTIONS])) {
-            throw new Method($method);
+            throw new MethodException($method);
         }
         $this->method = $method;
         $this->query = $query;

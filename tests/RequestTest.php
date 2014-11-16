@@ -2,7 +2,7 @@
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\Method;
+use BEAR\Resource\Exception\MethodException;
 use BEAR\Resource\Exception\OutOfBounds;
 use BEAR\Resource\Renderer\FakeErrorRenderer;
 use BEAR\Resource\Renderer\FakeTestRenderer;
@@ -211,7 +211,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testInvalidMethod()
     {
-        $this->setExpectedException(Method::class);
+        $this->setExpectedException(MethodException::class);
         new Request($this->invoker, new Entry, 'invalid-method');
     }
 

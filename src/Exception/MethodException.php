@@ -6,9 +6,6 @@
  */
 namespace BEAR\Resource\Exception;
 
-/**
- * Invalid method exception
- */
-class Method extends BadRequestException implements ExceptionInterface
+class MethodException extends BadRequestException implements ExceptionInterface
 {
 }
