@@ -6,7 +6,7 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\ResourceNotFound;
+use BEAR\Resource\Exception\ResourceNotFoundException;
 use BEAR\Resource\Exception\Uri as UriException;
 use Ray\Di\Di\Inject;
 use Ray\Di\Exception\Unbound;
@@ -72,7 +72,7 @@ class Factory implements FactoryInterface
     private function retryWithIndexSuffix(Unbound $e, Uri $uri)
     {
         if (substr($uri->path, -1) !== '/' || substr($uri->path, -6) === '/index') {
-            throw new ResourceNotFound($uri, 404, $e);
+            throw new ResourceNotFoundException($uri, 404, $e);
         }
         $uri .= 'index';
 

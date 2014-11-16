@@ -2,7 +2,7 @@
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\ResourceNotFound;
+use BEAR\Resource\Exception\ResourceNotFoundException;
 use BEAR\Resource\Exception\Scheme;
 use BEAR\Resource\Exception\Uri as UriException;
 use FakeVendor\Sandbox\Resource\App\Factory\News;
@@ -78,7 +78,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testResourceNotFound()
     {
-        $this->setExpectedException(ResourceNotFound::class);
+        $this->setExpectedException(ResourceNotFoundException::class);
         $this->factory->newInstance('page://self/not_found_XXXX');
     }
 
