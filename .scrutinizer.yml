@@ -1,9 +1,6 @@
 filter:
-    excluded_paths: ["src/DevInvoker"]
     paths: ["src/*"]
 tools:
-    external_code_coverage: true
-    php_code_coverage: true
     php_sim: true
     php_mess_detector: true
     php_pdepend: true
