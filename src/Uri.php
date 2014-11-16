@@ -17,7 +17,7 @@ final class Uri extends AbstractUri
     public function __construct($uri, array $query = [])
     {
         if (! filter_var($uri, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED)) {
-            throw new UriException($uri);
+            $this->invalidUri($uri);
         }
         $parsedUrl = parse_url($uri);
         list($this->scheme, $this->host, $this->path) = array_values($parsedUrl);
@@ -27,5 +27,14 @@ final class Uri extends AbstractUri
         if ($query) {
             $this->query = $query + $this->query;
         }
+    }
+
+    /**
+     * @param mixed $uri
+     */
+    private function invalidUri($uri)
+    {
+        $msg = is_string($uri) ? $uri : gettype($uri);
+        throw new UriException($msg);
     }
 }

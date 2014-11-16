@@ -46,12 +46,8 @@ class Factory implements FactoryInterface
      */
     public function newInstance($uri)
     {
-        if (is_string($uri)) {
+        if (! $uri instanceof Uri) {
             $uri = new Uri($uri);
-        }
-        if (is_scalar($uri) || ! $uri instanceof Uri) {
-            $msg = is_object($uri) ? get_class($uri) : gettype($uri);
-            throw new UriException($msg);
         }
         $adapter = $this->scheme->getAdapter($uri);
         try {
