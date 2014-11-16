@@ -6,6 +6,9 @@
  */
 namespace BEAR\Resource;
 
+use BEAR\Resource\Exception\LinkException;
+use BEAR\Resource\Annotation\Link;
+
 /**
  * Anchor
  */
@@ -23,7 +26,7 @@ class A implements HrefInterface
     public function href($rel, ResourceObject $ro)
     {
         if (!isset($ro->links[$rel])) {
-            throw new Exception\LinkException(get_class($ro) . ':' . $rel);
+            throw new LinkException(get_class($ro) . ':' . $rel);
         }
         $link = $ro->links[$rel];
         $isTemplated = (isset($link[Link::TEMPLATED]) && $link[Link::TEMPLATED] === true);
