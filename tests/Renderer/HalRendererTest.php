@@ -84,7 +84,7 @@ class HalRendererTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \BEAR\Resource\Exception\HrefNotFound
+     * @expectedException \BEAR\Resource\Exception\HrefNotFoundException
      */
     public function testRenderInvalidLink()
     {

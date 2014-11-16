@@ -57,7 +57,7 @@ class HalRenderer implements RenderInterface
      * @param mixed          $data
      *
      * @return Hal
-     * @throws Exception\HrefNotFound
+     * @throws Exception\HrefNotFoundException
      */
     private function getHal(ResourceObject $ro, $data)
     {
@@ -66,7 +66,7 @@ class HalRenderer implements RenderInterface
         foreach ($ro->links as $rel => $link) {
             $attr = (isset($link[LinkAnnotation::TEMPLATED]) && $link[LinkAnnotation::TEMPLATED] === true) ? [LinkAnnotation::TEMPLATED => true] : [];
             if (!isset($link[LinkAnnotation::HREF])) {
-                throw new Exception\HrefNotFound($rel);
+                throw new Exception\HrefNotFoundException($rel);
             }
             $link = $this->mapper->reverseMap($link[LinkAnnotation::HREF]);
             $hal->addLink($rel, $link, $attr);
