@@ -6,9 +6,24 @@
  */
 namespace BEAR\Resource\Module;
 
+use BEAR\Resource\A;
+use BEAR\Resource\Anchor;
+use BEAR\Resource\AnchorInterface;
 use BEAR\Resource\Exception\InvalidAppNameException;
+use BEAR\Resource\Factory;
+use BEAR\Resource\FactoryInterface;
+use BEAR\Resource\HrefInterface;
+use BEAR\Resource\Invoker;
+use BEAR\Resource\InvokerInterface;
+use BEAR\Resource\JsonRenderer;
+use BEAR\Resource\Linker;
+use BEAR\Resource\LinkerInterface;
 use BEAR\Resource\NamedParameter;
 use BEAR\Resource\NamedParameterInterface;
+use BEAR\Resource\RenderInterface;
+use BEAR\Resource\Resource;
+use BEAR\Resource\ResourceInterface;
+use BEAR\Resource\SchemeCollectionInterface;
 use Ray\Di\AbstractModule;
 use Ray\Di\Scope;
 
@@ -43,13 +58,14 @@ class ResourceClientModule extends AbstractModule
         $this->bind()->annotatedWith('resource_dir')->toInstance($this->resourceDir);
 
         // bind resource client component
-        $this->bind('BEAR\Resource\ResourceInterface')->to('BEAR\Resource\Resource')->in(Scope::SINGLETON);
-        $this->bind('BEAR\Resource\InvokerInterface')->to('BEAR\Resource\Invoker')->in(Scope::SINGLETON);
-        $this->bind('BEAR\Resource\LinkerInterface')->to('BEAR\Resource\Linker')->in(Scope::SINGLETON);
-        $this->bind('BEAR\Resource\HrefInterface')->to('BEAR\Resource\A')->in(Scope::SINGLETON);
-        $this->bind('BEAR\Resource\FactoryInterface')->to('BEAR\Resource\Factory')->in(Scope::SINGLETON);
-        $this->bind('BEAR\Resource\SchemeCollectionInterface')->toProvider('BEAR\Resource\Module\SchemeCollectionProvider')->in(Scope::SINGLETON);
-        $this->bind('BEAR\Resource\AnchorInterface')->to('BEAR\Resource\Anchor')->in(Scope::SINGLETON);
-        $this->bind(NamedParameterInterface::class)->to(NamedParameter::class);
+        $this->bind(ResourceInterface::class)->to(Resource::class)->in(Scope::SINGLETON);
+        $this->bind(InvokerInterface::class)->to(Invoker::class)->in(Scope::SINGLETON);
+        $this->bind(LinkerInterface::class)->to(Linker::class)->in(Scope::SINGLETON);
+        $this->bind(HrefInterface::class)->to(A::class)->in(Scope::SINGLETON);
+        $this->bind(FactoryInterface::class)->to(Factory::class)->in(Scope::SINGLETON);
+        $this->bind(SchemeCollectionInterface::class)->toProvider(SchemeCollectionProvider::class)->in(Scope::SINGLETON);
+        $this->bind(AnchorInterface::class)->to(Anchor::class)->in(Scope::SINGLETON);
+        $this->bind(NamedParameterInterface::class)->to(NamedParameter::class)->in(Scope::SINGLETON);
+        $this->bind(RenderInterface::class)->to(JsonRenderer::class)->in(Scope::SINGLETON);
     }
 }

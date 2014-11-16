@@ -6,6 +6,8 @@
  */
 namespace BEAR\Resource\Module;
 
+use BEAR\Resource\JsonRenderer;
+use BEAR\Resource\RenderInterface;
 use Ray\Di\AbstractModule;
 use Ray\Di\Scope;
 
@@ -16,6 +18,6 @@ class JsonModule extends AbstractModule
      */
     protected function configure()
     {
-        $this->bind('BEAR\Resource\RenderInterface')->to('BEAR\Resource\Renderer\JsonRenderer')->in(Scope::SINGLETON);
+        $this->bind(RenderInterface::class)->to(JsonRenderer::class)->in(Scope::SINGLETON);
     }
 }

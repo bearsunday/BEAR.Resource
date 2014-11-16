@@ -34,6 +34,5 @@ class ResourceModule extends AbstractModule
     {
         $this->install(new ResourceClientModule($this->appName));
         $this->install(new EmbedResourceModule($this));
-        $this->bind('BEAR\Resource\RenderInterface')->to('BEAR\Resource\JsonRenderer');
     }
 }
