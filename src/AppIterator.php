@@ -93,10 +93,7 @@ final class AppIterator implements \Iterator
         $metaCollection = [];
         foreach ($iterator as $item) {
             /** @var $item \SplFileInfo */
-            $isPhp = $item->isFile()
-                && $item->getExtension() === 'php'
-                && (strpos($item->getBasename('.php'), '.') === false);
-            if (!$isPhp) {
+            if ($this->isNotPhp($item)) {
                 continue;
             }
             $resourceClass = $this->getResourceClassName($item);
@@ -110,6 +107,19 @@ final class AppIterator implements \Iterator
         return $metaCollection;
     }
 
+    /**
+     * @param \SplFileInfo $item
+     *
+     * @return bool
+     */
+    private function isNotPhp(\SplFileInfo $item)
+    {
+        $isPhp = $item->isFile()
+            && $item->getExtension() === 'php'
+            && (strpos($item->getBasename('.php'), '.') === false);
+
+        return ! $isPhp;
+    }
     /**
      * @param \SplFileInfo $file
      *
