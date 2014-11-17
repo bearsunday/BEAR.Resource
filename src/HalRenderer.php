@@ -64,15 +64,29 @@ class HalRenderer implements RenderInterface
         $uri = $this->mapper->reverseMap($ro->uri);
         $hal = new Hal($uri, $data);
         foreach ($ro->links as $rel => $link) {
-            $attr = (isset($link[LinkAnnotation::TEMPLATED]) && $link[LinkAnnotation::TEMPLATED] === true) ? [LinkAnnotation::TEMPLATED => true] : [];
             if (!isset($link[LinkAnnotation::HREF])) {
                 throw new Exception\HrefNotFoundException($rel);
             }
             $link = $this->mapper->reverseMap($link[LinkAnnotation::HREF]);
+            $attr = $this->getAttr($link);
             $hal->addLink($rel, $link, $attr);
         }
 
         return $hal;
+    }
+
+    /**
+     * @param $link
+     *
+     * @return array
+     */
+    private function getAttr($link)
+    {
+        if (isset($link[LinkAnnotation::TEMPLATED]) && $link[LinkAnnotation::TEMPLATED] === true) {
+            return [LinkAnnotation::TEMPLATED => true];
+        }
+
+        return [];
     }
 
     /**
