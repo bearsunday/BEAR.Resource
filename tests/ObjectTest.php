@@ -150,14 +150,13 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
     public function testSetRendererWithoutRenderer()
     {
         $result = (string) ($this->resourceObject);
-        $this->assertSame('', $result);
+        $this->assertSame('["entry1","entry2","entry3"]', $result);
     }
 
     public function testResourceHasView()
     {
-        $view = 'i have view';
-        $this->resourceObject->view = $view;
+        $this->resourceObject->view = 'view-is-override';
         $result = (string) ($this->resourceObject);
-        $this->assertSame($view, $result);
+        $this->assertSame('["entry1","entry2","entry3"]', $result);
     }
 }

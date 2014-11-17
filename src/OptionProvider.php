@@ -41,7 +41,7 @@ final class OptionProvider implements OptionProviderInterface
     }
 
     /**
-     * @param array $methods
+     * @param \ReflectionMethod[] $methods
      *
      * @return array
      */

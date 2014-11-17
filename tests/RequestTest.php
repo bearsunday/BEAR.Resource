@@ -139,7 +139,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             ['a' => 'koriym', 'b' => 25]
         );
         $result = (string) $request;
-        $this->assertSame('', $result);
+        $this->assertSame('{"posts":["koriym",25]}', $result);
     }
 
     public function testIterator()

@@ -168,7 +168,7 @@ abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggrega
      * @param RenderInterface $renderer
      *
      * @return $this
-     * @Ray\Di\Di\Inject(optional = true)
+     * @Ray\Di\Di\Inject(optional=true)
      */
     public function setRenderer(RenderInterface $renderer)
     {
@@ -186,35 +186,18 @@ abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggrega
      */
     public function __toString()
     {
-        if ($this->renderer instanceof RenderInterface) {
-            try {
-                $view = $this->renderer->render($this);
-            } catch (Exception $e) {
-                $view = '';
-                error_log('Exception caught in ' . get_class($this)) . '::__toString() ';
-                error_log((string) $e);
-            }
-
-            return $view;
+        if (! $this->renderer instanceof RenderInterface) {
+            $this->renderer = new JsonRenderer;
+        }
+        try {
+            $view = $this->renderer->render($this);
+        } catch (Exception $e) {
+            $view = '';
+            error_log('Exception caught in ' . get_class($this)) . '::__toString() ';
+            error_log((string) $e);
         }
 
-        return $this->toExtraString();
-    }
-
-    /**
-     * @return string
-     */
-    private function toExtraString()
-    {
-        /** @var $this ResourceObject */
-        if (is_string($this->view)) {
-            return $this->view;
-        }
-        if (is_scalar($this->body)) {
-            return (string) $this->body;
-        }
-
-        return '';
+        return $view;
     }
 
     /**
