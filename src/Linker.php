@@ -185,14 +185,9 @@ final class Linker implements LinkerInterface
      */
     private function isList($value)
     {
-        $value = array_values((array) $value);
-        $isMultiColumnList = (count($value) > 1
-            && isset($value[0])
-            && isset($value[1])
-            && is_array($value[0])
-            && is_array($value[1])
-            && (array_keys($value[0]) === array_keys($value[1]))
-        );
+        $list = $value;
+        $keys = array_keys((array) array_pop($list));
+        $isMultiColumnList = $keys !== [0 => 0] && ($keys === array_keys((array) array_pop($list)));
         $isOneColumnList = (count($value) === 1) && is_array($value[0]);
 
         return ($isOneColumnList || $isMultiColumnList);
