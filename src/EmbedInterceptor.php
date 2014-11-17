@@ -74,7 +74,6 @@ final class EmbedInterceptor implements MethodInterceptor
                 throw new EmbedException($embed->src, 500, $e);
             }
         }
-
     }
 
     /**
@@ -90,7 +89,6 @@ final class EmbedInterceptor implements MethodInterceptor
             }
             $resourceObject->body[$embed->rel] = $resourceObject->body[$embed->rel]->request();
         }
-
     }
 
     /**

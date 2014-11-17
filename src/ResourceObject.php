@@ -232,7 +232,7 @@ abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggrega
     }
 
     /**
-     * @param $body
+     * @param mixed $body
      *
      * @return mixed
      */
