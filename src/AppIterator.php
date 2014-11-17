@@ -127,24 +127,30 @@ final class AppIterator implements \Iterator
      */
     private function getResourceClassName(\SplFileInfo $file)
     {
-        static $cache = [];
-
         $pathName = $file->getPathname();
-        if (isset($cache[$pathName])) {
-            return $cache[$pathName];
-        }
         $declaredClasses = get_declared_classes();
         include_once $pathName;
         $newClasses = array_values(array_diff_key(get_declared_classes(), $declaredClasses));
+        $name = $this->getName($newClasses);
+
+        return $name;
+    }
+
+    /**
+     * @param array $newClasses
+     *
+     * @return bool
+     */
+    private function getName(array $newClasses)
+    {
         foreach ($newClasses as $newClass) {
             $parent = (new \ReflectionClass($newClass))->getParentClass();
             if ($parent && $parent->name === ResourceObject::class) {
-                $cache[$pathName] = $newClass;
-
                 return $newClass;
             }
         }
 
         return false;
+
     }
 }
