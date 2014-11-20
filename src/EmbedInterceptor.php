@@ -84,7 +84,7 @@ final class EmbedInterceptor implements MethodInterceptor
     {
         foreach ($embeds as $embed) {
             /** @var $embed Embed */
-            if (! $embed instanceof Embed || ! ($resourceObject->body[$embed->rel] instanceof ResourceInterface)) {
+            if (! $embed instanceof Embed || ! ($resourceObject->body[$embed->rel] instanceof RequestInterface)) {
                 continue;
             }
             $resourceObject->body[$embed->rel] = $resourceObject->body[$embed->rel]->request();
@@ -102,9 +102,6 @@ final class EmbedInterceptor implements MethodInterceptor
         $params = $invocation->getMethod()->getParameters();
         $namedParameters = [];
         foreach ($params as $param) {
-            if (isset($namedParameters[$param->name])) {
-                throw new \InvalidArgumentException($param->name);
-            }
             $namedParameters[$param->name] = array_shift($args);
         }
 
