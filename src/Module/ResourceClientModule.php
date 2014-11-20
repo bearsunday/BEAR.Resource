@@ -34,8 +34,6 @@ class ResourceClientModule extends AbstractModule
      */
     private $appName;
 
-    private $resourceDir;
-
     /**
      * @param string $appName
      */
@@ -53,11 +51,7 @@ class ResourceClientModule extends AbstractModule
      */
     protected function configure()
     {
-        // bind app name
         $this->bind()->annotatedWith('app_name')->toInstance($this->appName);
-        $this->bind()->annotatedWith('resource_dir')->toInstance($this->resourceDir);
-
-        // bind resource client component
         $this->bind(ResourceInterface::class)->to(Resource::class)->in(Scope::SINGLETON);
         $this->bind(InvokerInterface::class)->to(Invoker::class)->in(Scope::SINGLETON);
         $this->bind(LinkerInterface::class)->to(Linker::class)->in(Scope::SINGLETON);

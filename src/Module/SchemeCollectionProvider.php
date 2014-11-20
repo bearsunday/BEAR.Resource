@@ -22,11 +22,6 @@ class SchemeCollectionProvider implements ProviderInterface
     protected $appName;
 
     /**
-     * @var string
-     */
-    protected $resourceDir;
-
-    /**
      * @var InjectorInterface
      */
     protected $injector;
@@ -38,15 +33,14 @@ class SchemeCollectionProvider implements ProviderInterface
      *
      * @throws \BEAR\Resource\Exception\InvalidAppNameException
      * @Inject
-     * @Named("appName=app_name,resourceDir=resource_dir")
+     * @Named("appName=app_name")
      */
-    public function setAppName($appName, $resourceDir)
+    public function setAppName($appName)
     {
         if (! is_string($appName)) {
             throw new InvalidAppNameException($appName);
         }
         $this->appName = $appName;
-        $this->resourceDir = $resourceDir;
     }
 
     /**
@@ -67,8 +61,8 @@ class SchemeCollectionProvider implements ProviderInterface
     public function get()
     {
         $schemeCollection = new SchemeCollection;
-        $pageAdapter = new AppAdapter($this->injector, $this->appName, 'Resource\Page', $this->resourceDir . '/Page');
-        $appAdapter = new AppAdapter($this->injector, $this->appName, 'Resource\App', $this->resourceDir . '/App');
+        $pageAdapter = new AppAdapter($this->injector, $this->appName, 'Resource\Page');
+        $appAdapter = new AppAdapter($this->injector, $this->appName, 'Resource\App');
         $schemeCollection->scheme('page')->host('self')->toAdapter($pageAdapter);
         $schemeCollection->scheme('app')->host('self')->toAdapter($appAdapter);
 
