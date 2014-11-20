@@ -61,7 +61,6 @@ class ResourceClientModule extends AbstractModule
         $this->bind(ResourceInterface::class)->to(Resource::class)->in(Scope::SINGLETON);
         $this->bind(InvokerInterface::class)->to(Invoker::class)->in(Scope::SINGLETON);
         $this->bind(LinkerInterface::class)->to(Linker::class)->in(Scope::SINGLETON);
-        $this->bind(HrefInterface::class)->to(A::class)->in(Scope::SINGLETON);
         $this->bind(FactoryInterface::class)->to(Factory::class)->in(Scope::SINGLETON);
         $this->bind(SchemeCollectionInterface::class)->toProvider(SchemeCollectionProvider::class)->in(Scope::SINGLETON);
         $this->bind(AnchorInterface::class)->to(Anchor::class)->in(Scope::SINGLETON);
