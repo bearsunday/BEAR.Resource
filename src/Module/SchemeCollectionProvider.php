@@ -37,9 +37,6 @@ class SchemeCollectionProvider implements ProviderInterface
      */
     public function setAppName($appName)
     {
-        if (! is_string($appName)) {
-            throw new InvalidAppNameException($appName);
-        }
         $this->appName = $appName;
     }
 
