@@ -45,13 +45,6 @@ abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggrega
     public $view;
 
     /**
-     * Resource links
-     *
-     * @var array
-     */
-    public $links = [];
-
-    /**
      * Renderer
      *
      * @var \BEAR\Resource\RenderInterface

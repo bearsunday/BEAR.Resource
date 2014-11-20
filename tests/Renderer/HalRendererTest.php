@@ -3,7 +3,9 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Module\ResourceModule;
+use Doctrine\Common\Annotations\AnnotationReader;
 use Ray\Di\Injector;
+use BEAR\Resource\Annotation\Link;
 
 class MockResource extends ResourceObject
 {
@@ -15,6 +17,9 @@ class MockResource extends ResourceObject
         'greeting' => 'hello'
     ];
 
+    /**
+     * @Link(rel="rel1", href="page://self/rel1")
+     */
     public function onGet($a, $b)
     {
         $this['posts'] = [$a, $b];
@@ -37,7 +42,7 @@ class HalRendererTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->halRenderer = new HalRenderer(new UriMapper('api'));
+        $this->halRenderer = new HalRenderer(new UriMapper('api'), new AnnotationReader);
         $this->resource = new MockResource;
         $this->resource->uri = 'dummy://self/index';
     }
@@ -83,16 +88,6 @@ class HalRendererTest extends \PHPUnit_Framework_TestCase
         $this->assertContains($links, $this->resource->view);
     }
 
-    /**
-     * @expectedException \BEAR\Resource\Exception\HrefNotFoundException
-     */
-    public function testRenderInvalidLink()
-    {
-        $this->resource->links = ['rel1' => 'page://self/rel1'];
-        $this->resource->setRenderer($this->halRenderer);
-        $this->halRenderer->render($this->resource);
-    }
-
     public function testBodyHasRequest()
     {
         $request = new Request(
@@ -109,7 +104,7 @@ class HalRendererTest extends \PHPUnit_Framework_TestCase
 
     public function testEmbedResource()
     {
-        $resource = (new Injector(new ResourceModule('FakeVendor\Sandbox')))->getInstance(ResourceInterface::class);
+        $resource = (new Injector(new ResourceModule('FakeVendor\Sandbox'), $_ENV['TMP_DIR']))->getInstance(ResourceInterface::class);
         $resourceObject = $resource
             ->get
             ->uri('app://self/bird/birds')
@@ -122,6 +117,9 @@ class HalRendererTest extends \PHPUnit_Framework_TestCase
     "_links": {
         "self": {
             "href": "/api/bird/birds?id=1"
+        },
+        "bird3": {
+            "href": "/api/bird/suzume"
         }
     },
     "_embedded": {

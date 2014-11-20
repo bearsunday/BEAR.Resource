@@ -208,7 +208,7 @@ class FakeVendor_Sandbox_Resource_App_Weave_Book_OCETQ1c extends FakeVendor\Sand
      * @param RenderInterface $renderer
      *
      * @return $this
-     * @Ray\Di\Di\Inject(optional = true)
+     * @Ray\Di\Di\Inject(optional=true)
      */
     public function setRenderer(BEAR\Resource\RenderInterface $renderer)
     {
@@ -245,6 +245,9 @@ class FakeVendor_Sandbox_Resource_App_Weave_Book_OCETQ1c extends FakeVendor\Sand
         $this->isIntercepting = true;
         return $invocationResult;
     }
+    /**
+     * @return mixed
+     */
     public function jsonSerialize()
     {
         if (isset($this->bindings[__FUNCTION__]) === false) {

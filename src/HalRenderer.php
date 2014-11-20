@@ -6,10 +6,12 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Annotation\Link as LinkAnnotation;
+use BEAR\Resource\Annotation\Link;
 use BEAR\Resource\Exception;
 use Nocarrier\Hal;
+use Ray\Aop\WeavedInterface;
 use Ray\Di\Di\Inject;
+use Doctrine\Common\Annotations\Reader;
 
 class HalRenderer implements RenderInterface
 {
@@ -24,14 +26,20 @@ class HalRenderer implements RenderInterface
     private $embed;
 
     /**
+     * @var Reader
+     */
+    private $reader;
+
+    /**
      * @param UriMapperInterface $mapper
      *
      * @Inject
      */
-    public function __construct(UriMapperInterface $mapper)
+    public function __construct(UriMapperInterface $mapper, Reader $reader)
     {
         $this->mapper = $mapper;
         $this->embed = new \SplObjectStorage;
+        $this->reader = $reader;
     }
 
     /**
@@ -44,6 +52,7 @@ class HalRenderer implements RenderInterface
         // HAL
         $hal = $this->getHal($ro, $data);
         $this->addEmbedResource($hal);
+        $this->addLinkAnnotation($hal, $ro);
         $ro->view = $hal->asJson(true);
         $ro->headers['content-type'] = 'application/hal+json; charset=UTF-8';
 
@@ -63,14 +72,6 @@ class HalRenderer implements RenderInterface
     {
         $uri = $this->mapper->reverseMap($ro->uri);
         $hal = new Hal($uri, $data);
-        foreach ($ro->links as $rel => $link) {
-            if (!isset($link[LinkAnnotation::HREF])) {
-                throw new Exception\HrefNotFoundException($rel);
-            }
-            $link = $this->mapper->reverseMap($link[LinkAnnotation::HREF]);
-            $attr = $this->getAttr($link);
-            $hal->addLink($rel, $link, $attr);
-        }
 
         return $hal;
     }
@@ -120,11 +121,43 @@ class HalRenderer implements RenderInterface
             $data = $ro->jsonSerialize();
             $uri = $this->mapper->reverseMap($ro->uri);
             $embedHal = new Hal($uri, $data);
-            foreach ($ro->links as $rel => $link) {
-                $mappedLink = $this->mapper->reverseMap($link);
-                $embedHal->addLink($rel, $mappedLink);
+
+            $links = $this->getLinks($ro);
+            foreach ($links as $link) {
+                if ($link instanceof Link) {
+                    $mappedLink = $this->mapper->reverseMap($link->href);
+                    $embedHal->addLink($link->rel, $mappedLink);
+                }
             }
+
             $hal->addResource($embedRel, $embedHal);
         }
+    }
+
+    private function addLinkAnnotation(Hal $hal, ResourceObject $ro)
+    {
+        $this->getLinks($ro);
+        $links = $this->getLinks($ro);
+        foreach ($links as $link) {
+            if ($link instanceof Link) {
+                $mappedLink = $this->mapper->reverseMap($link->href);
+                $hal->addLink($link->rel, $mappedLink);
+            }
+        }
+
+//        $hal->addResource($ro, $hal);
+    }
+
+    /**
+     * @param ResourceObject $ro
+     *
+     * @return array|Link[]
+     */
+    private function getLinks(ResourceObject $ro)
+    {
+        $object = ($ro instanceof WeavedInterface) ? (new \ReflectionClass($ro))->getParentClass()->name : $ro;
+        $links = method_exists($object, 'onGet') ? $this->reader->getMethodAnnotations(new \ReflectionMethod($object, 'onGet')) : [];
+
+        return (array) $links;
     }
 }
