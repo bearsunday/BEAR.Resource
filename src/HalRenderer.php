@@ -77,20 +77,6 @@ class HalRenderer implements RenderInterface
     }
 
     /**
-     * @param $link
-     *
-     * @return array
-     */
-    private function getAttr($link)
-    {
-        if (isset($link[LinkAnnotation::TEMPLATED]) && $link[LinkAnnotation::TEMPLATED] === true) {
-            return [LinkAnnotation::TEMPLATED => true];
-        }
-
-        return [];
-    }
-
-    /**
      * @param ResourceObject $ro
      *
      * @return ResourceObject
