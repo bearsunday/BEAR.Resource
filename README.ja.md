@@ -2,9 +2,9 @@ Hypermedia framework for object as a service
 --------------------------------------------
 
 [![Latest Stable Version](https://poser.pugx.org/bear/resource/v/stable.png)](https://packagist.org/packages/bear/resource)
-[![Build Status](https://secure.travis-ci.org/koriym/BEAR.Resource.png?branch=master)](http://travis-ci.org/koriym/BEAR.git@github.com:koriym/BEAR.Resource.git)
-[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/koriym/BEAR.Resource/badges/quality-score.png?s=fa3351a652dc4a425a3bbb32c71438ce2dbb62c1)](https://scrutinizer-ci.com/g/koriym/BEAR.Resource/)
-[![Code Coverage](https://scrutinizer-ci.com/g/koriym/BEAR.Resource/badges/coverage.png?s=56c3b44894ab8c7287c19e47bb6d98571e0e3309)](https://scrutinizer-ci.com/g/koriym/BEAR.Resource/)
+[![Build Status](https://travis-ci.org/koriym/BEAR.Resource.svg?branch=develop-2)](https://travis-ci.org/koriym/BEAR.Resource)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/koriym/BEAR.Resource/badges/quality-score.png?b=develop-2)](https://scrutinizer-ci.com/g/koriym/BEAR.Resource/?branch=develop-2)
+[![Code Coverage](https://scrutinizer-ci.com/g/koriym/BEAR.Resource/badges/coverage.png?b=develop-2)](https://scrutinizer-ci.com/g/koriym/BEAR.Resource/?branch=develop-2)
 
 **BEAR.Resource** はオブジェクトがリソースの振る舞いを持つHypermediaフレームワークです。
 クライアントーサーバー、統一インターフェイス、ステートレス、相互接続したリソース表現、レイヤードコンポーネント等の
@@ -64,27 +64,13 @@ class Author extends ResourceObject
 ```
 ### インスタンスの取得
 
-リソースクライアントはリソースオブジェクトのクライアントです。
-インスタンスを取得するために[インスタンススクリプト](https://github.com/koriym/BEAR.Resource/blob/readme/scripts/instance.php)を`require`して
-URIスキーマをクラスにマップし、リソースクライアントがリソースオブジェクトを`URI`で扱えるようにします。
-```php
-$resource = require '/path/to/BEAR.Resource/scripts/instance.php';
-$resource->setSchemeCollection(
-  (new SchemeCollection)
-    ->scheme('app')
-    ->host('self')
-    ->toAdapter(new Adapter\App($injector, 'MyVendor\Sandbox', 'Resource\App'));
-);
-```
-
-またはインジェクターを使って依存解決を行いクライアントインスタンスを取得します。
+ディペンデンシーインジェクターを使ってクライアントインスタンスを取得します。
 
 ```php
-$injector = Injector::create([new ResourceModule('MyVendor\Sandbox')])
-$resource = $injector->getInstance('BEAR\Resource\ResourceInterface');
-```
+use BEAR\Resource\ResourceInterface;
 
-どちらの方法でも **MyVendor\Sandbox\Resource\App\User** クラスが **app://self/user** というURIにマップされたリソースを扱うリソースクライアントが準備できます。
+$resource = (new Injector(new ResourceModule('FakeVendor/Sandbox')))->getInstance(ResourceInterface::class);
+```
 
 ### リソースリクエスト
 
@@ -292,16 +278,7 @@ HATEOAS について詳しくは[How to GET a Cup of Coffee](http://www.infoq.co
 
 ### リソース表現
 
-リソースはそれぞれ表現のためのレンダラーを自身に持っています。
-このレンダラーはリソースの依存なので、インジェクターを使ってレンダラーをインジェクトして利用します。
-
-
-```php
-$modules = [new ResourceModule('MyVendor\Sandbox'), new JsonModule]:
-$resource = Injector::create(modules)
-  ->getInstance('BEAR\Resource\ResourceInterface');
-```
-
+リソースはそれぞれ表現のためのリソースレンダラーを持っています。
 文字列評価されるとリソースはインジェクトされたリソースレンダラーを使ってリソース表現になります。
 
 ```php
@@ -314,7 +291,7 @@ echo $user;
 // }
 ```
 このときの`$user`はレンダラーが内蔵された`ResourceObject`リソースオブジェクトです。
-文字列ではないので配列やオブジェクトとしても取り扱うことができます。
+配列やオブジェクトとしても取り扱うことができます。
 
 ```php
 
@@ -340,93 +317,12 @@ $user = $resource
   ->withQuery(['id' => 1])
   ->request();
 
-$smarty->assign('user', $user);
+$templateEngine->assign('user', $user);
 ```
 
 `eager`のない`request()`ではリソースリクエストの結果ではなく、リクエストオブジェクトが取得できます。
 テンプレートエンジンにアサインするとテンプレートにリソースリクエスト`{$user}`が現れたタイミングで`リソースリクエスト`と`リソースレンダリング`を行い文字列表現になります。
 リソース表現はAPI用の他にも、テンプレートエンジンを用いてHTMLにする事もできます。
-
-## シグナルパラメーター
-
-メソッドの実行には引き数が必要です。通常は以下の３つの優先順位でで引き数が用意されます。
-
-  * メソッドを呼び出すコンシュマーが指定 ```$obj->method(1, 2, ...);```
-  * メソッドシグネチャーでデフォルトを指定 ```function method($a1 = 1)```
-  * メソッド内で`null`だったら内部で取得　```function method($cat = null) { $cat = $cat ?: new Cat;```
-
-引き数の用意の責任をメソッドとコンシュマーから分離したのがシグナルパラメーターです。
-コンシュマーとメソッドが引き数を用意しない場合のみ機能します。
-
-シグナルパラメーターという名前は[シグナル・スロット](http://en.wikipedia.org/wiki/Signals_and_slots)というデザインパターンからのものです。
-引き数が不足したときには変数名で`シグナル`が発信されて`スロット`として登録されているシグナルパラメーターがその不足を解決します。
-
-### パラメータープロバイダーの登録
-
-リソースクラインアントに変数名とプロバイダーの登録をします。
-
-```php
-$resource = $injector->getInstance('BEAR\Resource\ResourceInterface');
-$resource->attachParamProvider('user_id', new SessionIdParam);
-```
-
-この登録では`$user_id`という変数名の引き数が必要な時に`SessionIdParam`が呼ばれます。
-
-
-### パラメータープロバイダーの実装
-
-```php
-class SessionIdParam implements ParamProviderInterface
-{
-    /**
-     * @param Param $param
-     *
-     * @return mixed
-     */
-    public function __invoke(Param $param)
-    {
-        if (isset($_SESSION['login_id'])) {
-            // found !
-            return $param->inject($_SESSION['login_id']);
-        };
-        // no idea, ask another provider...
-    }
-}
-```
-
-`SessionIdParam`は`ParamProviderInterface`インターフェイスを実装してパラメーター情報を受け取り、
-**可能であれば**実引き数を用意して`$param->inject($args)`と返します。
-
-パラメタープロバイダーは同一の変数名に複数登録でき、登録していたプロバイダーが次々に呼ばれます。
-すべてのプロバイダーが実引き数を用意できないと`BEAR\Resource\Exception\ParameterException`例外が投げられます。
-
-### onProvidesメソッド
-
-変数名を指定しないで`'*'`登録する`OnProvidesParam`はプロバイダーの用意が不要で、同一のクラスでの引き数のインジェクトを可能にします。
-
-```php
-class Post
-{
-    public function onPost($date)
-    {
-        // $date is passed by the onProvidesDate method.
-    }
-
-    public function onProvidesDate()
-    {
-        return date(DATE_RFC822);
-    }
-}
-```
-このリソースでクライアントが`$date`を指定しないと`onProvidesDate`が呼ばれ、返り値が`onPost`に渡されます。
-`onPost`メソッド内では渡されたものだけを使うので、テスタビリティは向上し責任の分離したコードになります。
-
-onProvidesメソッドの機能を利用するには`OnProvidesParam`パラメータープロバイダーを登録します。
-
-```php
-$resource->attachParamProvider('*', new OnProvidesParam);
-```
-
 
 ## 埋め込みリソース
 
@@ -497,9 +393,6 @@ HAL Moduleを使うとリソース表現が[HAL](http://stateless.co/hal_specifi
 
 ```
 
-[デモコード](https://github.com/koriym/BEAR.Resource/tree/develop/docs/sample/06.HAL)をご覧下さい。
-
-
 ### Requirements
  * PHP 5.4+
 
@@ -508,7 +401,7 @@ HAL Moduleを使うとリソース表現が[HAL](http://stateless.co/hal_specifi
 ```javascript
 {
     "require": {
-        "bear/resource": "~0.11"
+        "bear/resource": "~1.0@dev"
     }
 }
 ```
