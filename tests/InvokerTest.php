@@ -75,7 +75,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
 
     public function testInvokeWeave()
     {
-        $compiler = new Compiler($_ENV['TEST_DIR']);
+        $compiler = new Compiler($_ENV['TMP_DIR']);
         $book = $compiler->newInstance(Book::class, [], (new Bind)->bindInterceptors('onGet', [new FakeLogInterceptor]));
         $request = new Request($this->invoker, $book, Request::GET, ['id' => 1]);
         $actual = $this->invoker->invoke($request)->body;
@@ -107,7 +107,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
 
     public function testOptionsWeaver()
     {
-        $order = (new Compiler($_ENV['TEST_DIR']))->newInstance(Order::class, [], new Bind);
+        $order = (new Compiler($_ENV['TMP_DIR']))->newInstance(Order::class, [], new Bind);
         $request = new Request($this->invoker, $order, Request::OPTIONS);
         $response = $this->invoker->invoke($request);
         $actual = $response->headers['allow'];
