@@ -107,10 +107,6 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     /**
      * @param mixed $offset
      * @param mixed $value
-     *
-     * @throws Exception\LogicException
-     * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function offsetSet($offset, $value)
     {
@@ -119,8 +115,6 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
 
     /**
      * @param mixed $offset
-     *
-     * @throws OutOfBoundsException
      */
     public function offsetUnset($offset)
     {
