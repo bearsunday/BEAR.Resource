@@ -6,9 +6,6 @@
  */
 namespace BEAR\Resource\Exception;
 
-/**
- * Generic exception
- */
 interface ExceptionInterface
 {
 }
