@@ -2,9 +2,9 @@ Hypermedia framework for object as a service
 --------------------------------------------
 
 [![Latest Stable Version](https://poser.pugx.org/bear/resource/v/stable.png)](https://packagist.org/packages/bear/resource)
-[![Build Status](https://secure.travis-ci.org/koriym/BEAR.Resource.png?branch=master)](http://travis-ci.org/koriym/BEAR.git@github.com:koriym/BEAR.Resource.git)
-[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/koriym/BEAR.Resource/badges/quality-score.png?s=fa3351a652dc4a425a3bbb32c71438ce2dbb62c1)](https://scrutinizer-ci.com/g/koriym/BEAR.Resource/)
-[![Code Coverage](https://scrutinizer-ci.com/g/koriym/BEAR.Resource/badges/coverage.png?s=56c3b44894ab8c7287c19e47bb6d98571e0e3309)](https://scrutinizer-ci.com/g/koriym/BEAR.Resource/)
+[![Build Status](https://secure.travis-ci.org/koriym/BEAR.Resource.png?branch=develop)](http://travis-ci.org/koriym/BEAR.git@github.com:koriym/BEAR.Resource.git)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/koriym/BEAR.Resource/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/koriym/BEAR.Resource/?branch=develop)
+[![Code Coverage](https://scrutinizer-ci.com/g/koriym/BEAR.Resource/badges/coverage.png?b=develop)](https://scrutinizer-ci.com/g/koriym/BEAR.Resource/?branch=develop)
 
 **BEAR.Resource** Is a Hypermedia framework that allows resources to behave as objects. It allows objects to have RESTful web service benefits such as client-server, uniform interface, statelessness, resource expression with mutual connectivity and layered components.
 
