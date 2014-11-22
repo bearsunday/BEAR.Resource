@@ -8,10 +8,10 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use FakeVendor\Sandbox\Resource\App\Bird\Birds;
 use FakeVendor\Sandbox\Resource\App\Bird\InvalidBird;
 use FakeVendor\Sandbox\Resource\App\Bird\NotFoundBird;
+use FakeVendor\Sandbox\Resource\App\Bird\Sparrow;
 use Ray\Aop\Arguments;
 use Ray\Aop\ReflectiveMethodInvocation;
 use Ray\Di\Injector;
-use FakeVendor\Sandbox\Resource\App\Bird\Sparrow;
 
 class EmbedInterceptorTest extends \PHPUnit_Framework_TestCase
 {

@@ -3,8 +3,8 @@
 namespace FakeVendor\Sandbox\Resource\App\Bird;
 
 use BEAR\Resource\Annotation\Embed;
-use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Annotation\Link;
+use BEAR\Resource\ResourceObject;
 
 class Birds extends ResourceObject
 {

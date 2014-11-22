@@ -2,9 +2,9 @@
 
 namespace BEAR\Resource\Module;
 
-use Ray\Di\Injector;
-use BEAR\Resource\UriMapperInterface;
 use BEAR\Resource\UriMapper;
+use BEAR\Resource\UriMapperInterface;
+use Ray\Di\Injector;
 
 class HalModuleTest extends \PHPUnit_Framework_TestCase
 {

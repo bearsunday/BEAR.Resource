@@ -2,10 +2,10 @@
 
 namespace BEAR\Resource;
 
+use BEAR\Resource\Annotation\Link;
 use BEAR\Resource\Module\ResourceModule;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Ray\Di\Injector;
-use BEAR\Resource\Annotation\Link;
 
 class MockResource extends ResourceObject
 {
