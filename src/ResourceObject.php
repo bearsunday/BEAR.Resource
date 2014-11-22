@@ -14,7 +14,7 @@ use IteratorAggregate;
 use JsonSerializable;
 use Traversable;
 
-abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggregate, JsonSerializable
+abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, Countable, IteratorAggregate, JsonSerializable
 {
     /**
      * Uri
@@ -205,6 +205,14 @@ abstract class ResourceObject implements ArrayAccess, Countable, IteratorAggrega
         }
 
         return ['value' => $this->body];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function transfer(TransferInterface $responder)
+    {
+        $responder($this);
     }
 
     /**
