@@ -6,13 +6,10 @@
  */
 namespace BEAR\Resource\Module;
 
-use BEAR\Resource\A;
 use BEAR\Resource\Anchor;
 use BEAR\Resource\AnchorInterface;
-use BEAR\Resource\Exception\InvalidAppNameException;
 use BEAR\Resource\Factory;
 use BEAR\Resource\FactoryInterface;
-use BEAR\Resource\HrefInterface;
 use BEAR\Resource\Invoker;
 use BEAR\Resource\InvokerInterface;
 use BEAR\Resource\JsonRenderer;
@@ -30,25 +27,10 @@ use Ray\Di\Scope;
 class ResourceClientModule extends AbstractModule
 {
     /**
-     * @var string
-     */
-    private $appName;
-
-    /**
-     * @param string $appName
-     */
-    public function __construct($appName)
-    {
-        $this->appName = $appName;
-        parent::__construct();
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function configure()
     {
-        $this->bind()->annotatedWith('app_name')->toInstance($this->appName);
         $this->bind(ResourceInterface::class)->to(Resource::class)->in(Scope::SINGLETON);
         $this->bind(InvokerInterface::class)->to(Invoker::class)->in(Scope::SINGLETON);
         $this->bind(LinkerInterface::class)->to(Linker::class)->in(Scope::SINGLETON);

@@ -32,7 +32,8 @@ class ResourceModule extends AbstractModule
      */
     protected function configure()
     {
-        $this->install(new ResourceClientModule($this->appName));
-        $this->install(new EmbedResourceModule($this));
+        $this->bind()->annotatedWith('app_name')->toInstance($this->appName);
+        $this->install(new ResourceClientModule);
+        $this->install(new EmbedResourceModule);
     }
 }
