@@ -97,7 +97,7 @@ final class AppIterator implements \Iterator
                 continue;
             }
             $resourceClass = $this->getResourceClassName($item);
-            if ($resourceClass === false) {
+            if ($resourceClass === '') {
                 continue;
             }
             $meta = new Meta($resourceClass);
@@ -139,7 +139,7 @@ final class AppIterator implements \Iterator
     /**
      * @param array $newClasses
      *
-     * @return bool
+     * @return string
      */
     private function getName(array $newClasses)
     {
@@ -150,6 +150,6 @@ final class AppIterator implements \Iterator
             }
         }
 
-        return false;
+        return '';
     }
 }
