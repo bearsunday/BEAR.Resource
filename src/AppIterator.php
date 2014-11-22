@@ -151,6 +151,5 @@ final class AppIterator implements \Iterator
         }
 
         return false;
-
     }
 }
