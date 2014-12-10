@@ -3,11 +3,9 @@
     "description": "Hypermedia framework for object as a service",
     "keywords": [
         "Hypermedia",
-        "Framework",
-        "Object as a service",
         "REST",
         "HATEOAS",
-        "Stateless",
+        "Object as a service",
         "Protocol"
     ],
     "homepage": "https://github.com/koriym/BEAR.Resource",
@@ -19,11 +17,15 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=5.5.0",
         "ray/di": "~2.0@dev",
-        "ray/aop": "~2.0@dev",
         "nocarrier/hal":"~0.9",
         "rize/uri-template": "~0.2.5"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "suggest": {
+        "ext-uri_template": "ext/uri_template for URI Template(RFC6570) specification."
     },
     "autoload": {
         "psr-4": {

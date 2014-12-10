@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b50849f7140e70cfe17be3b83ea2caff",
+    "hash": "9139cc6b7bfe12379c00fa80c6ab20aa",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -114,7 +114,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -369,14 +369,13 @@
     ],
     "packages-dev": [],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": {
-        "ray/di": 20,
-        "ray/aop": 20
+        "ray/di": 20
     },
-    "prefer-stable": false,
+    "prefer-stable": true,
     "platform": {
-        "php": ">=5.4.0"
+        "php": ">=5.5.0"
     },
     "platform-dev": []
 }
