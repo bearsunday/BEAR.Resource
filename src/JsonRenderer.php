@@ -13,7 +13,7 @@ class JsonRenderer implements RenderInterface
      */
     public function render(ResourceObject $ro)
     {
-        $ro->view = @json_encode($ro);
+        $ro->view = json_encode($ro, JSON_PRETTY_PRINT);
         $e = json_last_error();
         if ($e) {
             // @codeCoverageIgnoreStart
