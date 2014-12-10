@@ -126,7 +126,7 @@ final class Linker implements LinkerInterface
             if ($annotation->rel !== $link->key) {
                 continue;
             }
-            $uri = \GuzzleHttp\uri_template($annotation->href, $current->body);
+            $uri = uri_template($annotation->href, $current->body);
             $rel = $this->factory->newInstance($uri);
             $request = new Request($this->invoker, $rel, Request::GET, (new Uri($uri))->query);
             $linkedResource = $this->invoker->invoke($request);
@@ -169,7 +169,7 @@ final class Linker implements LinkerInterface
             if ($annotation->crawl !== $link->key) {
                 continue;
             }
-            $uri = \GuzzleHttp\uri_template($annotation->href, $body);
+            $uri = uri_template($annotation->href, $body);
             $rel = $this->factory->newInstance($uri);
             $request = new Request($this->invoker, $rel, Request::GET, (new Uri($uri))->query, [$link]);
             $hash = $request->hash();

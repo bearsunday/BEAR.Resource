@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9e5c51b17949f08965b183490bd98796",
+    "hash": "b50849f7140e70cfe17be3b83ea2caff",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -127,124 +127,6 @@
             "time": "2013-01-12 18:59:04"
         },
         {
-            "name": "guzzlehttp/guzzle",
-            "version": "4.2.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "66fd916e9f9130bc22c51450476823391cb2f67c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/66fd916e9f9130bc22c51450476823391cb2f67c",
-                "reference": "66fd916e9f9130bc22c51450476823391cb2f67c",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "guzzlehttp/streams": "~2.1",
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "ext-curl": "*",
-                "phpunit/phpunit": "~4.0",
-                "psr/log": "~1.0"
-            },
-            "suggest": {
-                "ext-curl": "Guzzle will use specific adapters if cURL is present"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "4.2-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "GuzzleHttp\\": "src/"
-                },
-                "files": [
-                    "src/functions.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Michael Dowling",
-                    "email": "mtdowling@gmail.com",
-                    "homepage": "https://github.com/mtdowling"
-                }
-            ],
-            "description": "Guzzle is a PHP HTTP client library and framework for building RESTful web service clients",
-            "homepage": "http://guzzlephp.org/",
-            "keywords": [
-                "client",
-                "curl",
-                "framework",
-                "http",
-                "http client",
-                "rest",
-                "web service"
-            ],
-            "time": "2014-10-05 19:29:14"
-        },
-        {
-            "name": "guzzlehttp/streams",
-            "version": "2.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/guzzle/streams.git",
-                "reference": "f91b721d73f0e561410903b3b3c90a5d0e40b534"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/streams/zipball/f91b721d73f0e561410903b3b3c90a5d0e40b534",
-                "reference": "f91b721d73f0e561410903b3b3c90a5d0e40b534",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "GuzzleHttp\\Stream\\": "src/"
-                },
-                "files": [
-                    "src/functions.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Michael Dowling",
-                    "email": "mtdowling@gmail.com",
-                    "homepage": "https://github.com/mtdowling"
-                }
-            ],
-            "description": "Provides a simple abstraction over streams of data (Guzzle 4+)",
-            "homepage": "http://guzzlephp.org/",
-            "keywords": [
-                "Guzzle",
-                "stream"
-            ],
-            "time": "2014-08-17 21:15:53"
-        },
-        {
             "name": "nikic/php-parser",
             "version": "v1.0.2",
             "source": {
@@ -291,23 +173,23 @@
         },
         {
             "name": "nocarrier/hal",
-            "version": "0.9.9",
+            "version": "0.9.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/blongden/hal.git",
-                "reference": "380e2bd836b347d28edd4245b2ad460b08f93825"
+                "reference": "4ff57176cb4ebde4245bda979ed662a0f8480b97"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/blongden/hal/zipball/380e2bd836b347d28edd4245b2ad460b08f93825",
-                "reference": "380e2bd836b347d28edd4245b2ad460b08f93825",
+                "url": "https://api.github.com/repos/blongden/hal/zipball/4ff57176cb4ebde4245bda979ed662a0f8480b97",
+                "reference": "4ff57176cb4ebde4245bda979ed662a0f8480b97",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "4.1.*"
+                "phpunit/phpunit": "4.*"
             },
             "type": "library",
             "autoload": {
@@ -335,7 +217,7 @@
                 "rest",
                 "xml"
             ],
-            "time": "2014-09-09 08:47:13"
+            "time": "2014-11-24 11:48:52"
         },
         {
             "name": "ray/aop",
@@ -343,12 +225,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Ray.Aop.git",
-                "reference": "b4bab490ebb273b8fc5269a904b27657a29e1ad1"
+                "reference": "f42f4925bf148f25d7e77275f07c3c6c1ef6c678"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Ray.Aop/zipball/b4bab490ebb273b8fc5269a904b27657a29e1ad1",
-                "reference": "b4bab490ebb273b8fc5269a904b27657a29e1ad1",
+                "url": "https://api.github.com/repos/koriym/Ray.Aop/zipball/f42f4925bf148f25d7e77275f07c3c6c1ef6c678",
+                "reference": "f42f4925bf148f25d7e77275f07c3c6c1ef6c678",
                 "shasum": ""
             },
             "require": {
@@ -389,7 +271,7 @@
                 "code gen",
                 "method invocation"
             ],
-            "time": "2014-11-05 02:31:41"
+            "time": "2014-12-04 02:51:24"
         },
         {
             "name": "ray/di",
@@ -397,12 +279,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Ray.Di.git",
-                "reference": "aaef472866ca4bcb3d156842ed57f18244d340c2"
+                "reference": "d8d569fa3934d44df74bf11de250439ff54827af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/aaef472866ca4bcb3d156842ed57f18244d340c2",
-                "reference": "aaef472866ca4bcb3d156842ed57f18244d340c2",
+                "url": "https://api.github.com/repos/koriym/Ray.Di/zipball/d8d569fa3934d44df74bf11de250439ff54827af",
+                "reference": "d8d569fa3934d44df74bf11de250439ff54827af",
                 "shasum": ""
             },
             "require": {
@@ -438,53 +320,59 @@
                 "di",
                 "guice"
             ],
-            "time": "2014-11-10 23:59:33"
-        }
-    ],
-    "packages-dev": [
+            "time": "2014-12-09 10:44:33"
+        },
         {
-            "name": "facebook/xhprof",
-            "version": "dev-master",
+            "name": "rize/uri-template",
+            "version": "0.2.6",
             "source": {
                 "type": "git",
-                "url": "https://github.com/lox/xhprof.git",
-                "reference": "6bf00728827fc1e2a639dff6f94f1618396bffc5"
+                "url": "https://github.com/rize/UriTemplate.git",
+                "reference": "907ca9b59014f18f6c3f1158bdd46a3c1675e9f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lox/xhprof/zipball/6bf00728827fc1e2a639dff6f94f1618396bffc5",
-                "reference": "6bf00728827fc1e2a639dff6f94f1618396bffc5",
+                "url": "https://api.github.com/repos/rize/UriTemplate/zipball/907ca9b59014f18f6c3f1158bdd46a3c1675e9f0",
+                "reference": "907ca9b59014f18f6c3f1158bdd46a3c1675e9f0",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.2.0"
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0.0"
             },
             "type": "library",
             "autoload": {
-                "files": [
-                    "xhprof_lib/utils/xhprof_lib.php",
-                    "xhprof_lib/utils/xhprof_runs.php"
-                ]
+                "psr-0": {
+                    "Rize\\UriTemplate": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "Apache-2.0"
+                "MIT"
             ],
-            "description": "XHProf: A Hierarchical Profiler for PHP",
-            "homepage": "http://pecl.php.net/package/xhprof",
+            "authors": [
+                {
+                    "name": "Marut K",
+                    "homepage": "http://twitter.com/rezigned"
+                }
+            ],
+            "description": "PHP URI Template (RFC 6570) supports both expansion & extraction",
             "keywords": [
-                "performance",
-                "profiling"
+                "RFC 6570",
+                "template",
+                "uri"
             ],
-            "time": "2014-08-29 01:48:15"
+            "time": "2014-06-11 06:00:32"
         }
     ],
+    "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
         "ray/di": 20,
-        "ray/aop": 20,
-        "facebook/xhprof": 20
+        "ray/aop": 20
     },
     "prefer-stable": false,
     "platform": {

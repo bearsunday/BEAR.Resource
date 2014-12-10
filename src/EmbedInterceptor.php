@@ -67,7 +67,7 @@ final class EmbedInterceptor implements MethodInterceptor
             }
 
             try {
-                $uri = \GuzzleHttp\uri_template($embed->src, $query);
+                $uri = uri_template($embed->src, $query);
                 $resourceObject->body[$embed->rel] = clone $this->resource->get->uri($uri);
             } catch (BadRequestException $e) {
                 // wrap ResourceNotFound or Uri exception

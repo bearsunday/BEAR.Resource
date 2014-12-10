@@ -23,15 +23,13 @@
         "ray/di": "~2.0@dev",
         "ray/aop": "~2.0@dev",
         "nocarrier/hal":"~0.9",
-        "guzzlehttp/guzzle": "~4.0"
-    },
-    "require-dev": {
-        "facebook/xhprof": "dev-master"
+        "rize/uri-template": "~0.2.5"
     },
     "autoload": {
         "psr-4": {
             "BEAR\\Resource\\": "src/"
-        }
+        },
+        "files": ["src-function/functions.php"]
     },
     "extra": {
         "branch-alias": {

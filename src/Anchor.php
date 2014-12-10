@@ -58,7 +58,7 @@ class Anchor implements AnchorInterface
     {
         $body = $request->resourceObject->body;
         $query = is_array($body) ? array_merge($body, $query) : [];
-        $uri = \GuzzleHttp\uri_template($annotation->href, $query);
+        $uri = uri_template($annotation->href, $query);
 
         return [$annotation->method, $uri];
     }
