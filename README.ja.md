@@ -394,7 +394,7 @@ HAL Moduleを使うとリソース表現が[HAL](http://stateless.co/hal_specifi
 ```
 
 ### Requirements
- * PHP 5.4+
+ * PHP 5.5+
 
 ### Installation
 

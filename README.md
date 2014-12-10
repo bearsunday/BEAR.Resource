@@ -1,4 +1,4 @@
-Hypermedia framework for object as a service
+fHypermedia framework for object as a service
 --------------------------------------------
 
 [![Latest Stable Version](https://poser.pugx.org/bear/resource/v/stable.png)](https://packagist.org/packages/bear/resource)
@@ -404,7 +404,7 @@ Result
  [A demo code](https://github.com/koriym/BEAR.Resource/tree/develop/docs/sample/06.HAL) is available. 
 
 ### Requirements
- * PHP 5.4+
+ * PHP 5.5+
 
 ### Installation
 
