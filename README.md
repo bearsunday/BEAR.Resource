@@ -1,5 +1,4 @@
-fHypermedia framework for object as a service
---------------------------------------------
+# Hypermedia framework for object as a service
 
 [![Latest Stable Version](https://poser.pugx.org/bear/resource/v/stable.png)](https://packagist.org/packages/bear/resource)
 [![Build Status](https://travis-ci.org/koriym/BEAR.Resource.svg?branch=develop-2)](https://travis-ci.org/koriym/BEAR.Resource)
@@ -416,8 +415,7 @@ Result
 }
 ```
 
-A Resource Oriented Framework
------------------------------
+# A Resource Oriented Framework
 
 __BEAR.Sunday__ is a Resource Oriented Framework. In BEAR.Sunday on top of the web behavior in BEAR.Resource also has the added Google guice style DI/AOP System [Ray](https://github.com/koriym/Ray.Di) and is a full stack web application framework.
 
