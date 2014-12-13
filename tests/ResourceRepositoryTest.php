@@ -33,7 +33,6 @@ class ResourceRepositoryTest extends \PHPUnit_Framework_TestCase
         $resource = (new ResourceClientFactory)->newInstance('FakeVendor\Sandbox', new AnnotationReader, $scheme);
         $this->uri = new Uri('app://self/author', ['id' => 1]);
         $this->ro = $resource->get->uri($this->uri)->eager->request();
-
     }
 
     public function testSave()

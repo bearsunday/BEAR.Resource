@@ -7,7 +7,6 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\Link;
-use BEAR\Resource\Exception;
 use Doctrine\Common\Annotations\Reader;
 use Nocarrier\Hal;
 use Ray\Aop\WeavedInterface;

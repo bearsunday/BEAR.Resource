@@ -7,7 +7,6 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
 

@@ -8,7 +8,6 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use FakeVendor\Sandbox\Resource\App\Author;
 use FakeVendor\Sandbox\Resource\App\Blog;
 use FakeVendor\Sandbox\Resource\App\Link\Scalar\Name;
-use FakeVendor\Sandbox\Resource\App\Link\User;
 use Ray\Di\Injector;
 
 class LinkerTest extends \PHPUnit_Framework_TestCase
