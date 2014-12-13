@@ -20,6 +20,7 @@
         "php": ">=5.5.0",
         "ray/di": "~2.0@dev",
         "nocarrier/hal":"~0.9",
+        "doctrine/cache":"~1.0",
         "rize/uri-template": "~0.2.5"
     },
     "minimum-stability": "dev",
