@@ -19,18 +19,10 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $injector = new Injector;
         $scheme = (new SchemeCollection)
-        ->scheme('app')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\App'))
-        ->scheme('page')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\Page'))
-        ->scheme('nop')->host('self')->toAdapter(new FakeNop);
-        $reader = new AnnotationReader;
-        $invoker = new Invoker(new NamedParameter);
-        $factory = new Factory($scheme);
-        $this->resource = new Resource(
-            $factory,
-            $invoker,
-            new Anchor($reader),
-            new Linker($reader, $invoker, $factory)
-        );
+            ->scheme('app')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\App'))
+            ->scheme('page')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\Page'))
+            ->scheme('nop')->host('self')->toAdapter(new FakeNop);
+        $this->resource = (new ResourceClientFactory)->newInstance('FakeVendor\Sandbox', new AnnotationReader, $scheme);
     }
 
     public function testNewInstance()
