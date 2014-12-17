@@ -41,6 +41,7 @@ class Invoker implements InvokerInterface
         }
         if (isset($request->resourceObject->uri) && $request->resourceObject->uri instanceof AbstractUri) {
             $request->resourceObject->uri->query = $request->query;
+            $request->resourceObject->uri->method = $request->method;
         }
         $params = $this->params->getParameters([$request->resourceObject, $onMethod], $request->query);
         $result = call_user_func_array([$request->resourceObject, $onMethod], $params);
