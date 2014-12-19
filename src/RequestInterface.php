@@ -6,12 +6,9 @@
  */
 namespace BEAR\Resource;
 
-use Ray\Di\Di\ImplementedBy;
-
 /**
- * Interface for resource request
- *
- * @ImplementedBy("BEAR\Resource\Request")
+ * @property AbstractRequest $eager
+ * @property AbstractRequest $lazy
  */
 interface RequestInterface
 {

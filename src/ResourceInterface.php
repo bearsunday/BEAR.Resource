@@ -6,6 +6,13 @@
  */
 namespace BEAR\Resource;
 
+/**
+ * @property $this $get
+ * @property $this $post
+ * @property $this $put
+ * @property $this $head
+ * @property $this $options
+ */
 interface ResourceInterface
 {
     /**
@@ -31,7 +38,7 @@ interface ResourceInterface
      *
      * @param string|AbstractUri $uri
      *
-     * @return $this
+     * @return RequestInterface
      */
     public function uri($uri);
 
