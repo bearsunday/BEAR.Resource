@@ -36,6 +36,11 @@ abstract class AbstractUri
     public $query = [];
 
     /**
+     * @var string
+     */
+    public $method;
+
+    /**
      * {@inheritdoc}
      */
     public function __toString()
