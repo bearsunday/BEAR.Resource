@@ -14,8 +14,7 @@ final class OptionProvider implements OptionProviderInterface
     public function get(ResourceObject $ro)
     {
         $options = $this->getOptions($ro);
-        $ro->headers['allow'] = $options['allow'];
-        $ro->headers += $options['params'];
+        $ro->headers['allow'] = (string) $options;
         $ro->body = null;
 
         return $ro;
@@ -26,7 +25,7 @@ final class OptionProvider implements OptionProviderInterface
      *
      * @param ResourceObject $resourceObject
      *
-     * @return array
+     * @return Options
      */
     private function getOptions(ResourceObject $resourceObject)
     {
@@ -35,9 +34,8 @@ final class OptionProvider implements OptionProviderInterface
         foreach ($allows as $method) {
             $params[] = $this->getParams($resourceObject, $method);
         }
-        $result = ['allow' => $allows, 'params' => $params];
 
-        return $result;
+        return new Options($allows, $params);
     }
 
     /**
