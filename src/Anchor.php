@@ -33,7 +33,7 @@ class Anchor implements AnchorInterface
             }
         }
 
-        throw new LinkException("rel:{$rel} class:" . get_class($request->resourceObject));
+        throw new LinkException("rel:{$rel} class:" . get_class($request->resourceObject), 500);
     }
 
     /**

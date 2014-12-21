@@ -42,6 +42,6 @@ final class NamedParameter implements NamedParameterInterface
             return $parameter->getDefaultValue();
         }
         $msg = '$' . "{$parameter->name} in " . get_class($callable[0]) . '::' . $callable[1] . '()';
-        throw new ParameterException($msg);
+        throw new ParameterException($msg, 400);
     }
 }

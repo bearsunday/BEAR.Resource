@@ -35,6 +35,6 @@ final class Uri extends AbstractUri
     private function invalidUri($uri)
     {
         $msg = is_string($uri) ? $uri : gettype($uri);
-        throw new UriException($msg);
+        throw new UriException($msg, 500);
     }
 }

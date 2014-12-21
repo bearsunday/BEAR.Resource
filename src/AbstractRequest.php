@@ -110,7 +110,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
      */
     public function offsetSet($offset, $value)
     {
-        throw new OutOfBoundsException(__METHOD__ . ' is unavailable.');
+        throw new OutOfBoundsException(__METHOD__ . ' is unavailable.', 400);
     }
 
     /**
@@ -119,7 +119,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     public function offsetUnset($offset)
     {
         unset($offset);
-        throw new OutOfBoundsException(__METHOD__ . ' is unavailable.');
+        throw new OutOfBoundsException(__METHOD__ . ' is unavailable.', 400);
     }
 
     /**
@@ -178,7 +178,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     {
         $this->invoke();
         if (!isset($this->result->body[$offset])) {
-            throw new OutOfBoundsException("[$offset] for object[" . get_class($this->result) . "]");
+            throw new OutOfBoundsException("[$offset] for object[" . get_class($this->result) . "]", 400);
         }
 
         return $this->result->body[$offset];
