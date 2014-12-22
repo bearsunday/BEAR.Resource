@@ -32,7 +32,19 @@
         "psr-4": {
             "BEAR\\Resource\\": "src/"
         },
-        "files": ["src-function/functions.php"]
+        "files": [
+            "src-files/uri_template.php",
+            "src-files/doctrine_annotations.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "BEAR\\Resource\\": [
+                "tests/",
+                "tests/Fake/"
+            ],
+            "FakeVendor\\Sandbox\\": "tests/Fake/FakeVendor/Sandbox/"
+        }
     },
     "extra": {
         "branch-alias": {
