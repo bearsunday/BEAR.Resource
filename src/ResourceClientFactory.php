@@ -16,7 +16,7 @@ class ResourceClientFactory
      * @param Reader           $reader
      * @param SchemeCollection $scheme
      *
-     * @return Resource
+     * @return \BEAR\Resource\Resource
      */
     public function newInstance($namespace, Reader $reader, SchemeCollection $scheme = null)
     {
