@@ -8,7 +8,7 @@ class ResourceObjectTest extends \PHPUnit_Framework_TestCase
     {
         $resourceObject = new FakeResource;
         $responder = new FakeResponder;
-        $resourceObject->transfer($responder);
+        $resourceObject->transfer($responder, []);
         $this->assertSame(FakeResource::class, $responder->class);
     }
 }
