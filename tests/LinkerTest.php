@@ -115,6 +115,9 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
                                 'name' => 'zim'
                             ],
                         ],
+                        'tag_type' => [
+                            0 => 'type1'
+                        ],
                     ],
                     1 => [
                         'id' => '2',
@@ -126,8 +129,11 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
                                 'name' => 'dib'
                             ],
                         ],
+                        'tag_type' => [
+                            0 => 'type1'
+                        ],
                     ],
-                ],
+                ]
             ],
         ];
         $this->assertSame($expected, $result->body);

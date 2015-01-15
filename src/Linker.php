@@ -27,6 +27,13 @@ final class Linker implements LinkerInterface
     private $factory;
 
     /**
+     * memory cache for linker
+     *
+     * @var array
+     */
+    private $cache = [];
+
+    /**
      * @param Reader           $reader
      * @param InvokerInterface $invoker
      * @param FactoryInterface $factory
@@ -173,8 +180,12 @@ final class Linker implements LinkerInterface
             $rel = $this->factory->newInstance($uri);
             $request = new Request($this->invoker, $rel, Request::GET, (new Uri($uri))->query, [$link]);
             $hash = $request->hash();
-            $body[$annotation->rel] = $this->invoke($request)->body;
-            $this->cache[$hash] = $body[$annotation->rel];
+            if (isset($this->cache[$hash])) {
+                $body[$annotation->rel] = $this->cache[$hash];
+
+                continue;
+            }
+            $this->cache[$hash] = $body[$annotation->rel] = $this->invoke($request)->body;
         }
     }
 
@@ -188,7 +199,7 @@ final class Linker implements LinkerInterface
         $list = $value;
         $keys = array_keys((array) array_pop($list));
         $isMultiColumnList = $keys !== [0 => 0] && ($keys === array_keys((array) array_pop($list)));
-        $isOneColumnList = (count($value) === 1) && is_array($value[0]);
+        $isOneColumnList = (count($value) === 1) && isset($value[0]) && is_array($value[0]);
 
         return ($isOneColumnList || $isMultiColumnList);
     }
