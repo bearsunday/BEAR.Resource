@@ -6,8 +6,10 @@
  */
 namespace BEAR\Resource;
 
+use BEAR\Resource\Module\ResourceModule;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Ray\Di\AbstractModule;
+use Ray\Di\EmptyModule;
 use Ray\Di\Injector;
 use Doctrine\Common\Annotations\Reader;
 
@@ -32,7 +34,9 @@ class ResourceClientFactory
      */
     public function newClient($tmpDir, $namespace, AbstractModule $module = null)
     {
-        $this->injector = $module ? new Injector($module, $tmpDir) : new Injector(null, $tmpDir);
+        $module = $module ?: new EmptyModule;
+        $module->install(new ResourceModule($namespace));
+        $this->injector = new Injector($module, $tmpDir);
 
         return $this->newInstance($namespace, new AnnotationReader);
     }
@@ -41,10 +45,8 @@ class ResourceClientFactory
      * @param string           $namespace
      * @param Reader           $reader
      * @param SchemeCollection $scheme
-     * @param AbstractModule   $module
      *
-     * @return \BEAR\Resource\Resource
-     *
+     * @return Resource
      * @deprecated use newClient
      */
     public function newInstance($namespace, Reader $reader, SchemeCollection $scheme = null)
