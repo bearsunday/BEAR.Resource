@@ -46,9 +46,10 @@ final class EmbedInterceptor implements MethodInterceptor
         $method = $invocation->getMethod();
         $query = $this->getArgsByInvocation($invocation);
         $embeds = $this->reader->getMethodAnnotations($method);
+        // embedding resource
         $this->embedResource($embeds, $resourceObject, $query);
-        $result =  $invocation->proceed();
-        $this->evaluateEmbedResources($embeds, $resourceObject);
+        // request (method can modify embedded resource)
+        $result = $invocation->proceed();
 
         return $result;
     }
@@ -73,21 +74,6 @@ final class EmbedInterceptor implements MethodInterceptor
                 // wrap ResourceNotFound or Uri exception
                 throw new EmbedException($embed->src, 500, $e);
             }
-        }
-    }
-
-    /**
-     * @param Embed[]        $embeds
-     * @param ResourceObject $resourceObject
-     */
-    private function evaluateEmbedResources(array $embeds, ResourceObject $resourceObject)
-    {
-        foreach ($embeds as $embed) {
-            /** @var $embed Embed */
-            if (! $embed instanceof Embed || ! ($resourceObject->body[$embed->rel] instanceof RequestInterface)) {
-                continue;
-            }
-            $resourceObject->body[$embed->rel] = $resourceObject->body[$embed->rel]->request();
         }
     }
 
