@@ -66,15 +66,30 @@ final class EmbedInterceptor implements MethodInterceptor
             if (! $embed instanceof Embed) {
                 continue;
             }
-
             try {
-                $uri = uri_template($embed->src, $query);
+                $templateUri = $this->getFullUri($embed->src, $resourceObject);
+                $uri = uri_template($templateUri, $query);
                 $resourceObject->body[$embed->rel] = clone $this->resource->get->uri($uri);
             } catch (BadRequestException $e) {
                 // wrap ResourceNotFound or Uri exception
                 throw new EmbedException($embed->src, 500, $e);
             }
         }
+    }
+
+    /**
+     * @param string         $uri
+     * @param ResourceObject $resourceObject
+     *
+     * @return string
+     */
+    private function getFullUri($uri, ResourceObject $resourceObject)
+    {
+        if (substr($uri, 0, 1) == '/') {
+            $uri = "{$resourceObject->uri->scheme}://{$resourceObject->uri->host}" . $uri;
+        }
+
+        return $uri;
     }
 
     /**
