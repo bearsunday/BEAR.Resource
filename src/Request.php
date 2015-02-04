@@ -10,7 +10,7 @@ namespace BEAR\Resource;
  * @property $this lazy
  * @property $this eager
  */
-final class Request extends AbstractRequest
+final class Request extends AbstractRequest implements RequestInterface
 {
     const GET = 'get';
     const POST = 'post';

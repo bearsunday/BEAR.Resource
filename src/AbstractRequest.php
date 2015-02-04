@@ -71,7 +71,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     /**
      * Request Result
      *
-     * @var Object
+     * @var ResourceObject
      */
     protected $result;
 

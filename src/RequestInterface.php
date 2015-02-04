@@ -59,4 +59,36 @@ interface RequestInterface
      * @return string
      */
     public function hash();
+
+    /**
+     * @return ResourceObject
+     */
+    public function request();
+
+    /**
+     * Replace linked resource
+     *
+     * @param string $linkKey
+     *
+     * @return $this
+     */
+    public function linkSelf($linkKey);
+
+    /**
+     * Add linked resource
+     *
+     * @param string $linkKey
+     *
+     * @return $this
+     */
+    public function linkNew($linkKey);
+
+    /**
+     * Crawl resource with link key
+     *
+     * @param string $linkKey
+     *
+     * @return $this
+     */
+    public function linkCrawl($linkKey);
 }
