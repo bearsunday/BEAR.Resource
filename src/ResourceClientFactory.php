@@ -16,44 +16,35 @@ use Doctrine\Common\Annotations\Reader;
 class ResourceClientFactory
 {
     /**
-     * @var Injector
-     */
-    private $injector;
-
-    public function __construct()
-    {
-        $this->injector = new Injector;
-    }
-
-    /**
      * @param string         $tmpDir
      * @param string         $namespace
      * @param AbstractModule $module
      *
-     * @return Resource
+     * @return ResourceInterface
      */
-    public function newClient($tmpDir, $namespace, AbstractModule $module = null)
+    public function newClient($tmpDir, $namespace, AbstractModule $module = null, SchemeCollection $scheme = null, AnnotationReader $reader = null)
     {
         $module = $module ?: new EmptyModule;
         $module->install(new ResourceModule($namespace));
-        $this->injector = new Injector($module, $tmpDir);
+        $injector = new Injector($module, $tmpDir);
+        $reader = $reader ?: new AnnotationReader;
+        $scheme = $scheme ?: $scheme = (new SchemeCollection)
+            ->scheme('app')->host('self')->toAdapter(new AppAdapter($injector, $namespace, 'Resource\App'))
+            ->scheme('page')->host('self')->toAdapter(new AppAdapter($injector, $namespace, 'Resource\Page'));
 
-        return $this->newInstance($namespace, new AnnotationReader);
+        return $this->newInstance($scheme, $reader);
     }
 
     /**
-     * @param string           $namespace
-     * @param Reader           $reader
      * @param SchemeCollection $scheme
      *
+     * @param Reader           $reader
+     *
      * @return Resource
-     * @deprecated use newClient
+     * @internal   param string $namespace
      */
-    public function newInstance($namespace, Reader $reader, SchemeCollection $scheme = null)
+    private function newInstance(SchemeCollection $scheme = null, Reader $reader)
     {
-        $scheme = $scheme ?: $scheme = (new SchemeCollection)
-            ->scheme('app')->host('self')->toAdapter(new AppAdapter($this->injector, $namespace, 'Resource\App'))
-            ->scheme('page')->host('self')->toAdapter(new AppAdapter($this->injector, $namespace, 'Resource\Page'));
         $invoker = new Invoker(new NamedParameter);
         $factory = new Factory($scheme);
         $resource = new Resource(

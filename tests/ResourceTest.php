@@ -5,6 +5,7 @@ namespace BEAR\Resource;
 use Doctrine\Common\Annotations\AnnotationReader;
 use FakeVendor\Sandbox\Resource\App\Blog;
 use FakeVendor\Sandbox\Resource\Page\Index;
+use Ray\Di\EmptyModule;
 use Ray\Di\Injector;
 
 class ResourceTest extends \PHPUnit_Framework_TestCase
@@ -22,7 +23,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
             ->scheme('app')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\App'))
             ->scheme('page')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\Page'))
             ->scheme('nop')->host('self')->toAdapter(new FakeNop);
-        $this->resource = (new ResourceClientFactory)->newInstance('FakeVendor\Sandbox', new AnnotationReader, $scheme);
+        $this->resource = (new ResourceClientFactory)->newClient($_ENV['TMP_DIR'], 'FakeVendor\Sandbox', new EmptyModule, $scheme, new AnnotationReader);
     }
 
     public function testNewInstance()

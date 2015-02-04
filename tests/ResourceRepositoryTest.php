@@ -4,6 +4,7 @@ namespace BEAR\Resource;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
+use Ray\Di\EmptyModule;
 use Ray\Di\Injector;
 
 class ResourceRepositoryTest extends \PHPUnit_Framework_TestCase
@@ -30,7 +31,7 @@ class ResourceRepositoryTest extends \PHPUnit_Framework_TestCase
         $injector = new Injector;
         $scheme = (new SchemeCollection)
             ->scheme('app')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\App'));
-        $resource = (new ResourceClientFactory)->newInstance('FakeVendor\Sandbox', new AnnotationReader, $scheme);
+        $resource = (new ResourceClientFactory)->newClient($_ENV['TMP_DIR'], 'FakeVendor\Sandbox', new EmptyModule(), $scheme, new AnnotationReader);
         $this->uri = new Uri('app://self/author', ['id' => 1]);
         $this->ro = $resource->get->uri($this->uri)->eager->request();
     }

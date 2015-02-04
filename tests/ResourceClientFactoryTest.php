@@ -8,7 +8,7 @@ class ResourceClientFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetInstance()
     {
-        $resource = (new ResourceClientFactory)->newInstance('FakeVendor\Sandbox', new AnnotationReader);
+        $resource = (new ResourceClientFactory)->newClient($_ENV['TMP_DIR'], 'FakeVendor\Sandbox');
         $this->assertInstanceOf(Resource::class, $resource);
     }
 }
