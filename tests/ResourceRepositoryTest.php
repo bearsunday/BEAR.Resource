@@ -2,6 +2,7 @@
 
 namespace BEAR\Resource;
 
+use BEAR\Resource\Module\ResourceModule;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
 use Ray\Di\EmptyModule;
@@ -28,10 +29,7 @@ class ResourceRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->resourceRepo = new ResourceRepository(new ArrayCache);
-        $injector = new Injector;
-        $scheme = (new SchemeCollection)
-            ->scheme('app')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\App'));
-        $resource = (new ResourceClientFactory)->newClient($_ENV['TMP_DIR'], 'FakeVendor\Sandbox', new EmptyModule(), $scheme, new AnnotationReader);
+        $resource = (new Injector(new ResourceModule('FakeVendor\Sandbox'), $_ENV['TMP_DIR']))->getInstance(ResourceInterface::class);
         $this->uri = new Uri('app://self/author', ['id' => 1]);
         $this->ro = $resource->get->uri($this->uri)->eager->request();
     }

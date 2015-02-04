@@ -13,6 +13,9 @@ use Ray\Di\EmptyModule;
 use Ray\Di\Injector;
 use Doctrine\Common\Annotations\Reader;
 
+/**
+ * @deprecated
+ */
 class ResourceClientFactory
 {
     /**
