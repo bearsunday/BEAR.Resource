@@ -2,6 +2,7 @@
 
 namespace BEAR\Resource;
 
+use BEAR\Resource\Module\ResourceModule;
 use Doctrine\Common\Annotations\AnnotationReader;
 use FakeVendor\Sandbox\Resource\App\Blog;
 use FakeVendor\Sandbox\Resource\Page\Index;
@@ -18,12 +19,26 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $injector = new Injector;
+        $this->resource = (new Injector(new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox')), $_ENV['TMP_DIR']))->getInstance(ResourceInterface::class);
+    }
+
+    public function testManualConstruction()
+    {
+        $injector = new Injector(new EmptyModule, $_ENV['TMP_DIR']);
+        $reader = new AnnotationReader;
         $scheme = (new SchemeCollection)
             ->scheme('app')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\App'))
             ->scheme('page')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\Page'))
             ->scheme('nop')->host('self')->toAdapter(new FakeNop);
-        $this->resource = (new ResourceClientFactory)->newClient($_ENV['TMP_DIR'], 'FakeVendor\Sandbox', new EmptyModule, $scheme, new AnnotationReader);
+        $invoker = new Invoker(new NamedParameter);
+        $factory = new Factory($scheme);
+        $resource = new Resource(
+            $factory,
+            $invoker,
+            new Anchor($reader),
+            new Linker($reader, $invoker, $factory)
+        );
+        $this->assertInstanceOf(ResourceInterface::class, $resource);
     }
 
     public function testNewInstance()
