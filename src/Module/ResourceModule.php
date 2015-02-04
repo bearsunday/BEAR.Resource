@@ -6,6 +6,7 @@
  */
 namespace BEAR\Resource\Module;
 
+use BEAR\Resource\Annotation\AppName;
 use Ray\Di\AbstractModule;
 use Ray\Di\Di\Named;
 
@@ -18,8 +19,6 @@ class ResourceModule extends AbstractModule
 
     /**
      * @param string $appName
-     *
-     * @Named("appName=appName")
      */
     public function __construct($appName)
     {
@@ -32,7 +31,7 @@ class ResourceModule extends AbstractModule
      */
     protected function configure()
     {
-        $this->bind()->annotatedWith('app_name')->toInstance($this->appName);
+        $this->bind()->annotatedWith(AppName::class)->toInstance($this->appName);
         $this->install(new ResourceClientModule);
         $this->install(new EmbedResourceModule);
     }

@@ -6,8 +6,8 @@
  */
 namespace BEAR\Resource\Module;
 
+use BEAR\Resource\Annotation\AppName;
 use BEAR\Resource\AppAdapter;
-use BEAR\Resource\Exception\InvalidAppNameException;
 use BEAR\Resource\SchemeCollection;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
@@ -19,34 +19,23 @@ class SchemeCollectionProvider implements ProviderInterface
     /**
      * @var string
      */
-    protected $appName;
+    private $appName;
 
     /**
      * @var InjectorInterface
      */
-    protected $injector;
+    private $injector;
 
     /**
-     * @param string $appName
-     *
-     * @return void
-     *
-     * @throws \BEAR\Resource\Exception\InvalidAppNameException
-     * @Inject
-     * @Named("appName=app_name")
-     */
-    public function setAppName($appName)
-    {
-        $this->appName = $appName;
-    }
-
-    /**
+     * @param string            $appName
      * @param InjectorInterface $injector
      *
      * @Inject
+     * @AppName("appName")
      */
-    public function setInjector(InjectorInterface $injector)
+    public function __construct($appName, InjectorInterface $injector)
     {
+        $this->appName = $appName;
         $this->injector = $injector;
     }
 
