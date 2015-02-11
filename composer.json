@@ -18,13 +18,12 @@
     ],
     "require": {
         "php": ">=5.5.0",
-        "ray/di": "~2.0@dev",
+        "ray/di": "~2.0",
         "nocarrier/hal":"~0.9",
         "doctrine/cache":"~1.0",
         "rize/uri-template": "~0.2.5"
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
     "suggest": {
         "ext-uri_template": "ext/uri_template for URI Template(RFC6570) specification."
     },
