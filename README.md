@@ -354,9 +354,9 @@ class News extends ResourceObject
 
 ### HAL (Hypertext Application Language)
 
-`HAL Module` changes resource representatin as [HAL](http://stateless.co/hal_specification.html).
+`HAL Module` changes resource representation as [HAL](http://stateless.co/hal_specification.html).
 
-Embedded resource evaluete when it is present.
+Embedded resource evaluate when it is present.
 
 
 ```php
@@ -401,23 +401,24 @@ Result
 
 ```
 
- [A demo code](https://github.com/koriym/BEAR.Resource/tree/develop/docs/sample/06.HAL) is available. 
+ [A demo application code](https://github.com/koriym/BEAR.Resource/tree/develop/docs/sample/06.HAL) is available.
 
-### Requirements
+## Requirements
  * PHP 5.5+
 
-### Installation
+## Installation
 
 ```javascript
-{
-    "require": {
-        "bear/resource": "~1.0@dev"
-    }
-}
+composer require bear/resource ~1.0@dev
 ```
 
-# A Resource Oriented Framework
+## A Resource Oriented Framework
 
-__BEAR.Sunday__ is a Resource Oriented Framework. In BEAR.Sunday on top of the web behavior in BEAR.Resource also has the added Google guice style DI/AOP System [Ray](https://github.com/koriym/Ray.Di) and is a full stack web application framework.
+__BEAR.Sunday__ is a Resource Oriented Framework. In BEAR.Sunday on top of the web behavior in BEAR.Resource also has the added Google guice style DI/AOP System [Ray](https://github.com/koriym/Ray.Di) and is a web application framework.
 
-Please check out [BEAR.Sunday on GitHub](https://github.com/koriym/BEAR.Sunday).
+Please check out [BEAR.Sunday web site](http://bearsunday.github.io/).
+
+## See Also
+
+ * [BEAR.QueryRepository](https://github.com/koriym/BEAR.QueryRepository) - Segregates reads and writes into two separate repository.
+ * [Ray.WebParamModule](https://github.com/Ray-Di/Ray.WebParamModule) - Binds the value(s) of a web context to method parameter.
