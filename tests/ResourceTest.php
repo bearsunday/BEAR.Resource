@@ -2,6 +2,7 @@
 
 namespace BEAR\Resource;
 
+use BEAR\Resource\Module\HalModule;
 use BEAR\Resource\Module\ResourceModule;
 use Doctrine\Common\Annotations\AnnotationReader;
 use FakeVendor\Sandbox\Resource\App\Blog;
@@ -11,6 +12,7 @@ use Ray\Di\Injector;
 
 class ResourceTest extends \PHPUnit_Framework_TestCase
 {
+
     /**
      * @var ResourceInterface
      */
@@ -19,24 +21,26 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->resource = (new Injector(new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox')), $_ENV['TMP_DIR']))->getInstance(ResourceInterface::class);
+        $this->resource = (
+        new Injector(
+            new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox')), $_ENV['TMP_DIR']
+        )
+        )->getInstance(ResourceInterface::class);
     }
 
     public function testManualConstruction()
     {
         $injector = new Injector(new EmptyModule, $_ENV['TMP_DIR']);
         $reader = new AnnotationReader;
-        $scheme = (new SchemeCollection)
-            ->scheme('app')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\App'))
-            ->scheme('page')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\Page'))
-            ->scheme('nop')->host('self')->toAdapter(new FakeNop);
+        $scheme = (new SchemeCollection)->scheme('app')->host('self')->toAdapter(
+                new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\App')
+            )->scheme('page')->host('self')->toAdapter(
+                new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\Page')
+            )->scheme('nop')->host('self')->toAdapter(new FakeNop);
         $invoker = new Invoker(new NamedParameter);
         $factory = new Factory($scheme);
         $resource = new Resource(
-            $factory,
-            $invoker,
-            new Anchor($reader),
-            new Linker($reader, $invoker, $factory)
+            $factory, $invoker, new Anchor($reader), new Linker($reader, $invoker, $factory)
         );
         $this->assertInstanceOf(ResourceInterface::class, $resource);
     }
@@ -67,7 +71,9 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
     public function testWithAddRequestOverrideQuery()
     {
-        $instance = $this->resource->get->uri('page://self/index')->withQuery(['id' => 1])->addQuery(['id' => 2])->eager->request();
+        $instance = $this->resource->get->uri('page://self/index')->withQuery(['id' => 1])->addQuery(
+            ['id' => 2]
+        )->eager->request();
         $this->assertSame(2, $instance->body);
     }
 
@@ -88,11 +94,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
     public function testLinkSelf()
     {
-        $request = $this->resource
-            ->get
-            ->uri('app://self/author')
-            ->linkSelf('blog')
-            ->request();
+        $request = $this->resource->get->uri('app://self/author')->linkSelf('blog')->request();
         /** @var $request Request */
         $this->assertSame('blog', $request->links[0]->key);
         $this->assertSame(LinkType::SELF_LINK, $request->links[0]->type);
@@ -100,11 +102,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
     public function testLinkNew()
     {
-        $request = $this->resource
-            ->get
-            ->uri('app://self/author')
-            ->linkNew('blog')
-            ->request();
+        $request = $this->resource->get->uri('app://self/author')->linkNew('blog')->request();
         /** @var $request Request */
         $this->assertSame('blog', $request->links[0]->key);
         $this->assertSame(LinkType::NEW_LINK, $request->links[0]->type);
@@ -112,13 +110,32 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
     public function testLinkCrawl()
     {
-        $request = $this->resource
-            ->get
-            ->uri('app://self/author')
-            ->linkCrawl('blog')
-            ->request();
+        $request = $this->resource->get->uri('app://self/author')->linkCrawl('blog')->request();
         /** @var $request Request */
         $this->assertSame('blog', $request->links[0]->key);
         $this->assertSame(LinkType::CRAWL_LINK, $request->links[0]->type);
+    }
+
+    public function testHal()
+    {
+        $resource = (new Injector(new HalModule(new ResourceModule('FakeVendor\Sandbox'))))->getInstance(
+            'BEAR\Resource\ResourceInterface'
+        );
+        $user = $resource->get->uri('app://self/author')->withQuery(['id' => 1])->eager->request();
+        $expected = '{
+    "name": "Aramis",
+    "age": 16,
+    "blog_id": 12,
+    "_links": {
+        "self": {
+            "href": "/author?id=1"
+        },
+        "blog": {
+            "href": "app://self/blog?id=12"
+        }
+    }
+}
+';
+        $this->assertSame($expected, (string) $user);
     }
 }

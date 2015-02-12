@@ -8,8 +8,6 @@ namespace BEAR\Resource\Module;
 
 use BEAR\Resource\HalRenderer;
 use BEAR\Resource\RenderInterface;
-use BEAR\Resource\UriMapper;
-use BEAR\Resource\UriMapperInterface;
 use Ray\Di\AbstractModule;
 use Ray\Di\Scope;
 
@@ -20,7 +18,6 @@ class HalModule extends AbstractModule
      */
     protected function configure()
     {
-        $this->bind(UriMapperInterface::class)->to(UriMapper::class)->in(Scope::SINGLETON);
-        $this->bind(RenderInterface::class)->to(HalRenderer::class)->in(Scope::SINGLETON);
+        $this->bind(RenderInterface::class)->to(HalRenderer::class);
     }
 }
