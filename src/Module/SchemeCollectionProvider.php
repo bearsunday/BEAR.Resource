@@ -10,7 +10,6 @@ use BEAR\Resource\Annotation\AppName;
 use BEAR\Resource\AppAdapter;
 use BEAR\Resource\SchemeCollection;
 use Ray\Di\Di\Inject;
-use Ray\Di\Di\Named;
 use Ray\Di\InjectorInterface;
 use Ray\Di\ProviderInterface;
 

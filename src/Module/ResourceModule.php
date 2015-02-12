@@ -8,7 +8,6 @@ namespace BEAR\Resource\Module;
 
 use BEAR\Resource\Annotation\AppName;
 use Ray\Di\AbstractModule;
-use Ray\Di\Di\Named;
 
 class ResourceModule extends AbstractModule
 {

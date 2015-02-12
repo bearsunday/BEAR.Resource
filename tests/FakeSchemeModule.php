@@ -6,7 +6,6 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Module\SchemeCollectionProvider;
 use Ray\Di\AbstractModule;
 
 class FakeSchemeModule extends AbstractModule

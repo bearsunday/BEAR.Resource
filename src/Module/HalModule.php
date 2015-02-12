@@ -9,7 +9,6 @@ namespace BEAR\Resource\Module;
 use BEAR\Resource\HalRenderer;
 use BEAR\Resource\RenderInterface;
 use Ray\Di\AbstractModule;
-use Ray\Di\Scope;
 
 class HalModule extends AbstractModule
 {
