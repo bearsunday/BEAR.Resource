@@ -5,6 +5,7 @@ namespace BEAR\Resource;
 use BEAR\Resource\Module\HalModule;
 use BEAR\Resource\Module\ResourceModule;
 use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Cache\ArrayCache;
 use FakeVendor\Sandbox\Resource\App\Blog;
 use FakeVendor\Sandbox\Resource\Page\Index;
 use Ray\Di\EmptyModule;
@@ -32,12 +33,11 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     {
         $injector = new Injector(new EmptyModule, $_ENV['TMP_DIR']);
         $reader = new AnnotationReader;
-        $scheme = (new SchemeCollection)->scheme('app')->host('self')->toAdapter(
-                new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\App')
-            )->scheme('page')->host('self')->toAdapter(
-                new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\Page')
-            )->scheme('nop')->host('self')->toAdapter(new FakeNop);
-        $invoker = new Invoker(new NamedParameter);
+       $scheme = (new SchemeCollection)
+            ->scheme('app')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\App'))
+            ->scheme('page')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\Page'))
+            ->scheme('nop')->host('self')->toAdapter(new FakeNop);
+        $invoker = new Invoker(new NamedParameter(new ArrayCache, new VoidParamHandler));
         $factory = new Factory($scheme);
         $resource = new Resource(
             $factory, $invoker, new Anchor($reader), new Linker($reader, $invoker, $factory)

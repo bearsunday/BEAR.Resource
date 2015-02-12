@@ -2,13 +2,15 @@
 
 namespace BEAR\Resource;
 
+use Doctrine\Common\Cache\ArrayCache;
+
 class Root extends ResourceObject
 {
     public function onGet()
     {
         $this['one'] = 1;
         $this['two'] = new Request(
-            new Invoker(new NamedParameter),
+            new Invoker(new NamedParameter(new ArrayCache, new VoidParamHandler)),
             new Child
         );
 

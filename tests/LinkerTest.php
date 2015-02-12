@@ -5,6 +5,7 @@ namespace BEAR\Resource;
 use BEAR\Resource\Exception\LinkQueryException;
 use BEAR\Resource\Exception\LinkRelException;
 use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Cache\ArrayCache;
 use FakeVendor\Sandbox\Resource\App\Author;
 use FakeVendor\Sandbox\Resource\App\Blog;
 use FakeVendor\Sandbox\Resource\App\Link\Scalar\Name;
@@ -36,7 +37,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
             ->toAdapter(new AppAdapter(new Injector, 'FakeVendor\Sandbox', 'Resource\App'));
         $this->linker = new Linker(
             new AnnotationReader,
-            new Invoker(new NamedParameter),
+            new Invoker(new NamedParameter(new ArrayCache, new VoidParamHandler)),
             new Factory($schemeCollection)
         );
     }
@@ -44,7 +45,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     public function testLinkAnnotationSelf()
     {
         $request = new Request(
-            new Invoker(new NamedParameter),
+            new Invoker(new NamedParameter(new ArrayCache, new VoidParamHandler)),
             new Author,
             Request::GET,
             ['id' => 1],
@@ -61,7 +62,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     public function testAnnotationNew()
     {
         $request = new Request(
-            new Invoker(new NamedParameter),
+            new Invoker(new NamedParameter(new ArrayCache, new VoidParamHandler)),
             new Author,
             Request::GET,
             ['id' => 1],
@@ -83,7 +84,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     public function testAnnotationCrawl()
     {
         $request = new Request(
-            new Invoker(new NamedParameter),
+            new Invoker(new NamedParameter(new ArrayCache, new VoidParamHandler)),
             new Blog,
             Request::GET,
             ['id' => 11],
@@ -143,7 +144,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(LinkQueryException::class);
         $request = new Request(
-            new Invoker(new NamedParameter),
+            new Invoker(new NamedParameter(new ArrayCache, new VoidParamHandler)),
             new Name,
             Request::GET,
             ['name' => 'bear'],
@@ -156,7 +157,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(LinkRelException::class);
         $request = new Request(
-            new Invoker(new NamedParameter),
+            new Invoker(new NamedParameter(new ArrayCache, new VoidParamHandler)),
             new Author,
             Request::GET,
             ['id' => '1'],
