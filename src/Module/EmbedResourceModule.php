@@ -6,6 +6,10 @@
  */
 namespace BEAR\Resource\Module;
 
+use BEAR\Resource\Annotation\Embed;
+use BEAR\Resource\EmbedInterceptor;
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\Reader;
 use Ray\Di\AbstractModule;
 
 class EmbedResourceModule extends AbstractModule
@@ -15,11 +19,11 @@ class EmbedResourceModule extends AbstractModule
      */
     protected function configure()
     {
-        $this->bind('Doctrine\Common\Annotations\Reader')->to('Doctrine\Common\Annotations\AnnotationReader');
+        $this->bind(Reader::class)->to(AnnotationReader::class);
         $this->bindInterceptor(
             $this->matcher->any(),
-            $this->matcher->annotatedWith('BEAR\Resource\Annotation\Embed'),
-            ['BEAR\Resource\EmbedInterceptor']
+            $this->matcher->annotatedWith(Embed::class),
+            [EmbedInterceptor::class]
         );
     }
 }
