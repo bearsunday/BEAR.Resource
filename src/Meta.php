@@ -65,6 +65,7 @@ final class Meta
     {
         $ref = new \ReflectionClass($class);
         $allows = $this->getAllows($ref->getMethods());
+        $params = [];
         foreach ($allows as $method) {
             $params[] = $this->getParams($class, $method);
         }

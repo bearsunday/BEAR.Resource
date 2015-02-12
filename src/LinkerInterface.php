@@ -11,9 +11,9 @@ interface LinkerInterface
     /**
      * InvokerInterface link
      *
-     * @param Request $request
+     * @param AbstractRequest $request
      *
-     * @return ResourceObject
+     * @return mixed
      */
     public function invoke(AbstractRequest $request);
 }

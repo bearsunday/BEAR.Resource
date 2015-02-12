@@ -6,6 +6,7 @@
  */
 namespace BEAR\Resource;
 
+use BEAR\Resource\Annotation\Link;
 use BEAR\Resource\Exception\LinkRelException;
 use Doctrine\Common\Annotations\Reader;
 
@@ -161,13 +162,14 @@ final class Linker implements LinkerInterface
     }
 
     /**
-     * @param Link[]   $annotations
+     * @param array    $annotations
      * @param LinkType $link
      * @param array    $body
      */
     private function crawl(array $annotations, LinkType $link, array &$body)
     {
         foreach ($annotations as $annotation) {
+            /** @var $annotation Link */
             if ($annotation->crawl !== $link->key) {
                 continue;
             }

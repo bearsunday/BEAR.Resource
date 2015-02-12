@@ -11,9 +11,9 @@ interface InvokerInterface
     /**
      * Invoke resource request
      *
-     * @param Request $request
+     * @param AbstractRequest $request
      *
-     * @return ResourceObject
+     * @return mixed
      */
     public function invoke(AbstractRequest $request);
 }

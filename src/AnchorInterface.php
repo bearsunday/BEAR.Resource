@@ -11,12 +11,11 @@ interface AnchorInterface
     /**
      * Return linked request with hyper reference
      *
-     * @param string           $rel
-     * @param RequestInterface $request
-     * @param array            $query
+     * @param string          $rel
+     * @param AbstractRequest $request
+     * @param array           $query
      *
-     * @return array [$method, $uri]
-     * @throws Exception\LinkException
+     * @return mixed
      */
     public function href($rel, AbstractRequest $request, array $query);
 }

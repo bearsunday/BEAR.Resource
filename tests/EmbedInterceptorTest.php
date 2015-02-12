@@ -131,6 +131,7 @@ class EmbedInterceptorTest extends \PHPUnit_Framework_TestCase
 
         /** @var $request Request */
         $resourceObject = $request();
+        /** @var $birdRequest Request */
         $birdRequest = $resourceObject['birdRequest'];
         $birdObject = $resourceObject['birdObject'];
 

@@ -28,8 +28,7 @@ final class EmbedInterceptor implements MethodInterceptor
 
     /**
      * @param ResourceInterface $resource
-     *
-     * @Inject
+     * @param Reader            $reader
      */
     public function __construct(ResourceInterface $resource, Reader $reader)
     {
@@ -42,6 +41,7 @@ final class EmbedInterceptor implements MethodInterceptor
      */
     public function invoke(MethodInvocation $invocation)
     {
+        /** @var $resourceObject ResourceObject */
         $resourceObject = $invocation->getThis();
         $method = $invocation->getMethod();
         $query = $this->getArgsByInvocation($invocation);
