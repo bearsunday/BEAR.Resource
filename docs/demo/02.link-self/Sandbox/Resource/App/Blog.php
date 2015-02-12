@@ -1,9 +1,8 @@
 <?php
 
-namespace Sandbox\Resource\App;
+namespace Sandbox\Resource\Resource\App;
 
 use BEAR\Resource\ResourceObject;
-use BEAR\Resource\Annotation\Link;
 
 class Blog extends ResourceObject
 {
@@ -15,6 +14,8 @@ class Blog extends ResourceObject
 
     public function onGet($id)
     {
-        return $this->users[$id];
+        $this->body = $this->users[$id];
+
+        return $this;
     }
 }

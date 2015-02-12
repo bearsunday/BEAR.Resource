@@ -1,15 +1,19 @@
 <?php
 
-use Doctrine\Common\Annotations\AnnotationRegistry;
+use BEAR\Resource\Module\HalModule;
+use BEAR\Resource\ResourceInterface;
 use BEAR\Resource\ResourceObject;
 use Ray\Di\Injector;
+use BEAR\Resource\Module\ResourceModule;
 
 main: {
-    $resource = require __DIR__ . '/scripts/instance.php';
+    require __DIR__ . '/scripts/bootstrap.php';
+    /* @var $resource \BEAR\Resource\ResourceInterface */
+    $resource = (new Injector(new HalModule(new ResourceModule('Sandbox\Resource'))))->getInstance(ResourceInterface::class);
     $user = $resource
         ->get
         ->uri('app://self/user')
-        ->withQuery(['id' => 0])
+        ->withQuery(['id' => 2])
         ->linkNew('blog')
         ->eager
         ->request();
@@ -17,8 +21,9 @@ main: {
 }
 
 output: {
-    print_r($user->body) . PHP_EOL;
-    print_r($user->body['blog']) . PHP_EOL;
+    echo $user;
+//    print_r($user->body) . PHP_EOL;
+//    print_r($user->body['blog']) . PHP_EOL;
 }
 
 //    Array

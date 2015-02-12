@@ -13,18 +13,9 @@ bootstarp: {
     $loader->addPsr4('MyVendor\\MyApp\\', __DIR__);
 }
 
-class AppModule extends AbstractModule
-{
-    protected function configure()
-    {
-        $this->install(new ResourceModule('MyVendor\MyApp'));
-        $this->install(new HalModule);
-    }
-}
-
 main: {
     // create resource client with HalModule
-    $resource = (new Injector(new AppModule))->getInstance('BEAR\Resource\ResourceInterface');
+    $resource = (new Injector(new HalModule(new ResourceModule('MyVendor\MyApp'))))->getInstance('BEAR\Resource\ResourceInterface');
     // request
     $news = $resource
         ->get

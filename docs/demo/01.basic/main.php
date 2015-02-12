@@ -1,11 +1,15 @@
 <?php
 
-use Doctrine\Common\Annotations\AnnotationRegistry;
+use BEAR\Resource\Module\ResourceModule;
+use BEAR\Resource\ResourceInterface;
 use BEAR\Resource\ResourceObject;
 use Ray\Di\Injector;
 
 main: {
-    $resource = require __DIR__ . '/scripts/instance.php';
+    require __DIR__ . '/scripts/bootstrap.php';
+    /* @var $resource \BEAR\Resource\ResourceInterface */
+    $resource = (new Injector(new ResourceModule('Sandbox\Resource')))->getInstance(ResourceInterface::class);
+
     $result = $resource
         ->get
         ->uri('app://self/user')
