@@ -10,9 +10,6 @@ use BEAR\Resource\Annotation\Link;
 use Doctrine\Common\Annotations\Reader;
 use Nocarrier\Hal;
 
-/**
- * HAL(Hypertext Application Language) renderer
- */
 class HalRenderer implements RenderInterface
 {
     /**
@@ -25,9 +22,6 @@ class HalRenderer implements RenderInterface
      */
     private $uri;
 
-    /**
-     * @param Reader $reader
-     */
     public function __construct(Reader $reader)
     {
         $this->reader = $reader;
@@ -65,9 +59,6 @@ class HalRenderer implements RenderInterface
         return $uri;
     }
 
-    /**
-     * @param \BEAR\Resource\ResourceObject $ro
-     */
     private function valuateElements(ResourceObject &$ro)
     {
         foreach ($ro->body as $key => &$element) {
@@ -80,10 +71,6 @@ class HalRenderer implements RenderInterface
     }
 
     /**
-     * @param Uri   $uri
-     * @param array $body
-     * @param array $links
-     *
      * @return Hal
      */
     private function getHal(Uri $uri, array $body, array $links)
@@ -98,8 +85,6 @@ class HalRenderer implements RenderInterface
     }
 
     /**
-     * @param ResourceObject $ro
-     *
      * @return array
      */
     private function valuate(ResourceObject $ro)
@@ -119,13 +104,6 @@ class HalRenderer implements RenderInterface
         return[$ro, $body];
     }
 
-    /**
-     * @param array $body
-     * @param array $links
-     * @param Hal   $hal
-     *
-     * @internal param Uri $uri
-     */
     private function getHalLink(array $body, array $links, Hal $hal)
     {
         foreach ($links as $link) {

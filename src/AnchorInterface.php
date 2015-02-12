@@ -15,7 +15,7 @@ interface AnchorInterface
      * @param RequestInterface $request
      * @param array            $query
      *
-     * @return array [$method, $uri];
+     * @return array [$method, $uri]
      * @throws Exception\LinkException
      */
     public function href($rel, AbstractRequest $request, array $query);

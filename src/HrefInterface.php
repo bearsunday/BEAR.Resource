@@ -6,9 +6,6 @@
  */
 namespace BEAR\Resource;
 
-/**
- * Interface for hyper reference
- */
 interface HrefInterface
 {
     /**

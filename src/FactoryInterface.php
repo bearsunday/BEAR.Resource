@@ -6,13 +6,6 @@
  */
 namespace BEAR\Resource;
 
-use Ray\Di\Di\ImplementedBy;
-
-/**
- * Interface for resource factory
- *
- * @ImplementedBy("Factory")
- */
 interface FactoryInterface
 {
     /**

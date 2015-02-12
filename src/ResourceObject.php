@@ -99,8 +99,6 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      * Set the value at the specified index
      *
      * @param mixed $offset offset
-     *
-     * @return void
      */
     public function offsetUnset($offset)
     {
@@ -119,8 +117,6 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
 
     /**
      * Sort the entries by key
-     *
-     * @return void
      */
     public function ksort()
     {
@@ -132,8 +128,6 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
 
     /**
      * Sort the entries by key
-     *
-     * @return void
      */
     public function asort()
     {
@@ -146,7 +140,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * Get array iterator
      *
-     * @return ArrayIterator
+     * @return \ArrayIterator
      */
     public function getIterator()
     {

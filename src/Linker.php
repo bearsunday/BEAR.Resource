@@ -33,11 +33,6 @@ final class Linker implements LinkerInterface
      */
     private $cache = [];
 
-    /**
-     * @param Reader           $reader
-     * @param InvokerInterface $invoker
-     * @param FactoryInterface $factory
-     */
     public function __construct(
         Reader $reader,
         InvokerInterface $invoker,

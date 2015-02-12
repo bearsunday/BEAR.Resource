@@ -20,10 +20,6 @@ final class Invoker implements InvokerInterface
      */
     private $optionProvider;
 
-    /**
-     * @param NamedParameterInterface $params
-     * @param OptionProviderInterface $optionProvider
-     */
     public function __construct(NamedParameterInterface $params, OptionProviderInterface $optionProvider = null)
     {
         $this->params = $params;

@@ -8,6 +8,10 @@ namespace BEAR\Resource;
 
 final class Meta
 {
+    const EXTRAS_VENDOR = 'vendor';
+
+    const EXTRAS_PACKAGE = 'package';
+
     /**
      * @var string
      */
@@ -22,9 +26,6 @@ final class Meta
      * @var array
      */
     public $extras = [];
-
-    const EXTRAS_VENDOR = 'vendor';
-    const EXTRAS_PACKAGE = 'package';
 
     /**
      * @param string $class

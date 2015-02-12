@@ -35,11 +35,6 @@ final class Resource implements ResourceInterface
      */
     private $request;
 
-    /**
-     * @param FactoryInterface $factory
-     * @param InvokerInterface $invoker
-     * @param AnchorInterface  $anchor
-     */
     public function __construct(
         FactoryInterface $factory,
         InvokerInterface $invoker,

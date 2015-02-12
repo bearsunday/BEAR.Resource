@@ -105,8 +105,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     }
 
     /**
-     * @param mixed $offset
-     * @param mixed $value
+     *{@inheritDoc}
      */
     public function offsetSet($offset, $value)
     {
@@ -114,7 +113,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     }
 
     /**
-     * @param mixed $offset
+     * {@inheritDoc}
      */
     public function offsetUnset($offset)
     {

@@ -41,7 +41,7 @@ abstract class AbstractUri
     public $method;
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function __toString()
     {

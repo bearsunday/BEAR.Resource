@@ -10,9 +10,6 @@ interface TransferInterface
 {
     /**
      * Transfer resource object state
-     *
-     * @param ResourceObject $resourceObject
-     * @param array          $server
      */
     public function __invoke(ResourceObject $resourceObject, array $server);
 }
