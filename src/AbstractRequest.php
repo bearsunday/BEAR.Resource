@@ -146,7 +146,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     }
 
     /**
-     * @return mixed
+     * @return ResourceObject
      */
     private function invoke()
     {

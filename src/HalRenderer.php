@@ -46,14 +46,14 @@ class HalRenderer implements RenderInterface
         $hal = $this->getHal($ro->uri, $body, $links);
         $ro->view = $hal->asJson(true) . PHP_EOL;
         $ro->headers['Content-Type'] = 'application/hal+json';
-        
+
         return $ro->view;
     }
 
     /**
      * @param string $uri
      *
-     * @return mixed
+     * @return string
      */
     protected function getReverseMatchedLink($uri)
     {
@@ -96,13 +96,8 @@ class HalRenderer implements RenderInterface
         }
         // HAL
         $body = $ro->body ?: [];
-        if (is_scalar($body)) {
-            $body = ['value' => $body];
 
-            return array($ro, $body);
-        }
-
-        return[$ro, $body];
+        return [$ro, $body];
     }
 
     private function getHalLink(array $body, array $links, Hal $hal)

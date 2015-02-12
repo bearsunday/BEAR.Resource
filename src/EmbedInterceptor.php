@@ -12,7 +12,6 @@ use BEAR\Resource\Exception\EmbedException;
 use Doctrine\Common\Annotations\Reader;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
-use Ray\Di\Di\Inject;
 
 final class EmbedInterceptor implements MethodInterceptor
 {
