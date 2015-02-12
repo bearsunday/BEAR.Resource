@@ -10,7 +10,7 @@ use BEAR\Resource\Exception\ResourceNotFoundException;
 use Ray\Di\Di\Inject;
 use Ray\Di\Exception\Unbound;
 
-class Factory implements FactoryInterface
+final class Factory implements FactoryInterface
 {
     /**
      * Resource adapter biding config

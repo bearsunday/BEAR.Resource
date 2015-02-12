@@ -10,7 +10,7 @@ use BEAR\Resource\Annotation\Link as LinkAnnotation;
 use BEAR\Resource\Exception\LinkException as LinkException;
 use Doctrine\Common\Annotations\Reader;
 
-class Anchor implements AnchorInterface
+final class Anchor implements AnchorInterface
 {
     /**
      * @param Reader $reader

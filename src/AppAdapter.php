@@ -8,7 +8,7 @@ namespace BEAR\Resource;
 
 use Ray\Di\InjectorInterface;
 
-class AppAdapter implements AdapterInterface
+final class AppAdapter implements AdapterInterface
 {
     /**
      * @var InjectorInterface

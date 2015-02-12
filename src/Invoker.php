@@ -8,7 +8,7 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\MethodNotAllowedException;
 
-class Invoker implements InvokerInterface
+final class Invoker implements InvokerInterface
 {
     /**
      * @var NamedParameter

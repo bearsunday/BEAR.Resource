@@ -6,7 +6,7 @@
  */
 namespace BEAR\Resource;
 
-class JsonRenderer implements RenderInterface
+final class JsonRenderer implements RenderInterface
 {
     /**
      * {@inheritdoc}
