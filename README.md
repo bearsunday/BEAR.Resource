@@ -361,7 +361,7 @@ Embedded resource evaluate when it is present.
 
 ```php
     // create resource client with HalModule
-    $resource = Injector::create([new ResourceModule('MyVendor\MyApp'), new HalModule])->getInstance('BEAR\Resource\ResourceInterface');
+    $resource = (new Injector(new HalModule(new ResourceModule('FakeVendor\Sandbox'))))->getInstance(ResourceInterface::class);
     // request
     $news = $resource
         ->get
