@@ -403,6 +403,24 @@ Result
 
  [A demo application code](https://github.com/koriym/BEAR.Resource/tree/develop/docs/sample/06.HAL) is available.
 
+
+## Performance boost ##
+
+A resource client is serializable. It has huge performance boosts. Recommended in production use.
+
+```php
+
+use BEAR\Resource\ResourceInterface;
+
+// save
+$resource = (new Injector(new ResourceModule('FakeVendor/Sandbox')))->getInstance(ResourceInterface::class);
+$cachedResource = serialize($resource);
+
+// load
+$resource = unserialize($cachedResource);
+$news = $resource->get->uri('app://self/news')->request();
+```
+
 ## Requirements
  * PHP 5.5+
 
@@ -422,3 +440,12 @@ Please check out [BEAR.Sunday web site](http://bearsunday.github.io/).
 
  * [BEAR.QueryRepository](https://github.com/koriym/BEAR.QueryRepository) - Segregates reads and writes into two separate repository.
  * [Ray.WebParamModule](https://github.com/Ray-Di/Ray.WebParamModule) - Binds the value(s) of a web context to method parameter.
+
+## Testing BEAR.Resource
+
+Here's how to install BEAR.Resource from source and run the unit tests and demos.
+
+$ composer create-project bear/resource:~1.0@dev BEAR.Resource
+$ cd BEAR.Resource
+$ phpunit
+$ php docs/demo/run.php
