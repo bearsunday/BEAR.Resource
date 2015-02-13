@@ -1,10 +1,9 @@
 <?php
 
 use BEAR\Resource\Module\HalModule;
-use BEAR\Resource\ResourceInterface;
-use BEAR\Resource\ResourceObject;
-use Ray\Di\Injector;
 use BEAR\Resource\Module\ResourceModule;
+use BEAR\Resource\ResourceInterface;
+use Ray\Di\Injector;
 
 main: {
     require __DIR__ . '/scripts/bootstrap.php';
@@ -17,22 +16,25 @@ main: {
         ->linkNew('blog')
         ->eager
         ->request();
-    /* @var $result \BEAR\Resource|ResourceObject */
 }
 
 output: {
     echo $user;
-//    print_r($user->body) . PHP_EOL;
-//    print_r($user->body['blog']) . PHP_EOL;
 }
 
-//    Array
-//    (
-//        [name] => Athos
-//        [age] => 15
-//        [blog_id] => 0
-//    )
-//    Array
-//    (
-//        [name] => Athos blog
-//    )
+//{
+//    "name": "Porthos",
+//    "age": 17,
+//    "blog_id": 2,
+//    "blog": {
+//    "name": "Porthos blog"
+//    },
+//    "_links": {
+//    "self": {
+//        "href": "/user?id=2"
+//        },
+//        "blog": {
+//        "href": "app://self/blog?id=2"
+//        }
+//    }
+//}

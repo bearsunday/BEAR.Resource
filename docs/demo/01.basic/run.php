@@ -10,13 +10,13 @@ main: {
     /* @var $resource \BEAR\Resource\ResourceInterface */
     $resource = (new Injector(new ResourceModule('Sandbox\Resource')))->getInstance(ResourceInterface::class);
 
+    /* @var $result ResourceObject */
     $result = $resource
         ->get
         ->uri('app://self/user')
         ->withQuery(['id' => 1])
         ->eager
         ->request();
-    /* @var $result \BEAR\Resource|ResourceObject */
 }
 
 output: {
@@ -28,3 +28,15 @@ output: {
     print 'body:' . PHP_EOL;
     print_r($result->body) . PHP_EOL;
 }
+//code:200
+//headers:
+//Array
+//(
+//)
+//body:
+//Array
+//(
+//    [name] => Aramis
+//    [age] => 16
+//    [blog_id] => 1
+//)

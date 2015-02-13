@@ -3,7 +3,6 @@ namespace Sandbox\Resource\App\Tag;
 
 use BEAR\Resource\ResourceObject;
 use Sandbox\Resource\App\SelectTrait;
-use BEAR\Resource\Annotation\Link;
 
 class Name extends ResourceObject
 {

@@ -31,6 +31,11 @@ final class Resource implements ResourceInterface
     private $anchor;
 
     /**
+     * @var LinkerInterface
+     */
+    private $linker;
+
+    /**
      * @var Request
      */
     private $request;
@@ -38,11 +43,13 @@ final class Resource implements ResourceInterface
     public function __construct(
         FactoryInterface $factory,
         InvokerInterface $invoker,
-        AnchorInterface  $anchor
+        AnchorInterface  $anchor,
+        LinkerInterface  $linker
     ) {
         $this->factory = $factory;
         $this->invoker = $invoker;
         $this->anchor = $anchor;
+        $this->linker = $linker;
     }
 
     /**
@@ -79,7 +86,9 @@ final class Resource implements ResourceInterface
             $this->invoker,
             $resourceObject,
             $this->method,
-            $uri->query
+            $uri->query,
+            [],
+            $this->linker
         );
 
         return $this->request;

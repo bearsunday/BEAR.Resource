@@ -2,10 +2,10 @@
 
 namespace Restbucks\Resource\App;
 
+use BEAR\Resource\Annotation\Link;
 use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Uri;
 use Ray\Di\Di\Scope;
-use BEAR\Resource\Annotation\Link;
 
 class Menu extends ResourceObject
 {
