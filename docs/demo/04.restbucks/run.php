@@ -37,3 +37,7 @@ output: {
     echo 'Location: ' . $response->headers['Location'] . PHP_EOL;
     echo 'Order: ' . (($response->code === 201) ? 'Success' : 'Failure'). PHP_EOL;
 }
+
+//201: Created
+//Location: app://self/Order/?id=2033905881
+//Order: Success

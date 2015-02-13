@@ -2,8 +2,8 @@
 
 namespace MyVendor\MyApp\Resource\App;
 
-use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Annotation\Embed;
+use BEAR\Resource\ResourceObject;
 
 class News extends ResourceObject
 {

@@ -2,9 +2,9 @@
 
 namespace Restbucks\Resource\App;
 
+use BEAR\Resource\Annotation\Link;
 use BEAR\Resource\ResourceObject;
 use Ray\Di\Di\Scope;
-use BEAR\Resource\Annotation\Link;
 
 class Order extends ResourceObject
 {

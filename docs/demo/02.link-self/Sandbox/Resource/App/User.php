@@ -2,8 +2,8 @@
 
 namespace Sandbox\Resource\Resource\App;
 
-use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Annotation\Link;
+use BEAR\Resource\ResourceObject;
 
 class User extends ResourceObject
 {
