@@ -9,7 +9,9 @@ namespace BEAR\Resource;
 /**
  * @property $this $get
  * @property $this $post
+ * @property $this $patch
  * @property $this $put
+ * @property $this $delete
  * @property $this $head
  * @property $this $options
  */
