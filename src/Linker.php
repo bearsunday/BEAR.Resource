@@ -175,7 +175,7 @@ final class Linker implements LinkerInterface
             }
             $uri = uri_template($annotation->href, $body);
             $rel = $this->factory->newInstance($uri);
-            $request = new Request($this->invoker, $rel, Request::GET, (new Uri($uri))->query, [$link]);
+            $request = new Request($this->invoker, $rel, Request::GET, (new Uri($uri))->query, [$link], $this);
             $hash = $request->hash();
             if (isset($this->cache[$hash])) {
                 $body[$annotation->rel] = $this->cache[$hash];

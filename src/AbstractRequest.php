@@ -81,6 +81,11 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     protected $invoker;
 
     /**
+     * @var LinkerInterface
+     */
+    private $linker;
+
+    /**
      * @param InvokerInterface $invoker
      * @param ResourceObject   $ro
      * @param string           $method
@@ -92,7 +97,8 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
         ResourceObject $ro = null,
         $method = Request::GET,
         array $query = [],
-        array $links = []
+        array $links = [],
+        LinkerInterface $linker = null
     ) {
         $this->invoker = $invoker;
         $this->resourceObject = $ro;
@@ -102,6 +108,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
         $this->method = $method;
         $this->query = $query;
         $this->links = $links;
+        $this->linker = $linker;
     }
 
     /**
@@ -141,7 +148,6 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
             return $this;
         }
         $this->result = $this->invoke($this);
-
         return $this->result;
     }
 
@@ -165,7 +171,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
         if (!is_null($query)) {
             $this->query = array_merge($this->query, $query);
         }
-        $result = $this->invoker->invoke($this);
+        $result = ($this->linker) ? $result = $this->linker->invoke($this) : $this->invoker->invoke($this);
 
         return $result;
     }
