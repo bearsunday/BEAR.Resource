@@ -8,7 +8,7 @@ namespace BEAR\Resource\Module;
 
 use BEAR\Resource\Anchor;
 use BEAR\Resource\AnchorInterface;
-use BEAR\Resource\Annotation\CompileCache;
+use BEAR\Resource\Annotation\LogicCache;
 use BEAR\Resource\Factory;
 use BEAR\Resource\FactoryInterface;
 use BEAR\Resource\Invoker;
@@ -44,7 +44,7 @@ class ResourceClientModule extends AbstractModule
         $this->bind(AnchorInterface::class)->to(Anchor::class)->in(Scope::SINGLETON);
         $this->bind(NamedParameterInterface::class)->to(NamedParameter::class)->in(Scope::SINGLETON);
         $this->bind(RenderInterface::class)->to(JsonRenderer::class)->in(Scope::SINGLETON);
-        $this->bind(Cache::class)->annotatedWith(CompileCache::class)->to(ArrayCache::class);
+        $this->bind(Cache::class)->annotatedWith(LogicCache::class)->to(ArrayCache::class);
         $this->bind(ParamHandlerInterface::class)->to(VoidParamHandler::class);
     }
 }
