@@ -22,8 +22,8 @@ use BEAR\Resource\ParamHandlerInterface;
 use BEAR\Resource\RenderInterface;
 use BEAR\Resource\Resource;
 use BEAR\Resource\ResourceInterface;
+use BEAR\Resource\ResourceParamHandler;
 use BEAR\Resource\SchemeCollectionInterface;
-use BEAR\Resource\VoidParamHandler;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\Cache;
 use Ray\Di\AbstractModule;
@@ -45,6 +45,6 @@ class ResourceClientModule extends AbstractModule
         $this->bind(NamedParameterInterface::class)->to(NamedParameter::class)->in(Scope::SINGLETON);
         $this->bind(RenderInterface::class)->to(JsonRenderer::class)->in(Scope::SINGLETON);
         $this->bind(Cache::class)->annotatedWith(LogicCache::class)->to(ArrayCache::class);
-        $this->bind(ParamHandlerInterface::class)->to(VoidParamHandler::class);
+        $this->bind(ParamHandlerInterface::class)->to(ResourceParamHandler::class);
     }
 }
