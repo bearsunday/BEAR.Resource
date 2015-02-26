@@ -16,4 +16,8 @@ class Greeting extends ResourceObject
 
         return $this;
     }
+
+    public function onPut($name)
+    {
+    }
 }
