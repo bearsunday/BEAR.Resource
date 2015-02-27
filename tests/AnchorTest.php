@@ -4,6 +4,7 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\LinkException;
 use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Cache\ArrayCache;
 use FakeVendor\Sandbox\Resource\App\Author;
 
 class AnchorTest extends \PHPUnit_Framework_TestCase
@@ -26,7 +27,7 @@ class AnchorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $invoker = new Invoker(new NamedParameter);
+        $invoker = new Invoker(new NamedParameter(new ArrayCache, new VoidParamHandler));
         $author = new Author;
         $author->onGet(1);
         $this->request = new Request($invoker, $author, Request::GET, ['id' => 1]);

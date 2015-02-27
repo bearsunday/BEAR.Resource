@@ -1,0 +1,58 @@
+<?php
+/**
+ * This file is part of the BEAR.Resource package
+ *
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ */
+namespace BEAR\Resource;
+
+use BEAR\Resource\Annotation\ResourceParam;
+use Doctrine\Common\Annotations\Reader;
+use Ray\Di\InjectorInterface;
+
+class ResourceParamHandler implements ParamHandlerInterface
+{
+    /**
+     * @var Reader
+     */
+    private $reader;
+
+    /**
+     * @var InjectorInterface
+     */
+    private $injector;
+
+    public function __construct(Reader $reader, InjectorInterface $injector)
+    {
+        $this->reader = $reader;
+        $this->injector = $injector;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function handle(\ReflectionParameter $parameter)
+    {
+        $annotations = $this->reader->getMethodAnnotations($parameter->getDeclaringFunction());
+        foreach ($annotations as $annotation) {
+            if ($annotation instanceof ResourceParam && $annotation->param === $parameter->name) {
+                return $this->getResourceParam($annotation->uri);
+            }
+        }
+        (new VoidParamHandler)->handle($parameter);
+    }
+
+    /**
+     * @param string $uri
+     *
+     * @return mixed
+     */
+    private function getResourceParam($uri)
+    {
+        $resource = $this->injector->getInstance(ResourceInterface::class);
+        $resourceResult = $resource->get->uri($uri)->eager->request();
+        $fragment = parse_url($uri, PHP_URL_FRAGMENT);
+
+        return $resourceResult[$fragment];
+    }
+}

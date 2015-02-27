@@ -3,6 +3,7 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\ParameterException;
+use Doctrine\Common\Cache\ArrayCache;
 
 class ReflectiveParamsTestClass
 {
@@ -22,7 +23,7 @@ class NamedParameterTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->params = new NamedParameter;
+        $this->params = new NamedParameter(new ArrayCache, new VoidParamHandler);
     }
 
     public function testGetParameters()

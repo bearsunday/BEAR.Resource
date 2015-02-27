@@ -7,6 +7,7 @@ use BEAR\Resource\Exception\ParameterException;
 use BEAR\Resource\Interceptor\FakeLogInterceptor;
 use BEAR\Resource\Interceptor\Log;
 use BEAR\Resource\Mock\Comment;
+use Doctrine\Common\Cache\ArrayCache;
 use FakeVendor\Sandbox\Resource\App\Restbucks\Order;
 use FakeVendor\Sandbox\Resource\App\User;
 use FakeVendor\Sandbox\Resource\App\Weave\Book;
@@ -32,7 +33,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->invoker = new Invoker(new NamedParameter, new OptionProvider);
+        $this->invoker = new Invoker(new NamedParameter(new ArrayCache, new VoidParamHandler), new OptionProvider);
     }
 
     public function testInvoke()
