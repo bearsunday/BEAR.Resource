@@ -29,6 +29,9 @@ use Doctrine\Common\Cache\Cache;
 use Ray\Di\AbstractModule;
 use Ray\Di\Scope;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ResourceClientModule extends AbstractModule
 {
     /**
