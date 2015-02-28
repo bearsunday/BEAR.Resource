@@ -45,15 +45,7 @@ final class NamedParameter implements NamedParameterInterface
             $names = $this->getParameterNames($callable);
             $this->cache->save($id, $names);
         }
-        $parameters = [];
-        foreach ($names as $name => $defaultValue) {
-            $value = isset($query[$name]) ? $query[$name] : $defaultValue;
-            if ($value instanceof Param) {
-                $parameter = new \ReflectionParameter([$value->class, $value->method], $value->param);
-                $value = $this->handler->handle($parameter);
-            }
-            $parameters[] = $value;
-        };
+        $parameters = $this->handleParams($query, $names);
 
         return $parameters;
     }
@@ -68,5 +60,26 @@ final class NamedParameter implements NamedParameterInterface
         }
 
         return $names;
+    }
+
+    /**
+     * @param string[] $query
+     * @param string[] $names
+     *
+     * @return array
+     */
+    private function handleParams(array $query, $names)
+    {
+        $parameters = [];
+        foreach ($names as $name => $defaultValue) {
+            $value = isset($query[$name]) ? $query[$name] : $defaultValue;
+            if ($value instanceof Param) {
+                $parameter = new \ReflectionParameter([$value->class, $value->method], $value->param);
+                $value = $this->handler->handle($parameter);
+            }
+            $parameters[] = $value;
+        };
+
+        return $parameters;
     }
 }
