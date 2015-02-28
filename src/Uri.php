@@ -16,10 +16,7 @@ final class Uri extends AbstractUri
      */
     public function __construct($uri, array $query = [])
     {
-        if (! filter_var($uri, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED)) {
-            $msg = is_string($uri) ? $uri : gettype($uri);
-            throw new UriException($msg, 500);
-        }
+        $this->validate($uri);
         if ($query) {
             $uri = uri_template($uri, $query);
         }
@@ -30,6 +27,17 @@ final class Uri extends AbstractUri
         }
         if ($query) {
             $this->query = $query + $this->query;
+        }
+    }
+
+    /**
+     * @param string $uri
+     */
+    private function validate($uri)
+    {
+        if (! filter_var($uri, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED)) {
+            $msg = is_string($uri) ? $uri : gettype($uri);
+            throw new UriException($msg, 500);
         }
     }
 }
