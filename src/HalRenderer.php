@@ -17,11 +17,6 @@ class HalRenderer implements RenderInterface
      */
     private $reader;
 
-    /**
-     * @var Uri
-     */
-    private $uri;
-
     public function __construct(Reader $reader)
     {
         $this->reader = $reader;
