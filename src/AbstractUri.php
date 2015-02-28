@@ -24,10 +24,6 @@ abstract class AbstractUri
     public $path;
 
     /**
-     * @var string
-     */
-    public $fullPath;
-    /**
      * Associative query array
      *
      * @var array
