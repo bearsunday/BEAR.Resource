@@ -2,10 +2,8 @@
 /**
  * RESTbucks simple example
  *
- * @package BEAR.Resource
  * @see http://www.infoq.com/articles/webber-rest-workflow
  */
-
 use BEAR\Resource\Code;
 
 main: {

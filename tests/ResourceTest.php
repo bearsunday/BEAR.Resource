@@ -13,7 +13,6 @@ use Ray\Di\Injector;
 
 class ResourceTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var ResourceInterface
      */
@@ -33,7 +32,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     {
         $injector = new Injector(new EmptyModule, $_ENV['TMP_DIR']);
         $reader = new AnnotationReader;
-       $scheme = (new SchemeCollection)
+        $scheme = (new SchemeCollection)
             ->scheme('app')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\App'))
             ->scheme('page')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\Page'))
             ->scheme('nop')->host('self')->toAdapter(new FakeNop);
@@ -95,7 +94,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     public function testLinkSelf()
     {
         $request = $this->resource->get->uri('app://self/author')->linkSelf('blog')->request();
-        /** @var $request Request */
+        /* @var $request Request */
         $this->assertSame('blog', $request->links[0]->key);
         $this->assertSame(LinkType::SELF_LINK, $request->links[0]->type);
     }
@@ -103,7 +102,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     public function testLinkNew()
     {
         $request = $this->resource->get->uri('app://self/author')->linkNew('blog')->request();
-        /** @var $request Request */
+        /* @var $request Request */
         $this->assertSame('blog', $request->links[0]->key);
         $this->assertSame(LinkType::NEW_LINK, $request->links[0]->type);
     }
@@ -111,7 +110,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     public function testLinkCrawl()
     {
         $request = $this->resource->get->uri('app://self/author')->linkCrawl('blog')->request();
-        /** @var $request Request */
+        /* @var $request Request */
         $this->assertSame('blog', $request->links[0]->key);
         $this->assertSame(LinkType::CRAWL_LINK, $request->links[0]->type);
     }

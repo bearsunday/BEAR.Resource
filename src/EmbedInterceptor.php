@@ -61,7 +61,7 @@ final class EmbedInterceptor implements MethodInterceptor
     private function embedResource(array $embeds, ResourceObject $resourceObject, array $query)
     {
         foreach ($embeds as $embed) {
-            /** @var $embed Embed */
+            /* @var $embed Embed */
             if (! $embed instanceof Embed) {
                 continue;
             }

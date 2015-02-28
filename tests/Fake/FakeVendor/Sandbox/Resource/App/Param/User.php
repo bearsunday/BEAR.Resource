@@ -13,7 +13,7 @@ class User extends ResourceObject
         if ($author_id === self::PARAMETER_IN_SERVICE_EXCEPTION) {
             // this cause exception
             $resource = $GLOBALS['RESOURCE'];
-            /** @var $resource \BEAR\Resource\ResourceInterface */
+            /* @var $resource \BEAR\Resource\ResourceInterface */
             $resource->put->uri('app://self/param/user')->withQuery([])->eager->request();
         }
 
@@ -27,7 +27,7 @@ class User extends ResourceObject
     public function onPut($id)
     {
         $resource = $GLOBALS['RESOURCE'];
-        /** @var $resource \BEAR\Resource\ResourceInterface */
+        /* @var $resource \BEAR\Resource\ResourceInterface */
         $resource->put->uri('app://self/param/user')->withQuery([])->eager->request();
     }
 

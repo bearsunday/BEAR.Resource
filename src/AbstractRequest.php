@@ -138,7 +138,6 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
         return (string) $this->result;
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -148,6 +147,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
             return $this;
         }
         $this->result = $this->invoke($this);
+
         return $this->result;
     }
 

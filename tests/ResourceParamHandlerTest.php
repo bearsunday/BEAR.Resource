@@ -2,7 +2,6 @@
 
 namespace BEAR\Resource;
 
-
 use BEAR\Resource\Exception\ParameterException;
 use BEAR\Resource\Module\ResourceModule;
 use Ray\Di\Injector;

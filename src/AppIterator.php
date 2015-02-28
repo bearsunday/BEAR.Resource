@@ -92,7 +92,7 @@ final class AppIterator implements \Iterator
     {
         $metaCollection = [];
         foreach ($iterator as $item) {
-            /** @var $item \SplFileInfo */
+            /* @var $item \SplFileInfo */
             if ($this->isNotPhp($item)) {
                 continue;
             }

@@ -19,6 +19,6 @@ class Entry extends ResourceObject
      */
     public function provideId()
     {
-        return array('id' => 1);
+        return ['id' => 1];
     }
 }

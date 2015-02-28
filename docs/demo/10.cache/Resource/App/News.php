@@ -14,7 +14,7 @@ class News extends ResourceObject
     {
         $this['headline'] = "40th anniversary of Rubik's Cube invention.";
         $this['sports'] = "Pieter Weening wins Giro d'Italia.";
-        
+
         return $this;
     }
 }

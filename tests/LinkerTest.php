@@ -125,7 +125,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
                         'post_id' => '1',
                         'tag_id' => '2',
                         'tag_name' => [
-                            0 =>[
+                            0 => [
                                 'id' => '2',
                                 'name' => 'dib'
                             ],

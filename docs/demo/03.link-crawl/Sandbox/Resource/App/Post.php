@@ -43,6 +43,7 @@ class Post extends ResourceObject
     public function onGet($author_id)
     {
         $posts = $this->select('author_id', $author_id);
+
         return $posts;
     }
 }

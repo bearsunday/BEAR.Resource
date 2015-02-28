@@ -42,7 +42,7 @@ class EmbedInterceptorTest extends \PHPUnit_Framework_TestCase
         );
         $result = $invocation->proceed();
         $profile = $result['bird1'];
-        /** @var $profile Request */
+        /* @var $profile Request */
         $this->assertInstanceOf('BEAR\Resource\Request', $profile);
         $this->assertSame('get app://self/bird/canary', $profile->toUriWithMethod());
 
@@ -55,7 +55,7 @@ class EmbedInterceptorTest extends \PHPUnit_Framework_TestCase
     public function testInvokeAnotherLink(ResourceObject $result)
     {
         $profile = $result['bird2'];
-        /** @var $profile Request */
+        /* @var $profile Request */
         $this->assertInstanceOf('BEAR\Resource\Request', $profile);
         $this->assertSame('get app://self/bird/sparrow?id=1', $profile->toUriWithMethod());
 
@@ -68,20 +68,20 @@ class EmbedInterceptorTest extends \PHPUnit_Framework_TestCase
     public function testInvokeString(ResourceObject $result)
     {
         $result->setRenderer(new JsonRenderer);
-        $json = (string)$result;
+        $json = (string) $result;
         $this->assertSame('{"bird1":{"name":"chill kun"},"bird2":{"sparrow_id":"1"}}', $json);
     }
 
     public function testEmbedAnnotation()
     {
         $request = $this->resource->get->uri('app://self/bird/birds')->withQuery(['id' => 1])->request();
-        /** @var $request Request */
+        /* @var $request Request */
         $this->assertSame('app://self/bird/birds?id=1', $request->toUri());
         $resourceObject = $request();
         $bird1 = $resourceObject['bird1'];
         $bird2 = $resourceObject['bird2'];
-        /** @var $bird1 Request */
-        /** @var $bird2 Request */
+        /* @var $bird1 Request */
+        /* @var $bird2 Request */
         $this->assertSame('app://self/bird/canary', $bird1->toUri());
         $this->assertSame('app://self/bird/sparrow?id=1', $bird2->toUri());
 
@@ -129,7 +129,7 @@ class EmbedInterceptorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame('app://self/bird/sparrows?id_request=3&id_object=5&id_eager_request=7', $request->toUri());
 
-        /** @var $request Request */
+        /* @var $request Request */
         $resourceObject = $request();
         /** @var $birdRequest Request */
         $birdRequest = $resourceObject['birdRequest'];

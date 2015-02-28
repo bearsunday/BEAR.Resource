@@ -12,11 +12,11 @@ class User extends ResourceObject
         'x-header-test' => '123'
     ];
 
-    private $users = array(
-        array('id' => 1, 'name' => 'Athos', 'age' => 15, 'blog_id' => 11),
-        array('id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12),
-        array('id' => 3, 'name' => 'Porthos', 'age' => 17, 'blog_id' => 0)
-    );
+    private $users = [
+        ['id' => 1, 'name' => 'Athos', 'age' => 15, 'blog_id' => 11],
+        ['id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12],
+        ['id' => 3, 'name' => 'Porthos', 'age' => 17, 'blog_id' => 0]
+    ];
 
     public function onGet($id)
     {
@@ -33,7 +33,8 @@ class User extends ResourceObject
     }
 
     /**
-     * @param  string $noProvide
+     * @param string $noProvide
+     *
      * @return string
      */
     public function onPut($noProvide)

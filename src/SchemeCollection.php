@@ -68,6 +68,7 @@ final class SchemeCollection implements SchemeCollectionInterface
         if (! isset($this->collection[$schemeIndex])) {
             throw new SchemeException($uri->scheme . '://' . $uri->host);
         }
+
         return $this->collection[$schemeIndex];
     }
 }

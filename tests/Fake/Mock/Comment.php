@@ -20,6 +20,6 @@ class Comment extends ResourceObject
      */
     public function provideId()
     {
-        return array('aaa' => 1);
+        return ['aaa' => 1];
     }
 }

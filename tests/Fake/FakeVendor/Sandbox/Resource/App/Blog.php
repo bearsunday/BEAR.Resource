@@ -6,11 +6,11 @@ use BEAR\Resource\ResourceObject;
 
 class Blog extends ResourceObject
 {
-    private $repo = array(
-        11 => ['id'=> 11, 'name' => "Athos blog"],
-        12 => ['id'=> 12, 'name' => "Aramis blog"],
-        99 => ['id'=> 19, 'name' => "BEAR blog"],
-    );
+    private $repo = [
+        11 => ['id' => 11, 'name' => "Athos blog"],
+        12 => ['id' => 12, 'name' => "Aramis blog"],
+        99 => ['id' => 19, 'name' => "BEAR blog"],
+    ];
 
     /**
      * @Link(rel="post", href="app://self/marshal/post?blog_id={id}", crawl="tree")

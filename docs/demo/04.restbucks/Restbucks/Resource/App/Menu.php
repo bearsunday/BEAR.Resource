@@ -9,8 +9,7 @@ use Ray\Di\Di\Scope;
 
 class Menu extends ResourceObject
 {
-
-    private $menu = array();
+    private $menu = [];
 
     /**
      * @param Resource $resource

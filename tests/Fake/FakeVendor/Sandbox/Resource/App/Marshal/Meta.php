@@ -39,7 +39,6 @@ class Meta extends ResourceObject
      * @param id
      *
      * @return array
-     *
      */
     public function onGet($post_id)
     {

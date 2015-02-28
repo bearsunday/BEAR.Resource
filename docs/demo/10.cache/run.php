@@ -7,7 +7,7 @@ use Ray\Di\Injector;
 
 bootstarp: {
     $loader = require dirname(dirname(dirname(__DIR__))) . '/vendor/autoload.php';
-    /** @var $loader \Composer\Autoload\ClassLoader */
+    /* @var $loader \Composer\Autoload\ClassLoader */
     $loader->addPsr4('MyVendor\\MyApp\\', __DIR__);
 }
 
@@ -27,7 +27,7 @@ main: {
     $time1 = microtime(true) - $start;
     $start = microtime(true);
 }
-    $resource =unserialize($cachedClient);
+    $resource = unserialize($cachedClient);
     // request
     $news = $resource
         ->get

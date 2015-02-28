@@ -79,7 +79,6 @@ final class Request extends AbstractRequest implements RequestInterface
         return (string) $this->resourceObject->uri;
     }
 
-
     /**
      * {@inheritDoc}
      */

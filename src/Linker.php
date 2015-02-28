@@ -96,6 +96,7 @@ final class Linker implements LinkerInterface
      * @param AbstractRequest $request
      *
      * @return ResourceObject|mixed
+     *
      * @throws Exception\LinkQueryException
      */
     private function annotationLink(LinkType $link, ResourceObject $current, AbstractRequest $request)
@@ -120,6 +121,7 @@ final class Linker implements LinkerInterface
      * @param ResourceObject                   $current
      *
      * @return ResourceObject
+     *
      * @throws Exception\LinkQueryException
      * @throws Exception\LinkRelException
      */
@@ -169,7 +171,7 @@ final class Linker implements LinkerInterface
     private function crawl(array $annotations, LinkType $link, array &$body)
     {
         foreach ($annotations as $annotation) {
-            /** @var $annotation Link */
+            /* @var $annotation Link */
             if ($annotation->crawl !== $link->key) {
                 continue;
             }

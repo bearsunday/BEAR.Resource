@@ -36,4 +36,3 @@ class Order extends ResourceObject
         return $this;
     }
 }
-

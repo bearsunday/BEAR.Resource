@@ -54,7 +54,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $this->resourceObject['a'] = 'orange';
         $this->resourceObject['b'] = 'banana';
         $this->resourceObject->ksort();
-        $expected = array('a' => 'orange', 'b' => 'banana', 'd' => 'lemon');
+        $expected = ['a' => 'orange', 'b' => 'banana', 'd' => 'lemon'];
         $this->assertSame($expected, (array) $this->resourceObject->body);
     }
 
@@ -65,7 +65,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $this->resourceObject['a'] = 'orange';
         $this->resourceObject['b'] = 'banana';
         $this->resourceObject->asort();
-        $expected = array('b' => 'banana', 'd' => 'lemon', 'a' => 'orange');
+        $expected = ['b' => 'banana', 'd' => 'lemon', 'a' => 'orange'];
         $this->assertSame($expected, (array) $this->resourceObject->body);
     }
 
@@ -84,7 +84,6 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $resource->ksort();
         $this->assertSame(1, $resource->body);
     }
-
 
     public function testAppend()
     {
