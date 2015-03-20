@@ -133,9 +133,15 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
      */
     public function __toString()
     {
-        $this->invoke();
+        try {
+            $this->invoke();
 
-        return (string) $this->result;
+            return (string)$this->result;
+        } catch (\Exception $e) {
+            error_log($e);
+
+            return '';
+        }
     }
 
     /**
