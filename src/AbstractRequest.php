@@ -136,7 +136,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
         try {
             $this->invoke();
 
-            return (string)$this->result;
+            return (string) $this->result;
         } catch (\Exception $e) {
             error_log($e);
 
