@@ -17,8 +17,8 @@ class VoidParamHandler implements ParamHandlerInterface
     public function handle(\ReflectionParameter $parameter)
     {
         $class = $parameter->getDeclaringClass();
-        $className = $class->implementsInterface(WeavedInterface::class) ? $class->getParentClass()->getName() : $class->getName();
-        $method = $parameter->getDeclaringFunction()->getName();
+        $className = $class->implementsInterface(WeavedInterface::class) ? $class->getParentClass()->getName() : $class->name;
+        $method = $parameter->getDeclaringFunction()->name;
         $msg = sprintf("$%s in %s::%s()", $parameter->name, $className, $method);
 
         throw new ParameterException($msg);
