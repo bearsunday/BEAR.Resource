@@ -17,7 +17,7 @@ final class Uri extends AbstractUri
     public function __construct($uri, array $query = [])
     {
         $this->validate($uri);
-        if ($query) {
+        if (! empty($query)) {
             $uri = uri_template($uri, $query);
         }
         $parsedUrl = parse_url($uri);
@@ -25,7 +25,7 @@ final class Uri extends AbstractUri
         if (isset($parsedUrl['query'])) {
             parse_str($parsedUrl['query'], $this->query);
         }
-        if ($query) {
+        if (! empty($query)) {
             $this->query = $query + $this->query;
         }
     }
