@@ -18,7 +18,7 @@ final class AppAdapter implements AdapterInterface
     /**
      * Resource adapter namespace
      *
-     * @var array
+     * @var string
      */
     private $namespace;
 

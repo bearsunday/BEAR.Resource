@@ -15,7 +15,7 @@ final class Factory implements FactoryInterface
     /**
      * Resource adapter biding config
      *
-     * @var SchemeCollection
+     * @var SchemeCollectionInterface
      */
     private $scheme;
 

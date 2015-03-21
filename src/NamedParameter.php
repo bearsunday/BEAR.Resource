@@ -7,8 +7,6 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\LogicCache;
-use BEAR\Resource\Exception\ParameterException;
-use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\Cache;
 
 final class NamedParameter implements NamedParameterInterface

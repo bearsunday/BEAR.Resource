@@ -61,7 +61,7 @@ interface RequestInterface
     public function hash();
 
     /**
-     * @return ResourceObject
+     * @return ResourceObject|Request
      */
     public function request();
 

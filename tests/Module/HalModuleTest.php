@@ -2,8 +2,6 @@
 
 namespace Module;
 
-use BEAR\Resource\Module\ResourceModule;
-use BEAR\Resource\Resource;
 use BEAR\Resource\ResourceInterface;
 use FakeVendor\Sandbox\AppModule;
 use Ray\Di\Injector;
