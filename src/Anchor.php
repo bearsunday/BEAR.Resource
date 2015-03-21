@@ -13,6 +13,11 @@ use Doctrine\Common\Annotations\Reader;
 final class Anchor implements AnchorInterface
 {
     /**
+     * @var Reader
+     */
+    private $reader;
+
+    /**
      * @param Reader $reader
      */
     public function __construct(Reader $reader)

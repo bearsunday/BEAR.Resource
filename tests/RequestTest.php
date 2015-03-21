@@ -220,4 +220,15 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInternalType('string', $this->request->hash());
     }
+
+    public function testRequestExceptionString()
+    {
+        $request = new Request(
+            $this->invoker,
+            new FakeNopResource,
+            Request::PUT,
+            ['key' => 'animal', 'value' => 'kuma']
+        );
+        $this->assertSame('', (string) $request);
+    }
 }

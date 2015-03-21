@@ -22,7 +22,7 @@ interface ResourceInterface
      *
      * @param string $uri
      *
-     * @return $this
+     * @return ResourceObject
      */
     public function newInstance($uri);
 
@@ -31,7 +31,7 @@ interface ResourceInterface
      *
      * @param mixed $ro
      *
-     * @return ResourceObject
+     * @return RequestInterface
      */
     public function object($ro);
 

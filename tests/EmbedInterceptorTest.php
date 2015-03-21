@@ -6,6 +6,7 @@ use BEAR\Resource\Exception\EmbedException;
 use BEAR\Resource\Module\ResourceModule;
 use Doctrine\Common\Annotations\AnnotationReader;
 use FakeVendor\Sandbox\Resource\App\Bird\Birds;
+use FakeVendor\Sandbox\Resource\App\Bird\Birds_Rel;
 use FakeVendor\Sandbox\Resource\App\Bird\InvalidBird;
 use FakeVendor\Sandbox\Resource\App\Bird\NotFoundBird;
 use FakeVendor\Sandbox\Resource\App\Bird\Sparrow;
@@ -33,10 +34,30 @@ class EmbedInterceptorTest extends \PHPUnit_Framework_TestCase
 
     public function testInvoke()
     {
-        $mock = new Birds;
+        $fake = new Birds;
+        $fake->uri = new Uri('app://self/birds');
         $invocation = new ReflectiveMethodInvocation(
-            $mock,
-            new \ReflectionMethod($mock, 'onGet'),
+            $fake,
+            new \ReflectionMethod($fake, 'onGet'),
+            new Arguments(['id' => 1]),
+            [$this->embedInterceptor]
+        );
+        $result = $invocation->proceed();
+        $profile = $result['bird1'];
+        /* @var $profile Request */
+        $this->assertInstanceOf('BEAR\Resource\Request', $profile);
+        $this->assertSame('get app://self/bird/canary', $profile->toUriWithMethod());
+
+        return $result;
+    }
+
+    public function testInvokeRelativePath()
+    {
+        $fake = new Birds_Rel;
+        $fake->uri = new Uri('app://self/birds_rel');
+        $invocation = new ReflectiveMethodInvocation(
+            $fake,
+            new \ReflectionMethod($fake, 'onGet'),
             new Arguments(['id' => 1]),
             [$this->embedInterceptor]
         );

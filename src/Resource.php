@@ -18,29 +18,44 @@ namespace BEAR\Resource;
 final class Resource implements ResourceInterface
 {
     /**
-     * @var Factory
+     * Resource factory
+     *
+     * @var FactoryInterface
      */
     private $factory;
 
     /**
-     * @var Invoker
+     * @var InvokerInterface
      */
     private $invoker;
 
     /**
-     * @var Anchor
+     * Anchor
+     *
+     * @var AnchorInterface
      */
     private $anchor;
 
     /**
+     * Linker
+     *
      * @var LinkerInterface
      */
     private $linker;
 
     /**
+     * Reuqest
+     *
      * @var Request
      */
     private $request;
+
+    /**
+     * Request method
+     *
+     * @var string
+     */
+    private $method;
 
     public function __construct(
         FactoryInterface $factory,

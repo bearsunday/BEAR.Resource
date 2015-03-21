@@ -18,7 +18,7 @@ final class Meta
     public $uri;
 
     /**
-     * @var array
+     * @var Options
      */
     public $options = [];
 

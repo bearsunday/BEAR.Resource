@@ -7,8 +7,6 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\LogicCache;
-use BEAR\Resource\Exception\ParameterException;
-use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\Cache;
 
 final class NamedParameter implements NamedParameterInterface
@@ -55,7 +53,7 @@ final class NamedParameter implements NamedParameterInterface
         $parameters = (new \ReflectionMethod($callable[0], $callable[1]))->getParameters();
         $names = [];
         foreach ($parameters as $parameter) {
-            $default = $parameter->isDefaultValueAvailable() === true ? $parameter->getDefaultValue() : new Param(get_class($callable[0]), $callable[1], $parameter->getName());
+            $default = $parameter->isDefaultValueAvailable() === true ? $parameter->getDefaultValue() : new Param(get_class($callable[0]), $callable[1], $parameter->name);
             $names[$parameter->name] = $default;
         }
 

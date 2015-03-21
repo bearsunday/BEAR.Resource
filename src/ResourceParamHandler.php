@@ -33,7 +33,10 @@ class ResourceParamHandler implements ParamHandlerInterface
      */
     public function handle(\ReflectionParameter $parameter)
     {
-        $annotations = $this->reader->getMethodAnnotations($parameter->getDeclaringFunction());
+        $func = $parameter->getDeclaringFunction();
+        $method = new \ReflectionMethod($parameter->getDeclaringClass()->name, $func->name);
+        $parameter->getDeclaringFunction()->name;
+        $annotations = $this->reader->getMethodAnnotations($method);
         foreach ($annotations as $annotation) {
             if ($annotation instanceof ResourceParam && $annotation->param === $parameter->name) {
                 return $this->getResourceParam($annotation->uri);
