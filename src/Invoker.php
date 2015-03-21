@@ -11,7 +11,7 @@ use BEAR\Resource\Exception\MethodNotAllowedException;
 final class Invoker implements InvokerInterface
 {
     /**
-     * @var NamedParameter
+     * @var NamedParameterInterface
      */
     protected $params;
 
