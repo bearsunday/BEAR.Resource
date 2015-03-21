@@ -445,7 +445,9 @@ Please check out [BEAR.Sunday web site](http://bearsunday.github.io/).
 
 Here's how to install BEAR.Resource from source and run the unit tests and demos.
 
-$ composer create-project bear/resource:~1.0 BEAR.Resource
-$ cd BEAR.Resource
-$ phpunit
-$ php docs/demo/run.php
+```
+composer create-project bear/resource:~1.0 BEAR.Resource
+cd BEAR.Resource
+phpunit
+php docs/demo/run.php
+```
