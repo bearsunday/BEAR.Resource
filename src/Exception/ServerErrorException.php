@@ -6,6 +6,12 @@
  */
 namespace BEAR\Resource\Exception;
 
+use BEAR\Resource\Code;
+
 class ServerErrorException extends \ErrorException implements ExceptionInterface
 {
+    public function __construct($message = null, $code = Code::ERROR, \Exception $previous = null)
+    {
+        parent::__construct($message, $code, $previous);
+    }
 }
