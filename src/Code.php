@@ -73,8 +73,9 @@ final class Code
         304 => 'Not Modified',
         305 => 'Use Proxy',
         307 => 'Temporary Redirect',
+        306 => 'Switch Proxy',
         308 => 'Permanent Redirect',
-        // 308-399   Unassigned
+        // 309-399   Unassigned
         400 => 'Bad Request',
         401 => 'Unauthorized',
         402 => 'Payment Required',
