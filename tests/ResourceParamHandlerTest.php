@@ -29,7 +29,7 @@ class ResourceParamHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testException()
     {
-        $this->setExpectedException(ParameterException::class);
+        $this->setExpectedException(ParameterException::class, null, Code::BAD_REQUEST);
         $this->resource->put->uri('app://self/rparam/greeting')->eager->request();
     }
 }
