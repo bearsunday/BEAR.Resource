@@ -54,21 +54,21 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
 
     public function testInvokerInterfaceDefaultParamWithNoProvider()
     {
-        $this->setExpectedException(ParameterException::class);
+        $this->setExpectedException(ParameterException::class, null, Code::BAD_REQUEST);
         $request = new Request($this->invoker, new User, Request::PUT);
         $this->invoker->invoke($request);
     }
 
     public function testInvokerInterfaceWithNoProvider()
     {
-        $this->setExpectedException(ParameterException::class);
+        $this->setExpectedException(ParameterException::class, null, Code::BAD_REQUEST);
         $request = new Request($this->invoker, new Mock\Blog, Request::GET, []);
         $this->invoker->invoke($request);
     }
 
     public function testInvokerInterfaceWithUnspecificProviderButNoResult()
     {
-        $this->setExpectedException(ParameterException::class);
+        $this->setExpectedException(ParameterException::class, null, Code::BAD_REQUEST);
         $request = new Request($this->invoker, new Comment);
         $actual = $this->invoker->invoke($request);
         $this->assertSame('entry1', $actual);

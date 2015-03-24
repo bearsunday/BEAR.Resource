@@ -44,7 +44,7 @@ class NamedParameterTest extends \PHPUnit_Framework_TestCase
 
     public function testParameterException()
     {
-        $this->setExpectedException(ParameterException::class);
+        $this->setExpectedException(ParameterException::class, null, Code::BAD_REQUEST);
         $object = new ReflectiveParamsTestClass;
         $namedArgs = [];
         $this->params->getParameters([$object, 'onGet'], $namedArgs);

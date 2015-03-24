@@ -21,6 +21,6 @@ class VoidParamHandler implements ParamHandlerInterface
         $method = $parameter->getDeclaringFunction()->name;
         $msg = sprintf("$%s in %s::%s()", $parameter->name, $className, $method);
 
-        throw new ParameterException($msg);
+        throw new ParameterException($msg, Code::BAD_REQUEST);
     }
 }
