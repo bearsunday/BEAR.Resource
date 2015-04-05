@@ -63,4 +63,13 @@ class JsonRendererTest extends \PHPUnit_Framework_TestCase
         $data = (string) $this->ro;
         $this->assertInternalType('string', $data);
     }
+
+    public function testHeader()
+    {
+        /* @var $ro ResourceObject */
+        $ro = $this->ro->onGet();
+        (string) $ro;
+        $expected = 'application/json';
+        $this->assertSame($expected, $ro->headers['content-type']);
+    }
 }
