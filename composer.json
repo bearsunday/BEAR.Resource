@@ -43,10 +43,5 @@
             ],
             "FakeVendor\\Sandbox\\": "tests/Fake/FakeVendor/Sandbox/"
         }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-develop-2": "1.0.x-dev"
-        }
     }
 }
