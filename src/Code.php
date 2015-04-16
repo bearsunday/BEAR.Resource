@@ -28,6 +28,7 @@ final class Code
     // 40X Client Error
     const BAD_REQUEST = 400;
     const UNAUTHORIZED = 401;
+    const FORBIDDEN = 403;
     const NOT_FOUND = 404;
 
     // 50X Service Error
@@ -106,7 +107,7 @@ final class Code
         505 => 'HTTP Version Not Supported',
         507 => 'Insufficient Storage',
         508 => 'Loop Detected',
-        // 509       Unassigned]
+        // 509       Unassigned
         510 => 'Not Extended',
         // 511-599   Unassigned
     ];
