@@ -8,8 +8,7 @@
         "Object as a service",
         "Protocol"
     ],
-    "homepage": "https://github.com/koriym/BEAR.Resource",
-    "license": "BSD-3-Clause",
+    "license": "MIT",
     "authors": [
         {
             "name": "Akihito Koriyama",
