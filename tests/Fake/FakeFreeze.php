@@ -14,7 +14,7 @@ class FakeFreeze extends ResourceObject
 
     public function __construct()
     {
-        $this->closure = function(){};
+        $this->closure = function () {};
         $module = new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox'));
         /* @var $resource ResourceInterface */
         $resource = (new Injector($module, $_ENV['TMP_DIR']))->getInstance(ResourceInterface::class);
