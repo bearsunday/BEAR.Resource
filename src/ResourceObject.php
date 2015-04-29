@@ -228,4 +228,13 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
 
         return ['code', 'headers', 'body', 'view'];
     }
+
+    public function __debugInfo() {
+        return [
+            'code' => $this->code,
+            'headers' => $this->headers,
+            'body' => $this->body,
+            'view' => $this->view
+        ];
+    }
 }
