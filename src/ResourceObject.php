@@ -231,7 +231,10 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     public function __sleep()
     {
         $this->uri = (string) $this->uri;
-        $this->body = $this->evaluate($this->body);
+        $isTraversable = is_array($this->body) || $this->body instanceof \Traversable;
+        if ($isTraversable) {
+            $this->body = $this->evaluate($this->body);
+        }
 
         return ['uri', 'code', 'headers', 'body', 'view'];
     }
