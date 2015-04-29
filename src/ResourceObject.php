@@ -190,8 +190,12 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      */
     public function jsonSerialize()
     {
-        $this->evaluateBody();
-
+        $this->uri = (string) $this->uri;
+        $body = $this->body;
+        $isTraversable = is_array($body) || $body instanceof \Traversable;
+        if ($isTraversable) {
+            return $this->evaluate($body);
+        }
         return ['value' => $this->body];
     }
 
@@ -208,25 +212,28 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      *
      * @return mixed
      */
-    private function evaluateBody()
+    /**
+     * @param mixed $body
+     *
+     * @return mixed
+     */
+    private function evaluate($body)
     {
-        $isTraversable = is_array($this->body) || $this->body instanceof \Traversable;
-        if (! $isTraversable) {
-            return;
-        }
-        foreach ($this->body as &$value) {
+        foreach ($body as &$value) {
             if ($value instanceof RequestInterface) {
                 $result = $value();
                 $value = $result->body;
             }
         }
+        return $body;
     }
 
     public function __sleep()
     {
-        $this->evaluateBody();
+        $this->uri = (string) $this->uri;
+        $this->body = $this->evaluate($this->body);
 
-        return ['code', 'headers', 'body', 'view'];
+        return ['uri', 'code', 'headers', 'body', 'view'];
     }
 
     public function __debugInfo() {
