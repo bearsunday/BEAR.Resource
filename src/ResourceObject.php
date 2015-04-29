@@ -221,4 +221,11 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
             }
         }
     }
+
+    public function __sleep()
+    {
+        $this->evaluateBody();
+
+        return ['code', 'headers', 'body', 'view'];
+    }
 }
