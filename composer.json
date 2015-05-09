@@ -40,7 +40,8 @@
                 "tests/",
                 "tests/Fake/"
             ],
-            "FakeVendor\\Sandbox\\": "tests/Fake/FakeVendor/Sandbox/"
+            "FakeVendor\\Sandbox\\": "tests/Fake/FakeVendor/Sandbox/",
+            "FakeVendor\\Blog\\": "tests/Fake/FakeVendor/Blog/src"
         }
     }
 }
