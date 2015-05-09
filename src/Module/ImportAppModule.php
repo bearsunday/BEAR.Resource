@@ -7,62 +7,43 @@
 namespace BEAR\Resource\Module;
 
 use BEAR\Resource\Annotation\ImportSchemeConfig;
-use BEAR\Resource\Exception\SchemeException;
+use BEAR\Resource\ContextualModule;
 use BEAR\Resource\SchemeCollectionInterface;
 use Ray\Compiler\DiCompiler;
 use Ray\Di\AbstractModule;
 
 class ImportAppModule extends AbstractModule
 {
+    /**
+     * Import scheme config
+     *
+     * @var array [$host, $scriptDir, $name][]
+     */
     private $schemeConfig = [];
+
+    private $defaultContextName;
+
+    /**
+     * @var ContextualModule
+     */
+    private $contextualModule;
 
     /**
      * @param array $configs [[host => [application name, context]]
      */
-    public function __construct(array $configs)
+    public function __construct(array $configs, $defaultContextName = '')
     {
+        $this->contextualModule = new ContextualModule($defaultContextName);
         foreach ($configs as $host => $config) {
-            list($name, $context) = $config;
-            $appModule = $name . '\Module\AppModule';
-            $tmpDir = dirname(dirname(dirname((new \ReflectionClass($appModule))->getFileName()))) . '/var/tmp';
-            $scriptDir = sprintf('%s/%s', $tmpDir, $context);
-            if (! file_exists($scriptDir)) {
-                mkdir($scriptDir);
-            }
-            $this->schemeConfig[] = [$host, $scriptDir, $name];
-            if ($host === 'self') {
-                continue;
-            }
-            $config[] = $scriptDir;
-            $module = $this->getContextualModule($context, $name);
-            if (! file_exists($scriptDir)) {
-                mkdir($scriptDir);
-            }
-            $compiler = new DiCompiler($module, $scriptDir);
-            $compiler->compile();
-            $this->schemeConfig[] = [$host, $scriptDir, $name];
+            // create import config
+            list($appName, $context, $scriptDir) = $this->getSchemeConfig($config, $host);
+            $this->compile($scriptDir, $context, $appName);
+            $this->schemeConfig[] = [$host, $scriptDir, $appName];
         }
+        $this->defaultContextName = $defaultContextName;
         parent::__construct();
     }
 
-    private function getContextualModule($contexts, $name)
-    {
-        $contextsArray = array_reverse(explode('-', $contexts));
-        $module = null;
-        foreach ($contextsArray as $context) {
-            $class = $name . '\Module\\' . ucwords($context) . 'Module';
-            if (!class_exists($class)) {
-                $class = 'BEAR\Package\Context\\' . ucwords($context) . 'Module';
-            }
-            if (! is_a($class, AbstractModule::class, true)) {
-                throw new SchemeException($class);
-            }
-            /* @var $module AbstractModule */
-            $module = new $class($module);
-        }
-
-        return $module;
-    }
     /**
      * {@inheritdoc}
      */
@@ -70,5 +51,38 @@ class ImportAppModule extends AbstractModule
     {
         $this->bind()->annotatedWith(ImportSchemeConfig::class)->toInstance($this->schemeConfig);
         $this->bind(SchemeCollectionInterface::class)->toProvider(ImportSchemeCollectionProvider::class);
+    }
+
+    /**
+     * @param array  $config
+     * @param string $host
+     *
+     * @return array [$name, $context, $scriptDir]
+     */
+    private function getSchemeConfig(array $config, $host)
+    {
+        list($name, $context) = $config;
+        $appModule = $name . '\Module\AppModule';
+        $tmpDir = dirname(dirname(dirname((new \ReflectionClass($appModule))->getFileName()))) . '/var/tmp';
+        $scriptDir = sprintf('%s/%s', $tmpDir, $context);
+        $this->schemeConfig[] = [$host, $scriptDir, $name];
+
+        return [$name, $context, $scriptDir];
+    }
+
+    /**
+     * @param string $scriptDir
+     * @param string $context
+     * @param string $appName
+     *
+     */
+    private function compile($scriptDir, $context, $appName)
+    {
+        $module = $this->contextualModule->__invoke($context, $appName);
+        if (! file_exists($scriptDir)) {
+            mkdir($scriptDir);
+        }
+        $compiler = new DiCompiler($module, $scriptDir);
+        $compiler->compile();
     }
 }

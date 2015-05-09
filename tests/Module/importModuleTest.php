@@ -2,6 +2,7 @@
 
 namespace Module;
 
+use BEAR\Resource\Exception\SchemeException;
 use BEAR\Resource\Module\ImportAppModule;
 use BEAR\Resource\ResourceInterface;
 use FakeVendor\Sandbox\AppModule;
@@ -11,6 +12,15 @@ class ImportAppModuleTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
+        $rm = function ($dir) use (&$rm) {
+            foreach (glob($dir . '/*') as $file) {
+                is_dir($file) ? $rm($file) : unlink($file);
+                @rmdir($file);
+            }
+        };
+        $tmpDir = dirname(dirname(__DIR__)) . '/tests/Fake/FakeVendor/Blog/var/tmp';
+        $rm($tmpDir);
+        file_put_contents($tmpDir . '/tmp.text', '1');
         parent::setUp();
     }
 
@@ -42,5 +52,14 @@ EOT;
 {"weather":{"today":"the weather of today is sunny"},"technology":"Microsoft to stop producing Windows versions","user":{"id":3,"name":"Porthos","age":17,"blog_id":0}}
 EOT;
         $this->assertSame($expect, (string) $news);
+    }
+
+    public function testInvalidContext()
+    {
+        $this->setExpectedException(SchemeException::class);
+        $importConfig = [
+            'blog' => ['FakeVendor\Blog', 'invalid_context']
+        ];
+        (new ImportAppModule($importConfig));
     }
 }
