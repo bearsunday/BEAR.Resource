@@ -220,14 +220,12 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      */
     private function evaluate($body)
     {
-        $isTraversable = is_array($body) || $body instanceof \Traversable;
-        if (! $isTraversable) {
-            return $body;
-        }
-        foreach ($body as &$value) {
-            if ($value instanceof RequestInterface) {
-                $result = $value();
-                $value = $result->body;
+        if (is_array($body)) {
+            foreach ($body as &$value) {
+                if ($value instanceof RequestInterface) {
+                    $result = $value();
+                    $value = $result->body;
+                }
             }
         }
 
@@ -236,8 +234,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
 
     public function __sleep()
     {
-        $isTraversable = is_array($this->body) || $this->body instanceof \Traversable;
-        if ($isTraversable) {
+        if (is_array($this->body)) {
             $this->body = $this->evaluate($this->body);
         }
 
