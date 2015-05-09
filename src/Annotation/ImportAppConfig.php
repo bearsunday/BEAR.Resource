@@ -13,7 +13,7 @@ use Ray\Di\Di\Qualifier;
  * @Target("METHOD")
  * @Qualifier
  */
-final class ImportSchemeConfig
+final class ImportAppConfig
 {
     /**
      * @var string

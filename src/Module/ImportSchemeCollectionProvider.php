@@ -7,15 +7,19 @@
 namespace BEAR\Resource\Module;
 
 use BEAR\Resource\Annotation\AppName;
-use BEAR\Resource\Annotation\ImportSchemeConfig;
+use BEAR\Resource\Annotation\ImportAppConfig;
 use BEAR\Resource\AppAdapter;
+use BEAR\Resource\ImportApp;
 use Ray\Compiler\ScriptInjector;
 use Ray\Di\InjectorInterface;
 use Ray\Di\ProviderInterface;
 
 class ImportSchemeCollectionProvider implements ProviderInterface
 {
-    private $schemeConfig;
+    /**
+     * @var ImportApp[]
+     */
+    private $importAppConfig;
 
     /**
      * @var string
@@ -29,16 +33,16 @@ class ImportSchemeCollectionProvider implements ProviderInterface
 
     /**
      * @param string            $appName
-     * @param array             $schemeConfig
+     * @param array             $importAppConfig
      * @param InjectorInterface $injector
      *
      * @AppName("appName")
-     * @ImportSchemeConfig("schemeConfig")
+     * @ImportAppConfig("importAppConfig")
      */
-    public function __construct($appName, array $schemeConfig, InjectorInterface $injector)
+    public function __construct($appName, array $importAppConfig, InjectorInterface $injector)
     {
         $this->appName = $appName;
-        $this->schemeConfig = $schemeConfig;
+        $this->importAppConfig = $importAppConfig;
         $this->injector = $injector;
     }
 
@@ -50,12 +54,11 @@ class ImportSchemeCollectionProvider implements ProviderInterface
     public function get()
     {
         $schemeCollection = (new SchemeCollectionProvider($this->appName, $this->injector))->get();
-        foreach ($this->schemeConfig as $config) {
-            list($host, $scriptDir, $name) = $config;
-            $adapter = new AppAdapter(new ScriptInjector($scriptDir), $name);
+        foreach ($this->importAppConfig as $importApp) {
+            $adapter = new AppAdapter(new ScriptInjector($importApp->scriptDir), $importApp->appName);
             $schemeCollection
-                ->scheme('page')->host($host)->toAdapter($adapter)
-                ->scheme('app')->host($host)->toAdapter($adapter);
+                ->scheme('page')->host($importApp->host)->toAdapter($adapter)
+                ->scheme('app')->host($importApp->host)->toAdapter($adapter);
         }
 
         return $schemeCollection;

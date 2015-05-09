@@ -3,12 +3,13 @@
 namespace Module;
 
 use BEAR\Resource\Exception\SchemeException;
+use BEAR\Resource\ImportApp;
 use BEAR\Resource\Module\ImportAppModule;
 use BEAR\Resource\ResourceInterface;
 use FakeVendor\Sandbox\AppModule;
 use Ray\Di\Injector;
 
-class ImportAppModuleTest extends \PHPUnit_Framework_TestCase
+class importModuleTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
@@ -28,7 +29,7 @@ class ImportAppModuleTest extends \PHPUnit_Framework_TestCase
     {
         $module = new AppModule;
         $importConfig = [
-            'blog' => ['FakeVendor\Blog', 'app']
+            new ImportApp('blog', 'FakeVendor\Blog', 'app')
         ];
         $module->override(new ImportAppModule($importConfig));
         $resource = (new Injector($module))->getInstance(ResourceInterface::class);
@@ -58,7 +59,7 @@ EOT;
     {
         $this->setExpectedException(SchemeException::class);
         $importConfig = [
-            'blog' => ['FakeVendor\Blog', 'invalid_context']
+            new ImportApp('blog', 'FakeVendor\Blog', 'invalid_context')
         ];
         (new ImportAppModule($importConfig));
     }
