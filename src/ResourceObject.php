@@ -190,7 +190,6 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      */
     public function jsonSerialize()
     {
-        $this->uri = (string) $this->uri;
         $body = $this->evaluate($this->body);
         $isTraversable = is_array($body) || $body instanceof \Traversable;
         if (! $isTraversable) {
