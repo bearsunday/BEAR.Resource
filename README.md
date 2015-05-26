@@ -2,9 +2,9 @@
 
 ## Hypermedia framework for object as a service
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/bearsunday/BEAR.Resource/badges/quality-score.png?b=develop-2)](https://scrutinizer-ci.com/g/bearsunday/BEAR.Resource/?branch=develop-2)
-[![Code Coverage](https://scrutinizer-ci.com/g/bearsunday/BEAR.Resource/badges/coverage.png?b=develop-2)](https://scrutinizer-ci.com/g/bearsunday/BEAR.Resource/?branch=develop-2)
-[![Build Status](https://travis-ci.org/bearsunday/BEAR.Resource.svg?branch=develop-2)](https://travis-ci.org/bearsunday/BEAR.Resource)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/bearsunday/BEAR.Resource/badges/quality-score.png?b=1.x)](https://scrutinizer-ci.com/g/bearsunday/BEAR.Resource/?branch=1.x)
+[![Code Coverage](https://scrutinizer-ci.com/g/bearsunday/BEAR.Resource/badges/coverage.png?b=1.x)](https://scrutinizer-ci.com/g/bearsunday/BEAR.Resource/?branch=1.x)
+[![Build Status](https://travis-ci.org/bearsunday/BEAR.Resource.svg?branch=1.x)](https://travis-ci.org/bearsunday/BEAR.Resource)
 
 **BEAR.Resource** Is a Hypermedia framework that allows resources to behave as objects. It allows objects to have RESTful web service benefits such as client-server, uniform interface, statelessness, resource expression with mutual connectivity and layered components.
 
