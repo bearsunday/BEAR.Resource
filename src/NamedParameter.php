@@ -6,7 +6,6 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Annotation\LogicCache;
 use Doctrine\Common\Cache\Cache;
 
 final class NamedParameter implements NamedParameterInterface
@@ -23,8 +22,6 @@ final class NamedParameter implements NamedParameterInterface
 
     /**
      * @param Cache $cache
-     *
-     * @LogicCache("cache")
      */
     public function __construct(Cache $cache, ParamHandlerInterface $handler)
     {

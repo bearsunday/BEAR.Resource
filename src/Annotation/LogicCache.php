@@ -12,6 +12,8 @@ use Ray\Di\Di\Qualifier;
  * @Annotation
  * @Target("METHOD")
  * @Qualifier
+ *
+ * @deprecated
  */
 final class LogicCache
 {
