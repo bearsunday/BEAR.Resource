@@ -438,8 +438,8 @@ Please check out [BEAR.Sunday web site](http://bearsunday.github.io/).
 
 ## See Also
 
- * [BEAR.QueryRepository](https://github.com/koriym/BEAR.QueryRepository) - Segregates reads and writes into two separate repository.
- * [Ray.WebParamModule](https://github.com/Ray-Di/Ray.WebParamModule) - Binds the value(s) of a web context to method parameter.
+ * [BEAR.QueryRepository](https://github.com/bearsunday/BEAR.QueryRepository) - Segregates reads and writes into two separate repository.
+ * [Ray.WebParamModule](https://github.com/ray-di/Ray.WebParamModule) - Binds the value(s) of a web context to method parameter.
 
 ## Testing BEAR.Resource
 
