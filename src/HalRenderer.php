@@ -65,14 +65,39 @@ class HalRenderer implements RenderInterface
     }
 
     /**
+     * @param ResourceObject $ro
+     *
      * @return array
      */
     private function valuate(ResourceObject $ro)
     {
+        // evaluate all request in body.
+        if (is_array($ro->body)) {
+            $this->valuateElements($ro);
+        }
         // HAL
         $body = $ro->body ?: [];
+        if (is_scalar($body)) {
+            $body = ['value' => $body];
 
-        return [$ro, $body];
+            return [$ro, $body];
+        }
+
+        return[$ro, $body];
+    }
+
+    /**
+     * @param \BEAR\Resource\ResourceObject $ro
+     */
+    private function valuateElements(ResourceObject &$ro)
+    {
+        foreach ($ro->body as $key => &$element) {
+            if ($element instanceof RequestInterface) {
+                unset($ro->body[$key]);
+                $view = $this->render($element());
+                $ro->body['_embedded'][$key] = json_decode($view);
+            }
+        }
     }
 
     private function getHalLink(array $body, array $annotations, Hal $hal)
