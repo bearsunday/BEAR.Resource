@@ -1,6 +1,6 @@
 <?php
 
-namespace Sandbox\Resource\App;
+namespace Sandbox\Demo03\Resource\App;
 
 trait SelectTrait
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Sandbox\Resource\Resource\App;
+namespace Sandbox\Demo01\Resource\App;
 
 use BEAR\Resource\Annotation\Link;
 use BEAR\Resource\ResourceObject;

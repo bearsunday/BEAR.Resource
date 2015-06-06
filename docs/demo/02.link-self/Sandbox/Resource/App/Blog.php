@@ -1,6 +1,6 @@
 <?php
 
-namespace Sandbox\Resource\Resource\App;
+namespace Sandbox\Demo02\Resource\App;
 
 use BEAR\Resource\ResourceObject;
 

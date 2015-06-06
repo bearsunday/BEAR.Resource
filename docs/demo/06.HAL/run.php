@@ -21,7 +21,7 @@ main: {
         ->withQuery(['date' => 'today'])
         ->request();
     // output
-    echo $news . PHP_EOL;
+    echo $news;
 }
 //{
 //    "headline": "40th anniversary of Rubik's Cube invention.",
@@ -32,6 +32,9 @@ main: {
 //            "_links": {
 //            "self": {
 //                "href": "/weather?date=today"
+//                },
+//                "tomorrow": {
+//                "href": "/weather/tomorrow"
 //                }
 //            }
 //        }

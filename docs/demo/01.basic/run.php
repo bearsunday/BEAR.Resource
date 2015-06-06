@@ -8,7 +8,7 @@ use Ray\Di\Injector;
 main: {
     require __DIR__ . '/scripts/bootstrap.php';
     /* @var $resource \BEAR\Resource\ResourceInterface */
-    $resource = (new Injector(new ResourceModule('Sandbox\Resource')))->getInstance(ResourceInterface::class);
+    $resource = (new Injector(new ResourceModule('Sandbox\Demo01')))->getInstance(ResourceInterface::class);
 
     /* @var $result ResourceObject */
     $result = $resource

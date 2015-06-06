@@ -1,8 +1,8 @@
 <?php
-namespace Sandbox\Resource\App\Tag;
+namespace Sandbox\Demo03\Resource\App\Tag;
 
 use BEAR\Resource\ResourceObject;
-use Sandbox\Resource\App\SelectTrait;
+use \Sandbox\Demo03\Resource\App\SelectTrait;
 
 class Name extends ResourceObject
 {

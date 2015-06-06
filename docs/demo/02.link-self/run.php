@@ -8,7 +8,7 @@ use Ray\Di\Injector;
 main: {
     require __DIR__ . '/scripts/bootstrap.php';
     /* @var $resource \BEAR\Resource\ResourceInterface */
-    $resource = (new Injector(new HalModule(new ResourceModule('Sandbox\Resource'))))->getInstance(ResourceInterface::class);
+    $resource = (new Injector(new HalModule(new ResourceModule('Sandbox\Demo02'))))->getInstance(ResourceInterface::class);
     $user = $resource
         ->get
         ->uri('app://self/user')

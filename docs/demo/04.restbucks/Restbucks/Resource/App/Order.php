@@ -24,7 +24,7 @@ class Order extends ResourceObject
     {
         // data store here
         //   .. and get order id.
-        $orderId = rand();
+        $orderId = '12345';
         $this['drink'] = $drink;
         $this['order_id'] = $orderId;
 
