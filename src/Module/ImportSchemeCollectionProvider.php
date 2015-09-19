@@ -55,7 +55,7 @@ class ImportSchemeCollectionProvider implements ProviderInterface
     {
         $schemeCollection = (new SchemeCollectionProvider($this->appName, $this->injector))->get();
         foreach ($this->importAppConfig as $importApp) {
-            $adapter = new AppAdapter(new ScriptInjector($importApp->scriptDir), $importApp->appName);
+            $adapter = new AppAdapter($this->injector, $importApp->appName);
             $schemeCollection
                 ->scheme('page')->host($importApp->host)->toAdapter($adapter)
                 ->scheme('app')->host($importApp->host)->toAdapter($adapter);
