@@ -401,7 +401,7 @@ HAL Moduleを使うとリソース表現が[HAL](http://stateless.co/hal_specifi
 ```javascript
 {
     "require": {
-        "bear/resource": "~1.0@dev"
+        "bear/resource": "~1.0"
     }
 }
 ```
