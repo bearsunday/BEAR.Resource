@@ -42,7 +42,6 @@ class ImportAppModule extends AbstractModule
         $this->contextualModule = new ContextualModule($defaultContextName);
         foreach ($importApps as $importApp) {
             // create import config
-            $this->compile($importApp);
             $this->importAppConfig[] = $importApp;
         }
         $this->defaultContextName = $defaultContextName;
@@ -56,12 +55,5 @@ class ImportAppModule extends AbstractModule
     {
         $this->bind()->annotatedWith(ImportAppConfig::class)->toInstance($this->importAppConfig);
         $this->bind(SchemeCollectionInterface::class)->toProvider(ImportSchemeCollectionProvider::class);
-    }
-
-    private function compile(ImportApp $importApp)
-    {
-        $module = $this->contextualModule->__invoke($importApp->context, $importApp->appName);
-        $compiler = new DiCompiler($module, $importApp->scriptDir);
-        $compiler->compile();
     }
 }
