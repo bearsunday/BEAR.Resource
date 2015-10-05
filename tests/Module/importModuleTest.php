@@ -54,13 +54,4 @@ EOT;
 EOT;
         $this->assertSame($expect, (string) $news);
     }
-
-    public function testInvalidContext()
-    {
-        $this->setExpectedException(SchemeException::class);
-        $importConfig = [
-            new ImportApp('blog', 'FakeVendor\Blog', 'invalid_context')
-        ];
-        (new ImportAppModule($importConfig));
-    }
 }
