@@ -30,8 +30,7 @@
             "BEAR\\Resource\\": "src/"
         },
         "files": [
-            "src-files/uri_template.php",
-            "src-files/doctrine_annotations.php"
+            "src-files/uri_template.php"
         ]
     },
     "autoload-dev": {
