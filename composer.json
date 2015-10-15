@@ -20,7 +20,7 @@
         "ray/di": "~2.0",
         "nocarrier/hal":"~0.9",
         "doctrine/cache":"~1.0",
-        "rize/uri-template": "~0.2.5"
+        "rize/uri-template": "~0.2"
     },
     "suggest": {
         "ext-uri_template": "ext/uri_template for URI Template(RFC6570) specification."
@@ -30,8 +30,7 @@
             "BEAR\\Resource\\": "src/"
         },
         "files": [
-            "src-files/uri_template.php",
-            "src-files/doctrine_annotations.php"
+            "src-files/uri_template.php"
         ]
     },
     "autoload-dev": {
