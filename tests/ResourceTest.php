@@ -7,6 +7,10 @@ use BEAR\Resource\Module\ResourceModule;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
 use FakeVendor\Sandbox\Resource\App\Blog;
+use FakeVendor\Sandbox\Resource\App\Href\Embed;
+use FakeVendor\Sandbox\Resource\App\Href\Hasembed;
+use FakeVendor\Sandbox\Resource\App\Href\Origin;
+use FakeVendor\Sandbox\Resource\App\Href\Target;
 use FakeVendor\Sandbox\Resource\Page\Index;
 use Ray\Di\EmptyModule;
 use Ray\Di\Injector;
@@ -89,6 +93,24 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->resource->get->uri('app://self/author')->withQuery(['id' => 1])->eager->request();
         $blog = $this->resource->href('blog');
         $this->assertInstanceOf(Blog::class, $blog);
+    }
+
+    public function testHrefInResourceObject()
+    {
+        $origin = $this->resource->get->uri('app://self/href/origin')->withQuery(['id' => 1])->eager->request();
+        $this->assertInstanceOf(Origin::class, $origin);
+        $this->assertInstanceOf(Target::class, $origin['next']);
+        $next = $origin['next'];
+        $this->assertSame($next['id'], 1);
+    }
+
+    public function testHrefInResourceObjectHasEmbed()
+    {
+        $origin = $this->resource->get->uri('app://self/href/hasembed')->withQuery(['id' => 1])->eager->request();
+        $this->assertInstanceOf(Hasembed::class, $origin);
+        $this->assertInstanceOf(Target::class, $origin['next']);
+        $next = $origin['next'];
+        $this->assertSame($next['id'], 1);
     }
 
     public function testLinkSelf()
