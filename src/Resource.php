@@ -117,7 +117,7 @@ final class Resource implements ResourceInterface
     public function href($rel, array $query = [])
     {
         list($method, $uri) = $this->anchor->href($rel, $this->request, $query);
-        $target = $this->{$method}->uri($uri)->withQuery($query)->eager->request();
+        $target = $this->{$method}->uri($uri)->addQuery($query)->eager->request();
 
         return $target;
     }
