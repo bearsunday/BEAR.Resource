@@ -2,7 +2,6 @@
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Code;
 use BEAR\Resource\Exception\BadRequestException;
 use BEAR\Resource\Exception\ResourceNotFoundException;
 use BEAR\Resource\Exception\ServerErrorException;

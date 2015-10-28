@@ -2,7 +2,6 @@
 
 namespace Module;
 
-use BEAR\Resource\Exception\SchemeException;
 use BEAR\Resource\ImportApp;
 use BEAR\Resource\Module\ImportAppModule;
 use BEAR\Resource\ResourceInterface;
