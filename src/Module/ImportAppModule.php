@@ -30,16 +30,10 @@ class ImportAppModule extends AbstractModule
     private $defaultContextName;
 
     /**
-     * @var ContextualModule
-     */
-    private $contextualModule;
-
-    /**
      * @param ImportApp[] $importApps
      */
     public function __construct(array $importApps, $defaultContextName = '')
     {
-        $this->contextualModule = new ContextualModule($defaultContextName);
         foreach ($importApps as $importApp) {
             // create import config
             $this->importAppConfig[] = $importApp;
