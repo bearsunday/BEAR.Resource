@@ -46,12 +46,5 @@ final class ImportApp
         $this->host = $host;
         $this->appName = $appName;
         $this->context = $context;
-        // contextual script dir
-        $appModule = $appName . '\Module\AppModule';
-        $tmpDir = dirname(dirname(dirname((new \ReflectionClass($appModule))->getFileName()))) . '/var/tmp';
-        $this->scriptDir = sprintf('%s/%s', $tmpDir, $context);
-        if (! file_exists($this->scriptDir)) {
-            mkdir($this->scriptDir);
-        }
     }
 }
