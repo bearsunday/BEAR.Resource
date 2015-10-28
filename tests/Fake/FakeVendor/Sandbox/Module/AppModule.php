@@ -1,6 +1,6 @@
 <?php
 
-namespace FakeVendor\Sandbox;
+namespace FakeVendor\Sandbox\Module;
 
 use BEAR\Resource\Module\HalModule;
 use BEAR\Resource\Module\ResourceModule;
