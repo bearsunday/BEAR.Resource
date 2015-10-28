@@ -31,7 +31,7 @@ final class EmbedInterceptor implements MethodInterceptor
      */
     public function __construct(ResourceInterface $resource, Reader $reader)
     {
-        $this->resource = $resource;
+        $this->resource = clone $resource;
         $this->reader = $reader;
     }
 
