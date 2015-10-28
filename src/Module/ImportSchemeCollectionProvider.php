@@ -10,7 +10,6 @@ use BEAR\Resource\Annotation\AppName;
 use BEAR\Resource\Annotation\ImportAppConfig;
 use BEAR\Resource\AppAdapter;
 use BEAR\Resource\ImportApp;
-use Ray\Compiler\ScriptInjector;
 use Ray\Di\InjectorInterface;
 use Ray\Di\ProviderInterface;
 

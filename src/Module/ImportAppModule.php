@@ -10,7 +10,6 @@ use BEAR\Resource\Annotation\ImportAppConfig;
 use BEAR\Resource\ContextualModule;
 use BEAR\Resource\ImportApp;
 use BEAR\Resource\SchemeCollectionInterface;
-use Ray\Compiler\DiCompiler;
 use Ray\Di\AbstractModule;
 
 class ImportAppModule extends AbstractModule
@@ -30,16 +29,10 @@ class ImportAppModule extends AbstractModule
     private $defaultContextName;
 
     /**
-     * @var ContextualModule
-     */
-    private $contextualModule;
-
-    /**
      * @param ImportApp[] $importApps
      */
     public function __construct(array $importApps, $defaultContextName = '')
     {
-        $this->contextualModule = new ContextualModule($defaultContextName);
         foreach ($importApps as $importApp) {
             // create import config
             $this->importAppConfig[] = $importApp;

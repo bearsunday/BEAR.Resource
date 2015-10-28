@@ -3,7 +3,7 @@
 namespace Module;
 
 use BEAR\Resource\ResourceInterface;
-use FakeVendor\Sandbox\AppModule;
+use FakeVendor\Sandbox\Module\AppModule;
 use Ray\Di\Injector;
 
 class HalModuleTest extends \PHPUnit_Framework_TestCase
@@ -15,7 +15,7 @@ class HalModuleTest extends \PHPUnit_Framework_TestCase
 
     public function testConfigure()
     {
-        $resource = (new Injector(new AppModule()))->getInstance(ResourceInterface::class);
+        $resource = (new Injector(new AppModule))->getInstance(ResourceInterface::class);
         // request
         $news = $resource
             ->get
