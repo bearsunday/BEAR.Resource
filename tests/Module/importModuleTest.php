@@ -5,7 +5,7 @@ namespace Module;
 use BEAR\Resource\ImportApp;
 use BEAR\Resource\Module\ImportAppModule;
 use BEAR\Resource\ResourceInterface;
-use FakeVendor\Sandbox\AppModule;
+use FakeVendor\Sandbox\Module\AppModule;
 use Ray\Di\Injector;
 
 class importModuleTest extends \PHPUnit_Framework_TestCase
