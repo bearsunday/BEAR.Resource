@@ -44,7 +44,12 @@ final class AppAdapter implements AdapterInterface
      */
     public function get(AbstractUri $uri)
     {
-        $class = $this->namespace . $this->path . '\Resource' . str_replace(' ', '\\', ucwords(str_replace('/', ' ', ' ' . $uri->scheme . $uri->path)));
+        if (substr($uri->path, -1) === '/') {
+            $uri->path .= 'index';
+        }
+        $schemePath = ucwords($uri->scheme) . str_replace('-', '', ucwords($uri->path, '/-'));
+        $namespace = str_replace('/', '\\', $schemePath);
+        $class = sprintf('%s%s\Resource\%s', $this->namespace, $this->path, $namespace);
         $instance = $this->injector->getInstance($class);
 
         return $instance;
