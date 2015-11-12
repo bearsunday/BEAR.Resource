@@ -6,6 +6,8 @@
  */
 namespace BEAR\Resource;
 
+use BEAR\Resource\Exception\ResourceNotFoundException;
+use Ray\Di\Exception\Unbound;
 use Ray\Di\InjectorInterface;
 
 final class AppAdapter implements AdapterInterface
@@ -53,7 +55,15 @@ final class AppAdapter implements AdapterInterface
             $this->path,
             str_replace('/', '\\', ucwords($uri->scheme) . str_replace('-', '', ucwords($uri->path, '/-')))
         );
-        $instance = $this->injector->getInstance($class);
+        try {
+            $instance = $this->injector->getInstance($class);
+        } catch (Unbound $e) {
+            $unboundClass = $e->getMessage();
+            if  ($unboundClass === "{$class}-") {
+                throw new ResourceNotFoundException($uri, 404, $e);
+            }
+            throw $e;
+        }
 
         return $instance;
     }

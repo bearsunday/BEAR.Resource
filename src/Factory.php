@@ -49,11 +49,7 @@ final class Factory implements FactoryInterface
             $uri = new Uri($uri);
         }
         $adapter = $this->scheme->getAdapter($uri);
-        try {
-            $resourceObject = $adapter->get($uri);
-        } catch (Unbound $e) {
-            throw new ResourceNotFoundException($uri, 404, $e);
-        }
+        $resourceObject = $adapter->get($uri);
 
         return $resourceObject;
     }
