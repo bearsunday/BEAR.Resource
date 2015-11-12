@@ -49,12 +49,13 @@ final class AppAdapter implements AdapterInterface
         if (substr($uri->path, -1) === '/') {
             $uri->path .= 'index';
         }
-        $path = str_replace(' ', '', ucwords(str_replace('-', ' ', $uri->path))); // dash to camel case
+        // dirty hack for hhvm bug https://github.com/facebook/hhvm/issues/6368
+        $path = ! defined('HHVM') ? str_replace('-', '', ucwords($uri->path, '/-')) : str_replace(' ', '\\', substr(ucwords(str_replace('/', ' ', ' ' . str_replace(' ', '', ucwords(str_replace('-', ' ', $uri->path))))), 1));
         $class = sprintf(
             '%s%s\Resource\%s',
             $this->namespace,
             $this->path,
-            str_replace('/', '\\', ucwords($uri->scheme) . str_replace(' ', '\\', substr(ucwords(str_replace('/', ' ', ' ' . $path)), 1))) // slash-delimiter camel case
+            str_replace('/', '\\', ucwords($uri->scheme) . $path)
         );
         try {
             $instance = $this->injector->getInstance($class);
