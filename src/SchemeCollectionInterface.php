@@ -34,4 +34,13 @@ interface SchemeCollectionInterface
      * @return $this
      */
     public function toAdapter(AdapterInterface $adapter);
+
+    /**
+     * Return resource adapter
+     *
+     * @param AbstractUri $uri
+     *
+     * @return AdapterInterface
+     */
+    public function getAdapter(AbstractUri $uri);
 }

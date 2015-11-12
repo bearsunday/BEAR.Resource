@@ -6,8 +6,10 @@ use BEAR\Resource\Exception\ResourceNotFoundException;
 use BEAR\Resource\Exception\SchemeException;
 use BEAR\Resource\Exception\UriException;
 use FakeVendor\Sandbox\Resource\App\Factory\News;
+use FakeVendor\Sandbox\Resource\Page\HelloWorld;
 use FakeVendor\Sandbox\Resource\Page\Index as IndexPage;
 use FakeVendor\Sandbox\Resource\Page\News as PageNews;
+use Ray\Di\Exception\Unbound;
 use Ray\Di\Injector;
 
 class FactoryTest extends \PHPUnit_Framework_TestCase
@@ -82,9 +84,21 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $this->factory->newInstance('page://self/not_found_XXXX');
     }
 
+    public function testUnbound()
+    {
+        $this->setExpectedException(Unbound::class);
+        $instance = $this->factory->newInstance('page://self/unbound');
+    }
+
     public function testIndexSuffix()
     {
         $instance = $this->factory->newInstance('page://self/');
         $this->assertInstanceOf(IndexPage::class, $instance);
+    }
+
+    public function testDash()
+    {
+        $instance = $this->factory->newInstance('page://self/hello-world');
+        $this->assertInstanceOf(HelloWorld::class, $instance);
     }
 }

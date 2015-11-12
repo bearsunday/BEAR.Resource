@@ -6,6 +6,8 @@
  */
 namespace BEAR\Resource;
 
+use BEAR\Resource\Exception\ResourceNotFoundException;
+use Ray\Di\Exception\Unbound;
 use Ray\Di\InjectorInterface;
 
 final class AppAdapter implements AdapterInterface
@@ -44,8 +46,26 @@ final class AppAdapter implements AdapterInterface
      */
     public function get(AbstractUri $uri)
     {
-        $class = $this->namespace . $this->path . '\Resource' . str_replace(' ', '\\', ucwords(str_replace('/', ' ', ' ' . $uri->scheme . $uri->path)));
-        $instance = $this->injector->getInstance($class);
+        if (substr($uri->path, -1) === '/') {
+            $uri->path .= 'index';
+        }
+        // dirty hack for hhvm bug https://github.com/facebook/hhvm/issues/6368
+        $path = ! defined('HHVM_VERSION') ? str_replace('-', '', ucwords($uri->path, '/-')) : str_replace(' ', '\\', substr(ucwords(str_replace('/', ' ', ' ' . str_replace(' ', '', ucwords(str_replace('-', ' ', $uri->path))))), 1));
+        $class = sprintf(
+            '%s%s\Resource\%s',
+            $this->namespace,
+            $this->path,
+            str_replace('/', '\\', ucwords($uri->scheme) . $path)
+        );
+        try {
+            $instance = $this->injector->getInstance($class);
+        } catch (Unbound $e) {
+            $unboundClass = $e->getMessage();
+            if  ($unboundClass === "{$class}-") {
+                throw new ResourceNotFoundException($uri, 404, $e);
+            }
+            throw $e;
+        }
 
         return $instance;
     }
