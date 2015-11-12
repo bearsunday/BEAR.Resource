@@ -9,6 +9,7 @@ use FakeVendor\Sandbox\Resource\App\Factory\News;
 use FakeVendor\Sandbox\Resource\Page\HelloWorld;
 use FakeVendor\Sandbox\Resource\Page\Index as IndexPage;
 use FakeVendor\Sandbox\Resource\Page\News as PageNews;
+use Ray\Di\Exception\Unbound;
 use Ray\Di\Injector;
 
 class FactoryTest extends \PHPUnit_Framework_TestCase
@@ -81,6 +82,12 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(ResourceNotFoundException::class);
         $this->factory->newInstance('page://self/not_found_XXXX');
+    }
+
+    public function testUnbound()
+    {
+        $this->setExpectedException(Unbound::class);
+        $instance = $this->factory->newInstance('page://self/unbound');
     }
 
     public function testIndexSuffix()
