@@ -49,11 +49,12 @@ final class AppAdapter implements AdapterInterface
         if (substr($uri->path, -1) === '/') {
             $uri->path .= 'index';
         }
+        $path = str_replace(' ', '', ucwords(str_replace('-', ' ', $uri->path))); // dash to camel case
         $class = sprintf(
             '%s%s\Resource\%s',
             $this->namespace,
             $this->path,
-            str_replace('/', '\\', ucwords($uri->scheme) . str_replace('-', '', ucwords($uri->path, '/-')))
+            str_replace('/', '\\', ucwords($uri->scheme) . str_replace(' ', '\\', substr(ucwords(str_replace('/', ' ', ' ' . $path)), 1))) // slash-delimiter camel case
         );
         try {
             $instance = $this->injector->getInstance($class);
