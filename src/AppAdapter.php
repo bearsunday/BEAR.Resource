@@ -61,7 +61,7 @@ final class AppAdapter implements AdapterInterface
             $instance = $this->injector->getInstance($class);
         } catch (Unbound $e) {
             $unboundClass = $e->getMessage();
-            if  ($unboundClass === "{$class}-") {
+            if ($unboundClass === "{$class}-") {
                 throw new ResourceNotFoundException($uri, 404, $e);
             }
             throw $e;
