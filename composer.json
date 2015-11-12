@@ -22,6 +22,11 @@
         "doctrine/cache":"~1.0",
         "rize/uri-template": "~0.2"
     },
+    "require-dev": {
+        "phpunit/phpunit": "~4.8",
+        "squizlabs/php_codesniffer": "~2.3",
+        "phpmd/phpmd": "~2.3"
+    },
     "suggest": {
         "ext-uri_template": "ext/uri_template for URI Template(RFC6570) specification."
     },
@@ -42,5 +47,11 @@
             "FakeVendor\\Sandbox\\": "tests/Fake/FakeVendor/Sandbox/",
             "FakeVendor\\Blog\\": "tests/Fake/FakeVendor/Blog/src"
         }
-    }
-}
+    },
+    "scripts" :{
+        "test": [
+            "php vendor/phpmd/phpmd/src/bin/phpmd src text ./phpmd.xml",
+            "php vendor/squizlabs/php_codesniffer/scripts/phpcs",
+            "php vendor/phpunit/phpunit/phpunit"
+        ]
+    }}
