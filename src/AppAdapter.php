@@ -47,9 +47,12 @@ final class AppAdapter implements AdapterInterface
         if (substr($uri->path, -1) === '/') {
             $uri->path .= 'index';
         }
-        $schemePath = ucwords($uri->scheme) . str_replace('-', '', ucwords($uri->path, '/-'));
-        $namespace = str_replace('/', '\\', $schemePath);
-        $class = sprintf('%s%s\Resource\%s', $this->namespace, $this->path, $namespace);
+        $class = sprintf(
+            '%s%s\Resource\%s',
+            $this->namespace,
+            $this->path,
+            str_replace('/', '\\', ucwords($uri->scheme) . str_replace('-', '', ucwords($uri->path, '/-')))
+        );
         $instance = $this->injector->getInstance($class);
 
         return $instance;
