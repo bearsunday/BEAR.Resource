@@ -52,25 +52,9 @@ final class Factory implements FactoryInterface
         try {
             $resourceObject = $adapter->get($uri);
         } catch (Unbound $e) {
-            $resourceObject = $this->retryWithIndexSuffix($e, $uri);
+            throw new ResourceNotFoundException($uri, 404, $e);
         }
 
         return $resourceObject;
-    }
-
-    /**
-     * @param Unbound $e
-     * @param Uri     $uri
-     *
-     * @return ResourceObject
-     */
-    private function retryWithIndexSuffix(Unbound $e, Uri $uri)
-    {
-        if (substr($uri->path, -1) !== '/' || substr($uri->path, -6) === '/index') {
-            throw new ResourceNotFoundException($uri, 404, $e);
-        }
-        $uri .= 'index';
-
-        return $this->newInstance((string) $uri);
     }
 }
