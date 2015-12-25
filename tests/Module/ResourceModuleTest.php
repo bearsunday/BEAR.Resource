@@ -3,7 +3,7 @@
 namespace Module;
 
 use BEAR\Resource\Module\ResourceModule;
-use BEAR\Resource\Resource;
+use BEAR\Resource\ResourceClient;
 use BEAR\Resource\ResourceInterface;
 use Ray\Di\Injector;
 
@@ -17,6 +17,6 @@ class ResourceModuleTest extends \PHPUnit_Framework_TestCase
     public function testConfigure()
     {
         $resource = (new Injector(new ResourceModule('FakeVendor/Sandbox')))->getInstance(ResourceInterface::class);
-        $this->assertInstanceOf(Resource::class, $resource);
+        $this->assertInstanceOf(ResourceClient::class, $resource);
     }
 }

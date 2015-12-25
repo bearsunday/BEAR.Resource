@@ -15,7 +15,7 @@ namespace BEAR\Resource;
  * @property $this $head
  * @property $this $options
  */
-final class Resource implements ResourceInterface
+final class ResourceClient implements ResourceInterface
 {
     /**
      * Resource factory

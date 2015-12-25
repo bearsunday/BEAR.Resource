@@ -20,6 +20,7 @@ use BEAR\Resource\NamedParameterInterface;
 use BEAR\Resource\ParamHandlerInterface;
 use BEAR\Resource\RenderInterface;
 use BEAR\Resource\Resource;
+use BEAR\Resource\ResourceClient;
 use BEAR\Resource\ResourceInterface;
 use BEAR\Resource\ResourceParamHandler;
 use BEAR\Resource\SchemeCollectionInterface;
@@ -38,7 +39,7 @@ class ResourceClientModule extends AbstractModule
      */
     protected function configure()
     {
-        $this->bind(ResourceInterface::class)->to(Resource::class)->in(Scope::SINGLETON);
+        $this->bind(ResourceInterface::class)->to(ResourceClient::class)->in(Scope::SINGLETON);
         $this->bind(InvokerInterface::class)->to(Invoker::class)->in(Scope::SINGLETON);
         $this->bind(LinkerInterface::class)->to(Linker::class)->in(Scope::SINGLETON);
         $this->bind(FactoryInterface::class)->to(Factory::class)->in(Scope::SINGLETON);
