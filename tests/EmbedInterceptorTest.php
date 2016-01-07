@@ -144,9 +144,8 @@ class EmbedInterceptorTest extends \PHPUnit_Framework_TestCase
             ->resource
             ->get
             ->uri('app://self/bird/sparrows')
-            ->withQuery(
-                ['id_request' => 3, 'id_object' => 5, 'id_eager_request' => 7]
-            )->request();
+            ->withQuery(['id_request' => 3, 'id_object' => 5, 'id_eager_request' => 7])
+            ->request();
 
         $this->assertSame('app://self/bird/sparrows?id_request=3&id_object=5&id_eager_request=7', $request->toUri());
 
@@ -155,10 +154,8 @@ class EmbedInterceptorTest extends \PHPUnit_Framework_TestCase
         /** @var $birdRequest Request */
         $birdRequest = $resourceObject['birdRequest'];
         $birdObject = $resourceObject['birdObject'];
-
         $this->assertInstanceOf(Request::class, $birdRequest);
         $this->assertSame('get app://self/bird/sparrow?id=3', $birdRequest->toUriWithMethod());
-
         $this->assertInstanceOf(Sparrow::class, $birdObject);
         $this->assertSame(serialize($birdObject->body), serialize(['sparrow_id' => 5]));
     }

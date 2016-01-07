@@ -5,14 +5,6 @@ namespace BEAR\Resource;
 use BEAR\Resource\Exception\ParameterException;
 use Doctrine\Common\Cache\ArrayCache;
 
-class ReflectiveParamsTestClass
-{
-    public function onGet($id, $name = 'koriym')
-    {
-        return "$id $name";
-    }
-}
-
 class NamedParameterTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -28,7 +20,7 @@ class NamedParameterTest extends \PHPUnit_Framework_TestCase
 
     public function testGetParameters()
     {
-        $object = new ReflectiveParamsTestClass;
+        $object = new FakeParamResource;
         $namedArgs = ['id' => 1, 'name' => 'koriym'];
         $args = $this->params->getParameters([$object, 'onGet'], $namedArgs);
         $this->assertSame([1, 'koriym'], $args);
@@ -36,7 +28,7 @@ class NamedParameterTest extends \PHPUnit_Framework_TestCase
 
     public function testDefaultValue()
     {
-        $object = new ReflectiveParamsTestClass;
+        $object = new FakeParamResource;
         $namedArgs = ['id' => 1];
         $args = $this->params->getParameters([$object, 'onGet'], $namedArgs);
         $this->assertSame([1, 'koriym'], $args);
@@ -45,7 +37,7 @@ class NamedParameterTest extends \PHPUnit_Framework_TestCase
     public function testParameterException()
     {
         $this->setExpectedException(ParameterException::class, null, Code::BAD_REQUEST);
-        $object = new ReflectiveParamsTestClass;
+        $object = new FakeParamResource;
         $namedArgs = [];
         $this->params->getParameters([$object, 'onGet'], $namedArgs);
     }

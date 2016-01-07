@@ -19,11 +19,6 @@ class AnchorTest extends \PHPUnit_Framework_TestCase
      */
     private $request;
 
-    /**
-     * @var Resource
-     */
-    private $resource;
-
     protected function setUp()
     {
         parent::setUp();
