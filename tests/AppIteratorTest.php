@@ -13,7 +13,7 @@ class AppIteratorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $resourceDir = $_ENV['TEST_DIR'] . '/Fake/MyVendor';
+        $resourceDir = __DIR__ . '/Fake/MyVendor';
         $this->appIterator = new AppIterator($resourceDir);
     }
 
