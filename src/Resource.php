@@ -96,6 +96,7 @@ final class Resource implements ResourceInterface
     {
         if (is_string($uri)) {
             $uri = new Uri($uri);
+            $uri->method = $this->method;
         }
         $resourceObject = $this->newInstance($uri);
         $resourceObject->uri = $uri;
