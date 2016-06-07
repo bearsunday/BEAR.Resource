@@ -16,7 +16,7 @@
         }
     ],
     "require": {
-        "php": ">=5.5.0",
+        "php": ">=5.5.16",
         "ray/di": "~2.0",
         "nocarrier/hal":"~0.9",
         "doctrine/cache":"~1.0",
