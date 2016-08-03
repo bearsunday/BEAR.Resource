@@ -70,7 +70,7 @@ final class NamedParameter implements NamedParameterInterface
                 $value = $this->handler->handle($parameter);
             }
             $parameters[] = $value;
-        };
+        }
 
         return $parameters;
     }

@@ -7,7 +7,7 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\Link as LinkAnnotation;
-use BEAR\Resource\Exception\LinkException as LinkException;
+use BEAR\Resource\Exception\LinkException;
 use Doctrine\Common\Annotations\Reader;
 
 final class Anchor implements AnchorInterface
