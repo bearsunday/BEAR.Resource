@@ -20,9 +20,6 @@ final class NamedParameter implements NamedParameterInterface
      */
     private $handler;
 
-    /**
-     * @param Cache $cache
-     */
     public function __construct(Cache $cache, ParamHandlerInterface $handler)
     {
         $this->cache = $cache;

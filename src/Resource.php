@@ -44,7 +44,7 @@ final class Resource implements ResourceInterface
     private $linker;
 
     /**
-     * Reuqest
+     * Request
      *
      * @var Request
      */

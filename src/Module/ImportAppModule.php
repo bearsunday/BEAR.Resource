@@ -29,7 +29,8 @@ class ImportAppModule extends AbstractModule
     private $defaultContextName;
 
     /**
-     * @param ImportApp[] $importApps
+     * @param array  $importApps
+     * @param string $defaultContextName
      */
     public function __construct(array $importApps, $defaultContextName = '')
     {
