@@ -79,6 +79,7 @@ final class Resource implements ResourceInterface
 
     /**
      * {@inheritDoc}
+     * @throws \BEAR\Resource\Exception\MethodException
      */
     public function object($resourceObject)
     {
@@ -91,6 +92,7 @@ final class Resource implements ResourceInterface
 
     /**
      * {@inheritDoc}
+     * @throws \BEAR\Resource\Exception\MethodException
      */
     public function uri($uri)
     {

@@ -13,6 +13,8 @@ final class Uri extends AbstractUri
     /**
      * @param string $uri
      * @param array  $query
+     *
+     * @throws \BEAR\Resource\Exception\UriException
      */
     public function __construct($uri, array $query = [])
     {

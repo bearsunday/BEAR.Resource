@@ -49,6 +49,7 @@ final class Linker implements LinkerInterface
      * {@inheritDoc}
      *
      * @throws LinkQueryException
+     * @throws \BEAR\Resource\Exception\LinkRelException
      */
     public function invoke(AbstractRequest $request)
     {
@@ -125,6 +126,7 @@ final class Linker implements LinkerInterface
      * @param ResourceObject                   $current
      *
      * @return ResourceObject
+     * @throws \BEAR\Resource\Exception\MethodException
      *
      * @throws Exception\LinkQueryException
      * @throws Exception\LinkRelException
@@ -172,6 +174,9 @@ final class Linker implements LinkerInterface
      * @param array    $annotations
      * @param LinkType $link
      * @param array    $body
+     *
+     * @throws \BEAR\Resource\Exception\LinkQueryException
+     * @throws \BEAR\Resource\Exception\MethodException
      */
     private function crawl(array $annotations, LinkType $link, array &$body)
     {

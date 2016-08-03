@@ -24,6 +24,7 @@ class HalRenderer implements RenderInterface
 
     /**
      * {@inheritdoc}
+     * @throws \RuntimeException
      */
     public function render(ResourceObject $ro)
     {
