@@ -198,7 +198,7 @@ final class Linker implements LinkerInterface
         $list = $value;
         $keys = array_keys((array) array_pop($list));
         $isMultiColumnList = $keys !== [0 => 0] && ($keys === array_keys((array) array_pop($list)));
-        $isSingleColumnList = (count($value) === 1) && $keys == array_keys((array) $list);
+        $isSingleColumnList = (count($value) === 1) && $keys === array_keys((array) $list);
 
         return ($isSingleColumnList || $isMultiColumnList);
     }

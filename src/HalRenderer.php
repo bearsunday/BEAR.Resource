@@ -53,7 +53,7 @@ class HalRenderer implements RenderInterface
     /**
      * @return Hal
      */
-    private function getHal(Uri $uri, array $body, array $annotations)
+    private function getHal(AbstractUri $uri, array $body, array $annotations)
     {
         $query = $uri->query ? '?' . http_build_query($uri->query) : '';
         $path = $uri->path . $query;
