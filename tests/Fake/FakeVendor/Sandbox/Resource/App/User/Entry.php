@@ -7,9 +7,6 @@ use BEAR\Resource\ResourceObject;
 
 class Entry extends ResourceObject
 {
-    /**
-     * @param \BEAR\Resource\ResourceInterface $resource
-     */
     public function __construct(ResourceInterface $resource = null)
     {
         $this->resource = $resource;
@@ -22,8 +19,6 @@ class Entry extends ResourceObject
     ];
 
     /**
-     * @param id
-     *
      * @return array
      */
     public function onGet()

@@ -7,12 +7,10 @@
 namespace BEAR\Resource;
 
 use ArrayAccess;
-use ArrayIterator;
 use Countable;
 use Exception;
 use IteratorAggregate;
 use JsonSerializable;
-use Traversable;
 
 abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, Countable, IteratorAggregate, JsonSerializable
 {
@@ -178,8 +176,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
             $view = $this->renderer->render($this);
         } catch (Exception $e) {
             $view = '';
-            error_log('Exception caught in ' . get_class($this)) . '::__toString() ';
-            error_log((string) $e);
+            $msg = 'Exception caught in ' . get_class($this) . '::__toString() (log only)';
+            error_log($msg . (string) $e);
         }
 
         return $view;
@@ -220,6 +218,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     private function evaluate($body)
     {
         if (is_array($body)) {
+            /** @noinspection ForeachSourceInspection */
             foreach ($body as &$value) {
                 if ($value instanceof RequestInterface) {
                     $result = $value();

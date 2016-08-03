@@ -6,6 +6,6 @@
  */
 namespace BEAR\Resource\Exception;
 
-class EmbedException extends BadRequestException implements ExceptionInterface
+class EmbedException extends BadRequestException
 {
 }

@@ -6,7 +6,7 @@ use BEAR\Resource\Exception\EmbedException;
 use BEAR\Resource\Module\ResourceModule;
 use Doctrine\Common\Annotations\AnnotationReader;
 use FakeVendor\Sandbox\Resource\App\Bird\Birds;
-use FakeVendor\Sandbox\Resource\App\Bird\Birds_Rel;
+use FakeVendor\Sandbox\Resource\App\Bird\BirdsRel;
 use FakeVendor\Sandbox\Resource\App\Bird\InvalidBird;
 use FakeVendor\Sandbox\Resource\App\Bird\NotFoundBird;
 use FakeVendor\Sandbox\Resource\App\Bird\Sparrow;
@@ -53,7 +53,7 @@ class EmbedInterceptorTest extends \PHPUnit_Framework_TestCase
 
     public function testInvokeRelativePath()
     {
-        $fake = new Birds_Rel;
+        $fake = new BirdsRel;
         $fake->uri = new Uri('app://self/birds_rel');
         $invocation = new ReflectiveMethodInvocation(
             $fake,

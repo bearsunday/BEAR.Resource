@@ -86,11 +86,14 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     private $linker;
 
     /**
-     * @param InvokerInterface $invoker
-     * @param ResourceObject   $ro
-     * @param string           $method
-     * @param array            $query
-     * @param LinkType[]       $links
+     * @param InvokerInterface     $invoker
+     * @param ResourceObject|null  $ro
+     * @param string               $method
+     * @param array                $query
+     * @param array                $links
+     * @param LinkerInterface|null $linker
+     *
+     * @throws MethodException
      */
     public function __construct(
         InvokerInterface $invoker,
@@ -102,7 +105,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     ) {
         $this->invoker = $invoker;
         $this->resourceObject = $ro;
-        if (! in_array(strtolower($method), [self::GET, self::POST, self::PUT, self::PATCH, self::DELETE, self::HEAD, self::OPTIONS])) {
+        if (! in_array(strtolower($method), [self::GET, self::POST, self::PUT, self::PATCH, self::DELETE, self::HEAD, self::OPTIONS], true)) {
             throw new MethodException($method, 400);
         }
         $this->method = $method;
@@ -113,6 +116,8 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
 
     /**
      *{@inheritDoc}
+     *
+     * @throws OutOfBoundsException
      */
     public function offsetSet($offset, $value)
     {
@@ -121,6 +126,8 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
 
     /**
      * {@inheritDoc}
+     *
+     * @throws OutOfBoundsException
      */
     public function offsetUnset($offset)
     {
@@ -162,7 +169,8 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
      */
     private function invoke()
     {
-        if (is_null($this->result)) {
+        if ($this->result === null) {
+            /** @noinspection ImplicitMagicMethodCallInspection */
             $this->result = $this->__invoke();
         }
 
@@ -174,22 +182,24 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
      */
     public function __invoke(array $query = null)
     {
-        if (!is_null($query)) {
+        if ($query !== null) {
             $this->query = array_merge($this->query, $query);
         }
-        $result = ($this->linker) ? $result = $this->linker->invoke($this) : $this->invoker->invoke($this);
+        $result = $this->linker ? $result = $this->linker->invoke($this) : $this->invoker->invoke($this);
 
         return $result;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @throws OutOfBoundsException
      */
     public function offsetGet($offset)
     {
         $this->invoke();
         if (!isset($this->result->body[$offset])) {
-            throw new OutOfBoundsException("[$offset] for object[" . get_class($this->result) . "]", 400);
+            throw new OutOfBoundsException("[$offset] for object[" . get_class($this->result) . ']', 400);
         }
 
         return $this->result->body[$offset];

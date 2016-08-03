@@ -25,8 +25,6 @@ class Order extends ResourceObject
     }
 
     /**
-     * Post
-     *
      * @link(link="payment" rel="app://self/restbucks/payment/?order_id={orderId}" method="put")
      */
     public function onPost($drink)

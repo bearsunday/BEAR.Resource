@@ -8,6 +8,9 @@ use BEAR\Resource\ResourceObject;
 
 class Origin extends ResourceObject
 {
+    /**
+     * @var ResourceInterface
+     */
     private $resource;
 
     public function __construct(ResourceInterface $resource)

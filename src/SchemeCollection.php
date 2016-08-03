@@ -61,11 +61,13 @@ final class SchemeCollection implements SchemeCollectionInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws SchemeException
      */
     public function getAdapter(AbstractUri $uri)
     {
         $schemeIndex = $uri->scheme . '://' . $uri->host;
-        if (! isset($this->collection[$schemeIndex])) {
+        if (! array_key_exists($schemeIndex, $this->collection)) {
             throw new SchemeException($uri->scheme . '://' . $uri->host);
         }
 

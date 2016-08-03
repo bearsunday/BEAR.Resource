@@ -6,9 +6,7 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\ResourceNotFoundException;
 use Ray\Di\Di\Inject;
-use Ray\Di\Exception\Unbound;
 
 final class Factory implements FactoryInterface
 {
@@ -42,6 +40,7 @@ final class Factory implements FactoryInterface
 
     /**
      * {@inheritDoc}
+     * @throws \BEAR\Resource\Exception\UriException
      */
     public function newInstance($uri)
     {

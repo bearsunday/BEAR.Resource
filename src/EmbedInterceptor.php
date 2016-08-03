@@ -37,6 +37,7 @@ final class EmbedInterceptor implements MethodInterceptor
 
     /**
      * {@inheritdoc}
+     * @throws \BEAR\Resource\Exception\EmbedException
      */
     public function invoke(MethodInvocation $invocation)
     {
@@ -57,6 +58,8 @@ final class EmbedInterceptor implements MethodInterceptor
      * @param Embed[]        $embeds
      * @param ResourceObject $resourceObject
      * @param array          $query
+     *
+     * @throws EmbedException
      */
     private function embedResource(array $embeds, ResourceObject $resourceObject, array $query)
     {
@@ -84,7 +87,7 @@ final class EmbedInterceptor implements MethodInterceptor
      */
     private function getFullUri($uri, ResourceObject $resourceObject)
     {
-        if (substr($uri, 0, 1) == '/') {
+        if ($uri[0] === '/') {
             $uri = "{$resourceObject->uri->scheme}://{$resourceObject->uri->host}" . $uri;
         }
 

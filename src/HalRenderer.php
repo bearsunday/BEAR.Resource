@@ -24,6 +24,7 @@ class HalRenderer implements RenderInterface
 
     /**
      * {@inheritdoc}
+     * @throws \RuntimeException
      */
     public function render(ResourceObject $ro)
     {
@@ -31,7 +32,7 @@ class HalRenderer implements RenderInterface
 
         $method = 'on' . ucfirst($ro->uri->method);
         $hasMethod = method_exists($ro, $method);
-        $annotations = ($hasMethod) ? $this->reader->getMethodAnnotations(new \ReflectionMethod($ro, $method)) : [];
+        $annotations = $hasMethod ? $this->reader->getMethodAnnotations(new \ReflectionMethod($ro, $method)) : [];
         /* @var $annotations Link[] */
         $hal = $this->getHal($ro->uri, $body, $annotations);
         $ro->view = $hal->asJson(true) . PHP_EOL;
@@ -51,9 +52,14 @@ class HalRenderer implements RenderInterface
     }
 
     /**
+     * @param AbstractUri $uri         Resource uri
+     * @param array       $body        Resource body
+     * @param array       $annotations Annotations
+     *
      * @return Hal
+     * @throws \RuntimeException
      */
-    private function getHal(Uri $uri, array $body, array $annotations)
+    private function getHal(AbstractUri $uri, array $body, array $annotations)
     {
         $query = $uri->query ? '?' . http_build_query($uri->query) : '';
         $path = $uri->path . $query;
@@ -64,9 +70,6 @@ class HalRenderer implements RenderInterface
         return $hal;
     }
 
-    /**
-     * @return array
-     */
     private function valuate(ResourceObject $ro)
     {
         // HAL

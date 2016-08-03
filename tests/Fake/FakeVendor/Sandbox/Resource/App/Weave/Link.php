@@ -7,10 +7,6 @@ use BEAR\Resource\ResourceObject;
 class Link extends ResourceObject
 {
     /**
-     * @param animal
-     *
-     * @return string
-     *
      * @Log
      */
     public function onGet($animal)
@@ -19,8 +15,6 @@ class Link extends ResourceObject
     }
 
     /**
-     * @param ResourceObject $resource
-     *
      * @return string
      */
     public function onLinkView(ResourceObject $resource)

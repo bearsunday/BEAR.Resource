@@ -30,6 +30,7 @@ class ResourceParamHandler implements ParamHandlerInterface
 
     /**
      * {@inheritdoc}
+     * @throws \BEAR\Resource\Exception\ParameterException
      */
     public function handle(\ReflectionParameter $parameter)
     {

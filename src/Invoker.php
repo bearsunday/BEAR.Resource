@@ -28,6 +28,8 @@ final class Invoker implements InvokerInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @throws MethodNotAllowedException
      */
     public function invoke(AbstractRequest $request)
     {
@@ -35,7 +37,7 @@ final class Invoker implements InvokerInterface
         if (method_exists($request->resourceObject, $onMethod) !== true) {
             return $this->extraMethod($request->resourceObject, $request, $onMethod);
         }
-        if (isset($request->resourceObject->uri) && $request->resourceObject->uri instanceof AbstractUri) {
+        if ($request->resourceObject->uri instanceof AbstractUri) {
             $request->resourceObject->uri->query = $request->query;
             $request->resourceObject->uri->method = $request->method;
         }

@@ -43,6 +43,9 @@ final class AppAdapter implements AdapterInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws ResourceNotFoundException
+     * @throws \Ray\Di\Exception\Unbound
      */
     public function get(AbstractUri $uri)
     {
@@ -60,13 +63,26 @@ final class AppAdapter implements AdapterInterface
         try {
             $instance = $this->injector->getInstance($class);
         } catch (Unbound $e) {
-            $unboundClass = $e->getMessage();
-            if ($unboundClass === "{$class}-") {
-                throw new ResourceNotFoundException($uri, 404, $e);
-            }
-            throw $e;
+            $notFound = $this->getNotFound($uri, $e, $class);
+            throw $notFound;
         }
 
         return $instance;
+    }
+
+    /**
+     * @param AbstractUri $uri
+     * @param Unbound     $e
+     * @param string      $class
+     *
+     * @return Unbound
+     */
+    private function getNotFound(AbstractUri $uri, $e, $class)
+    {
+        $unboundClass = $e->getMessage();
+        if ($unboundClass === "{$class}-") {
+            return new ResourceNotFoundException($uri, 404, $e);
+        }
+        return $e;
     }
 }

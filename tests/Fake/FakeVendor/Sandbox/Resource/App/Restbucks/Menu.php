@@ -15,12 +15,6 @@ class Menu extends ResourceObject
     }
 
     /**
-     * Menu
-     *
-     * @param string $drink
-     *
-     * @return \Sandbox\Resource\App\RestBucks\Menu
-     *
      * @Link(rel="order", href="app://self/restbucks/order?drink={drink}", method="")
      */
     public function onGet($drink = null)

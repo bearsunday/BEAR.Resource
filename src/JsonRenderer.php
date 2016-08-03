@@ -13,7 +13,7 @@ final class JsonRenderer implements RenderInterface
      */
     public function render(ResourceObject $ro)
     {
-        if (!isset($ro->headers['content-type'])) {
+        if (! array_key_exists('content-type', $ro->headers)) {
             $ro->headers['content-type'] = 'application/json';
         }
         $ro->view = json_encode($ro);

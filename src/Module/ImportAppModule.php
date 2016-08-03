@@ -7,8 +7,6 @@
 namespace BEAR\Resource\Module;
 
 use BEAR\Resource\Annotation\ImportAppConfig;
-use BEAR\Resource\ContextualModule;
-use BEAR\Resource\ImportApp;
 use BEAR\Resource\SchemeCollectionInterface;
 use Ray\Di\AbstractModule;
 
@@ -29,7 +27,8 @@ class ImportAppModule extends AbstractModule
     private $defaultContextName;
 
     /**
-     * @param ImportApp[] $importApps
+     * @param array  $importApps
+     * @param string $defaultContextName
      */
     public function __construct(array $importApps, $defaultContextName = '')
     {
@@ -43,6 +42,8 @@ class ImportAppModule extends AbstractModule
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Ray\Di\Exception\NotFound
      */
     protected function configure()
     {

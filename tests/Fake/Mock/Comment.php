@@ -7,9 +7,6 @@ use BEAR\Resource\ResourceObject;
 
 class Comment extends ResourceObject
 {
-    /**
-     * @param id
-     */
     public function onGet($id)
     {
         return "entry {$id}";

@@ -26,6 +26,7 @@ class User extends ResourceObject
 
     public function onPut($id)
     {
+        unset($id);
         $resource = $GLOBALS['RESOURCE'];
         /* @var $resource \BEAR\Resource\ResourceInterface */
         $resource->put->uri('app://self/param/user')->withQuery([])->eager->request();

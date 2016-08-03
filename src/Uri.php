@@ -13,11 +13,13 @@ final class Uri extends AbstractUri
     /**
      * @param string $uri
      * @param array  $query
+     *
+     * @throws \BEAR\Resource\Exception\UriException
      */
     public function __construct($uri, array $query = [])
     {
         $this->validate($uri);
-        if (! empty($query)) {
+        if (count($query) !== 0) {
             $uri = uri_template($uri, $query);
         }
         $parsedUrl = parse_url($uri);
@@ -25,13 +27,15 @@ final class Uri extends AbstractUri
         if (isset($parsedUrl['query'])) {
             parse_str($parsedUrl['query'], $this->query);
         }
-        if (! empty($query)) {
+        if (count($query) !== 0) {
             $this->query = $query + $this->query;
         }
     }
 
     /**
      * @param string $uri
+     *
+     * @throws UriException
      */
     private function validate($uri)
     {
