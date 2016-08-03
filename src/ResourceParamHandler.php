@@ -31,6 +31,7 @@ class ResourceParamHandler implements ParamHandlerInterface
     /**
      * {@inheritdoc}
      */
+    /** @noinspection PhpInconsistentReturnPointsInspection */
     public function handle(\ReflectionParameter $parameter)
     {
         $func = $parameter->getDeclaringFunction();

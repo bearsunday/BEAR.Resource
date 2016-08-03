@@ -133,6 +133,7 @@ final class Linker implements LinkerInterface
             }
             $uri = uri_template($annotation->href, $current->body);
             $rel = $this->factory->newInstance($uri);
+            /** @noinspection UnnecessaryParenthesesInspection */
             $request = new Request($this->invoker, $rel, Request::GET, (new Uri($uri))->query);
             $linkedResource = $this->invoker->invoke($request);
 
@@ -177,6 +178,7 @@ final class Linker implements LinkerInterface
             }
             $uri = uri_template($annotation->href, $body);
             $rel = $this->factory->newInstance($uri);
+            /** @noinspection UnnecessaryParenthesesInspection */
             $request = new Request($this->invoker, $rel, Request::GET, (new Uri($uri))->query, [$link], $this);
             $hash = $request->hash();
             if (array_key_exists($hash, $this->cache)) {
