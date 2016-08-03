@@ -72,7 +72,7 @@ final class AppIterator implements \Iterator
      */
     public function valid()
     {
-        return isset($this->keys[$this->i]);
+        return array_key_exists($this->i, $this->keys);
     }
 
     /**

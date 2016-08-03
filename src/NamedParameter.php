@@ -67,7 +67,7 @@ final class NamedParameter implements NamedParameterInterface
     {
         $parameters = [];
         foreach ($names as $name => $defaultValue) {
-            $value = isset($query[$name]) ? $query[$name] : $defaultValue;
+            $value = array_key_exists($name, $query) ? $query[$name] : $defaultValue;
             if ($value instanceof Param) {
                 $parameter = new \ReflectionParameter([$value->class, $value->method], $value->param);
                 $value = $this->handler->handle($parameter);

@@ -179,7 +179,7 @@ final class Linker implements LinkerInterface
             $rel = $this->factory->newInstance($uri);
             $request = new Request($this->invoker, $rel, Request::GET, (new Uri($uri))->query, [$link], $this);
             $hash = $request->hash();
-            if (isset($this->cache[$hash])) {
+            if (array_key_exists($hash, $this->cache)) {
                 $body[$annotation->rel] = $this->cache[$hash];
 
                 continue;
