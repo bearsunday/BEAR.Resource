@@ -57,6 +57,14 @@ final class Resource implements ResourceInterface
      */
     private $method;
 
+    /** @noinspection MoreThanThreeArgumentsInspection */
+
+    /**
+     * @param FactoryInterface $factory Resource factory
+     * @param InvokerInterface $invoker Resource request invoker
+     * @param AnchorInterface  $anchor  Resource anchor
+     * @param LinkerInterface  $linker  Resource linker
+     */
     public function __construct(
         FactoryInterface $factory,
         InvokerInterface $invoker,
@@ -93,6 +101,7 @@ final class Resource implements ResourceInterface
     /**
      * {@inheritDoc}
      * @throws \BEAR\Resource\Exception\MethodException
+     * @throws \BEAR\Resource\Exception\UriException
      */
     public function uri($uri)
     {
@@ -115,10 +124,12 @@ final class Resource implements ResourceInterface
 
     /**
      * {@inheritDoc}
+     * @throws \BEAR\Resource\Exception\MethodException
      */
     public function href($rel, array $query = [])
     {
         list($method, $uri) = $this->anchor->href($rel, $this->request, $query);
+        /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
         $target = $this->{$method}->uri($uri)->addQuery($query)->eager->request();
 
         return $target;

@@ -95,7 +95,6 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
      *
      * @throws MethodException
      */
-    /** @noinspection MoreThanThreeArgumentsInspection */
     public function __construct(
         InvokerInterface $invoker,
         ResourceObject $ro = null,

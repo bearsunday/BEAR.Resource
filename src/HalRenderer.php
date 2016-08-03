@@ -52,8 +52,11 @@ class HalRenderer implements RenderInterface
     }
 
     /**
-     * @return Hal
+     * @param AbstractUri $uri         Resource uri
+     * @param array       $body        Resource body
+     * @param array       $annotations Annotations
      *
+     * @return Hal
      * @throws \RuntimeException
      */
     private function getHal(AbstractUri $uri, array $body, array $annotations)
@@ -67,9 +70,6 @@ class HalRenderer implements RenderInterface
         return $hal;
     }
 
-    /**
-     * @return array
-     */
     private function valuate(ResourceObject $ro)
     {
         // HAL

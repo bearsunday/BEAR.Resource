@@ -30,8 +30,8 @@ class ResourceParamHandler implements ParamHandlerInterface
 
     /**
      * {@inheritdoc}
+     * @throws \BEAR\Resource\Exception\ParameterException
      */
-    /** @noinspection PhpInconsistentReturnPointsInspection */
     public function handle(\ReflectionParameter $parameter)
     {
         $func = $parameter->getDeclaringFunction();
@@ -43,7 +43,6 @@ class ResourceParamHandler implements ParamHandlerInterface
                 return $this->getResourceParam($annotation->uri);
             }
         }
-        /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
         (new VoidParamHandler)->handle($parameter);
     }
 
