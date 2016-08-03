@@ -31,7 +31,7 @@ class HalRenderer implements RenderInterface
 
         $method = 'on' . ucfirst($ro->uri->method);
         $hasMethod = method_exists($ro, $method);
-        $annotations = ($hasMethod) ? $this->reader->getMethodAnnotations(new \ReflectionMethod($ro, $method)) : [];
+        $annotations = $hasMethod ? $this->reader->getMethodAnnotations(new \ReflectionMethod($ro, $method)) : [];
         /* @var $annotations Link[] */
         $hal = $this->getHal($ro->uri, $body, $annotations);
         $ro->view = $hal->asJson(true) . PHP_EOL;

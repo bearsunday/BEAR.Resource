@@ -101,7 +101,7 @@ final class Linker implements LinkerInterface
      */
     private function annotationLink(LinkType $link, ResourceObject $current, AbstractRequest $request)
     {
-        if (!(is_array($current->body))) {
+        if (! is_array($current->body)) {
             throw new Exception\LinkQueryException('Only array is allowed for link in ' . get_class($current), 500);
         }
         $classMethod = 'on' . ucfirst($request->method);

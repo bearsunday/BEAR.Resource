@@ -178,7 +178,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
         if (!is_null($query)) {
             $this->query = array_merge($this->query, $query);
         }
-        $result = ($this->linker) ? $result = $this->linker->invoke($this) : $this->invoker->invoke($this);
+        $result = $this->linker ? $result = $this->linker->invoke($this) : $this->invoker->invoke($this);
 
         return $result;
     }
@@ -190,7 +190,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     {
         $this->invoke();
         if (!isset($this->result->body[$offset])) {
-            throw new OutOfBoundsException("[$offset] for object[" . get_class($this->result) . "]", 400);
+            throw new OutOfBoundsException("[$offset] for object[" . get_class($this->result) . ']', 400);
         }
 
         return $this->result->body[$offset];
