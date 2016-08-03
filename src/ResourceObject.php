@@ -176,8 +176,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
             $view = $this->renderer->render($this);
         } catch (Exception $e) {
             $view = '';
-            error_log('Exception caught in ' . get_class($this)) . '::__toString() ';
-            error_log((string) $e);
+            $msg = 'Exception caught in ' . get_class($this) . '::__toString() (log only)';
+            error_log($msg . (string) $e);
         }
 
         return $view;
