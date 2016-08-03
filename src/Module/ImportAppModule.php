@@ -7,8 +7,6 @@
 namespace BEAR\Resource\Module;
 
 use BEAR\Resource\Annotation\ImportAppConfig;
-use BEAR\Resource\ContextualModule;
-use BEAR\Resource\ImportApp;
 use BEAR\Resource\SchemeCollectionInterface;
 use Ray\Di\AbstractModule;
 
