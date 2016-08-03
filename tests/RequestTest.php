@@ -101,7 +101,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $request = new Request(
             $this->invoker,
             new FakeNopResource,
-            'get', ['a' => 'koriym', 'b' => 25]
+            'get',
+            ['a' => 'koriym', 'b' => 25]
         );
         $this->assertSame(['koriym', 30], $request(['b' => 30])->body);
     }
