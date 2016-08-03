@@ -9,6 +9,7 @@ namespace BEAR\Resource;
 /**
  * @property $this lazy
  * @property $this eager
+ *
  */
 final class Request extends AbstractRequest
 {
@@ -19,25 +20,6 @@ final class Request extends AbstractRequest
     const DELETE = 'delete';
     const HEAD = 'head';
     const OPTIONS = 'options';
-
-    /**
-     * Links
-     *
-     * @var LinkType[]
-     */
-    public $links = [];
-
-    /**
-     * @var InvokerInterface
-     */
-    protected $invoker;
-
-    /**
-     * Request option (eager or lazy)
-     *
-     * @var string
-     */
-    public $in = 'lazy';
 
     /**
      * {@inheritdoc}
