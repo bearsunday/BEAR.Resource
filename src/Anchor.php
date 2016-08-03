@@ -27,6 +27,8 @@ final class Anchor implements AnchorInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws LinkException
      */
     public function href($rel, AbstractRequest $request, array $query)
     {

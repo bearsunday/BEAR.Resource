@@ -43,6 +43,9 @@ final class AppAdapter implements AdapterInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws ResourceNotFoundException
+     * @throws \Ray\Di\Exception\Unbound
      */
     public function get(AbstractUri $uri)
     {

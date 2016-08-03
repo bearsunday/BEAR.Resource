@@ -52,6 +52,8 @@ class HalRenderer implements RenderInterface
 
     /**
      * @return Hal
+     *
+     * @throws \RuntimeException
      */
     private function getHal(AbstractUri $uri, array $body, array $annotations)
     {

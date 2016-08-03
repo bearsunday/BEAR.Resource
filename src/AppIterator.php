@@ -29,6 +29,8 @@ final class AppIterator implements \Iterator
 
     /**
      * @param string $resourceDir
+     *
+     * @throws ResourceDirException
      */
     public function __construct($resourceDir)
     {

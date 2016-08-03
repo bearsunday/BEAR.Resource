@@ -32,6 +32,8 @@ final class Uri extends AbstractUri
 
     /**
      * @param string $uri
+     *
+     * @throws UriException
      */
     private function validate($uri)
     {

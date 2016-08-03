@@ -61,6 +61,8 @@ final class SchemeCollection implements SchemeCollectionInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws SchemeException
      */
     public function getAdapter(AbstractUri $uri)
     {

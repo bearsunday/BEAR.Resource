@@ -57,6 +57,8 @@ final class EmbedInterceptor implements MethodInterceptor
      * @param Embed[]        $embeds
      * @param ResourceObject $resourceObject
      * @param array          $query
+     *
+     * @throws EmbedException
      */
     private function embedResource(array $embeds, ResourceObject $resourceObject, array $query)
     {

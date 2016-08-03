@@ -28,6 +28,8 @@ final class Invoker implements InvokerInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @throws MethodNotAllowedException
      */
     public function invoke(AbstractRequest $request)
     {

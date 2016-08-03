@@ -92,6 +92,8 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
      * @param array                $query
      * @param array                $links
      * @param LinkerInterface|null $linker
+     *
+     * @throws MethodException
      */
     public function __construct(
         InvokerInterface $invoker,
@@ -114,6 +116,8 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
 
     /**
      *{@inheritDoc}
+     *
+     * @throws OutOfBoundsException
      */
     public function offsetSet($offset, $value)
     {
@@ -122,6 +126,8 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
 
     /**
      * {@inheritDoc}
+     *
+     * @throws OutOfBoundsException
      */
     public function offsetUnset($offset)
     {
@@ -185,6 +191,8 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
 
     /**
      * {@inheritdoc}
+     *
+     * @throws OutOfBoundsException
      */
     public function offsetGet($offset)
     {

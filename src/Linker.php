@@ -7,6 +7,7 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\Link;
+use BEAR\Resource\Exception\LinkQueryException;
 use BEAR\Resource\Exception\LinkRelException;
 use Doctrine\Common\Annotations\Reader;
 
@@ -46,6 +47,8 @@ final class Linker implements LinkerInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @throws LinkQueryException
      */
     public function invoke(AbstractRequest $request)
     {
@@ -96,6 +99,7 @@ final class Linker implements LinkerInterface
      * @param AbstractRequest $request
      *
      * @return ResourceObject|mixed
+     * @throws \BEAR\Resource\Exception\LinkRelException
      *
      * @throws Exception\LinkQueryException
      */

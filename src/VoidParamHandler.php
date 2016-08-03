@@ -13,6 +13,8 @@ class VoidParamHandler implements ParamHandlerInterface
 {
     /**
      * {@inheritdoc}
+     *
+     * @throws ParameterException
      */
     public function handle(\ReflectionParameter $parameter)
     {
