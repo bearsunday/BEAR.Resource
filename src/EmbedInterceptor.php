@@ -86,7 +86,7 @@ final class EmbedInterceptor implements MethodInterceptor
      */
     private function getFullUri($uri, ResourceObject $resourceObject)
     {
-        if (substr($uri, 0, 1) === '/') {
+        if ($uri[0] === '/') {
             $uri = "{$resourceObject->uri->scheme}://{$resourceObject->uri->host}" . $uri;
         }
 
