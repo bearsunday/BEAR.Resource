@@ -103,7 +103,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     ) {
         $this->invoker = $invoker;
         $this->resourceObject = $ro;
-        if (! in_array(strtolower($method), [self::GET, self::POST, self::PUT, self::PATCH, self::DELETE, self::HEAD, self::OPTIONS])) {
+        if (! in_array(strtolower($method), [self::GET, self::POST, self::PUT, self::PATCH, self::DELETE, self::HEAD, self::OPTIONS], true)) {
             throw new MethodException($method, 400);
         }
         $this->method = $method;
