@@ -83,7 +83,7 @@ final class Meta
     {
         $allows = [];
         foreach ($methods as $method) {
-            $isRequestMethod = (substr($method->name, 0, 2) === 'on') && (substr($method->name, 0, 6) !== 'onLink');
+            $isRequestMethod = strpos($method->name, 'on') === 0 && strpos($method->name, 'onLink') !== 0;
             if ($isRequestMethod) {
                 $allows[] = strtolower(substr($method->name, 2));
             }
