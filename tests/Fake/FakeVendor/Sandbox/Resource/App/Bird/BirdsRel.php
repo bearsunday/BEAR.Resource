@@ -6,7 +6,7 @@ use BEAR\Resource\Annotation\Embed;
 use BEAR\Resource\Annotation\Link;
 use BEAR\Resource\ResourceObject;
 
-class Birds_Rel extends ResourceObject
+class BirdsRel extends ResourceObject
 {
     /**
      * @Embed(rel="bird1", src="/bird/canary")
