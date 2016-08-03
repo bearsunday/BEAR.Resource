@@ -20,6 +20,7 @@ class News extends ResourceObject
      */
     public function onGet($date)
     {
+        unset($date);
         $this['headline'] = "40th anniversary of Rubik's Cube invention.";
         $this['sports'] = "Pieter Weening wins Giro d'Italia.";
         $this['user'] = $this->resource->get->uri('app://self/user')->withQuery(['id' => 1])->request();

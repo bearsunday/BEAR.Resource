@@ -6,9 +6,6 @@ use BEAR\Resource\ResourceObject;
 
 class Entry extends ResourceObject
 {
-    /**
-     * @param id
-     */
     public function onGet($id)
     {
         return "entry {$id}";

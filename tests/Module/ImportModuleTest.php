@@ -8,7 +8,7 @@ use BEAR\Resource\ResourceInterface;
 use FakeVendor\Sandbox\Module\AppModule;
 use Ray\Di\Injector;
 
-class importModuleTest extends \PHPUnit_Framework_TestCase
+class ImportModuleTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {

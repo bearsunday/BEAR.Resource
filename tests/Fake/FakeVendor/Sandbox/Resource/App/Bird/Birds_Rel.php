@@ -11,11 +11,11 @@ class Birds_Rel extends ResourceObject
     /**
      * @Embed(rel="bird1", src="/bird/canary")
      * @Embed(rel="bird2", src="/bird/sparrow{?id}")
-     *
      * @Link(rel="bird3", href="/bird/suzume")
      */
     public function onGet($id)
     {
+        unset($id);
         return $this;
     }
 }

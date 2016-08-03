@@ -12,6 +12,7 @@ class FakeResponder implements TransferInterface
     public function __invoke(ResourceObject $resourceObject, array $server)
     {
         // transfer resource object to external boundary (HTTP / File ...)
+        unset($server);
         $this->class = get_class($resourceObject);
     }
 }

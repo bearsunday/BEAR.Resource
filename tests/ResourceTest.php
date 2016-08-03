@@ -26,10 +26,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->resource = (
-        new Injector(
-            new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox')), $_ENV['TMP_DIR']
-        )
-        )->getInstance(ResourceInterface::class);
+        new Injector(new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox')), $_ENV['TMP_DIR']))->getInstance(ResourceInterface::class);
     }
 
     public function testManualConstruction()
@@ -42,9 +39,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
             ->scheme('nop')->host('self')->toAdapter(new FakeNop);
         $invoker = new Invoker(new NamedParameter(new ArrayCache, new VoidParamHandler));
         $factory = new Factory($scheme);
-        $resource = new Resource(
-            $factory, $invoker, new Anchor($reader), new Linker($reader, $invoker, $factory)
-        );
+        $resource = new Resource($factory, $invoker, new Anchor($reader), new Linker($reader, $invoker, $factory));
         $this->assertInstanceOf(ResourceInterface::class, $resource);
     }
 
