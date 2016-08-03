@@ -49,7 +49,7 @@ final class Anchor implements AnchorInterface
      */
     private function isValidLinkAnnotation($annotation, $rel)
     {
-        return $annotation instanceof LinkAnnotation && isset($annotation->rel) && $annotation->rel === $rel;
+        return $annotation instanceof LinkAnnotation && $annotation->rel !== null && $annotation->rel === $rel;
     }
 
     /**
