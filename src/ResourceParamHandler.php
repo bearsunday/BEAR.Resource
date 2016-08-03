@@ -43,6 +43,7 @@ class ResourceParamHandler implements ParamHandlerInterface
                 return $this->getResourceParam($annotation->uri);
             }
         }
+        /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
         (new VoidParamHandler)->handle($parameter);
     }
 

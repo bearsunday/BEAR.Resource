@@ -40,6 +40,7 @@ final class Factory implements FactoryInterface
 
     /**
      * {@inheritDoc}
+     * @throws \BEAR\Resource\Exception\UriException
      */
     public function newInstance($uri)
     {
