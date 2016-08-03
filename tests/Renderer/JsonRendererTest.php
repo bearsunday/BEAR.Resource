@@ -2,32 +2,6 @@
 
 namespace BEAR\Resource;
 
-use Doctrine\Common\Cache\ArrayCache;
-
-class Root extends ResourceObject
-{
-    public function onGet()
-    {
-        $this['one'] = 1;
-        $this['two'] = new Request(
-            new Invoker(new NamedParameter(new ArrayCache, new VoidParamHandler)),
-            new Child
-        );
-
-        return $this;
-    }
-}
-
-class Child extends ResourceObject
-{
-    public function onGet()
-    {
-        $this['tree'] = 3;
-
-        return $this;
-    }
-}
-
 class JsonRendererTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -37,7 +11,7 @@ class JsonRendererTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->ro = new Root;
+        $this->ro = new FakeRoot;
         $this->ro->setRenderer(new JsonRenderer);
     }
 
