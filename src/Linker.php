@@ -172,6 +172,7 @@ final class Linker implements LinkerInterface
             /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
             $this->crawl($annotations, $link, $body);
         }
+        unset($body);
         $current->body = $isList ? $bodyList : $bodyList[0];
 
         return $current;

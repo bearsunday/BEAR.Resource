@@ -95,6 +95,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
      *
      * @throws MethodException
      */
+    /** @noinspection MoreThanThreeArgumentsInspection */
     public function __construct(
         InvokerInterface $invoker,
         ResourceObject $ro = null,
@@ -169,7 +170,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
      */
     private function invoke()
     {
-        if (is_null($this->result)) {
+        if ($this->result === null) {
             /** @noinspection ImplicitMagicMethodCallInspection */
             $this->result = $this->__invoke();
         }
@@ -182,7 +183,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
      */
     public function __invoke(array $query = null)
     {
-        if (!is_null($query)) {
+        if ($query !== null) {
             $this->query = array_merge($this->query, $query);
         }
         $result = $this->linker ? $result = $this->linker->invoke($this) : $this->invoker->invoke($this);
