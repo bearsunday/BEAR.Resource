@@ -195,7 +195,7 @@ final class Linker implements LinkerInterface
             if ($annotation->crawl !== $link->key) {
                 continue;
             }
-            $uri = uri_template($annotation->href, $body);
+            $uri = uri_template($annotation->href, (array) $body);
             $rel = $this->factory->newInstance($uri);
             /** @noinspection UnnecessaryParenthesesInspection */
             $request = new Request($this->invoker, $rel, Request::GET, (new Uri($uri))->query, [$link], $this);
