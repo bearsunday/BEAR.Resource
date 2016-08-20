@@ -75,7 +75,7 @@ final class AppAdapter implements AdapterInterface
      * @param Unbound     $e
      * @param string      $class
      *
-     * @return Unbound
+     * @return ResourceNotFoundException|Unbound
      */
     private function getNotFound(AbstractUri $uri, Unbound $e, $class)
     {
