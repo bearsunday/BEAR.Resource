@@ -24,6 +24,7 @@ class HalRenderer implements RenderInterface
 
     /**
      * {@inheritdoc}
+     *
      * @throws \RuntimeException
      */
     public function render(ResourceObject $ro)
@@ -57,6 +58,7 @@ class HalRenderer implements RenderInterface
      * @param array       $annotations Annotations
      *
      * @return Hal
+     *
      * @throws \RuntimeException
      */
     private function getHal(AbstractUri $uri, array $body, array $annotations)

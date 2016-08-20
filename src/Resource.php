@@ -87,6 +87,7 @@ final class Resource implements ResourceInterface
 
     /**
      * {@inheritDoc}
+     *
      * @throws \BEAR\Resource\Exception\MethodException
      */
     public function object($resourceObject)
@@ -100,6 +101,7 @@ final class Resource implements ResourceInterface
 
     /**
      * {@inheritDoc}
+     *
      * @throws \BEAR\Resource\Exception\MethodException
      * @throws \BEAR\Resource\Exception\UriException
      */
@@ -124,12 +126,13 @@ final class Resource implements ResourceInterface
 
     /**
      * {@inheritDoc}
+     *
      * @throws \BEAR\Resource\Exception\MethodException
      */
     public function href($rel, array $query = [])
     {
         list($method, $uri) = $this->anchor->href($rel, $this->request, $query);
-        /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
+        /* @noinspection ExceptionsAnnotatingAndHandlingInspection */
         $target = $this->{$method}->uri($uri)->addQuery($query)->eager->request();
 
         return $target;

@@ -35,6 +35,7 @@ class ResourceClientModule extends AbstractModule
 {
     /**
      * {@inheritdoc}
+     *
      * @throws \Ray\Di\Exception\NotFound
      */
     protected function configure()

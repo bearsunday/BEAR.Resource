@@ -170,7 +170,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     private function invoke()
     {
         if ($this->result === null) {
-            /** @noinspection ImplicitMagicMethodCallInspection */
+            /* @noinspection ImplicitMagicMethodCallInspection */
             $this->result = $this->__invoke();
         }
 

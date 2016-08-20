@@ -16,6 +16,7 @@ class BirdsRel extends ResourceObject
     public function onGet($id)
     {
         unset($id);
+
         return $this;
     }
 }
