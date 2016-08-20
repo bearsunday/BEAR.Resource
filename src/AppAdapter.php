@@ -77,7 +77,7 @@ final class AppAdapter implements AdapterInterface
      *
      * @return Unbound
      */
-    private function getNotFound(AbstractUri $uri, $e, $class)
+    private function getNotFound(AbstractUri $uri, Unbound $e, $class)
     {
         $unboundClass = $e->getMessage();
         if ($unboundClass === "{$class}-") {
