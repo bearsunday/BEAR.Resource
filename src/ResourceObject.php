@@ -218,7 +218,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     private function evaluate($body)
     {
         if (is_array($body)) {
-            /** @noinspection ForeachSourceInspection */
+            /* @noinspection ForeachSourceInspection */
             foreach ($body as &$value) {
                 if ($value instanceof RequestInterface) {
                     $result = $value();

@@ -37,6 +37,7 @@ final class EmbedInterceptor implements MethodInterceptor
 
     /**
      * {@inheritdoc}
+     *
      * @throws \BEAR\Resource\Exception\EmbedException
      */
     public function invoke(MethodInvocation $invocation)

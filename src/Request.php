@@ -9,7 +9,6 @@ namespace BEAR\Resource;
 /**
  * @property $this lazy
  * @property $this eager
- *
  */
 final class Request extends AbstractRequest
 {

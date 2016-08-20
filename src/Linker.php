@@ -56,7 +56,7 @@ final class Linker implements LinkerInterface
         $this->invoker->invoke($request);
         $current = clone $request->resourceObject;
         foreach ($request->links as $link) {
-            /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
+            /* @noinspection ExceptionsAnnotatingAndHandlingInspection */
             $nextResource = $this->annotationLink($link, $current, $request);
             $current = $this->nextLink($link, $current, $nextResource);
         }
@@ -101,9 +101,9 @@ final class Linker implements LinkerInterface
      * @param AbstractRequest $request
      *
      * @return ResourceObject|mixed
+     *
      * @throws \BEAR\Resource\Exception\MethodException
      * @throws \BEAR\Resource\Exception\LinkRelException
-     *
      * @throws Exception\LinkQueryException
      */
     private function annotationLink(LinkType $link, ResourceObject $current, AbstractRequest $request)
@@ -117,7 +117,7 @@ final class Linker implements LinkerInterface
             return $this->annotationCrawl($annotations, $link, $current);
         }
 
-        /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
+        /* @noinspection ExceptionsAnnotatingAndHandlingInspection */
         return $this->annotationRel($annotations, $link, $current)->body;
     }
 
@@ -129,22 +129,22 @@ final class Linker implements LinkerInterface
      * @param ResourceObject                   $current
      *
      * @return ResourceObject
+     *
      * @throws \BEAR\Resource\Exception\UriException
      * @throws \BEAR\Resource\Exception\MethodException
-     *
      * @throws Exception\LinkQueryException
      * @throws Exception\LinkRelException
      */
     private function annotationRel(array $annotations, LinkType $link, ResourceObject $current)
     {
-        /** @noinspection LoopWhichDoesNotLoopInspection */
+        /* @noinspection LoopWhichDoesNotLoopInspection */
         foreach ($annotations as $annotation) {
             if ($annotation->rel !== $link->key) {
                 continue;
             }
             $uri = uri_template($annotation->href, $current->body);
             $rel = $this->factory->newInstance($uri);
-            /** @noinspection UnnecessaryParenthesesInspection */
+            /* @noinspection UnnecessaryParenthesesInspection */
             $request = new Request($this->invoker, $rel, Request::GET, (new Uri($uri))->query);
             $linkedResource = $this->invoker->invoke($request);
 
@@ -161,6 +161,7 @@ final class Linker implements LinkerInterface
      * @param ResourceObject $current
      *
      * @return ResourceObject
+     *
      * @throws \BEAR\Resource\Exception\MethodException
      */
     private function annotationCrawl(array $annotations, LinkType $link, ResourceObject $current)
@@ -169,7 +170,7 @@ final class Linker implements LinkerInterface
         $bodyList = $isList ? $current->body : [$current->body];
         /** @var $bodyList array */
         foreach ($bodyList as &$body) {
-            /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
+            /* @noinspection ExceptionsAnnotatingAndHandlingInspection */
             $this->crawl($annotations, $link, $body);
         }
         unset($body);
@@ -197,7 +198,7 @@ final class Linker implements LinkerInterface
             }
             $uri = uri_template($annotation->href, (array) $body);
             $rel = $this->factory->newInstance($uri);
-            /** @noinspection UnnecessaryParenthesesInspection */
+            /* @noinspection UnnecessaryParenthesesInspection */
             $request = new Request($this->invoker, $rel, Request::GET, (new Uri($uri))->query, [$link], $this);
             $hash = $request->hash();
             if (array_key_exists($hash, $this->cache)) {
