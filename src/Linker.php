@@ -11,6 +11,9 @@ use BEAR\Resource\Exception\LinkQueryException;
 use BEAR\Resource\Exception\LinkRelException;
 use Doctrine\Common\Annotations\Reader;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 final class Linker implements LinkerInterface
 {
     /**
