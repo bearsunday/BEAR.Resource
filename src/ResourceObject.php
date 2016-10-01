@@ -12,7 +12,7 @@ use Exception;
 use IteratorAggregate;
 use JsonSerializable;
 
-abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, Countable, IteratorAggregate, JsonSerializable
+abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, Countable, IteratorAggregate, JsonSerializable, ToStringInterface
 {
     /**
      * Uri
@@ -169,11 +169,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      */
     public function __toString()
     {
-        if (! $this->renderer instanceof RenderInterface) {
-            $this->renderer = new JsonRenderer;
-        }
         try {
-            $view = $this->renderer->render($this);
+            $view = $this->toString();
         } catch (Exception $e) {
             $view = '';
             $msg = 'Exception caught in ' . get_class($this) . '::__toString() (log only)';
@@ -181,6 +178,18 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         }
 
         return $view;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toString()
+    {
+        if (! $this->renderer instanceof RenderInterface) {
+            $this->renderer = new JsonRenderer;
+        }
+
+        return $this->renderer->render($this);
     }
 
     /**
