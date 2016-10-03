@@ -66,4 +66,5 @@
             "apigen generate -s src -d build/api",
             "@test"
         ]
-    }}
+    }
+}
