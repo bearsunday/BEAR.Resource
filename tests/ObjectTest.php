@@ -96,7 +96,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $iterator = $this->resourceObject->getIterator();
         $actual = '';
         while ($iterator->valid()) {
-            $actual .= $iterator->key() . '=>' . $iterator->current() . ",";
+            $actual .= $iterator->key() . '=>' . $iterator->current() . ',';
             $iterator->next();
         }
         $expected = '0=>entry1,1=>entry2,2=>entry3,';
@@ -109,7 +109,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $iterator = $this->resourceObject->getIterator();
         $actual = '';
         while ($iterator->valid()) {
-            $actual .= $iterator->key() . '=>' . $iterator->current() . ",";
+            $actual .= $iterator->key() . '=>' . $iterator->current() . ',';
             $iterator->next();
         }
         $expected = '';

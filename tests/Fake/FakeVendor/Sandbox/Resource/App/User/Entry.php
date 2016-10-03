@@ -13,9 +13,9 @@ class Entry extends ResourceObject
     }
 
     private $entries = [
-        100 => ['id' => 100, 'title' => "Entry1"],
-        101 => ['id' => 101, 'title' => "Entry2"],
-        102 => ['id' => 102, 'title' => "Entry3"],
+        100 => ['id' => 100, 'title' => 'Entry1'],
+        101 => ['id' => 101, 'title' => 'Entry2'],
+        102 => ['id' => 102, 'title' => 'Entry3'],
     ];
 
     /**
