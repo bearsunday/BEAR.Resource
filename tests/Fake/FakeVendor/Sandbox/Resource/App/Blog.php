@@ -7,9 +7,9 @@ use BEAR\Resource\ResourceObject;
 class Blog extends ResourceObject
 {
     private $repo = [
-        11 => ['id' => 11, 'name' => "Athos blog"],
-        12 => ['id' => 12, 'name' => "Aramis blog"],
-        99 => ['id' => 19, 'name' => "BEAR blog"],
+        11 => ['id' => 11, 'name' => 'Athos blog'],
+        12 => ['id' => 12, 'name' => 'Aramis blog'],
+        99 => ['id' => 19, 'name' => 'BEAR blog'],
     ];
 
     /**
