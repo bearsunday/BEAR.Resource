@@ -17,15 +17,13 @@
     ],
     "require": {
         "php": "~5.6|~7.0",
-        "ray/di": "~2.0",
-        "nocarrier/hal":"~0.9",
-        "doctrine/cache":"~1.0",
-        "rize/uri-template": "~0.2"
+        "ray/di": "^2.5",
+        "nocarrier/hal":"^0.9",
+        "doctrine/cache":"^1.6",
+        "rize/uri-template": "^0.3"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.8",
-        "squizlabs/php_codesniffer": "~2.3",
-        "phpmd/phpmd": "~2.3"
+        "bear/qatools": "^1.1"
     },
     "suggest": {
         "ext-uri_template": "ext/uri_template for URI Template(RFC6570) specification."
@@ -63,7 +61,6 @@
             "pdepend --jdepend-xml=./build/logs/jdepend.xml --jdepend-chart=./build/pdepend/dependencies.svg --overview-pyramid=./build/pdepend/overview-pyramid.svg src",
             "phploc --log-csv ./build/logs/phploc.csv src",
             "phpcs --report=checkstyle --report-file=./build/logs/checkstyle.xml --standard=phpcs.xml src",
-            "apigen generate -s src -d build/api",
             "@test"
         ]
     }}
