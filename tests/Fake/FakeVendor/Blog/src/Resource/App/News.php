@@ -21,7 +21,7 @@ class News extends ResourceObject
     public function onGet($date)
     {
         unset($date);
-        $this['technology'] = "Microsoft to stop producing Windows versions";
+        $this['technology'] = 'Microsoft to stop producing Windows versions';
         $this['user'] = $this->resource->get->uri('app://self/user')->withQuery(['id' => 2])->request();
 
         return $this;
