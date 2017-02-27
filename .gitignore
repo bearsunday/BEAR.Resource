@@ -6,4 +6,4 @@ tmp
 build
 cache.properties
 composer.lock
-composer.phar
+.DS_Store
