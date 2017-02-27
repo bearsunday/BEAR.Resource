@@ -422,7 +422,7 @@ $news = $resource->get->uri('app://self/news')->request();
 ```
 
 ## Requirements
- * PHP 5.5+
+ * PHP 5.6+
 
 ## Installation
 
