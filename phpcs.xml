@@ -8,7 +8,6 @@
     <rule ref="PSR2">
         <exclude name="Generic.Files.LineLength"/>
     </rule>
-    <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
     <rule ref="PEAR.Commenting.FunctionComment">
         <exclude name="PEAR.Commenting.FunctionComment.MissingReturn"/>
         <exclude name="PEAR.Commenting.FunctionComment.MissingParamComment"/>
