@@ -12,16 +12,6 @@ namespace BEAR\Resource\Annotation;
  */
 final class Link
 {
-    const REL = 'rel';
-
-    const SRC = 'src';
-
-    const HREF = 'href';
-
-    const TITLE = 'title';
-
-    const TEMPLATED = 'templated';
-
     /**
      * @var string
      */
@@ -47,11 +37,4 @@ final class Link
      * @var string
      */
     public $method = 'get';
-
-    /**
-     * Embed resource uri
-     *
-     * @var string
-     */
-    public $src;
 }
