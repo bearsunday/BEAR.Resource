@@ -127,4 +127,5 @@ return \PhpCsFixer\Config::create()
             ->exclude('tests/Fake')
             ->exclude('src-data')
             ->in(__DIR__)
-    )->setLineEnding("\n");
+    )->setLineEnding("\n")
+    ->setUsingCache(false);
