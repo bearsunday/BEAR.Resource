@@ -55,7 +55,7 @@ final class Resource implements ResourceInterface
      *
      * @var string
      */
-    private $method;
+    private $method = 'get';
 
     /** @noinspection MoreThanThreeArgumentsInspection */
 

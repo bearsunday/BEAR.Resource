@@ -196,4 +196,10 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $ro = $index(['id' => 'bear']);
         $this->assertSame('bear', $ro->body);
     }
+
+    public function testShortSyntaxFunctionWithDefaultGetMethod()
+    {
+        $ro = $this->resource->uri('page://self/index')();
+        $this->assertInstanceOf(Index::class, $ro);
+    }
 }
