@@ -2,6 +2,7 @@
     <testsuites>
         <testsuite>
             <directory suffix="Test.php">tests</directory>
+            <file phpVersion="7.0.0" phpVersionOperator=">=">tests/ShortSyntaxTest.php</file>
         </testsuite>
     </testsuites>
 
