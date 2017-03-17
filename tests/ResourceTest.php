@@ -25,8 +25,8 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->resource = (
-        new Injector(new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox')), $_ENV['TMP_DIR']))->getInstance(ResourceInterface::class);
+        $injector = new Injector(new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox'), $_ENV['TMP_DIR']));
+        $this->resource = $injector->getInstance(ResourceInterface::class);
     }
 
     public function testManualConstruction()
