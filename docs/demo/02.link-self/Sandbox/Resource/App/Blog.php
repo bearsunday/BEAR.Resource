@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is part of the BEAR.Sunday package.
+ *
+ * @license http://opensource.org/licenses/MIT MIT
+ */
 namespace Sandbox\Resource\Resource\App;
 
 use BEAR\Resource\ResourceObject;

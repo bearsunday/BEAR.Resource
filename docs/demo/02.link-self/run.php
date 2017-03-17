@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is part of the BEAR.Sunday package.
+ *
+ * @license http://opensource.org/licenses/MIT MIT
+ */
 use BEAR\Resource\Module\HalModule;
 use BEAR\Resource\Module\ResourceModule;
 use BEAR\Resource\ResourceInterface;

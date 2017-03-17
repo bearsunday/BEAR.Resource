@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the BEAR.Resource package
+ * This file is part of the BEAR.Sunday package.
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
@@ -49,7 +49,7 @@ final class Linker implements LinkerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @throws LinkQueryException
      * @throws \BEAR\Resource\Exception\LinkRelException
@@ -103,11 +103,11 @@ final class Linker implements LinkerInterface
      * @param ResourceObject  $current
      * @param AbstractRequest $request
      *
-     * @return ResourceObject|mixed
-     *
      * @throws \BEAR\Resource\Exception\MethodException
      * @throws \BEAR\Resource\Exception\LinkRelException
      * @throws Exception\LinkQueryException
+     *
+     * @return ResourceObject|mixed
      */
     private function annotationLink(LinkType $link, ResourceObject $current, AbstractRequest $request)
     {
@@ -131,12 +131,12 @@ final class Linker implements LinkerInterface
      * @param LinkType                         $link
      * @param ResourceObject                   $current
      *
-     * @return ResourceObject
-     *
      * @throws \BEAR\Resource\Exception\UriException
      * @throws \BEAR\Resource\Exception\MethodException
      * @throws Exception\LinkQueryException
      * @throws Exception\LinkRelException
+     *
+     * @return ResourceObject
      */
     private function annotationRel(array $annotations, LinkType $link, ResourceObject $current)
     {
@@ -163,9 +163,9 @@ final class Linker implements LinkerInterface
      * @param LinkType       $link
      * @param ResourceObject $current
      *
-     * @return ResourceObject
-     *
      * @throws \BEAR\Resource\Exception\MethodException
+     *
+     * @return ResourceObject
      */
     private function annotationCrawl(array $annotations, LinkType $link, ResourceObject $current)
     {
@@ -216,7 +216,7 @@ final class Linker implements LinkerInterface
     /**
      * @param mixed $value
      *
-     * @return boolean
+     * @return bool
      */
     private function isList($value)
     {
@@ -225,6 +225,6 @@ final class Linker implements LinkerInterface
         $isMultiColumnList = $keys !== [0 => 0] && ($keys === array_keys((array) array_pop($list)));
         $isSingleColumnList = (count($value) === 1) && $keys === array_keys((array) $list);
 
-        return ($isSingleColumnList || $isMultiColumnList);
+        return $isSingleColumnList || $isMultiColumnList;
     }
 }

@@ -1,18 +1,21 @@
 <?php
-
+/**
+ * This file is part of the BEAR.Sunday package.
+ *
+ * @license http://opensource.org/licenses/MIT MIT
+ */
 namespace Restbucks\Resource\App;
 
 use BEAR\Resource\Annotation\Link;
 use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Uri;
-use Ray\Di\Di\Scope;
 
 class Menu extends ResourceObject
 {
     private $menu = [];
 
     /**
-     * @param Resource $resource
+     * @param resource $resource
      */
     public function __construct()
     {

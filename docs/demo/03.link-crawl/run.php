@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is part of the BEAR.Sunday package.
+ *
+ * @license http://opensource.org/licenses/MIT MIT
+ */
 main: {
     $resource = require __DIR__ . '/scripts/instance.php';
     $author = $resource

@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is part of the BEAR.Sunday package.
+ *
+ * @license http://opensource.org/licenses/MIT MIT
+ */
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\MethodException;
@@ -12,14 +16,13 @@ use FakeVendor\Sandbox\Resource\App\User\Entry;
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Invoker
-     */
-    private $invoker;
-
-    /**
      * @var Request
      */
     protected $request;
+    /**
+     * @var Invoker
+     */
+    private $invoker;
 
     /**
      * @var FakeResource

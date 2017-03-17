@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the BEAR.Resource package
+ * This file is part of the BEAR.Sunday package.
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
@@ -32,6 +32,6 @@ final class Param
     {
         $this->class = $class;
         $this->method = $method;
-        $this->param  = $param;
+        $this->param = $param;
     }
 }

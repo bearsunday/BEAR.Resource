@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is part of the BEAR.Sunday package.
+ *
+ * @license http://opensource.org/licenses/MIT MIT
+ */
 namespace BEAR\Resource;
 
 use BEAR\Resource\Renderer\FakeTestRenderer;
@@ -127,7 +131,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
     {
         $this->resourceObject->headers['X-TEST'] = __FUNCTION__;
         $str = (string) $this->resourceObject;
-        $this->assertTrue(is_string($str));
+        $this->assertInternalType('string', $str);
     }
 
     public function testToStringScalarBody()
@@ -135,7 +139,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $this->resourceObject->headers['X-TEST'] = __FUNCTION__;
         $this->resourceObject->body = 'OK';
         $str = (string) $this->resourceObject;
-        $this->assertTrue(is_string($str));
+        $this->assertInternalType('string', $str);
     }
 
     public function testToStringWithRenderer()

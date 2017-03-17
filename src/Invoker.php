@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the BEAR.Resource package
+ * This file is part of the BEAR.Sunday package.
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
@@ -13,7 +13,7 @@ final class Invoker implements InvokerInterface
     /**
      * @var NamedParameterInterface
      */
-    protected $params;
+    private $params;
 
     /**
      * @var OptionProviderInterface
@@ -27,7 +27,7 @@ final class Invoker implements InvokerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @throws MethodNotAllowedException
      */
@@ -55,7 +55,7 @@ final class Invoker implements InvokerInterface
      */
     private function postRequest(AbstractRequest $request, $result)
     {
-        if (!$result instanceof ResourceObject) {
+        if (! $result instanceof ResourceObject) {
             $request->resourceObject->body = $result;
             $result = $request->resourceObject;
         }
@@ -70,9 +70,9 @@ final class Invoker implements InvokerInterface
      * @param AbstractRequest $request
      * @param string          $method
      *
-     * @return ResourceObject
-     *
      * @throws Exception\MethodNotAllowedException
+     *
+     * @return ResourceObject
      */
     private function extraMethod(ResourceObject $ro, AbstractRequest $request, $method)
     {

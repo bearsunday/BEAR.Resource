@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is part of the BEAR.Sunday package.
+ *
+ * @license http://opensource.org/licenses/MIT MIT
+ */
 use BEAR\Resource\Module\ResourceModule;
 use BEAR\Resource\ResourceInterface;
 use BEAR\Resource\ResourceObject;
@@ -14,12 +18,12 @@ $resource = (new Injector(new ResourceModule('/')))->getInstance(ResourceInterfa
 $result = $resource->get->object(new User)->withQuery(['id' => 1])->eager->request();
 /* @var $result ResourceObject */
 
-print "code:{$result->code}" . PHP_EOL;
+echo "code:{$result->code}" . PHP_EOL;
 
-print 'headers:' . PHP_EOL;
+echo 'headers:' . PHP_EOL;
 print_r($result->headers) . PHP_EOL;
 
-print 'body:' . PHP_EOL;
+echo 'body:' . PHP_EOL;
 print_r($result->body) . PHP_EOL;
 
 //    code:200

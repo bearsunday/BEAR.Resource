@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the BEAR.Resource package
+ * This file is part of the BEAR.Sunday package.
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
@@ -12,6 +12,15 @@ namespace BEAR\Resource;
  */
 interface RequestInterface
 {
+    /**
+     * InvokerInterface resource request
+     *
+     * @param array $query
+     *
+     * @return ResourceObject
+     */
+    public function __invoke(array $query = null);
+
     /**
      * Set query
      *
@@ -29,15 +38,6 @@ interface RequestInterface
      * @return $this
      */
     public function addQuery(array $query);
-
-    /**
-     * InvokerInterface resource request
-     *
-     * @param array $query
-     *
-     * @return ResourceObject
-     */
-    public function __invoke(array $query = null);
 
     /**
      * To Request URI string
