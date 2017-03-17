@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the BEAR.Package package
+ * This file is part of the BEAR.Sunday package.
  *
  * @license http://opensource.org/licenses/MIT MIT
  */

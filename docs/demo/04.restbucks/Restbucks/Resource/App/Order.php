@@ -1,10 +1,13 @@
 <?php
-
+/**
+ * This file is part of the BEAR.Sunday package.
+ *
+ * @license http://opensource.org/licenses/MIT MIT
+ */
 namespace Restbucks\Resource\App;
 
 use BEAR\Resource\Annotation\Link;
 use BEAR\Resource\ResourceObject;
-use Ray\Di\Di\Scope;
 
 class Order extends ResourceObject
 {
@@ -24,7 +27,7 @@ class Order extends ResourceObject
     {
         // data store here
         //   .. and get order id.
-        $orderId = rand();
+        $orderId = mt_rand();
         $this['drink'] = $drink;
         $this['order_id'] = $orderId;
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the BEAR.Resource package
+ * This file is part of the BEAR.Sunday package.
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
@@ -115,27 +115,6 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     }
 
     /**
-     *{@inheritDoc}
-     *
-     * @throws OutOfBoundsException
-     */
-    public function offsetSet($offset, $value)
-    {
-        throw new OutOfBoundsException(__METHOD__ . ' is unavailable.', 400);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @throws OutOfBoundsException
-     */
-    public function offsetUnset($offset)
-    {
-        unset($offset);
-        throw new OutOfBoundsException(__METHOD__ . ' is unavailable.', 400);
-    }
-
-    /**
      * @return string
      */
     public function __toString()
@@ -152,33 +131,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public function request()
-    {
-        if ($this->in !== 'eager') {
-            return $this;
-        }
-        $this->result = $this->invoke();
-
-        return $this->result;
-    }
-
-    /**
-     * @return ResourceObject
-     */
-    private function invoke()
-    {
-        if ($this->result === null) {
-            /* @noinspection ImplicitMagicMethodCallInspection */
-            $this->result = $this->__invoke();
-        }
-
-        return $this->result;
-    }
-
-    /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function __invoke(array $query = null)
     {
@@ -191,6 +144,40 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     }
 
     /**
+     *{@inheritdoc}
+     *
+     * @throws OutOfBoundsException
+     */
+    public function offsetSet($offset, $value)
+    {
+        throw new OutOfBoundsException(__METHOD__ . ' is unavailable.', 400);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @throws OutOfBoundsException
+     */
+    public function offsetUnset($offset)
+    {
+        unset($offset);
+        throw new OutOfBoundsException(__METHOD__ . ' is unavailable.', 400);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function request()
+    {
+        if ($this->in !== 'eager') {
+            return $this;
+        }
+        $this->result = $this->invoke();
+
+        return $this->result;
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @throws OutOfBoundsException
@@ -198,7 +185,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     public function offsetGet($offset)
     {
         $this->invoke();
-        if (!isset($this->result->body[$offset])) {
+        if (! isset($this->result->body[$offset])) {
             throw new OutOfBoundsException("[$offset] for object[" . get_class($this->result) . ']', 400);
         }
 
@@ -233,5 +220,18 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     public function hash()
     {
         return md5(get_class($this->resourceObject) . $this->method . serialize($this->query) . serialize($this->links));
+    }
+
+    /**
+     * @return ResourceObject
+     */
+    private function invoke()
+    {
+        if ($this->result === null) {
+            /* @noinspection ImplicitMagicMethodCallInspection */
+            $this->result = $this->__invoke();
+        }
+
+        return $this->result;
     }
 }

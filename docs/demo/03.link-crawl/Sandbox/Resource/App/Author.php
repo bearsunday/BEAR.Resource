@@ -1,4 +1,9 @@
 <?php
+/**
+ * This file is part of the BEAR.Sunday package.
+ *
+ * @license http://opensource.org/licenses/MIT MIT
+ */
 namespace Sandbox\Resource\App;
 
 use BEAR\Resource\Annotation\Link;
@@ -17,6 +22,6 @@ class Author extends ResourceObject
      */
     public function onGet($id = null)
     {
-        return is_null($id) ? $this->users : $this->users[$id];
+        return $id === null? $this->users : $this->users[$id];
     }
 }

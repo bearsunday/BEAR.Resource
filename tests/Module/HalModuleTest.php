@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is part of the BEAR.Sunday package.
+ *
+ * @license http://opensource.org/licenses/MIT MIT
+ */
 namespace Module;
 
 use BEAR\Resource\ResourceInterface;
@@ -22,7 +26,7 @@ class HalModuleTest extends \PHPUnit_Framework_TestCase
             ->uri('app://self/news')
             ->withQuery(['date' => 'today'])
             ->request();
-        $expect = <<<EOT
+        $expect = <<<'EOT'
 {"weather":{"today":"the weather of today is sunny"},"headline":"40th anniversary of Rubik's Cube invention.","sports":"Pieter Weening wins Giro d'Italia.","user":{"id":2,"name":"Aramis","age":16,"blog_id":12}}
 EOT;
         $this->assertSame($expect, (string) $news);

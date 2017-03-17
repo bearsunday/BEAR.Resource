@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is part of the BEAR.Sunday package.
+ *
+ * @license http://opensource.org/licenses/MIT MIT
+ */
 $packageDir = dirname(dirname(dirname(dirname(__DIR__))));
 $loader = require $packageDir . '/vendor/autoload.php';
 require dirname(__DIR__) . '/Sandbox/Resource/App/Blog.php';

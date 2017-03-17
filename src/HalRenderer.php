@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the BEAR.Resource package
+ * This file is part of the BEAR.Sunday package.
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
@@ -57,9 +57,9 @@ class HalRenderer implements RenderInterface
      * @param array       $body        Resource body
      * @param array       $annotations Annotations
      *
-     * @return Hal
-     *
      * @throws \RuntimeException
+     *
+     * @return Hal
      */
     private function getHal(AbstractUri $uri, array $body, array $annotations)
     {

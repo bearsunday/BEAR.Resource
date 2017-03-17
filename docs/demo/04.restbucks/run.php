@@ -1,8 +1,8 @@
 <?php
 /**
- * RESTbucks simple example
+ * This file is part of the BEAR.Sunday package.
  *
- * @see http://www.infoq.com/articles/webber-rest-workflow
+ * @license http://opensource.org/licenses/MIT MIT
  */
 use BEAR\Resource\Code;
 
@@ -33,7 +33,7 @@ output: {
     $code = new Code;
     echo "$response->code: " . $code->statusText[$response->code] . PHP_EOL;
     echo 'Location: ' . $response->headers['Location'] . PHP_EOL;
-    echo 'Order: ' . (($response->code === 201) ? 'Success' : 'Failure'). PHP_EOL;
+    echo 'Order: ' . (($response->code === 201) ? 'Success' : 'Failure') . PHP_EOL;
 }
 
 //201: Created

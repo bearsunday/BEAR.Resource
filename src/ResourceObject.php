@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the BEAR.Resource package
+ * This file is part of the BEAR.Sunday package.
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
@@ -43,6 +43,13 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     public $view;
 
     /**
+     * Body
+     *
+     * @var mixed
+     */
+    public $body;
+
+    /**
      * Renderer
      *
      * @var \BEAR\Resource\RenderInterface
@@ -50,11 +57,33 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     protected $renderer;
 
     /**
-     * Body
+     * Return representational string
      *
-     * @var mixed
+     * Return object hash if representation renderer is not set.
+     *
+     * @return string
      */
-    public $body;
+    public function __toString()
+    {
+        try {
+            $view = $this->toString();
+        } catch (Exception $e) {
+            $view = '';
+            $msg = 'Exception caught in ' . get_class($this) . '::__toString() (log only)';
+            error_log($msg . (string) $e);
+        }
+
+        return $view;
+    }
+
+    public function __sleep()
+    {
+        if (is_array($this->body)) {
+            $this->body = $this->evaluate($this->body);
+        }
+
+        return ['uri', 'code', 'headers', 'body', 'view'];
+    }
 
     /**
      * Returns the body value at the specified index
@@ -142,7 +171,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     {
         $isTraversal = (is_array($this->body) || $this->body instanceof \Traversable);
 
-        return ($isTraversal ? new \ArrayIterator($this->body) : new \ArrayIterator([]));
+        return $isTraversal ? new \ArrayIterator($this->body) : new \ArrayIterator([]);
     }
 
     /**
@@ -158,26 +187,6 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         $this->renderer = $renderer;
 
         return $this;
-    }
-
-    /**
-     * Return representational string
-     *
-     * Return object hash if representation renderer is not set.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        try {
-            $view = $this->toString();
-        } catch (Exception $e) {
-            $view = '';
-            $msg = 'Exception caught in ' . get_class($this) . '::__toString() (log only)';
-            error_log($msg . (string) $e);
-        }
-
-        return $view;
     }
 
     /**
@@ -219,6 +228,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      *
      * @return mixed
      */
+
     /**
      * @param mixed $body
      *
@@ -237,14 +247,5 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         }
 
         return $body;
-    }
-
-    public function __sleep()
-    {
-        if (is_array($this->body)) {
-            $this->body = $this->evaluate($this->body);
-        }
-
-        return ['uri', 'code', 'headers', 'body', 'view'];
     }
 }

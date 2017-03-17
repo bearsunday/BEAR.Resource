@@ -1,4 +1,9 @@
 <?php
+/**
+ * This file is part of the BEAR.Sunday package.
+ *
+ * @license http://opensource.org/licenses/MIT MIT
+ */
 passthru('php ' . __DIR__ . '/00.min/run.php');
 passthru('php ' . __DIR__ . '/01.basic/run.php');
 passthru('php ' . __DIR__ . '/02.link-self/run.php');

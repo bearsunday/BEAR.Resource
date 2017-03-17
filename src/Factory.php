@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the BEAR.Resource package
+ * This file is part of the BEAR.Sunday package.
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
@@ -39,7 +39,7 @@ final class Factory implements FactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @throws \BEAR\Resource\Exception\UriException
      */

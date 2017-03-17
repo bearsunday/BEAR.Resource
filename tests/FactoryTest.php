@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is part of the BEAR.Sunday package.
+ *
+ * @license http://opensource.org/licenses/MIT MIT
+ */
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\ResourceNotFoundException;
@@ -72,6 +76,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException(UriException::class);
         $this->factory->newInstance('invalid_uri');
     }
+
     public function testInvalidObjectUri()
     {
         $this->setExpectedException(UriException::class);

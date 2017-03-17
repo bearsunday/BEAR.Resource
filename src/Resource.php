@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the BEAR.Resource package
+ * This file is part of the BEAR.Sunday package.
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
@@ -78,7 +78,19 @@ final class Resource implements ResourceInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function __get($name)
+    {
+        $this->method = $name;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function newInstance($uri)
     {
@@ -86,7 +98,7 @@ final class Resource implements ResourceInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @throws \BEAR\Resource\Exception\MethodException
      */
@@ -100,7 +112,7 @@ final class Resource implements ResourceInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @throws \BEAR\Resource\Exception\MethodException
      * @throws \BEAR\Resource\Exception\UriException
@@ -125,7 +137,7 @@ final class Resource implements ResourceInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @throws \BEAR\Resource\Exception\MethodException
      */
@@ -136,17 +148,5 @@ final class Resource implements ResourceInterface
         $target = $this->{$method}->uri($uri)->addQuery($query)->eager->request();
 
         return $target;
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return $this
-     */
-    public function __get($name)
-    {
-        $this->method = $name;
-
-        return $this;
     }
 }

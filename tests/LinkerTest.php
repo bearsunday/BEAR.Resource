@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is part of the BEAR.Sunday package.
+ *
+ * @license http://opensource.org/licenses/MIT MIT
+ */
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\LinkQueryException;
@@ -14,14 +18,13 @@ use Ray\Di\Injector;
 class LinkerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Linker
-     */
-    private $linker;
-
-    /**
      * @var Request
      */
     protected $request;
+    /**
+     * @var Linker
+     */
+    private $linker;
 
     protected function setUp()
     {

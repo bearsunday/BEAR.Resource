@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the BEAR.Resource package
+ * This file is part of the BEAR.Sunday package.
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
@@ -19,6 +19,18 @@ final class Request extends AbstractRequest
     const DELETE = 'delete';
     const HEAD = 'head';
     const OPTIONS = 'options';
+
+    /**
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function __get($name)
+    {
+        $this->in = $name;
+
+        return $this;
+    }
 
     /**
      * {@inheritdoc}
@@ -41,7 +53,7 @@ final class Request extends AbstractRequest
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function toUriWithMethod()
     {
@@ -51,7 +63,7 @@ final class Request extends AbstractRequest
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function toUri()
     {
@@ -61,7 +73,7 @@ final class Request extends AbstractRequest
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function linkSelf($linkKey)
     {
@@ -71,7 +83,7 @@ final class Request extends AbstractRequest
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function linkNew($linkKey)
     {
@@ -81,23 +93,11 @@ final class Request extends AbstractRequest
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function linkCrawl($linkKey)
     {
         $this->links[] = new LinkType($linkKey, LinkType::CRAWL_LINK);
-
-        return $this;
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return $this
-     */
-    public function __get($name)
-    {
-        $this->in = $name;
 
         return $this;
     }

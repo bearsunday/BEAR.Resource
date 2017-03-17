@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the BEAR.Resource package
+ * This file is part of the BEAR.Sunday package.
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
@@ -34,7 +34,7 @@ final class AppIterator implements \Iterator
      */
     public function __construct($resourceDir)
     {
-        if (!file_exists($resourceDir)) {
+        if (! file_exists($resourceDir)) {
             throw new ResourceDirException($resourceDir);
         }
         $iterator = new RecursiveIteratorIterator(
@@ -122,6 +122,7 @@ final class AppIterator implements \Iterator
 
         return ! $isPhp;
     }
+
     /**
      * @param \SplFileInfo $file
      *
