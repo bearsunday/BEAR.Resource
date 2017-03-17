@@ -1,18 +1,13 @@
 <?php
-
+/**
+ * This file is part of the BEAR.Resource package.
+ *
+ * @license http://opensource.org/licenses/MIT MIT
+ */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Module\HalModule;
 use BEAR\Resource\Module\ResourceModule;
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Cache\ArrayCache;
-use FakeVendor\Sandbox\Resource\App\Blog;
-use FakeVendor\Sandbox\Resource\App\Href\Embed;
-use FakeVendor\Sandbox\Resource\App\Href\Hasembed;
-use FakeVendor\Sandbox\Resource\App\Href\Origin;
-use FakeVendor\Sandbox\Resource\App\Href\Target;
 use FakeVendor\Sandbox\Resource\Page\Index;
-use Ray\Di\EmptyModule;
 use Ray\Di\Injector;
 
 class ShortSyntaxTest extends \PHPUnit_Framework_TestCase

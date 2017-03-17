@@ -1,7 +1,7 @@
 <?php
 
 $header = <<<'EOF'
-This file is part of the BEAR.Sunday package.
+This file is part of the BEAR.Resource package.
 
 @license http://opensource.org/licenses/MIT MIT
 EOF;
