@@ -132,6 +132,7 @@ final class Resource implements ResourceInterface
             [],
             $this->linker
         );
+        $this->method = 'get';
 
         return $this->request;
     }
