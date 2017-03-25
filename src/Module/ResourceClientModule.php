@@ -41,12 +41,12 @@ class ResourceClientModule extends AbstractModule
     protected function configure()
     {
         $this->bind(ResourceInterface::class)->to(Resource::class)->in(Scope::SINGLETON);
-        $this->bind(InvokerInterface::class)->to(Invoker::class)->in(Scope::SINGLETON);
-        $this->bind(LinkerInterface::class)->to(Linker::class)->in(Scope::SINGLETON);
-        $this->bind(FactoryInterface::class)->to(Factory::class)->in(Scope::SINGLETON);
-        $this->bind(SchemeCollectionInterface::class)->toProvider(SchemeCollectionProvider::class)->in(Scope::SINGLETON);
-        $this->bind(AnchorInterface::class)->to(Anchor::class)->in(Scope::SINGLETON);
-        $this->bind(NamedParameterInterface::class)->to(NamedParameter::class)->in(Scope::SINGLETON);
+        $this->bind(InvokerInterface::class)->to(Invoker::class);
+        $this->bind(LinkerInterface::class)->to(Linker::class);
+        $this->bind(FactoryInterface::class)->to(Factory::class);
+        $this->bind(SchemeCollectionInterface::class)->toProvider(SchemeCollectionProvider::class);
+        $this->bind(AnchorInterface::class)->to(Anchor::class);
+        $this->bind(NamedParameterInterface::class)->to(NamedParameter::class);
         $this->bind(RenderInterface::class)->to(JsonRenderer::class)->in(Scope::SINGLETON);
         $this->bind(Cache::class)->to(ArrayCache::class);
         $this->bind(ParamHandlerInterface::class)->to(ResourceParamHandler::class);
