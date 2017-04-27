@@ -29,7 +29,6 @@ class SchemeCollectionProvider implements ProviderInterface
      * @param string            $appName
      * @param InjectorInterface $injector
      *
-     * @Inject
      * @AppName("appName")
      */
     public function __construct($appName, InjectorInterface $injector)
