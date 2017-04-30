@@ -9,13 +9,6 @@ namespace BEAR\Resource;
 final class OptionProvider implements OptionProviderInterface
 {
     /**
-     * Valid resource request methods
-     *
-     * @var array
-     */
-    const VALID_METHODS = ['onGet', 'onPost', 'onPut', 'onPatch', 'onDelete', 'onHead'];
-
-    /**
      * {@inheritdoc}
      */
     public function get(ResourceObject $ro)
@@ -54,7 +47,7 @@ final class OptionProvider implements OptionProviderInterface
     {
         $allows = [];
         foreach ($methods as $method) {
-            if (in_array($method->name, self::VALID_METHODS, true)) {
+            if (in_array($method->name, ['onGet', 'onPost', 'onPut', 'onPatch', 'onDelete', 'onHead'], true)) {
                 $allows[] = strtolower(substr($method->name, 2));
             }
         }
