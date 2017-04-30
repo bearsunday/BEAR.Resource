@@ -9,7 +9,7 @@ namespace BEAR\Resource;
 use BEAR\Resource\Exception\MethodException;
 use BEAR\Resource\Exception\OutOfBoundsException;
 
-abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \IteratorAggregate
+abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \IteratorAggregate, \Serializable
 {
     const GET = 'get';
     const POST = 'post';
@@ -220,6 +220,22 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     public function hash()
     {
         return md5(get_class($this->resourceObject) . $this->method . serialize($this->query) . serialize($this->links));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize()
+    {
+        return serialize($this->invoke());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unserialize($serialized)
+    {
+        return unserialize($serialized);
     }
 
     /**

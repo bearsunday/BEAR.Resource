@@ -47,8 +47,7 @@ final class OptionProvider implements OptionProviderInterface
     {
         $allows = [];
         foreach ($methods as $method) {
-            $isRequestMethod = strpos($method->name, 'on') === 0 && strpos($method->name, 'onLink') !== 0;
-            if ($isRequestMethod) {
+            if (in_array($method->name, ['onGet', 'onPost', 'onPut', 'onPatch', 'onDelete', 'onHead'], true)) {
                 $allows[] = strtolower(substr($method->name, 2));
             }
         }
