@@ -223,6 +223,22 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function serialize()
+    {
+        return serialize($this->invoke());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unserialize($serialized)
+    {
+        return unserialize($serialized);
+    }
+
+    /**
      * @return ResourceObject
      */
     private function invoke()
@@ -234,21 +250,4 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
 
         return $this->result;
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function serialize()
-    {
-        return serialize($this->invoke());
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function unserialize($serialized)
-    {
-        return unserialize($serialized);
-    }
-
 }

@@ -54,7 +54,7 @@ final class OptionProvider implements OptionProviderInterface
     {
         $allows = [];
         foreach ($methods as $method) {
-            if (in_array($method->name, self::VALID_METHODS)) {
+            if (in_array($method->name, self::VALID_METHODS, true)) {
                 $allows[] = strtolower(substr($method->name, 2));
             }
         }
