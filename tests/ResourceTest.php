@@ -157,4 +157,10 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 ';
         $this->assertSame($expected, (string) $user);
     }
+
+    public function testConstructorHasAnotherResourceRequest()
+    {
+        $body = $this->resource->post->uri('app://self/holder')->eager->request()->body;
+        $this->assertSame(true, $body);
+    }
 }
