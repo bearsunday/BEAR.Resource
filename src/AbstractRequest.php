@@ -138,9 +138,11 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
         if ($query !== null) {
             $this->query = array_merge($this->query, $query);
         }
-        $result = $this->linker ? $result = $this->linker->invoke($this) : $this->invoker->invoke($this);
+        if ($this->links) {
+            return $this->linker->invoke($this);
+        }
 
-        return $result;
+        return $this->invoker->invoke($this);
     }
 
     /**
