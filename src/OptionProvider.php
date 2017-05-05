@@ -57,7 +57,7 @@ final class OptionProvider implements OptionProviderInterface
         $allows = [];
         foreach ($methods as $method) {
             if (in_array($method->name, ['onGet', 'onPost', 'onPut', 'onPatch', 'onDelete', 'onHead'], true)) {
-                $allows[] = strtolower(substr($method->name, 2));
+                $allows[] = strtoupper(substr($method->name, 2));
             }
         }
 

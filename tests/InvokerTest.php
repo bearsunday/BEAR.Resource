@@ -94,7 +94,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $request = new Request($this->invoker, new Doc, Request::OPTIONS);
         $response = $this->invoker->invoke($request);
         $actual = $response->headers['allow'];
-        $expected = 'get, post';
+        $expected = 'GET, POST';
         $this->assertSame($actual, $expected);
 
         return $response;
@@ -107,7 +107,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     {
         $actual = $ro->view;
         $expected = '{
-    "get": {
+    "GET": {
         "summary": "User",
         "description": "Returns a variety of information about the user specified by the required $id parameter",
         "parameters": {
@@ -118,7 +118,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
             }
         }
     },
-    "post": {
+    "POST": {
         "parameters": {
             "id": {
                 "description": "id",
@@ -146,7 +146,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $request = new Request($this->invoker, new Order, Request::OPTIONS);
         $response = $this->invoker->invoke($request);
         $actual = $response->headers['allow'];
-        $expected = 'get, post';
+        $expected = 'GET, POST';
         $this->assertSame($actual, $expected);
     }
 
@@ -156,7 +156,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $request = new Request($this->invoker, $order, Request::OPTIONS);
         $response = $this->invoker->invoke($request);
         $actual = $response->headers['allow'];
-        $expected = 'get, post';
+        $expected = 'GET, POST';
         $this->assertSame($actual, $expected);
     }
 
