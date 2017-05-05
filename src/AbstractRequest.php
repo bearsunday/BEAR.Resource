@@ -176,6 +176,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
 
             return $this->result;
         }
+
         return $this;
     }
 
