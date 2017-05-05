@@ -6,6 +6,29 @@
  */
 namespace BEAR\Resource;
 
+use phpDocumentor\Reflection\DocBlockFactory;
+
+/** @noinspection PhpInconsistentReturnPointsInspection */
+
+/**
+ * OPTIONS resource request
+ *
+ * get($ro) return valid options request method response in 'application/json' media type.
+ *
+ * {
+ *   "get": {
+ *       "summary": "User",
+ *       "description": "Returns a variety of information about the user specified by the required $id parameter",
+ *       "parameters": {
+ *           "id": {
+ *               "description": "User ID",
+ *               "type": "string",
+ *               "required": true
+ *           }
+ *       }
+ *   }
+ *}
+ */
 final class OptionProvider implements OptionProviderInterface
 {
     /**
@@ -13,32 +36,18 @@ final class OptionProvider implements OptionProviderInterface
      */
     public function get(ResourceObject $ro)
     {
-        $options = $this->getOptions($ro);
-        $ro->headers['allow'] = (string) $options;
-        $ro->body = null;
+        $ro->headers['Content-Type'] = 'application/json';
+        $allows = $this->getAllows((new \ReflectionClass($ro))->getMethods());
+        $ro->headers['allow'] = implode(', ', $allows);
+        $body = $this->getOptionsPayload($ro, $allows);
+        $ro->view = json_encode($body, JSON_PRETTY_PRINT);
 
         return $ro;
     }
 
     /**
-     * Return available resource request method
+     * Return valid methods
      *
-     * @param ResourceObject $resourceObject
-     *
-     * @return Options
-     */
-    private function getOptions(ResourceObject $resourceObject)
-    {
-        $allows = $this->getAllows((new \ReflectionClass($resourceObject))->getMethods());
-        $params = [];
-        foreach ($allows as $method) {
-            $params[] = $this->getParams($resourceObject, $method);
-        }
-
-        return new Options($allows, $params);
-    }
-
-    /**
      * @param \ReflectionMethod[] $methods
      *
      * @return array
@@ -57,24 +66,91 @@ final class OptionProvider implements OptionProviderInterface
 
     /**
      * @param ResourceObject $ro
+     * @param array          $allows
+     *
+     * @return array
+     */
+    private function getOptionsPayload(ResourceObject $ro, $allows)
+    {
+        $mehtodList = [];
+        foreach ($allows as $method) {
+            $mehtodList[$method] = $this->getMethodParameters($ro, $method);
+        }
+
+        return $mehtodList;
+    }
+
+    /**
+     * @param ResourceObject $ro
      * @param string         $method
      *
-     * @return string[]
+     * @return array
      */
-    private function getParams($ro, $method)
+    private function getMethodParameters($ro, $requestMethod)
     {
-        $params = [];
-        $refMethod = new \ReflectionMethod($ro, 'on' . $method);
-        $parameters = $refMethod->getParameters();
-        $paramArray = [];
-        foreach ($parameters as $parameter) {
-            $name = $parameter->name;
-            $param = $parameter->isOptional() ? "({$name})" : $name;
-            $paramArray[] = $param;
+        $method = new \ReflectionMethod($ro, 'on' . $requestMethod);
+        $docComment = $method->getDocComment();
+        $methodDoc = $paramDoc = [];
+        if ($docComment) {
+            list($methodDoc, $paramDoc) = $this->docBlock($docComment);
         }
-        $key = "param-{$method}";
-        $params[$key] = implode(',', $paramArray);
+        $parameters = $method->getParameters();
+        foreach ($parameters as $parameter) {
+            $type = $this->getParameterType($parameter, $paramDoc, $parameter->name);
+            if (is_string($type)) {
+                $paramDoc[$parameter->name]['type'] = $type;
+            }
+            $paramDoc[$parameter->name]['required'] = ! $parameter->isOptional();
+        }
 
-        return $params;
+        return $methodDoc + ['parameters' => $paramDoc];
+    }
+
+    /**
+     * @param string $docComment
+     *
+     * @return array [$docs, $params]
+     */
+    private function docBlock($docComment)
+    {
+        $docblock = (DocBlockFactory::createInstance())->create($docComment);
+        $summary = $docblock->getSummary();
+        $docs = $params = [];
+        if ($summary) {
+            $docs['summary'] = $summary;
+        }
+        $description = (string) $docblock->getDescription();
+        if ($description) {
+            $docs['description'] = $description;
+        }
+        $tags = $docblock->getTagsByName('param');
+        foreach ($tags as $tag) {
+            /* @var $tag \phpDocumentor\Reflection\DocBlock\Tags\Param */
+            $varName = $tag->getVariableName();
+            $params[$varName] = [
+                'description' => (string) $tag->getDescription(),
+                'type' => (string) $tag->getType()
+            ];
+        }
+
+        return [$docs, $params];
+    }
+
+    /**
+     * @param \ReflectionParameter $parameter
+     * @param array                $paramDoc
+     * @param string               $name
+     *
+     * @return string|null
+     */
+    private function getParameterType(\ReflectionParameter $parameter, array $paramDoc, $name)
+    {
+        $hasType = method_exists($parameter, 'getType') && $parameter->getType();
+        if ($hasType) {
+            return (string) $parameter->getType();
+        }
+        if (isset($paramDoc[$name]['type'])) {
+            return $paramDoc[$name]['type'];
+        }
     }
 }
