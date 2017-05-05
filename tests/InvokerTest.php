@@ -12,6 +12,7 @@ use BEAR\Resource\Interceptor\FakeLogInterceptor;
 use BEAR\Resource\Interceptor\Log;
 use BEAR\Resource\Mock\Comment;
 use Doctrine\Common\Cache\ArrayCache;
+use FakeVendor\Sandbox\Resource\App\Doc;
 use FakeVendor\Sandbox\Resource\App\Restbucks\Order;
 use FakeVendor\Sandbox\Resource\App\User;
 use FakeVendor\Sandbox\Resource\App\Weave\Book;
@@ -90,11 +91,54 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
 
     public function testOptionsMethod()
     {
-        $request = new Request($this->invoker, new User, Request::OPTIONS);
+        $request = new Request($this->invoker, new Doc, Request::OPTIONS);
         $response = $this->invoker->invoke($request);
         $actual = $response->headers['allow'];
-        $expected = 'get, post, put, patch';
+        $expected = 'get, post';
         $this->assertSame($actual, $expected);
+
+        return $response;
+    }
+
+    /**
+     * @depends testOptionsMethod
+     */
+    public function testOptionsMethodBody(ResourceObject $ro)
+    {
+        $actual = $ro->view;
+        $expected = '{
+    "get": {
+        "summary": "User",
+        "description": "Returns a variety of information about the user specified by the required $id parameter",
+        "parameters": {
+            "id": {
+                "description": "User ID",
+                "type": "string",
+                "required": true
+            }
+        }
+    },
+    "post": {
+        "parameters": {
+            "id": {
+                "description": "id",
+                "type": "int",
+                "required": true
+            },
+            "name": {
+                "description": "name",
+                "type": "string",
+                "required": false
+            },
+            "age": {
+                "description": "age",
+                "type": "int",
+                "required": false
+            }
+        }
+    }
+}';
+        $this->assertSame($expected, $actual);
     }
 
     public function testOptionsMethod2()
