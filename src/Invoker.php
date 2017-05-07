@@ -7,6 +7,7 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\MethodNotAllowedException;
+use Ray\Di\Di\Named;
 
 final class Invoker implements InvokerInterface
 {
@@ -20,6 +21,9 @@ final class Invoker implements InvokerInterface
      */
     private $optionsRenderer;
 
+    /**
+     * @Named("optionsRenderer=options")
+     */
     public function __construct(NamedParameterInterface $params, RenderInterface $optionsRenderer)
     {
         $this->params = $params;
