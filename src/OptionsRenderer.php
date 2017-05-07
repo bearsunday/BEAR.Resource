@@ -108,9 +108,9 @@ final class OptionsRenderer implements RenderInterface
     {
         $method = new \ReflectionMethod($ro, 'on' . $requestMethod);
         $docComment = $method->getDocComment();
-        $methodDoc = $paramDoc = [];
+        $doc = $paramDoc = [];
         if ($docComment) {
-            list($methodDoc, $paramDoc) = $this->docBlock($docComment);
+            list($doc, $paramDoc) = $this->docBlock($docComment);
         }
         $parameters = $method->getParameters();
         foreach ($parameters as $parameter) {
@@ -133,7 +133,7 @@ final class OptionsRenderer implements RenderInterface
             $response['_embeded'] = $paramMetas['embeded'];
         }
 
-        return $methodDoc + ['parameters' => $paramDoc, 'response' => $response];
+        return $doc + ['parameters' => $paramDoc, 'response' => $response];
     }
 
     /**

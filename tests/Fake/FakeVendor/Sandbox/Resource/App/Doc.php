@@ -34,4 +34,10 @@ class Doc extends ResourceObject
     {
         return $this;
     }
+
+    public function onDelete()
+    {
+        return $this;
+    }
+
 }

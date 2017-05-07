@@ -95,7 +95,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $request = new Request($this->invoker, new Doc, Request::OPTIONS);
         $response = $this->invoker->invoke($request);
         $actual = $response->headers['allow'];
-        $expected = 'GET, POST';
+        $expected = 'GET, POST, DELETE';
         $this->assertSame($actual, $expected);
 
         return $response;
@@ -117,6 +117,19 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
                 "type": "string",
                 "required": true
             }
+        },
+        "response": {
+            "_links": {
+                "friend": {
+                    "href": "/fiend{?id}"
+                },
+                "task": {
+                    "href": "/task{?id}"
+                }
+            },
+            "_embeded": {
+                "profile": "/profile{?id}"
+            }
         }
     },
     "POST": {
@@ -129,14 +142,21 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
             "name": {
                 "description": "name",
                 "type": "string",
-                "required": false
+                "required": false,
+                "default": "default_name"
             },
             "age": {
                 "description": "age",
                 "type": "int",
-                "required": false
+                "required": false,
+                "default": "99"
             }
-        }
+        },
+        "response": []
+    },
+    "DELETE": {
+        "parameters": [],
+        "response": []
     }
 }';
         $this->assertSame($expected, $actual);
