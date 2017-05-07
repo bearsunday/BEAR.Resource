@@ -6,6 +6,9 @@
  */
 namespace BEAR\Resource;
 
+use BEAR\Resource\Annotation\Embed;
+use BEAR\Resource\Annotation\Link;
+use Doctrine\Common\Annotations\Reader;
 use phpDocumentor\Reflection\DocBlockFactory;
 
 /** @noinspection PhpInconsistentReturnPointsInspection */
@@ -32,6 +35,19 @@ use phpDocumentor\Reflection\DocBlockFactory;
 final class OptionProvider implements OptionProviderInterface
 {
     /**
+     * @var Reader
+     */
+    private $reader;
+
+    /**
+     * @param Reader $reader
+     */
+    public function __construct(Reader $reader)
+    {
+        $this->reader = $reader;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function get(ResourceObject $ro)
@@ -40,7 +56,7 @@ final class OptionProvider implements OptionProviderInterface
         $allows = $this->getAllows((new \ReflectionClass($ro))->getMethods());
         $ro->headers['allow'] = implode(', ', $allows);
         $body = $this->getOptionsPayload($ro, $allows);
-        $ro->view = json_encode($body, JSON_PRETTY_PRINT);
+        $ro->view = json_encode($body, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
         return $ro;
     }
@@ -102,8 +118,17 @@ final class OptionProvider implements OptionProviderInterface
             }
             $paramDoc[$parameter->name]['required'] = ! $parameter->isOptional();
         }
+        $links = $this->getLink($method);
+        $embeded = $this->getEmbeded($method);
+        $response = [];
+        if ($links) {
+            $response['_links'] = $links;
+        }
+        if ($embeded) {
+            $response['_embeded'] = $embeded;
+        }
 
-        return $methodDoc + ['parameters' => $paramDoc];
+        return $methodDoc + ['parameters' => $paramDoc, 'response' => $response];
     }
 
     /**
@@ -152,5 +177,37 @@ final class OptionProvider implements OptionProviderInterface
         if (isset($paramDoc[$name]['type'])) {
             return $paramDoc[$name]['type'];
         }
+    }
+
+    /**
+     * @return array
+     */
+    private function getLink(\ReflectionMethod $method)
+    {
+        $links = [];
+        $annotations = $this->reader->getMethodAnnotations($method);
+        foreach ($annotations as $annotation) {
+            if ($annotation instanceof Link) {
+                $links[$annotation->rel] = ['href' =>$annotation->href];
+            }
+        }
+
+        return $links;
+    }
+
+    /**
+     * @return array
+     */
+    private function getEmbeded(\ReflectionMethod $method)
+    {
+        $embeded = [];
+        $annotations = $this->reader->getMethodAnnotations($method);
+        foreach ($annotations as $annotation) {
+            if ($annotation instanceof Embed) {
+                $embeded[$annotation->rel] = $annotation->src;
+            }
+        }
+
+        return $embeded;
     }
 }
