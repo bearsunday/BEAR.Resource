@@ -14,10 +14,12 @@ use phpDocumentor\Reflection\DocBlockFactory;
 /** @noinspection PhpInconsistentReturnPointsInspection */
 
 /**
- * OPTIONS resource request
+ * OPTIONS method renderer
  *
- * get($ro) return valid options request method response in 'application/json' media type.
+ * header:
+ * 'Content-Type': 'application/json'
  *
+ * payload:
  * {
  *   "get": {
  *       "summary": "User",
