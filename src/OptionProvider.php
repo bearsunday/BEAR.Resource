@@ -102,7 +102,7 @@ final class OptionProvider implements OptionProviderInterface
      *
      * @return array
      */
-    private function getMethodParameters($ro, $requestMethod)
+    private function getMethodParameters(ResourceObject $ro, $requestMethod)
     {
         $method = new \ReflectionMethod($ro, 'on' . $requestMethod);
         $docComment = $method->getDocComment();
@@ -122,14 +122,13 @@ final class OptionProvider implements OptionProviderInterface
                 $paramDoc[$parameter->name]['default'] = (string) $parameter->getDefaultValue();
             }
         }
-        $links = $this->getLink($method);
-        $embeded = $this->getEmbeded($method);
+        $paramMetas = $this->getParamMetas($method);
         $response = [];
-        if ($links) {
-            $response['_links'] = $links;
+        if (isset($paramMetas['links'])) {
+            $response['_links'] = $paramMetas['links'];
         }
-        if ($embeded) {
-            $response['_embeded'] = $embeded;
+        if (isset($paramMetas['embeded'])) {
+            $response['_embeded'] = $paramMetas['embeded'];
         }
 
         return $methodDoc + ['parameters' => $paramDoc, 'response' => $response];
@@ -186,32 +185,19 @@ final class OptionProvider implements OptionProviderInterface
     /**
      * @return array
      */
-    private function getLink(\ReflectionMethod $method)
+    private function getParamMetas(\ReflectionMethod $method)
     {
-        $links = [];
-        $annotations = $this->reader->getMethodAnnotations($method);
-        foreach ($annotations as $annotation) {
-            if ($annotation instanceof Link) {
-                $links[$annotation->rel] = ['href' =>$annotation->href];
-            }
-        }
-
-        return $links;
-    }
-
-    /**
-     * @return array
-     */
-    private function getEmbeded(\ReflectionMethod $method)
-    {
-        $embeded = [];
+        $paramMetas = $embeded = [];
         $annotations = $this->reader->getMethodAnnotations($method);
         foreach ($annotations as $annotation) {
             if ($annotation instanceof Embed) {
-                $embeded[$annotation->rel] = $annotation->src;
+                $paramMetas['embeded'][$annotation->rel] = $annotation->src;
+            }
+            if ($annotation instanceof Link) {
+                $paramMetas['links'][$annotation->rel] = ['href' => $annotation->href];
             }
         }
 
-        return $embeded;
+        return $paramMetas;
     }
 }

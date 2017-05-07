@@ -19,7 +19,6 @@ use BEAR\Resource\NamedParameter;
 use BEAR\Resource\NamedParameterInterface;
 use BEAR\Resource\OptionProvider;
 use BEAR\Resource\OptionProviderInterface;
-use BEAR\Resource\Options;
 use BEAR\Resource\ParamHandlerInterface;
 use BEAR\Resource\RenderInterface;
 use BEAR\Resource\Resource;
