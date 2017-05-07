@@ -33,7 +33,10 @@
     },
     "autoload": {
         "psr-4": {
-            "BEAR\\Resource\\": "src/"
+            "BEAR\\Resource\\": [
+                "src/",
+                "src-deprecated"
+            ]
         },
         "files": [
             "src-files/uri_template.php"

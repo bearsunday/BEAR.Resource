@@ -6,7 +6,10 @@
  */
 namespace BEAR\Resource;
 
-interface OptionsInterface
+/**
+ * @deprecated use generic RenderInterface instead
+ */
+interface OptionProviderInterface
 {
     /**
      * @param ResourceObject $ro resource object
