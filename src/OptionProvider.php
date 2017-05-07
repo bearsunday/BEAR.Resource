@@ -117,6 +117,10 @@ final class OptionProvider implements OptionProviderInterface
                 $paramDoc[$parameter->name]['type'] = $type;
             }
             $paramDoc[$parameter->name]['required'] = ! $parameter->isOptional();
+            $hasDefault = $parameter->isDefaultValueAvailable() && $parameter->getDefaultValue() !== null;
+            if ($hasDefault) {
+                $paramDoc[$parameter->name]['default'] = (string) $parameter->getDefaultValue();
+            }
         }
         $links = $this->getLink($method);
         $embeded = $this->getEmbeded($method);
