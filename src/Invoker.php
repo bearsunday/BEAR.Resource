@@ -16,14 +16,14 @@ final class Invoker implements InvokerInterface
     private $params;
 
     /**
-     * @var OptionProviderInterface
+     * @var RenderInterface
      */
-    private $optionProvider;
+    private $optionsRenderer;
 
-    public function __construct(NamedParameterInterface $params, OptionProviderInterface $optionProvider)
+    public function __construct(NamedParameterInterface $params, RenderInterface $optionsRenderer)
     {
         $this->params = $params;
-        $this->optionProvider = $optionProvider;
+        $this->optionsRenderer = $optionsRenderer;
     }
 
     /**
@@ -79,8 +79,7 @@ final class Invoker implements InvokerInterface
         if ($request->method !== Request::OPTIONS) {
             throw new MethodNotAllowedException(get_class($request->resourceObject) . "::$method()", 405);
         }
-        $optionProvider = $this->optionProvider ?: new OptionProvider;
 
-        return $optionProvider->get($ro);
+        return $this->optionsRenderer->render($ro);
     }
 }

@@ -11,6 +11,7 @@ use BEAR\Resource\Exception\ParameterException;
 use BEAR\Resource\Interceptor\FakeLogInterceptor;
 use BEAR\Resource\Interceptor\Log;
 use BEAR\Resource\Mock\Comment;
+use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
 use FakeVendor\Sandbox\Resource\App\Doc;
 use FakeVendor\Sandbox\Resource\App\Restbucks\Order;
@@ -38,7 +39,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->invoker = new Invoker(new NamedParameter(new ArrayCache, new VoidParamHandler), new OptionProvider);
+        $this->invoker = new Invoker(new NamedParameter(new ArrayCache, new VoidParamHandler), new OptionsRenderer(new AnnotationReader));
     }
 
     public function testInvoke()

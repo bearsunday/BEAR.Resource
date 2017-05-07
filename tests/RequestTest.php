@@ -10,6 +10,7 @@ use BEAR\Resource\Exception\MethodException;
 use BEAR\Resource\Exception\OutOfBoundsException;
 use BEAR\Resource\Renderer\FakeErrorRenderer;
 use BEAR\Resource\Renderer\FakeTestRenderer;
+use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
 use FakeVendor\Sandbox\Resource\App\User\Entry;
 
@@ -32,7 +33,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->invoker = new Invoker(new NamedParameter(new ArrayCache, new VoidParamHandler));
+        $this->invoker = new Invoker(new NamedParameter(new ArrayCache, new VoidParamHandler), new OptionsRenderer(new AnnotationReader));
         $entry = new Entry;
         $entry->uri = new Uri('test://self/path/to/resource');
         $this->request = new Request($this->invoker, $entry);
