@@ -6,8 +6,6 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Annotation\Embed;
-use BEAR\Resource\Annotation\Link;
 use Doctrine\Common\Annotations\Reader;
 use phpDocumentor\Reflection\DocBlockFactory;
 
