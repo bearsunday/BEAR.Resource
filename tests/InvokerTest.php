@@ -117,19 +117,6 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
                 "type": "string",
                 "required": true
             }
-        },
-        "response": {
-            "_links": {
-                "friend": {
-                    "href": "/fiend{?id}"
-                },
-                "task": {
-                    "href": "/task{?id}"
-                }
-            },
-            "_embeded": {
-                "profile": "/profile{?id}"
-            }
         }
     },
     "POST": {
@@ -151,12 +138,10 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
                 "required": false,
                 "default": "99"
             }
-        },
-        "response": []
+        }
     },
     "DELETE": {
-        "parameters": [],
-        "response": []
+        "parameters": []
     }
 }';
         $this->assertSame($expected, $actual);
