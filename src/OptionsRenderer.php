@@ -57,7 +57,7 @@ final class OptionsRenderer implements RenderInterface
         $ro->headers['Content-Type'] = 'application/json';
         $allows = $this->getAllows((new \ReflectionClass($ro))->getMethods());
         $ro->headers['allow'] = implode(', ', $allows);
-        $body = $this->getOptionsPayload($ro, $allows);
+        $body = $this->getEntityBody($ro, $allows);
         $ro->view = json_encode($body, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
         return $ro;
@@ -88,7 +88,7 @@ final class OptionsRenderer implements RenderInterface
      *
      * @return array
      */
-    private function getOptionsPayload(ResourceObject $ro, $allows)
+    private function getEntityBody(ResourceObject $ro, $allows)
     {
         $mehtodList = [];
         foreach ($allows as $method) {
@@ -124,16 +124,8 @@ final class OptionsRenderer implements RenderInterface
                 $paramDoc[$parameter->name]['default'] = (string) $parameter->getDefaultValue();
             }
         }
-        $paramMetas = $this->getParamMetas($method);
-        $response = [];
-        if (isset($paramMetas['links'])) {
-            $response['_links'] = $paramMetas['links'];
-        }
-        if (isset($paramMetas['embeded'])) {
-            $response['_embeded'] = $paramMetas['embeded'];
-        }
 
-        return $doc + ['parameters' => $paramDoc, 'response' => $response];
+        return $doc + ['parameters' => $paramDoc];
     }
 
     /**
@@ -143,7 +135,8 @@ final class OptionsRenderer implements RenderInterface
      */
     private function docBlock($docComment)
     {
-        $docblock = (DocBlockFactory::createInstance())->create($docComment);
+        $factory = DocBlockFactory::createInstance();
+        $docblock = $factory->create($docComment);
         $summary = $docblock->getSummary();
         $docs = $params = [];
         if ($summary) {
@@ -182,24 +175,5 @@ final class OptionsRenderer implements RenderInterface
         if (isset($paramDoc[$name]['type'])) {
             return $paramDoc[$name]['type'];
         }
-    }
-
-    /**
-     * @return array
-     */
-    private function getParamMetas(\ReflectionMethod $method)
-    {
-        $paramMetas = $embeded = [];
-        $annotations = $this->reader->getMethodAnnotations($method);
-        foreach ($annotations as $annotation) {
-            if ($annotation instanceof Embed) {
-                $paramMetas['embeded'][$annotation->rel] = $annotation->src;
-            }
-            if ($annotation instanceof Link) {
-                $paramMetas['links'][$annotation->rel] = ['href' => $annotation->href];
-            }
-        }
-
-        return $paramMetas;
     }
 }
