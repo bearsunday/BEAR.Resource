@@ -111,19 +111,29 @@ final class OptionsRenderer implements RenderInterface
             list($doc, $paramDoc) = $this->docBlock($docComment);
         }
         $parameters = $method->getParameters();
+        $required = [];
         foreach ($parameters as $parameter) {
             $type = $this->getParameterType($parameter, $paramDoc, $parameter->name);
             if (is_string($type)) {
                 $paramDoc[$parameter->name]['type'] = $type;
             }
-            $paramDoc[$parameter->name]['required'] = ! $parameter->isOptional();
+            if (! $parameter->isOptional()) {
+                $required[] = $parameter->name;
+            }
             $hasDefault = $parameter->isDefaultValueAvailable() && $parameter->getDefaultValue() !== null;
             if ($hasDefault) {
                 $paramDoc[$parameter->name]['default'] = (string) $parameter->getDefaultValue();
             }
         }
+        $paramMetas = [];
+        if ($paramDoc) {
+            $paramMetas['parameters'] = $paramDoc;
+        }
+        if ($required) {
+            $paramMetas['required'] = $required;
+        }
 
-        return $doc + ['parameters' => $paramDoc];
+        return $doc + $paramMetas;
     }
 
     /**
@@ -168,7 +178,12 @@ final class OptionsRenderer implements RenderInterface
     {
         $hasType = method_exists($parameter, 'getType') && $parameter->getType();
         if ($hasType) {
-            return (string) $parameter->getType();
+            $type = (string) $parameter->getType();
+            if ($type === 'int') {
+                $type = 'integer';
+            }
+
+            return $type;
         }
         if (isset($paramDoc[$name]['type'])) {
             return $paramDoc[$name]['type'];

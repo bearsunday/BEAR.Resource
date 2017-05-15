@@ -114,35 +114,35 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         "parameters": {
             "id": {
                 "description": "User ID",
-                "type": "string",
-                "required": true
+                "type": "string"
             }
-        }
+        },
+        "required": [
+            "id"
+        ]
     },
     "POST": {
         "parameters": {
             "id": {
                 "description": "id",
-                "type": "int",
-                "required": true
+                "type": "int"
             },
             "name": {
                 "description": "name",
                 "type": "string",
-                "required": false,
                 "default": "default_name"
             },
             "age": {
                 "description": "age",
                 "type": "int",
-                "required": false,
                 "default": "99"
             }
-        }
+        },
+        "required": [
+            "id"
+        ]
     },
-    "DELETE": {
-        "parameters": []
-    }
+    "DELETE": []
 }';
         $this->assertSame($expected, $actual);
     }
