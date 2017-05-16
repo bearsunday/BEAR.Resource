@@ -143,7 +143,8 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         ]
     },
     "DELETE": []
-}';
+}
+';
         $this->assertSame($expected, $actual);
     }
 
