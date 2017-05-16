@@ -130,16 +130,7 @@ final class OptionsRenderer implements RenderInterface
             $docs['description'] = $description;
         }
         $tags = $docblock->getTagsByName('param');
-        foreach ($tags as $tag) {
-            /* @var $tag \phpDocumentor\Reflection\DocBlock\Tags\Param */
-            $varName = $tag->getVariableName();
-            $tagType = (string) $tag->getType();
-            $type = $tagType === 'int' ? 'integer' : $tagType;
-            $params[$varName] = [
-                'description' => (string) $tag->getDescription(),
-                'type' => $type
-            ];
-        }
+        $params = $this->docBlogTags($tags, $params);
 
         return [$docs, $params];
     }
@@ -155,12 +146,7 @@ final class OptionsRenderer implements RenderInterface
     {
         $hasType = method_exists($parameter, 'getType') && $parameter->getType();
         if ($hasType) {
-            $type = (string) $parameter->getType();
-            if ($type === 'int') {
-                $type = 'integer';
-            }
-
-            return $type;
+            return $this->getType($parameter);
         }
         if (isset($paramDoc[$name]['type'])) {
             return $paramDoc[$name]['type'];
@@ -211,5 +197,39 @@ final class OptionsRenderer implements RenderInterface
         }
 
         return $paramDoc;
+    }
+
+    /**
+     * @param \ReflectionParameter $parameter
+     *
+     * @return string
+     */
+    private function getType(\ReflectionParameter $parameter)
+    {
+        $type = (string)$parameter->getType();
+        if ($type === 'int') {
+            $type = 'integer';
+        }
+
+        return $type;
+    }
+
+    /*
+     * @return array
+     */
+    private function docBlogTags(array $tags, array $params)
+    {
+        foreach ($tags as $tag) {
+            /* @var $tag \phpDocumentor\Reflection\DocBlock\Tags\Param */
+            $varName = $tag->getVariableName();
+            $tagType = (string)$tag->getType();
+            $type = $tagType === 'int' ? 'integer' : $tagType;
+            $params[$varName] = [
+                'description' => (string)$tag->getDescription(),
+                'type' => $type
+            ];
+        }
+
+        return $params;
     }
 }
