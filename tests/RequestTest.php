@@ -236,4 +236,10 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertSame('', (string) $request);
     }
+
+    public function testSerialize()
+    {
+        $ro = unserialize(serialize($this->request), []);
+        $this->assertInstanceOf(AbstractRequest::class, $ro);
+    }
 }
