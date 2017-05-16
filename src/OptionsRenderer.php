@@ -86,7 +86,7 @@ final class OptionsRenderer implements RenderInterface
 
     /**
      * @param ResourceObject $ro
-     * @param string $requestMethod
+     * @param string         $requestMethod
      *
      * @return array
      */
