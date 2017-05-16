@@ -12,25 +12,12 @@ use phpDocumentor\Reflection\DocBlockFactory;
 /** @noinspection PhpInconsistentReturnPointsInspection */
 
 /**
- * OPTIONS method renderer
+ * RFC2616 OPTIONS method renderer
  *
- * header:
- * 'Content-Type': 'application/json'
+ * Set resource request information to `headers` and `view` in ResourceObject.
  *
- * payload:
- * {
- *   "get": {
- *       "summary": "User",
- *       "description": "Returns a variety of information about the user specified by the required $id parameter",
- *       "parameters": {
- *           "id": {
- *               "description": "User ID",
- *               "type": "string",
- *               "required": true
- *           }
- *       }
- *   }
- *}
+ * @link https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html
+ * @see /docs/options/README.md
  */
 final class OptionsRenderer implements RenderInterface
 {

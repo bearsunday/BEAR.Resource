@@ -1,0 +1,37 @@
+{
+  "GET": {
+    "summary": "User",
+    "description": "Returns a variety of information about the user specified by the required $id parameter",
+    "parameters": {
+      "id": {
+        "description": "User ID",
+        "type": "string"
+      }
+    },
+    "required": [
+      "id"
+    ]
+  },
+  "POST": {
+    "parameters": {
+      "id": {
+        "description": "id",
+        "type": "integer"
+      },
+      "name": {
+        "description": "name",
+        "type": "string",
+        "default": "default_name"
+      },
+      "age": {
+        "description": "age",
+        "type": "integer",
+        "default": "99"
+      }
+    },
+    "required": [
+      "id"
+    ]
+  },
+  "DELETE": []
+}
