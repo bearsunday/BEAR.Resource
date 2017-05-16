@@ -239,7 +239,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testSerialize()
     {
-        $ro = unserialize(serialize($this->request), []);
+        $ro = unserialize(serialize($this->request));
         $this->assertInstanceOf(AbstractRequest::class, $ro);
     }
 }
