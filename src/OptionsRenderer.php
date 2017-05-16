@@ -101,7 +101,7 @@ final class OptionsRenderer implements RenderInterface
         $parameters = $method->getParameters();
         list($paramDoc, $required) = $this->getParameterMetas($parameters, $paramDoc);
         $paramMetas = [];
-        if ($paramDoc) {
+        if ((bool) $paramDoc) {
             $paramMetas['parameters'] = $paramDoc;
         }
         if ((bool) $required) {
