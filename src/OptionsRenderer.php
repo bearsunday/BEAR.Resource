@@ -177,19 +177,39 @@ final class OptionsRenderer implements RenderInterface
     {
         $required = [];
         foreach ($parameters as $parameter) {
-            $type = $this->getParameterType($parameter, $paramDoc, $parameter->name);
-            if (is_string($type)) {
-                $paramDoc[$parameter->name]['type'] = $type;
-            }
-            if (!$parameter->isOptional()) {
+            $paramDoc = $this->paramType($paramDoc, $parameter);
+            if (! $parameter->isOptional()) {
                 $required[] = $parameter->name;
             }
-            $hasDefault = $parameter->isDefaultValueAvailable() && $parameter->getDefaultValue() !== null;
-            if ($hasDefault) {
-                $paramDoc[$parameter->name]['default'] = (string)$parameter->getDefaultValue();
-            }
+            $paramDoc = $this->paramDefault($paramDoc, $parameter);
         }
 
         return [$paramDoc, $required];
+    }
+
+    /**
+     * @return array
+     */
+    private function paramDefault(array $paramDoc, \ReflectionParameter $parameter)
+    {
+        $hasDefault = $parameter->isDefaultValueAvailable() && $parameter->getDefaultValue() !== null;
+        if ($hasDefault) {
+            $paramDoc[$parameter->name]['default'] = (string) $parameter->getDefaultValue();
+        }
+
+        return $paramDoc;
+    }
+
+    /**
+     * @return array
+     */
+    private function paramType(array $paramDoc, \ReflectionParameter $parameter)
+    {
+        $type = $this->getParameterType($parameter, $paramDoc, $parameter->name);
+        if (is_string($type)) {
+            $paramDoc[$parameter->name]['type'] = $type;
+        }
+
+        return $paramDoc;
     }
 }
