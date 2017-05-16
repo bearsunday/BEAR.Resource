@@ -23,9 +23,4 @@ final class Options
         $this->allow = $allow;
         $this->params = $params;
     }
-
-    public function __toString()
-    {
-        return implode(', ', $this->allow);
-    }
 }

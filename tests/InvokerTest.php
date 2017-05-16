@@ -11,7 +11,9 @@ use BEAR\Resource\Exception\ParameterException;
 use BEAR\Resource\Interceptor\FakeLogInterceptor;
 use BEAR\Resource\Interceptor\Log;
 use BEAR\Resource\Mock\Comment;
+use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
+use FakeVendor\Sandbox\Resource\App\Doc;
 use FakeVendor\Sandbox\Resource\App\Restbucks\Order;
 use FakeVendor\Sandbox\Resource\App\User;
 use FakeVendor\Sandbox\Resource\App\Weave\Book;
@@ -37,7 +39,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->invoker = new Invoker(new NamedParameter(new ArrayCache, new VoidParamHandler), new OptionProvider);
+        $this->invoker = new Invoker(new NamedParameter(new ArrayCache, new VoidParamHandler), new OptionsRenderer(new AnnotationReader));
     }
 
     public function testInvoke()
@@ -90,11 +92,60 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
 
     public function testOptionsMethod()
     {
-        $request = new Request($this->invoker, new User, Request::OPTIONS);
+        $request = new Request($this->invoker, new Doc, Request::OPTIONS);
         $response = $this->invoker->invoke($request);
         $actual = $response->headers['allow'];
-        $expected = 'get, post, put, patch';
+        $expected = 'GET, POST, DELETE';
         $this->assertSame($actual, $expected);
+
+        return $response;
+    }
+
+    /**
+     * @depends testOptionsMethod
+     */
+    public function testOptionsMethodBody(ResourceObject $ro)
+    {
+        $actual = $ro->view;
+        $expected = '{
+    "GET": {
+        "summary": "User",
+        "description": "Returns a variety of information about the user specified by the required $id parameter",
+        "parameters": {
+            "id": {
+                "description": "User ID",
+                "type": "string"
+            }
+        },
+        "required": [
+            "id"
+        ]
+    },
+    "POST": {
+        "parameters": {
+            "id": {
+                "description": "id",
+                "type": "integer"
+            },
+            "name": {
+                "description": "name",
+                "type": "string",
+                "default": "default_name"
+            },
+            "age": {
+                "description": "age",
+                "type": "integer",
+                "default": "99"
+            }
+        },
+        "required": [
+            "id"
+        ]
+    },
+    "DELETE": []
+}
+';
+        $this->assertSame($expected, $actual);
     }
 
     public function testOptionsMethod2()
@@ -102,7 +153,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $request = new Request($this->invoker, new Order, Request::OPTIONS);
         $response = $this->invoker->invoke($request);
         $actual = $response->headers['allow'];
-        $expected = 'get, post';
+        $expected = 'GET, POST';
         $this->assertSame($actual, $expected);
     }
 
@@ -112,7 +163,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $request = new Request($this->invoker, $order, Request::OPTIONS);
         $response = $this->invoker->invoke($request);
         $actual = $response->headers['allow'];
-        $expected = 'get, post';
+        $expected = 'GET, POST';
         $this->assertSame($actual, $expected);
     }
 

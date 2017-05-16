@@ -6,6 +6,9 @@
  */
 namespace BEAR\Resource;
 
+/**
+ * @deprecated use generic RenderInterface instead
+ */
 interface OptionProviderInterface
 {
     /**

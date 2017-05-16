@@ -3,23 +3,15 @@
         <testsuite>
             <directory suffix="Test.php">tests</directory>
             <file phpVersion="7.0.0" phpVersionOperator=">=">tests-php7/ShortSyntaxTest.php</file>
+            <file phpVersion="7.0.0" phpVersionOperator=">=">tests-php7/OptionsTest.php</file>
         </testsuite>
     </testsuites>
-
-    <logging>
-        <log type="coverage-html" target="build/coverage"/>
-        <log type="coverage-clover" target="build/logs/clover.xml"/>
-        <log type="junit" target="build/logs/junit.xml" logIncompleteSkipped="false"/>
-    </logging>
-
     <filter>
         <whitelist>
             <directory suffix=".php">src</directory>
         </whitelist>
     </filter>
     <php>
-        <ini name="xhprof.output_dir" value="./tests/tmp"/>
         <ini name="error_log" value="./tests/tmp/error.log"/>
-        <ini name="xdebug.max_nesting_level" value="500"/>
     </php>
 </phpunit>

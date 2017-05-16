@@ -7,6 +7,7 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\MethodNotAllowedException;
+use Ray\Di\Di\Named;
 
 final class Invoker implements InvokerInterface
 {
@@ -16,14 +17,17 @@ final class Invoker implements InvokerInterface
     private $params;
 
     /**
-     * @var OptionProviderInterface
+     * @var RenderInterface
      */
-    private $optionProvider;
+    private $optionsRenderer;
 
-    public function __construct(NamedParameterInterface $params, OptionProviderInterface $optionProvider = null)
+    /**
+     * @Named("optionsRenderer=options")
+     */
+    public function __construct(NamedParameterInterface $params, RenderInterface $optionsRenderer)
     {
         $this->params = $params;
-        $this->optionProvider = $optionProvider ?: new OptionProvider;
+        $this->optionsRenderer = $optionsRenderer;
     }
 
     /**
@@ -79,8 +83,7 @@ final class Invoker implements InvokerInterface
         if ($request->method !== Request::OPTIONS) {
             throw new MethodNotAllowedException(get_class($request->resourceObject) . "::$method()", 405);
         }
-        $optionProvider = $this->optionProvider ?: new OptionProvider;
 
-        return $optionProvider->get($ro);
+        return $this->optionsRenderer->render($ro);
     }
 }
