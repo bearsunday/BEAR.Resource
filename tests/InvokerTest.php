@@ -125,7 +125,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         "parameters": {
             "id": {
                 "description": "id",
-                "type": "int"
+                "type": "integer"
             },
             "name": {
                 "description": "name",
@@ -134,7 +134,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
             },
             "age": {
                 "description": "age",
-                "type": "int",
+                "type": "integer",
                 "default": "99"
             }
         },

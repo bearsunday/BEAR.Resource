@@ -158,9 +158,11 @@ final class OptionsRenderer implements RenderInterface
         foreach ($tags as $tag) {
             /* @var $tag \phpDocumentor\Reflection\DocBlock\Tags\Param */
             $varName = $tag->getVariableName();
+            $tagType = (string) $tag->getType();
+            $type = $tagType === 'int' ? 'integer' : $tagType;
             $params[$varName] = [
                 'description' => (string) $tag->getDescription(),
-                'type' => (string) $tag->getType()
+                'type' => $type
             ];
         }
 
