@@ -16,6 +16,7 @@ use phpDocumentor\Reflection\DocBlockFactory;
  *
  * Set resource request information to `headers` and `view` in ResourceObject.
  *
+ *
  * @link https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html
  * @see /docs/options/README.md
  */
@@ -98,20 +99,7 @@ final class OptionsRenderer implements RenderInterface
             list($doc, $paramDoc) = $this->docBlock($docComment);
         }
         $parameters = $method->getParameters();
-        $required = [];
-        foreach ($parameters as $parameter) {
-            $type = $this->getParameterType($parameter, $paramDoc, $parameter->name);
-            if (is_string($type)) {
-                $paramDoc[$parameter->name]['type'] = $type;
-            }
-            if (! $parameter->isOptional()) {
-                $required[] = $parameter->name;
-            }
-            $hasDefault = $parameter->isDefaultValueAvailable() && $parameter->getDefaultValue() !== null;
-            if ($hasDefault) {
-                $paramDoc[$parameter->name]['default'] = (string) $parameter->getDefaultValue();
-            }
-        }
+        list($paramDoc, $required) = $this->getParameterMetas($parameters, $paramDoc);
         $paramMetas = [];
         if ($paramDoc) {
             $paramMetas['parameters'] = $paramDoc;
@@ -177,5 +165,31 @@ final class OptionsRenderer implements RenderInterface
         if (isset($paramDoc[$name]['type'])) {
             return $paramDoc[$name]['type'];
         }
+    }
+
+    /**
+     * @param \ReflectionParameter[] $parameters
+     * @param array                  $paramDoc
+     *
+     * @return array [$paramDoc, $required]
+     */
+    private function getParameterMetas(array $parameters, array $paramDoc)
+    {
+        $required = [];
+        foreach ($parameters as $parameter) {
+            $type = $this->getParameterType($parameter, $paramDoc, $parameter->name);
+            if (is_string($type)) {
+                $paramDoc[$parameter->name]['type'] = $type;
+            }
+            if (!$parameter->isOptional()) {
+                $required[] = $parameter->name;
+            }
+            $hasDefault = $parameter->isDefaultValueAvailable() && $parameter->getDefaultValue() !== null;
+            if ($hasDefault) {
+                $paramDoc[$parameter->name]['default'] = (string)$parameter->getDefaultValue();
+            }
+        }
+
+        return [$paramDoc, $required];
     }
 }
