@@ -206,7 +206,7 @@ final class OptionsRenderer implements RenderInterface
      */
     private function getType(\ReflectionParameter $parameter)
     {
-        $type = (string)$parameter->getType();
+        $type = (string) $parameter->getType();
         if ($type === 'int') {
             $type = 'integer';
         }
@@ -222,10 +222,10 @@ final class OptionsRenderer implements RenderInterface
         foreach ($tags as $tag) {
             /* @var $tag \phpDocumentor\Reflection\DocBlock\Tags\Param */
             $varName = $tag->getVariableName();
-            $tagType = (string)$tag->getType();
+            $tagType = (string) $tag->getType();
             $type = $tagType === 'int' ? 'integer' : $tagType;
             $params[$varName] = [
-                'description' => (string)$tag->getDescription(),
+                'description' => (string) $tag->getDescription(),
                 'type' => $type
             ];
         }
