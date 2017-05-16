@@ -86,7 +86,7 @@ final class OptionsRenderer implements RenderInterface
 
     /**
      * @param ResourceObject $ro
-     * @param string         $method
+     * @param string $requestMethod
      *
      * @return array
      */
@@ -104,7 +104,7 @@ final class OptionsRenderer implements RenderInterface
         if ($paramDoc) {
             $paramMetas['parameters'] = $paramDoc;
         }
-        if ($required) {
+        if ((bool) $required) {
             $paramMetas['required'] = $required;
         }
 
@@ -214,7 +214,7 @@ final class OptionsRenderer implements RenderInterface
         return $type;
     }
 
-    /*
+    /**
      * @return array
      */
     private function docBlogTags(array $tags, array $params)
