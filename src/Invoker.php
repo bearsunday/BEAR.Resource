@@ -6,8 +6,8 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\MethodNotAllowedException;
 use BEAR\Resource\Annotation\OptionsRenderer;
+use BEAR\Resource\Exception\MethodNotAllowedException;
 
 final class Invoker implements InvokerInterface
 {

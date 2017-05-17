@@ -6,7 +6,6 @@
  */
 namespace BEAR\Resource\Module;
 
-use BEAR\Resource\OptionsRenderer;
 use BEAR\Resource\RenderInterface;
 use BEAR\Resource\VoidOptionsRenderer;
 use Ray\Di\AbstractModule;
