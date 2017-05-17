@@ -181,4 +181,14 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $request = new Request($this->invoker, new Order, Request::DELETE);
         $this->invoker->invoke($request);
     }
+
+    /**
+     * @expectedException \BEAR\Resource\Exception\MethodNotAllowedException
+     */
+    public function testOptionsNotAllowed()
+    {
+        $invoker = new Invoker(new NamedParameter(new ArrayCache, new VoidParamHandler), new VoidOptionsRenderer());
+        $request = new Request($this->invoker, new Order, Request::DELETE);
+        $invoker->invoke($request);
+    }
 }
