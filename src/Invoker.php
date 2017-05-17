@@ -80,10 +80,10 @@ final class Invoker implements InvokerInterface
      */
     private function invokeOptions(ResourceObject $ro, AbstractRequest $request, $method)
     {
-        if ($request->method !== Request::OPTIONS) {
-            throw new MethodNotAllowedException(get_class($request->resourceObject) . "::$method()", 405);
+        if ($request->method == Request::OPTIONS) {
+            return $this->optionsRenderer->render($ro);
         }
 
-        return $this->optionsRenderer->render($ro);
+        throw new MethodNotAllowedException(get_class($request->resourceObject) . "::$method()", 405);
     }
 }
