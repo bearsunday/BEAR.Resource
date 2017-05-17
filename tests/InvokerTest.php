@@ -6,7 +6,6 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\MethodNotAllowedException;
 use BEAR\Resource\Exception\ParameterException;
 use BEAR\Resource\Interceptor\FakeLogInterceptor;
 use BEAR\Resource\Interceptor\Log;
@@ -167,17 +166,21 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($actual, $expected);
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
     public function testInvokeExceptionHandle()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
         $outOfRangeId = 4;
         $request = new Request($this->invoker, new User, Request::GET, ['id' => $outOfRangeId]);
         $this->invoker->invoke($request);
     }
 
+    /**
+     * @expectedException \BEAR\Resource\Exception\MethodNotAllowedException
+     */
     public function testInvalidMethod()
     {
-        $this->setExpectedException(MethodNotAllowedException::class);
         $request = new Request($this->invoker, new Order, Request::DELETE);
         $this->invoker->invoke($request);
     }
@@ -187,7 +190,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
      */
     public function testOptionsNotAllowed()
     {
-        $invoker = new Invoker(new NamedParameter(new ArrayCache, new VoidParamHandler), new VoidOptionsRenderer());
+        $invoker = new Invoker(new NamedParameter(new ArrayCache, new VoidParamHandler), new VoidOptionsRenderer);
         $request = new Request($this->invoker, new Order, Request::DELETE);
         $invoker->invoke($request);
     }
