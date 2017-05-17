@@ -76,7 +76,7 @@ final class Invoker implements InvokerInterface
      *
      * @throws Exception\MethodNotAllowedException
      *
-     * @return ResourceObject
+     * @return string
      */
     private function extraMethod(ResourceObject $ro, AbstractRequest $request, $method)
     {
