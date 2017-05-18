@@ -31,6 +31,13 @@ class ResourceParamHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('sunday', $instance['name']);
     }
 
+    public function testResourceParamInUriTemplate()
+    {
+        $instance = $this->resource->post->uri('app://self/rparam/greeting')->withQuery(['name' => 'BEAR'])->eager->request();
+
+        $this->assertSame('login:BEAR', $instance['name']);
+    }
+
     public function testException()
     {
         $this->setExpectedException(ParameterException::class, null, Code::BAD_REQUEST);

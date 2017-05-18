@@ -6,9 +6,9 @@ use BEAR\Resource\ResourceObject;
 
 class Login extends ResourceObject
 {
-    public function onGet()
+    public function onGet($name = 'sunday')
     {
-        $this['nickname'] = 'sunday';
+        $this['nickname'] = 'login:' . $name;
 
         return $this;
     }
