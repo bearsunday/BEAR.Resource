@@ -53,13 +53,16 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     "GET": {
         "parameters": {
             "id": {
-                "type": "integer"
+                "type": "integer",
+                "description": "Id"
             },
             "name": {
-                "type": "string"
+                "type": "string",
+                "description": "Name"
             },
             "sw": {
-                "type": "bool"
+                "type": "bool",
+                "description": "Swithc"
             },
             "arr": {
                 "type": "array"

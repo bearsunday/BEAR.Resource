@@ -7,11 +7,11 @@ use BEAR\Resource\ResourceObject;
 class DocPhp7 extends ResourceObject
 {
     /**
-     * @param int    $id
-     * @param string $name
-     * @param bool   $sw
+     * @param int    $id          Id
+     * @param string $name        Name
+     * @param bool   $sw          Swithc
      * @param array  $arr
-     * @param string $defaultNull
+     * @param string $defaultNull DefaultNull
      *
      * @return $this
      */
