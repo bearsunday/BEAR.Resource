@@ -6,6 +6,9 @@
  */
 namespace BEAR\Resource;
 
+/**
+ * @deprecated
+ */
 interface ParamHandlerInterface
 {
     /**

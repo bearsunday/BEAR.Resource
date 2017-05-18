@@ -10,6 +10,9 @@ use BEAR\Resource\Annotation\ResourceParam;
 use Doctrine\Common\Annotations\Reader;
 use Ray\Di\InjectorInterface;
 
+/**
+ * @deprecated
+ */
 class ResourceParamHandler implements ParamHandlerInterface
 {
     /**

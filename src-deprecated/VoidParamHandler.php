@@ -9,6 +9,9 @@ namespace BEAR\Resource;
 use BEAR\Resource\Exception\ParameterException;
 use Ray\Aop\WeavedInterface;
 
+/**
+ * @deprecated
+ */
 class VoidParamHandler implements ParamHandlerInterface
 {
     /**
