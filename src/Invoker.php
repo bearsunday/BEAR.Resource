@@ -39,7 +39,7 @@ final class Invoker implements InvokerInterface
     {
         $onMethod = 'on' . ucfirst($request->method);
         if (method_exists($request->resourceObject, $onMethod) !== true) {
-            return $this->extraMethod($request->resourceObject, $request, $onMethod);
+            return $this->invokeOptions($request->resourceObject, $request, $onMethod);
         }
         if ($request->resourceObject->uri instanceof AbstractUri) {
             $request->resourceObject->uri->query = $request->query;
@@ -76,14 +76,14 @@ final class Invoker implements InvokerInterface
      *
      * @throws Exception\MethodNotAllowedException
      *
-     * @return ResourceObject
+     * @return string
      */
-    private function extraMethod(ResourceObject $ro, AbstractRequest $request, $method)
+    private function invokeOptions(ResourceObject $ro, AbstractRequest $request, $method)
     {
-        if ($request->method !== Request::OPTIONS) {
-            throw new MethodNotAllowedException(get_class($request->resourceObject) . "::$method()", 405);
+        if ($request->method == Request::OPTIONS) {
+            return $this->optionsRenderer->render($ro);
         }
 
-        return $this->optionsRenderer->render($ro);
+        throw new MethodNotAllowedException(get_class($request->resourceObject) . "::$method()", 405);
     }
 }
