@@ -22,11 +22,11 @@ class Greeting extends ResourceObject
     }
 
     /**
-     * @ResourceParam(param="name", uri="app://self/rparam/login{?name}#nickname", templated=true)
+     * @ResourceParam(param="id", uri="app://self/rparam/login{?name}#nickname", templated=true)
      */
-    public function onPost($name)
+    public function onPost($id, $name)
     {
-        $this['name'] = $name;
+        $this['id'] = $id;
 
         return $this;
     }
