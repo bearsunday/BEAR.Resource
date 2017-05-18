@@ -16,11 +16,11 @@ final class NamedParameter implements NamedParameterInterface
     private $cache;
 
     /**
-     * @var ParamHandlerInterface
+     * @var ParameterHandlerInterface
      */
     private $handler;
 
-    public function __construct(Cache $cache, ParamHandlerInterface $handler)
+    public function __construct(Cache $cache, ParameterHandlerInterface $handler)
     {
         $this->cache = $cache;
         $this->handler = $handler;
@@ -67,7 +67,7 @@ final class NamedParameter implements NamedParameterInterface
             $value = array_key_exists($name, $query) ? $query[$name] : $defaultValue;
             if ($value instanceof Param) {
                 $parameter = new \ReflectionParameter([$value->class, $value->method], $value->param);
-                $value = $this->handler->handle($parameter);
+                $value = $this->handler->handle($parameter, $query);
             }
             $parameters[] = $value;
         }
