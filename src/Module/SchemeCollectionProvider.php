@@ -9,7 +9,6 @@ namespace BEAR\Resource\Module;
 use BEAR\Resource\Annotation\AppName;
 use BEAR\Resource\AppAdapter;
 use BEAR\Resource\SchemeCollection;
-use Ray\Di\Di\Inject;
 use Ray\Di\InjectorInterface;
 use Ray\Di\ProviderInterface;
 
@@ -29,7 +28,6 @@ class SchemeCollectionProvider implements ProviderInterface
      * @param string            $appName
      * @param InjectorInterface $injector
      *
-     * @Inject
      * @AppName("appName")
      */
     public function __construct($appName, InjectorInterface $injector)
