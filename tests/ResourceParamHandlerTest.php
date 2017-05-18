@@ -26,14 +26,12 @@ class ResourceParamHandlerTest extends \PHPUnit_Framework_TestCase
     public function testResourceParam()
     {
         $instance = $this->resource->get->uri('app://self/rparam/greeting')->eager->request();
-
         $this->assertSame('LOGINID', $instance['name']);
     }
 
     public function testResourceParamInUriTemplate()
     {
         $instance = $this->resource->post->uri('app://self/rparam/greeting')->withQuery(['name' => 'BEAR'])->eager->request();
-
         $this->assertSame('login:BEAR', $instance['id']);
     }
 
@@ -43,5 +41,12 @@ class ResourceParamHandlerTest extends \PHPUnit_Framework_TestCase
     public function testException()
     {
         $this->resource->put->uri('app://self/rparam/greeting')->eager->request();
+    }
+
+    public function testNullDefault()
+    {
+        $instance = $this->resource->get->uri('app://self/rparam/greeting')->withQuery(['name' => 'IGNORED'])->eager->request();
+        $this->assertSame('LOGINID', $instance['name']);
+
     }
 }
