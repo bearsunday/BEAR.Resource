@@ -60,7 +60,7 @@ final class NamedParameter implements NamedParameterInterface
      *
      * @return array
      */
-    private function handleParams(array $query, $names)
+    private function handleParams(array $query, array $names)
     {
         $parameters = [];
         foreach ($names as $name => $defaultValue) {
