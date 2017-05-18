@@ -26,7 +26,7 @@ class AnchorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $invoker = new Invoker(new NamedParameter(new ArrayCache, new VoidParamHandler), new OptionsRenderer(new AnnotationReader()));
+        $invoker = new Invoker(new NamedParameter(new ArrayCache, new VoidParameterHandler), new OptionsRenderer(new AnnotationReader()));
         $author = new Author;
         $author->onGet(1);
         $this->request = new Request($invoker, $author, Request::GET, ['id' => 1]);

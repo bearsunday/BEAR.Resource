@@ -6,7 +6,6 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\ParameterException;
 use BEAR\Resource\Module\ResourceModule;
 use Ray\Di\Injector;
 
@@ -31,9 +30,18 @@ class ResourceParamHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('sunday', $instance['name']);
     }
 
+    public function testResourceParamInUriTemplate()
+    {
+        $instance = $this->resource->post->uri('app://self/rparam/greeting')->withQuery(['name' => 'BEAR'])->eager->request();
+
+        $this->assertSame('login:BEAR', $instance['id']);
+    }
+
+    /**
+     * @expectedException \BEAR\Resource\Exception\ParameterException
+     */
     public function testException()
     {
-        $this->setExpectedException(ParameterException::class, null, Code::BAD_REQUEST);
         $this->resource->put->uri('app://self/rparam/greeting')->eager->request();
     }
 }

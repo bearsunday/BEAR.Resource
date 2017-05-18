@@ -38,7 +38,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->invoker = new Invoker(new NamedParameter(new ArrayCache, new VoidParamHandler), new OptionsRenderer(new AnnotationReader));
+        $this->invoker = new Invoker(new NamedParameter(new ArrayCache, new VoidParameterHandler), new OptionsRenderer(new AnnotationReader));
     }
 
     public function testInvoke()
@@ -190,7 +190,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
      */
     public function testOptionsNotAllowed()
     {
-        $invoker = new Invoker(new NamedParameter(new ArrayCache, new VoidParamHandler), new VoidOptionsRenderer);
+        $invoker = new Invoker(new NamedParameter(new ArrayCache, new VoidParameterHandler), new VoidOptionsRenderer);
         $request = new Request($this->invoker, new Order, Request::DELETE);
         $invoker->invoke($request);
     }

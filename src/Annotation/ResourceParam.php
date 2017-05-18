@@ -21,4 +21,9 @@ final class ResourceParam
      * @var string
      */
     public $uri;
+
+    /**
+     * @var bool
+     */
+    public $templated = false;
 }
