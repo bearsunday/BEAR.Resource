@@ -163,6 +163,10 @@ final class OptionsRenderer implements RenderInterface
     {
         $required = [];
         foreach ($parameters as $parameter) {
+            if ($parameter->isDefaultValueAvailable() && $parameter->getDefaultValue() === null) {
+                unset($paramDoc[$parameter->name]);
+                continue;
+            }
             $paramDoc = $this->paramType($paramDoc, $parameter);
             if (! $parameter->isOptional()) {
                 $required[] = $parameter->name;
@@ -225,9 +229,12 @@ final class OptionsRenderer implements RenderInterface
             $tagType = (string) $tag->getType();
             $type = $tagType === 'int' ? 'integer' : $tagType;
             $params[$varName] = [
-                'description' => (string) $tag->getDescription(),
                 'type' => $type
             ];
+            $description = (string) $tag->getDescription();
+            if ($description) {
+                $params[$varName]['description'] = $description;
+            }
         }
 
         return $params;

@@ -112,8 +112,8 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         "description": "Returns a variety of information about the user specified by the required $id parameter",
         "parameters": {
             "id": {
-                "description": "User ID",
-                "type": "string"
+                "type": "string",
+                "description": "User ID"
             }
         },
         "required": [
@@ -123,17 +123,17 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     "POST": {
         "parameters": {
             "id": {
-                "description": "id",
-                "type": "integer"
+                "type": "integer",
+                "description": "ID"
             },
             "name": {
-                "description": "name",
                 "type": "string",
+                "description": "Name",
                 "default": "default_name"
             },
             "age": {
-                "description": "age",
                 "type": "integer",
+                "description": "Age",
                 "default": "99"
             }
         },

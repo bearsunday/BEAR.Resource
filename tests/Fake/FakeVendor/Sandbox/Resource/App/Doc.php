@@ -26,9 +26,9 @@ class Doc extends ResourceObject
     }
 
     /**
-     * @param int    $id   id
-     * @param string $name name
-     * @param int    $age  age
+     * @param int    $id   ID
+     * @param string $name Name
+     * @param int    $age  Age
      */
     public function onPost($id, $name = 'default_name', $age = 99)
     {
