@@ -19,7 +19,7 @@ class NamedParameterTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->params = new NamedParameter(new ArrayCache, new VoidParamHandler);
+        $this->params = new NamedParameter(new ArrayCache, new VoidParameterHandler);
     }
 
     public function testGetParameters()

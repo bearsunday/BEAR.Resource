@@ -47,7 +47,7 @@ class ParameterHandler implements ParameterHandlerInterface
                 return $this->getResourceParam($annotation, $query);
             }
         }
-        (new VoidParamHandler)->handle($parameter);
+        (new VoidParameterHandler)->handle($parameter, $query);
     }
 
     /**
