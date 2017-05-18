@@ -8,9 +8,9 @@ use BEAR\Resource\ResourceObject;
 class Greeting extends ResourceObject
 {
     /**
-     * @ResourceParam(param="name", uri="app://self/rparam/login#nickname")
+     * @ResourceParam(param="name", uri="app://self/rparam/login#login_id")
      */
-    public function onGet($name = 'sunday')
+    public function onGet($name = null)
     {
         $this['name'] = $name;
 

@@ -27,7 +27,7 @@ class ResourceParamHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $instance = $this->resource->get->uri('app://self/rparam/greeting')->eager->request();
 
-        $this->assertSame('sunday', $instance['name']);
+        $this->assertSame('LOGINID', $instance['name']);
     }
 
     public function testResourceParamInUriTemplate()

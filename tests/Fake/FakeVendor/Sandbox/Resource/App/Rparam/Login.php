@@ -8,6 +8,7 @@ class Login extends ResourceObject
 {
     public function onGet($name = 'sunday')
     {
+        $this['login_id'] = 'LOGINID';
         $this['nickname'] = 'login:' . $name;
 
         return $this;

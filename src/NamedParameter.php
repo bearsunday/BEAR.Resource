@@ -47,7 +47,7 @@ final class NamedParameter implements NamedParameterInterface
         $parameters = (new \ReflectionMethod($callable[0], $callable[1]))->getParameters();
         $names = [];
         foreach ($parameters as $parameter) {
-            $default = $parameter->isDefaultValueAvailable() === true ? $parameter->getDefaultValue() : new Param(get_class($callable[0]), $callable[1], $parameter->name);
+            $default = $parameter->isDefaultValueAvailable() === true && $parameter->getDefaultValue() !== null ? $parameter->getDefaultValue() : new Param(get_class($callable[0]), $callable[1], $parameter->name);
             $names[$parameter->name] = $default;
         }
 
