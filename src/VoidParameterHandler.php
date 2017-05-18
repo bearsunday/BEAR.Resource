@@ -18,6 +18,7 @@ class VoidParameterHandler implements ParameterHandlerInterface
      */
     public function handle(\ReflectionParameter $parameter, array $query)
     {
+        unset($query);
         $class = $parameter->getDeclaringClass();
         $className = $class->implementsInterface(WeavedInterface::class) ? $class->getParentClass()->getName() : $class->name;
         $method = $parameter->getDeclaringFunction()->name;
