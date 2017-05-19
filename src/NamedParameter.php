@@ -48,7 +48,7 @@ final class NamedParameter implements NamedParameterInterface
             $names = $this->getNamedParamMetas($callable);
             $this->cache->save($id, $names);
         }
-        $parameters = $this->handleParams($query, $names);
+        $parameters = $this->evaluateParams($query, $names);
 
         return $parameters;
     }
@@ -69,18 +69,7 @@ final class NamedParameter implements NamedParameterInterface
             $default = $parameter->isDefaultValueAvailable() === true ? $parameter->getDefaultValue() : new Param(get_class($callable[0]), $callable[1], $parameter->name);
             $names[$parameter->name] = $default;
         }
-        $annotations = $this->reader->getMethodAnnotations($method);
-        foreach ($annotations as $annotation) {
-            if ($annotation instanceof ResourceParam) {
-                $names[$annotation->param] = $annotation;
-            }
-            if ($annotation instanceof Assisted) {
-                /* @var $annotation Assisted */
-                foreach ($annotation->values as $assistedParam) {
-                    $names[$assistedParam] = $annotation;
-                }
-            }
-        }
+        $names = $this->SetAnnotationMetas($method, $names);
 
         return $names;
     }
@@ -91,34 +80,35 @@ final class NamedParameter implements NamedParameterInterface
      *
      * @return array
      */
-    private function handleParams(array $query, array $names)
+    private function evaluateParams(array $query, array $names)
     {
         $parameters = [];
         foreach ($names as $name => $param) {
-            // @ResourceParam value
-            if ($param instanceof ResourceParam) {
-                $parameters[] = $this->getResourceParam($param, $query);
-                continue;
-            }
-            // @Assisted (method injection) value
-            if ($param instanceof Assisted) {
-                $parameters[] = null;
-                continue;
-            }
-            // query value
-            if (isset($query[$name])) {
-                $parameters[] = $query[$name];
-                continue;
-            }
-            // default value
-            if (is_scalar($param) || $param === null) {
-                $parameters[] = $param;
-                continue;
-            }
-            throw new ParameterException($name);
+            $parameters[] = $this->getParamValue($param, $query, $name);
         }
 
         return $parameters;
+    }
+
+    private function getParamValue($param, array $query, $name)
+    {
+        // @ResourceParam value
+        if ($param instanceof ResourceParam) {
+            return $this->getResourceParam($param, $query);
+        }
+        // @Assisted (method injection) value
+        if ($param instanceof Assisted) {
+            return null;
+        }
+        // query value
+        if (isset($query[$name])) {
+            return $query[$name];
+        }
+        // default value
+        if (is_scalar($param) || $param === null) {
+            return $param;
+        }
+        throw new ParameterException($name);
     }
 
     /**
@@ -135,5 +125,25 @@ final class NamedParameter implements NamedParameterInterface
         $fragment = parse_url($uri, PHP_URL_FRAGMENT);
 
         return $resourceResult[$fragment];
+    }
+
+    /**
+     * @return array
+     */
+    private function SetAnnotationMetas(\ReflectionMethod $method, array $names)
+    {
+        $annotations = $this->reader->getMethodAnnotations($method);
+        foreach ($annotations as $annotation) {
+            if ($annotation instanceof ResourceParam) {
+                $names[$annotation->param] = $annotation;
+            }
+            if ($annotation instanceof Assisted) {
+                /* @var $annotation Assisted */
+                foreach ($annotation->values as $assistedParam) {
+                    $names[$assistedParam] = $annotation;
+                }
+            }
+        }
+        return $names;
     }
 }
