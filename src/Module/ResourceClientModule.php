@@ -18,13 +18,9 @@ use BEAR\Resource\LinkerInterface;
 use BEAR\Resource\NamedParameter;
 use BEAR\Resource\NamedParameterInterface;
 use BEAR\Resource\OptionsRenderer;
-use BEAR\Resource\ParameterHandler;
-use BEAR\Resource\ParameterHandlerInterface;
-use BEAR\Resource\ParamHandlerInterface;
 use BEAR\Resource\RenderInterface;
 use BEAR\Resource\Resource;
 use BEAR\Resource\ResourceInterface;
-use BEAR\Resource\ResourceParamHandler;
 use BEAR\Resource\SchemeCollectionInterface;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\Cache;
@@ -53,7 +49,5 @@ class ResourceClientModule extends AbstractModule
         $this->bind(RenderInterface::class)->to(JsonRenderer::class)->in(Scope::SINGLETON);
         $this->bind(Cache::class)->to(ArrayCache::class);
         $this->bind(RenderInterface::class)->annotatedWith('options')->to(OptionsRenderer::class);
-        $this->bind(ParameterHandlerInterface::class)->to(ParameterHandler::class);
-        $this->bind(ParamHandlerInterface::class)->to(ResourceParamHandler::class);
     }
 }

@@ -93,7 +93,7 @@ class EmbedInterceptorTest extends \PHPUnit_Framework_TestCase
     public function testInvokeString(ResourceObject $result)
     {
         $result->setRenderer(new JsonRenderer);
-        $json = (string) $result;
+        $json = $result->toString();
         $this->assertSame('{"bird1":{"name":"chill kun"},"bird2":{"sparrow_id":"1"}}', $json);
     }
 

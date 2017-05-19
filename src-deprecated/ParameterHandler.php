@@ -11,7 +11,7 @@ use Doctrine\Common\Annotations\Reader;
 use Ray\Di\InjectorInterface;
 
 /**
- * Resource parameter handler
+ * @deprecated
  */
 class ParameterHandler implements ParameterHandlerInterface
 {

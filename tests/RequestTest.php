@@ -13,6 +13,7 @@ use BEAR\Resource\Renderer\FakeTestRenderer;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
 use FakeVendor\Sandbox\Resource\App\User\Entry;
+use Ray\Di\Injector;
 
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,7 +34,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->invoker = new Invoker(new NamedParameter(new ArrayCache, new VoidParameterHandler), new OptionsRenderer(new AnnotationReader));
+        $this->invoker = new Invoker(new NamedParameter(new ArrayCache, new AnnotationReader, new Injector), new OptionsRenderer(new AnnotationReader));
         $entry = new Entry;
         $entry->uri = new Uri('test://self/path/to/resource');
         $this->request = new Request($this->invoker, $entry);

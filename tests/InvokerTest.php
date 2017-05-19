@@ -18,6 +18,7 @@ use FakeVendor\Sandbox\Resource\App\User;
 use FakeVendor\Sandbox\Resource\App\Weave\Book;
 use Ray\Aop\Bind;
 use Ray\Aop\Compiler;
+use Ray\Di\Injector;
 
 class InvokerTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,7 +39,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->invoker = new Invoker(new NamedParameter(new ArrayCache, new VoidParameterHandler), new OptionsRenderer(new AnnotationReader));
+        $this->invoker = new Invoker(new NamedParameter(new ArrayCache, new AnnotationReader, new Injector), new OptionsRenderer(new AnnotationReader));
     }
 
     public function testInvoke()
@@ -112,8 +113,8 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         "description": "Returns a variety of information about the user specified by the required $id parameter",
         "parameters": {
             "id": {
-                "description": "User ID",
-                "type": "string"
+                "type": "string",
+                "description": "User ID"
             }
         },
         "required": [
@@ -123,17 +124,17 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     "POST": {
         "parameters": {
             "id": {
-                "description": "id",
-                "type": "integer"
+                "type": "integer",
+                "description": "ID"
             },
             "name": {
-                "description": "name",
                 "type": "string",
+                "description": "Name",
                 "default": "default_name"
             },
             "age": {
-                "description": "age",
                 "type": "integer",
+                "description": "Age",
                 "default": "99"
             }
         },
@@ -190,7 +191,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
      */
     public function testOptionsNotAllowed()
     {
-        $invoker = new Invoker(new NamedParameter(new ArrayCache, new VoidParameterHandler), new VoidOptionsRenderer);
+        $invoker = new Invoker(new NamedParameter(new ArrayCache, new AnnotationReader, new Injector), new VoidOptionsRenderer);
         $request = new Request($this->invoker, new Order, Request::DELETE);
         $invoker->invoke($request);
     }
