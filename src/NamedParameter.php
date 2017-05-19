@@ -55,7 +55,7 @@ final class NamedParameter implements NamedParameterInterface
     /**
      * Return evaluated parameters
      *
-     * @param array            $query　caller value
+     * @param array            $query caller value
      * @param ParamInterface[] $names Param object[] ['varName' => ParamInterface]
      *
      * @return array
