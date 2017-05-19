@@ -10,8 +10,8 @@
         <whitelist>
             <directory suffix=".php">src</directory>
             <exclude>
-                <file>Module/OptionsMethodModule.php</file>
-                <file>Module/VoidOptionsMethodModule.php</file>
+                <file>src/Module/OptionsMethodModule.php</file>
+                <file>src/Module/VoidOptionsMethodModule.php</file>
             </exclude>
         </whitelist>
     </filter>
