@@ -100,10 +100,6 @@ final class OptionsMethods
     {
         $required = [];
         foreach ($parameters as $parameter) {
-            if ($parameter->isDefaultValueAvailable() && $parameter->getDefaultValue() === null) {
-                unset($paramDoc[$parameter->name]);
-                continue;
-            }
             $paramDoc = $this->paramType($paramDoc, $parameter);
             if (! $parameter->isOptional()) {
                 $required[] = $parameter->name;
