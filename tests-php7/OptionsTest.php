@@ -67,6 +67,10 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
             },
             "arr": {
                 "type": "array"
+            },
+            "defaultNull": {
+                "type": "string",
+                "description": "DefaultNull"
             }
         },
         "required": [
