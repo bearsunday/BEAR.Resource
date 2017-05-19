@@ -11,7 +11,6 @@ use BEAR\Resource\Exception\ParameterException;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Cache\Cache;
 use Ray\Di\Di\Assisted;
-use Ray\Di\Injector;
 use Ray\Di\InjectorInterface;
 
 final class NamedParameter implements NamedParameterInterface
