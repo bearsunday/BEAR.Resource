@@ -6,8 +6,10 @@
  */
 namespace BEAR\Resource;
 
+use BEAR\Resource\Annotation\ResourceParam;
 use Doctrine\Common\Annotations\Reader;
 use phpDocumentor\Reflection\DocBlockFactory;
+use Ray\Di\Di\Assisted;
 
 /** @noinspection PhpInconsistentReturnPointsInspection */
 
@@ -107,6 +109,7 @@ final class OptionsRenderer implements RenderInterface
         if ((bool) $required) {
             $paramMetas['required'] = $required;
         }
+        $paramMetas = $this->ignoreAssistedPrameter($method, $paramMetas);
 
         return $doc + $paramMetas;
     }
@@ -238,5 +241,27 @@ final class OptionsRenderer implements RenderInterface
         }
 
         return $params;
+    }
+
+    /**
+     * @return array
+     */
+    private function ignoreAssistedPrameter(\ReflectionMethod $method, array $paramMetas)
+    {
+        $annotations = $this->reader->getMethodAnnotations($method);
+        foreach ($annotations as $annotation) {
+            if ($annotation instanceof ResourceParam) {
+                unset($paramMetas['parameters'][$annotation->param]);
+                $paramMetas['required'] = array_values(array_diff($paramMetas['required'], [$annotation->param]));
+            }
+            if ($annotation instanceof Assisted) {
+                $paramMetas['required'] = array_values(array_diff($paramMetas['required'], $annotation->values));
+                foreach ($annotation->values as $varName) {
+                    unset($paramMetas['parameters'][$varName]);
+                }
+            }
+        }
+
+        return $paramMetas;
     }
 }
