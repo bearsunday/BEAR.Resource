@@ -166,12 +166,26 @@ final class OptionsRenderer implements RenderInterface
     {
         $required = [];
         foreach ($parameters as $parameter) {
-            $paramDoc = $this->paramType($paramDoc, $parameter);
-            if (! $parameter->isOptional()) {
-                $required[] = $parameter->name;
-            }
-            $paramDoc = $this->paramDefault($paramDoc, $parameter);
+            list($paramDoc, $required) = $this->getParamMetas($paramDoc, $parameter, $required);
         }
+
+        return [$paramDoc, $required];
+    }
+
+    /**
+     * @param array                $paramDoc
+     * @param \ReflectionParameter $parameter
+     * @param array                $required
+     *
+     * @return array
+     */
+    private function getParamMetas(array $paramDoc, \ReflectionParameter $parameter, array $required)
+    {
+        $paramDoc = $this->paramType($paramDoc, $parameter);
+        if (! $parameter->isOptional()) {
+            $required[] = $parameter->name;
+        }
+        $paramDoc = $this->paramDefault($paramDoc, $parameter);
 
         return [$paramDoc, $required];
     }
