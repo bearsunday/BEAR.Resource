@@ -138,11 +138,21 @@ final class NamedParameter implements NamedParameterInterface
                 $names[$annotation->param] = $annotation;
             }
             if ($annotation instanceof Assisted) {
-                /* @var $annotation Assisted */
-                foreach ($annotation->values as $assistedParam) {
-                    $names[$assistedParam] = $annotation;
-                }
+                $names = $this->setAssistedAnnotation($names, $annotation);
             }
+        }
+
+        return $names;
+    }
+
+    /**
+     * @return array
+     */
+    private function setAssistedAnnotation(array $names, Assisted $assisted)
+    {
+        /* @var $annotation Assisted */
+        foreach ($assisted->values as $assistedParam) {
+            $names[$assistedParam] = $assisted;
         }
         return $names;
     }
