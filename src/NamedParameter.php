@@ -7,7 +7,6 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\ResourceParam;
-use BEAR\Resource\Exception\ParameterException;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Cache\Cache;
 use Ray\Di\Di\Assisted;
@@ -54,6 +53,23 @@ final class NamedParameter implements NamedParameterInterface
     }
 
     /**
+     * @param string[] $query caller value
+     * @param string[] $names default value ['param-name' => 'param-type|param-value']
+     *
+     * @return array
+     */
+    private function evaluateParams(array $query, array $names)
+    {
+        $parameters = [];
+        foreach ($names as $varName => $param) {
+            /* @var $param ParamInterface */
+            $parameters[] = $param($varName, $query, $this->injector);
+        }
+
+        return $parameters;
+    }
+
+    /**
      * Return named parameter information
      *
      * @param array $callable
@@ -66,76 +82,22 @@ final class NamedParameter implements NamedParameterInterface
         $parameters = $method->getParameters();
         $names = [];
         foreach ($parameters as $parameter) {
-            $default = $parameter->isDefaultValueAvailable() === true ? $parameter->getDefaultValue() : new VoidParam;
-            $names[$parameter->name] = $default;
+            $names[$parameter->name] = $parameter->isDefaultValueAvailable() === true ? new OptionalParam($parameter->getDefaultValue()) : new RequiredParam;
         }
-        $names = $this->setAnnotationMetas($method, $names);
+        $names = $this->overrideAssistedParam($method, $names);
 
         return $names;
     }
 
     /**
-     * @param string[] $query caller value
-     * @param string[] $names default value ['param-name' => 'param-type|param-value']
-     *
      * @return array
      */
-    private function evaluateParams(array $query, array $names)
-    {
-        $parameters = [];
-        foreach ($names as $name => $param) {
-            $parameters[] = $this->getParamValue($param, $query, $name);
-        }
-
-        return $parameters;
-    }
-
-    private function getParamValue($param, array $query, $name)
-    {
-        // @ResourceParam value
-        if ($param instanceof ResourceParam) {
-            return $this->getResourceParam($param, $query);
-        }
-        // @Assisted (method injection) value
-        if ($param instanceof Assisted) {
-            return null;
-        }
-        // query value
-        if (isset($query[$name])) {
-            return $query[$name];
-        }
-        // default value
-        if (is_scalar($param) || $param === null) {
-            return $param;
-        }
-        throw new ParameterException($name);
-    }
-
-    /**
-     * @param ResourceParam $resourceParam
-     * @param array         $query
-     *
-     * @return mixed
-     */
-    private function getResourceParam(ResourceParam $resourceParam, array $query)
-    {
-        $uri = $resourceParam->templated === true ? uri_template($resourceParam->uri, $query) : $resourceParam->uri;
-        $resource = $this->injector->getInstance(ResourceInterface::class);
-        $resourceResult = $resource->get->uri($uri)->eager->request();
-        $fragment = parse_url($uri, PHP_URL_FRAGMENT);
-
-        return $resourceResult[$fragment];
-    }
-
-    /**
-     * @return array
-     */
-    private function setAnnotationMetas(\ReflectionMethod $method, array $names)
+    private function overrideAssistedParam(\ReflectionMethod $method, array $names)
     {
         $annotations = $this->reader->getMethodAnnotations($method);
         foreach ($annotations as $annotation) {
             if ($annotation instanceof ResourceParam) {
-                $names[$annotation->param] = $annotation;
+                $names[$annotation->param] = new AssistedResourceParam($annotation);
             }
             if ($annotation instanceof Assisted) {
                 $names = $this->setAssistedAnnotation($names, $annotation);
@@ -152,7 +114,7 @@ final class NamedParameter implements NamedParameterInterface
     {
         /* @var $annotation Assisted */
         foreach ($assisted->values as $assistedParam) {
-            $names[$assistedParam] = $assisted;
+            $names[$assistedParam] = new AssistedParam;
         }
 
         return $names;
