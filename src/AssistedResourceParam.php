@@ -23,6 +23,7 @@ final class AssistedResourceParam implements ParamInterface
      */
     public function __invoke($varName, array $query, InjectorInterface $injector)
     {
+        unset($varName);
         $resource = $injector->getInstance(ResourceInterface::class);
         $uri = $this->resourceParam->templated === true ? uri_template($this->resourceParam->uri, $query) : $this->resourceParam->uri;
         $resourceResult = $resource->get->uri($uri)->eager->request();
