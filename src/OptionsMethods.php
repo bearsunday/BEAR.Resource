@@ -43,7 +43,7 @@ final class OptionsMethods
         if ((bool) $required) {
             $paramMetas['required'] = $required;
         }
-        $paramMetas = $this->ignoreAssistedPrameter($method, $paramMetas);
+        $paramMetas = $this->ignoreAnnotatedPrameter($method, $paramMetas);
 
         return $doc + $paramMetas;
     }
@@ -178,9 +178,11 @@ final class OptionsMethods
     }
 
     /**
+     * Ignore @ Assisted @ ResourceParam parameter
+     *
      * @return array
      */
-    private function ignoreAssistedPrameter(\ReflectionMethod $method, array $paramMetas)
+    private function ignoreAnnotatedPrameter(\ReflectionMethod $method, array $paramMetas)
     {
         $annotations = $this->reader->getMethodAnnotations($method);
         foreach ($annotations as $annotation) {
@@ -189,11 +191,23 @@ final class OptionsMethods
                 $paramMetas['required'] = array_values(array_diff($paramMetas['required'], [$annotation->param]));
             }
             if ($annotation instanceof Assisted) {
-                $paramMetas['required'] = array_values(array_diff($paramMetas['required'], $annotation->values));
-                foreach ($annotation->values as $varName) {
-                    unset($paramMetas['parameters'][$varName]);
-                }
+                $paramMetas = $this->ignorreAssisted($paramMetas, $annotation);
             }
+        }
+
+        return $paramMetas;
+    }
+
+    /**
+     * Ignore @ Assisted parameter
+     *
+     * @return array
+     */
+    private function ignorreAssisted(array $paramMetas, Assisted $annotation)
+    {
+        $paramMetas['required'] = array_values(array_diff($paramMetas['required'], $annotation->values));
+        foreach ($annotation->values as $varName) {
+            unset($paramMetas['parameters'][$varName]);
         }
 
         return $paramMetas;
