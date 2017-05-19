@@ -14,6 +14,7 @@ class DocPhp7 extends ResourceObject
      * @param bool   $sw          Swithc
      * @param string $login_id    Login ID
      * @param array  $arr
+     * @param string $time
      * @param string $defaultNull DefaultNull
      *
      * @ResourceParam(param="login_id", uri="app://self/login#id")
