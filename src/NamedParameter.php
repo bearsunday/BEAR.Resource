@@ -66,10 +66,10 @@ final class NamedParameter implements NamedParameterInterface
         $parameters = $method->getParameters();
         $names = [];
         foreach ($parameters as $parameter) {
-            $default = $parameter->isDefaultValueAvailable() === true ? $parameter->getDefaultValue() : new Param(get_class($callable[0]), $callable[1], $parameter->name);
+            $default = $parameter->isDefaultValueAvailable() === true ? $parameter->getDefaultValue() : new VoidParam;
             $names[$parameter->name] = $default;
         }
-        $names = $this->SetAnnotationMetas($method, $names);
+        $names = $this->setAnnotationMetas($method, $names);
 
         return $names;
     }
@@ -130,7 +130,7 @@ final class NamedParameter implements NamedParameterInterface
     /**
      * @return array
      */
-    private function SetAnnotationMetas(\ReflectionMethod $method, array $names)
+    private function setAnnotationMetas(\ReflectionMethod $method, array $names)
     {
         $annotations = $this->reader->getMethodAnnotations($method);
         foreach ($annotations as $annotation) {
