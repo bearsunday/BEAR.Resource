@@ -154,6 +154,7 @@ final class NamedParameter implements NamedParameterInterface
         foreach ($assisted->values as $assistedParam) {
             $names[$assistedParam] = $assisted;
         }
+
         return $names;
     }
 }
