@@ -166,10 +166,6 @@ final class OptionsRenderer implements RenderInterface
     {
         $required = [];
         foreach ($parameters as $parameter) {
-            if ($parameter->isDefaultValueAvailable() && $parameter->getDefaultValue() === null) {
-                unset($paramDoc[$parameter->name]);
-                continue;
-            }
             $paramDoc = $this->paramType($paramDoc, $parameter);
             if (! $parameter->isOptional()) {
                 $required[] = $parameter->name;
@@ -254,11 +250,24 @@ final class OptionsRenderer implements RenderInterface
                 unset($paramMetas['parameters'][$annotation->param]);
                 $paramMetas['required'] = array_values(array_diff($paramMetas['required'], [$annotation->param]));
             }
-            if ($annotation instanceof Assisted) {
-                $paramMetas['required'] = array_values(array_diff($paramMetas['required'], $annotation->values));
-                foreach ($annotation->values as $varName) {
-                    unset($paramMetas['parameters'][$varName]);
-                }
+            $paramMetas = $this->unsetAssisted($paramMetas, $annotation);
+        }
+
+        return $paramMetas;
+    }
+
+    /**
+     * @param array $paramMetas
+     * @param mixed $annotation
+     *
+     * @return array
+     */
+    private function unsetAssisted(array $paramMetas, $annotation)
+    {
+        if ($annotation instanceof Assisted) {
+            $paramMetas['required'] = array_values(array_diff($paramMetas['required'], $annotation->values));
+            foreach ($annotation->values as $varName) {
+                unset($paramMetas['parameters'][$varName]);
             }
         }
 
