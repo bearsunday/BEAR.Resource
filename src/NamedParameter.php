@@ -7,7 +7,6 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\ResourceParam;
-use BEAR\Resource\Exception\ParameterException;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Cache\Cache;
 use Ray\Di\Di\Assisted;
@@ -48,7 +47,24 @@ final class NamedParameter implements NamedParameterInterface
             $names = $this->getNamedParamMetas($callable);
             $this->cache->save($id, $names);
         }
-        $parameters = $this->handleParams($query, $names);
+        $parameters = $this->evaluateParams($query, $names);
+
+        return $parameters;
+    }
+
+    /**
+     * @param string[] $query caller value
+     * @param string[] $names default value ['param-name' => 'param-type|param-value']
+     *
+     * @return array
+     */
+    private function evaluateParams(array $query, array $names)
+    {
+        $parameters = [];
+        foreach ($names as $varName => $param) {
+            /* @var $param ParamInterface */
+            $parameters[] = $param($varName, $query, $this->injector);
+        }
 
         return $parameters;
     }
@@ -66,19 +82,25 @@ final class NamedParameter implements NamedParameterInterface
         $parameters = $method->getParameters();
         $names = [];
         foreach ($parameters as $parameter) {
-            $default = $parameter->isDefaultValueAvailable() === true ? $parameter->getDefaultValue() : new Param(get_class($callable[0]), $callable[1], $parameter->name);
-            $names[$parameter->name] = $default;
+            $names[$parameter->name] = $parameter->isDefaultValueAvailable() === true ? new OptionalParam($parameter->getDefaultValue()) : new RequiredParam;
         }
+        $names = $this->overrideAssistedParam($method, $names);
+
+        return $names;
+    }
+
+    /**
+     * @return array
+     */
+    private function overrideAssistedParam(\ReflectionMethod $method, array $names)
+    {
         $annotations = $this->reader->getMethodAnnotations($method);
         foreach ($annotations as $annotation) {
             if ($annotation instanceof ResourceParam) {
-                $names[$annotation->param] = $annotation;
+                $names[$annotation->param] = new AssistedResourceParam($annotation);
             }
             if ($annotation instanceof Assisted) {
-                /* @var $annotation Assisted */
-                foreach ($annotation->values as $assistedParam) {
-                    $names[$assistedParam] = $annotation;
-                }
+                $names = $this->setAssistedAnnotation($names, $annotation);
             }
         }
 
@@ -86,54 +108,15 @@ final class NamedParameter implements NamedParameterInterface
     }
 
     /**
-     * @param string[] $query caller value
-     * @param string[] $names default value ['param-name' => 'param-type|param-value']
-     *
      * @return array
      */
-    private function handleParams(array $query, array $names)
+    private function setAssistedAnnotation(array $names, Assisted $assisted)
     {
-        $parameters = [];
-        foreach ($names as $name => $param) {
-            // @ResourceParam value
-            if ($param instanceof ResourceParam) {
-                $parameters[] = $this->getResourceParam($param, $query);
-                continue;
-            }
-            // @Assisted (method injection) value
-            if ($param instanceof Assisted) {
-                $parameters[] = null;
-                continue;
-            }
-            // query value
-            if (isset($query[$name])) {
-                $parameters[] = $query[$name];
-                continue;
-            }
-            // default value
-            if (is_scalar($param) || $param === null) {
-                $parameters[] = $param;
-                continue;
-            }
-            throw new ParameterException($name);
+        /* @var $annotation Assisted */
+        foreach ($assisted->values as $assistedParam) {
+            $names[$assistedParam] = new AssistedParam;
         }
 
-        return $parameters;
-    }
-
-    /**
-     * @param ResourceParam $resourceParam
-     * @param array         $query
-     *
-     * @return mixed
-     */
-    private function getResourceParam(ResourceParam $resourceParam, array $query)
-    {
-        $uri = $resourceParam->templated === true ? uri_template($resourceParam->uri, $query) : $resourceParam->uri;
-        $resource = $this->injector->getInstance(ResourceInterface::class);
-        $resourceResult = $resource->get->uri($uri)->eager->request();
-        $fragment = parse_url($uri, PHP_URL_FRAGMENT);
-
-        return $resourceResult[$fragment];
+        return $names;
     }
 }
