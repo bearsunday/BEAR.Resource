@@ -75,7 +75,10 @@ final class NamedParameter implements NamedParameterInterface
                 $names[$annotation->param] = $annotation;
             }
             if ($annotation instanceof Assisted) {
-                $names[$annotation->param] = $annotation;
+                /* @var $annotation Assisted */
+                foreach ($annotation->values as $assistedParam) {
+                    $names[$assistedParam] = $annotation;
+                }
             }
         }
 
@@ -97,8 +100,13 @@ final class NamedParameter implements NamedParameterInterface
                 $parameters[] = $this->getResourceParam($param, $query);
                 continue;
             }
-            // caller value but not @Assisted
-            if (! $param instanceof Assisted && isset($query[$name])) {
+            // @Assisted (method injection) value
+            if ($param instanceof Assisted) {
+                $parameters[] = null;
+                continue;
+            }
+            // query value
+            if (isset($query[$name])) {
                 $parameters[] = $query[$name];
                 continue;
             }

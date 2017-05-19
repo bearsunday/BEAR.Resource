@@ -163,4 +163,25 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $body = $this->resource->post->uri('app://self/holder')->eager->request()->body;
         $this->assertSame(true, $body);
     }
+
+    public function testAssistedParameter()
+    {
+        $injector = new Injector(new FakeAssistedModule(new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox')), $_ENV['TMP_DIR']));
+        $this->resource = $injector->getInstance(ResourceInterface::class);
+        $ro = $this->resource->get->uri('page://self/assist')->eager->request();
+        /* @var $ro \BEAR\Resource\ResourceObject */
+        $this->assertSame('login_id:assisted01', $ro->body);
+
+        return $this->resource;
+    }
+
+    /**
+     * @depends testAssistedOverRideAssisteValue
+     */
+    public function testPreventAssistedParameterOverride(ResourceInterface $resource)
+    {
+        $ro = $resource->get->uri('page://self/assist')->withQuery(['login_id' => '_WILL_BE_IGNORED_'])->eager->request();
+        /* @var $ro \BEAR\Resource\ResourceObject */
+        $this->assertSame('login_id:assisted01', $ro->body);
+    }
 }
