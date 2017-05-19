@@ -47,6 +47,5 @@ class ResourceParamHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $instance = $this->resource->get->uri('app://self/rparam/greeting')->withQuery(['name' => 'IGNORED'])->eager->request();
         $this->assertSame('LOGINID', $instance['name']);
-
     }
 }

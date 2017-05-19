@@ -40,7 +40,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
             ->scheme('app')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\App'))
             ->scheme('page')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\Page'))
             ->scheme('nop')->host('self')->toAdapter(new FakeNop);
-        $invoker = new Invoker(new NamedParameter(new ArrayCache, new VoidParameterHandler), new OptionsRenderer($reader));
+        $invoker = new Invoker(new NamedParameter(new ArrayCache, $reader, $injector), new OptionsRenderer($reader));
         $factory = new Factory($scheme);
         $resource = new Resource($factory, $invoker, new Anchor($reader), new Linker($reader, $invoker, $factory));
         $this->assertInstanceOf(ResourceInterface::class, $resource);

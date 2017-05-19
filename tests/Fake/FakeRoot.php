@@ -4,6 +4,7 @@ namespace BEAR\Resource;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
+use Ray\Di\Injector;
 
 class FakeRoot extends ResourceObject
 {
@@ -11,7 +12,7 @@ class FakeRoot extends ResourceObject
     {
         $this['one'] = 1;
         $this['two'] = new Request(
-            new Invoker(new NamedParameter(new ArrayCache, new VoidParameterHandler), new OptionsRenderer(new AnnotationReader)),
+            new Invoker(new NamedParameter(new ArrayCache, new AnnotationReader, new Injector), new OptionsRenderer(new AnnotationReader)),
             new FakeChild
         );
 
