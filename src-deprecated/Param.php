@@ -7,7 +7,7 @@
 namespace BEAR\Resource;
 
 /**
- * @deprecated 
+ * @deprecated
  */
 final class Param
 {
