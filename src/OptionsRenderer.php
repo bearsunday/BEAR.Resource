@@ -166,16 +166,26 @@ final class OptionsRenderer implements RenderInterface
     {
         $required = [];
         foreach ($parameters as $parameter) {
-            if ($parameter->isDefaultValueAvailable() && $parameter->getDefaultValue() === null) {
-                unset($paramDoc[$parameter->name]);
-                continue;
-            }
-            $paramDoc = $this->paramType($paramDoc, $parameter);
-            if (! $parameter->isOptional()) {
-                $required[] = $parameter->name;
-            }
-            $paramDoc = $this->paramDefault($paramDoc, $parameter);
+            list($paramDoc, $required) = $this->getParamMetas($paramDoc, $parameter, $required);
         }
+
+        return [$paramDoc, $required];
+    }
+
+    /**
+     * @param array                $paramDoc
+     * @param \ReflectionParameter $parameter
+     * @param array                $required
+     *
+     * @return array
+     */
+    private function getParamMetas(array $paramDoc, \ReflectionParameter $parameter, array $required)
+    {
+        $paramDoc = $this->paramType($paramDoc, $parameter);
+        if (! $parameter->isOptional()) {
+            $required[] = $parameter->name;
+        }
+        $paramDoc = $this->paramDefault($paramDoc, $parameter);
 
         return [$paramDoc, $required];
     }
@@ -254,11 +264,24 @@ final class OptionsRenderer implements RenderInterface
                 unset($paramMetas['parameters'][$annotation->param]);
                 $paramMetas['required'] = array_values(array_diff($paramMetas['required'], [$annotation->param]));
             }
-            if ($annotation instanceof Assisted) {
-                $paramMetas['required'] = array_values(array_diff($paramMetas['required'], $annotation->values));
-                foreach ($annotation->values as $varName) {
-                    unset($paramMetas['parameters'][$varName]);
-                }
+            $paramMetas = $this->unsetAssisted($paramMetas, $annotation);
+        }
+
+        return $paramMetas;
+    }
+
+    /**
+     * @param array $paramMetas
+     * @param mixed $annotation
+     *
+     * @return array
+     */
+    private function unsetAssisted(array $paramMetas, $annotation)
+    {
+        if ($annotation instanceof Assisted) {
+            $paramMetas['required'] = array_values(array_diff($paramMetas['required'], $annotation->values));
+            foreach ($annotation->values as $varName) {
+                unset($paramMetas['parameters'][$varName]);
             }
         }
 

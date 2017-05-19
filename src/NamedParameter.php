@@ -41,11 +41,11 @@ final class NamedParameter implements NamedParameterInterface
      */
     public function getParameters(array $callable, array $query)
     {
-        $id = __CLASS__ . get_class($callable[0]) . $callable[1];
-        $names = $this->cache->fetch($id);
+        $cacheId = __CLASS__ . get_class($callable[0]) . $callable[1];
+        $names = $this->cache->fetch($cacheId);
         if (! $names) {
             $names = $this->getNamedParamMetas($callable);
-            $this->cache->save($id, $names);
+            $this->cache->save($cacheId, $names);
         }
         $parameters = $this->evaluateParams($query, $names);
 
@@ -53,8 +53,10 @@ final class NamedParameter implements NamedParameterInterface
     }
 
     /**
-     * @param string[] $query caller value
-     * @param string[] $names default value ['param-name' => 'param-type|param-value']
+     * Return evaluated parameters
+     *
+     * @param array            $query caller value
+     * @param ParamInterface[] $names Param object[] ['varName' => ParamInterface]
      *
      * @return array
      */
@@ -90,6 +92,8 @@ final class NamedParameter implements NamedParameterInterface
     }
 
     /**
+     * Set "method injection" parameter
+     *
      * @return array
      */
     private function overrideAssistedParam(\ReflectionMethod $method, array $names)
@@ -108,6 +112,10 @@ final class NamedParameter implements NamedParameterInterface
     }
 
     /**
+     * Set AssistedParam objects
+     *
+     * null is used for Assisted interceptor
+     *
      * @return array
      */
     private function setAssistedAnnotation(array $names, Assisted $assisted)
