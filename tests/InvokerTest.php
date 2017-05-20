@@ -94,7 +94,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     {
         $request = new Request($this->invoker, new Doc, Request::OPTIONS);
         $response = $this->invoker->invoke($request);
-        $actual = $response->headers['allow'];
+        $actual = $response->headers['Allow'];
         $expected = 'GET, POST, DELETE';
         $this->assertSame($actual, $expected);
 
@@ -152,7 +152,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
     {
         $request = new Request($this->invoker, new Order, Request::OPTIONS);
         $response = $this->invoker->invoke($request);
-        $actual = $response->headers['allow'];
+        $actual = $response->headers['Allow'];
         $expected = 'GET, POST';
         $this->assertSame($actual, $expected);
     }
@@ -162,7 +162,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $order = (new Compiler($_ENV['TMP_DIR']))->newInstance(Order::class, [], new Bind);
         $request = new Request($this->invoker, $order, Request::OPTIONS);
         $response = $this->invoker->invoke($request);
-        $actual = $response->headers['allow'];
+        $actual = $response->headers['Allow'];
         $expected = 'GET, POST';
         $this->assertSame($actual, $expected);
     }

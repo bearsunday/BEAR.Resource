@@ -37,7 +37,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     {
         $request = new Request($this->invoker, new DocPhp7, Request::OPTIONS);
         $response = $this->invoker->invoke($request);
-        $actual = $response->headers['allow'];
+        $actual = $response->headers['Allow'];
         $expected = 'GET';
         $this->assertSame($actual, $expected);
 
