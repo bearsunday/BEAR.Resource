@@ -11,10 +11,6 @@ use Ray\Di\InjectorInterface;
 final class AssistedParam implements ParamInterface
 {
     /**
-     * Return null to prevent override parameter
-     *
-     * This parameter is injected by AOP
-     *
      * {@inheritdoc}
      */
     public function __invoke($varName, array $query, InjectorInterface $injector)

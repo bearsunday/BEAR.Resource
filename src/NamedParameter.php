@@ -6,7 +6,6 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Annotation\AbstracAsssistedParam;
 use BEAR\Resource\Annotation\ResourceParam;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Cache\Cache;
@@ -107,9 +106,6 @@ final class NamedParameter implements NamedParameterInterface
             if ($annotation instanceof Assisted) {
                 $names = $this->setAssistedAnnotation($names, $annotation);
             }
-            if ($annotation instanceof AbstracAsssistedParam) {
-                $names = $this->setAssistedParam($names, $annotation);
-            }
         }
 
         return $names;
@@ -128,16 +124,6 @@ final class NamedParameter implements NamedParameterInterface
         foreach ($assisted->values as $assistedParam) {
             $names[$assistedParam] = new AssistedParam;
         }
-
-        return $names;
-    }
-
-    /**
-     * @return array
-     */
-    private function setAssistedParam(array $names, AbstracAsssistedParam $asssistedParam)
-    {
-        $names[$asssistedParam->param] = new AssistedParam;
 
         return $names;
     }
