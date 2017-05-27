@@ -60,4 +60,17 @@ class AppAdapterTest extends \PHPUnit_Framework_TestCase
         $index = $appAdapter->get(new Uri('page://self/index'));
         $this->assertInstanceOf(Index::class, $index);
     }
+
+    /**
+     * @expectedException \BEAR\Resource\Exception\ResourceNotFoundException
+     */
+    public function testNotFoundWithCompiler()
+    {
+        $scriptDir = __DIR__ . '/tmp';
+        $compiler = new DiCompiler(new AppModule, $scriptDir);
+        $compiler->compile();
+        $injector = new ScriptInjector($scriptDir);
+        $appAdapter = new AppAdapter($injector, 'FakeVendor\Sandbox');
+        $appAdapter->get(new Uri('page://self/__not_found__'));
+    }
 }
