@@ -8,6 +8,8 @@ namespace BEAR\Resource;
 
 use FakeVendor\Sandbox\Module\AppModule;
 use FakeVendor\Sandbox\Resource\Page\Index;
+use Ray\Compiler\DiCompiler;
+use Ray\Compiler\ScriptInjector;
 use Ray\Di\Injector;
 
 class AppAdapterTest extends \PHPUnit_Framework_TestCase
@@ -35,5 +37,27 @@ class AppAdapterTest extends \PHPUnit_Framework_TestCase
     public function testNotFound()
     {
         $index = $this->appAdapter->get(new Uri('page://self/__not_found__'));
+    }
+
+    /**
+     * @return ScriptInjector
+     */
+    private function getScriptInjector()
+    {
+        $scriptDir = __DIR__ . '/tmp';
+        $compiler = new DiCompiler(new AppModule, $scriptDir);
+        $compiler->compile();
+        $injector = new ScriptInjector($scriptDir);
+
+        return $injector;
+
+    }
+
+    public function testGetWithCompiler()
+    {
+        $injector = $this->getScriptInjector();
+        $appAdapter = new AppAdapter($injector, 'FakeVendor\Sandbox');
+        $index = $appAdapter->get(new Uri('page://self/index'));
+        $this->assertInstanceOf(Index::class, $index);
     }
 }
