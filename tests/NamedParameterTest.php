@@ -49,4 +49,26 @@ class NamedParameterTest extends TestCase
         $namedArgs = [];
         $this->params->getParameters([$object, 'onGet'], $namedArgs);
     }
+
+    public function testParameterWebContext()
+    {
+        $fakeGlobals = [
+            '_COOKIE' => ['c' => 'cookie_val'],
+            '_ENV' => ['e' => 'env_val'],
+            '_POST' => ['f' => 'post_val'],
+            '_GET' => ['q' => 'get_val'],
+            '_SERVER' => ['s' => 'server_val']
+        ];
+        AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose($fakeGlobals);
+        $object = new FakeParamResource;
+        $expected = [
+            'cookie_val',
+            'env_val',
+            'post_val',
+            'get_val',
+            'server_val'
+        ];
+        $args = $this->params->getParameters([$object, 'onPost'], []);
+        $this->assertSame($expected, $args);
+    }
 }

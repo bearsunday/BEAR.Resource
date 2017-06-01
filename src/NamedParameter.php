@@ -11,6 +11,7 @@ use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Cache\Cache;
 use Ray\Di\Di\Assisted;
 use Ray\Di\InjectorInterface;
+use Ray\WebContextParam\Annotation\AbstractWebContextParam;
 
 final class NamedParameter implements NamedParameterInterface
 {
@@ -29,11 +30,17 @@ final class NamedParameter implements NamedParameterInterface
      */
     private $injector;
 
-    public function __construct(Cache $cache, Reader $reader, InjectorInterface $injector)
+    /**
+     * @var array
+     */
+    private $globals;
+
+    public function __construct(Cache $cache, Reader $reader, InjectorInterface $injector, array $globals = [])
     {
         $this->cache = $cache;
         $this->reader = $reader;
         $this->injector = $injector;
+        $this->globals = $globals;
     }
 
     /**
@@ -98,6 +105,7 @@ final class NamedParameter implements NamedParameterInterface
      */
     private function overrideAssistedParam(\ReflectionMethod $method, array $names)
     {
+        $globals = $this->globals ? $this->globals : $GLOBALS;
         $annotations = $this->reader->getMethodAnnotations($method);
         foreach ($annotations as $annotation) {
             if ($annotation instanceof ResourceParam) {
@@ -105,6 +113,9 @@ final class NamedParameter implements NamedParameterInterface
             }
             if ($annotation instanceof Assisted) {
                 $names = $this->setAssistedAnnotation($names, $annotation);
+            }
+            if ($annotation instanceof AbstractWebContextParam) {
+                $names[$annotation->param] = new AssistedWebContextParam($annotation, $globals);
             }
         }
 
