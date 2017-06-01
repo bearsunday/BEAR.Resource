@@ -71,4 +71,35 @@ class NamedParameterTest extends TestCase
         $args = $this->params->getParameters([$object, 'onPost'], []);
         $this->assertSame($expected, $args);
     }
+
+    /**
+     * @expectedException \BEAR\Resource\Exception\ParameterException
+     */
+    public function testParameterWebContextNotExits()
+    {
+        AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose([]);
+        $object = new FakeParamResource;
+        $args = $this->params->getParameters([$object, 'onPut'], ['cookie' => 1]); // should be ignored
+    }
+
+    public function testParameterWebContextDefault()
+    {
+        AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose([]);
+        $object = new FakeParamResource;
+        $expected = [
+            1, 'default'
+        ];
+        $args = $this->params->getParameters([$object, 'onDelete'], ['a' => 1]);
+        $this->assertSame($expected, $args);
+    }
+
+    /**
+     * @expectedException \BEAR\Resource\Exception\ParameterException
+     */
+    public function testParameterWebContexRequiredNotGiven()
+    {
+        AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose([]);
+        $object = new FakeParamResource;
+        $args = $this->params->getParameters([$object, 'onDelete'], []);
+    }
 }

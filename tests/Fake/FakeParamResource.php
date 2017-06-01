@@ -28,4 +28,18 @@ class FakeParamResource
     public function onPost($cookie, $env, $form, $query, $server)
     {
     }
+
+    /**
+     * @CookieParam(param="cookie", key="c")
+     */
+    public function onPut($cookie)
+    {
+    }
+
+    /**
+     * @CookieParam(param="cookie", key="c")
+     */
+    public function onDelete($a, $cookie = 'default')
+    {
+    }
 }

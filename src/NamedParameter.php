@@ -89,11 +89,18 @@ final class NamedParameter implements NamedParameterInterface
     {
         $method = new \ReflectionMethod($callable[0], $callable[1]);
         $parameters = $method->getParameters();
-        $names = [];
+        list($names, $webcontext) = $this->setAssistedParam($method);
         foreach ($parameters as $parameter) {
+            if (isset($names[$parameter->name])) {
+                continue;
+            }
+            if (isset($webcontext[$parameter->name])) {
+                $default = $parameter->isDefaultValueAvailable() === true ? new DefaultParam($parameter->getDefaultValue()) : new NoDefaultParam();
+                $names[$parameter->name] = new AssistedWebContextParam($webcontext[$parameter->name], $default);
+                continue;
+            }
             $names[$parameter->name] = $parameter->isDefaultValueAvailable() === true ? new OptionalParam($parameter->getDefaultValue()) : new RequiredParam;
         }
-        $names = $this->overrideAssistedParam($method, $names);
 
         return $names;
     }
@@ -103,9 +110,9 @@ final class NamedParameter implements NamedParameterInterface
      *
      * @return array
      */
-    private function overrideAssistedParam(\ReflectionMethod $method, array $names)
+    private function setAssistedParam(\ReflectionMethod $method)
     {
-        $globals = $this->globals ? $this->globals : $GLOBALS;
+        $names = $webcontext = [];
         $annotations = $this->reader->getMethodAnnotations($method);
         foreach ($annotations as $annotation) {
             if ($annotation instanceof ResourceParam) {
@@ -115,11 +122,11 @@ final class NamedParameter implements NamedParameterInterface
                 $names = $this->setAssistedAnnotation($names, $annotation);
             }
             if ($annotation instanceof AbstractWebContextParam) {
-                $names[$annotation->param] = new AssistedWebContextParam($annotation, $globals);
+                $webcontext[$annotation->param] = $annotation;
             }
         }
 
-        return $names;
+        return [$names, $webcontext];
     }
 
     /**

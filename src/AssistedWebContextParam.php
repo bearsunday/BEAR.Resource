@@ -6,6 +6,7 @@
  */
 namespace BEAR\Resource;
 
+use BEAR\Resource\Exception\BadRequestException;
 use Ray\Di\InjectorInterface;
 use Ray\WebContextParam\Annotation\AbstractWebContextParam;
 
@@ -23,9 +24,15 @@ final class AssistedWebContextParam implements ParamInterface
      */
     private $webContextParam;
 
-    public function __construct(AbstractWebContextParam $webContextParam)
+    /**
+     * @var ParamInterface
+     */
+    private $defaultParam;
+
+    public function __construct(AbstractWebContextParam $webContextParam, ParamInterface $defaultParam)
     {
         $this->webContextParam = $webContextParam;
+        $this->defaultParam = $defaultParam;
     }
 
     /**
@@ -33,12 +40,18 @@ final class AssistedWebContextParam implements ParamInterface
      */
     public function __invoke($varName, array $query, InjectorInterface $injector)
     {
-        unset($varName, $injector);
         $superGlobals = static::$globals ? static::$globals : $GLOBALS;
         $webContextParam = $this->webContextParam;
         $phpWebContext = $superGlobals[$webContextParam::GLOBAL_KEY];
 
-        return isset($phpWebContext[$this->webContextParam->key]) ? $phpWebContext[$this->webContextParam->key] : null;
+        if (isset($phpWebContext[$this->webContextParam->key])) {
+            return  $phpWebContext[$this->webContextParam->key];
+        }
+        if ($this->webContextParam->is_requried === true) {
+            throw new BadRequestException($varName);
+        }
+
+        return $this->defaultParam->__invoke($varName, $query, $injector);
     }
 
     public static function setSuperGlobalsOnlyForTestingPurpose(array $globals)
