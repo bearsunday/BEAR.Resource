@@ -12,19 +12,20 @@ use Ray\WebContextParam\Annotation\AbstractWebContextParam;
 final class AssistedWebContextParam implements ParamInterface
 {
     /**
+     * $GLOBALS for testing
+     *
+     * @var array
+     */
+    private static $globals = [];
+
+    /**
      * @var AbstractWebContextParam
      */
     private $webContextParam;
 
-    /**
-     * @var array
-     */
-    private $globals;
-
-    public function __construct(AbstractWebContextParam $webContextParam, array $globals = null)
+    public function __construct(AbstractWebContextParam $webContextParam)
     {
         $this->webContextParam = $webContextParam;
-        $this->globals = $globals;
     }
 
     /**
@@ -33,10 +34,15 @@ final class AssistedWebContextParam implements ParamInterface
     public function __invoke($varName, array $query, InjectorInterface $injector)
     {
         unset($varName, $injector);
-        $superGlobals = $this->globals ? $this->globals : $GLOBALS;
+        $superGlobals = static::$globals ? static::$globals : $GLOBALS;
         $webContextParam = $this->webContextParam;
         $phpWebContext = $superGlobals[$webContextParam::GLOBAL_KEY];
 
         return isset($phpWebContext[$this->webContextParam->key]) ? $phpWebContext[$this->webContextParam->key] : null;
+    }
+
+    public static function setSuperGlobalsOnlyForTestingPurpose(array $globals)
+    {
+        self::$globals = $globals;
     }
 }
