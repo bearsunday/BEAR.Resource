@@ -39,20 +39,6 @@ class AppAdapterTest extends \PHPUnit_Framework_TestCase
         $index = $this->appAdapter->get(new Uri('page://self/__not_found__'));
     }
 
-    /**
-     * @return ScriptInjector
-     */
-    private function getScriptInjector()
-    {
-        $scriptDir = __DIR__ . '/tmp';
-        $compiler = new DiCompiler(new AppModule, $scriptDir);
-        $compiler->compile();
-        $injector = new ScriptInjector($scriptDir);
-
-        return $injector;
-
-    }
-
     public function testGetWithCompiler()
     {
         $injector = $this->getScriptInjector();
@@ -72,5 +58,18 @@ class AppAdapterTest extends \PHPUnit_Framework_TestCase
         $injector = new ScriptInjector($scriptDir);
         $appAdapter = new AppAdapter($injector, 'FakeVendor\Sandbox');
         $appAdapter->get(new Uri('page://self/__not_found__'));
+    }
+
+    /**
+     * @return ScriptInjector
+     */
+    private function getScriptInjector()
+    {
+        $scriptDir = __DIR__ . '/tmp';
+        $compiler = new DiCompiler(new AppModule, $scriptDir);
+        $compiler->compile();
+        $injector = new ScriptInjector($scriptDir);
+
+        return $injector;
     }
 }
