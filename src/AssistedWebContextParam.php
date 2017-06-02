@@ -6,7 +6,6 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\BadRequestException;
 use Ray\Di\InjectorInterface;
 use Ray\WebContextParam\Annotation\AbstractWebContextParam;
 
@@ -46,9 +45,6 @@ final class AssistedWebContextParam implements ParamInterface
 
         if (isset($phpWebContext[$this->webContextParam->key])) {
             return  $phpWebContext[$this->webContextParam->key];
-        }
-        if ($this->webContextParam->is_requried === true) {
-            throw new BadRequestException($varName);
         }
 
         return $this->defaultParam->__invoke($varName, $query, $injector);
