@@ -22,7 +22,7 @@ final class DefaultParam implements ParamInterface
      */
     public function __invoke($varName, array $query, InjectorInterface $injector)
     {
-        unset($query, $injector);
+        unset($varName, $query, $injector);
 
         return $this->defaultValue;
     }
