@@ -19,7 +19,12 @@ use Ray\WebContextParam\Annotation\ServerParam;
 
 final class OptionsMethods
 {
-    const WEB_CONTEXT_NAME = [
+    /**
+     * Constants for annotation name and "in" name
+     *
+     * @var array
+     */
+    private $webContextName = [
         CookieParam::class => 'cookie',
         EnvParam::class => 'env',
         FormParam::class => 'formData',
@@ -68,7 +73,7 @@ final class OptionsMethods
         $annotations = $this->reader->getMethodAnnotations($method);
         foreach ($annotations as $annotation) {
             if ($annotation instanceof AbstractWebContextParam) {
-                $ins[$annotation->param] = self::WEB_CONTEXT_NAME[get_class($annotation)];
+                $ins[$annotation->param] = $this->webContextName[get_class($annotation)];
             }
         }
 
