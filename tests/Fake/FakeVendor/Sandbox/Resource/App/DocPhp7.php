@@ -1,10 +1,15 @@
 <?php
-
+/**
+ * This file is part of the BEAR.Resource package.
+ *
+ * @license http://opensource.org/licenses/MIT MIT
+ */
 namespace FakeVendor\Sandbox\Resource\App;
 
 use BEAR\Resource\Annotation\ResourceParam;
 use BEAR\Resource\ResourceObject;
 use Ray\Di\Di\Assisted;
+use Ray\WebContextParam\Annotation\ServerParam;
 
 class DocPhp7 extends ResourceObject
 {
@@ -21,6 +26,14 @@ class DocPhp7 extends ResourceObject
      * @Assisted({"time"})
      */
     public function onGet(int $id, string $name, bool $sw, string $login_id, array $arr, string $time, $defaultNull = null)
+    {
+        return $this;
+    }
+
+    /**
+     * @ServerParam(param="id", key="id_key")
+     */
+    public function onPost(int $id)
     {
         return $this;
     }

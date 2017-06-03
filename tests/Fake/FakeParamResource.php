@@ -12,7 +12,7 @@ use Ray\WebContextParam\Annotation\FormParam;
 use Ray\WebContextParam\Annotation\QueryParam;
 use Ray\WebContextParam\Annotation\ServerParam;
 
-class FakeParamResource
+class FakeParamResource extends ResourceObject
 {
     public function onGet($id, $name = 'koriym')
     {
