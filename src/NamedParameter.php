@@ -11,6 +11,7 @@ use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Cache\Cache;
 use Ray\Di\Di\Assisted;
 use Ray\Di\InjectorInterface;
+use Ray\WebContextParam\Annotation\AbstractWebContextParam;
 
 final class NamedParameter implements NamedParameterInterface
 {
@@ -29,11 +30,17 @@ final class NamedParameter implements NamedParameterInterface
      */
     private $injector;
 
-    public function __construct(Cache $cache, Reader $reader, InjectorInterface $injector)
+    /**
+     * @var array
+     */
+    private $globals;
+
+    public function __construct(Cache $cache, Reader $reader, InjectorInterface $injector, array $globals = [])
     {
         $this->cache = $cache;
         $this->reader = $reader;
         $this->injector = $injector;
+        $this->globals = $globals;
     }
 
     /**
@@ -82,11 +89,18 @@ final class NamedParameter implements NamedParameterInterface
     {
         $method = new \ReflectionMethod($callable[0], $callable[1]);
         $parameters = $method->getParameters();
-        $names = [];
+        list($names, $webcontext) = $this->setAssistedParam($method);
         foreach ($parameters as $parameter) {
+            if (isset($names[$parameter->name])) {
+                continue;
+            }
+            if (isset($webcontext[$parameter->name])) {
+                $default = $parameter->isDefaultValueAvailable() === true ? new DefaultParam($parameter->getDefaultValue()) : new NoDefaultParam();
+                $names[$parameter->name] = new AssistedWebContextParam($webcontext[$parameter->name], $default);
+                continue;
+            }
             $names[$parameter->name] = $parameter->isDefaultValueAvailable() === true ? new OptionalParam($parameter->getDefaultValue()) : new RequiredParam;
         }
-        $names = $this->overrideAssistedParam($method, $names);
 
         return $names;
     }
@@ -96,8 +110,9 @@ final class NamedParameter implements NamedParameterInterface
      *
      * @return array
      */
-    private function overrideAssistedParam(\ReflectionMethod $method, array $names)
+    private function setAssistedParam(\ReflectionMethod $method)
     {
+        $names = $webcontext = [];
         $annotations = $this->reader->getMethodAnnotations($method);
         foreach ($annotations as $annotation) {
             if ($annotation instanceof ResourceParam) {
@@ -106,9 +121,12 @@ final class NamedParameter implements NamedParameterInterface
             if ($annotation instanceof Assisted) {
                 $names = $this->setAssistedAnnotation($names, $annotation);
             }
+            if ($annotation instanceof AbstractWebContextParam) {
+                $webcontext[$annotation->param] = $annotation;
+            }
         }
 
-        return $names;
+        return [$names, $webcontext];
     }
 
     /**

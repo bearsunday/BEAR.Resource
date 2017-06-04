@@ -10,9 +10,27 @@ use BEAR\Resource\Annotation\ResourceParam;
 use Doctrine\Common\Annotations\Reader;
 use phpDocumentor\Reflection\DocBlockFactory;
 use Ray\Di\Di\Assisted;
+use Ray\WebContextParam\Annotation\AbstractWebContextParam;
+use Ray\WebContextParam\Annotation\CookieParam;
+use Ray\WebContextParam\Annotation\EnvParam;
+use Ray\WebContextParam\Annotation\FormParam;
+use Ray\WebContextParam\Annotation\QueryParam;
+use Ray\WebContextParam\Annotation\ServerParam;
 
 final class OptionsMethods
 {
+    /**
+     * Constants for annotation name and "in" name
+     *
+     * @var array
+     */
+    private $webContextName = [
+        CookieParam::class => 'cookie',
+        EnvParam::class => 'env',
+        FormParam::class => 'formData',
+        QueryParam::class => 'query',
+        ServerParam::class => 'server'
+    ];
     private $reader;
 
     public function __construct(Reader $reader)
@@ -29,13 +47,14 @@ final class OptionsMethods
     public function __invoke(ResourceObject $ro, $requestMethod)
     {
         $method = new \ReflectionMethod($ro, 'on' . $requestMethod);
+        $ins = $this->getInMap($method);
         $docComment = $method->getDocComment();
         $doc = $paramDoc = [];
         if ($docComment) {
             list($doc, $paramDoc) = $this->docBlock($docComment);
         }
         $parameters = $method->getParameters();
-        list($paramDoc, $required) = $this->getParameterMetas($parameters, $paramDoc);
+        list($paramDoc, $required) = $this->getParameterMetas($parameters, $paramDoc, $ins);
         $paramMetas = [];
         if ((bool) $paramDoc) {
             $paramMetas['parameters'] = $paramDoc;
@@ -46,6 +65,19 @@ final class OptionsMethods
         $paramMetas = $this->ignoreAnnotatedPrameter($method, $paramMetas);
 
         return $doc + $paramMetas;
+    }
+
+    private function getInMap(\ReflectionMethod $method)
+    {
+        $ins = [];
+        $annotations = $this->reader->getMethodAnnotations($method);
+        foreach ($annotations as $annotation) {
+            if ($annotation instanceof AbstractWebContextParam) {
+                $ins[$annotation->param] = $this->webContextName[get_class($annotation)];
+            }
+        }
+
+        return $ins;
     }
 
     /**
@@ -96,10 +128,16 @@ final class OptionsMethods
      *
      * @return array [$paramDoc, $required]
      */
-    private function getParameterMetas(array $parameters, array $paramDoc)
+    private function getParameterMetas(array $parameters, array $paramDoc, array $ins)
     {
         $required = [];
         foreach ($parameters as $parameter) {
+            if (isset($ins[$parameter->name])) {
+                $paramDoc[$parameter->name]['in'] = $ins[$parameter->name];
+            }
+            if (! isset($paramDoc[$parameter->name])) {
+                $paramDoc[$parameter->name] = [];
+            }
             $paramDoc = $this->paramType($paramDoc, $parameter);
             if (! $parameter->isOptional()) {
                 $required[] = $parameter->name;

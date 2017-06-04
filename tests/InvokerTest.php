@@ -6,7 +6,6 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\ParameterException;
 use BEAR\Resource\Interceptor\FakeLogInterceptor;
 use BEAR\Resource\Interceptor\Log;
 use BEAR\Resource\Mock\Comment;
@@ -16,11 +15,12 @@ use FakeVendor\Sandbox\Resource\App\Doc;
 use FakeVendor\Sandbox\Resource\App\Restbucks\Order;
 use FakeVendor\Sandbox\Resource\App\User;
 use FakeVendor\Sandbox\Resource\App\Weave\Book;
+use PHPUnit\Framework\TestCase;
 use Ray\Aop\Bind;
 use Ray\Aop\Compiler;
 use Ray\Di\Injector;
 
-class InvokerTest extends \PHPUnit_Framework_TestCase
+class InvokerTest extends TestCase
 {
     /**
      * @var Invoker
@@ -58,23 +58,29 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($actual, $expected);
     }
 
+    /**
+     * @expectedException \BEAR\Resource\Exception\ParameterException
+     */
     public function testInvokerInterfaceDefaultParamWithNoProvider()
     {
-        $this->setExpectedException(ParameterException::class, null, Code::BAD_REQUEST);
         $request = new Request($this->invoker, new User, Request::PUT);
         $this->invoker->invoke($request);
     }
 
+    /**
+     * @expectedException \BEAR\Resource\Exception\ParameterException
+     */
     public function testInvokerInterfaceWithNoProvider()
     {
-        $this->setExpectedException(ParameterException::class, null, Code::BAD_REQUEST);
         $request = new Request($this->invoker, new Mock\Blog, Request::GET, []);
         $this->invoker->invoke($request);
     }
 
+    /**
+     * @expectedException \BEAR\Resource\Exception\ParameterException
+     */
     public function testInvokerInterfaceWithUnspecificProviderButNoResult()
     {
-        $this->setExpectedException(ParameterException::class, null, Code::BAD_REQUEST);
         $request = new Request($this->invoker, new Comment);
         $actual = $this->invoker->invoke($request);
         $this->assertSame('entry1', $actual);

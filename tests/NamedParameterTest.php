@@ -6,12 +6,12 @@
  */
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\ParameterException;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
+use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
-class NamedParameterTest extends \PHPUnit_Framework_TestCase
+class NamedParameterTest extends TestCase
 {
     /**
      * @var NamedParameter
@@ -40,11 +40,66 @@ class NamedParameterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame([1, 'koriym'], $args);
     }
 
+    /**
+     * @expectedException \BEAR\Resource\Exception\ParameterException
+     */
     public function testParameterException()
     {
-        $this->setExpectedException(ParameterException::class, null, Code::BAD_REQUEST);
         $object = new FakeParamResource;
         $namedArgs = [];
         $this->params->getParameters([$object, 'onGet'], $namedArgs);
+    }
+
+    public function testParameterWebContext()
+    {
+        $fakeGlobals = [
+            '_COOKIE' => ['c' => 'cookie_val'],
+            '_ENV' => ['e' => 'env_val'],
+            '_POST' => ['f' => 'post_val'],
+            '_GET' => ['q' => 'get_val'],
+            '_SERVER' => ['s' => 'server_val']
+        ];
+        AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose($fakeGlobals);
+        $object = new FakeParamResource;
+        $expected = [
+            'cookie_val',
+            'env_val',
+            'post_val',
+            'get_val',
+            'server_val'
+        ];
+        $args = $this->params->getParameters([$object, 'onPost'], []);
+        $this->assertSame($expected, $args);
+    }
+
+    /**
+     * @expectedException \BEAR\Resource\Exception\ParameterException
+     */
+    public function testParameterWebContextNotExits()
+    {
+        AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose([]);
+        $object = new FakeParamResource;
+        $args = $this->params->getParameters([$object, 'onPut'], ['cookie' => 1]); // should be ignored
+    }
+
+    public function testParameterWebContextDefault()
+    {
+        AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose([]);
+        $object = new FakeParamResource;
+        $expected = [
+            1, 'default'
+        ];
+        $args = $this->params->getParameters([$object, 'onDelete'], ['a' => 1]);
+        $this->assertSame($expected, $args);
+    }
+
+    /**
+     * @expectedException \BEAR\Resource\Exception\ParameterException
+     */
+    public function testParameterWebContexRequiredNotGiven()
+    {
+        AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose([]);
+        $object = new FakeParamResource;
+        $args = $this->params->getParameters([$object, 'onDelete'], []);
     }
 }
