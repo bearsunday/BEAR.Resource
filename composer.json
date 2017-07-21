@@ -31,6 +31,9 @@
         "squizlabs/php_codesniffer": "^2.8",
         "phpmd/phpmd": "^2.6"
     },
+    "conflict": {
+        "phpdocumentor/reflection-docblock": "<3.0||>=3.2.0"
+    },
     "suggest": {
         "ext-uri_template": "ext/uri_template for URI Template(RFC6570) specification."
     },
