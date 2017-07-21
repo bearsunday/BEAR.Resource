@@ -21,7 +21,7 @@
         "nocarrier/hal":"^0.9.12",
         "doctrine/cache":"^1.6",
         "rize/uri-template": "^0.3",
-        "phpdocumentor/reflection-docblock": "^3.1",
+        "phpdocumentor/reflection-docblock": "3.1.1",
         "koriym/http-constants": "^1.0",
         "ray/web-param-module": "^2.0",
         "justinrainbow/json-schema": "^5.2"
