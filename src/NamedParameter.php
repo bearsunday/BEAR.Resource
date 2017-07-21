@@ -89,9 +89,11 @@ final class NamedParameter implements NamedParameterInterface
     {
         $method = new \ReflectionMethod($callable[0], $callable[1]);
         $parameters = $method->getParameters();
-        list($names, $webcontext) = $this->setAssistedParam($method);
+        list($assistedNames, $webcontext) = $this->setAssistedParam($method);
+        $names = [];
         foreach ($parameters as $parameter) {
-            if (isset($names[$parameter->name])) {
+            if (isset($assistedNames[$parameter->name])) {
+                $names[$parameter->name] = $assistedNames[$parameter->name];
                 continue;
             }
             if (isset($webcontext[$parameter->name])) {
