@@ -28,7 +28,6 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         if ($ro->code !== 200) {
             return $ro;
         }
-        /* @var $result \BEAR\Resource\ResourceObject */
         $ref = new \ReflectionClass($ro);
         $thisFile = $ro instanceof WeavedInterface ? $thisFile = $ref->getParentClass()->getFileName() : $ref->getFileName();
         $schemaFile = str_replace('.php', '.json', $thisFile);
@@ -49,6 +48,9 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         throw new JsonSchemaException($schemaFile, Code::ERROR, $e);
     }
 
+    /**
+     * @return object
+     */
     private function getBodyAsObject(JsonSchema $jsonSchema, ResourceObject $ro)
     {
         if ($jsonSchema->value && isset($ro->body[$jsonSchema->value])) {
