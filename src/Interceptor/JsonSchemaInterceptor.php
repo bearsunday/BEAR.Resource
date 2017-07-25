@@ -23,23 +23,22 @@ final class JsonSchemaInterceptor implements MethodInterceptor
      */
     public function invoke(MethodInvocation $invocation)
     {
-        $result = $invocation->proceed();
-        $object = $invocation->getThis();
-        /* @var $object ResourceObject */
-        if ($object->code !== 200) {
-            return $result;
+        $ro = $invocation->proceed();
+        /* @var $ro \BEAR\Resource\ResourceObject */
+        if ($ro->code !== 200) {
+            return $ro;
         }
         /* @var $result \BEAR\Resource\ResourceObject */
-        $ref = new \ReflectionClass($object);
-        $thisFile = $object instanceof WeavedInterface ? $thisFile = $ref->getParentClass()->getFileName() : $ref->getFileName();
+        $ref = new \ReflectionClass($ro);
+        $thisFile = $ro instanceof WeavedInterface ? $thisFile = $ref->getParentClass()->getFileName() : $ref->getFileName();
         $schemaFile = str_replace('.php', '.json', $thisFile);
         $validator = new Validator;
         $jsonSchema = $invocation->getMethod()->getAnnotation(JsonSchema::class);
-        $data = $this->getBodyAsObject($jsonSchema, $object);
+        $data = $this->getBodyAsObject($jsonSchema, $ro);
         $validator->validate($data, (object) ['$ref' => 'file://' . $schemaFile]);
         $isValid = $validator->isValid();
         if ($isValid === true) {
-            return $result;
+            return $ro;
         }
 
         $e = null;
