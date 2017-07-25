@@ -25,6 +25,10 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     {
         $result = $invocation->proceed();
         $object = $invocation->getThis();
+        /* @var $object ResourceObject */
+        if ($object->code !== 200) {
+            return $result;
+        }
         /* @var $result \BEAR\Resource\ResourceObject */
         $ref = new \ReflectionClass($object);
         $thisFile = $object instanceof WeavedInterface ? $thisFile = $ref->getParentClass()->getFileName() : $ref->getFileName();
