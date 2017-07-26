@@ -53,8 +53,8 @@ final class JsonSchemaInterceptor implements MethodInterceptor
      */
     private function getBodyAsObject(JsonSchema $jsonSchema, ResourceObject $ro)
     {
-        if ($jsonSchema->value && isset($ro->body[$jsonSchema->value])) {
-            return (object) $ro->body[$jsonSchema->value];
+        if ($jsonSchema->key && isset($ro->body[$jsonSchema->key])) {
+            return (object) $ro->body[$jsonSchema->key];
         }
 
         return (object) $ro->body;
