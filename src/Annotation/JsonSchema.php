@@ -13,9 +13,9 @@ namespace BEAR\Resource\Annotation;
 final class JsonSchema
 {
     /**
-     * Json schema file name
+     * Json schema body key name
      *
      * @var string
      */
-    public $value;
+    public $key;
 }
