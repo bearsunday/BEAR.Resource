@@ -13,7 +13,7 @@ use BEAR\Resource\ResourceObject;
 class FakeUser extends ResourceObject
 {
     /**
-     * @JsonSchema(schema="user.json", request="user.get.json")
+     * @JsonSchema(schema="definitions/user.json", request="user.get.json")
      */
     public function onGet($age)
     {
@@ -35,7 +35,7 @@ class FakeUser extends ResourceObject
     }
 
     /**
-     * @JsonSchema(schema="user.json")
+     * @JsonSchema(schema="definitions/user.json")
      */
     public function onPut()
     {
