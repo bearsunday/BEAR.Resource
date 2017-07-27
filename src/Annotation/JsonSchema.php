@@ -22,9 +22,9 @@ final class JsonSchema
     public $key;
 
     /**
-     * Validation target
-     *
-     * @Enum({"none", "request", "response", "request_response"})
+     * Do request valdiation ?
+     * 
+     * @var bool
      */
-    public $validate = 'response';
+    public $request = false;
 }

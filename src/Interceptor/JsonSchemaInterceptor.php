@@ -32,10 +32,13 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         /* @var $jsonSchema JsonSchema */
         $ref = new \ReflectionClass($ro);
         $roFileName = $ro instanceof WeavedInterface ? $roFileName = $ref->getParentClass()->getFileName() : $ref->getFileName();
-        $scanObject = $this->getBodyAsObject($jsonSchema, $ro);
-        if ($jsonSchema->validate === 'response' | $jsonSchema->validate === 'request') {
-            $this->validate($scanObject, $jsonSchema, '.php', $roFileName);
+        if ($jsonSchema->request) {
+            $requestObject = $this->getRequestObject($ro);
+            $methodExt = '.' . $ro->uri->method;
+            $this->validate($requestObject, $jsonSchema, $methodExt, $roFileName);
         }
+        $scanObject = $this->getBodyAsObject($jsonSchema, $ro);
+        $this->validate($scanObject, $jsonSchema, '', $roFileName);
 
         return $ro;
     }
@@ -46,10 +49,10 @@ final class JsonSchemaInterceptor implements MethodInterceptor
      * @param string         $ext
      * @param string         $schemaFile
      */
-    public function validate($scanObject, JsonSchema $jsonSchema, $ext, $thisFile)
+    public function validate($scanObject, JsonSchema $jsonSchema, $methodExt, $thisFile)
     {
         $validator = new Validator;
-        $schemaFile = str_replace($ext, '.json', $thisFile);
+        $schemaFile = str_replace('.php', "{$methodExt}.json", $thisFile);
         $validator->validate($scanObject, (object) ['$ref' => 'file://' . $schemaFile]);
         $isValid = $validator->isValid();
         if ($isValid) {
@@ -69,9 +72,19 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     private function getBodyAsObject(JsonSchema $jsonSchema, ResourceObject $ro)
     {
         if ($jsonSchema->key && isset($ro->body[$jsonSchema->key])) {
-            return (object) $ro->body[$jsonSchema->key  ];
+            return (object) $ro->body[$jsonSchema->key];
         }
 
         return (object) $ro->body;
+    }
+
+    /**
+     * @return object
+     */
+    private function getRequestObject(ResourceObject $ro)
+    {
+        $object = (object) $ro->uri->query;
+
+        return $object;
     }
 }
