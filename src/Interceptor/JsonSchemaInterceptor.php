@@ -33,23 +33,21 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         $ref = new \ReflectionClass($ro);
         $roFileName = $ro instanceof WeavedInterface ? $roFileName = $ref->getParentClass()->getFileName() : $ref->getFileName();
         if ($jsonSchema->request) {
-            $requestObject = $this->getRequestObject($ro);
             $methodExt = '.' . $ro->uri->method;
-            $this->validate($requestObject, $jsonSchema, $methodExt, $roFileName);
+            $this->validate((object) $ro->uri->query, $methodExt, $roFileName);
         }
         $scanObject = $this->getBodyAsObject($jsonSchema, $ro);
-        $this->validate($scanObject, $jsonSchema, '', $roFileName);
+        $this->validate($scanObject, '', $roFileName);
 
         return $ro;
     }
 
     /**
-     * @param JsonSchema     $jsonSchema
-     * @param ResourceObject $ro
-     * @param string         $ext
-     * @param string         $schemaFile
+     * @param object $scanObject
+     * @param string $methodExt
+     * @param string $thisFile
      */
-    public function validate($scanObject, JsonSchema $jsonSchema, $methodExt, $thisFile)
+    public function validate($scanObject, $methodExt, $thisFile)
     {
         $validator = new Validator;
         $schemaFile = str_replace('.php', "{$methodExt}.json", $thisFile);
@@ -76,15 +74,5 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         }
 
         return (object) $ro->body;
-    }
-
-    /**
-     * @return object
-     */
-    private function getRequestObject(ResourceObject $ro)
-    {
-        $object = (object) $ro->uri->query;
-
-        return $object;
     }
 }

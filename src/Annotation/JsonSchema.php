@@ -6,8 +6,6 @@
  */
 namespace BEAR\Resource\Annotation;
 
-use Doctrine\Common\Annotations\Annotation\Enum;
-
 /**
  * @Annotation
  * @Target("METHOD")
@@ -23,7 +21,7 @@ final class JsonSchema
 
     /**
      * Do request valdiation ?
-     * 
+     *
      * @var bool
      */
     public $request = false;
