@@ -9,11 +9,19 @@ namespace BEAR\Resource\Module;
 use BEAR\Resource\Exception\JsonSchemaException;
 use BEAR\Resource\JsonSchema\FakePerson;
 use BEAR\Resource\JsonSchema\FakeUser;
+use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Uri;
 use Ray\Di\Injector;
 
 class JsonSchemalModuleTest extends \PHPUnit_Framework_TestCase
 {
+    public function testValid()
+    {
+        $ro = $this->createRo(FakeUser::class);
+        $ro->onGet(20);
+        $this->assertSame($ro->body['firstName'], 'mucha');
+    }
+
     public function testValidateException()
     {
         $e = $this->createJsonSchemaException(FakeUser::class);
@@ -52,11 +60,27 @@ class JsonSchemalModuleTest extends \PHPUnit_Framework_TestCase
         $ro->onPost();
     }
 
+    public function testWorksOnlyCode200()
+    {
+        $ro = $this->createRo(FakeUser::class);
+        $ro->onPut();
+        $this->isInstanceOf($ro, ResourceObject::class);
+    }
+
+    /**
+     * @expectedException \BEAR\Resource\Exception\JsonSchemaNotFoundException
+     */
+    public function invalidRequestTest()
+    {
+        $ro = $this->createRo(FakeUser::class);
+        $ro->onPatch();
+    }
+
     private function createJsonSchemaException($class)
     {
         $ro = $this->createRo($class);
         try {
-            $ro->onGet('1');
+            $ro->onGet(10);
         } catch (JsonSchemaException $e) {
             return $e;
         }
@@ -71,7 +95,7 @@ class JsonSchemalModuleTest extends \PHPUnit_Framework_TestCase
     {
         $jsonSchema = dirname(__DIR__) . '/Fake/json_schema';
         $jsonValidate = dirname(__DIR__) . '/Fake/json_validate';
-        $ro = (new Injector(new JsonSchemalModule($jsonSchema, $jsonValidate)))->getInstance($class);
+        $ro = (new Injector(new JsonSchemalModule($jsonSchema, $jsonValidate), $_ENV['TMP_DIR']))->getInstance($class);
         /* @var $ro FakeUser */
         $ro->uri = new Uri('app://self/user?id=1');
 

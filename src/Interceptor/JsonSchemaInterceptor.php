@@ -1,4 +1,9 @@
 <?php
+/**
+ * This file is part of the BEAR.Resource package.
+ *
+ * @license http://opensource.org/licenses/MIT MIT
+ */
 namespace BEAR\Resource\Interceptor;
 
 use BEAR\Resource\Annotation\JsonSchema;
@@ -82,9 +87,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     private function validateRequest($jsonSchema, $ro)
     {
         $schemaFile = $this->validateDir . '/' . $jsonSchema->request;
-        if (! file_exists($schemaFile)) {
-            throw new JsonSchemaNotFoundException($schemaFile);
-        }
+        $this->validateFileExists($schemaFile);
         $this->validate((object) $ro->uri->query, $schemaFile);
     }
 
@@ -111,10 +114,18 @@ final class JsonSchemaInterceptor implements MethodInterceptor
             }
         }
         $schemaFile = $this->schemaDir . '/' . $jsonSchema->schema;
+        $this->validateFileExists($schemaFile);
+
+        return $schemaFile;
+    }
+
+    /**
+     * @param $schemaFile
+     */
+    private function validateFileExists($schemaFile)
+    {
         if (! file_exists($schemaFile) || is_dir($schemaFile)) {
             throw new JsonSchemaNotFoundException($schemaFile);
         }
-
-        return $schemaFile;
     }
 }
