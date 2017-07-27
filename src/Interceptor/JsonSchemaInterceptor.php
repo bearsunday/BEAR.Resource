@@ -28,18 +28,31 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         if ($ro->code !== 200) {
             return $ro;
         }
+        $jsonSchema = $invocation->getMethod()->getAnnotation(JsonSchema::class);
+        /* @var $jsonSchema JsonSchema */
         $ref = new \ReflectionClass($ro);
         $thisFile = $ro instanceof WeavedInterface ? $thisFile = $ref->getParentClass()->getFileName() : $ref->getFileName();
-        $schemaFile = str_replace('.php', '.json', $thisFile);
-        $validator = new Validator;
-        $jsonSchema = $invocation->getMethod()->getAnnotation(JsonSchema::class);
-        $data = $this->getBodyAsObject($jsonSchema, $ro);
-        $validator->validate($data, (object) ['$ref' => 'file://' . $schemaFile]);
-        $isValid = $validator->isValid();
-        if ($isValid === true) {
-            return $ro;
-        }
+        $scanObject = $this->getBodyAsObject($jsonSchema, $ro);
+        $this->validate($scanObject, $jsonSchema, '.php', $thisFile);
 
+        return $ro;
+    }
+
+    /**
+     * @param JsonSchema     $jsonSchema
+     * @param ResourceObject $ro
+     * @param string         $ext
+     * @param string         $schemaFile
+     */
+    public function validate($scanObject, JsonSchema $jsonSchema, $ext, $thisFile)
+    {
+        $validator = new Validator;
+        $schemaFile = str_replace($ext, '.json', $thisFile);
+        $validator->validate($scanObject, (object) ['$ref' => 'file://' . $schemaFile]);
+        $isValid = $validator->isValid();
+        if ($isValid) {
+            return;
+        }
         $e = null;
         foreach ($validator->getErrors() as $error) {
             $msg = sprintf('[%s] %s', $error['property'], $error['message']);
@@ -54,7 +67,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     private function getBodyAsObject(JsonSchema $jsonSchema, ResourceObject $ro)
     {
         if ($jsonSchema->key && isset($ro->body[$jsonSchema->key])) {
-            return (object) $ro->body[$jsonSchema->key];
+            return (object) $ro->body[$jsonSchema->key  ];
         }
 
         return (object) $ro->body;
