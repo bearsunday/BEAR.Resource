@@ -8,13 +8,23 @@ namespace BEAR\Resource\Module;
 
 use BEAR\Resource\Exception\JsonSchemaException;
 use BEAR\Resource\JsonSchema\FakePerson;
+use BEAR\Resource\JsonSchema\FakeUser;
+use BEAR\Resource\Uri;
 use Ray\Di\Injector;
 
 class JsonSchemalModuleTest extends \PHPUnit_Framework_TestCase
 {
     public function testValidateException()
     {
-        $e = $this->createJsonSchemaException();
+        $e = $this->createJsonSchemaException(FakeUser::class);
+        $this->assertInstanceOf(JsonSchemaException::class, $e);
+
+        return $e;
+    }
+
+    public function testBCValidateException()
+    {
+        $e = $this->createJsonSchemaException(FakePerson::class);
         $this->assertInstanceOf(JsonSchemaException::class, $e);
 
         return $e;
@@ -23,8 +33,9 @@ class JsonSchemalModuleTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testValidateException
      */
-    public function testValidateErrorException(JsonSchemaException $e)
+    public function testBCValidateErrorException(JsonSchemaException $e)
     {
+        $errors = [];
         while ($e = $e->getPrevious()) {
             $errors[] = $e->getMessage();
         }
@@ -32,14 +43,38 @@ class JsonSchemalModuleTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $errors);
     }
 
-    private function createJsonSchemaException()
+    /**
+     * @expectedException \BEAR\Resource\Exception\JsonSchemaNotFoundException
+     */
+    public function testException()
     {
-        $person = (new Injector(new JsonSchemalModule))->getInstance(FakePerson::class);
-        /* @var $person FakePerson */
+        $ro = $this->createRo(FakeUser::class);
+        $ro->onPost();
+    }
+
+    private function createJsonSchemaException($class)
+    {
+        $ro = $this->createRo($class);
         try {
-            $person->onGet();
+            $ro->onGet('1');
         } catch (JsonSchemaException $e) {
             return $e;
         }
+    }
+
+    /**
+     * @param $class
+     *
+     * @return FakeUser|mixed
+     */
+    private function createRo($class)
+    {
+        $jsonSchema = dirname(__DIR__) . '/Fake/json_schema';
+        $jsonValidate = dirname(__DIR__) . '/Fake/json_validate';
+        $ro = (new Injector(new JsonSchemalModule($jsonSchema, $jsonValidate)))->getInstance($class);
+        /* @var $ro FakeUser */
+        $ro->uri = new Uri('app://self/user?id=1');
+
+        return $ro;
     }
 }

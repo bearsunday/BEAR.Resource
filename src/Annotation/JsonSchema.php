@@ -1,9 +1,4 @@
 <?php
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
 namespace BEAR\Resource\Annotation;
 
 /**
@@ -20,9 +15,14 @@ final class JsonSchema
     public $key;
 
     /**
-     * Do request valdiation ?
-     *
-     * @var bool
+     * @var string
      */
-    public $request = false;
+    public $schema;
+
+    /**
+     * Input parameter validation scheme
+     *
+     * @var string
+     */
+    public $request;
 }
