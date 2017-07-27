@@ -31,9 +31,9 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         $jsonSchema = $invocation->getMethod()->getAnnotation(JsonSchema::class);
         /* @var $jsonSchema JsonSchema */
         $ref = new \ReflectionClass($ro);
-        $thisFile = $ro instanceof WeavedInterface ? $thisFile = $ref->getParentClass()->getFileName() : $ref->getFileName();
+        $roFileName = $ro instanceof WeavedInterface ? $roFileName = $ref->getParentClass()->getFileName() : $ref->getFileName();
         $scanObject = $this->getBodyAsObject($jsonSchema, $ro);
-        $this->validate($scanObject, $jsonSchema, '.php', $thisFile);
+        $this->validate($scanObject, $jsonSchema, '.php', $roFileName);
 
         return $ro;
     }
