@@ -33,7 +33,9 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         $ref = new \ReflectionClass($ro);
         $roFileName = $ro instanceof WeavedInterface ? $roFileName = $ref->getParentClass()->getFileName() : $ref->getFileName();
         $scanObject = $this->getBodyAsObject($jsonSchema, $ro);
-        $this->validate($scanObject, $jsonSchema, '.php', $roFileName);
+        if ($jsonSchema->validate === 'response' | $jsonSchema->validate === 'request') {
+            $this->validate($scanObject, $jsonSchema, '.php', $roFileName);
+        }
 
         return $ro;
     }
