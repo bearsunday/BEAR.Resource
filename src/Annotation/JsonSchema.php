@@ -18,4 +18,16 @@ final class JsonSchema
      * @var string
      */
     public $key;
+
+    /**
+     * @var string
+     */
+    public $schema;
+
+    /**
+     * Input parameter validation scheme
+     *
+     * @var string
+     */
+    public $request;
 }
