@@ -13,13 +13,16 @@ use BEAR\Resource\ResourceObject;
 class FakeUser extends ResourceObject
 {
     /**
-     * @JsonSchema(schema="user.json", request="user.get.json")
+     * @JsonSchema(schema="user.json", params="user.get.json")
      */
     public function onGet($age)
     {
-        $this->body = [
+        $name = [
             'firstName' => 'mucha',
-            'lastName' => 'alfons',
+            'lastName' => 'alfons'
+        ];
+        $this->body = [
+            'name' => $name,
             'age' => $age
         ];
 
@@ -35,7 +38,7 @@ class FakeUser extends ResourceObject
     }
 
     /**
-     * @JsonSchema(schema="user.json")
+     * @JsonSchema(schema="definitions/user.json")
      */
     public function onPut()
     {
@@ -46,7 +49,7 @@ class FakeUser extends ResourceObject
     }
 
     /**
-     * @JsonSchema(request="__invalid.json")
+     * @JsonSchema(params="__invalid.json")
      */
     public function onPatch()
     {

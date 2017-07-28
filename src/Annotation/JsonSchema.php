@@ -29,5 +29,5 @@ final class JsonSchema
      *
      * @var string
      */
-    public $request;
+    public $params;
 }

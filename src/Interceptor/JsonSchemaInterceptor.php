@@ -12,6 +12,7 @@ use BEAR\Resource\Exception\JsonSchemaErrorException;
 use BEAR\Resource\Exception\JsonSchemaException;
 use BEAR\Resource\Exception\JsonSchemaNotFoundException;
 use BEAR\Resource\ResourceObject;
+use JsonSchema\Constraints\Constraint;
 use JsonSchema\Validator;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
@@ -54,7 +55,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         }
         $jsonSchema = $invocation->getMethod()->getAnnotation(JsonSchema::class);
         /* @var $jsonSchema JsonSchema */
-        if ($jsonSchema->request) {
+        if ($jsonSchema->params) {
             $this->validateRequest($jsonSchema, $ro);
         }
         $this->validateResponse($jsonSchema, $ro);
@@ -62,10 +63,28 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         return $ro;
     }
 
-    public function validate($scanObject, $schemaFile)
+    /**
+     * @return string
+     */
+    private function validateRequest(JsonSchema $jsonSchema, ResourceObject $ro)
+    {
+        $schemaFile = $this->validateDir . '/' . $jsonSchema->params;
+        $this->validateFileExists($schemaFile);
+        $this->validate((object) $ro->uri->query, $schemaFile);
+    }
+
+    private function validateResponse(JsonSchema $jsonSchema, ResourceObject $ro)
+    {
+        $schemeFile = $this->getSchemaFile($jsonSchema, $ro);
+        $body = isset($ro->body[$jsonSchema->key]) ? (object) $ro->body[$jsonSchema->key] : (object) $ro->body;
+        $this->validate($body, $schemeFile);
+    }
+
+    private function validate($scanObject, $schemaFile)
     {
         $validator = new Validator;
-        $validator->validate($scanObject, (object) ['$ref' => 'file://' . $schemaFile]);
+        $schema = (object) ['$ref' => 'file://' . $schemaFile];
+        $validator->validate($scanObject, $schema, Constraint::CHECK_MODE_TYPE_CAST);
         $isValid = $validator->isValid();
         if ($isValid) {
             return;
@@ -76,30 +95,6 @@ final class JsonSchemaInterceptor implements MethodInterceptor
             $e = $e ? new JsonSchemaErrorException($msg, 0, $e) : new JsonSchemaErrorException($msg);
         }
         throw new JsonSchemaException($schemaFile, Code::ERROR, $e);
-    }
-
-    /**
-     * @param $jsonSchema
-     * @param $ro
-     *
-     * @return string
-     */
-    private function validateRequest($jsonSchema, $ro)
-    {
-        $schemaFile = $this->validateDir . '/' . $jsonSchema->request;
-        $this->validateFileExists($schemaFile);
-        $this->validate((object) $ro->uri->query, $schemaFile);
-    }
-
-    /**
-     * @param $jsonSchema
-     * @param $ro
-     */
-    private function validateResponse($jsonSchema, $ro)
-    {
-        $schemeFile = $this->getSchemaFile($jsonSchema, $ro);
-        $body = isset($ro->body[$jsonSchema->key]) ? (object) $ro->body[$jsonSchema->key] : (object) $ro->body;
-        $this->validate($body, $schemeFile);
     }
 
     private function getSchemaFile(JsonSchema $jsonSchema, ResourceObject $ro)
