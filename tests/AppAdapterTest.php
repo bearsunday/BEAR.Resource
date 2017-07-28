@@ -8,11 +8,12 @@ namespace BEAR\Resource;
 
 use FakeVendor\Sandbox\Module\AppModule;
 use FakeVendor\Sandbox\Resource\Page\Index;
+use PHPUnit\Framework\TestCase;
 use Ray\Compiler\DiCompiler;
 use Ray\Compiler\ScriptInjector;
 use Ray\Di\Injector;
 
-class AppAdapterTest extends \PHPUnit_Framework_TestCase
+class AppAdapterTest extends TestCase
 {
     /**
      * @var AppAdapter
@@ -21,7 +22,7 @@ class AppAdapterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $injector = new Injector(new AppModule, __DIR__ . '/tmp');
+        $injector = new Injector(new AppModule, $_ENV['TMP_DIR']);
         $this->appAdapter = new AppAdapter($injector, 'FakeVendor\Sandbox');
     }
 

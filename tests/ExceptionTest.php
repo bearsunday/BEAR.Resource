@@ -9,8 +9,9 @@ namespace BEAR\Resource;
 use BEAR\Resource\Exception\BadRequestException;
 use BEAR\Resource\Exception\ResourceNotFoundException;
 use BEAR\Resource\Exception\ServerErrorException;
+use PHPUnit\Framework\TestCase;
 
-class ExceptionTest extends \PHPUnit_Framework_TestCase
+class ExceptionTest extends TestCase
 {
     public function testBadRequestExceptionCode()
     {

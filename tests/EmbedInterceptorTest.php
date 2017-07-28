@@ -14,11 +14,12 @@ use FakeVendor\Sandbox\Resource\App\Bird\BirdsRel;
 use FakeVendor\Sandbox\Resource\App\Bird\InvalidBird;
 use FakeVendor\Sandbox\Resource\App\Bird\NotFoundBird;
 use FakeVendor\Sandbox\Resource\App\Bird\Sparrow;
+use PHPUnit\Framework\TestCase;
 use Ray\Aop\Arguments;
 use Ray\Aop\ReflectiveMethodInvocation;
 use Ray\Di\Injector;
 
-class EmbedInterceptorTest extends \PHPUnit_Framework_TestCase
+class EmbedInterceptorTest extends TestCase
 {
     /**
      * @var \BEAR\Resource\Resource
@@ -32,7 +33,7 @@ class EmbedInterceptorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->resource = (new Injector(new ResourceModule('FakeVendor\Sandbox')))->getInstance(ResourceInterface::class);
+        $this->resource = (new Injector(new ResourceModule('FakeVendor\Sandbox'), $_ENV['TMP_DIR']))->getInstance(ResourceInterface::class);
         $this->embedInterceptor = new EmbedInterceptor($this->resource, new AnnotationReader);
     }
 

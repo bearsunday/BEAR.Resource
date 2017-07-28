@@ -7,8 +7,9 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\SchemeException;
+use PHPUnit\Framework\TestCase;
 
-class SchemeCollectionTest extends \PHPUnit_Framework_TestCase
+class SchemeCollectionTest extends TestCase
 {
     /**
      * @var SchemeCollection

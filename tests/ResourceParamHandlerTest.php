@@ -7,9 +7,10 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Module\ResourceModule;
+use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
-class ResourceParamHandlerTest extends \PHPUnit_Framework_TestCase
+class ResourceParamHandlerTest extends TestCase
 {
     /**
      * @var ResourceInterface

@@ -7,8 +7,9 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Renderer\FakeTestRenderer;
+use PHPUnit\Framework\TestCase;
 
-class ObjectTest extends \PHPUnit_Framework_TestCase
+class ObjectTest extends TestCase
 {
     /**
      * @var ResourceObject
