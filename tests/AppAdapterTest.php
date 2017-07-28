@@ -22,7 +22,7 @@ class AppAdapterTest extends TestCase
 
     protected function setUp()
     {
-        $injector = new Injector(new AppModule, __DIR__ . '/tmp');
+        $injector = new Injector(new AppModule, $_ENV['TMP_DIR']);
         $this->appAdapter = new AppAdapter($injector, 'FakeVendor\Sandbox');
     }
 

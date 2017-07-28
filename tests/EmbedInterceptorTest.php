@@ -33,7 +33,7 @@ class EmbedInterceptorTest extends TestCase
 
     protected function setUp()
     {
-        $this->resource = (new Injector(new ResourceModule('FakeVendor\Sandbox')))->getInstance(ResourceInterface::class);
+        $this->resource = (new Injector(new ResourceModule('FakeVendor\Sandbox'), $_ENV['TMP_DIR']))->getInstance(ResourceInterface::class);
         $this->embedInterceptor = new EmbedInterceptor($this->resource, new AnnotationReader);
     }
 
