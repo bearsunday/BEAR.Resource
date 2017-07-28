@@ -12,6 +12,7 @@ use BEAR\Resource\Exception\JsonSchemaErrorException;
 use BEAR\Resource\Exception\JsonSchemaException;
 use BEAR\Resource\Exception\JsonSchemaNotFoundException;
 use BEAR\Resource\ResourceObject;
+use JsonSchema\Constraints\Constraint;
 use JsonSchema\Validator;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
@@ -63,23 +64,16 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     }
 
     /**
-     * @param $jsonSchema
-     * @param $ro
-     *
      * @return string
      */
-    private function validateRequest($jsonSchema, $ro)
+    private function validateRequest(JsonSchema $jsonSchema, ResourceObject $ro)
     {
         $schemaFile = $this->validateDir . '/' . $jsonSchema->request;
         $this->validateFileExists($schemaFile);
         $this->validate((object) $ro->uri->query, $schemaFile);
     }
 
-    /**
-     * @param $jsonSchema
-     * @param $ro
-     */
-    private function validateResponse($jsonSchema, $ro)
+    private function validateResponse(JsonSchema $jsonSchema, ResourceObject $ro)
     {
         $schemeFile = $this->getSchemaFile($jsonSchema, $ro);
         $body = isset($ro->body[$jsonSchema->key]) ? (object) $ro->body[$jsonSchema->key] : (object) $ro->body;
@@ -88,8 +82,9 @@ final class JsonSchemaInterceptor implements MethodInterceptor
 
     private function validate($scanObject, $schemaFile)
     {
-        $validator = new Validator();
-        $validator->validate($scanObject, (object) ['$ref' => 'file://' . $schemaFile]);
+        $validator = new Validator;
+        $schema = (object) ['$ref' => 'file://' . $schemaFile];
+        $validator->validate($scanObject, $schema, Constraint::CHECK_MODE_TYPE_CAST);
         $isValid = $validator->isValid();
         if ($isValid) {
             return;
