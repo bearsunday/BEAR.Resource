@@ -55,7 +55,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         }
         $jsonSchema = $invocation->getMethod()->getAnnotation(JsonSchema::class);
         /* @var $jsonSchema JsonSchema */
-        if ($jsonSchema->request) {
+        if ($jsonSchema->params) {
             $this->validateRequest($jsonSchema, $ro);
         }
         $this->validateResponse($jsonSchema, $ro);
@@ -68,7 +68,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
      */
     private function validateRequest(JsonSchema $jsonSchema, ResourceObject $ro)
     {
-        $schemaFile = $this->validateDir . '/' . $jsonSchema->request;
+        $schemaFile = $this->validateDir . '/' . $jsonSchema->params;
         $this->validateFileExists($schemaFile);
         $this->validate((object) $ro->uri->query, $schemaFile);
     }
