@@ -19,7 +19,7 @@ class JsonSchemalModuleTest extends \PHPUnit_Framework_TestCase
     {
         $ro = $this->createRo(FakeUser::class);
         $ro->onGet(20);
-        $this->assertSame($ro->body['firstName'], 'mucha');
+        $this->assertSame($ro->body['name']['firstName'], 'mucha');
     }
 
     public function testValidateException()

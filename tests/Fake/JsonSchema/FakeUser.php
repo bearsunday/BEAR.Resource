@@ -13,13 +13,16 @@ use BEAR\Resource\ResourceObject;
 class FakeUser extends ResourceObject
 {
     /**
-     * @JsonSchema(schema="definitions/user.json", request="user.get.json")
+     * @JsonSchema(schema="user.json")
      */
     public function onGet($age)
     {
-        $this->body = [
+        $name = [
             'firstName' => 'mucha',
-            'lastName' => 'alfons',
+            'lastName' => 'alfons'
+        ];
+        $this->body = [
+            'name' => $name,
             'age' => $age
         ];
 

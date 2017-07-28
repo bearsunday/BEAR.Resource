@@ -2,17 +2,12 @@
   "title": "Person",
   "type": "object",
   "properties": {
-    "firstName": {
-      "type": "string"
-    },
-    "lastName": {
-      "type": "string"
-    },
+    "name": { "$ref": "name.json#/definitions/name"},
     "age": {
       "description": "Age in years",
       "type": "integer",
       "minimum": 20
     }
   },
-  "required": ["firstName", "lastName"]
+  "required": ["name", "age"]
 }

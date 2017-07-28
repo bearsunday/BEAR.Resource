@@ -1,0 +1,13 @@
+{
+  "title": "Name",
+  "definitions": {
+    "name": {
+      "type": "object",
+      "properties": {
+        "firstName": {"type": "string"},
+        "lastName": {"type": "string"}
+      },
+      "required": ["firstName", "lastName"]
+    }
+  }
+}
