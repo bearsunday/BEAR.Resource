@@ -13,9 +13,10 @@ use Doctrine\Common\Cache\ArrayCache;
 use FakeVendor\Sandbox\Resource\App\Author;
 use FakeVendor\Sandbox\Resource\App\Blog;
 use FakeVendor\Sandbox\Resource\App\Link\Scalar\Name;
+use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
-class LinkerTest extends \PHPUnit_Framework_TestCase
+class LinkerTest extends TestCase
 {
     /**
      * @var Request

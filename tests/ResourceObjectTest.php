@@ -7,8 +7,9 @@
 namespace BEAR\Resource;
 
 use FakeVendor\Sandbox\Resource\App\Author;
+use PHPUnit\Framework\TestCase;
 
-class ResourceObjectTest extends \PHPUnit_Framework_TestCase
+class ResourceObjectTest extends TestCase
 {
     public function testTransfer()
     {

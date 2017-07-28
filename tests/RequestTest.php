@@ -13,9 +13,10 @@ use BEAR\Resource\Renderer\FakeTestRenderer;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
 use FakeVendor\Sandbox\Resource\App\User\Entry;
+use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
-class RequestTest extends \PHPUnit_Framework_TestCase
+class RequestTest extends TestCase
 {
     /**
      * @var Request

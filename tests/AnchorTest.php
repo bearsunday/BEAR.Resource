@@ -10,9 +10,10 @@ use BEAR\Resource\Exception\LinkException;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
 use FakeVendor\Sandbox\Resource\App\Author;
+use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
-class AnchorTest extends \PHPUnit_Framework_TestCase
+class AnchorTest extends TestCase
 {
     /**
      * @var Anchor

@@ -7,8 +7,9 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\ResourceDirException;
+use PHPUnit\Framework\TestCase;
 
-class AppIteratorTest extends \PHPUnit_Framework_TestCase
+class AppIteratorTest extends TestCase
 {
     /**
      * @var AppIterator

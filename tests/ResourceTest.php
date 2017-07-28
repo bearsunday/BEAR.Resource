@@ -15,10 +15,11 @@ use FakeVendor\Sandbox\Resource\App\Href\Hasembed;
 use FakeVendor\Sandbox\Resource\App\Href\Origin;
 use FakeVendor\Sandbox\Resource\App\Href\Target;
 use FakeVendor\Sandbox\Resource\Page\Index;
+use PHPUnit\Framework\TestCase;
 use Ray\Di\EmptyModule;
 use Ray\Di\Injector;
 
-class ResourceTest extends \PHPUnit_Framework_TestCase
+class ResourceTest extends TestCase
 {
     /**
      * @var ResourceInterface

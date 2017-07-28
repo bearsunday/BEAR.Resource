@@ -8,9 +8,10 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Module\ResourceModule;
 use BEAR\Resource\Module\VoidOptionsMethodModule;
+use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
-class VoidOptionsRendererTest extends \PHPUnit_Framework_TestCase
+class VoidOptionsRendererTest extends TestCase
 {
     /**
      * @expectedException \BEAR\Resource\Exception\MethodNotAllowedException

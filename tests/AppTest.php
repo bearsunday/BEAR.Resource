@@ -7,9 +7,10 @@
 namespace BEAR\Resource;
 
 use FakeVendor\Sandbox\Resource\Page\Index;
+use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
-class AppTest extends \PHPUnit_Framework_TestCase
+class AppTest extends TestCase
 {
     public function testGet()
     {
