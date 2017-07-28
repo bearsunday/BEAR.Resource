@@ -62,22 +62,6 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         return $ro;
     }
 
-    public function validate($scanObject, $schemaFile)
-    {
-        $validator = new Validator;
-        $validator->validate($scanObject, (object) ['$ref' => 'file://' . $schemaFile]);
-        $isValid = $validator->isValid();
-        if ($isValid) {
-            return;
-        }
-        $e = null;
-        foreach ($validator->getErrors() as $error) {
-            $msg = sprintf('[%s] %s', $error['property'], $error['message']);
-            $e = $e ? new JsonSchemaErrorException($msg, 0, $e) : new JsonSchemaErrorException($msg);
-        }
-        throw new JsonSchemaException($schemaFile, Code::ERROR, $e);
-    }
-
     /**
      * @param $jsonSchema
      * @param $ro
@@ -100,6 +84,22 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         $schemeFile = $this->getSchemaFile($jsonSchema, $ro);
         $body = isset($ro->body[$jsonSchema->key]) ? (object) $ro->body[$jsonSchema->key] : (object) $ro->body;
         $this->validate($body, $schemeFile);
+    }
+
+    private function validate($scanObject, $schemaFile)
+    {
+        $validator = new Validator();
+        $validator->validate($scanObject, (object) ['$ref' => 'file://' . $schemaFile]);
+        $isValid = $validator->isValid();
+        if ($isValid) {
+            return;
+        }
+        $e = null;
+        foreach ($validator->getErrors() as $error) {
+            $msg = sprintf('[%s] %s', $error['property'], $error['message']);
+            $e = $e ? new JsonSchemaErrorException($msg, 0, $e) : new JsonSchemaErrorException($msg);
+        }
+        throw new JsonSchemaException($schemaFile, Code::ERROR, $e);
     }
 
     private function getSchemaFile(JsonSchema $jsonSchema, ResourceObject $ro)
