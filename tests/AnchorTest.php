@@ -28,7 +28,7 @@ class AnchorTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $invoker = new Invoker(new NamedParameter(new ArrayCache, new AnnotationReader, new Injector), new OptionsRenderer(new AnnotationReader()));
+        $invoker = new Invoker(new NamedParameter(new ArrayCache, new AnnotationReader, new Injector), new OptionsRenderer(new OptionsMethods(new AnnotationReader)));
         $author = new Author;
         $author->onGet(1);
         $this->request = new Request($invoker, $author, Request::GET, ['id' => 1]);

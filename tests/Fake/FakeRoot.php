@@ -12,7 +12,7 @@ class FakeRoot extends ResourceObject
     {
         $this['one'] = 1;
         $this['two'] = new Request(
-            new Invoker(new NamedParameter(new ArrayCache, new AnnotationReader, new Injector), new OptionsRenderer(new AnnotationReader)),
+            new Invoker(new NamedParameter(new ArrayCache, new AnnotationReader, new Injector), new OptionsRenderer(new OptionsMethods(new AnnotationReader))),
             new FakeChild
         );
 

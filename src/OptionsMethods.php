@@ -6,10 +6,12 @@
  */
 namespace BEAR\Resource;
 
+use BEAR\Resource\Annotation\JsonSchema;
 use BEAR\Resource\Annotation\ResourceParam;
 use Doctrine\Common\Annotations\Reader;
 use phpDocumentor\Reflection\DocBlockFactory;
 use Ray\Di\Di\Assisted;
+use Ray\Di\Di\Named;
 use Ray\WebContextParam\Annotation\AbstractWebContextParam;
 use Ray\WebContextParam\Annotation\CookieParam;
 use Ray\WebContextParam\Annotation\EnvParam;
@@ -33,9 +35,18 @@ final class OptionsMethods
     ];
     private $reader;
 
-    public function __construct(Reader $reader)
+    /**
+     * @var string
+     */
+    private $schemaDir;
+
+    /**
+     * @Named("schemaDir=json_schema_dir")
+     */
+    public function __construct(Reader $reader, $schemaDir = '')
     {
         $this->reader = $reader;
+        $this->schemaDir = $schemaDir;
     }
 
     /**
@@ -63,8 +74,13 @@ final class OptionsMethods
             $paramMetas['required'] = $required;
         }
         $paramMetas = $this->ignoreAnnotatedPrameter($method, $paramMetas);
+        $schema = $this->getJsonSchema($method);
+        $request = $paramMetas ? ['request' => $paramMetas] : [];
+        if ($schema) {
+            return $doc + $request + ['schema' => $schema];
+        }
 
-        return $doc + $paramMetas;
+        return $doc + $request;
     }
 
     private function getInMap(\ReflectionMethod $method)
@@ -245,5 +261,19 @@ final class OptionsMethods
         }
 
         return $paramMetas;
+    }
+
+    private function getJsonSchema(\ReflectionMethod $method)
+    {
+        $schema = $this->reader->getMethodAnnotation($method, JsonSchema::class);
+        if (! $schema instanceof JsonSchema) {
+            return false;
+        }
+        $schemaFile = $this->schemaDir . '/' . $schema->schema;
+        if (! file_exists($schemaFile)) {
+            return false;
+        }
+
+        return (array) json_decode(file_get_contents($schemaFile));
     }
 }

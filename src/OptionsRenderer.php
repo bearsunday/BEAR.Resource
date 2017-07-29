@@ -6,8 +6,6 @@
  */
 namespace BEAR\Resource;
 
-use Doctrine\Common\Annotations\Reader;
-
 /**
  * RFC2616 OPTIONS method renderer
  *
@@ -19,22 +17,13 @@ use Doctrine\Common\Annotations\Reader;
 final class OptionsRenderer implements RenderInterface
 {
     /**
-     * @var Reader
-     */
-    private $reader;
-
-    /**
      * @var OptionsMethods
      */
     private $optionsMethod;
 
-    /**
-     * @param Reader $reader
-     */
-    public function __construct(Reader $reader)
+    public function __construct(OptionsMethods $optionsMethods)
     {
-        $this->reader = $reader;
-        $this->optionsMethod = new OptionsMethods($reader);
+        $this->optionsMethod = $optionsMethods;
     }
 
     /**

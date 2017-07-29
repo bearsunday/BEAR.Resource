@@ -39,7 +39,7 @@ class InvokerTest extends TestCase
 
     protected function setUp()
     {
-        $this->invoker = new Invoker(new NamedParameter(new ArrayCache, new AnnotationReader, new Injector), new OptionsRenderer(new AnnotationReader));
+        $this->invoker = new Invoker(new NamedParameter(new ArrayCache, new AnnotationReader, new Injector), new OptionsRenderer(new OptionsMethods(new AnnotationReader)));
     }
 
     public function testInvoke()
@@ -117,36 +117,40 @@ class InvokerTest extends TestCase
     "GET": {
         "summary": "User",
         "description": "Returns a variety of information about the user specified by the required $id parameter",
-        "parameters": {
-            "id": {
-                "type": "string",
-                "description": "User ID"
-            }
-        },
-        "required": [
-            "id"
-        ]
+        "request": {
+            "parameters": {
+                "id": {
+                    "type": "string",
+                    "description": "User ID"
+                }
+            },
+            "required": [
+                "id"
+            ]
+        }
     },
     "POST": {
-        "parameters": {
-            "id": {
-                "type": "integer",
-                "description": "ID"
+        "request": {
+            "parameters": {
+                "id": {
+                    "type": "integer",
+                    "description": "ID"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Name",
+                    "default": "default_name"
+                },
+                "age": {
+                    "type": "integer",
+                    "description": "Age",
+                    "default": "99"
+                }
             },
-            "name": {
-                "type": "string",
-                "description": "Name",
-                "default": "default_name"
-            },
-            "age": {
-                "type": "integer",
-                "description": "Age",
-                "default": "99"
-            }
-        },
-        "required": [
-            "id"
-        ]
+            "required": [
+                "id"
+            ]
+        }
     },
     "DELETE": []
 }
