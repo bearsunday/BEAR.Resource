@@ -7,6 +7,7 @@
 namespace BEAR\Resource\Module;
 
 use BEAR\Resource\Annotation\AppName;
+use BEAR\Resource\OptionsMethods;
 use Ray\Di\AbstractModule;
 
 class ResourceModule extends AbstractModule
@@ -33,5 +34,6 @@ class ResourceModule extends AbstractModule
         $this->bind()->annotatedWith(AppName::class)->toInstance($this->appName);
         $this->install(new ResourceClientModule);
         $this->install(new EmbedResourceModule);
+        $this->bind(OptionsMethods::class);
     }
 }
