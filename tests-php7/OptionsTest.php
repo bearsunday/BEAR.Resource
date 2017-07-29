@@ -53,44 +53,48 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
         $actual = $ro->view;
         $expected = '{
     "GET": {
-        "parameters": {
-            "id": {
-                "type": "integer",
-                "description": "Id"
+        "request": {
+            "parameters": {
+                "id": {
+                    "type": "integer",
+                    "description": "Id"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Name"
+                },
+                "sw": {
+                    "type": "bool",
+                    "description": "Swithc"
+                },
+                "arr": {
+                    "type": "array"
+                },
+                "defaultNull": {
+                    "type": "string",
+                    "description": "DefaultNull"
+                }
             },
-            "name": {
-                "type": "string",
-                "description": "Name"
-            },
-            "sw": {
-                "type": "bool",
-                "description": "Swithc"
-            },
-            "arr": {
-                "type": "array"
-            },
-            "defaultNull": {
-                "type": "string",
-                "description": "DefaultNull"
-            }
-        },
-        "required": [
-            "id",
-            "name",
-            "sw",
-            "arr"
-        ]
+            "required": [
+                "id",
+                "name",
+                "sw",
+                "arr"
+            ]
+        }
     },
     "POST": {
-        "parameters": {
-            "id": {
-                "in": "server",
-                "type": "integer"
-            }
-        },
-        "required": [
-            "id"
-        ]
+        "request": {
+            "parameters": {
+                "id": {
+                    "in": "server",
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "id"
+            ]
+        }
     }
 }
 ';
@@ -105,63 +109,71 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
         $actual = $ro->view;
         $expected = '{
     "GET": {
-        "parameters": {
-            "id": [],
-            "name": {
-                "default": "koriym"
-            }
-        },
-        "required": [
-            "id"
-        ]
+        "request": {
+            "parameters": {
+                "id": [],
+                "name": {
+                    "default": "koriym"
+                }
+            },
+            "required": [
+                "id"
+            ]
+        }
     },
     "POST": {
-        "parameters": {
-            "cookie": {
-                "in": "cookie"
+        "request": {
+            "parameters": {
+                "cookie": {
+                    "in": "cookie"
+                },
+                "env": {
+                    "in": "env"
+                },
+                "form": {
+                    "in": "formData"
+                },
+                "query": {
+                    "in": "query"
+                },
+                "server": {
+                    "in": "server"
+                }
             },
-            "env": {
-                "in": "env"
-            },
-            "form": {
-                "in": "formData"
-            },
-            "query": {
-                "in": "query"
-            },
-            "server": {
-                "in": "server"
-            }
-        },
-        "required": [
-            "cookie",
-            "env",
-            "form",
-            "query",
-            "server"
-        ]
+            "required": [
+                "cookie",
+                "env",
+                "form",
+                "query",
+                "server"
+            ]
+        }
     },
     "PUT": {
-        "parameters": {
-            "cookie": {
-                "in": "cookie"
-            }
-        },
-        "required": [
-            "cookie"
-        ]
+        "request": {
+            "parameters": {
+                "cookie": {
+                    "in": "cookie"
+                }
+            },
+            "required": [
+                "cookie"
+            ]
+        }
     },
     "DELETE": {
-        "parameters": {
-            "a": [],
-            "cookie": {
-                "in": "cookie",
-                "default": "default"
-            }
-        },
-        "required": [
-            "a"
-        ]
+        "request": {
+            "parameters": {
+                "a": [],
+                "cookie": {
+                    "in": "cookie",
+                    "default": "default"
+                }
+            },
+            "required": [
+                "a"
+            ]
+        }
     }
 }
 ';
@@ -180,17 +192,18 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     "GET": {
         "summary": "User",
         "description": "Returns a variety of information about the user specified by the required $id parameter",
-        "parameters": {
-            "id": {
-                "type": "string",
-                "description": "User ID"
-            }
+        "request": {
+            "parameters": {
+                "id": {
+                    "type": "string",
+                    "description": "User ID"
+                }
+            },
+            "required": [
+                "id"
+            ]
         },
-        "required": [
-            "id"
-        ],
         "schema": {
-            "title": "Person",
             "type": "object",
             "properties": {
                 "name": {

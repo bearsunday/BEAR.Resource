@@ -75,11 +75,12 @@ final class OptionsMethods
         }
         $paramMetas = $this->ignoreAnnotatedPrameter($method, $paramMetas);
         $schema = $this->getJsonSchema($method);
+        $request = $paramMetas ? ['request' => $paramMetas] : [];
         if ($schema) {
-            return $doc + $paramMetas + ['schema' => $schema];
+            return $doc + $request + ['schema' => $schema];
         }
 
-        return $doc + $paramMetas;
+        return $doc + $request;
     }
 
     private function getInMap(\ReflectionMethod $method)

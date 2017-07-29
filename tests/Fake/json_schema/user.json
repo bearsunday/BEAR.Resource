@@ -1,5 +1,4 @@
 {
-  "title": "Person",
   "type": "object",
   "properties": {
     "name": { "$ref": "name.json#/definitions/name"},
