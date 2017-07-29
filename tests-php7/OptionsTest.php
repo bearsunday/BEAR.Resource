@@ -9,6 +9,7 @@ namespace BEAR\Resource;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
 use FakeVendor\Sandbox\Resource\App\DocPhp7;
+use FakeVendor\Sandbox\Resource\App\DocUser;
 use Ray\Di\Injector;
 
 class OptionsTest extends \PHPUnit_Framework_TestCase
@@ -30,7 +31,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->invoker = new Invoker(new NamedParameter(new ArrayCache, new AnnotationReader, new Injector), new OptionsRenderer(new AnnotationReader));
+        $this->invoker = new Invoker(new NamedParameter(new ArrayCache, new AnnotationReader, new Injector), new OptionsRenderer(new OptionsMethods(new AnnotationReader, $_ENV['schema_dir'])));
     }
 
     public function testOptionsMethod()
@@ -161,6 +162,51 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
         "required": [
             "a"
         ]
+    }
+}
+';
+        $this->assertSame($expected, $actual);
+    }
+
+    public function testOptionsMethodWithJsonSchema()
+    {
+        $request = new Request($this->invoker, new DocUser, Request::OPTIONS);
+        $ro = $this->invoker->invoke($request);
+        $actual = $ro->headers['Allow'];
+        $expected = 'GET';
+        $this->assertSame($actual, $expected);
+        $actual = $ro->view;
+        $expected = '{
+    "GET": {
+        "summary": "User",
+        "description": "Returns a variety of information about the user specified by the required $id parameter",
+        "parameters": {
+            "id": {
+                "type": "string",
+                "description": "User ID"
+            }
+        },
+        "required": [
+            "id"
+        ],
+        "schema": {
+            "title": "Person",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "$ref": "name.json#/definitions/name"
+                },
+                "age": {
+                    "description": "Age in years",
+                    "type": "integer",
+                    "minimum": 20
+                }
+            },
+            "required": [
+                "name",
+                "age"
+            ]
+        }
     }
 }
 ';

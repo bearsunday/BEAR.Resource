@@ -10,6 +10,7 @@ $loader = require dirname(__DIR__) . '/vendor/autoload.php';
 /* @var $loader \Composer\Autoload\ClassLoader */
 AnnotationRegistry::registerLoader([$loader, 'loadClass']);
 
+$_ENV['schema_dir'] = __DIR__ . '/Fake/json_schema';
 $_ENV['TMP_DIR'] = __DIR__ . '/tmp';
 $unlink = function ($path) use (&$unlink) {
     foreach (glob(rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . '*') as $file) {
