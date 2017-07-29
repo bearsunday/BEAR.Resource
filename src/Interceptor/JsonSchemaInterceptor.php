@@ -70,13 +70,13 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     {
         $schemaFile = $this->validateDir . '/' . $jsonSchema->params;
         $this->validateFileExists($schemaFile);
-        $this->validate((object) $ro->uri->query, $schemaFile);
+        $this->validate($ro->uri->query, $schemaFile);
     }
 
     private function validateResponse(JsonSchema $jsonSchema, ResourceObject $ro)
     {
         $schemeFile = $this->getSchemaFile($jsonSchema, $ro);
-        $body = isset($ro->body[$jsonSchema->key]) ? (object) $ro->body[$jsonSchema->key] : (object) $ro->body;
+        $body = isset($ro->body[$jsonSchema->key]) ? $ro->body[$jsonSchema->key] : $ro->body;
         $this->validate($body, $schemeFile);
     }
 

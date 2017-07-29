@@ -9,6 +9,7 @@ namespace BEAR\Resource\Module;
 use BEAR\Resource\Exception\JsonSchemaException;
 use BEAR\Resource\JsonSchema\FakePerson;
 use BEAR\Resource\JsonSchema\FakeUser;
+use BEAR\Resource\JsonSchema\FakeUsers;
 use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Uri;
 use Ray\Di\Injector;
@@ -20,6 +21,13 @@ class JsonSchemalModuleTest extends \PHPUnit_Framework_TestCase
         $ro = $this->createRo(FakeUser::class);
         $ro->onGet(20);
         $this->assertSame($ro->body['name']['firstName'], 'mucha');
+    }
+
+    public function testValidArrayRef()
+    {
+        $ro = $this->createRo(FakeUsers::class);
+        $ro->onGet(20);
+        $this->assertSame($ro->body[0]['name']['firstName'], 'mucha');
     }
 
     public function testValidateException()
