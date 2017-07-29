@@ -17,6 +17,7 @@ use BEAR\Resource\Linker;
 use BEAR\Resource\LinkerInterface;
 use BEAR\Resource\NamedParameter;
 use BEAR\Resource\NamedParameterInterface;
+use BEAR\Resource\OptionsMethods;
 use BEAR\Resource\OptionsRenderer;
 use BEAR\Resource\RenderInterface;
 use BEAR\Resource\Resource;
@@ -49,5 +50,6 @@ class ResourceClientModule extends AbstractModule
         $this->bind(RenderInterface::class)->to(JsonRenderer::class)->in(Scope::SINGLETON);
         $this->bind(Cache::class)->to(ArrayCache::class);
         $this->bind(RenderInterface::class)->annotatedWith('options')->to(OptionsRenderer::class);
+        $this->bind(OptionsMethods::class);
     }
 }
