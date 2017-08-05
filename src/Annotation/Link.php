@@ -13,13 +13,6 @@ namespace BEAR\Resource\Annotation;
 final class Link
 {
     /**
-     * Crawl ID
-     *
-     * @var string
-     */
-    public $crawl = '';
-
-    /**
      * Relation to the target resource of the link
      *
      * @var string
@@ -46,4 +39,11 @@ final class Link
      * @var string
      */
     public $title = '';
+
+    /**
+     * Crawl tag ID for crawl request
+     *
+     * @var string
+     */
+    public $crawl = '';
 }
