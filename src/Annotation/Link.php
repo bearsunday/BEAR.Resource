@@ -13,26 +13,28 @@ namespace BEAR\Resource\Annotation;
 final class Link
 {
     /**
+     * Crawl ID
+     *
      * @var string
      */
     public $crawl = '';
 
     /**
-     * Relation
+     * Relation to the target resource of the link
      *
      * @var string
      */
     public $rel;
 
     /**
-     * Hyper reference uri
+     * A URI template, as defined by RFC 6570
      *
      * @var string
      */
     public $href;
 
     /**
-     * Request method
+     * A method for the Link
      *
      * @var string
      */
