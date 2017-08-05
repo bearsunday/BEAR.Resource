@@ -39,4 +39,11 @@ final class Link
      * @var string
      */
     public $method = 'get';
+
+    /**
+     * A title for the link
+     *
+     * @var string
+     */
+    public $title = '';
 }
