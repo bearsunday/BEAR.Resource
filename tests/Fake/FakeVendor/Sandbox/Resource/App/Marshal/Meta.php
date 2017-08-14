@@ -33,6 +33,21 @@ class Meta extends ResourceObject
             'post_id' => '5',
             'data' => 'meta 5',
         ],
+        [
+            'id' => '6',
+            'post_id' => '6',
+            'data' => 'meta 6',
+        ],
+        [
+            'id' => '7',
+            'post_id' => '7',
+            'data' => 'meta 7',
+        ],
+        [
+            'id' => '8',
+            'post_id' => '8',
+            'data' => 'meta 8',
+        ],
     ];
 
     /**
