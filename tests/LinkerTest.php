@@ -146,6 +146,109 @@ class LinkerTest extends TestCase
         $this->assertSame($expected, $result->body);
     }
 
+    public function testAnnotationCrawl2()
+    {
+        $request = new Request(
+            $this->invoker,
+            new Blog,
+            Request::GET,
+            ['id' => 16],
+            [new LinkType('tree', LinkType::CRAWL_LINK)]
+        );
+        $result = $this->linker->invoke($request);
+        $expected = [
+            'id' => 16,
+            'name' => 'Porthos blog',
+            'post' => [
+                [
+                    'id' => '6',
+                    'author_id' => '3',
+                    'body' => 'Porthos post #1',
+                    'meta' => [
+                        [
+                            'id' => '6',
+                            'post_id' => '6',
+                            'data' => 'meta 6',
+                        ],
+                    ],
+                    'tag' => [
+                        [
+                            'id' => '11',
+                            'post_id' => '6',
+                            'tag_id' => '1',
+                            'tag_name' => [
+                                [
+                                    'id' => '1',
+                                    'name' => 'zim',
+                                ],
+                            ],
+                            'tag_type' => [
+                                'type1',
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'id' => '7',
+                    'author_id' => '3',
+                    'body' => 'Porthos post #1',
+                    'meta' => [
+                        [
+                            'id' => '7',
+                            'post_id' => '7',
+                            'data' => 'meta 7',
+                        ],
+                    ],
+                    'tag' => [
+                        [
+                            'id' => '12',
+                            'post_id' => '7',
+                            'tag_id' => '2',
+                            'tag_name' => [
+                                [
+                                    'id' => '2',
+                                    'name' => 'dib',
+                                ],
+                            ],
+                            'tag_type' => [
+                                'type1',
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'id' => '8',
+                    'author_id' => '3',
+                    'body' => 'Porthos post #1',
+                    'meta' => [
+                        [
+                            'id' => '8',
+                            'post_id' => '8',
+                            'data' => 'meta 8',
+                        ],
+                    ],
+                    'tag' => [
+                        [
+                            'id' => '13',
+                            'post_id' => '8',
+                            'tag_id' => '3',
+                            'tag_name' => [
+                                [
+                                        'id' => '3',
+                                        'name' => 'gir',
+                                ],
+                            ],
+                            'tag_type' => [
+                                'type1',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        $this->assertSame($expected, $result->body);
+    }
+
     public function testScalarValueLinkThrowException()
     {
         $this->setExpectedException(LinkQueryException::class);

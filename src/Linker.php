@@ -221,10 +221,12 @@ final class Linker implements LinkerInterface
     private function isList($value)
     {
         $list = $value;
-        $keys = array_keys((array) array_pop($list));
-        $isMultiColumnList = $keys !== [0 => 0] && ($keys === array_keys((array) array_pop($list)));
+        $firstRow = array_pop($list);
+        $keys = array_keys((array) $firstRow);
+        $isMultiColumnMultiRowList = $keys !== [0 => 0] && ($keys === array_keys((array) array_pop($list)));
+        $isMultiColumnList = is_array($firstRow) && array_filter(array_keys($value), 'is_numeric') === array_keys($value);
         $isSingleColumnList = (count($value) === 1) && $keys === array_keys((array) $list);
 
-        return $isSingleColumnList || $isMultiColumnList;
+        return $isSingleColumnList || $isMultiColumnMultiRowList || $isMultiColumnList;
     }
 }

@@ -59,6 +59,21 @@ class Tag extends ResourceObject
             'post_id' => '5',
             'tag_id'  => '2',
         ],
+        [
+            'id' => '11',
+            'post_id' => '6',
+            'tag_id'  => '1',
+        ],
+        [
+            'id' => '12',
+            'post_id' => '7',
+            'tag_id'  => '2',
+        ],
+        [
+            'id' => '13',
+            'post_id' => '8',
+            'tag_id'  => '3',
+        ],
     ];
 
     /**

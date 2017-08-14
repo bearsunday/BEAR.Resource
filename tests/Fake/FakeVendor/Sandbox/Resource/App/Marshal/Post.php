@@ -32,6 +32,23 @@ class Post extends ResourceObject
             'author_id' => '2',
             'body' => 'Clara post #2',
         ],
+        'blog16' => [
+            [
+                'id' => '6',
+                'author_id' => '3',
+                'body' => 'Porthos post #1',
+            ],
+            [
+                'id' => '7',
+                'author_id' => '3',
+                'body' => 'Porthos post #1',
+            ],
+            [
+                'id' => '8',
+                'author_id' => '3',
+                'body' => 'Porthos post #1',
+            ]
+        ]
     ];
 
     /**
