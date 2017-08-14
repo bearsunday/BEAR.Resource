@@ -158,12 +158,12 @@ class LinkerTest extends TestCase
         $result = $this->linker->invoke($request);
         $expected = [
             'id' => 16,
-            'name' => 'John blog',
+            'name' => 'Porthos blog',
             'post' => [
                 [
                     'id' => '6',
                     'author_id' => '3',
-                    'body' => 'John post #1',
+                    'body' => 'Porthos post #1',
                     'meta' => [
                         [
                             'id' => '6',
@@ -191,7 +191,7 @@ class LinkerTest extends TestCase
                 [
                     'id' => '7',
                     'author_id' => '3',
-                    'body' => 'John post #1',
+                    'body' => 'Porthos post #1',
                     'meta' => [
                         [
                             'id' => '7',
@@ -219,7 +219,7 @@ class LinkerTest extends TestCase
                 [
                     'id' => '8',
                     'author_id' => '3',
-                    'body' => 'John post #1',
+                    'body' => 'Porthos post #1',
                     'meta' => [
                         [
                             'id' => '8',
