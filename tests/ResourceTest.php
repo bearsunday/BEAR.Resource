@@ -177,7 +177,7 @@ class ResourceTest extends TestCase
     }
 
     /**
-     * @depends testAssistedOverRideAssisteValue
+     * @depends testAssistedParameter
      */
     public function testPreventAssistedParameterOverride(ResourceInterface $resource)
     {
