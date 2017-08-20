@@ -125,8 +125,7 @@ final class NamedParameter implements NamedParameterInterface
 
     /**
      * Set AssistedParam objects
-     *
-s     */
+     s     */
     private function setAssistedAnnotation(array $names, Assisted $assisted) : array
     {
         /* @var $annotation Assisted */
