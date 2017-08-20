@@ -43,9 +43,20 @@ class ImportModuleTest extends TestCase
             ->uri('app://self/news')
             ->withQuery(['date' => 'today'])
             ->request();
-        $expect = <<<'EOT'
-{"weather":{"today":"the weather of today is sunny"},"headline":"40th anniversary of Rubik's Cube invention.","sports":"Pieter Weening wins Giro d'Italia.","user":{"id":2,"name":"Aramis","age":16,"blog_id":12}}
-EOT;
+        $expect = '{
+    "weather": {
+        "today": "the weather of today is sunny"
+    },
+    "headline": "40th anniversary of Rubik\'s Cube invention.",
+    "sports": "Pieter Weening wins Giro d\'Italia.",
+    "user": {
+        "id": 2,
+        "name": "Aramis",
+        "age": 16,
+        "blog_id": 12
+    }
+}
+';
         $this->assertSame($expect, (string) $news);
 
         $news = $resource
@@ -53,9 +64,19 @@ EOT;
             ->uri('app://blog/news')
             ->withQuery(['date' => 'today'])
             ->request();
-        $expect = <<<'EOT'
-{"weather":{"today":"the weather of today is sunny"},"technology":"Microsoft to stop producing Windows versions","user":{"id":3,"name":"Porthos","age":17,"blog_id":0}}
-EOT;
+        $expect = '{
+    "weather": {
+        "today": "the weather of today is sunny"
+    },
+    "technology": "Microsoft to stop producing Windows versions",
+    "user": {
+        "id": 3,
+        "name": "Porthos",
+        "age": 17,
+        "blog_id": 0
+    }
+}
+';
         $this->assertSame($expect, (string) $news);
     }
 }

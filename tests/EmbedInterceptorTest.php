@@ -98,6 +98,24 @@ class EmbedInterceptorTest extends TestCase
         $this->assertSame('{"bird1":{"name":"chill kun"},"bird2":{"sparrow_id":"1"}}', $json);
     }
 
+    /**
+     * @depends testInvoke
+     */
+    public function testInvokeStringWithPrettyJsonRnderer(ResourceObject $result)
+    {
+        $result->setRenderer(new PrettyJsonRenderer);
+        $json = $result->toString();
+        $this->assertSame('{
+    "bird1": {
+        "name": "chill kun"
+    },
+    "bird2": {
+        "sparrow_id": "1"
+    }
+}
+', $json);
+    }
+
     public function testEmbedAnnotation()
     {
         $request = $this->resource->get->uri('app://self/bird/birds')->withQuery(['id' => 1])->request();
