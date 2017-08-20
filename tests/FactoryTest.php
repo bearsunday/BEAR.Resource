@@ -81,7 +81,7 @@ class FactoryTest extends TestCase
     public function testInvalidObjectUri()
     {
         $this->expectException(UriException::class);
-        $this->factory->newInstance([]);
+        $this->factory->newInstance('');
     }
 
     public function testResourceNotFound()

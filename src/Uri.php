@@ -16,7 +16,7 @@ final class Uri extends AbstractUri
      *
      * @throws \BEAR\Resource\Exception\UriException
      */
-    public function __construct($uri, array $query = [])
+    public function __construct(string $uri, array $query = [])
     {
         $this->validate($uri);
         if (count($query) !== 0) {
@@ -33,11 +33,9 @@ final class Uri extends AbstractUri
     }
 
     /**
-     * @param string $uri
-     *
      * @throws UriException
      */
-    private function validate($uri)
+    private function validate(string $uri)
     {
         if (! filter_var($uri, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED)) {
             $msg = is_string($uri) ? $uri : gettype($uri);

@@ -73,10 +73,8 @@ final class Linker implements LinkerInterface
      * @param LinkType       $link
      * @param ResourceObject $ro
      * @param mixed          $nextResource
-     *
-     * @return ResourceObject
      */
-    private function nextLink(LinkType $link, ResourceObject $ro, $nextResource)
+    private function nextLink(LinkType $link, ResourceObject $ro, $nextResource) : ResourceObject
     {
         $nextBody = $nextResource instanceof ResourceObject ? $nextResource->body : $nextResource;
 
@@ -98,10 +96,6 @@ final class Linker implements LinkerInterface
 
     /**
      * Annotation link
-     *
-     * @param LinkType        $link
-     * @param ResourceObject  $current
-     * @param AbstractRequest $request
      *
      * @throws \BEAR\Resource\Exception\MethodException
      * @throws \BEAR\Resource\Exception\LinkRelException
@@ -135,10 +129,8 @@ final class Linker implements LinkerInterface
      * @throws \BEAR\Resource\Exception\MethodException
      * @throws Exception\LinkQueryException
      * @throws Exception\LinkRelException
-     *
-     * @return ResourceObject
      */
-    private function annotationRel(array $annotations, LinkType $link, ResourceObject $current)
+    private function annotationRel(array $annotations, LinkType $link, ResourceObject $current) : ResourceObject
     {
         /* @noinspection LoopWhichDoesNotLoopInspection */
         foreach ($annotations as $annotation) {
@@ -159,15 +151,9 @@ final class Linker implements LinkerInterface
     /**
      * Link annotation crawl
      *
-     * @param array          $annotations
-     * @param LinkType       $link
-     * @param ResourceObject $current
-     *
      * @throws \BEAR\Resource\Exception\MethodException
-     *
-     * @return ResourceObject
      */
-    private function annotationCrawl(array $annotations, LinkType $link, ResourceObject $current)
+    private function annotationCrawl(array $annotations, LinkType $link, ResourceObject $current) : ResourceObject
     {
         $isList = $this->isList($current->body);
         $bodyList = $isList ? $current->body : [$current->body];
@@ -183,10 +169,6 @@ final class Linker implements LinkerInterface
     }
 
     /**
-     * @param array    $annotations
-     * @param LinkType $link
-     * @param array    $body
-     *
      * @throws \BEAR\Resource\Exception\LinkQueryException
      * @throws \BEAR\Resource\Exception\MethodException
      * @throws \BEAR\Resource\Exception\LinkRelException
@@ -215,10 +197,8 @@ final class Linker implements LinkerInterface
 
     /**
      * @param mixed $value
-     *
-     * @return bool
      */
-    private function isList($value)
+    private function isList($value) : bool
     {
         $list = $value;
         $firstRow = array_pop($list);

@@ -43,25 +43,12 @@ final class Anchor implements AnchorInterface
         throw new LinkException("rel:{$rel} class:" . get_class($request->resourceObject), 500);
     }
 
-    /**
-     * @param LinkAnnotation $annotation
-     * @param string         $rel
-     *
-     * @return bool
-     */
-    private function isValidLinkAnnotation($annotation, $rel)
+    private function isValidLinkAnnotation($annotation, string $rel) : bool
     {
         return $annotation instanceof LinkAnnotation && $annotation->rel !== null && $annotation->rel === $rel;
     }
 
-    /**
-     * @param AbstractRequest $request
-     * @param array           $query
-     * @param LinkAnnotation  $annotation
-     *
-     * @return array
-     */
-    private function getMethodUdi(AbstractRequest $request, array $query, LinkAnnotation $annotation)
+    private function getMethodUdi(AbstractRequest $request, array $query, LinkAnnotation $annotation) : array
     {
         $body = $request->resourceObject->body;
         $query = is_array($body) ? array_merge($body, $query) : [];

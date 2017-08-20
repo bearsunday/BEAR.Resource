@@ -36,12 +36,7 @@ final class Meta
         $this->options = $this->getOptions($class);
     }
 
-    /**
-     * @param string $class
-     *
-     * @return string
-     */
-    private function getUri($class)
+    private function getUri(string $class) : string
     {
         $classPath = explode('\\', $class);
         // $class
@@ -56,12 +51,8 @@ final class Meta
 
     /**
      * Return available resource request method
-     *
-     * @param string $class
-     *
-     * @return Options
      */
-    private function getOptions($class)
+    private function getOptions(string $class) : Options
     {
         $ref = new \ReflectionClass($class);
         $allows = $this->getAllows($ref->getMethods());
@@ -76,10 +67,8 @@ final class Meta
 
     /**
      * @param \ReflectionMethod[] $methods
-     *
-     * @return array
      */
-    private function getAllows(array $methods)
+    private function getAllows(array $methods) : array
     {
         $allows = [];
         foreach ($methods as $method) {
@@ -92,13 +81,7 @@ final class Meta
         return $allows;
     }
 
-    /**
-     * @param string $class
-     * @param string $method
-     *
-     * @return Params
-     */
-    private function getParams($class, $method)
+    private function getParams(string $class, string $method) : Params
     {
         $refMethod = new \ReflectionMethod($class, 'on' . $method);
         $parameters = $refMethod->getParameters();

@@ -49,13 +49,7 @@ final class OptionsMethods
         $this->schemaDir = $schemaDir;
     }
 
-    /**
-     * @param ResourceObject $ro
-     * @param string         $requestMethod
-     *
-     * @return array
-     */
-    public function __invoke(ResourceObject $ro, $requestMethod)
+    public function __invoke(ResourceObject $ro, string $requestMethod) : array
     {
         $method = new \ReflectionMethod($ro, 'on' . $requestMethod);
         $ins = $this->getInMap($method);
@@ -83,7 +77,7 @@ final class OptionsMethods
         return $doc + $request;
     }
 
-    private function getInMap(\ReflectionMethod $method)
+    private function getInMap(\ReflectionMethod $method) : array
     {
         $ins = [];
         $annotations = $this->reader->getMethodAnnotations($method);
@@ -97,11 +91,9 @@ final class OptionsMethods
     }
 
     /**
-     * @param string $docComment
-     *
      * @return array [$docs, $params]
      */
-    private function docBlock($docComment)
+    private function docBlock(string $docComment) : array
     {
         $factory = DocBlockFactory::createInstance();
         $docblock = $factory->create($docComment);
@@ -127,7 +119,7 @@ final class OptionsMethods
      *
      * @return string|null
      */
-    private function getParameterType(\ReflectionParameter $parameter, array $paramDoc, $name)
+    private function getParameterType(\ReflectionParameter $parameter, array $paramDoc, string $name)
     {
         $hasType = method_exists($parameter, 'getType') && $parameter->getType();
         if ($hasType) {

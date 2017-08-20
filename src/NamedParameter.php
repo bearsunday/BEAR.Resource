@@ -64,10 +64,8 @@ final class NamedParameter implements NamedParameterInterface
      *
      * @param array            $query caller value
      * @param ParamInterface[] $names Param object[] ['varName' => ParamInterface]
-     *
-     * @return array
      */
-    private function evaluateParams(array $query, array $names)
+    private function evaluateParams(array $query, array $names) : array
     {
         $parameters = [];
         foreach ($names as $varName => $param) {
@@ -80,12 +78,8 @@ final class NamedParameter implements NamedParameterInterface
 
     /**
      * Return named parameter information
-     *
-     * @param array $callable
-     *
-     * @return array
      */
-    private function getNamedParamMetas(array $callable)
+    private function getNamedParamMetas(callable $callable) : array
     {
         $method = new \ReflectionMethod($callable[0], $callable[1]);
         $parameters = $method->getParameters();
@@ -109,10 +103,8 @@ final class NamedParameter implements NamedParameterInterface
 
     /**
      * Set "method injection" parameter
-     *
-     * @return array
      */
-    private function setAssistedParam(\ReflectionMethod $method)
+    private function setAssistedParam(\ReflectionMethod $method) : array
     {
         $names = $webcontext = [];
         $annotations = $this->reader->getMethodAnnotations($method);
@@ -135,10 +127,8 @@ final class NamedParameter implements NamedParameterInterface
      * Set AssistedParam objects
      *
      * null is used for Assisted interceptor
-     *
-     * @return array
      */
-    private function setAssistedAnnotation(array $names, Assisted $assisted)
+    private function setAssistedAnnotation(array $names, Assisted $assisted) : array
     {
         /* @var $annotation Assisted */
         foreach ($assisted->values as $assistedParam) {

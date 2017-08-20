@@ -42,26 +42,12 @@ class HalRenderer implements RenderInterface
         return $ro->view;
     }
 
-    /**
-     * @param string $uri
-     *
-     * @return string
-     */
-    protected function getReverseMatchedLink($uri)
+    private function getReverseMatchedLink(string $uri) : string
     {
         return $uri;
     }
 
-    /**
-     * @param AbstractUri $uri         Resource uri
-     * @param array       $body        Resource body
-     * @param array       $annotations Annotations
-     *
-     * @throws \RuntimeException
-     *
-     * @return Hal
-     */
-    private function getHal(AbstractUri $uri, array $body, array $annotations)
+    private function getHal(AbstractUri $uri, array $body, array $annotations) : Hal
     {
         $query = $uri->query ? '?' . http_build_query($uri->query) : '';
         $path = $uri->path . $query;
