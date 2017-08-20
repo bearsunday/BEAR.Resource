@@ -8,9 +8,10 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Module\ResourceModule;
 use FakeVendor\Sandbox\Resource\Page\Index;
+use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
-class ShortSyntaxTest extends \PHPUnit_Framework_TestCase
+class ShortSyntaxTest extends TestCase
 {
     /**
      * @var ResourceInterface

@@ -33,7 +33,7 @@ class AppIteratorTest extends TestCase
 
     public function testResourceDirException()
     {
-        $this->setExpectedException(ResourceDirException::class);
+        $this->expectException(ResourceDirException::class);
         new AppIterator('/invalid');
     }
 }

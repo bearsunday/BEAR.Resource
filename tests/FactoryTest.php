@@ -50,13 +50,13 @@ class FactoryTest extends TestCase
 
     public function testNewInstanceScheme()
     {
-        $this->setExpectedException(SchemeException::class);
+        $this->expectException(SchemeException::class);
         $this->factory->newInstance('bad://self/news');
     }
 
     public function testNewInstanceSchemes()
     {
-        $this->setExpectedException(SchemeException::class);
+        $this->expectException(SchemeException::class);
         $this->factory->newInstance('app://invalid_host/news');
     }
 
@@ -74,25 +74,25 @@ class FactoryTest extends TestCase
 
     public function testInvalidUri()
     {
-        $this->setExpectedException(UriException::class);
+        $this->expectException(UriException::class);
         $this->factory->newInstance('invalid_uri');
     }
 
     public function testInvalidObjectUri()
     {
-        $this->setExpectedException(UriException::class);
-        $this->factory->newInstance([]);
+        $this->expectException(UriException::class);
+        $this->factory->newInstance('');
     }
 
     public function testResourceNotFound()
     {
-        $this->setExpectedException(ResourceNotFoundException::class);
+        $this->expectException(ResourceNotFoundException::class);
         $this->factory->newInstance('page://self/not_found_XXXX');
     }
 
     public function testUnbound()
     {
-        $this->setExpectedException(Unbound::class);
+        $this->expectException(Unbound::class);
         $instance = $this->factory->newInstance('page://self/unbound');
     }
 

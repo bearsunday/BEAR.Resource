@@ -44,7 +44,7 @@ class AnchorTest extends TestCase
 
     public function testInvalid()
     {
-        $this->setExpectedException(LinkException::class);
+        $this->expectException(LinkException::class);
         $this->anchor->href('invalid', $this->request, []);
     }
 }

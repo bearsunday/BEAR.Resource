@@ -43,11 +43,7 @@ final class LinkType
      */
     public $type;
 
-    /**
-     * @param string $key
-     * @param string $type
-     */
-    public function __construct($key, $type)
+    public function __construct(string $key, string $type)
     {
         $this->key = $key;
         $this->type = $type;

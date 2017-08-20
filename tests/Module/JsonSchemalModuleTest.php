@@ -7,14 +7,16 @@
 namespace BEAR\Resource\Module;
 
 use BEAR\Resource\Exception\JsonSchemaException;
+use BEAR\Resource\Exception\JsonSchemaNotFoundException;
 use BEAR\Resource\JsonSchema\FakePerson;
 use BEAR\Resource\JsonSchema\FakeUser;
 use BEAR\Resource\JsonSchema\FakeUsers;
 use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Uri;
+use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
-class JsonSchemalModuleTest extends \PHPUnit_Framework_TestCase
+class JsonSchemalModuleTest extends TestCase
 {
     public function testValid()
     {
@@ -59,11 +61,9 @@ class JsonSchemalModuleTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $errors);
     }
 
-    /**
-     * @expectedException \BEAR\Resource\Exception\JsonSchemaNotFoundException
-     */
     public function testException()
     {
+        $this->expectException(JsonSchemaNotFoundException::class);
         $ro = $this->createRo(FakeUser::class);
         $ro->onPost();
     }
@@ -72,14 +72,12 @@ class JsonSchemalModuleTest extends \PHPUnit_Framework_TestCase
     {
         $ro = $this->createRo(FakeUser::class);
         $ro->onPut();
-        $this->isInstanceOf($ro, ResourceObject::class);
+        $this->assertInstanceOf(ResourceObject::class, $ro);
     }
 
-    /**
-     * @expectedException \BEAR\Resource\Exception\JsonSchemaNotFoundException
-     */
     public function invalidRequestTest()
     {
+        $this->expectException(JsonSchemaNotFoundException::class);
         $ro = $this->createRo(FakeUser::class);
         $ro->onPatch();
     }

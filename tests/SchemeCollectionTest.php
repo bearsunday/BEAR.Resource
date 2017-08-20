@@ -31,7 +31,7 @@ class SchemeCollectionTest extends TestCase
 
     public function testInvalidScheme()
     {
-        $this->setExpectedException(SchemeException::class);
+        $this->expectException(SchemeException::class);
         $this->scheme->getAdapter(new Uri('app://self/'));
     }
 }

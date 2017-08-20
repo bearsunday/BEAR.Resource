@@ -114,9 +114,6 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
         $this->linker = $linker;
     }
 
-    /**
-     * @return string
-     */
     public function __toString()
     {
         try {
@@ -241,10 +238,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
         return unserialize($serialized);
     }
 
-    /**
-     * @return ResourceObject
-     */
-    private function invoke()
+    private function invoke() : ResourceObject
     {
         if ($this->result === null) {
             /* @noinspection ImplicitMagicMethodCallInspection */

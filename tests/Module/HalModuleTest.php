@@ -8,9 +8,10 @@ namespace Module;
 
 use BEAR\Resource\ResourceInterface;
 use FakeVendor\Sandbox\Module\AppModule;
+use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
-class HalModuleTest extends \PHPUnit_Framework_TestCase
+class HalModuleTest extends TestCase
 {
     public function setUp()
     {

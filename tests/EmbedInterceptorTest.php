@@ -129,7 +129,7 @@ class EmbedInterceptorTest extends TestCase
 
     public function testNotFoundSrc()
     {
-        $this->setExpectedException(EmbedException::class);
+        $this->expectException(EmbedException::class);
         $mock = new NotFoundBird;
         $invocation = new ReflectiveMethodInvocation($mock, new \ReflectionMethod($mock, 'onGet'), new Arguments(['id' => 1]), [$this->embedInterceptor]);
         $invocation->proceed();
@@ -137,7 +137,7 @@ class EmbedInterceptorTest extends TestCase
 
     public function testNotInvalidSrc()
     {
-        $this->setExpectedException(EmbedException::class);
+        $this->expectException(EmbedException::class);
         $mock = new InvalidBird;
         $invocation = new ReflectiveMethodInvocation($mock, new \ReflectionMethod($mock, 'onGet'), new Arguments(['id' => 1]), [$this->embedInterceptor]);
         $invocation->proceed();

@@ -42,37 +42,23 @@ class HalRenderer implements RenderInterface
         return $ro->view;
     }
 
-    /**
-     * @param string $uri
-     *
-     * @return string
-     */
-    protected function getReverseMatchedLink($uri)
+    private function getReverseMatchedLink(string $uri) : string
     {
         return $uri;
     }
 
-    /**
-     * @param AbstractUri $uri         Resource uri
-     * @param array       $body        Resource body
-     * @param array       $annotations Annotations
-     *
-     * @throws \RuntimeException
-     *
-     * @return Hal
-     */
-    private function getHal(AbstractUri $uri, array $body, array $annotations)
+    private function getHal(AbstractUri $uri, array $body, array $annotations) : Hal
     {
         $query = $uri->query ? '?' . http_build_query($uri->query) : '';
         $path = $uri->path . $query;
         $selfLink = $this->getReverseMatchedLink($path);
         $hal = new Hal($selfLink, $body);
-        $this->getHalLink($body, $annotations, $hal);
+        $this->addLinks($body, $annotations, $hal);
 
         return $hal;
     }
 
-    private function valuate(ResourceObject $ro)
+    private function valuate(ResourceObject $ro) : array
     {
         // HAL
         $body = $ro->body ?: [];
@@ -80,7 +66,7 @@ class HalRenderer implements RenderInterface
         return [$ro, $body];
     }
 
-    private function getHalLink(array $body, array $annotations, Hal $hal)
+    private function addLinks(array $body, array $annotations, Hal $hal)
     {
         foreach ($annotations as $annotation) {
             if ($annotation instanceof Link) {

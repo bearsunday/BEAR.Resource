@@ -54,10 +54,8 @@ final class Invoker implements InvokerInterface
     /**
      * @param AbstractRequest $request
      * @param mixed           $result
-     *
-     * @return ResourceObject
      */
-    private function postRequest(AbstractRequest $request, $result)
+    private function postRequest(AbstractRequest $request, $result) : ResourceObject
     {
         if (! $result instanceof ResourceObject) {
             $request->resourceObject->body = $result;
@@ -70,15 +68,9 @@ final class Invoker implements InvokerInterface
     /**
      * OPTIONS
      *
-     * @param ResourceObject  $ro
-     * @param AbstractRequest $request
-     * @param string          $method
-     *
      * @throws Exception\MethodNotAllowedException
-     *
-     * @return string
      */
-    private function invokeOptions(ResourceObject $ro, AbstractRequest $request, $method)
+    private function invokeOptions(ResourceObject $ro, AbstractRequest $request, string $method) : ResourceObject
     {
         if ($request->method == Request::OPTIONS) {
             return $this->optionsRenderer->render($ro);

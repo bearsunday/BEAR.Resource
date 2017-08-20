@@ -63,9 +63,6 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         return $ro;
     }
 
-    /**
-     * @return string
-     */
     private function validateRequest(JsonSchema $jsonSchema, ResourceObject $ro)
     {
         $schemaFile = $this->validateDir . '/' . $jsonSchema->params;
@@ -97,7 +94,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         throw new JsonSchemaException($schemaFile, Code::ERROR, $e);
     }
 
-    private function getSchemaFile(JsonSchema $jsonSchema, ResourceObject $ro)
+    private function getSchemaFile(JsonSchema $jsonSchema, ResourceObject $ro) : string
     {
         if (! $jsonSchema->schema) {
             // for BC only
@@ -114,10 +111,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         return $schemaFile;
     }
 
-    /**
-     * @param $schemaFile
-     */
-    private function validateFileExists($schemaFile)
+    private function validateFileExists(string $schemaFile)
     {
         if (! file_exists($schemaFile) || is_dir($schemaFile)) {
             throw new JsonSchemaNotFoundException($schemaFile);

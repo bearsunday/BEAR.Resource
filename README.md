@@ -421,13 +421,10 @@ $resource = unserialize($cachedResource);
 $news = $resource->get->uri('app://self/news')->request();
 ```
 
-## Requirements
- * PHP 5.6+
-
 ## Installation
 
 ```javascript
-composer require bear/resource ~1.0
+composer require bear/resource ^1.0
 ```
 
 ## A Resource Oriented Framework

@@ -393,17 +393,10 @@ HAL Moduleを使うとリソース表現が[HAL](http://stateless.co/hal_specifi
 
 ```
 
-### Requirements
- * PHP 5.6+
-
 ### Installation
 
 ```javascript
-{
-    "require": {
-        "bear/resource": "~1.0"
-    }
-}
+composer require bear/resource ^1.0
 ```
 
 ### A Resource Oriented Framework

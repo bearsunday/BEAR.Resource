@@ -65,13 +65,9 @@ final class AppAdapter implements AdapterInterface
     }
 
     /**
-     * @param AbstractUri $uri
-     * @param Unbound     $e
-     * @param string      $class
-     *
      * @return ResourceNotFoundException|Unbound
      */
-    private function getNotFound(AbstractUri $uri, Unbound $e, $class)
+    private function getNotFound(AbstractUri $uri, Unbound $e, string $class) : \Exception
     {
         $unboundClass = $e->getMessage();
         if ($unboundClass === "{$class}-") {

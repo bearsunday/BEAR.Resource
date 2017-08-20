@@ -6,6 +6,8 @@
  */
 namespace BEAR\Resource;
 
+use BEAR\Resource\Exception\MethodNotAllowedException;
+use BEAR\Resource\Exception\ParameterException;
 use BEAR\Resource\Interceptor\FakeLogInterceptor;
 use BEAR\Resource\Interceptor\Log;
 use BEAR\Resource\Mock\Comment;
@@ -58,29 +60,23 @@ class InvokerTest extends TestCase
         $this->assertSame($actual, $expected);
     }
 
-    /**
-     * @expectedException \BEAR\Resource\Exception\ParameterException
-     */
     public function testInvokerInterfaceDefaultParamWithNoProvider()
     {
+        $this->expectException(ParameterException::class);
         $request = new Request($this->invoker, new User, Request::PUT);
         $this->invoker->invoke($request);
     }
 
-    /**
-     * @expectedException \BEAR\Resource\Exception\ParameterException
-     */
     public function testInvokerInterfaceWithNoProvider()
     {
+        $this->expectException(ParameterException::class);
         $request = new Request($this->invoker, new Mock\Blog, Request::GET, []);
         $this->invoker->invoke($request);
     }
 
-    /**
-     * @expectedException \BEAR\Resource\Exception\ParameterException
-     */
     public function testInvokerInterfaceWithUnspecificProviderButNoResult()
     {
+        $this->expectException(ParameterException::class);
         $request = new Request($this->invoker, new Comment);
         $actual = $this->invoker->invoke($request);
         $this->assertSame('entry1', $actual);
@@ -177,30 +173,24 @@ class InvokerTest extends TestCase
         $this->assertSame($actual, $expected);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testInvokeExceptionHandle()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $outOfRangeId = 4;
         $request = new Request($this->invoker, new User, Request::GET, ['id' => $outOfRangeId]);
         $this->invoker->invoke($request);
     }
 
-    /**
-     * @expectedException \BEAR\Resource\Exception\MethodNotAllowedException
-     */
     public function testInvalidMethod()
     {
+        $this->expectException(MethodNotAllowedException::class);
         $request = new Request($this->invoker, new Order, Request::DELETE);
         $this->invoker->invoke($request);
     }
 
-    /**
-     * @expectedException \BEAR\Resource\Exception\MethodNotAllowedException
-     */
     public function testOptionsNotAllowed()
     {
+        $this->expectException(MethodNotAllowedException::class);
         $invoker = new Invoker(new NamedParameter(new ArrayCache, new AnnotationReader, new Injector), new VoidOptionsRenderer);
         $request = new Request($this->invoker, new Order, Request::DELETE);
         $invoker->invoke($request);

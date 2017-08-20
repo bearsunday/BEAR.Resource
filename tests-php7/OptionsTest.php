@@ -10,9 +10,10 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
 use FakeVendor\Sandbox\Resource\App\DocPhp7;
 use FakeVendor\Sandbox\Resource\App\DocUser;
+use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
-class OptionsTest extends \PHPUnit_Framework_TestCase
+class OptionsTest extends TestCase
 {
     /**
      * @var Invoker
