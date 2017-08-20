@@ -85,12 +85,7 @@ final class AppIterator implements \Iterator
         $this->i = 0;
     }
 
-    /**
-     * @param \Iterator $iterator
-     *
-     * @return array
-     */
-    private function getMetaCollection(\Iterator $iterator)
+    private function getMetaCollection(\Iterator $iterator) : array
     {
         $metaCollection = [];
         foreach ($iterator as $item) {
@@ -109,12 +104,7 @@ final class AppIterator implements \Iterator
         return $metaCollection;
     }
 
-    /**
-     * @param \SplFileInfo $item
-     *
-     * @return bool
-     */
-    private function isNotPhp(\SplFileInfo $item)
+    private function isNotPhp(\SplFileInfo $item) : bool
     {
         $isPhp = $item->isFile()
             && $item->getExtension() === 'php'

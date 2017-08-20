@@ -136,7 +136,7 @@ final class OptionsMethods
      *
      * @return array [$paramDoc, $required]
      */
-    private function getParameterMetas(array $parameters, array $paramDoc, array $ins)
+    private function getParameterMetas(array $parameters, array $paramDoc, array $ins) : array
     {
         $required = [];
         foreach ($parameters as $parameter) {
@@ -156,10 +156,7 @@ final class OptionsMethods
         return [$paramDoc, $required];
     }
 
-    /**
-     * @return array
-     */
-    private function paramDefault(array $paramDoc, \ReflectionParameter $parameter)
+    private function paramDefault(array $paramDoc, \ReflectionParameter $parameter) : array
     {
         $hasDefault = $parameter->isDefaultValueAvailable() && $parameter->getDefaultValue() !== null;
         if ($hasDefault) {
@@ -169,10 +166,7 @@ final class OptionsMethods
         return $paramDoc;
     }
 
-    /**
-     * @return array
-     */
-    private function paramType(array $paramDoc, \ReflectionParameter $parameter)
+    private function paramType(array $paramDoc, \ReflectionParameter $parameter) : array
     {
         $type = $this->getParameterType($parameter, $paramDoc, $parameter->name);
         if (is_string($type)) {
@@ -184,10 +178,8 @@ final class OptionsMethods
 
     /**
      * @param \ReflectionParameter $parameter
-     *
-     * @return string
      */
-    private function getType(\ReflectionParameter $parameter)
+    private function getType(\ReflectionParameter $parameter) : string
     {
         $type = (string) $parameter->getType();
         if ($type === 'int') {
@@ -197,10 +189,7 @@ final class OptionsMethods
         return $type;
     }
 
-    /**
-     * @return array
-     */
-    private function docBlogTags(array $tags, array $params)
+    private function docBlogTags(array $tags, array $params) : array
     {
         foreach ($tags as $tag) {
             /* @var $tag \phpDocumentor\Reflection\DocBlock\Tags\Param */
@@ -221,10 +210,8 @@ final class OptionsMethods
 
     /**
      * Ignore @ Assisted @ ResourceParam parameter
-     *
-     * @return array
      */
-    private function ignoreAnnotatedPrameter(\ReflectionMethod $method, array $paramMetas)
+    private function ignoreAnnotatedPrameter(\ReflectionMethod $method, array $paramMetas) : array
     {
         $annotations = $this->reader->getMethodAnnotations($method);
         foreach ($annotations as $annotation) {
@@ -242,10 +229,8 @@ final class OptionsMethods
 
     /**
      * Ignore @ Assisted parameter
-     *
-     * @return array
      */
-    private function ignorreAssisted(array $paramMetas, Assisted $annotation)
+    private function ignorreAssisted(array $paramMetas, Assisted $annotation) : array
     {
         $paramMetas['required'] = array_values(array_diff($paramMetas['required'], $annotation->values));
         foreach ($annotation->values as $varName) {
@@ -255,15 +240,15 @@ final class OptionsMethods
         return $paramMetas;
     }
 
-    private function getJsonSchema(\ReflectionMethod $method)
+    private function getJsonSchema(\ReflectionMethod $method) : array
     {
         $schema = $this->reader->getMethodAnnotation($method, JsonSchema::class);
         if (! $schema instanceof JsonSchema) {
-            return false;
+            return [];
         }
         $schemaFile = $this->schemaDir . '/' . $schema->schema;
         if (! file_exists($schemaFile)) {
-            return false;
+            return [];
         }
 
         return (array) json_decode(file_get_contents($schemaFile));

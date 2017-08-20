@@ -53,12 +53,12 @@ class HalRenderer implements RenderInterface
         $path = $uri->path . $query;
         $selfLink = $this->getReverseMatchedLink($path);
         $hal = new Hal($selfLink, $body);
-        $this->getHalLink($body, $annotations, $hal);
+        $this->addLinks($body, $annotations, $hal);
 
         return $hal;
     }
 
-    private function valuate(ResourceObject $ro)
+    private function valuate(ResourceObject $ro) : array
     {
         // HAL
         $body = $ro->body ?: [];
@@ -66,7 +66,7 @@ class HalRenderer implements RenderInterface
         return [$ro, $body];
     }
 
-    private function getHalLink(array $body, array $annotations, Hal $hal)
+    private function addLinks(array $body, array $annotations, Hal $hal)
     {
         foreach ($annotations as $annotation) {
             if ($annotation instanceof Link) {

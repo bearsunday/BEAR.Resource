@@ -17,9 +17,6 @@ final class Factory implements FactoryInterface
      */
     private $scheme;
 
-    /**
-     * @param SchemeCollectionInterface $scheme
-     */
     public function __construct(SchemeCollectionInterface $scheme)
     {
         $this->scheme = $scheme;
@@ -27,8 +24,6 @@ final class Factory implements FactoryInterface
 
     /**
      * Set scheme collection
-     *
-     * @param SchemeCollectionInterface $scheme
      *
      * @Inject(optional = true)
      * @codeCoverageIgnore
@@ -49,8 +44,7 @@ final class Factory implements FactoryInterface
             $uri = new Uri($uri);
         }
         $adapter = $this->scheme->getAdapter($uri);
-        $resourceObject = $adapter->get($uri);
 
-        return $resourceObject;
+        return $adapter->get($uri);
     }
 }

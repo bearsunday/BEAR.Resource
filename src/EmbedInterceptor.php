@@ -80,13 +80,7 @@ final class EmbedInterceptor implements MethodInterceptor
         }
     }
 
-    /**
-     * @param string         $uri
-     * @param ResourceObject $resourceObject
-     *
-     * @return string
-     */
-    private function getFullUri($uri, ResourceObject $resourceObject)
+    private function getFullUri(string $uri, ResourceObject $resourceObject) : string
     {
         if ($uri[0] === '/') {
             $uri = "{$resourceObject->uri->scheme}://{$resourceObject->uri->host}" . $uri;
@@ -95,12 +89,7 @@ final class EmbedInterceptor implements MethodInterceptor
         return $uri;
     }
 
-    /**
-     * @param MethodInvocation $invocation
-     *
-     * @return array
-     */
-    private function getArgsByInvocation(MethodInvocation $invocation)
+    private function getArgsByInvocation(MethodInvocation $invocation) : array
     {
         $args = $invocation->getArguments()->getArrayCopy();
         $params = $invocation->getMethod()->getParameters();
