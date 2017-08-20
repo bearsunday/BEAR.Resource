@@ -59,7 +59,7 @@ class InvokerTest extends TestCase
     }
 
     /**
-     * @expectedException \BEAR\Resource\Exception\ParameterException
+     * @expectException \BEAR\Resource\Exception\ParameterException
      */
     public function testInvokerInterfaceDefaultParamWithNoProvider()
     {
@@ -68,7 +68,7 @@ class InvokerTest extends TestCase
     }
 
     /**
-     * @expectedException \BEAR\Resource\Exception\ParameterException
+     * @expectException \BEAR\Resource\Exception\ParameterException
      */
     public function testInvokerInterfaceWithNoProvider()
     {
@@ -77,7 +77,7 @@ class InvokerTest extends TestCase
     }
 
     /**
-     * @expectedException \BEAR\Resource\Exception\ParameterException
+     * @expectException \BEAR\Resource\Exception\ParameterException
      */
     public function testInvokerInterfaceWithUnspecificProviderButNoResult()
     {
@@ -178,7 +178,7 @@ class InvokerTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectException \InvalidArgumentException
      */
     public function testInvokeExceptionHandle()
     {
@@ -188,7 +188,7 @@ class InvokerTest extends TestCase
     }
 
     /**
-     * @expectedException \BEAR\Resource\Exception\MethodNotAllowedException
+     * @expectException \BEAR\Resource\Exception\MethodNotAllowedException
      */
     public function testInvalidMethod()
     {
@@ -197,7 +197,7 @@ class InvokerTest extends TestCase
     }
 
     /**
-     * @expectedException \BEAR\Resource\Exception\MethodNotAllowedException
+     * @expectException \BEAR\Resource\Exception\MethodNotAllowedException
      */
     public function testOptionsNotAllowed()
     {

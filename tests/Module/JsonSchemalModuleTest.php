@@ -12,9 +12,10 @@ use BEAR\Resource\JsonSchema\FakeUser;
 use BEAR\Resource\JsonSchema\FakeUsers;
 use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Uri;
+use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
-class JsonSchemalModuleTest extends \PHPUnit_Framework_TestCase
+class JsonSchemalModuleTest extends TestCase
 {
     public function testValid()
     {
@@ -60,7 +61,7 @@ class JsonSchemalModuleTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \BEAR\Resource\Exception\JsonSchemaNotFoundException
+     * @expectException \BEAR\Resource\Exception\JsonSchemaNotFoundException
      */
     public function testException()
     {
@@ -72,11 +73,11 @@ class JsonSchemalModuleTest extends \PHPUnit_Framework_TestCase
     {
         $ro = $this->createRo(FakeUser::class);
         $ro->onPut();
-        $this->isInstanceOf($ro, ResourceObject::class);
+        $this->assertInstanceOf(ResourceObject::class, $ro);
     }
 
     /**
-     * @expectedException \BEAR\Resource\Exception\JsonSchemaNotFoundException
+     * @expectException \BEAR\Resource\Exception\JsonSchemaNotFoundException
      */
     public function invalidRequestTest()
     {

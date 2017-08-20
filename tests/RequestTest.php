@@ -80,7 +80,7 @@ class RequestTest extends TestCase
 
     public function testOffsetSet()
     {
-        $this->setExpectedException(OutOfBoundsException::class);
+        $this->expectException(OutOfBoundsException::class);
         $request = new Request(
             $this->invoker,
             new FakeNopResource,
@@ -92,7 +92,7 @@ class RequestTest extends TestCase
 
     public function testOffsetUnset()
     {
-        $this->setExpectedException(OutOfBoundsException::class);
+        $this->expectException(OutOfBoundsException::class);
         $request = new Request(
             $this->invoker,
             new FakeNopResource,
@@ -177,7 +177,7 @@ class RequestTest extends TestCase
 
     public function testArrayAccessNotExists()
     {
-        $this->setExpectedException(OutOfBoundsException::class);
+        $this->expectException(OutOfBoundsException::class);
         $request = new Request(
             $this->invoker,
             new Entry
@@ -219,7 +219,7 @@ class RequestTest extends TestCase
 
     public function testInvalidMethod()
     {
-        $this->setExpectedException(MethodException::class);
+        $this->expectException(MethodException::class);
         new Request($this->invoker, new Entry, 'invalid-method');
     }
 

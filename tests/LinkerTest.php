@@ -251,7 +251,7 @@ class LinkerTest extends TestCase
 
     public function testScalarValueLinkThrowException()
     {
-        $this->setExpectedException(LinkQueryException::class);
+        $this->expectException(LinkQueryException::class);
         $request = new Request(
             $this->invoker,
             new Name,
@@ -264,7 +264,7 @@ class LinkerTest extends TestCase
 
     public function testInvalidRel()
     {
-        $this->setExpectedException(LinkRelException::class);
+        $this->expectException(LinkRelException::class);
         $request = new Request(
             $this->invoker,
             new Author,

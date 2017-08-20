@@ -9,9 +9,10 @@ namespace Module;
 use BEAR\Resource\Module\ResourceModule;
 use BEAR\Resource\Resource;
 use BEAR\Resource\ResourceInterface;
+use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
-class ResourceModuleTest extends \PHPUnit_Framework_TestCase
+class ResourceModuleTest extends TestCase
 {
     public function setUp()
     {

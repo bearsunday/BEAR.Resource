@@ -33,7 +33,7 @@ class AppAdapterTest extends TestCase
     }
 
     /**
-     * @expectedException \BEAR\Resource\Exception\ResourceNotFoundException
+     * @expectException \BEAR\Resource\Exception\ResourceNotFoundException
      */
     public function testNotFound()
     {
@@ -49,7 +49,7 @@ class AppAdapterTest extends TestCase
     }
 
     /**
-     * @expectedException \BEAR\Resource\Exception\ResourceNotFoundException
+     * @expectException \BEAR\Resource\Exception\ResourceNotFoundException
      */
     public function testNotFoundWithCompiler()
     {

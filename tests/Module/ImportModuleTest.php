@@ -10,9 +10,10 @@ use BEAR\Resource\ImportApp;
 use BEAR\Resource\Module\ImportAppModule;
 use BEAR\Resource\ResourceInterface;
 use FakeVendor\Sandbox\Module\AppModule;
+use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
-class ImportModuleTest extends \PHPUnit_Framework_TestCase
+class ImportModuleTest extends TestCase
 {
     public function setUp()
     {

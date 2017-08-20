@@ -14,7 +14,7 @@ use Ray\Di\Injector;
 class VoidOptionsRendererTest extends TestCase
 {
     /**
-     * @expectedException \BEAR\Resource\Exception\MethodNotAllowedException
+     * @expectException \BEAR\Resource\Exception\MethodNotAllowedException
      */
     public function testVoidOptionsRenderer()
     {

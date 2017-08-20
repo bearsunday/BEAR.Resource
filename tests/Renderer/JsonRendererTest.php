@@ -6,7 +6,9 @@
  */
 namespace BEAR\Resource;
 
-class JsonRendererTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class JsonRendererTest extends TestCase
 {
     /**
      * @var

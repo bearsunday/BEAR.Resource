@@ -41,7 +41,7 @@ class NamedParameterTest extends TestCase
     }
 
     /**
-     * @expectedException \BEAR\Resource\Exception\ParameterException
+     * @expectException \BEAR\Resource\Exception\ParameterException
      */
     public function testParameterException()
     {
@@ -73,7 +73,7 @@ class NamedParameterTest extends TestCase
     }
 
     /**
-     * @expectedException \BEAR\Resource\Exception\ParameterException
+     * @expectException \BEAR\Resource\Exception\ParameterException
      */
     public function testParameterWebContextNotExits()
     {
@@ -94,7 +94,7 @@ class NamedParameterTest extends TestCase
     }
 
     /**
-     * @expectedException \BEAR\Resource\Exception\ParameterException
+     * @expectException \BEAR\Resource\Exception\ParameterException
      */
     public function testParameterWebContexRequiredNotGiven()
     {

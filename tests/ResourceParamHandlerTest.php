@@ -37,7 +37,7 @@ class ResourceParamHandlerTest extends TestCase
     }
 
     /**
-     * @expectedException \BEAR\Resource\Exception\ParameterException
+     * @expectException \BEAR\Resource\Exception\ParameterException
      */
     public function testException()
     {
