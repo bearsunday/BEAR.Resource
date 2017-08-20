@@ -6,6 +6,7 @@
  */
 namespace BEAR\Resource;
 
+use BEAR\Resource\Exception\ParameterException;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
 use PHPUnit\Framework\TestCase;
@@ -40,11 +41,9 @@ class NamedParameterTest extends TestCase
         $this->assertSame([1, 'koriym'], $args);
     }
 
-    /**
-     * @expectException \BEAR\Resource\Exception\ParameterException
-     */
     public function testParameterException()
     {
+        $this->expectException(ParameterException::class);
         $object = new FakeParamResource;
         $namedArgs = [];
         $this->params->getParameters([$object, 'onGet'], $namedArgs);
@@ -72,11 +71,9 @@ class NamedParameterTest extends TestCase
         $this->assertSame($expected, $args);
     }
 
-    /**
-     * @expectException \BEAR\Resource\Exception\ParameterException
-     */
     public function testParameterWebContextNotExits()
     {
+        $this->expectException(ParameterException::class);
         AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose([]);
         $object = new FakeParamResource;
         $args = $this->params->getParameters([$object, 'onPut'], ['cookie' => 1]); // should be ignored
@@ -93,11 +90,9 @@ class NamedParameterTest extends TestCase
         $this->assertSame($expected, $args);
     }
 
-    /**
-     * @expectException \BEAR\Resource\Exception\ParameterException
-     */
     public function testParameterWebContexRequiredNotGiven()
     {
+        $this->expectException(ParameterException::class);
         AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose([]);
         $object = new FakeParamResource;
         $args = $this->params->getParameters([$object, 'onDelete'], []);

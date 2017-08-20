@@ -6,6 +6,7 @@
  */
 namespace BEAR\Resource;
 
+use BEAR\Resource\Exception\ResourceNotFoundException;
 use FakeVendor\Sandbox\Module\AppModule;
 use FakeVendor\Sandbox\Resource\Page\Index;
 use PHPUnit\Framework\TestCase;
@@ -32,12 +33,10 @@ class AppAdapterTest extends TestCase
         $this->assertInstanceOf(Index::class, $index);
     }
 
-    /**
-     * @expectException \BEAR\Resource\Exception\ResourceNotFoundException
-     */
     public function testNotFound()
     {
-        $index = $this->appAdapter->get(new Uri('page://self/__not_found__'));
+        $this->expectException(ResourceNotFoundException::class);
+        $this->appAdapter->get(new Uri('page://self/__not_found__'));
     }
 
     public function testGetWithCompiler()
@@ -48,11 +47,9 @@ class AppAdapterTest extends TestCase
         $this->assertInstanceOf(Index::class, $index);
     }
 
-    /**
-     * @expectException \BEAR\Resource\Exception\ResourceNotFoundException
-     */
     public function testNotFoundWithCompiler()
     {
+        $this->expectException(ResourceNotFoundException::class);
         $scriptDir = __DIR__ . '/tmp';
         $compiler = new DiCompiler(new AppModule, $scriptDir);
         $compiler->compile();

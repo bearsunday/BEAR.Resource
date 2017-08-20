@@ -7,6 +7,7 @@
 namespace BEAR\Resource\Module;
 
 use BEAR\Resource\Exception\JsonSchemaException;
+use BEAR\Resource\Exception\JsonSchemaNotFoundException;
 use BEAR\Resource\JsonSchema\FakePerson;
 use BEAR\Resource\JsonSchema\FakeUser;
 use BEAR\Resource\JsonSchema\FakeUsers;
@@ -60,11 +61,9 @@ class JsonSchemalModuleTest extends TestCase
         $this->assertSame($expected, $errors);
     }
 
-    /**
-     * @expectException \BEAR\Resource\Exception\JsonSchemaNotFoundException
-     */
     public function testException()
     {
+        $this->expectException(JsonSchemaNotFoundException::class);
         $ro = $this->createRo(FakeUser::class);
         $ro->onPost();
     }
@@ -76,11 +75,9 @@ class JsonSchemalModuleTest extends TestCase
         $this->assertInstanceOf(ResourceObject::class, $ro);
     }
 
-    /**
-     * @expectException \BEAR\Resource\Exception\JsonSchemaNotFoundException
-     */
     public function invalidRequestTest()
     {
+        $this->expectException(JsonSchemaNotFoundException::class);
         $ro = $this->createRo(FakeUser::class);
         $ro->onPatch();
     }

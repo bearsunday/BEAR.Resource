@@ -6,6 +6,7 @@
  */
 namespace BEAR\Resource;
 
+use BEAR\Resource\Exception\ParameterException;
 use BEAR\Resource\Module\ResourceModule;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
@@ -36,11 +37,9 @@ class ResourceParamHandlerTest extends TestCase
         $this->assertSame('login:BEAR', $instance['id']);
     }
 
-    /**
-     * @expectException \BEAR\Resource\Exception\ParameterException
-     */
     public function testException()
     {
+        $this->expectException(ParameterException::class);
         $this->resource->put->uri('app://self/rparam/greeting')->eager->request();
     }
 
