@@ -16,10 +16,10 @@
         }
     ],
     "require": {
-        "php": ">=5.6.0",
+        "php": ">=7.0.0",
         "ray/di": "^2.6.1",
         "nocarrier/hal":"^0.9.12",
-        "doctrine/cache":"^1.6",
+        "doctrine/cache":"^1.7",
         "rize/uri-template": "^0.3",
         "phpdocumentor/reflection-docblock": "^3.1",
         "koriym/http-constants": "^1.0",
