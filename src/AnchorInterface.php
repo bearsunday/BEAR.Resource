@@ -11,9 +11,9 @@ interface AnchorInterface
     /**
      * Return linked request with hyper reference
      *
-     * @param string          $rel
-     * @param AbstractRequest $request
-     * @param array           $query
+     * @param string          $rel     Realaction
+     * @param AbstractRequest $request Resource request
+     * @param array           $query   Resource parameters
      *
      * @return mixed
      */
