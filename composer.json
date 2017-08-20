@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": ">=5.6.0",
-        "ray/di": "^2.5",
+        "ray/di": "^2.6.1",
         "nocarrier/hal":"^0.9.12",
         "doctrine/cache":"^1.6",
         "rize/uri-template": "^0.3",
@@ -27,9 +27,7 @@
         "justinrainbow/json-schema": "^5.2"
     },
     "require-dev": {
-        "phpunit/phpunit": "~5.7 < 6.0",
-        "squizlabs/php_codesniffer": "^2.8",
-        "phpmd/phpmd": "^2.6"
+        "phpunit/phpunit": "^6.0"
     },
     "conflict": {
         "phpdocumentor/reflection-docblock": "<3.0||>=3.2.0"
