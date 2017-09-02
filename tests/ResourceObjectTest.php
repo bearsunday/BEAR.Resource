@@ -52,6 +52,6 @@ class ResourceObjectTest extends TestCase
         $this->assertContains('public $code =>', $actual);
         $this->assertContains('public $headers =>', $actual);
         $this->assertContains('public $body =>', $actual);
-        $this->assertContains('public $view =>,', $actual);
+        $this->assertContains('public $view =>', $actual);
     }
 }
