@@ -49,9 +49,9 @@ class ResourceObjectTest extends TestCase
         ob_start();
         var_dump($ro);
         $actual = ob_get_clean();
-        $this->assertContains('public $code =>', $actual);
-        $this->assertContains('public $headers =>', $actual);
-        $this->assertContains('public $body =>', $actual);
-        $this->assertContains('public $view =>', $actual);
+        $this->assertContains('code', $actual);
+        $this->assertContains('headers', $actual);
+        $this->assertContains('body', $actual);
+        $this->assertContains('view', $actual);
     }
 }
