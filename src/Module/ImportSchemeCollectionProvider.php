@@ -6,6 +6,7 @@
  */
 namespace BEAR\Resource\Module;
 
+use BEAR\Package\AppInjector;
 use BEAR\Resource\Annotation\AppName;
 use BEAR\Resource\Annotation\ImportAppConfig;
 use BEAR\Resource\AppAdapter;
@@ -54,7 +55,9 @@ class ImportSchemeCollectionProvider implements ProviderInterface
     {
         $schemeCollection = (new SchemeCollectionProvider($this->appName, $this->injector))->get();
         foreach ($this->importAppConfig as $importApp) {
-            $adapter = new AppAdapter($this->injector, $importApp->appName);
+            /* @var \BEAR\Resource\ImportApp */
+            $injector = class_exists(AppInjector::class) ? new AppInjector($importApp->appName, $importApp->context) : $this->injector;
+            $adapter = new AppAdapter($injector, $importApp->appName);
             $schemeCollection
                 ->scheme('page')->host($importApp->host)->toAdapter($adapter)
                 ->scheme('app')->host($importApp->host)->toAdapter($adapter);
