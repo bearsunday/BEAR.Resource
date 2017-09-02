@@ -42,4 +42,27 @@ class ResourceObjectTest extends TestCase
         $expected = '{"php":"7","user":{"name":"Aramis","age":16,"blog_id":12}}';
         $this->assertSame($expected, $json);
     }
+
+    public function testDebugInfo()
+    {
+        $ro = new FakeFreeze;
+        ob_start();
+        var_dump($ro);
+        $actual = ob_get_clean();
+        $this->assertContains('{
+  public $code =>
+  int(201)
+  public $headers =>
+  array(1) {
+    \'content-type\' =>
+    string(16) "application/json"
+  }
+  public $body =>
+  array(2) {
+    \'php\' =>
+    string(1) "7"', $actual);
+        $this->assertContains('  public $view =>
+  string(58) "{"php":"7","user":{"name":"Aramis","age":16,"blog_id":12}}"
+}', $actual);
+    }
 }
