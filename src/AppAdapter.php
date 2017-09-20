@@ -52,8 +52,7 @@ final class AppAdapter implements AdapterInterface
         if (substr($uri->path, -1) === '/') {
             $uri->path .= 'index';
         }
-        // dirty hack for hhvm bug https://github.com/facebook/hhvm/issues/6368
-        $path = ! defined('HHVM_VERSION') ? str_replace('-', '', ucwords($uri->path, '/-')) : str_replace(' ', '\\', substr(ucwords(str_replace('/', ' ', ' ' . str_replace(' ', '', ucwords(str_replace('-', ' ', $uri->path))))), 1));
+        $path = str_replace('-', '', ucwords($uri->path, '/-'));
         $class = sprintf('%s%s\Resource\%s', $this->namespace, $this->path, str_replace('/', '\\', ucwords($uri->scheme) . $path));
         try {
             $instance = $this->injector->getInstance($class);
