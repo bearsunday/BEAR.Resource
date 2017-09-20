@@ -32,8 +32,11 @@ final class Request extends AbstractRequest
 
             return $this;
         }
+        if ($name === 'code' || $name === 'headers' || $name === 'body') {
+            return parent::__get($name);
+        }
 
-        return parent::__get($name);
+        throw new \OutOfRangeException($name);
     }
 
     /**

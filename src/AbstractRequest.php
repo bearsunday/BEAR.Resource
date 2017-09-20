@@ -150,23 +150,9 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
 
     public function __get($name)
     {
-        if ($name === 'code') {
-            $this->result = $this->invoke();
+        $this->result = $this->invoke();
 
-            return $this->result->code;
-        }
-        if ($name === 'headers') {
-            $this->result = $this->invoke();
-
-            return $this->result->headers;
-        }
-        if ($name === 'body') {
-            $this->result = $this->invoke();
-
-            return $this->result->body;
-        }
-
-        throw new \OutOfRangeException($name);
+        return $this->result->$name;
     }
 
     /**
