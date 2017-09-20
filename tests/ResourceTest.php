@@ -114,26 +114,88 @@ class ResourceTest extends TestCase
 
     public function testLinkSelf()
     {
-        $request = $this->resource->get->uri('app://self/author')->linkSelf('blog')->request();
+        $request = $this->resource->get->uri('app://self/author')->withQuery(['id' => 1])->linkSelf('blog')->request();
         /* @var $request Request */
         $this->assertSame('blog', $request->links[0]->key);
         $this->assertSame(LinkType::SELF_LINK, $request->links[0]->type);
+        $ro = $request();
+        $v = var_export($ro->body, true);
+        $this->assertSame(200, $ro->code);
+        $this->assertSame(['id' => 12, 'name' => 'Aramis blog'], $ro->body);
     }
 
     public function testLinkNew()
     {
-        $request = $this->resource->get->uri('app://self/author')->linkNew('blog')->request();
+        $request = $this->resource->get->uri('app://self/author')->withQuery(['id' => 1])->linkNew('blog')->request();
         /* @var $request Request */
         $this->assertSame('blog', $request->links[0]->key);
         $this->assertSame(LinkType::NEW_LINK, $request->links[0]->type);
+        $ro = $request();
+        $this->assertSame(200, $ro->code);
+        $this->assertSame(
+            [
+                'name' => 'Aramis',
+                'age' => 16,
+                'blog_id' => 12,
+                'blog' => ['id' => 12, 'name' => 'Aramis blog']
+            ], $ro->body);
     }
 
     public function testLinkCrawl()
     {
-        $request = $this->resource->get->uri('app://self/author')->linkCrawl('blog')->request();
+        $request = $this->resource->get->uri('app://self/blog')->withQuery(['id' => 11])->linkCrawl('tree')->request();
         /* @var $request Request */
-        $this->assertSame('blog', $request->links[0]->key);
+        $this->assertSame('tree', $request->links[0]->key);
         $this->assertSame(LinkType::CRAWL_LINK, $request->links[0]->type);
+        $ro = $request();
+        $this->assertSame(200, $ro->code);
+        $expected = [
+            'id' => 11,
+            'name' => 'Athos blog',
+            'post' => [
+                'id' => '1',
+                'author_id' => '1',
+                'body' => 'Anna post #1',
+                'meta' => [
+                    0 => [
+                        'id' => '1',
+                        'post_id' => '1',
+                        'data' => 'meta 1'
+                    ],
+                ],
+                'tag' => [
+                    0 => [
+                        'id' => '1',
+                        'post_id' => '1',
+                        'tag_id' => '1',
+                        'tag_name' => [
+                            0 => [
+                                'id' => '1',
+                                'name' => 'zim'
+                            ],
+                        ],
+                        'tag_type' => [
+                            0 => 'type1'
+                        ],
+                    ],
+                    1 => [
+                        'id' => '2',
+                        'post_id' => '1',
+                        'tag_id' => '2',
+                        'tag_name' => [
+                            0 => [
+                                'id' => '2',
+                                'name' => 'dib'
+                            ],
+                        ],
+                        'tag_type' => [
+                            0 => 'type1'
+                        ],
+                    ],
+                ]
+            ],
+        ];
+        $this->assertSame($expected, $ro->body);
     }
 
     public function testHal()
