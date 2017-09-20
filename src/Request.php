@@ -27,9 +27,13 @@ final class Request extends AbstractRequest
      */
     public function __get($name)
     {
-        $this->in = $name;
+        if ($name === 'eager' || $name === 'lazy') {
+            $this->in = $name;
 
-        return $this;
+            return $this;
+        }
+
+        return parent::__get($name);
     }
 
     /**
