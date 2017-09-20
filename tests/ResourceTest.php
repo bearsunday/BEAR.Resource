@@ -138,7 +138,9 @@ class ResourceTest extends TestCase
                 'age' => 16,
                 'blog_id' => 12,
                 'blog' => ['id' => 12, 'name' => 'Aramis blog']
-            ], $ro->body);
+            ],
+            $ro->body
+        );
     }
 
     public function testLinkCrawl()
