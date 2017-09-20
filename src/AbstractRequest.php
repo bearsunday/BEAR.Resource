@@ -9,6 +9,12 @@ namespace BEAR\Resource;
 use BEAR\Resource\Exception\MethodException;
 use BEAR\Resource\Exception\OutOfBoundsException;
 
+/**
+ * @property string code
+ * @property array headers
+ * @property mixed body
+ * @property string view
+ */
 abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \IteratorAggregate, \Serializable
 {
     const GET = 'get';
@@ -140,6 +146,13 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
         }
 
         return $this->invoker->invoke($this);
+    }
+
+    public function __get($name)
+    {
+        $this->result = $this->invoke();
+
+        return $this->result->$name;
     }
 
     /**

@@ -27,9 +27,16 @@ final class Request extends AbstractRequest
      */
     public function __get($name)
     {
-        $this->in = $name;
+        if ($name === 'eager' || $name === 'lazy') {
+            $this->in = $name;
 
-        return $this;
+            return $this;
+        }
+        if ($name === 'code' || $name === 'headers' || $name === 'body') {
+            return parent::__get($name);
+        }
+
+        throw new \OutOfRangeException($name);
     }
 
     /**

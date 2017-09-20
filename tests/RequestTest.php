@@ -244,4 +244,47 @@ class RequestTest extends TestCase
         $ro = unserialize(serialize($this->request));
         $this->assertInstanceOf(AbstractRequest::class, $ro);
     }
+
+    public function testCode()
+    {
+        $request = new Request(
+            $this->invoker,
+            $this->fake,
+            Request::GET,
+            ['a' => 'koriym', 'b' => 25]
+        );
+        $newRequest = clone $request;
+        $code = $newRequest->code;
+        $this->assertSame(200, $code);
+
+        return $request;
+    }
+
+    /**
+     * @depends testCode
+     */
+    public function testHeaders(Request $request)
+    {
+        $headers = $request->headers;
+        $this->assertSame([], $headers);
+    }
+
+    /**
+     * @depends testCode
+     */
+    public function testBody(Request $request)
+    {
+        $body = $request->body;
+        $expected = ['posts' => ['koriym', 25]];
+        $this->assertSame($expected, $body);
+    }
+
+    /**
+     * @depends testCode
+     */
+    public function testInvalidProp(Request $request)
+    {
+        $this->expectException(\OutOfRangeException::class);
+        $request->__invalid__;
+    }
 }
