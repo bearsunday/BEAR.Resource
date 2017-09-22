@@ -54,7 +54,6 @@ final class JsonSchemaInterceptor implements MethodInterceptor
             $arguments = $this->getNamedArguments($invocation);
             $this->validateRequest($jsonSchema, $arguments);
         }
-
         /* @var $ro ResourceObject */
         $ro = $invocation->proceed();
         if ($ro->code !== 200) {
