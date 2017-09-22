@@ -14,9 +14,11 @@ class FakeUser extends ResourceObject
 {
     /**
      * @JsonSchema(schema="user.json", params="user.get.json")
+     * {@SuppressWarnings("unused")}
      */
-    public function onGet($age)
+    public function onGet($age, $gender = 'male')
     {
+        // in practical codes, an argument $gender may be consumed internally.
         $name = [
             'firstName' => 'mucha',
             'lastName' => 'alfons'

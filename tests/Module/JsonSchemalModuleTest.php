@@ -68,6 +68,19 @@ class JsonSchemalModuleTest extends TestCase
         $ro->onPost();
     }
 
+    public function testParameterException()
+    {
+        $caughtException = null;
+        $ro = $this->createRo(FakeUser::class);
+        try {
+            $ro->onGet(30, 'invalid gender');
+        } catch (JsonSchemaException $e) {
+            $caughtException = $e;
+        }
+        $this->assertEmpty($ro->body);
+        $this->assertInstanceOf(JsonSchemaException::class, $caughtException);
+    }
+
     public function testWorksOnlyCode200()
     {
         $ro = $this->createRo(FakeUser::class);
