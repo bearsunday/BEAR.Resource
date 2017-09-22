@@ -123,7 +123,6 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     {
         $parameters = $invocation->getMethod()->getParameters();
         $values = $invocation->getArguments();
-
         $arguments = [];
         foreach ($parameters as $index => $parameter) {
             $arguments[$parameter->name] = $values[$index] ?? $parameter->getDefaultValue();
