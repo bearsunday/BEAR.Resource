@@ -50,7 +50,6 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     {
         /* @var $jsonSchema JsonSchema */
         $jsonSchema = $invocation->getMethod()->getAnnotation(JsonSchema::class);
-
         if ($jsonSchema->params) {
             $arguments = $this->getNamedArguments($invocation);
             $this->validateRequest($jsonSchema, $arguments);
