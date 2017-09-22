@@ -48,26 +48,27 @@ final class JsonSchemaInterceptor implements MethodInterceptor
      */
     public function invoke(MethodInvocation $invocation)
     {
+        /* @var $jsonSchema JsonSchema */
+        $jsonSchema = $invocation->getMethod()->getAnnotation(JsonSchema::class);
+        if ($jsonSchema->params) {
+            $arguments = $this->getNamedArguments($invocation);
+            $this->validateRequest($jsonSchema, $arguments);
+        }
+        /* @var $ro ResourceObject */
         $ro = $invocation->proceed();
-        /* @var $ro \BEAR\Resource\ResourceObject */
         if ($ro->code !== 200) {
             return $ro;
-        }
-        $jsonSchema = $invocation->getMethod()->getAnnotation(JsonSchema::class);
-        /* @var $jsonSchema JsonSchema */
-        if ($jsonSchema->params) {
-            $this->validateRequest($jsonSchema, $ro);
         }
         $this->validateResponse($jsonSchema, $ro);
 
         return $ro;
     }
 
-    private function validateRequest(JsonSchema $jsonSchema, ResourceObject $ro)
+    private function validateRequest(JsonSchema $jsonSchema, array $arguments)
     {
         $schemaFile = $this->validateDir . '/' . $jsonSchema->params;
         $this->validateFileExists($schemaFile);
-        $this->validate($ro->uri->query, $schemaFile);
+        $this->validate($arguments, $schemaFile);
     }
 
     private function validateResponse(JsonSchema $jsonSchema, ResourceObject $ro)
@@ -116,5 +117,17 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         if (! file_exists($schemaFile) || is_dir($schemaFile)) {
             throw new JsonSchemaNotFoundException($schemaFile);
         }
+    }
+
+    private function getNamedArguments(MethodInvocation $invocation)
+    {
+        $parameters = $invocation->getMethod()->getParameters();
+        $values = $invocation->getArguments();
+        $arguments = [];
+        foreach ($parameters as $index => $parameter) {
+            $arguments[$parameter->name] = $values[$index] ?? $parameter->getDefaultValue();
+        }
+
+        return $arguments;
     }
 }
