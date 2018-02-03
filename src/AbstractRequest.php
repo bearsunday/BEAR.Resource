@@ -148,6 +148,9 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
         return $this->invoker->invoke($this);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function __get($name)
     {
         $this->result = $this->invoke();
