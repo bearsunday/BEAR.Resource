@@ -8,7 +8,7 @@ namespace BEAR\Resource;
 
 use phpDocumentor\Reflection\DocBlockFactory;
 
-final class OptionsMethodsDocBolck
+final class OptionsMethodDocBolck
 {
     /**
      * Return docBloc and parameter metas of method
