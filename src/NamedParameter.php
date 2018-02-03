@@ -83,7 +83,63 @@ final class NamedParameter implements NamedParameterInterface
     {
         $method = new \ReflectionMethod($callable[0], $callable[1]);
         $parameters = $method->getParameters();
-        list($assistedNames, $webcontext) = $this->setAssistedParam($method);
+        $annotations = $this->reader->getMethodAnnotations($method);
+        $assistedNames = $this->getAssistedNames($annotations);
+        $webContext = $this->getWebContext($annotations);
+        $namedParamMetas = $this->addNamedParams($parameters, $assistedNames, $webContext);
+
+        return $namedParamMetas;
+    }
+
+    private function getAssistedNames(array $annotations) : array
+    {
+        $names = [];
+        foreach ($annotations as $annotation) {
+            if ($annotation instanceof ResourceParam) {
+                $names[$annotation->param] = new AssistedResourceParam($annotation);
+            }
+            if ($annotation instanceof Assisted) {
+                $names = $this->setAssistedAnnotation($names, $annotation);
+            }
+        }
+
+        return $names;
+    }
+
+    private function getWebContext(array $annotations) : array
+    {
+        $webcontext = [];
+        foreach ($annotations as $annotation) {
+            if ($annotation instanceof AbstractWebContextParam) {
+                $webcontext[$annotation->param] = $annotation;
+            }
+        }
+
+        return $webcontext;
+    }
+
+    /**
+     * Set AssistedParam objects
+     s     */
+    private function setAssistedAnnotation(array $names, Assisted $assisted) : array
+    {
+        /* @var $annotation Assisted */
+        foreach ($assisted->values as $assistedParam) {
+            $names[$assistedParam] = new AssistedParam;
+        }
+
+        return $names;
+    }
+
+    /**
+     * @param \ReflectionParameter[] $parameters
+     * @param array                  $assistedNames
+     * @param array                  $webcontext
+     *
+     * @return array
+     */
+    private function addNamedParams(array $parameters, array $assistedNames, array $webcontext) : array
+    {
         $names = [];
         foreach ($parameters as $parameter) {
             if (isset($assistedNames[$parameter->name])) {
@@ -96,41 +152,6 @@ final class NamedParameter implements NamedParameterInterface
                 continue;
             }
             $names[$parameter->name] = $parameter->isDefaultValueAvailable() === true ? new OptionalParam($parameter->getDefaultValue()) : new RequiredParam;
-        }
-
-        return $names;
-    }
-
-    /**
-     * Set "method injection" parameter
-     */
-    private function setAssistedParam(\ReflectionMethod $method) : array
-    {
-        $names = $webcontext = [];
-        $annotations = $this->reader->getMethodAnnotations($method);
-        foreach ($annotations as $annotation) {
-            if ($annotation instanceof ResourceParam) {
-                $names[$annotation->param] = new AssistedResourceParam($annotation);
-            }
-            if ($annotation instanceof Assisted) {
-                $names = $this->setAssistedAnnotation($names, $annotation);
-            }
-            if ($annotation instanceof AbstractWebContextParam) {
-                $webcontext[$annotation->param] = $annotation;
-            }
-        }
-
-        return [$names, $webcontext];
-    }
-
-    /**
-     * Set AssistedParam objects
-     s     */
-    private function setAssistedAnnotation(array $names, Assisted $assisted) : array
-    {
-        /* @var $annotation Assisted */
-        foreach ($assisted->values as $assistedParam) {
-            $names[$assistedParam] = new AssistedParam;
         }
 
         return $names;
