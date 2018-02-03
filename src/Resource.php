@@ -104,11 +104,7 @@ final class Resource implements ResourceInterface
      */
     public function object($resourceObject)
     {
-        return new Request(
-            $this->invoker,
-            $resourceObject,
-            $this->method
-        );
+        return new Request($this->invoker, $resourceObject, $this->method);
     }
 
     /**
@@ -125,14 +121,7 @@ final class Resource implements ResourceInterface
         $uri->method = $this->method;
         $resourceObject = $this->newInstance($uri);
         $resourceObject->uri = $uri;
-        $this->request = new Request(
-            $this->invoker,
-            $resourceObject,
-            $uri->method,
-            $uri->query,
-            [],
-            $this->linker
-        );
+        $this->request = new Request($this->invoker, $resourceObject, $uri->method, $uri->query, [], $this->linker);
         $this->method = 'get';
 
         return $this->request;
