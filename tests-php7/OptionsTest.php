@@ -8,6 +8,7 @@ namespace BEAR\Resource;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
+use FakeVendor\Sandbox\Resource\App\DocInvalidFile;
 use FakeVendor\Sandbox\Resource\App\DocPhp7;
 use FakeVendor\Sandbox\Resource\App\DocUser;
 use PHPUnit\Framework\TestCase;
@@ -225,5 +226,25 @@ class OptionsTest extends TestCase
 }
 ';
         $this->assertSame($expected, $actual);
+    }
+
+    public function testOptionsNoSchemaFile()
+    {
+        $request = new Request($this->invoker, new DocInvalidFile, Request::OPTIONS);
+        $ro = $this->invoker->invoke($request);
+        $expected = '{
+    "GET": {
+        "request": {
+            "parameters": {
+                "id": []
+            },
+            "required": [
+                "id"
+            ]
+        }
+    }
+}
+';
+        $this->assertSame($expected, $ro->view);
     }
 }

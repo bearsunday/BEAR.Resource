@@ -77,37 +77,23 @@ final class NamedParameter implements NamedParameterInterface
     }
 
     /**
-     * Return named parameter information
+     * Return named parameter metas
      */
     private function getNamedParamMetas(callable $callable) : array
     {
         $method = new \ReflectionMethod($callable[0], $callable[1]);
         $parameters = $method->getParameters();
-        list($assistedNames, $webcontext) = $this->setAssistedParam($method);
-        $names = [];
-        foreach ($parameters as $parameter) {
-            if (isset($assistedNames[$parameter->name])) {
-                $names[$parameter->name] = $assistedNames[$parameter->name];
-                continue;
-            }
-            if (isset($webcontext[$parameter->name])) {
-                $default = $parameter->isDefaultValueAvailable() === true ? new DefaultParam($parameter->getDefaultValue()) : new NoDefaultParam();
-                $names[$parameter->name] = new AssistedWebContextParam($webcontext[$parameter->name], $default);
-                continue;
-            }
-            $names[$parameter->name] = $parameter->isDefaultValueAvailable() === true ? new OptionalParam($parameter->getDefaultValue()) : new RequiredParam;
-        }
+        $annotations = $this->reader->getMethodAnnotations($method);
+        $assistedNames = $this->getAssistedNames($annotations);
+        $webContext = $this->getWebContext($annotations);
+        $namedParamMetas = $this->addNamedParams($parameters, $assistedNames, $webContext);
 
-        return $names;
+        return $namedParamMetas;
     }
 
-    /**
-     * Set "method injection" parameter
-     */
-    private function setAssistedParam(\ReflectionMethod $method) : array
+    private function getAssistedNames(array $annotations) : array
     {
-        $names = $webcontext = [];
-        $annotations = $this->reader->getMethodAnnotations($method);
+        $names = [];
         foreach ($annotations as $annotation) {
             if ($annotation instanceof ResourceParam) {
                 $names[$annotation->param] = new AssistedResourceParam($annotation);
@@ -115,17 +101,23 @@ final class NamedParameter implements NamedParameterInterface
             if ($annotation instanceof Assisted) {
                 $names = $this->setAssistedAnnotation($names, $annotation);
             }
+        }
+
+        return $names;
+    }
+
+    private function getWebContext(array $annotations) : array
+    {
+        $webcontext = [];
+        foreach ($annotations as $annotation) {
             if ($annotation instanceof AbstractWebContextParam) {
                 $webcontext[$annotation->param] = $annotation;
             }
         }
 
-        return [$names, $webcontext];
+        return $webcontext;
     }
 
-    /**
-     * Set AssistedParam objects
-     s     */
     private function setAssistedAnnotation(array $names, Assisted $assisted) : array
     {
         /* @var $annotation Assisted */
@@ -134,5 +126,41 @@ final class NamedParameter implements NamedParameterInterface
         }
 
         return $names;
+    }
+
+    /**
+     * @param \ReflectionParameter[] $parameters
+     * @param array                  $assistedNames
+     * @param array                  $webcontext
+     *
+     * @return ParamInterface[]
+     */
+    private function addNamedParams(array $parameters, array $assistedNames, array $webcontext) : array
+    {
+        $names = [];
+        foreach ($parameters as $parameter) {
+            if (isset($assistedNames[$parameter->name])) {
+                $names[$parameter->name] = $assistedNames[$parameter->name];
+                continue;
+            }
+            if (isset($webcontext[$parameter->name])) {
+                $default = $this->getDefault($parameter);
+                $names[$parameter->name] = new AssistedWebContextParam($webcontext[$parameter->name], $default);
+                continue;
+            }
+            $names[$parameter->name] = $this->getParam($parameter);
+        }
+
+        return $names;
+    }
+
+    private function getDefault(\ReflectionParameter $parameter) : ParamInterface
+    {
+        return $parameter->isDefaultValueAvailable() === true ? new DefaultParam($parameter->getDefaultValue()) : new NoDefaultParam();
+    }
+
+    private function getParam(\ReflectionParameter $parameter) : ParamInterface
+    {
+        return $parameter->isDefaultValueAvailable() === true ? new OptionalParam($parameter->getDefaultValue()) : new RequiredParam;
     }
 }

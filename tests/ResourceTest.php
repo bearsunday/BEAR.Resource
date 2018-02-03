@@ -226,7 +226,7 @@ class ResourceTest extends TestCase
     public function testConstructorHasAnotherResourceRequest()
     {
         $body = $this->resource->post->uri('app://self/holder')->eager->request()->body;
-        $this->assertSame(true, $body);
+        $this->assertTrue($body);
     }
 
     public function testAssistedParameter()
