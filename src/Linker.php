@@ -200,13 +200,31 @@ final class Linker implements LinkerInterface
      */
     private function isList($value) : bool
     {
+        if (! is_array($value)) {
+            return false;
+        }
         $list = $value;
         $firstRow = array_pop($list);
         $keys = array_keys((array) $firstRow);
-        $isMultiColumnMultiRowList = $keys !== [0 => 0] && ($keys === array_keys((array) array_pop($list)));
-        $isMultiColumnList = is_array($firstRow) && array_filter(array_keys($value), 'is_numeric') === array_keys($value);
-        $isSingleColumnList = (count($value) === 1) && $keys === array_keys((array) $list);
+        $isMultiColumnMultiRowList = $this->isMultiColumnMultiRowList($keys, $list);
+        $isMultiColumnList = $this->isMultiColumnList($value, $firstRow);
+        $isSingleColumnList = $this->isSingleColumnList($value, $keys, $list);
 
         return $isSingleColumnList || $isMultiColumnMultiRowList || $isMultiColumnList;
+    }
+
+    private function isMultiColumnMultiRowList(array $keys, $list) : bool
+    {
+        return $keys !== [0 => 0] && ($keys === array_keys((array) array_pop($list)));
+    }
+
+    private function isMultiColumnList(array $value, $firstRow) : bool
+    {
+        return is_array($firstRow) && array_filter(array_keys($value), 'is_numeric') === array_keys($value);
+    }
+
+    private function isSingleColumnList(array $value, array $keys, array $list) : bool
+    {
+        return (count($value) === 1) && $keys === array_keys((array) $list);
     }
 }
