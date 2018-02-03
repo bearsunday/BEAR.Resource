@@ -53,11 +53,7 @@ final class OptionsMethods
     {
         $method = new \ReflectionMethod($ro, 'on' . $requestMethod);
         $ins = $this->getInMap($method);
-        $docComment = $method->getDocComment();
-        $doc = $paramDoc = [];
-        if ($docComment) {
-            list($doc, $paramDoc) = $this->docBlock($docComment);
-        }
+        list($doc, $paramDoc) = (new OptionsMethodsDocBolck)($method);
         $parameters = $method->getParameters();
         $paramMetas = $this->getParamMetas($parameters, $paramDoc, $ins);
         $paramMetas = $this->ignoreAnnotatedPrameter($method, $paramMetas);
