@@ -32,7 +32,7 @@ final class Request extends AbstractRequest
 
             return $this;
         }
-        if ($name === 'code' || $name === 'headers' || $name === 'body') {
+        if (in_array($name, ['code', 'headers', 'body'], true)) {
             return parent::__get($name);
         }
 
