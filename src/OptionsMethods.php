@@ -125,7 +125,6 @@ final class OptionsMethods
 
     private function getParamMetas(array $parameters, array $paramDoc, array $ins) : array
     {
-        $required = [];
         foreach ($parameters as $parameter) {
             if (isset($ins[$parameter->name])) {
                 $paramDoc[$parameter->name]['in'] = $ins[$parameter->name];
@@ -134,14 +133,27 @@ final class OptionsMethods
                 $paramDoc[$parameter->name] = [];
             }
             $paramDoc = $this->paramType($paramDoc, $parameter);
-            if (! $parameter->isOptional()) {
-                $required[] = $parameter->name;
-            }
             $paramDoc = $this->paramDefault($paramDoc, $parameter);
         }
+        $required = $this->getRequired($parameters);
         $paramMetas = $this->setParamMetas($paramDoc, $required);
 
         return $paramMetas;
+    }
+
+    /**
+     * @param \ReflectionParameter[] $parameters
+     */
+    private function getRequired(array $parameters) : array
+    {
+        $required = [];
+        foreach ($parameters as $parameter) {
+            if (! $parameter->isOptional()) {
+                $required[] = $parameter->name;
+            }
+        }
+
+        return $required;
     }
 
     private function paramDefault(array $paramDoc, \ReflectionParameter $parameter) : array
