@@ -9,7 +9,6 @@ namespace BEAR\Resource;
 use BEAR\Resource\Annotation\JsonSchema;
 use BEAR\Resource\Annotation\ResourceParam;
 use Doctrine\Common\Annotations\Reader;
-use phpDocumentor\Reflection\DocBlockFactory;
 use Ray\Di\Di\Assisted;
 use Ray\Di\Di\Named;
 use Ray\WebContextParam\Annotation\AbstractWebContextParam;
@@ -77,28 +76,6 @@ final class OptionsMethods
         }
 
         return $ins;
-    }
-
-    /**
-     * @return array [$docs, $params]
-     */
-    private function docBlock(string $docComment) : array
-    {
-        $factory = DocBlockFactory::createInstance();
-        $docblock = $factory->create($docComment);
-        $summary = $docblock->getSummary();
-        $docs = $params = [];
-        if ($summary) {
-            $docs['summary'] = $summary;
-        }
-        $description = (string) $docblock->getDescription();
-        if ($description) {
-            $docs['description'] = $description;
-        }
-        $tags = $docblock->getTagsByName('param');
-        $params = $this->docBlogTags($tags, $params);
-
-        return [$docs, $params];
     }
 
     /**
@@ -183,25 +160,6 @@ final class OptionsMethods
         }
 
         return $type;
-    }
-
-    private function docBlogTags(array $tags, array $params) : array
-    {
-        foreach ($tags as $tag) {
-            /* @var $tag \phpDocumentor\Reflection\DocBlock\Tags\Param */
-            $varName = $tag->getVariableName();
-            $tagType = (string) $tag->getType();
-            $type = $tagType === 'int' ? 'integer' : $tagType;
-            $params[$varName] = [
-                'type' => $type
-            ];
-            $description = (string) $tag->getDescription();
-            if ($description) {
-                $params[$varName]['description'] = $description;
-            }
-        }
-
-        return $params;
     }
 
     /**
