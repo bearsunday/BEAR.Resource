@@ -11,7 +11,6 @@ use Ray\Aop\WeavedInterface;
 
 /**
  * @deprecated
- * @codeCoverageIgnore
  */
 class VoidParamHandler implements ParamHandlerInterface
 {
