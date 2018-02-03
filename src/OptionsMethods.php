@@ -63,7 +63,7 @@ final class OptionsMethods
         $paramMetas = $this->ignoreAnnotatedPrameter($method, $paramMetas);
         $schema = $this->getJsonSchema($method);
         $request = $paramMetas ? ['request' => $paramMetas] : [];
-        if ($schema) {
+        if (! empty($schema)) {
             return $doc + $request + ['schema' => $schema];
         }
 
@@ -242,12 +242,6 @@ final class OptionsMethods
         return (array) json_decode(file_get_contents($schemaFile));
     }
 
-    /**
-     * @param array $paramDoc
-     * @param       $required
-     *
-     * @return array
-     */
     private function setParamMetas(array $paramDoc, array $required) : array
     {
         $paramMetas = [];
