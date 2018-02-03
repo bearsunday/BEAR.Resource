@@ -59,14 +59,7 @@ final class OptionsMethods
             list($doc, $paramDoc) = $this->docBlock($docComment);
         }
         $parameters = $method->getParameters();
-        list($paramDoc, $required) = $this->getParameterMetas($parameters, $paramDoc, $ins);
-        $paramMetas = [];
-        if ((bool) $paramDoc) {
-            $paramMetas['parameters'] = $paramDoc;
-        }
-        if ((bool) $required) {
-            $paramMetas['required'] = $required;
-        }
+        $paramMetas = $this->getParamMetas($parameters, $paramDoc, $ins);
         $paramMetas = $this->ignoreAnnotatedPrameter($method, $paramMetas);
         $schema = $this->getJsonSchema($method);
         $request = $paramMetas ? ['request' => $paramMetas] : [];
@@ -130,13 +123,7 @@ final class OptionsMethods
         }
     }
 
-    /**
-     * @param \ReflectionParameter[] $parameters
-     * @param array                  $paramDoc
-     *
-     * @return array [$paramDoc, $required]
-     */
-    private function getParameterMetas(array $parameters, array $paramDoc, array $ins) : array
+    private function getParamMetas(array $parameters, array $paramDoc, array $ins) : array
     {
         $required = [];
         foreach ($parameters as $parameter) {
@@ -152,8 +139,15 @@ final class OptionsMethods
             }
             $paramDoc = $this->paramDefault($paramDoc, $parameter);
         }
+        $paramMetas = [];
+        if ((bool) $paramDoc) {
+            $paramMetas['parameters'] = $paramDoc;
+        }
+        if ((bool) $required) {
+            $paramMetas['required'] = $required;
+        }
 
-        return [$paramDoc, $required];
+        return $paramMetas;
     }
 
     private function paramDefault(array $paramDoc, \ReflectionParameter $parameter) : array
