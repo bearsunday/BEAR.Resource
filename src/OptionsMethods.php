@@ -139,13 +139,7 @@ final class OptionsMethods
             }
             $paramDoc = $this->paramDefault($paramDoc, $parameter);
         }
-        $paramMetas = [];
-        if ((bool) $paramDoc) {
-            $paramMetas['parameters'] = $paramDoc;
-        }
-        if ((bool) $required) {
-            $paramMetas['required'] = $required;
-        }
+        $paramMetas = $this->setParamMetas($paramDoc, $required);
 
         return $paramMetas;
     }
@@ -246,5 +240,24 @@ final class OptionsMethods
         }
 
         return (array) json_decode(file_get_contents($schemaFile));
+    }
+
+    /**
+     * @param array $paramDoc
+     * @param       $required
+     *
+     * @return array
+     */
+    private function setParamMetas(array $paramDoc, array $required) : array
+    {
+        $paramMetas = [];
+        if ((bool) $paramDoc) {
+            $paramMetas['parameters'] = $paramDoc;
+        }
+        if ((bool) $required) {
+            $paramMetas['required'] = $required;
+        }
+
+        return $paramMetas;
     }
 }
