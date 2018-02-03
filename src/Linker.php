@@ -200,9 +200,6 @@ final class Linker implements LinkerInterface
      */
     private function isList($value) : bool
     {
-        if (! is_array($value)) {
-            return false;
-        }
         $list = $value;
         $firstRow = array_pop($list);
         $keys = array_keys((array) $firstRow);
