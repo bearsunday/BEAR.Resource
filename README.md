@@ -85,6 +85,13 @@ $user = $resource
   ->request();
 ```
 
+In syntax sugar.
+
+```php
+$user = $resource->get->uri('app://self/user')(['id' => 1]);
+$user = $resource->uri('app://self/user')(['id' => 1]); // GET request method can be omitted
+```
+
  * This request passes 1 to the **onGet($id)** method in the **Sandbox\Resource\App\User** class that conforms to [PSR0](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md).
  * The retrieved resource has 3 properties **code**, **headers** and **body**.
 
