@@ -56,10 +56,9 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         }
         /* @var $ro ResourceObject */
         $ro = $invocation->proceed();
-        if ($ro->code !== 200) {
-            return $ro;
+        if ($ro->code === 200 || $ro->code == 201) {
+            $this->validateResponse($jsonSchema, $ro);
         }
-        $this->validateResponse($jsonSchema, $ro);
 
         return $ro;
     }
