@@ -113,12 +113,7 @@ final class AppIterator implements \Iterator
         return ! $isPhp;
     }
 
-    /**
-     * @param \SplFileInfo $file
-     *
-     * @return string | false
-     */
-    private function getResourceClassName(\SplFileInfo $file)
+    private function getResourceClassName(\SplFileInfo $file) : string
     {
         $pathName = $file->getPathname();
         $declaredClasses = get_declared_classes();
@@ -130,12 +125,7 @@ final class AppIterator implements \Iterator
         return $name;
     }
 
-    /**
-     * @param array $newClasses
-     *
-     * @return string
-     */
-    private function getName(array $newClasses)
+    private function getName(array $newClasses) : string
     {
         foreach ($newClasses as $newClass) {
             $parent = (new \ReflectionClass($newClass))->getParentClass();
