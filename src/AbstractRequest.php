@@ -103,7 +103,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
      */
     public function __construct(
         InvokerInterface $invoker,
-        ResourceObject $ro = null,
+        ResourceObject $ro,
         $method = Request::GET,
         array $query = [],
         array $links = [],
