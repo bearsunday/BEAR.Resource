@@ -77,7 +77,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     /**
      * Request Result
      *
-     * @var ResourceObject
+     * @var ResourceObject | null
      */
     protected $result;
 
@@ -87,7 +87,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     protected $invoker;
 
     /**
-     * @var LinkerInterface
+     * @var LinkerInterface | null
      */
     private $linker;
 
