@@ -35,7 +35,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     /**
      * Resource object
      *
-     * @var \BEAR\Resource\ResourceObject
+     * @var ResourceObject
      */
     public $resourceObject;
 
@@ -77,7 +77,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     /**
      * Request Result
      *
-     * @var ResourceObject | null
+     * @var ResourceObject
      */
     protected $result;
 
@@ -93,7 +93,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
 
     /**
      * @param InvokerInterface     $invoker
-     * @param ResourceObject|null  $ro
+     * @param ResourceObject       $ro
      * @param string               $method
      * @param array                $query
      * @param array                $links
