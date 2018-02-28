@@ -42,8 +42,10 @@ final class EmbedInterceptor implements MethodInterceptor
      */
     public function invoke(MethodInvocation $invocation)
     {
-        /** @var $resourceObject ResourceObject */
         $resourceObject = $invocation->getThis();
+        if (! $resourceObject instanceof ResourceObject) {
+            throw new EmbedException(get_class($resourceObject));
+        }
         $method = $invocation->getMethod();
         $query = $this->getArgsByInvocation($invocation);
         $embeds = $this->reader->getMethodAnnotations($method);
