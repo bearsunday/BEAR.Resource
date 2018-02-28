@@ -10,10 +10,10 @@ use BEAR\Resource\Exception\MethodException;
 use BEAR\Resource\Exception\OutOfBoundsException;
 
 /**
- * @property string code
- * @property array headers
- * @property mixed body
- * @property string view
+ * @property string $code
+ * @property array  $headers
+ * @property mixed  $body
+ * @property string $view
  */
 abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \IteratorAggregate, \Serializable
 {
