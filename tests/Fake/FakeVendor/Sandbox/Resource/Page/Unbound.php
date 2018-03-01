@@ -13,5 +13,6 @@ class Unbound extends ResourceObject
 {
     public function __construct(UnboundInterface $missing)
     {
+        unset($missing);
     }
 }
