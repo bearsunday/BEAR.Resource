@@ -7,16 +7,11 @@
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\EmbedException;
+use BEAR\Resource\Module\EmbedResourceModule;
 use BEAR\Resource\Module\ResourceModule;
-use Doctrine\Common\Annotations\AnnotationReader;
 use FakeVendor\Sandbox\Resource\App\Bird\Birds;
-use FakeVendor\Sandbox\Resource\App\Bird\BirdsRel;
-use FakeVendor\Sandbox\Resource\App\Bird\InvalidBird;
-use FakeVendor\Sandbox\Resource\App\Bird\NotFoundBird;
 use FakeVendor\Sandbox\Resource\App\Bird\Sparrow;
 use PHPUnit\Framework\TestCase;
-use Ray\Aop\Arguments;
-use Ray\Aop\ReflectiveMethodInvocation;
 use Ray\Di\Injector;
 
 class EmbedInterceptorTest extends TestCase
@@ -33,21 +28,12 @@ class EmbedInterceptorTest extends TestCase
 
     protected function setUp()
     {
-        $this->resource = (new Injector(new ResourceModule('FakeVendor\Sandbox'), $_ENV['TMP_DIR']))->getInstance(ResourceInterface::class);
-        $this->embedInterceptor = new EmbedInterceptor($this->resource, new AnnotationReader);
+        $this->resource = (new Injector(new EmbedResourceModule(new ResourceModule('FakeVendor\Sandbox')), $_ENV['TMP_DIR']))->getInstance(ResourceInterface::class);
     }
 
     public function testInvoke()
     {
-        $fake = new Birds;
-        $fake->uri = new Uri('app://self/birds');
-        $invocation = new ReflectiveMethodInvocation(
-            $fake,
-            new \ReflectionMethod($fake, 'onGet'),
-            new Arguments(['id' => 1]),
-            [$this->embedInterceptor]
-        );
-        $result = $invocation->proceed();
+        $result = $this->resource->uri('app://self/bird/birds')(['id' => 1]);
         $profile = $result['bird1'];
         /* @var $profile Request */
         $this->assertInstanceOf('BEAR\Resource\Request', $profile);
@@ -58,15 +44,7 @@ class EmbedInterceptorTest extends TestCase
 
     public function testInvokeRelativePath()
     {
-        $fake = new BirdsRel;
-        $fake->uri = new Uri('app://self/birds_rel');
-        $invocation = new ReflectiveMethodInvocation(
-            $fake,
-            new \ReflectionMethod($fake, 'onGet'),
-            new Arguments(['id' => 1]),
-            [$this->embedInterceptor]
-        );
-        $result = $invocation->proceed();
+        $result = $this->resource->uri('app://self/bird/birds-rel')(['id' => 1]);
         $profile = $result['bird1'];
         /* @var $profile Request */
         $this->assertInstanceOf('BEAR\Resource\Request', $profile);
@@ -148,17 +126,13 @@ class EmbedInterceptorTest extends TestCase
     public function testNotFoundSrc()
     {
         $this->expectException(EmbedException::class);
-        $mock = new NotFoundBird;
-        $invocation = new ReflectiveMethodInvocation($mock, new \ReflectionMethod($mock, 'onGet'), new Arguments(['id' => 1]), [$this->embedInterceptor]);
-        $invocation->proceed();
+        $this->resource->uri('app://self/bird/not-found-bird')(['id' => 1]);
     }
 
     public function testNotInvalidSrc()
     {
         $this->expectException(EmbedException::class);
-        $mock = new InvalidBird;
-        $invocation = new ReflectiveMethodInvocation($mock, new \ReflectionMethod($mock, 'onGet'), new Arguments(['id' => 1]), [$this->embedInterceptor]);
-        $invocation->proceed();
+        $this->resource->uri('app://self/bird/invalid-bird')(['id' => 1]);
     }
 
     public function testEmbedAnnotationResource()
