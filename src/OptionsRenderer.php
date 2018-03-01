@@ -37,7 +37,7 @@ final class OptionsRenderer implements RenderInterface
         $body = $this->getEntityBody($ro, $allows);
         $ro->view = json_encode($body, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL;
 
-        return $ro;
+        return $ro->view;
     }
 
     /**

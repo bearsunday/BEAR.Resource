@@ -38,13 +38,14 @@ class OptionsTest extends TestCase
 
     public function testOptionsMethod()
     {
-        $request = new Request($this->invoker, new DocPhp7, Request::OPTIONS);
+        $ro = new DocPhp7;
+        $request = new Request($this->invoker, $ro, Request::OPTIONS);
         $response = $this->invoker->invoke($request);
-        $actual = $response->headers['Allow'];
+        $actual = $ro->headers['Allow'];
         $expected = 'GET, POST';
         $this->assertSame($actual, $expected);
 
-        return $response;
+        return $ro;
     }
 
     /**
@@ -105,8 +106,9 @@ class OptionsTest extends TestCase
 
     public function testAssistedResource()
     {
-        $request = new Request($this->invoker, new FakeParamResource, Request::OPTIONS);
-        $ro = $this->invoker->invoke($request);
+        $ro = new FakeParamResource;
+        $request = new Request($this->invoker, $ro, Request::OPTIONS);
+        $this->invoker->invoke($request);
         $this->assertSame('GET, POST, PUT, DELETE', $ro->headers['Allow']);
         $actual = $ro->view;
         $expected = '{
@@ -184,8 +186,9 @@ class OptionsTest extends TestCase
 
     public function testOptionsMethodWithJsonSchema()
     {
-        $request = new Request($this->invoker, new DocUser, Request::OPTIONS);
-        $ro = $this->invoker->invoke($request);
+        $ro = new DocUser;
+        $request = new Request($this->invoker, $ro, Request::OPTIONS);
+        $this->invoker->invoke($request);
         $actual = $ro->headers['Allow'];
         $expected = 'GET';
         $this->assertSame($actual, $expected);
@@ -230,8 +233,9 @@ class OptionsTest extends TestCase
 
     public function testOptionsNoSchemaFile()
     {
-        $request = new Request($this->invoker, new DocInvalidFile, Request::OPTIONS);
-        $ro = $this->invoker->invoke($request);
+        $ro = new DocInvalidFile;
+        $request = new Request($this->invoker, $ro, Request::OPTIONS);
+        $this->invoker->invoke($request);
         $expected = '{
     "GET": {
         "request": {

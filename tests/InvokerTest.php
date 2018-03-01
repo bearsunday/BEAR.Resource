@@ -94,21 +94,21 @@ class InvokerTest extends TestCase
 
     public function testOptionsMethod()
     {
-        $request = new Request($this->invoker, new Doc, Request::OPTIONS);
+        $ro = new Doc;
+        $request = new Request($this->invoker, $ro, Request::OPTIONS);
         $response = $this->invoker->invoke($request);
-        $actual = $response->headers['Allow'];
+        $actual = $ro->headers['Allow'];
         $expected = 'GET, POST, DELETE';
         $this->assertSame($actual, $expected);
 
-        return $response;
+        return $response->view;
     }
 
     /**
      * @depends testOptionsMethod
      */
-    public function testOptionsMethodBody(ResourceObject $ro)
+    public function testOptionsMethodBody(string $view)
     {
-        $actual = $ro->view;
         $expected = '{
     "GET": {
         "summary": "User",
@@ -151,24 +151,26 @@ class InvokerTest extends TestCase
     "DELETE": []
 }
 ';
-        $this->assertSame($expected, $actual);
+        $this->assertSame($expected, $view);
     }
 
     public function testOptionsMethod2()
     {
-        $request = new Request($this->invoker, new Order, Request::OPTIONS);
-        $response = $this->invoker->invoke($request);
-        $actual = $response->headers['Allow'];
+        $ro = new Order;
+        $request = new Request($this->invoker, $ro, Request::OPTIONS);
+        $this->invoker->invoke($request);
+        $actual = $ro->headers['Allow'];
         $expected = 'GET, POST';
         $this->assertSame($actual, $expected);
     }
 
     public function testOptionsWeaver()
     {
-        $order = (new Compiler($_ENV['TMP_DIR']))->newInstance(Order::class, [], new Bind);
-        $request = new Request($this->invoker, $order, Request::OPTIONS);
-        $response = $this->invoker->invoke($request);
-        $actual = $response->headers['Allow'];
+        $ro = (new Compiler($_ENV['TMP_DIR']))->newInstance(Order::class, [], new Bind);
+        /* @var $order Order */
+        $request = new Request($this->invoker, $ro, Request::OPTIONS);
+        $this->invoker->invoke($request);
+        $actual = $ro->headers['Allow'];
         $expected = 'GET, POST';
         $this->assertSame($actual, $expected);
     }

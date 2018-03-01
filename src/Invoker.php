@@ -38,44 +38,38 @@ final class Invoker implements InvokerInterface
     public function invoke(AbstractRequest $request)
     {
         $onMethod = 'on' . ucfirst($request->method);
-        if (method_exists($request->resourceObject, $onMethod) !== true) {
-            return $this->invokeOptions($request->resourceObject, $request, $onMethod);
+        if (method_exists($request->resourceObject, $onMethod) === true) {
+            return $this->invokeMethod($request, $onMethod);
         }
+        if ($request->method === Request::OPTIONS) {
+            return $this->invokeOptions($request);
+        }
+
+        throw new MethodNotAllowedException(get_class($request->resourceObject) . "::{($request->method}()", 405);
+    }
+
+    private function invokeMethod(AbstractRequest $request, string $onMethod) : ResourceObject
+    {
         if ($request->resourceObject->uri instanceof AbstractUri) {
             $request->resourceObject->uri->query = $request->query;
             $request->resourceObject->uri->method = $request->method;
         }
         $params = $this->params->getParameters([$request->resourceObject, $onMethod], $request->query);
-        $result = call_user_func_array([$request->resourceObject, $onMethod], $params);
+        $response = call_user_func_array([$request->resourceObject, $onMethod], $params);
 
-        return $this->postRequest($request, $result);
-    }
-
-    /**
-     * @param AbstractRequest $request
-     * @param mixed           $result
-     */
-    private function postRequest(AbstractRequest $request, $result) : ResourceObject
-    {
-        if (! $result instanceof ResourceObject) {
-            $request->resourceObject->body = $result;
-            $result = $request->resourceObject;
+        if (! $response instanceof ResourceObject) {
+            $request->resourceObject->body = $response;
+            $response = $request->resourceObject;
         }
 
-        return $result;
+        return $response;
     }
 
-    /**
-     * OPTIONS
-     *
-     * @throws Exception\MethodNotAllowedException
-     */
-    private function invokeOptions(ResourceObject $ro, AbstractRequest $request, string $method) : ResourceObject
+    private function invokeOptions(AbstractRequest $request) : ResourceObject
     {
-        if ($request->method == Request::OPTIONS) {
-            return $this->optionsRenderer->render($ro);
-        }
+        $ro = $request->resourceObject;
+        $ro->view = $this->optionsRenderer->render($request->resourceObject);
 
-        throw new MethodNotAllowedException(get_class($request->resourceObject) . "::$method()", 405);
+        return $ro;
     }
 }
