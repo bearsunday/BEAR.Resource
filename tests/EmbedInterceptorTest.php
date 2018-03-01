@@ -174,7 +174,7 @@ class EmbedInterceptorTest extends TestCase
 
         /* @var $request Request */
         $resourceObject = $request();
-        /** @var $birdRequest Request */
+        /* @var $birdRequest Request */
         $birdRequest = $resourceObject['birdRequest'];
         $birdObject = $resourceObject['birdObject'];
         $this->assertInstanceOf(Request::class, $birdRequest);
