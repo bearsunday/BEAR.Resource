@@ -153,6 +153,7 @@ class RequestTest extends TestCase
     public function testIterator()
     {
         $request = new Request($this->invoker, new Entry);
+        $result = [];
         foreach ($request as $row) {
             $result[] = $row;
         }
