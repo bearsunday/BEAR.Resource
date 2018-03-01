@@ -40,7 +40,7 @@ final class Factory implements FactoryInterface
      */
     public function newInstance($uri)
     {
-        if (! $uri instanceof Uri) {
+        if (is_string($uri)) {
             $uri = new Uri($uri);
         }
         $adapter = $this->scheme->getAdapter($uri);
