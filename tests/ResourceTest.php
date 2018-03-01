@@ -202,7 +202,7 @@ class ResourceTest extends TestCase
 
     public function testHal()
     {
-        $resource = (new Injector(new HalModule(new ResourceModule('FakeVendor\Sandbox'))))->getInstance(
+        $resource = (new Injector(new HalModule(new ResourceModule('FakeVendor\Sandbox')), $_ENV['TMP_DIR']))->getInstance(
             'BEAR\Resource\ResourceInterface'
         );
         $user = $resource->get->uri('app://self/author')->withQuery(['id' => 1])->eager->request();

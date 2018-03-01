@@ -23,7 +23,7 @@ class AppInjector implements InjectorInterface
 
     public function getInstance($interface, $name = Name::ANY)
     {
-        $injector = new Injector(new AppModule);
+        $injector = new Injector(new AppModule, $_ENV['TMP_DIR']);
 
         return $injector->getInstance($interface, $name);
     }
