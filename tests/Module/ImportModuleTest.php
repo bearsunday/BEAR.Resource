@@ -4,10 +4,9 @@
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
-namespace Module;
+namespace BEAR\Resource\Module;
 
 use BEAR\Resource\ImportApp;
-use BEAR\Resource\Module\ImportAppModule;
 use BEAR\Resource\ResourceInterface;
 use FakeVendor\Sandbox\Module\AppModule;
 use PHPUnit\Framework\TestCase;

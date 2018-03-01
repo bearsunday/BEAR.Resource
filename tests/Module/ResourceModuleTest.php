@@ -4,9 +4,8 @@
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
-namespace Module;
+namespace BEAR\Resource\Module;
 
-use BEAR\Resource\Module\ResourceModule;
 use BEAR\Resource\Resource;
 use BEAR\Resource\ResourceInterface;
 use PHPUnit\Framework\TestCase;
