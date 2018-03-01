@@ -48,14 +48,18 @@ final class JsonSchemaInterceptor implements MethodInterceptor
      */
     public function invoke(MethodInvocation $invocation)
     {
-        /* @var $jsonSchema JsonSchema */
         $jsonSchema = $invocation->getMethod()->getAnnotation(JsonSchema::class);
+        if (! $jsonSchema instanceof JsonSchema) {
+            throw new JsonSchemaException($invocation->getMethod()->name);
+        }
         if ($jsonSchema->params) {
             $arguments = $this->getNamedArguments($invocation);
             $this->validateRequest($jsonSchema, $arguments);
         }
-        /* @var $ro ResourceObject */
         $ro = $invocation->proceed();
+        if (! $ro instanceof ResourceObject) {
+            throw new JsonSchemaException($invocation->getMethod()->name);
+        }
         if ($ro->code === 200 || $ro->code == 201) {
             $this->validateResponse($jsonSchema, $ro);
         }
