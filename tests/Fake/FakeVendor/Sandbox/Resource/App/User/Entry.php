@@ -11,6 +11,8 @@ use BEAR\Resource\ResourceObject;
 
 class Entry extends ResourceObject
 {
+    private $resource;
+
     private $entries = [
         100 => ['id' => 100, 'title' => 'Entry1'],
         101 => ['id' => 101, 'title' => 'Entry2'],
