@@ -1,0 +1,2 @@
+	excludes_analyse:
+		- %rootDir%/tests/tmp/*
