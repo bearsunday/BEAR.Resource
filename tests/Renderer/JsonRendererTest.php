@@ -4,7 +4,7 @@
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
-namespace BEAR\Resource;
+namespace BEAR\Resource\Renderer;
 
 use PHPUnit\Framework\TestCase;
 
