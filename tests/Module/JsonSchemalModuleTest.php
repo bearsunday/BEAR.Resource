@@ -105,12 +105,7 @@ class JsonSchemalModuleTest extends TestCase
         }
     }
 
-    /**
-     * @param $class
-     *
-     * @return FakeUser|mixed
-     */
-    private function createRo($class)
+    private function createRo(string $class) : ResourceObject
     {
         $jsonSchema = dirname(__DIR__) . '/Fake/json_schema';
         $jsonValidate = dirname(__DIR__) . '/Fake/json_validate';
