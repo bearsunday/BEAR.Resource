@@ -40,7 +40,7 @@ class LinkerTest extends TestCase
         $schemeCollection = (new SchemeCollection)
             ->scheme('app')
             ->host('self')
-            ->toAdapter(new AppAdapter(new Injector, 'FakeVendor\Sandbox', 'Resource\App'));
+            ->toAdapter(new AppAdapter(new Injector, 'FakeVendor\Sandbox'));
         $this->linker = new Linker(
             new AnnotationReader,
             $this->invoker,
