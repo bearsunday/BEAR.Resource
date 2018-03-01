@@ -39,5 +39,4 @@ class Doc extends ResourceObject
     {
         return $this;
     }
-
 }
