@@ -23,7 +23,7 @@ final class Request extends AbstractRequest
     /**
      * @param string $name
      *
-     * @return $this
+     * @return $this|int|string|array
      */
     public function __get($name)
     {
