@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is part of the BEAR.Resource package.
+ *
+ * @license http://opensource.org/licenses/MIT MIT
+ */
 namespace FakeVendor\Blog\Module;
 
 use BEAR\Resource\Module\HalModule;

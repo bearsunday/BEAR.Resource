@@ -124,7 +124,6 @@ return \PhpCsFixer\Config::create()
     ))
     ->setFinder(
         PhpCsFixer\Finder::create()
-            ->exclude('tests/Fake')
             ->exclude('src-data')
             ->exclude('src-deprecated')
             ->in(__DIR__)

@@ -1,4 +1,9 @@
 <?php
+/**
+ * This file is part of the BEAR.Resource package.
+ *
+ * @license http://opensource.org/licenses/MIT MIT
+ */
 namespace FakeVendor\Sandbox\Resource\App\Marshal;
 
 use BEAR\Resource\Annotation\Link;
