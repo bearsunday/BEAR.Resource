@@ -20,7 +20,7 @@ final class Meta
     /**
      * @var Options
      */
-    public $options = [];
+    public $options;
 
     /**
      * @var array
