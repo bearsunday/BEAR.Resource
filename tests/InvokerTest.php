@@ -86,6 +86,9 @@ class InvokerTest extends TestCase
     {
         $compiler = new Compiler($_ENV['TMP_DIR']);
         $book = $compiler->newInstance(Book::class, [], (new Bind)->bindInterceptors('onGet', [new FakeLogInterceptor]));
+        if (! $book instanceof Book) {
+            throw new \LogicException;
+        }
         $request = new Request($this->invoker, $book, Request::GET, ['id' => 1]);
         $actual = $this->invoker->invoke($request)->body;
         $expected = "book id[1][Log] target = FakeVendor\\Sandbox\\Resource\\App\\Weave\\Book, input = Array\n(\n    [0] => 1\n)\n, result = book id[1]";
@@ -167,7 +170,9 @@ class InvokerTest extends TestCase
     public function testOptionsWeaver()
     {
         $ro = (new Compiler($_ENV['TMP_DIR']))->newInstance(Order::class, [], new Bind);
-        /* @var $order Order */
+        if (! $ro instanceof Order) {
+            throw new \LogicException;
+        }
         $request = new Request($this->invoker, $ro, Request::OPTIONS);
         $this->invoker->invoke($request);
         $actual = $ro->headers['Allow'];
