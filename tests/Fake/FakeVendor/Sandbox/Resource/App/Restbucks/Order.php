@@ -7,7 +7,6 @@
 namespace FakeVendor\Sandbox\Resource\App\Restbucks;
 
 use BEAR\Resource\ResourceObject;
-use BEAR\Resource\Uri;
 use Ray\Di\Di\Scope;
 
 /**
@@ -41,7 +40,6 @@ class Order extends ResourceObject
         // created
         $this->code = 201;
         $this->headers['Location'] = "app://self/restbucks/order/?id=$orderId";
-        $this->links['payment'] = new Uri('app://self/restbucks//payment', ['order_id' => $orderId]);
 
         return $this;
     }
