@@ -29,7 +29,7 @@ class ResourceTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $injector = new Injector(new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox'), $_ENV['TMP_DIR']));
+        $injector = new Injector(new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox')), $_ENV['TMP_DIR']);
         $this->resource = $injector->getInstance(ResourceInterface::class);
     }
 
@@ -38,8 +38,8 @@ class ResourceTest extends TestCase
         $injector = new Injector(new EmptyModule, $_ENV['TMP_DIR']);
         $reader = new AnnotationReader;
         $scheme = (new SchemeCollection)
-            ->scheme('app')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\App'))
-            ->scheme('page')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\Page'))
+            ->scheme('app')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox'))
+            ->scheme('page')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox'))
             ->scheme('nop')->host('self')->toAdapter(new FakeNop);
         $invoker = new Invoker(new NamedParameter(new ArrayCache, $reader, $injector), new OptionsRenderer(new OptionsMethods($reader)));
         $factory = new Factory($scheme);
@@ -231,7 +231,7 @@ class ResourceTest extends TestCase
 
     public function testAssistedParameter()
     {
-        $injector = new Injector(new FakeAssistedModule(new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox')), $_ENV['TMP_DIR']));
+        $injector = new Injector(new FakeAssistedModule(new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox'))), $_ENV['TMP_DIR']);
         $this->resource = $injector->getInstance(ResourceInterface::class);
         $ro = $this->resource->get->uri('page://self/assist')->eager->request();
         /* @var $ro \BEAR\Resource\ResourceObject */
