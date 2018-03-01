@@ -1,2 +1,3 @@
-	excludes_analyse:
-		- %rootDir%/tests/tmp/*
+parameters:
+	ignoreErrors:
+		- '#Access to an undefined property BEAR\\Resource\\Request::\$__invalid__#'
