@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the BEAR.Resource package.
  *
@@ -127,7 +128,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
 
             return (string) $this->result;
         } catch (\Exception $e) {
-            error_log($e);
+            error_log((string) $e);
 
             return '';
         }

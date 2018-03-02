@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the BEAR.Resource package.
  *
@@ -70,7 +71,7 @@ final class AppAdapter implements AdapterInterface
     {
         $unboundClass = $e->getMessage();
         if ($unboundClass === "{$class}-") {
-            return new ResourceNotFoundException($uri, 404, $e);
+            return new ResourceNotFoundException((string) $uri, 404, $e);
         }
 
         return $e;

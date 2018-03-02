@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * This file is part of the BEAR.Resource package.
  *
@@ -25,7 +27,7 @@ class User extends ResourceObject
     public function onGet($id)
     {
         if (! isset($this->users[$id])) {
-            throw new \InvalidArgumentException($id);
+            throw new \InvalidArgumentException((string) $id);
         }
 
         return $this->users[$id];
