@@ -9,12 +9,7 @@ namespace BEAR\Resource;
 interface NamedParameterInterface
 {
     /**
-     * Get arguments
-     *
-     * @param array $callable
-     * @param array $query
-     *
-     * @return array
+     * Return ordered parameters from named query
      */
-    public function getParameters(array $callable, array $query);
+    public function getParameters(callable $callable, array $query) : array;
 }

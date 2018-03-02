@@ -156,8 +156,7 @@ final class Linker implements LinkerInterface
     private function annotationCrawl(array $annotations, LinkType $link, ResourceObject $current) : ResourceObject
     {
         $isList = $this->isList($current->body);
-        $bodyList = $isList ? $current->body : [$current->body];
-        /** @var $bodyList array */
+        $bodyList = $isList ? (array) $current->body : [$current->body];
         foreach ($bodyList as &$body) {
             /* @noinspection ExceptionsAnnotatingAndHandlingInspection */
             $this->crawl($annotations, $link, $body);
@@ -181,7 +180,7 @@ final class Linker implements LinkerInterface
             if ($annotation->crawl !== $link->key) {
                 continue;
             }
-            $uri = uri_template($annotation->href, (array) $body);
+            $uri = uri_template($annotation->href, $body);
             $rel = $this->factory->newInstance($uri);
             /* @noinspection UnnecessaryParenthesesInspection */
             $request = new Request($this->invoker, $rel, Request::GET, (new Uri($uri))->query, [$link], $this);
@@ -222,6 +221,6 @@ final class Linker implements LinkerInterface
 
     private function isSingleColumnList(array $value, array $keys, array $list) : bool
     {
-        return (count($value) === 1) && $keys === array_keys((array) $list);
+        return (count($value) === 1) && $keys === array_keys($list);
     }
 }

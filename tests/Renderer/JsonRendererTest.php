@@ -4,14 +4,17 @@
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
-namespace BEAR\Resource;
+namespace BEAR\Resource\Renderer;
 
+use BEAR\Resource\FakeRoot;
+use BEAR\Resource\JsonRenderer;
+use BEAR\Resource\ResourceObject;
 use PHPUnit\Framework\TestCase;
 
 class JsonRendererTest extends TestCase
 {
     /**
-     * @var
+     * @var FakeRoot
      */
     private $ro;
 

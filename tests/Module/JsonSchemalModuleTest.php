@@ -20,14 +20,14 @@ class JsonSchemalModuleTest extends TestCase
 {
     public function testValid()
     {
-        $ro = $this->createRo(FakeUser::class);
+        $ro = $this->getFakeUser();
         $ro->onGet(20);
         $this->assertSame($ro->body['name']['firstName'], 'mucha');
     }
 
     public function testValidArrayRef()
     {
-        $ro = $this->createRo(FakeUsers::class);
+        $ro = $this->getFakeUsers();
         $ro->onGet(20);
         $this->assertSame($ro->body[0]['name']['firstName'], 'mucha');
     }
@@ -64,14 +64,14 @@ class JsonSchemalModuleTest extends TestCase
     public function testException()
     {
         $this->expectException(JsonSchemaNotFoundException::class);
-        $ro = $this->createRo(FakeUser::class);
+        $ro = $this->getRo(FakeUser::class);
         $ro->onPost();
     }
 
     public function testParameterException()
     {
         $caughtException = null;
-        $ro = $this->createRo(FakeUser::class);
+        $ro = $this->getRo(FakeUser::class);
         try {
             $ro->onGet(30, 'invalid gender');
         } catch (JsonSchemaException $e) {
@@ -83,7 +83,7 @@ class JsonSchemalModuleTest extends TestCase
 
     public function testWorksOnlyCode200()
     {
-        $ro = $this->createRo(FakeUser::class);
+        $ro = $this->getRo(FakeUser::class);
         $ro->onPut();
         $this->assertInstanceOf(ResourceObject::class, $ro);
     }
@@ -91,13 +91,13 @@ class JsonSchemalModuleTest extends TestCase
     public function invalidRequestTest()
     {
         $this->expectException(JsonSchemaNotFoundException::class);
-        $ro = $this->createRo(FakeUser::class);
+        $ro = $this->getRo(FakeUser::class);
         $ro->onPatch();
     }
 
     private function createJsonSchemaException($class)
     {
-        $ro = $this->createRo($class);
+        $ro = $this->getRo($class);
         try {
             $ro->onGet(10);
         } catch (JsonSchemaException $e) {
@@ -105,12 +105,17 @@ class JsonSchemalModuleTest extends TestCase
         }
     }
 
-    /**
-     * @param $class
-     *
-     * @return FakeUser|mixed
-     */
-    private function createRo($class)
+    private function getFakeUser() : FakeUser
+    {
+        return $this->getRo(FakeUser::class);
+    }
+
+    private function getFakeUsers() : FakeUsers
+    {
+        return $this->getRo(FakeUsers::class);
+    }
+
+    private function getRo(string $class)
     {
         $jsonSchema = dirname(__DIR__) . '/Fake/json_schema';
         $jsonValidate = dirname(__DIR__) . '/Fake/json_validate';

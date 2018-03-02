@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the BEAR.Resource package.
  *
@@ -10,8 +11,8 @@ use BEAR\Resource\Code;
 
 class ServerErrorException extends \ErrorException implements ExceptionInterface
 {
-    public function __construct($message = null, $code = Code::ERROR, \Exception $previous = null)
+    public function __construct(string $message = '', $code = Code::ERROR, \Exception $previous = null)
     {
-        parent::__construct($message, $code, $previous);
+        parent::__construct($message, $code, 1, '', 0, $previous);
     }
 }

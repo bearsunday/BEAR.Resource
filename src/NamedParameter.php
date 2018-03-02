@@ -46,7 +46,7 @@ final class NamedParameter implements NamedParameterInterface
     /**
      * {@inheritdoc}
      */
-    public function getParameters(array $callable, array $query)
+    public function getParameters(callable $callable, array $query) : array
     {
         $cacheId = __CLASS__ . get_class($callable[0]) . $callable[1];
         $names = $this->cache->fetch($cacheId);

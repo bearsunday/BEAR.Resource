@@ -32,7 +32,7 @@ class AnchorTest extends TestCase
         $author = new Author;
         $author->onGet(1);
         $this->request = new Request($invoker, $author, Request::GET, ['id' => 1]);
-        $this->anchor = new Anchor(new AnnotationReader, $this->request);
+        $this->anchor = new Anchor(new AnnotationReader);
     }
 
     public function testHref()

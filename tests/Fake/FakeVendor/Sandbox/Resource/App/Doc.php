@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is part of the BEAR.Resource package.
+ *
+ * @license http://opensource.org/licenses/MIT MIT
+ */
 namespace FakeVendor\Sandbox\Resource\App;
 
 use BEAR\Resource\Annotation\Embed;
@@ -9,6 +13,7 @@ use BEAR\Resource\ResourceObject;
 class Doc extends ResourceObject
 {
     public $uri = 'app://self/Doc';
+
     /**
      * User
      *
@@ -39,5 +44,4 @@ class Doc extends ResourceObject
     {
         return $this;
     }
-
 }

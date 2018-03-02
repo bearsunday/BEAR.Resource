@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is part of the BEAR.Resource package.
+ *
+ * @license http://opensource.org/licenses/MIT MIT
+ */
 namespace FakeVendor\Sandbox\Resource\App\Cache;
 
 use BEAR\Resource\ResourceObject;
@@ -10,7 +14,6 @@ class Pdo extends ResourceObject
 
     public function __construct()
     {
-        $this->pdo = new \PDO('sqlite::memory:', null, null);
         $this->time = microtime(true);
     }
 }

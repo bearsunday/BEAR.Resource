@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the BEAR.Resource package.
  *
@@ -10,10 +11,10 @@ use BEAR\Resource\Exception\MethodException;
 use BEAR\Resource\Exception\OutOfBoundsException;
 
 /**
- * @property string code
- * @property array headers
- * @property mixed body
- * @property string view
+ * @property string $code
+ * @property array  $headers
+ * @property mixed  $body
+ * @property string $view
  */
 abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \IteratorAggregate, \Serializable
 {
@@ -35,7 +36,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     /**
      * Resource object
      *
-     * @var \BEAR\Resource\ResourceObject
+     * @var ResourceObject
      */
     public $resourceObject;
 
@@ -87,13 +88,13 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     protected $invoker;
 
     /**
-     * @var LinkerInterface
+     * @var LinkerInterface | null
      */
     private $linker;
 
     /**
      * @param InvokerInterface     $invoker
-     * @param ResourceObject|null  $ro
+     * @param ResourceObject       $ro
      * @param string               $method
      * @param array                $query
      * @param array                $links
@@ -103,7 +104,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
      */
     public function __construct(
         InvokerInterface $invoker,
-        ResourceObject $ro = null,
+        ResourceObject $ro,
         $method = Request::GET,
         array $query = [],
         array $links = [],
@@ -127,7 +128,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
 
             return (string) $this->result;
         } catch (\Exception $e) {
-            error_log($e);
+            error_log((string) $e);
 
             return '';
         }
@@ -141,7 +142,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
         if ($query !== null) {
             $this->query = array_merge($this->query, $query);
         }
-        if ($this->links) {
+        if ($this->links && $this->linker instanceof LinkerInterface) {
             return $this->linker->invoke($this);
         }
 

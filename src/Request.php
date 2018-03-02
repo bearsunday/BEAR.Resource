@@ -7,8 +7,8 @@
 namespace BEAR\Resource;
 
 /**
- * @property $this lazy
- * @property $this eager
+ * @property $this $lazy
+ * @property $this $eager
  */
 final class Request extends AbstractRequest
 {
@@ -23,7 +23,7 @@ final class Request extends AbstractRequest
     /**
      * @param string $name
      *
-     * @return $this
+     * @return $this|int|string|array
      */
     public function __get($name)
     {

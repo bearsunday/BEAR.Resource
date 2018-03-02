@@ -17,7 +17,7 @@ class VoidOptionsRendererTest extends TestCase
     public function testVoidOptionsRenderer()
     {
         $this->expectException(MethodNotAllowedException::class);
-        $injector = new Injector(new VoidOptionsMethodModule(new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox')), $_ENV['TMP_DIR']));
+        $injector = new Injector(new VoidOptionsMethodModule(new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox'))), $_ENV['TMP_DIR']);
         $resource = $injector->getInstance(ResourceInterface::class);
         /* @var $resource \BEAR\Resource\ResourceInterface */
         $resource->options->uri('page://self/index')->eager->request();

@@ -4,7 +4,7 @@
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
-namespace Module;
+namespace BEAR\Resource\Module;
 
 use BEAR\Resource\ResourceInterface;
 use FakeVendor\Sandbox\Module\AppModule;
@@ -20,10 +20,9 @@ class HalModuleTest extends TestCase
 
     public function testConfigure()
     {
-        $resource = (new Injector(new AppModule))->getInstance(ResourceInterface::class);
+        $resource = (new Injector(new AppModule, $_ENV['TMP_DIR']))->getInstance(ResourceInterface::class);
         // request
         $news = $resource
-            ->get
             ->uri('app://self/news')
             ->withQuery(['date' => 'today'])
             ->request();

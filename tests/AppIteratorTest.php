@@ -18,7 +18,7 @@ class AppIteratorTest extends TestCase
 
     protected function setUp()
     {
-        $resourceDir = __DIR__ . '/Fake/MyVendor';
+        $resourceDir = __DIR__ . '/Fake/Mock';
         $this->appIterator = new AppIterator($resourceDir);
     }
 

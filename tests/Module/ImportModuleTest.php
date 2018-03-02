@@ -4,10 +4,9 @@
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
-namespace Module;
+namespace BEAR\Resource\Module;
 
 use BEAR\Resource\ImportApp;
-use BEAR\Resource\Module\ImportAppModule;
 use BEAR\Resource\ResourceInterface;
 use FakeVendor\Sandbox\Module\AppModule;
 use PHPUnit\Framework\TestCase;
@@ -36,7 +35,7 @@ class ImportModuleTest extends TestCase
             new ImportApp('blog', 'FakeVendor\Blog', 'app')
         ];
         $module->override(new ImportAppModule($importConfig));
-        $resource = (new Injector($module))->getInstance(ResourceInterface::class);
+        $resource = (new Injector($module, $_ENV['TMP_DIR']))->getInstance(ResourceInterface::class);
         // request
         $news = $resource
             ->get

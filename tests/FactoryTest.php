@@ -29,8 +29,8 @@ class FactoryTest extends TestCase
         parent::setUp();
         $injector = new Injector;
         $scheme = (new SchemeCollection)
-            ->scheme('app')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\App'))
-            ->scheme('page')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox', 'Resource\Page'))
+            ->scheme('app')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox'))
+            ->scheme('page')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox'))
             ->scheme('prov')->host('self')->toAdapter(new FakeProv)
             ->scheme('nop')->host('self')->toAdapter(new FakeNop);
         $this->factory = new Factory($scheme);
