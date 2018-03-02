@@ -16,6 +16,7 @@ use JsonSchema\Constraints\Constraint;
 use JsonSchema\Validator;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
+use Ray\Aop\ReflectionMethod;
 use Ray\Aop\WeavedInterface;
 use Ray\Di\Di\Named;
 
@@ -48,8 +49,10 @@ final class JsonSchemaInterceptor implements MethodInterceptor
      */
     public function invoke(MethodInvocation $invocation)
     {
+        /** @var ReflectionMethod $method */
+        $method = $invocation->getMethod();
         /** @var JsonSchema $jsonSchema */
-        $jsonSchema = $invocation->getMethod()->getAnnotation(JsonSchema::class);
+        $jsonSchema = $method->getAnnotation(JsonSchema::class);
         if ($jsonSchema->params) {
             $arguments = $this->getNamedArguments($invocation);
             $this->validateRequest($jsonSchema, $arguments);
