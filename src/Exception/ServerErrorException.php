@@ -13,7 +13,6 @@ class ServerErrorException extends \ErrorException implements ExceptionInterface
 {
     public function __construct(string $message = '', $code = Code::ERROR, \Exception $previous = null)
     {
-        $this->message = $message;
-        $this->code = $code;
+        parent::__construct($message, $code, 1, '', 0, $previous);
     }
 }
