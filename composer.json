@@ -59,6 +59,6 @@
         "coverage": ["php -dzend_extension=xdebug.so ./vendor/bin/phpunit --coverage-text --coverage-html=build/coverage"],
         "cs": ["php-cs-fixer fix -v --dry-run", "phpcs --standard=./phpcs.xml src"],
         "cs-fix": ["php-cs-fixer fix -v", "phpcbf src"],
-        "phpstan": "phpstan analyse -l max src"
+        "phpstan": "phpstan analyse -l max -c phpstan.neon src tests --no-progress --no-interaction"
     }
 }
