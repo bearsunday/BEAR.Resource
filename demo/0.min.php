@@ -4,26 +4,35 @@
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
+namespace BEAR\Resource\Demo;
+
 use BEAR\Resource\Module\ResourceModule;
 use BEAR\Resource\ResourceInterface;
 use BEAR\Resource\ResourceObject;
 use Ray\Di\Injector;
 
-$loader = require dirname(dirname(dirname(__DIR__))) . '/vendor/autoload.php';
+require dirname(__DIR__) . '/vendor/autoload.php';
 
-$loader->add('', __DIR__);
+class User extends ResourceObject
+{
+    protected $users = [
+        ['name' => 'Athos', 'age' => 15, 'blog_id' => 0],
+        ['name' => 'Aramis', 'age' => 16, 'blog_id' => 1],
+        ['name' => 'Porthos', 'age' => 17, 'blog_id' => 2]
+    ];
 
-/* @var $resource \BEAR\Resource\Resource */
+    public function onGet($id)
+    {
+        return $this->users[$id];
+    }
+}
+/* @var \BEAR\Resource\Resource $resource */
 $resource = (new Injector(new ResourceModule('/')))->getInstance(ResourceInterface::class);
-
-$result = $resource->get->object(new User)->withQuery(['id' => 1])->eager->request();
-/* @var $result ResourceObject */
+$result = $resource->get->object(new User)(['id' => 1]);
 
 echo "code:{$result->code}" . PHP_EOL;
-
 echo 'headers:' . PHP_EOL;
 print_r($result->headers) . PHP_EOL;
-
 echo 'body:' . PHP_EOL;
 print_r($result->body) . PHP_EOL;
 
