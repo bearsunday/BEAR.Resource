@@ -10,6 +10,7 @@ use BEAR\Resource\ResourceObject;
 use Ray\Di\Injector;
 
 $loader = require dirname(dirname(dirname(__DIR__))) . '/vendor/autoload.php';
+
 $loader->add('', __DIR__);
 
 /* @var $resource \BEAR\Resource\Resource */
