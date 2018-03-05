@@ -64,8 +64,6 @@ namespace MyVendor\Sandbox\Resource\App {
         ];
 
         /**
-         * @param id
-         *
          * @return array
          */
         public function onGet($post_id)
@@ -112,9 +110,7 @@ namespace MyVendor\Sandbox\Resource\App {
          */
         public function onGet($author_id)
         {
-            $posts = $this->select('author_id', $author_id);
-
-            return $posts;
+            return $this->select('author_id', $author_id);
         }
     }
 
