@@ -18,11 +18,11 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 class News extends ResourceObject
 {
     /**
-     * @Embed(rel="weather", src="app://self/weather{?date}")
+     * @Embed(rel="weather", src="/weather{?date}")
      */
-    public function onGet($date)
+    public function onGet($date) : ResourceObject
     {
-        $this->body = [
+        $this->body += [
             'headline' => "40th anniversary of Rubik's Cube invention.",
             'sports' => "Pieter Weening wins Giro d'Italia."
         ];
@@ -33,7 +33,7 @@ class News extends ResourceObject
 
 class Weather extends ResourceObject
 {
-    public function onGet($date)
+    public function onGet($date) : ResourceObject
     {
         $this->body = [
             'today' => "the weather of {$date} is sunny"
@@ -44,7 +44,7 @@ class Weather extends ResourceObject
 }
 
 /** @var ResourceInterface $resource */
-$resource = (new Injector(new HalModule(new ResourceModule('MyVendor\Sandbox'))))->getInstance(ResourceInterface::class);
+$resource = (new Injector(new HalModule(new ResourceModule('MyVendor\Sandbox')), __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
 // request
 $news = $resource->get->uri('app://self/news')(['date' => 'today']);
 echo $news . PHP_EOL;

@@ -49,7 +49,7 @@ class User extends ResourceObject
 }
 
 /* @var $resource \BEAR\Resource\ResourceInterface */
-$resource = (new Injector(new HalModule(new ResourceModule('Sandbox\Resource'))))->getInstance(ResourceInterface::class);
+$resource = (new Injector(new HalModule(new ResourceModule('Sandbox\Resource')), __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
 $user = $resource->get->uri('app://self/user')(['id' => 2]);
 
 echo $user;

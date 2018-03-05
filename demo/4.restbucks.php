@@ -92,7 +92,7 @@ class Payment extends ResourceObject
 }
 
 /** @var ResourceInterface $resource */
-$resource = (new Injector(new HalModule(new ResourceModule('MyVendor\Sandbox'))))->getInstance(ResourceInterface::class);
+$resource = (new Injector(new HalModule(new ResourceModule('MyVendor\Sandbox')), __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
 $order = $resource->post->uri('app://self/order')(['drink' => 'latte']);
 $payment = [
     'credit_card_number' => '123456789',

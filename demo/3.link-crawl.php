@@ -232,7 +232,7 @@ namespace Main {
     use Ray\Di\Injector;
 
     /** @var ResourceInterface $resource */
-    $resource = (new Injector(new HalModule(new ResourceModule('MyVendor\Sandbox'))))->getInstance(ResourceInterface::class);
+    $resource = (new Injector(new HalModule(new ResourceModule('MyVendor\Sandbox')), __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
     $author = $resource->get->uri('app://self/author')->linkCrawl('tree')();
     echo json_encode($author->body, JSON_PRETTY_PRINT) . PHP_EOL;
 }

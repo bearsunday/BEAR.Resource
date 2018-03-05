@@ -27,7 +27,7 @@ class User extends ResourceObject
     }
 }
 /* @var $resource \BEAR\Resource\ResourceInterface */
-$resource = (new Injector(new ResourceModule('Sandbox\Resource')))->getInstance(ResourceInterface::class);
+$resource = (new Injector(new ResourceModule('Sandbox\Resource'), __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
 /* @var $result ResourceObject */
 $ro = $resource->get->uri('app://self/user')(['id' => 1]);
 echo "code:{$ro->code}" . PHP_EOL;
