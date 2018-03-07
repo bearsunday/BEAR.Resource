@@ -16,7 +16,7 @@
         }
     ],
     "require": {
-        "php": "^7.0",
+        "php": ">=7.0.0",
         "ray/di": "^2.6.5",
         "nocarrier/hal":"^0.9.12",
         "doctrine/cache":"^1.6",
