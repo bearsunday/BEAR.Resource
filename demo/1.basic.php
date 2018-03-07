@@ -23,9 +23,11 @@ class User extends ResourceObject
         ['name' => 'Porthos', 'age' => 17, 'blog_id' => 2]
     ];
 
-    public function onGet(string $id)
+    public function onGet(string $id) : ResourceObject
     {
-        return $this->users[$id];
+        $this->body = $this->users[$id];
+
+        return $this;
     }
 }
 
