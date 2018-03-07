@@ -6,6 +6,7 @@ declare(strict_types=1);
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
+
 return [
     'baseUrl' => 'http://httpbin.org/',
     'operations' => [
