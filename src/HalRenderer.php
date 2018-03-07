@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * This file is part of the BEAR.Resource package.
  *
@@ -42,6 +44,31 @@ class HalRenderer implements RenderInterface
         return $ro->view;
     }
 
+    private function valuateElements(ResourceObject &$ro)
+    {
+        foreach ($ro->body as $key => &$embeded) {
+            if ($embeded instanceof AbstractRequest) {
+                $isDefferentSchema = $this->isDifferentSchema($ro, $embeded->resourceObject);
+                if ($isDefferentSchema === true) {
+                    $ro->body['_embedded'][$key] = $embeded()->body;
+                    unset($ro->body[$key]);
+                    continue;
+                }
+                unset($ro->body[$key]);
+                $view = $this->render($embeded());
+                $ro->body['_embedded'][$key] = json_decode($view);
+            }
+        }
+    }
+
+    /**
+     * Return "is different schema" (page <-> app)
+     */
+    private function isDifferentSchema(ResourceObject $parentRo, ResourceObject $childRo) : bool
+    {
+        return $parentRo->uri->scheme . $parentRo->uri->host !== $childRo->uri->scheme . $childRo->uri->host;
+    }
+
     private function getReverseMatchedLink(string $uri) : string
     {
         return $uri;
@@ -60,10 +87,19 @@ class HalRenderer implements RenderInterface
 
     private function valuate(ResourceObject $ro) : array
     {
+        // evaluate all request in body.
+        if (is_array($ro->body)) {
+            $this->valuateElements($ro);
+        }
         // HAL
         $body = $ro->body ?: [];
+        if (is_scalar($body)) {
+            $body = ['value' => $body];
 
-        return [$ro, $body];
+            return [$ro, $body];
+        }
+
+        return[$ro, (array) $body];
     }
 
     private function addLinks(array $body, array $annotations, Hal $hal)

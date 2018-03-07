@@ -1,15 +1,11 @@
 <?php
+
+declare(strict_types=1);
 /**
  * This file is part of the BEAR.Resource package.
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
-use Doctrine\Common\Annotations\AnnotationRegistry;
-
-$loader = require dirname(__DIR__) . '/vendor/autoload.php';
-/* @var $loader \Composer\Autoload\ClassLoader */
-AnnotationRegistry::registerLoader([$loader, 'loadClass']);
-
 $_ENV['schema_dir'] = __DIR__ . '/Fake/json_schema';
 $_ENV['TMP_DIR'] = __DIR__ . '/tmp';
 $unlink = function ($path) use (&$unlink) {

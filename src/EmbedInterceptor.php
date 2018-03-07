@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * This file is part of the BEAR.Resource package.
  *
@@ -42,16 +44,12 @@ final class EmbedInterceptor implements MethodInterceptor
      */
     public function invoke(MethodInvocation $invocation)
     {
+        /** @var ResourceObject $resourceObject */
         $resourceObject = $invocation->getThis();
-        if (! $resourceObject instanceof ResourceObject) {
-            throw new EmbedException(get_class($resourceObject));
-        }
         $method = $invocation->getMethod();
         $query = $this->getArgsByInvocation($invocation);
         $embeds = $this->reader->getMethodAnnotations($method);
-        // embedding resource
         $this->embedResource($embeds, $resourceObject, $query);
-        // request (method can modify embedded resource)
         $result = $invocation->proceed();
 
         return $result;

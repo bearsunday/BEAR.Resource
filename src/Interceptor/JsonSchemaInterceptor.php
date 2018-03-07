@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * This file is part of the BEAR.Resource package.
  *
@@ -16,6 +18,7 @@ use JsonSchema\Constraints\Constraint;
 use JsonSchema\Validator;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
+use Ray\Aop\ReflectionMethod;
 use Ray\Aop\WeavedInterface;
 use Ray\Di\Di\Named;
 
@@ -48,18 +51,16 @@ final class JsonSchemaInterceptor implements MethodInterceptor
      */
     public function invoke(MethodInvocation $invocation)
     {
-        $jsonSchema = $invocation->getMethod()->getAnnotation(JsonSchema::class);
-        if (! $jsonSchema instanceof JsonSchema) {
-            throw new JsonSchemaException($invocation->getMethod()->name);
-        }
+        /** @var ReflectionMethod $method */
+        $method = $invocation->getMethod();
+        /** @var JsonSchema $jsonSchema */
+        $jsonSchema = $method->getAnnotation(JsonSchema::class);
         if ($jsonSchema->params) {
             $arguments = $this->getNamedArguments($invocation);
             $this->validateRequest($jsonSchema, $arguments);
         }
+        /** @var ResourceObject $ro */
         $ro = $invocation->proceed();
-        if (! $ro instanceof ResourceObject) {
-            throw new JsonSchemaException($invocation->getMethod()->name);
-        }
         if ($ro->code === 200 || $ro->code == 201) {
             $this->validateResponse($jsonSchema, $ro);
         }
