@@ -21,7 +21,7 @@ return \PhpCsFixer\Config::create()
         'combine_consecutive_unsets' => true,
         'concat_space' => ['spacing' => 'one'],
         'declare_equal_normalize' => true,
-        'declare_strict_types' => false,
+        'declare_strict_types' => true,
         'dir_constant' => true,
         'ereg_to_preg' => true,
         'function_typehint_space' => true,
@@ -124,7 +124,8 @@ return \PhpCsFixer\Config::create()
     ))
     ->setFinder(
         PhpCsFixer\Finder::create()
-            ->exclude('src-data')
+            ->exclude('demo/tmp')
+            ->exclude('tests/tmp')
             ->exclude('src-deprecated')
             ->in(__DIR__)
     )->setLineEnding("\n");
