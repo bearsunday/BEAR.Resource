@@ -4,7 +4,7 @@
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
-namespace Sandbox\Resource\Resource\App;
+namespace MyVendor\Demo\Resource\App;
 
 use BEAR\Resource\Module\ResourceModule;
 use BEAR\Resource\ResourceInterface;
@@ -21,15 +21,16 @@ class User extends ResourceObject
         ['name' => 'Porthos', 'age' => 17, 'blog_id' => 2]
     ];
 
-    public function onGet($id)
+    public function onGet(string $id)
     {
         return $this->users[$id];
     }
 }
-/* @var $resource \BEAR\Resource\ResourceInterface */
-$resource = (new Injector(new ResourceModule('Sandbox\Resource'), __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
-/* @var $result ResourceObject */
-$ro = $resource->get->uri('app://self/user')(['id' => 1]);
+
+/* @var ResourceInterface $resource */
+$resource = (new Injector(new ResourceModule('MyVendor\Demo'), __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
+/* @var $ro User */
+$ro = $resource->uri('app://self/user')(['id' => 1]);
 echo "code:{$ro->code}" . PHP_EOL;
 echo 'headers:' . PHP_EOL;
 print_r($ro->headers) . PHP_EOL;

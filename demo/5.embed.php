@@ -4,7 +4,7 @@
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
-namespace MyVendor\Sandbox\Resource\App;
+namespace MyVendor\Demo\Resource\App;
 
 use BEAR\Resource\Annotation\Embed;
 use BEAR\Resource\Module\HalModule;
@@ -43,9 +43,8 @@ class Weather extends ResourceObject
     }
 }
 
-/** @var ResourceInterface $resource */
-$resource = (new Injector(new HalModule(new ResourceModule('MyVendor\Sandbox')), __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
-// request
+/* @var ResourceInterface $resource */
+$resource = (new Injector(new HalModule(new ResourceModule('MyVendor\Demo')), __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
 $news = $resource->get->uri('app://self/news')(['date' => 'today']);
 echo $news . PHP_EOL;
 //{

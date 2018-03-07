@@ -4,7 +4,7 @@
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
-namespace Sandbox\Resource\Resource\App;
+namespace MyVendor\Demo\Resource\App;
 
 use BEAR\Resource\Annotation\Link;
 use BEAR\Resource\Module\HalModule;
@@ -23,7 +23,7 @@ class Blog extends ResourceObject
         ['name' => 'Porthos blog']
     ];
 
-    public function onGet($id)
+    public function onGet(string $id) : ResourceObject
     {
         $this->body = $this->users[$id];
 
@@ -42,18 +42,19 @@ class User extends ResourceObject
     /**
      * @Link(rel="blog", href="app://self/blog?id={blog_id}")
      */
-    public function onGet($id)
+    public function onGet($id) : ResourceObject
     {
-        return $this->users[$id];
+        $this->body = $this->users[$id];
+
+        return $this;
     }
 }
 
-/* @var $resource \BEAR\Resource\ResourceInterface */
-$resource = (new Injector(new HalModule(new ResourceModule('Sandbox\Resource')), __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
+/* @var ResourceInterface $resource */
+$resource = (new Injector(new HalModule(new ResourceModule('MyVendor\Demo')), __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
 $user = $resource->get->uri('app://self/user')(['id' => 2]);
 
 echo $user;
-
 //{
 //    "name": "Porthos",
 //    "age": 17,

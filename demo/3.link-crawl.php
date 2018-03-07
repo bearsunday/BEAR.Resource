@@ -4,15 +4,26 @@
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
-use BEAR\Resource\Module\HalModule;
-use BEAR\Resource\Module\ResourceModule;
-use BEAR\Resource\ResourceInterface;
-use Ray\Di\Injector;
-namespace MyVendor\Sandbox\Resource\App {
+namespace MyVendor\Demo\Resource\App {
     require dirname(__DIR__) . '/vendor/autoload.php';
 
     use BEAR\Resource\Annotation\Link;
     use BEAR\Resource\ResourceObject;
+
+    trait SelectTrait
+    {
+        public function select(string $key, string $id) : array
+        {
+            $result = [];
+            foreach ($this->repo as $item) {
+                if ($item[$key] == $id) {
+                    $result[] = $item;
+                }
+            }
+
+            return $result;
+        }
+    }
 
     class Author extends ResourceObject
     {
@@ -25,9 +36,11 @@ namespace MyVendor\Sandbox\Resource\App {
         /**
          * @Link(crawl="tree", rel="post", href="app://self/post?author_id={id}")
          */
-        public function onGet($id = null)
+        public function onGet($id = null) : ResourceObject
         {
-            return $id === null ? $this->users : $this->users[$id];
+            $this->body = $id === null ? $this->users : $this->users[$id];
+
+            return $this;
         }
     }
 
@@ -66,9 +79,11 @@ namespace MyVendor\Sandbox\Resource\App {
         /**
          * @return array
          */
-        public function onGet($post_id)
+        public function onGet($post_id) : ResourceObject
         {
-            return $this->select('id', $post_id);
+            $this->body = $this->select('id', $post_id);
+
+            return $this;
         }
     }
 
@@ -108,9 +123,11 @@ namespace MyVendor\Sandbox\Resource\App {
          * @Link(crawl="tree", rel="meta", href="app://self/meta?post_id={id}", method="get")
          * @Link(crawl="tree", rel="tag",  href="app://self/tag?post_id={id}",  method="get")
          */
-        public function onGet($author_id)
+        public function onGet($author_id) : ResourceObject
         {
-            return $this->select('author_id', $author_id);
+            $this->body = $this->select('author_id', $author_id);
+
+            return $this;
         }
     }
 
@@ -175,30 +192,17 @@ namespace MyVendor\Sandbox\Resource\App {
          * @Link(crawl="tree", rel="tag_name",  href="app://self/tag/name?tag_id={tag_id}",  method="get")
          * @Link(crawl="another_tree", rel="xxx",  href="app://path/to/another/resource",  method="get")
          */
-        public function onGet($post_id)
+        public function onGet(string $post_id) : ResourceObject
         {
-            return $this->select('post_id', $post_id);
-        }
-    }
+            $this->body = $this->select('post_id', $post_id);
 
-    trait SelectTrait
-    {
-        public function select($key, $id)
-        {
-            $result = [];
-            foreach ($this->repo as $item) {
-                if ($item[$key] == $id) {
-                    $result[] = $item;
-                }
-            }
-
-            return $result;
+            return $this;
         }
     }
 }
-namespace MyVendor\Sandbox\Resource\App\Tag {
+namespace MyVendor\Demo\Resource\App\Tag {
     use BEAR\Resource\ResourceObject;
-    use MyVendor\Sandbox\Resource\App\SelectTrait;
+    use MyVendor\Demo\Resource\App\SelectTrait;
 
     class Name extends ResourceObject
     {
@@ -219,9 +223,11 @@ namespace MyVendor\Sandbox\Resource\App\Tag {
             ],
         ];
 
-        public function onGet($tag_id)
+        public function onGet(string $tag_id) : ResourceObject
         {
-            return $this->select('id', $tag_id);
+            $this->body = $this->select('id', $tag_id);
+
+            return $this;
         }
     }
 }
@@ -229,10 +235,12 @@ namespace Main {
     use BEAR\Resource\Module\HalModule;
     use BEAR\Resource\Module\ResourceModule;
     use BEAR\Resource\ResourceInterface;
+    use MyVendor\Demo\Resource\App\Author;
     use Ray\Di\Injector;
 
-    /** @var ResourceInterface $resource */
-    $resource = (new Injector(new HalModule(new ResourceModule('MyVendor\Sandbox')), __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
+    /* @var ResourceInterface $resource */
+    $resource = (new Injector(new HalModule(new ResourceModule('MyVendor\Demo')), __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
+    /* @var Author $author */
     $author = $resource->get->uri('app://self/author')->linkCrawl('tree')();
     echo json_encode($author->body, JSON_PRETTY_PRINT) . PHP_EOL;
 }
