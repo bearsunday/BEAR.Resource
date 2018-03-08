@@ -49,25 +49,22 @@ class Weather extends ResourceObject
 $resource = (new Injector(new HalModule(new ResourceModule('MyVendor\Demo')), __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
 $news = $resource->get->uri('app://self/news')(['date' => 'today']);
 echo $news . PHP_EOL;
-```
-```json
-{
-    "headline": "40th anniversary of Rubik's Cube invention.",
-    "sports": "Pieter Weening wins Giro d'Italia.",
-    "_embedded": {
-        "weather": {
-            "today": "the weather of today is sunny",
-            "_links": {
-                "self": {
-                    "href": "/weather?date=today"
-                }
-            }
-        }
-    },
-    "_links": {
-        "self": {
-            "href": "/news?date=today"
-        }
-    }
-}
-```
+//{
+//    "headline": "40th anniversary of Rubik's Cube invention.",
+//    "sports": "Pieter Weening wins Giro d'Italia.",
+//    "_embedded": {
+//    "weather": {
+//        "today": "the weather of today is sunny",
+//            "_links": {
+//            "self": {
+//                "href": "/weather?date=today"
+//                }
+//            }
+//        }
+//    },
+//    "_links": {
+//    "self": {
+//        "href": "/news?date=today"
+//        }
+//    }
+//}
