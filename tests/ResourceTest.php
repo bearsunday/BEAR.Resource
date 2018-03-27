@@ -8,6 +8,7 @@ declare(strict_types=1);
  */
 namespace BEAR\Resource;
 
+use BEAR\Resource\Exception\MethodNotAllowedException;
 use BEAR\Resource\Module\HalModule;
 use BEAR\Resource\Module\ResourceModule;
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -250,5 +251,15 @@ class ResourceTest extends TestCase
         $ro = $resource->get->uri('page://self/assist')->withQuery(['login_id' => '_WILL_BE_IGNORED_'])->eager->request();
         /* @var $ro \BEAR\Resource\ResourceObject */
         $this->assertSame('login_id:assisted01', $ro->body);
+    }
+
+    public function testDefaultMethodRequestGet()
+    {
+        $this->resource->post->uri('app://self/holder')();
+        $requeset = $this->resource->uri('app://self/holder');
+        $this->assertSame('get', $requeset->method);
+        $this->expectException(MethodNotAllowedException::class);
+        $this->expectExceptionMessage('get');
+        $this->resource->uri('app://self/holder')();
     }
 }
