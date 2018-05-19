@@ -83,9 +83,9 @@ class ResourceTest extends TestCase
 
     public function testObject()
     {
-        $resourceObject = new Index;
-        $resourceObject->uri = new Uri('page://self/index');
-        $instance = $this->resource->get->object($resourceObject)->eager->request();
+        $ro = new Index;
+        $ro->uri = new Uri('page://self/index');
+        $instance = $this->resource->get->object($ro)->eager->request();
         $this->assertInstanceOf(Index::class, $instance);
     }
 

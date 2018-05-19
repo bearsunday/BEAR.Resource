@@ -39,7 +39,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
      *
      * @var ResourceObject
      */
-    public $resourceObject;
+    public $ro;
 
     /**
      * Method

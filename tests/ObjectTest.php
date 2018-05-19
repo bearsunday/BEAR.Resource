@@ -16,7 +16,7 @@ class ObjectTest extends TestCase
     /**
      * @var ResourceObject
      */
-    protected $resourceObject;
+    protected $ro;
 
     protected function setUp()
     {

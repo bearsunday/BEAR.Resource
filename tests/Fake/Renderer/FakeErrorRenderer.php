@@ -13,7 +13,7 @@ use BEAR\Resource\ResourceObject;
 
 class FakeErrorRenderer implements RenderInterface
 {
-    public function render(ResourceObject $resourceObject)
+    public function render(ResourceObject $ro)
     {
         throw new \ErrorException;
     }

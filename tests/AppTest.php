@@ -17,7 +17,7 @@ class AppTest extends TestCase
     public function testGet()
     {
         $app = new AppAdapter(new Injector, 'FakeVendor\Sandbox');
-        $resourceObject = $app->get(new Uri('page://self/index'));
-        $this->assertInstanceOf(Index::class, $resourceObject);
+        $ro = $app->get(new Uri('page://self/index'));
+        $this->assertInstanceOf(Index::class, $ro);
     }
 }
