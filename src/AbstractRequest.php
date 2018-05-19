@@ -36,13 +36,6 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     public $uri;
 
     /**
-     * Resource object
-     *
-     * @var ResourceObject
-     */
-    public $ro;
-
-    /**
      * Method
      *
      * @var string
@@ -76,6 +69,11 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
      * @var \BEAR\Resource\LinkType[]
      */
     public $links = [];
+
+    /**
+     * @var ResourceObject
+     */
+    public $ro;
 
     /**
      * Request Result
@@ -113,7 +111,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
         LinkerInterface $linker = null
     ) {
         $this->invoker = $invoker;
-        $this->resourceObject = $ro;
+        $this->ro = $ro;
         if (! in_array(strtolower($method), [self::GET, self::POST, self::PUT, self::PATCH, self::DELETE, self::HEAD, self::OPTIONS], true)) {
             throw new MethodException($method, 400);
         }
@@ -144,10 +142,10 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
         if ($query !== null) {
             $this->query = array_merge($this->query, $query);
         }
-        if (! isset($this->resourceObject->uri)) {
-            throw new UriException(get_class($this->resourceObject));
+        if (! isset($this->ro->uri)) {
+            throw new UriException(get_class($this->ro));
         }
-        $this->resourceObject->uri->query = $this->query;
+        $this->ro->uri->query = $this->query;
         if ($this->links && $this->linker instanceof LinkerInterface) {
             return $this->linker->invoke($this);
         }
@@ -242,7 +240,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
      */
     public function hash()
     {
-        return md5(get_class($this->resourceObject) . $this->method . serialize($this->query) . serialize($this->links));
+        return md5(get_class($this->ro) . $this->method . serialize($this->query) . serialize($this->links));
     }
 
     /**

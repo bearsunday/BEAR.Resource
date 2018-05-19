@@ -40,24 +40,24 @@ final class Invoker implements InvokerInterface
     public function invoke(AbstractRequest $request)
     {
         $onMethod = 'on' . ucfirst($request->method);
-        if (method_exists($request->resourceObject, $onMethod) === true) {
+        if (method_exists($request->ro, $onMethod) === true) {
             return $this->invokeMethod($request, $onMethod);
         }
         if ($request->method === Request::OPTIONS) {
             return $this->invokeOptions($request);
         }
 
-        throw new MethodNotAllowedException(get_class($request->resourceObject) . "::{($request->method}()", 405);
+        throw new MethodNotAllowedException(get_class($request->ro) . "::{($request->method}()", 405);
     }
 
     private function invokeMethod(AbstractRequest $request, string $onMethod) : ResourceObject
     {
-        $params = $this->params->getParameters([$request->resourceObject, $onMethod], $request->query);
-        $response = call_user_func_array([$request->resourceObject, $onMethod], $params);
+        $params = $this->params->getParameters([$request->ro, $onMethod], $request->query);
+        $response = call_user_func_array([$request->ro, $onMethod], $params);
 
         if (! $response instanceof ResourceObject) {
-            $request->resourceObject->body = $response;
-            $response = $request->resourceObject;
+            $request->ro->body = $response;
+            $response = $request->ro;
         }
 
         return $response;
@@ -65,8 +65,8 @@ final class Invoker implements InvokerInterface
 
     private function invokeOptions(AbstractRequest $request) : ResourceObject
     {
-        $ro = $request->resourceObject;
-        $ro->view = $this->optionsRenderer->render($request->resourceObject);
+        $ro = $request->ro;
+        $ro->view = $this->optionsRenderer->render($request->ro);
 
         return $ro;
     }
