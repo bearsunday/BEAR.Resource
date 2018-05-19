@@ -10,6 +10,7 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\MethodException;
 use BEAR\Resource\Exception\OutOfBoundsException;
+use BEAR\Resource\Exception\UriException;
 
 /**
  * @property string $code
@@ -143,6 +144,10 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
         if ($query !== null) {
             $this->query = array_merge($this->query, $query);
         }
+        if (! isset($this->resourceObject->uri)) {
+            throw new UriException(get_class($this->resourceObject));
+        }
+        $this->resourceObject->uri->query = $this->query;
         if ($this->links && $this->linker instanceof LinkerInterface) {
             return $this->linker->invoke($this);
         }

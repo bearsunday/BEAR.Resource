@@ -52,10 +52,6 @@ final class Invoker implements InvokerInterface
 
     private function invokeMethod(AbstractRequest $request, string $onMethod) : ResourceObject
     {
-        if ($request->resourceObject->uri instanceof AbstractUri) {
-            $request->resourceObject->uri->query = $request->query;
-            $request->resourceObject->uri->method = $request->method;
-        }
         $params = $this->params->getParameters([$request->resourceObject, $onMethod], $request->query);
         $response = call_user_func_array([$request->resourceObject, $onMethod], $params);
 

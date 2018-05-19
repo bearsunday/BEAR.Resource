@@ -34,6 +34,16 @@ class RequestTest extends TestCase
      */
     private $fake;
 
+    /**
+     * @var Entry
+     */
+    private $entry;
+
+    /**
+     * @var FakeNopResource
+     */
+    private $nop;
+
     protected function setUp()
     {
         parent::setUp();
@@ -43,6 +53,12 @@ class RequestTest extends TestCase
         $this->request = new Request($this->invoker, $entry);
         $this->fake = new FakeResource;
         $this->fake->uri = new Uri('test://self/path/to/resource');
+        $entry = new Entry;
+        $entry->uri = new Uri('app://self/dummy');
+        $this->entry = $entry;
+        $nop = new FakeNopResource;
+        $nop->uri = new Uri('app://self/dummy');
+        $this->nop = $nop;
     }
 
     public function testToUriWithMethod()
@@ -73,7 +89,7 @@ class RequestTest extends TestCase
     {
         $request = new Request(
             $this->invoker,
-            new FakeNopResource,
+            $this->nop,
             Request::GET,
             ['a' => 'koriym', 'b' => 25]
         );
@@ -85,7 +101,7 @@ class RequestTest extends TestCase
         $this->expectException(OutOfBoundsException::class);
         $request = new Request(
             $this->invoker,
-            new FakeNopResource,
+            $this->nop,
             Request::GET,
             ['key' => 'animal', 'value' => 'kuma']
         );
@@ -97,7 +113,7 @@ class RequestTest extends TestCase
         $this->expectException(OutOfBoundsException::class);
         $request = new Request(
             $this->invoker,
-            new FakeNopResource,
+            $this->nop,
             Request::PUT,
             ['key' => 'animal', 'value' => 'kuma']
         );
@@ -108,7 +124,7 @@ class RequestTest extends TestCase
     {
         $request = new Request(
             $this->invoker,
-            new FakeNopResource,
+            $this->nop,
             'get',
             ['a' => 'koriym', 'b' => 25]
         );
@@ -118,6 +134,7 @@ class RequestTest extends TestCase
     public function testToStringWithRenderableResourceObject()
     {
         $ro = (new FakeResource)->setRenderer(new FakeTestRenderer);
+        $ro->uri = new Uri('app://self/dummy');
         $request = new Request(
             $this->invoker,
             $ro,
@@ -131,6 +148,7 @@ class RequestTest extends TestCase
     public function testToStringWithErrorRenderer()
     {
         $ro = (new FakeResource)->setRenderer(new FakeErrorRenderer);
+        $ro->uri = new Uri('app://self/dummy');
         $request = new Request(
             $this->invoker,
             $ro,
@@ -154,7 +172,7 @@ class RequestTest extends TestCase
 
     public function testIterator()
     {
-        $request = new Request($this->invoker, new Entry);
+        $request = new Request($this->invoker, $this->entry);
         $result = [];
         foreach ($request as $row) {
             $result[] = $row;
@@ -169,7 +187,7 @@ class RequestTest extends TestCase
 
     public function testArrayAccess()
     {
-        $request = new Request($this->invoker, new Entry);
+        $request = new Request($this->invoker, $this->entry);
         $result = $request[100];
         $expected = [
             'id' => 100,
@@ -183,14 +201,14 @@ class RequestTest extends TestCase
         $this->expectException(OutOfBoundsException::class);
         $request = new Request(
             $this->invoker,
-            new Entry
+            $this->entry
         );
         $request[0];
     }
 
     public function testIsSet()
     {
-        $request = new Request($this->invoker, new Entry);
+        $request = new Request($this->invoker, $this->entry);
         $result = isset($request[100]);
         $this->assertTrue($result);
     }
@@ -199,7 +217,7 @@ class RequestTest extends TestCase
     {
         $request = new Request(
             $this->invoker,
-            new Entry
+            $this->entry
         );
         $result = isset($request[0]);
         $this->assertFalse($result);
@@ -223,7 +241,7 @@ class RequestTest extends TestCase
     public function testInvalidMethod()
     {
         $this->expectException(MethodException::class);
-        new Request($this->invoker, new Entry, 'invalid-method');
+        new Request($this->invoker, $this->entry, 'invalid-method');
     }
 
     public function testHash()
@@ -235,7 +253,7 @@ class RequestTest extends TestCase
     {
         $request = new Request(
             $this->invoker,
-            new FakeNopResource,
+            $this->nop,
             Request::PUT,
             ['key' => 'animal', 'value' => 'kuma']
         );

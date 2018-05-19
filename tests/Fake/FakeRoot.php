@@ -16,11 +16,28 @@ class FakeRoot extends ResourceObject
 {
     public function onGet()
     {
-        $this['one'] = 1;
-        $this['two'] = new Request(
-            new Invoker(new NamedParameter(new NamedParamMetas(new ArrayCache, new AnnotationReader), new Injector), new OptionsRenderer(new OptionsMethods(new AnnotationReader))),
-            new FakeChild
-        );
+        $fakeChild = new FakeChild;
+        $fakeChild->uri = new Uri('app://self/dummy');
+        $this->body = [
+            'one' => 1,
+            'two' => new Request(
+                new Invoker(
+                    new NamedParameter(
+                        new NamedParamMetas(
+                            new ArrayCache,
+                            new AnnotationReader
+                        ),
+                        new Injector
+                    ),
+                    new OptionsRenderer(
+                        new OptionsMethods(
+                            new AnnotationReader
+                        )
+                    )
+                ),
+            $fakeChild
+            )
+        ];
 
         return $this;
     }
