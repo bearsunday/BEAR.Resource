@@ -59,7 +59,7 @@ final class Linker implements LinkerInterface
     public function invoke(AbstractRequest $request)
     {
         $this->invoker->invoke($request);
-        $current = clone $request->ro;
+        $current = clone $request->resourceObject;
         foreach ($request->links as $link) {
             /* @noinspection ExceptionsAnnotatingAndHandlingInspection */
             $nextResource = $this->annotationLink($link, $current, $request);

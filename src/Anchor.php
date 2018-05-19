@@ -35,14 +35,14 @@ final class Anchor implements AnchorInterface
     public function href($rel, AbstractRequest $request, array $query)
     {
         $classMethod = 'on' . ucfirst($request->method);
-        $annotations = $this->reader->getMethodAnnotations(new \ReflectionMethod($request->ro, $classMethod));
+        $annotations = $this->reader->getMethodAnnotations(new \ReflectionMethod($request->resourceObject, $classMethod));
         foreach ($annotations as $annotation) {
             if ($this->isValidLinkAnnotation($annotation, $rel)) {
                 return $this->getMethodUdi($request, $query, $annotation);
             }
         }
 
-        throw new LinkException("rel:{$rel} class:" . get_class($request->ro), 500);
+        throw new LinkException("rel:{$rel} class:" . get_class($request->resourceObject), 500);
     }
 
     private function isValidLinkAnnotation($annotation, string $rel) : bool
@@ -52,7 +52,7 @@ final class Anchor implements AnchorInterface
 
     private function getMethodUdi(AbstractRequest $request, array $query, LinkAnnotation $annotation) : array
     {
-        $body = $request->ro->body;
+        $body = $request->resourceObject->body;
         $query = is_array($body) ? array_merge($body, $query) : [];
         $uri = uri_template($annotation->href, $query);
 
