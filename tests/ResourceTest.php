@@ -43,7 +43,7 @@ class ResourceTest extends TestCase
             ->scheme('app')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox'))
             ->scheme('page')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox'))
             ->scheme('nop')->host('self')->toAdapter(new FakeNop);
-        $invoker = new Invoker(new NamedParameter(new ArrayCache, $reader, $injector), new OptionsRenderer(new OptionsMethods($reader)));
+        $invoker = new Invoker(new NamedParameter(new NamedParamMetas(new ArrayCache, new AnnotationReader), new Injector), new OptionsRenderer(new OptionsMethods($reader)));
         $factory = new Factory($scheme);
         $resource = new Resource($factory, $invoker, new Anchor($reader), new Linker($reader, $invoker, $factory));
         $this->assertInstanceOf(ResourceInterface::class, $resource);
@@ -83,9 +83,9 @@ class ResourceTest extends TestCase
 
     public function testObject()
     {
-        $resourceObject = new Index;
-        $resourceObject->uri = new Uri('page://self/index');
-        $instance = $this->resource->get->object($resourceObject)->eager->request();
+        $ro = new Index;
+        $ro->uri = new Uri('page://self/index');
+        $instance = $this->resource->get->object($ro)->eager->request();
         $this->assertInstanceOf(Index::class, $instance);
     }
 

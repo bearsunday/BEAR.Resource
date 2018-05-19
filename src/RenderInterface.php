@@ -16,9 +16,9 @@ interface RenderInterface
     /**
      * Render
      *
-     * @param ResourceObject $resourceObject
+     * @param ResourceObject $ro
      *
      * @return string
      */
-    public function render(ResourceObject $resourceObject);
+    public function render(ResourceObject $ro);
 }

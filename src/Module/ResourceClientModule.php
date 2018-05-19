@@ -18,6 +18,8 @@ use BEAR\Resource\Linker;
 use BEAR\Resource\LinkerInterface;
 use BEAR\Resource\NamedParameter;
 use BEAR\Resource\NamedParameterInterface;
+use BEAR\Resource\NamedParamMetas;
+use BEAR\Resource\NamedParamMetasInterface;
 use BEAR\Resource\OptionsMethods;
 use BEAR\Resource\OptionsRenderer;
 use BEAR\Resource\PrettyJsonRenderer;
@@ -53,5 +55,6 @@ class ResourceClientModule extends AbstractModule
         $this->bind(Cache::class)->to(ArrayCache::class);
         $this->bind(RenderInterface::class)->annotatedWith('options')->to(OptionsRenderer::class);
         $this->bind(OptionsMethods::class);
+        $this->bind(NamedParamMetasInterface::class)->to(NamedParamMetas::class);
     }
 }

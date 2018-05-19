@@ -76,9 +76,9 @@ final class Request extends AbstractRequest
      */
     public function toUri()
     {
-        $this->resourceObject->uri->query = $this->query;
+        $this->ro->uri->query = $this->query;
 
-        return (string) $this->resourceObject->uri;
+        return (string) $this->ro->uri;
     }
 
     /**
