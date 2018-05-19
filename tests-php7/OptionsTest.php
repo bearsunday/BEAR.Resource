@@ -35,7 +35,7 @@ class OptionsTest extends TestCase
 
     protected function setUp()
     {
-        $this->invoker = new Invoker(new NamedParameter(new ArrayCache, new AnnotationReader, new Injector), new OptionsRenderer(new OptionsMethods(new AnnotationReader, $_ENV['schema_dir'])));
+        $this->invoker = new Invoker(new NamedParameter(new NamedParamMetas(new ArrayCache, new AnnotationReader), new Injector), new OptionsRenderer(new OptionsMethods(new AnnotationReader, $_ENV['schema_dir'])));
     }
 
     public function testOptionsMethod()
