@@ -34,18 +34,6 @@ final class NamedParameter implements NamedParameterInterface
     public function getParameters(callable $callable, array $query) : array
     {
         $metas = ($this->paramMetas)($callable, $this->injector);
-
-        return $this->evaluateParams($query, $metas);
-    }
-
-    /**
-     * Return evaluated parameters
-     *
-     * @param array            $query caller value
-     * @param ParamInterface[] $metas Param object[] ['varName' => ParamInterface]
-     */
-    private function evaluateParams(array $query, array $metas) : array
-    {
         $parameters = [];
         foreach ($metas as $varName => $param) {
             /* @var $param ParamInterface */
