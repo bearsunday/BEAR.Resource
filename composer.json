@@ -18,6 +18,8 @@
     "require": {
         "php": ">=7.0.0",
         "ray/di": "^2.7.0",
+        "ray/aop": "^2.7.2",
+        "ray/compiler": "^1.3.3",
         "nocarrier/hal":"^0.9.12",
         "doctrine/cache":"^1.6",
         "rize/uri-template": "^0.3",
@@ -29,19 +31,14 @@
     "require-dev": {
         "phpunit/phpunit": "^6.2"
     },
-    "conflict": {
-        "phpdocumentor/reflection-docblock": "<3.0||>=3.2.0"
-    },
-    "suggest": {
-        "ext-uri_template": "ext/uri_template for URI Template(RFC6570) specification."
-    },
     "autoload": {
         "psr-4": {
             "BEAR\\Resource\\": ["src/", "src-deprecated"]
         },
         "files": [
             "src-files/uri_template.php"
-        ]
+        ],
+        "exclude-from-classmap": ["/src-deprecated/"]
     },
     "autoload-dev": {
         "psr-4": {
