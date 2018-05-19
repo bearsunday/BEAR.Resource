@@ -104,9 +104,9 @@ final class Resource implements ResourceInterface
      *
      * @throws \BEAR\Resource\Exception\MethodException
      */
-    public function object($resourceObject)
+    public function object($ro)
     {
-        return new Request($this->invoker, $resourceObject, $this->method);
+        return new Request($this->invoker, $ro, $this->method);
     }
 
     /**
@@ -121,9 +121,9 @@ final class Resource implements ResourceInterface
             $uri = new Uri($uri);
         }
         $uri->method = $this->method;
-        $resourceObject = $this->newInstance($uri);
-        $resourceObject->uri = $uri;
-        $this->request = new Request($this->invoker, $resourceObject, $uri->method, $uri->query, [], $this->linker);
+        $ro = $this->newInstance($uri);
+        $ro->uri = $uri;
+        $this->request = new Request($this->invoker, $ro, $uri->method, $uri->query, [], $this->linker);
         $this->method = 'get';
 
         return $this->request;

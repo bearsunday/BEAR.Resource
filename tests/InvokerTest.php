@@ -43,7 +43,7 @@ class InvokerTest extends TestCase
 
     protected function setUp()
     {
-        $this->invoker = new Invoker(new NamedParameter(new ArrayCache, new AnnotationReader, new Injector), new OptionsRenderer(new OptionsMethods(new AnnotationReader)));
+        $this->invoker = new Invoker(new NamedParameter(new NamedParamMetas(new ArrayCache, new AnnotationReader), new Injector), new OptionsRenderer(new OptionsMethods(new AnnotationReader)));
     }
 
     public function testInvoke()
@@ -200,7 +200,7 @@ class InvokerTest extends TestCase
     public function testOptionsNotAllowed()
     {
         $this->expectException(MethodNotAllowedException::class);
-        $invoker = new Invoker(new NamedParameter(new ArrayCache, new AnnotationReader, new Injector), new VoidOptionsRenderer);
+        $invoker = new Invoker(new NamedParameter(new NamedParamMetas(new ArrayCache, new AnnotationReader), new Injector), new VoidOptionsRenderer);
         $request = new Request($this->invoker, new Order, Request::DELETE);
         $invoker->invoke($request);
     }

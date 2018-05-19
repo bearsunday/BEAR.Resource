@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": ">=7.0.0",
-        "ray/di": "^2.6.5",
+        "ray/di": "^2.7.0",
         "nocarrier/hal":"^0.9.12",
         "doctrine/cache":"^1.6",
         "rize/uri-template": "^0.3",
@@ -55,10 +55,11 @@
         "files": ["tests/Fake/AppInjector.php"]
     },
     "scripts" :{
-        "test": ["@cs", "phpunit"],
+        "tests": ["@cs", "phpunit", "@phpstan"],
         "coverage": ["php -dzend_extension=xdebug.so ./vendor/bin/phpunit --coverage-text --coverage-html=build/coverage"],
         "cs": ["php-cs-fixer fix -v --dry-run", "phpcs --standard=./phpcs.xml src"],
         "cs-fix": ["php-cs-fixer fix -v", "phpcbf src"],
+        "phpmd":  "vendor/bin/phpmd src,tests text ./phpmd.xml",
         "phpstan": "phpstan analyse -l max -c phpstan.neon src tests --no-progress --no-interaction"
     }
 }

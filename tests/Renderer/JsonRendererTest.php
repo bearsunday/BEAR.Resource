@@ -11,6 +11,7 @@ namespace BEAR\Resource\Renderer;
 use BEAR\Resource\FakeRoot;
 use BEAR\Resource\JsonRenderer;
 use BEAR\Resource\ResourceObject;
+use BEAR\Resource\Uri;
 use PHPUnit\Framework\TestCase;
 
 class JsonRendererTest extends TestCase
@@ -23,6 +24,7 @@ class JsonRendererTest extends TestCase
     protected function setUp()
     {
         $this->ro = new FakeRoot;
+        $this->ro->uri = new Uri('app://self/dummy');
         $this->ro->setRenderer(new JsonRenderer);
     }
 

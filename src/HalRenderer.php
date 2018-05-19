@@ -48,7 +48,7 @@ class HalRenderer implements RenderInterface
     {
         foreach ($ro->body as $key => &$embeded) {
             if ($embeded instanceof AbstractRequest) {
-                $isDefferentSchema = $this->isDifferentSchema($ro, $embeded->resourceObject);
+                $isDefferentSchema = $this->isDifferentSchema($ro, $embeded->ro);
                 if ($isDefferentSchema === true) {
                     $ro->body['_embedded'][$key] = $embeded()->body;
                     unset($ro->body[$key]);

@@ -13,10 +13,10 @@ interface TransferInterface
     /**
      * Transfer resource object state
      *
-     * @param ResourceObject $resourceObject Resource object
-     * @param array          $server         $_SERVER value
+     * @param ResourceObject $ro     Resource object
+     * @param array          $server $_SERVER value
      *
      * @return mixed
      */
-    public function __invoke(ResourceObject $resourceObject, array $server);
+    public function __invoke(ResourceObject $ro, array $server);
 }

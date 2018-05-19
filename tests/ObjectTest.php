@@ -16,64 +16,64 @@ class ObjectTest extends TestCase
     /**
      * @var ResourceObject
      */
-    protected $resourceObject;
+    protected $ro;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->resourceObject = new Mock\Entry;
-        $this->resourceObject[0] = 'entry1';
-        $this->resourceObject[1] = 'entry2';
-        $this->resourceObject[2] = 'entry3';
+        $this->ro = new Mock\Entry;
+        $this->ro[0] = 'entry1';
+        $this->ro[1] = 'entry2';
+        $this->ro[2] = 'entry3';
     }
 
     public function testOffsetGet()
     {
-        $actual = $this->resourceObject[0];
+        $actual = $this->ro[0];
         $this->assertSame('entry1', $actual);
     }
 
     public function testOffsetExists()
     {
-        $this->assertTrue(isset($this->resourceObject[0]));
+        $this->assertTrue(isset($this->ro[0]));
     }
 
     public function testOffsetUnset()
     {
-        unset($this->resourceObject[0]);
-        $this->assertFalse(isset($this->resourceObject[0]));
+        unset($this->ro[0]);
+        $this->assertFalse(isset($this->ro[0]));
     }
 
     public function testOffsetExistsFalse()
     {
-        $this->assertFalse(isset($this->resourceObject[10]));
+        $this->assertFalse(isset($this->ro[10]));
     }
 
     public function testCount()
     {
-        $this->assertSame(3, count($this->resourceObject));
+        $this->assertSame(3, count($this->ro));
     }
 
     public function testKsort()
     {
-        $this->resourceObject = new Mock\Entry;
-        $this->resourceObject['d'] = 'lemon';
-        $this->resourceObject['a'] = 'orange';
-        $this->resourceObject['b'] = 'banana';
-        $this->resourceObject->ksort();
+        $this->ro = new Mock\Entry;
+        $this->ro['d'] = 'lemon';
+        $this->ro['a'] = 'orange';
+        $this->ro['b'] = 'banana';
+        $this->ro->ksort();
         $expected = ['a' => 'orange', 'b' => 'banana', 'd' => 'lemon'];
-        $this->assertSame($expected, (array) $this->resourceObject->body);
+        $this->assertSame($expected, (array) $this->ro->body);
     }
 
     public function testAsort()
     {
-        $this->resourceObject = new Mock\Entry;
-        $this->resourceObject['d'] = 'lemon';
-        $this->resourceObject['a'] = 'orange';
-        $this->resourceObject['b'] = 'banana';
-        $this->resourceObject->asort();
+        $this->ro = new Mock\Entry;
+        $this->ro['d'] = 'lemon';
+        $this->ro['a'] = 'orange';
+        $this->ro['b'] = 'banana';
+        $this->ro->asort();
         $expected = ['b' => 'banana', 'd' => 'lemon', 'a' => 'orange'];
-        $this->assertSame($expected, (array) $this->resourceObject->body);
+        $this->assertSame($expected, (array) $this->ro->body);
     }
 
     public function testAsortDisable()
@@ -94,13 +94,13 @@ class ObjectTest extends TestCase
 
     public function testAppend()
     {
-        $this->resourceObject[] = 'entry_append';
-        $this->assertSame(4, count($this->resourceObject->body));
+        $this->ro[] = 'entry_append';
+        $this->assertSame(4, count($this->ro->body));
     }
 
     public function testGetIterator()
     {
-        $iterator = $this->resourceObject->getIterator();
+        $iterator = $this->ro->getIterator();
         $actual = '';
         while ($iterator->valid()) {
             $actual .= $iterator->key() . '=>' . $iterator->current() . ',';
@@ -112,8 +112,8 @@ class ObjectTest extends TestCase
 
     public function testGetEmptyIterator()
     {
-        $this->resourceObject->body = 'string';
-        $iterator = $this->resourceObject->getIterator();
+        $this->ro->body = 'string';
+        $iterator = $this->ro->getIterator();
         $actual = '';
         while ($iterator->valid()) {
             $actual .= $iterator->key() . '=>' . $iterator->current() . ',';
@@ -132,37 +132,37 @@ class ObjectTest extends TestCase
 
     public function testToString()
     {
-        $this->resourceObject->headers['X-TEST'] = __FUNCTION__;
-        $str = (string) $this->resourceObject;
+        $this->ro->headers['X-TEST'] = __FUNCTION__;
+        $str = (string) $this->ro;
         $this->assertInternalType('string', $str);
     }
 
     public function testToStringScalarBody()
     {
-        $this->resourceObject->headers['X-TEST'] = __FUNCTION__;
-        $this->resourceObject->body = 'OK';
-        $str = (string) $this->resourceObject;
+        $this->ro->headers['X-TEST'] = __FUNCTION__;
+        $this->ro->body = 'OK';
+        $str = (string) $this->ro;
         $this->assertInternalType('string', $str);
     }
 
     public function testToStringWithRenderer()
     {
         $renderer = new FakeTestRenderer;
-        $this->resourceObject->setRenderer($renderer);
-        $result = (string) ($this->resourceObject);
+        $this->ro->setRenderer($renderer);
+        $result = (string) ($this->ro);
         $this->assertSame('["entry1","entry2","entry3"]', $result);
     }
 
     public function testSetRendererWithoutRenderer()
     {
-        $result = (string) ($this->resourceObject);
+        $result = (string) ($this->ro);
         $this->assertSame('["entry1","entry2","entry3"]', $result);
     }
 
     public function testResourceHasView()
     {
-        $this->resourceObject->view = 'view-is-override';
-        $result = (string) ($this->resourceObject);
+        $this->ro->view = 'view-is-override';
+        $result = (string) ($this->ro);
         $this->assertSame('["entry1","entry2","entry3"]', $result);
     }
 }

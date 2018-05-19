@@ -44,12 +44,12 @@ final class EmbedInterceptor implements MethodInterceptor
      */
     public function invoke(MethodInvocation $invocation)
     {
-        /** @var ResourceObject $resourceObject */
-        $resourceObject = $invocation->getThis();
+        /** @var ResourceObject $ro */
+        $ro = $invocation->getThis();
         $method = $invocation->getMethod();
         $query = $this->getArgsByInvocation($invocation);
         $embeds = $this->reader->getMethodAnnotations($method);
-        $this->embedResource($embeds, $resourceObject, $query);
+        $this->embedResource($embeds, $ro, $query);
         $result = $invocation->proceed();
 
         return $result;
@@ -57,12 +57,12 @@ final class EmbedInterceptor implements MethodInterceptor
 
     /**
      * @param Embed[]        $embeds
-     * @param ResourceObject $resourceObject
+     * @param ResourceObject $ro
      * @param array          $query
      *
      * @throws EmbedException
      */
-    private function embedResource(array $embeds, ResourceObject $resourceObject, array $query)
+    private function embedResource(array $embeds, ResourceObject $ro, array $query)
     {
         foreach ($embeds as $embed) {
             /* @var $embed Embed */
@@ -70,9 +70,9 @@ final class EmbedInterceptor implements MethodInterceptor
                 continue;
             }
             try {
-                $templateUri = $this->getFullUri($embed->src, $resourceObject);
+                $templateUri = $this->getFullUri($embed->src, $ro);
                 $uri = uri_template($templateUri, $query);
-                $resourceObject->body[$embed->rel] = clone $this->resource->get->uri($uri);
+                $ro->body[$embed->rel] = clone $this->resource->get->uri($uri);
             } catch (BadRequestException $e) {
                 // wrap ResourceNotFound or Uri exception
                 throw new EmbedException($embed->src, 500, $e);
@@ -80,10 +80,10 @@ final class EmbedInterceptor implements MethodInterceptor
         }
     }
 
-    private function getFullUri(string $uri, ResourceObject $resourceObject) : string
+    private function getFullUri(string $uri, ResourceObject $ro) : string
     {
         if ($uri[0] === '/') {
-            $uri = "{$resourceObject->uri->scheme}://{$resourceObject->uri->host}" . $uri;
+            $uri = "{$ro->uri->scheme}://{$ro->uri->host}" . $uri;
         }
 
         return $uri;

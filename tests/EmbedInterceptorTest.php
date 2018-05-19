@@ -101,15 +101,15 @@ class EmbedInterceptorTest extends TestCase
         $request = $this->resource->get->uri('app://self/bird/birds')->withQuery(['id' => 1])->request();
         /* @var $request Request */
         $this->assertSame('app://self/bird/birds?id=1', $request->toUri());
-        $resourceObject = $request();
-        $bird1 = $resourceObject['bird1'];
-        $bird2 = $resourceObject['bird2'];
+        $ro = $request();
+        $bird1 = $ro['bird1'];
+        $bird2 = $ro['bird2'];
         /* @var $bird1 Request */
         /* @var $bird2 Request */
         $this->assertSame('app://self/bird/canary', $bird1->toUri());
         $this->assertSame('app://self/bird/sparrow?id=1', $bird2->toUri());
 
-        return $resourceObject['bird2'];
+        return $ro['bird2'];
     }
 
     /**
@@ -149,10 +149,10 @@ class EmbedInterceptorTest extends TestCase
         $this->assertSame('app://self/bird/sparrows?id_request=3&id_object=5&id_eager_request=7', $request->toUri());
 
         /* @var $request Request */
-        $resourceObject = $request();
+        $ro = $request();
         /* @var $birdRequest Request */
-        $birdRequest = $resourceObject['birdRequest'];
-        $birdObject = $resourceObject['birdObject'];
+        $birdRequest = $ro['birdRequest'];
+        $birdObject = $ro['birdObject'];
         $this->assertInstanceOf(Request::class, $birdRequest);
         $this->assertSame('get app://self/bird/sparrow?id=3', $birdRequest->toUriWithMethod());
         $this->assertInstanceOf(Sparrow::class, $birdObject);

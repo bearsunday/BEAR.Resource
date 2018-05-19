@@ -38,7 +38,7 @@ class LinkerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->invoker = new Invoker(new NamedParameter(new ArrayCache, new AnnotationReader, new Injector), new OptionsRenderer(new OptionsMethods(new AnnotationReader)));
+        $this->invoker = new Invoker(new NamedParameter(new NamedParamMetas(new ArrayCache, new AnnotationReader), new Injector), new OptionsRenderer(new OptionsMethods(new AnnotationReader)));
         $schemeCollection = (new SchemeCollection)
             ->scheme('app')
             ->host('self')
