@@ -185,7 +185,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
      */
     public function request()
     {
-        if ($this->in == 'eager') {
+        if ($this->in === 'eager') {
             $this->result = $this->invoke();
 
             return $this->result;
