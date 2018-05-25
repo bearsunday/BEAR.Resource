@@ -259,7 +259,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     {
         if ($this->result === null) {
             /* @noinspection ImplicitMagicMethodCallInspection */
-            $this->result = $this->__invoke();
+            $this->result = ($this)();
         }
 
         return $this->result;

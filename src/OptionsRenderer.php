@@ -73,7 +73,7 @@ final class OptionsRenderer implements RenderInterface
     {
         $mehtodList = [];
         foreach ($allows as $method) {
-            $mehtodList[$method] = $this->optionsMethod->__invoke($ro, $method);
+            $mehtodList[$method] = ($this->optionsMethod)($ro, $method);
         }
 
         return $mehtodList;
