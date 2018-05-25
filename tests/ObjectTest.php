@@ -163,6 +163,6 @@ class ObjectTest extends TestCase
     {
         $this->ro->view = 'view-is-override';
         $result = (string) ($this->ro);
-        $this->assertSame('["entry1","entry2","entry3"]', $result);
+        $this->assertSame('view-is-override', $result);
     }
 }
