@@ -17,50 +17,34 @@ interface RequestInterface
     /**
      * InvokerInterface resource request
      *
-     * @param array $query
-     *
-     * @return ResourceObject
+     * @param array|null $query
      */
-    public function __invoke(array $query = null);
+    public function __invoke(array $query = null) : ResourceObject;
 
     /**
      * Set query
-     *
-     * @param array $query
-     *
-     * @return $this
      */
-    public function withQuery(array $query);
+    public function withQuery(array $query) : self;
 
     /**
      * Add(merge) query
-     *
-     * @param array $query
-     *
-     * @return $this
      */
-    public function addQuery(array $query);
+    public function addQuery(array $query) : self;
 
     /**
      * To Request URI string
-     *
-     * @return string
      */
-    public function toUri();
+    public function toUri() : string;
 
     /**
      * To Request URI string with request method
-     *
-     * @return string
      */
-    public function toUriWithMethod();
+    public function toUriWithMethod() : string;
 
     /**
      * Return request hash
-     *
-     * @return string
      */
-    public function hash();
+    public function hash() : string;
 
     /**
      * @return mixed ResourceObject | Request
@@ -69,28 +53,16 @@ interface RequestInterface
 
     /**
      * Replace linked resource
-     *
-     * @param string $linkKey
-     *
-     * @return $this
      */
-    public function linkSelf($linkKey);
+    public function linkSelf(string $linkKey) : self;
 
     /**
      * Add linked resource
-     *
-     * @param string $linkKey
-     *
-     * @return $this
      */
-    public function linkNew($linkKey);
+    public function linkNew(string $linkKey) : self;
 
     /**
      * Crawl resource with link key
-     *
-     * @param string $linkKey
-     *
-     * @return $this
      */
-    public function linkCrawl($linkKey);
+    public function linkCrawl(string $linkKey) : self;
 }
