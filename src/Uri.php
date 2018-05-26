@@ -13,9 +13,6 @@ use BEAR\Resource\Exception\UriException;
 final class Uri extends AbstractUri
 {
     /**
-     * @param string $uri
-     * @param array  $query
-     *
      * @throws \BEAR\Resource\Exception\UriException
      */
     public function __construct(string $uri, array $query = [])
