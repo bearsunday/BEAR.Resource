@@ -34,7 +34,7 @@ final class SchemeCollection implements SchemeCollectionInterface
     /**
      * {@inheritdoc}
      */
-    public function scheme($scheme)
+    public function scheme(string $scheme) : SchemeCollectionInterface
     {
         $this->scheme = $scheme;
 
@@ -44,7 +44,7 @@ final class SchemeCollection implements SchemeCollectionInterface
     /**
      * {@inheritdoc}
      */
-    public function host($host)
+    public function host(string $host) : SchemeCollectionInterface
     {
         $this->app = $host;
 
@@ -54,7 +54,7 @@ final class SchemeCollection implements SchemeCollectionInterface
     /**
      * {@inheritdoc}
      */
-    public function toAdapter(AdapterInterface $adapter)
+    public function toAdapter(AdapterInterface $adapter) : SchemeCollectionInterface
     {
         $this->collection[$this->scheme . '://' . $this->app] = $adapter;
 
@@ -66,7 +66,7 @@ final class SchemeCollection implements SchemeCollectionInterface
      *
      * @throws SchemeException
      */
-    public function getAdapter(AbstractUri $uri)
+    public function getAdapter(AbstractUri $uri) : AdapterInterface
     {
         $schemeIndex = $uri->scheme . '://' . $uri->host;
         if (! array_key_exists($schemeIndex, $this->collection)) {

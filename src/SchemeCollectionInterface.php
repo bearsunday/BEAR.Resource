@@ -12,37 +12,21 @@ interface SchemeCollectionInterface
 {
     /**
      * Set scheme
-     *
-     * @param string $scheme
-     *
-     * @return $this
      */
-    public function scheme($scheme);
+    public function scheme(string $scheme) : self;
 
     /**
      * Set host
-     *
-     * @param string $host
-     *
-     * @return $this
      */
-    public function host($host);
+    public function host(string $host) : self;
 
     /**
      * Set resource adapter
-     *
-     * @param AdapterInterface $adapter
-     *
-     * @return $this
      */
-    public function toAdapter(AdapterInterface $adapter);
+    public function toAdapter(AdapterInterface $adapter) : self;
 
     /**
      * Return resource adapter
-     *
-     * @param AbstractUri $uri
-     *
-     * @return AdapterInterface
      */
-    public function getAdapter(AbstractUri $uri);
+    public function getAdapter(AbstractUri $uri) : AdapterInterface;
 }
