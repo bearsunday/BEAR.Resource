@@ -94,7 +94,7 @@ final class Resource implements ResourceInterface
     /**
      * {@inheritdoc}
      */
-    public function newInstance($uri)
+    public function newInstance($uri) : ResourceObject
     {
         return $this->factory->newInstance($uri);
     }
@@ -104,18 +104,15 @@ final class Resource implements ResourceInterface
      *
      * @throws \BEAR\Resource\Exception\MethodException
      */
-    public function object($ro)
+    public function object(ResourceObject$ro) : RequestInterface
     {
         return new Request($this->invoker, $ro, $this->method);
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \BEAR\Resource\Exception\MethodException
-     * @throws \BEAR\Resource\Exception\UriException
      */
-    public function uri($uri)
+    public function uri($uri) : RequestInterface
     {
         if (is_string($uri)) {
             $uri = new Uri($uri);
@@ -131,15 +128,11 @@ final class Resource implements ResourceInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \BEAR\Resource\Exception\MethodException
      */
-    public function href($rel, array $query = [])
+    public function href(string $rel, array $query = []) : ResourceObject
     {
         list($method, $uri) = $this->anchor->href($rel, $this->request, $query);
-        /* @noinspection ExceptionsAnnotatingAndHandlingInspection */
-        $target = $this->{$method}->uri($uri)->addQuery($query)->eager->request();
 
-        return $target;
+        return $this->{$method}->uri($uri)->addQuery($query)->eager->request();
     }
 }

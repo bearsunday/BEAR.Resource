@@ -21,38 +21,23 @@ interface ResourceInterface
 {
     /**
      * Return new resource object instance
-     *
-     * @param string $uri
-     *
-     * @return ResourceObject
      */
-    public function newInstance($uri);
+    public function newInstance(string $uri) : ResourceObject;
 
     /**
      * Set resource object
-     *
-     * @param mixed $ro
-     *
-     * @return RequestInterface
      */
-    public function object($ro);
+    public function object(ResourceObject$ro) : RequestInterface;
 
     /**
      * Set URI
      *
      * @param string|AbstractUri $uri
-     *
-     * @return RequestInterface
      */
-    public function uri($uri);
+    public function uri($uri) : RequestInterface;
 
     /**
      * Hyper reference (Hypertext As The Engine Of Application State)
-     *
-     * @param string $rel
-     * @param array  $query
-     *
-     * @return mixed
      */
-    public function href($rel, array $query = []);
+    public function href(string $rel, array $query = []) : ResourceObject;
 }
