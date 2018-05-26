@@ -8,12 +8,6 @@ declare(strict_types=1);
  */
 namespace BEAR\Resource;
 
-interface ProviderInterface
+final class NullResourceObject extends ResourceObject
 {
-    /**
-     * Return new resource object
-     *
-     * @return ResourceObject
-     */
-    public function get(AbstractUri $uri) : ResourceObject;
 }

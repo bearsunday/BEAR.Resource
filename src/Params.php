@@ -25,12 +25,7 @@ final class Params
      */
     public $optional = [];
 
-    /**
-     * @param string $method
-     * @param array  $required
-     * @param array  $optional
-     */
-    public function __construct($method, array $required, array $optional)
+    public function __construct(string $method, array $required, array $optional)
     {
         $this->method = $method;
         $this->required = $required;

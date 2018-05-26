@@ -72,7 +72,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     /**
      * @var ResourceObject
      */
-    public $ro;
+    public $resourceObject;
 
     /**
      * Request Result
@@ -110,7 +110,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
         LinkerInterface $linker = null
     ) {
         $this->invoker = $invoker;
-        $this->ro = $ro;
+        $this->resourceObject = $ro;
         if (! in_array(strtolower($method), [self::GET, self::POST, self::PUT, self::PATCH, self::DELETE, self::HEAD, self::OPTIONS], true)) {
             throw new MethodException($method, 400);
         }
@@ -136,12 +136,12 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     /**
      * {@inheritdoc}
      */
-    public function __invoke(array $query = null)
+    public function __invoke(array $query = null) : ResourceObject
     {
         if (is_array($query)) {
             $this->query = array_merge($this->query, $query);
         }
-        $this->ro->uri->query = $this->query;
+        $this->resourceObject->uri->query = $this->query;
         if ($this->links && $this->linker instanceof LinkerInterface) {
             return $this->linker->invoke($this);
         }
@@ -152,7 +152,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     /**
      * {@inheritdoc}
      */
-    public function __get($name)
+    public function __get(string $name)
     {
         $this->result = $this->invoke();
 
@@ -185,7 +185,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
      */
     public function request()
     {
-        if ($this->in == 'eager') {
+        if ($this->in === 'eager') {
             $this->result = $this->invoke();
 
             return $this->result;
@@ -234,9 +234,9 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     /**
      * {@inheritdoc}
      */
-    public function hash()
+    public function hash() : string
     {
-        return md5(get_class($this->ro) . $this->method . serialize($this->query) . serialize($this->links));
+        return md5(get_class($this->resourceObject) . $this->method . serialize($this->query) . serialize($this->links));
     }
 
     /**
@@ -259,7 +259,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     {
         if ($this->result === null) {
             /* @noinspection ImplicitMagicMethodCallInspection */
-            $this->result = $this->__invoke();
+            $this->result = ($this)();
         }
 
         return $this->result;

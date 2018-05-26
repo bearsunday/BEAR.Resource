@@ -1,11 +1,8 @@
 .idea
-templates_c
 vendor
-tmp
 *.log
 build
 cache.properties
 composer.lock
 composer.phar
-.DS_Store
 .php_cs.cache

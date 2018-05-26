@@ -81,7 +81,11 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     public function __sleep()
     {
         if (is_array($this->body)) {
-            $this->body = $this->evaluate($this->body);
+            foreach ($this->body as &$item) {
+                if ($item instanceof RequestInterface) {
+                    $item = ($item)();
+                }
+            }
         }
 
         return ['uri', 'code', 'headers', 'body', 'view'];
@@ -196,6 +200,9 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      */
     public function toString()
     {
+        if ($this->view !== null) {
+            return $this->view;
+        }
         if (! $this->renderer instanceof RenderInterface) {
             $this->renderer = new JsonRenderer;
         }
@@ -224,12 +231,6 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     {
         $responder($this, $server);
     }
-
-    /**
-     * @param mixed $body
-     *
-     * @return mixed
-     */
 
     /**
      * @param mixed $body
