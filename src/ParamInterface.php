@@ -13,10 +13,7 @@ use Ray\Di\InjectorInterface;
 interface ParamInterface
 {
     /**
-     * @param string $varName
-     * @param array  $query
-     *
      * @return mixed
      */
-    public function __invoke($varName, array $query, InjectorInterface $injector);
+    public function __invoke(string $varName, array $query, InjectorInterface $injector);
 }
