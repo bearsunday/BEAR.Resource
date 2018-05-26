@@ -10,7 +10,7 @@ namespace BEAR\Resource;
 
 class FakeNop implements AdapterInterface
 {
-    public function get(AbstractUri $uri)
+    public function get(AbstractUri $uri) : ResourceObject
     {
         unset($uri);
 

@@ -49,7 +49,7 @@ final class AppAdapter implements AdapterInterface
      * @throws ResourceNotFoundException
      * @throws \Ray\Di\Exception\Unbound
      */
-    public function get(AbstractUri $uri)
+    public function get(AbstractUri $uri) : ResourceObject
     {
         if (substr($uri->path, -1) === '/') {
             $uri->path .= 'index';
