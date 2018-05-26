@@ -279,8 +279,8 @@ class RequestTest extends TestCase
 
     public function testSerialize()
     {
-        $ro = unserialize(serialize($this->request));
-        $this->assertInstanceOf(AbstractRequest::class, $ro);
+        $this->expectException(\LogicException::class);
+        serialize($this->request);
     }
 
     public function testCode()
