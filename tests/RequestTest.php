@@ -155,7 +155,16 @@ class RequestTest extends TestCase
             Request::GET,
             ['a' => 'koriym', 'b' => 25]
         );
+        $no = $str = '';
+        set_error_handler(function (int $errno, string $errstr) use (&$no, &$str) {
+            $no = $errno;
+            $str = $errstr;
+        });
+        (string) $request;
+        $this->assertSame(256, $no);
+        $this->assertContains('FakeErrorRenderer->render', $str);
         $this->assertSame('', (string) $request);
+        restore_error_handler();
     }
 
     public function testToStringWithoutRender()
