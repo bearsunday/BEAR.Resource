@@ -49,7 +49,7 @@ final class AssistedWebContextParam implements ParamInterface
             return  $phpWebContext[$this->webContextParam->key];
         }
 
-        return $this->defaultParam->__invoke($varName, $query, $injector);
+        return ($this->defaultParam)($varName, $query, $injector);
     }
 
     public static function setSuperGlobalsOnlyForTestingPurpose(array $globals)
