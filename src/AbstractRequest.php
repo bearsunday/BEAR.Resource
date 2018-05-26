@@ -127,7 +127,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
 
             return (string) $this->result;
         } catch (\Exception $e) {
-            error_log((string) $e);
+            trigger_error($e->getMessage() . PHP_EOL . $e->getTraceAsString(), E_USER_ERROR);
 
             return '';
         }
