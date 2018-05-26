@@ -37,7 +37,7 @@ final class AppAdapter implements AdapterInterface
      * @param InjectorInterface $injector  Application dependency injector
      * @param string            $namespace Resource adapter namespace
      */
-    public function __construct(InjectorInterface $injector, $namespace)
+    public function __construct(InjectorInterface $injector, string $namespace)
     {
         $this->injector = $injector;
         $this->namespace = $namespace;

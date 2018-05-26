@@ -29,10 +29,7 @@ final class Meta
      */
     public $extras = [];
 
-    /**
-     * @param string $class
-     */
-    public function __construct($class)
+    public function __construct(string $class)
     {
         $this->uri = $this->getUri($class);
         $this->options = $this->getOptions($class);

@@ -92,19 +92,12 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     private $linker;
 
     /**
-     * @param InvokerInterface     $invoker
-     * @param ResourceObject       $ro
-     * @param string               $method
-     * @param array                $query
-     * @param array                $links
-     * @param LinkerInterface|null $linker
-     *
      * @throws MethodException
      */
     public function __construct(
         InvokerInterface $invoker,
         ResourceObject $ro,
-        $method = Request::GET,
+        string $method = Request::GET,
         array $query = [],
         array $links = [],
         LinkerInterface $linker = null

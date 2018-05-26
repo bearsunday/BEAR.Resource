@@ -32,7 +32,7 @@ final class Anchor implements AnchorInterface
      *
      * @throws LinkException
      */
-    public function href($rel, AbstractRequest $request, array $query)
+    public function href(string $rel, AbstractRequest $request, array $query)
     {
         $classMethod = 'on' . ucfirst($request->method);
         $annotations = $this->reader->getMethodAnnotations(new \ReflectionMethod($request->resourceObject, $classMethod));

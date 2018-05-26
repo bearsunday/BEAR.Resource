@@ -30,11 +30,9 @@ final class AppIterator implements \Iterator
     private $keys = [];
 
     /**
-     * @param string $resourceDir
-     *
      * @throws ResourceDirException
      */
-    public function __construct($resourceDir)
+    public function __construct(string $resourceDir)
     {
         if (! file_exists($resourceDir)) {
             throw new ResourceDirException($resourceDir);

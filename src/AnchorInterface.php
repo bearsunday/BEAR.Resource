@@ -19,5 +19,5 @@ interface AnchorInterface
      *
      * @return mixed
      */
-    public function href($rel, AbstractRequest $request, array $query);
+    public function href(string $rel, AbstractRequest $request, array $query);
 }
