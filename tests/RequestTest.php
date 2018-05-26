@@ -266,7 +266,15 @@ class RequestTest extends TestCase
             Request::PUT,
             ['key' => 'animal', 'value' => 'kuma']
         );
-        $this->assertSame('', (string) $request);
+        $no = $str = '';
+        set_error_handler(function (int $errno, string $errstr) use (&$no, &$str) {
+            $no = $errno;
+            $str = $errstr;
+        });
+        (string) $request;
+        $this->assertSame(256, $no);
+        $this->assertContains('BEAR\Resource\FakeNopResource', $str);
+        restore_error_handler();
     }
 
     public function testSerialize()
