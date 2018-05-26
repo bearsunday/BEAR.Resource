@@ -21,8 +21,10 @@ interface ResourceInterface
 {
     /**
      * Return new resource object instance
+     *
+     * @param string|AbstractUri $uri
      */
-    public function newInstance(string $uri) : ResourceObject;
+    public function newInstance($uri) : ResourceObject;
 
     /**
      * Set resource object
