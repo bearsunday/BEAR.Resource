@@ -136,7 +136,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     /**
      * {@inheritdoc}
      */
-    public function __invoke(array $query = null)
+    public function __invoke(array $query = null) : ResourceObject
     {
         if (is_array($query)) {
             $this->query = array_merge($this->query, $query);
@@ -152,7 +152,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     /**
      * {@inheritdoc}
      */
-    public function __get($name)
+    public function __get(string $name)
     {
         $this->result = $this->invoke();
 
@@ -234,7 +234,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     /**
      * {@inheritdoc}
      */
-    public function hash()
+    public function hash() : string
     {
         return md5(get_class($this->resourceObject) . $this->method . serialize($this->query) . serialize($this->links));
     }
