@@ -34,27 +34,15 @@ final class Invoker implements InvokerInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @throws MethodNotAllowedException
      */
-    public function invoke(AbstractRequest $request)
+    public function invoke(AbstractRequest $request) : ResourceObject
     {
         $onMethod = 'on' . ucfirst($request->method);
-        if (method_exists($request->resourceObject, $onMethod) === true) {
-            return $this->invokeMethod($request, $onMethod);
+        if (! method_exists($request->resourceObject, $onMethod) === true) {
+            return $this->methodNoExists($request);
         }
-        if ($request->method === Request::OPTIONS) {
-            return $this->invokeOptions($request);
-        }
-
-        throw new MethodNotAllowedException(get_class($request->resourceObject) . "::{($request->method}()", 405);
-    }
-
-    private function invokeMethod(AbstractRequest $request, string $onMethod) : ResourceObject
-    {
         $params = $this->params->getParameters([$request->resourceObject, $onMethod], $request->query);
         $response = call_user_func_array([$request->resourceObject, $onMethod], $params);
-
         if (! $response instanceof ResourceObject) {
             $request->resourceObject->body = $response;
             $response = $request->resourceObject;
@@ -63,11 +51,15 @@ final class Invoker implements InvokerInterface
         return $response;
     }
 
-    private function invokeOptions(AbstractRequest $request) : ResourceObject
+    private function methodNoExists(AbstractRequest $request) : ResourceObject
     {
-        $ro = $request->resourceObject;
-        $ro->view = $this->optionsRenderer->render($request->resourceObject);
+        if ($request->method === Request::OPTIONS) {
+            $ro = $request->resourceObject;
+            $ro->view = $this->optionsRenderer->render($request->resourceObject);
 
-        return $ro;
+            return $ro;
+        }
+
+        throw new MethodNotAllowedException(get_class($request->resourceObject) . "::{($request->method}()", 405);
     }
 }
