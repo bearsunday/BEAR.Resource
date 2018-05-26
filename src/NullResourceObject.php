@@ -8,12 +8,6 @@ declare(strict_types=1);
  */
 namespace BEAR\Resource;
 
-class FakeProv implements AdapterInterface
+final class NullResourceObject extends ResourceObject
 {
-    public function get(AbstractUri $uri)
-    {
-        unset($uri);
-
-        return new NullResourceObject;
-    }
 }

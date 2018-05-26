@@ -47,7 +47,7 @@ class FactoryTest extends TestCase
     public function testNewInstanceWithProvider()
     {
         $instance = $this->factory->newInstance('prov://self/path/to/dummy');
-        $this->assertInstanceOf('\stdClass', $instance);
+        $this->assertInstanceOf(ResourceObject::class, $instance);
     }
 
     public function testNewInstanceScheme()

@@ -14,8 +14,6 @@ interface FactoryInterface
      * Return new resource object instance
      *
      * @param string $uri resource URI
-     *
-     * @return ResourceObject
      */
-    public function newInstance($uri);
+    public function newInstance($uri) : ResourceObject;
 }
