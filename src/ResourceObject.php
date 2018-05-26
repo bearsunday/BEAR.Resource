@@ -70,9 +70,9 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         try {
             $view = $this->toString();
         } catch (Exception $e) {
-            $view = '';
-            $msg = 'Exception caught in ' . get_class($this) . '::__toString() (log only)';
-            error_log($msg . (string) $e);
+            trigger_error($e->getMessage() . PHP_EOL . $e->getTraceAsString(), E_USER_ERROR);
+
+            return '';
         }
 
         return $view;
