@@ -104,7 +104,7 @@ final class Resource implements ResourceInterface
      *
      * @throws \BEAR\Resource\Exception\MethodException
      */
-    public function object(ResourceObject$ro) : RequestInterface
+    public function object(ResourceObject $ro) : RequestInterface
     {
         return new Request($this->invoker, $ro, $this->method);
     }

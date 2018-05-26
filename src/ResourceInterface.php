@@ -27,7 +27,7 @@ interface ResourceInterface
     /**
      * Set resource object
      */
-    public function object(ResourceObject$ro) : RequestInterface;
+    public function object(ResourceObject $ro) : RequestInterface;
 
     /**
      * Set URI
