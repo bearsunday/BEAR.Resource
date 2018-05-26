@@ -40,7 +40,7 @@ final class Factory implements FactoryInterface
      *
      * @throws \BEAR\Resource\Exception\UriException
      */
-    public function newInstance($uri)
+    public function newInstance($uri) : ResourceObject
     {
         if (is_string($uri)) {
             $uri = new Uri($uri);

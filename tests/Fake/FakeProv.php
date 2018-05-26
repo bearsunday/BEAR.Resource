@@ -14,6 +14,6 @@ class FakeProv implements AdapterInterface
     {
         unset($uri);
 
-        return new \StdClass;
+        return new NullResourceObject;
     }
 }
