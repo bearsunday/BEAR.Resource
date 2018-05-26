@@ -244,7 +244,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
      */
     public function serialize()
     {
-        return serialize($this->invoke());
+        throw new \LogicException(__METHOD__ . ' not supported');
     }
 
     /**
@@ -252,7 +252,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
      */
     public function unserialize($serialized)
     {
-        return unserialize($serialized);
+        throw new \LogicException(__METHOD__ . ' not supported');
     }
 
     private function invoke() : ResourceObject
