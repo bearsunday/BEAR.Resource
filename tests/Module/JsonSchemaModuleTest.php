@@ -18,7 +18,7 @@ use BEAR\Resource\Uri;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
-class JsonSchemalModuleTest extends TestCase
+class JsonSchemaModuleTest extends TestCase
 {
     public function testValid()
     {
@@ -121,7 +121,7 @@ class JsonSchemalModuleTest extends TestCase
     {
         $jsonSchema = dirname(__DIR__) . '/Fake/json_schema';
         $jsonValidate = dirname(__DIR__) . '/Fake/json_validate';
-        $ro = (new Injector(new JsonSchemalModule($jsonSchema, $jsonValidate), $_ENV['TMP_DIR']))->getInstance($class);
+        $ro = (new Injector(new JsonSchemaModule($jsonSchema, $jsonValidate), $_ENV['TMP_DIR']))->getInstance($class);
         /* @var $ro FakeUser */
         $ro->uri = new Uri('app://self/user?id=1');
 
