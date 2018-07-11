@@ -20,7 +20,7 @@ before_script:
 script:
   - ./vendor/bin/phpunit $COVERAGE;
   - php demo/run.php
-  - if [[ $TRAVIS_PHP_VERSION = '7.1' ]]; then IFS=$'\n'; COMMIT_SCA_FILES=($(git diff --name-only --diff-filter=ACMRTUXB "${TRAVIS_COMMIT_RANGE}")); unset IFS && ./vendor/bin/php-cs-fixer fix --config=.php_cs -v --dry-run --stop-on-violation --using-cache=no --path-mode=intersection -- "${COMMIT_SCA_FILES[@]}";fi
+  - if [[ $TRAVIS_PHP_VERSION = '7.1' ]]; then IFS=$'\n'; COMMIT_SCA_FILES=($(git diff --name-only --diff-filter=ACMRTUXB "${TRAVIS_COMMIT_RANGE}")); unset IFS && export PHP_CS_FIXER_ALLOW_XDEBUG=1; ./vendor/bin/php-cs-fixer fix --config=.php_cs -v --dry-run --stop-on-violation --using-cache=no --path-mode=intersection -- "${COMMIT_SCA_FILES[@]}";fi
   - if [[ $TRAVIS_PHP_VERSION = '7.1' ]]; then ./vendor/bin/phpstan analyse -l max -c phpstan.neon src tests --no-progress --no-interaction; fi
 after_script:
   - if [[ $TRAVIS_PHP_VERSION = '7.1' ]]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi
