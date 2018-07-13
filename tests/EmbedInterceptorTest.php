@@ -11,7 +11,6 @@ namespace BEAR\Resource;
 use BEAR\Resource\Exception\EmbedException;
 use BEAR\Resource\Module\EmbedResourceModule;
 use BEAR\Resource\Module\ResourceModule;
-use FakeVendor\Sandbox\Resource\App\Bird\Birds;
 use FakeVendor\Sandbox\Resource\App\Bird\Sparrow;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;

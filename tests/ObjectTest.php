@@ -51,7 +51,7 @@ class ObjectTest extends TestCase
 
     public function testCount()
     {
-        $this->assertSame(3, count($this->ro));
+        $this->assertCount(3, $this->ro);
     }
 
     public function testKsort()
@@ -95,7 +95,7 @@ class ObjectTest extends TestCase
     public function testAppend()
     {
         $this->ro[] = 'entry_append';
-        $this->assertSame(4, count($this->ro->body));
+        $this->assertCount(4, $this->ro->body);
     }
 
     public function testGetIterator()
