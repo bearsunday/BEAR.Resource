@@ -11,7 +11,6 @@ namespace BEAR\Resource;
 use BEAR\Resource\Exception\MethodNotAllowedException;
 use BEAR\Resource\Exception\ParameterException;
 use BEAR\Resource\Interceptor\FakeLogInterceptor;
-use BEAR\Resource\Interceptor\Log;
 use BEAR\Resource\Mock\Comment;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
