@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use FakeVendor\Sandbox\Resource\App\Doc;
-use FakeVendor\Sandbox\Resource\App\Link\Scalar\Name;
 use PHPUnit\Framework\TestCase;
 
 class MetaTest extends TestCase
