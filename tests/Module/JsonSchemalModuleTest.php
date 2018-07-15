@@ -18,9 +18,6 @@ use BEAR\Resource\Uri;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
-/**
- * @deprecated
- */
 class JsonSchemalModuleTest extends TestCase
 {
     public function testValid()

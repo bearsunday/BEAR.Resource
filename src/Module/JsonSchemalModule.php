@@ -14,7 +14,7 @@ use BEAR\Resource\ResourceObject;
 use Ray\Di\AbstractModule;
 
 /**
- * @deprecated
+ * @deprecated Use JsonSchemaModule instead
  */
 class JsonSchemalModule extends AbstractModule
 {
