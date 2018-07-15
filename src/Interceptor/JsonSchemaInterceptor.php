@@ -77,9 +77,9 @@ final class JsonSchemaInterceptor implements MethodInterceptor
 
     private function validateResponse(JsonSchema $jsonSchema, ResourceObject $ro)
     {
-        $schemeFile = $this->getSchemaFile($jsonSchema, $ro);
+        $schemaFile = $this->getSchemaFile($jsonSchema, $ro);
         $body = isset($ro->body[$jsonSchema->key]) ? $ro->body[$jsonSchema->key] : $ro->body;
-        $this->validate($body, $schemeFile);
+        $this->validate($body, $schemaFile);
     }
 
     private function validate($scanObject, $schemaFile)
