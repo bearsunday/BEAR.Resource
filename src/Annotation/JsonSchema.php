@@ -27,7 +27,7 @@ final class JsonSchema
     public $schema;
 
     /**
-     * Input parameter validation scheme
+     * Input parameter validation schema
      *
      * @var string
      */
