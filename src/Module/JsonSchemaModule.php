@@ -13,10 +13,7 @@ use BEAR\Resource\Interceptor\JsonSchemaInterceptor;
 use BEAR\Resource\ResourceObject;
 use Ray\Di\AbstractModule;
 
-/**
- * @deprecated Use JsonSchemaModule instead
- */
-class JsonSchemalModule extends AbstractModule
+class JsonSchemaModule extends AbstractModule
 {
     /**
      * Json-schema json file directory
