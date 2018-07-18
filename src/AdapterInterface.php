@@ -12,10 +12,6 @@ interface AdapterInterface
 {
     /**
      * Return new resource object
-     *
-     * @param AbstractUri $uri
-     *
-     * @return ResourceObject
      */
-    public function get(AbstractUri $uri);
+    public function get(AbstractUri $uri) : ResourceObject;
 }
