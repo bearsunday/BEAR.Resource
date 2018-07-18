@@ -33,7 +33,7 @@ final class NamedParameter implements NamedParameterInterface
      */
     public function getParameters(callable $callable, array $query) : array
     {
-        $metas = ($this->paramMetas)($callable, $this->injector);
+        $metas = ($this->paramMetas)($callable);
         $parameters = [];
         foreach ($metas as $varName => $param) {
             /* @var $param ParamInterface */
