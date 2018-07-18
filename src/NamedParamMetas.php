@@ -37,7 +37,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
         if (! is_array($callable)) {
             throw new \LogicException('callable should be an array'); // @codeCoverageIgnore
         }
-         $cacheId = __CLASS__ . get_class($callable[0]) . $callable[1];
+        $cacheId = __CLASS__ . get_class($callable[0]) . $callable[1];
         $names = $this->cache->fetch($cacheId);
         if ($names) {
             return $names;
