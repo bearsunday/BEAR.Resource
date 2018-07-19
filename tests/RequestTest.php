@@ -161,7 +161,7 @@ class RequestTest extends TestCase
             $str = $errstr;
         });
         (string) $request;
-        $this->assertSame(256, $no);
+        $this->assertSame(E_USER_WARNING, $no);
         $this->assertContains('FakeErrorRenderer->render', $str);
         $this->assertSame('', (string) $request);
         restore_error_handler();
