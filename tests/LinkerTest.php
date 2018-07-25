@@ -251,6 +251,38 @@ class LinkerTest extends TestCase
         $this->assertSame($expected, $result->body);
     }
 
+    public function testAnnotationCrawl3()
+    {
+        $request = new Request(
+            $this->invoker,
+            new Blog,
+            Request::GET,
+            ['id' => 17],
+            [new LinkType('tree', LinkType::CRAWL_LINK)]
+        );
+        $result = $this->linker->invoke($request);
+        $expected = [
+            'id' => 17,
+            'name' => 'My blog',
+            'label' => [
+                'a',
+                'b'
+            ],
+            'keyword' => [
+                'c',
+                'd'
+            ],
+            'post' => [
+                'id' => '9',
+                'author_id' => '4',
+                'body' => 'My post #1',
+                'meta' => [],
+                'tag' => [],
+            ],
+        ];
+        $this->assertSame($expected, $result->body);
+    }
+
     public function testScalarValueLinkThrowException()
     {
         $this->expectException(LinkQueryException::class);

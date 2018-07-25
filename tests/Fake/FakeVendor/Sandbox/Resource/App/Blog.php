@@ -17,6 +17,18 @@ class Blog extends ResourceObject
         11 => ['id' => 11, 'name' => 'Athos blog'],
         12 => ['id' => 12, 'name' => 'Aramis blog'],
         16 => ['id' => 16, 'name' => 'Porthos blog'],
+        17 => [
+            'id' => 17,
+            'name' => 'My blog',
+            'label' => [
+                'a',
+                'b'
+            ],
+            'keyword' => [
+                'c',
+                'd'
+            ],
+        ],
         99 => ['id' => 19, 'name' => 'BEAR blog'],
     ];
 
