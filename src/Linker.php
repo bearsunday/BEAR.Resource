@@ -211,9 +211,19 @@ final class Linker implements LinkerInterface
         return $isSingleColumnList || $isMultiColumnMultiRowList || $isMultiColumnList;
     }
 
-    private function isMultiColumnMultiRowList(array $keys, $list) : bool
+    private function isMultiColumnMultiRowList(array $keys, array $list) : bool
     {
-        return $keys !== [0 => 0] && ($keys === array_keys((array) array_pop($list)));
+        if ($keys === [0 => 0]) {
+            return false;
+        }
+
+        foreach ($list as $item) {
+            if ($keys !== array_keys((array) $item)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private function isMultiColumnList(array $value, $firstRow) : bool
