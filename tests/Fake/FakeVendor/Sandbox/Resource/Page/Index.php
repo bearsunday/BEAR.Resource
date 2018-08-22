@@ -16,4 +16,24 @@ class Index extends ResourceObject
     {
         return $id;
     }
+
+    public function onPost(string $name)
+    {
+        return 'post ' . $name;
+    }
+
+    public function onPut(string $name)
+    {
+        return 'put ' . $name;
+    }
+
+    public function onPatch(string $name)
+    {
+        return 'patch ' . $name;
+    }
+
+    public function onDelete(string $name)
+    {
+        return 'delete ' . $name;
+    }
 }
