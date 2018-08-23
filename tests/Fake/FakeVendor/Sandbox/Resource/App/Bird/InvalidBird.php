@@ -16,7 +16,7 @@ class InvalidBird extends ResourceObject
      * @Named
      * @Embed(rel="bird1", src="invalid_uri")
      */
-    public function onGet($id)
+    public function onGet(int $id)
     {
         unset($id);
 

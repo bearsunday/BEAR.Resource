@@ -22,7 +22,7 @@ class User extends ResourceObject
      * @Link(rel="prof", href="app://path/to/prof")
      * @Link(rel="blog", href="app://self/link/blog?id={id}")
      */
-    public function onGet($id)
+    public function onGet(int $id)
     {
         return $this->users[$id];
     }

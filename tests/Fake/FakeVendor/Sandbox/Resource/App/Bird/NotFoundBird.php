@@ -14,7 +14,7 @@ class NotFoundBird extends ResourceObject
     /**
      * @Embed(rel="bird1", src="app://self/not_found_uri")
      */
-    public function onGet($id)
+    public function onGet(int $id)
     {
         return $this;
     }

@@ -22,7 +22,7 @@ class News extends ResourceObject
     /**
      * @Embed(rel="weather",src="app://self/weather{?date}")
      */
-    public function onGet($date)
+    public function onGet(string $date)
     {
         unset($date);
         $this['headline'] = "40th anniversary of Rubik's Cube invention.";

@@ -13,7 +13,7 @@ class Link extends ResourceObject
     /**
      * @Log
      */
-    public function onGet($animal)
+    public function onGet(string $animal)
     {
         return "Like a {$animal} to a honey pot.";
     }

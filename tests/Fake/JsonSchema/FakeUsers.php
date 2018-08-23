@@ -14,7 +14,7 @@ class FakeUsers extends ResourceObject
     /**
      * @JsonSchema(schema="users.json")
      */
-    public function onGet($age)
+    public function onGet(int $age)
     {
         $name = [
             'firstName' => 'mucha',

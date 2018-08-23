@@ -129,19 +129,24 @@ class OptionsTest extends TestCase
         "request": {
             "parameters": {
                 "cookie": {
-                    "in": "cookie"
+                    "in": "cookie",
+                    "type": "string"
                 },
                 "env": {
-                    "in": "env"
+                    "in": "env",
+                    "type": "string"
                 },
                 "form": {
-                    "in": "formData"
+                    "in": "formData",
+                    "type": "string"
                 },
                 "query": {
-                    "in": "query"
+                    "in": "query",
+                    "type": "string"
                 },
                 "server": {
-                    "in": "server"
+                    "in": "server",
+                    "type": "string"
                 }
             },
             "required": [
@@ -157,7 +162,8 @@ class OptionsTest extends TestCase
         "request": {
             "parameters": {
                 "cookie": {
-                    "in": "cookie"
+                    "in": "cookie",
+                    "type": "string"
                 }
             },
             "required": [
@@ -168,9 +174,12 @@ class OptionsTest extends TestCase
     "DELETE": {
         "request": {
             "parameters": {
-                "a": [],
+                "a": {
+                    "type": "string"
+                },
                 "cookie": {
                     "in": "cookie",
+                    "type": "string",
                     "default": "default"
                 }
             },
@@ -240,7 +249,9 @@ class OptionsTest extends TestCase
     "GET": {
         "request": {
             "parameters": {
-                "id": []
+                "id": {
+                    "type": "integer"
+                }
             },
             "required": [
                 "id"
