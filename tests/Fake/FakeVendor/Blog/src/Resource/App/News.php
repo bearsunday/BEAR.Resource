@@ -22,7 +22,7 @@ class News extends ResourceObject
     /**
      * @Embed(rel="weather",src="app://self/weather{?date}")
      */
-    public function onGet($date)
+    public function onGet(string $date)
     {
         unset($date);
         $this['technology'] = 'Microsoft to stop producing Windows versions';
