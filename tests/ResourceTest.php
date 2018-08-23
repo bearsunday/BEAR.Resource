@@ -18,8 +18,8 @@ use FakeVendor\Sandbox\Resource\App\Href\Origin;
 use FakeVendor\Sandbox\Resource\App\Href\Target;
 use FakeVendor\Sandbox\Resource\Page\Index;
 use PHPUnit\Framework\TestCase;
-use Ray\Di\EmptyModule;
 use Ray\Di\Injector;
+use Ray\Di\NullModule;
 
 class ResourceTest extends TestCase
 {
@@ -37,7 +37,7 @@ class ResourceTest extends TestCase
 
     public function testManualConstruction()
     {
-        $injector = new Injector(new EmptyModule, $_ENV['TMP_DIR']);
+        $injector = new Injector(new NullModule, $_ENV['TMP_DIR']);
         $reader = new AnnotationReader;
         $scheme = (new SchemeCollection)
             ->scheme('app')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox'))
@@ -200,6 +200,8 @@ class ResourceTest extends TestCase
             ],
         ];
         $this->assertSame($expected, $ro->body);
+
+        return $expected;
     }
 
     public function testHal()
@@ -250,5 +252,35 @@ class ResourceTest extends TestCase
         $ro = $resource->get->uri('page://self/assist')->withQuery(['login_id' => '_WILL_BE_IGNORED_'])->eager->request();
         /* @var $ro \BEAR\Resource\ResourceObject */
         $this->assertSame('login_id:assisted01', $ro->body);
+    }
+
+    public function testGet()
+    {
+        $ro = $this->resource->get('page://self/index', ['id' => 1]);
+        $this->assertSame(1, $ro->body);
+    }
+
+    public function testPost()
+    {
+        $ro = $this->resource->post('page://self/index', ['name' => 'bear']);
+        $this->assertSame('post bear', $ro->body);
+    }
+
+    public function testPut()
+    {
+        $ro = $this->resource->put('page://self/index', ['name' => 'bear']);
+        $this->assertSame('put bear', $ro->body);
+    }
+
+    public function testPatch()
+    {
+        $ro = $this->resource->patch('page://self/index', ['name' => 'bear']);
+        $this->assertSame('patch bear', $ro->body);
+    }
+
+    public function testDelete()
+    {
+        $ro = $this->resource->delete('page://self/index', ['name' => 'bear']);
+        $this->assertSame('delete bear', $ro->body);
     }
 }

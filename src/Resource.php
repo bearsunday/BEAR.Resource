@@ -11,8 +11,8 @@ namespace BEAR\Resource;
 /**
  * @property $this $get
  * @property $this $post
- * @property $this $patch
  * @property $this $put
+ * @property $this $patch
  * @property $this $delete
  * @property $this $head
  * @property $this $options
@@ -134,5 +134,54 @@ final class Resource implements ResourceInterface
         list($method, $uri) = $this->anchor->href($rel, $this->request, $query);
 
         return $this->{$method}->uri($uri)->addQuery($query)->eager->request();
+    }
+
+    public function get(string $uri, array $query) : ResourceObject
+    {
+        $this->method = Request::GET;
+
+        return $this->uri(new Uri($uri))($query);
+    }
+
+    public function post(string $uri, array $query) : ResourceObject
+    {
+        $this->method = Request::POST;
+
+        return $this->uri(new Uri($uri))($query);
+    }
+
+    public function put(string $uri, array $query) : ResourceObject
+    {
+        $this->method = Request::PUT;
+
+        return $this->uri(new Uri($uri))($query);
+    }
+
+    public function patch(string $uri, array $query) : ResourceObject
+    {
+        $this->method = Request::PATCH;
+
+        return $this->uri(new Uri($uri))($query);
+    }
+
+    public function delete(string $uri, array $query) : ResourceObject
+    {
+        $this->method = Request::DELETE;
+
+        return $this->uri(new Uri($uri))($query);
+    }
+
+    public function options(string $uri, array $query) : ResourceObject
+    {
+        $this->method = Request::OPTIONS;
+
+        return $this->uri(new Uri($uri))($query);
+    }
+
+    public function head(string $uri, array $query) : ResourceObject
+    {
+        $this->method = Request::HEAD;
+
+        return $this->uri(new Uri($uri))($query);
     }
 }
