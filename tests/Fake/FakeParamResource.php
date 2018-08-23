@@ -25,21 +25,21 @@ class FakeParamResource extends ResourceObject
      * @QueryParam(param="query", key="q")
      * @ServerParam(param="server", key="s")
      */
-    public function onPost($cookie, $env, $form, $query, $server)
+    public function onPost(string $cookie, string $env, string $form, string $query, string $server)
     {
     }
 
     /**
      * @CookieParam(param="cookie", key="c")
      */
-    public function onPut($cookie)
+    public function onPut(string $cookie)
     {
     }
 
     /**
      * @CookieParam(param="cookie", key="c")
      */
-    public function onDelete($a, $cookie = 'default')
+    public function onDelete(string $a, $cookie = 'default')
     {
     }
 }
