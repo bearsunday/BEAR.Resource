@@ -209,7 +209,7 @@ class OptionsTest extends TestCase
         "request": {
             "parameters": {
                 "id": {
-                    "type": "integer",
+                    "type": "string",
                     "description": "User ID"
                 }
             },
