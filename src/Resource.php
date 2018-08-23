@@ -134,49 +134,49 @@ final class Resource implements ResourceInterface
         return $this->{$method}->uri($uri)->addQuery($query)->eager->request();
     }
 
-    public function get(string $uri, array $query) : ResourceObject
+    public function get(string $uri, array $query = []) : ResourceObject
     {
         $this->method = Request::GET;
 
         return $this->uri(new Uri($uri))($query);
     }
 
-    public function post(string $uri, array $query) : ResourceObject
+    public function post(string $uri, array $query = []) : ResourceObject
     {
         $this->method = Request::POST;
 
         return $this->uri(new Uri($uri))($query);
     }
 
-    public function put(string $uri, array $query) : ResourceObject
+    public function put(string $uri, array $query = []) : ResourceObject
     {
         $this->method = Request::PUT;
 
         return $this->uri(new Uri($uri))($query);
     }
 
-    public function patch(string $uri, array $query) : ResourceObject
+    public function patch(string $uri, array $query = []) : ResourceObject
     {
         $this->method = Request::PATCH;
 
         return $this->uri(new Uri($uri))($query);
     }
 
-    public function delete(string $uri, array $query) : ResourceObject
+    public function delete(string $uri, array $query = []) : ResourceObject
     {
         $this->method = Request::DELETE;
 
         return $this->uri(new Uri($uri))($query);
     }
 
-    public function options(string $uri, array $query) : ResourceObject
+    public function options(string $uri, array $query = []) : ResourceObject
     {
         $this->method = Request::OPTIONS;
 
         return $this->uri(new Uri($uri))($query);
     }
 
-    public function head(string $uri, array $query) : ResourceObject
+    public function head(string $uri, array $query = []) : ResourceObject
     {
         $this->method = Request::HEAD;
 

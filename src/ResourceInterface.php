@@ -44,30 +44,30 @@ interface ResourceInterface
     /**
      * Invoke GET request
      */
-    public function get(string $uri, array $query) : ResourceObject;
+    public function get(string $uri, array $query = []) : ResourceObject;
 
     /**
      * Invoke POST request
      */
-    public function post(string $uri, array $query) : ResourceObject;
+    public function post(string $uri, array $query = []) : ResourceObject;
 
     /**
      * Invoke PUT request
      */
-    public function put(string $uri, array $query) : ResourceObject;
+    public function put(string $uri, array $query = []) : ResourceObject;
 
     /**
      * Invoke PATCH request
      */
-    public function patch(string $uri, array $query) : ResourceObject;
+    public function patch(string $uri, array $query = []) : ResourceObject;
 
     /**
      * Invoke DELETE request
      */
-    public function delete(string $uri, array $query) : ResourceObject;
+    public function delete(string $uri, array $query = []) : ResourceObject;
 
     /**
      * Invoke HEAD request
      */
-    public function head(string $uri, array $query) : ResourceObject;
+    public function head(string $uri, array $query = []) : ResourceObject;
 }
