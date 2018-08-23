@@ -10,7 +10,7 @@ use BEAR\Resource\ResourceObject;
 
 class Blog extends ResourceObject
 {
-    public function onGet($id)
+    public function onGet(int $id)
     {
     }
 }

@@ -10,7 +10,7 @@ use BEAR\Resource\ResourceObject;
 
 class Target extends ResourceObject
 {
-    public function onGet($id)
+    public function onGet(int $id)
     {
         $this['id'] = $id;
 

@@ -14,7 +14,7 @@ class DocInvalidFile extends ResourceObject
     /**
      * @JsonSchema(schema="__NOT_FOUND_.json")
      */
-    public function onGet($id)
+    public function onGet(int $id)
     {
         return $this;
     }

@@ -118,7 +118,7 @@ class InvokerTest extends TestCase
         "request": {
             "parameters": {
                 "id": {
-                    "type": "string",
+                    "type": "integer",
                     "description": "User ID"
                 }
             },

@@ -25,7 +25,7 @@ class Doc extends ResourceObject
      * @Link(rel="task", href="/task{?id}")
      * @Embed(rel="profile", src="/profile{?id}")
      */
-    public function onGet($id)
+    public function onGet(int $id)
     {
         return $this;
     }

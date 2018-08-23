@@ -22,7 +22,7 @@ class Order extends ResourceObject
     {
     }
 
-    public function onGet($id)
+    public function onGet(int $id)
     {
         return $this->orders[$id];
     }

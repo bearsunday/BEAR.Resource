@@ -10,7 +10,7 @@ use BEAR\Resource\ResourceObject as Ro;
 
 class News extends Ro
 {
-    public function onGet($id)
+    public function onGet(int $id)
     {
         return __CLASS__ . $id;
     }
