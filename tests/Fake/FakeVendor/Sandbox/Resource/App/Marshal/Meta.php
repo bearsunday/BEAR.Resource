@@ -58,7 +58,7 @@ class Meta extends ResourceObject
     /**
      * @return array
      */
-    public function onGet($post_id)
+    public function onGet(int $post_id)
     {
         return $this->select('id', $post_id);
     }
