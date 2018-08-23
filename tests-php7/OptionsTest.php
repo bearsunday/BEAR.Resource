@@ -179,6 +179,7 @@ class OptionsTest extends TestCase
                 },
                 "cookie": {
                     "in": "cookie",
+                    "type": "string",
                     "default": "default"
                 }
             },
