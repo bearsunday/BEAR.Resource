@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 /**
  * This file is part of the BEAR.Resource package.
  *
@@ -18,7 +16,7 @@ class Sparrows extends ResourceObject
      * @Embed(rel="birdObject", src="app://self/bird/sparrow")
      * @Embed(rel="eagerRequestedBird", src="app://self/bird/sparrow")
      */
-    public function onGet($id_request, $id_object, $id_eager_request)
+    public function onGet(int $id_request, int $id_object, int $id_eager_request)
     {
         $this['birdRequest'] = $this['birdRequest']->addQuery(['id' => $id_request]);
         $this['birdObject'] = $this['birdObject']->addQuery(['id' => $id_object])->eager->request();

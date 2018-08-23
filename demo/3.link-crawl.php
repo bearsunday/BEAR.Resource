@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 /**
  * This file is part of the BEAR.Resource package.
  *
@@ -38,7 +36,7 @@ namespace MyVendor\Demo\Resource\App {
         /**
          * @Link(crawl="tree", rel="post", href="app://self/post?author_id={id}")
          */
-        public function onGet($id = null) : ResourceObject
+        public function onGet(int $id = null) : ResourceObject
         {
             $this->body = $id === null ? $this->users : $this->users[$id];
 
@@ -78,10 +76,7 @@ namespace MyVendor\Demo\Resource\App {
             ],
         ];
 
-        /**
-         * @return array
-         */
-        public function onGet($post_id) : ResourceObject
+        public function onGet(string $post_id) : ResourceObject
         {
             $this->body = $this->select('id', $post_id);
 
@@ -125,7 +120,7 @@ namespace MyVendor\Demo\Resource\App {
          * @Link(crawl="tree", rel="meta", href="app://self/meta?post_id={id}", method="get")
          * @Link(crawl="tree", rel="tag",  href="app://self/tag?post_id={id}",  method="get")
          */
-        public function onGet($author_id) : ResourceObject
+        public function onGet(string $author_id) : ResourceObject
         {
             $this->body = $this->select('author_id', $author_id);
 

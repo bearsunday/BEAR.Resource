@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 /**
  * This file is part of the BEAR.Resource package.
  *
@@ -27,7 +25,7 @@ class Doc extends ResourceObject
      * @Link(rel="task", href="/task{?id}")
      * @Embed(rel="profile", src="/profile{?id}")
      */
-    public function onGet($id)
+    public function onGet(string $id)
     {
         return $this;
     }

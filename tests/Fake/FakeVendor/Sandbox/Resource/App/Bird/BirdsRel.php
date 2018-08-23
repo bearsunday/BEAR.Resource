@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 /**
  * This file is part of the BEAR.Resource package.
  *
@@ -19,7 +17,7 @@ class BirdsRel extends ResourceObject
      * @Embed(rel="bird2", src="/bird/sparrow{?id}")
      * @Link(rel="bird3", href="/bird/suzume")
      */
-    public function onGet($id)
+    public function onGet(string $id)
     {
         unset($id);
 

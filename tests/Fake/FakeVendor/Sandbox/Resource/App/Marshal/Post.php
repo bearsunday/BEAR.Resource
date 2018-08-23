@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 /**
  * This file is part of the BEAR.Resource package.
  *
@@ -67,7 +65,7 @@ class Post extends ResourceObject
      * @Link(rel="meta", href="app://self/marshal/meta?post_id={id}", crawl="tree")
      * @Link(rel="tag",  href="app://self/marshal/tag?post_id={id}", crawl="tree")
      */
-    public function onGet($blog_id)
+    public function onGet(int $blog_id)
     {
         $this->body = $this->repo['blog' . $blog_id];
 

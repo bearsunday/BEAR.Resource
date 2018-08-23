@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 /**
  * This file is part of the BEAR.Resource package.
  *
@@ -23,7 +21,7 @@ class Menu extends ResourceObject
     /**
      * @Link(rel="order", href="app://self/restbucks/order?drink={drink}", method="")
      */
-    public function onGet($drink = null)
+    public function onGet(string $drink = null)
     {
         if ($drink === null) {
             $this->body = $this->menu;

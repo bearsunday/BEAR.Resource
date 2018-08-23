@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 /**
  * This file is part of the BEAR.Resource package.
  *
@@ -22,7 +20,7 @@ class DocUser extends ResourceObject
      *
      * @JsonSchema(schema="user.json")
      */
-    public function onGet($id)
+    public function onGet(string $id)
     {
         return $this;
     }

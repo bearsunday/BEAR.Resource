@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 /**
  * This file is part of the BEAR.Resource package.
  *
@@ -22,7 +20,7 @@ class News extends ResourceObject
     /**
      * @Embed(rel="weather", src="/weather{?date}")
      */
-    public function onGet($date) : ResourceObject
+    public function onGet(string $date) : ResourceObject
     {
         $this->body += [
             'headline' => "40th anniversary of Rubik's Cube invention.",
@@ -35,7 +33,7 @@ class News extends ResourceObject
 
 class Weather extends ResourceObject
 {
-    public function onGet($date) : ResourceObject
+    public function onGet(string $date) : ResourceObject
     {
         $this->body = [
             'today' => "the weather of {$date} is sunny"

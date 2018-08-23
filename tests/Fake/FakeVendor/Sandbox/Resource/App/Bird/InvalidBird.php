@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 /**
  * This file is part of the BEAR.Resource package.
  *
@@ -18,7 +16,7 @@ class InvalidBird extends ResourceObject
      * @Named
      * @Embed(rel="bird1", src="invalid_uri")
      */
-    public function onGet($id)
+    public function onGet(int $id)
     {
         unset($id);
 

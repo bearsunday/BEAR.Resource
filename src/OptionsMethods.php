@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 /**
  * This file is part of the BEAR.Resource package.
  *
@@ -43,7 +41,7 @@ final class OptionsMethods
     /**
      * @Named("schemaDir=json_schema_dir")
      */
-    public function __construct(Reader $reader, $schemaDir = '')
+    public function __construct(Reader $reader, string $schemaDir = '')
     {
         $this->reader = $reader;
         $this->schemaDir = $schemaDir;

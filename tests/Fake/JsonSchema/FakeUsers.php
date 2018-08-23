@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 /**
  * This file is part of the BEAR.Resource package.
  *
@@ -16,7 +14,7 @@ class FakeUsers extends ResourceObject
     /**
      * @JsonSchema(schema="users.json")
      */
-    public function onGet($age)
+    public function onGet(int $age)
     {
         $name = [
             'firstName' => 'mucha',

@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 /**
  * This file is part of the BEAR.Resource package.
  *
@@ -60,7 +58,7 @@ class Meta extends ResourceObject
     /**
      * @return array
      */
-    public function onGet($post_id)
+    public function onGet(int $post_id)
     {
         return $this->select('id', $post_id);
     }

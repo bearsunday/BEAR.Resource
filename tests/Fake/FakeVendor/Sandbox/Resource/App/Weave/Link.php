@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 /**
  * This file is part of the BEAR.Resource package.
  *
@@ -15,7 +13,7 @@ class Link extends ResourceObject
     /**
      * @Log
      */
-    public function onGet($animal)
+    public function onGet(string $animal)
     {
         return "Like a {$animal} to a honey pot.";
     }

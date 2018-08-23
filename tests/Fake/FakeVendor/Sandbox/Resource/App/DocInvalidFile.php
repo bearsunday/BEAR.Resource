@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 /**
  * This file is part of the BEAR.Resource package.
  *
@@ -16,7 +14,7 @@ class DocInvalidFile extends ResourceObject
     /**
      * @JsonSchema(schema="__NOT_FOUND_.json")
      */
-    public function onGet($id)
+    public function onGet(int $id)
     {
         return $this;
     }

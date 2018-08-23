@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 /**
  * This file is part of the BEAR.Resource package.
  *
@@ -22,7 +20,7 @@ class Author extends ResourceObject
     /**
      * @Link(rel="blog", href="app://self/blog?id={blog_id}")
      */
-    public function onGet($id)
+    public function onGet(int $id)
     {
         $this->body = $this->users[$id];
 

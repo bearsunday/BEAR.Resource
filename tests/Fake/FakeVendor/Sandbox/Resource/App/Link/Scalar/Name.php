@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 /**
  * This file is part of the BEAR.Resource package.
  *
@@ -17,7 +15,7 @@ class Name extends ResourceObject
      * @Link(rel="greeting", href="app://self/link/scalar/hello?name={value}")
      * @Link(rel="no_query", href="app://self/link/scalar/hello")
      */
-    public function onGet($name)
+    public function onGet(string $name)
     {
         return $name;
     }

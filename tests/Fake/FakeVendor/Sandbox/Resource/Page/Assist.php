@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 /**
  * This file is part of the BEAR.Resource package.
  *
@@ -18,7 +16,7 @@ class Assist extends ResourceObject
      * @Assisted({"login_id"})
      * @Named("login_id=login_id")
      */
-    public function onGet($login_id = null)
+    public function onGet(string $login_id = null)
     {
         return 'login_id:' . $login_id;
     }

@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 /**
  * This file is part of the BEAR.Resource package.
  *
@@ -24,7 +22,7 @@ class Order extends ResourceObject
     {
     }
 
-    public function onGet($id)
+    public function onGet(int $id)
     {
         return $this->orders[$id];
     }
@@ -32,7 +30,7 @@ class Order extends ResourceObject
     /**
      * @link(link="payment" rel="app://self/restbucks/payment/?order_id={orderId}" method="put")
      */
-    public function onPost($drink)
+    public function onPost(string $drink)
     {
         // data store here
         //   .. and get order id.
