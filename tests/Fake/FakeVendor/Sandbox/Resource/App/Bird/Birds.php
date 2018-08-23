@@ -17,7 +17,7 @@ class Birds extends ResourceObject
      * @Embed(rel="bird2", src="app://self/bird/sparrow{?id}")
      * @Link(rel="bird3", href="app://self/bird/suzume")
      */
-    public function onGet($id)
+    public function onGet(string $id)
     {
         return $this;
     }
