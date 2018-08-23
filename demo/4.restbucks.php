@@ -35,7 +35,7 @@ class Menu extends ResourceObject
     /**
      * @Link(rel="order", href="app://self/Order?drink={drink}")
      */
-    public function onGet($drink = null) : ResourceObject
+    public function onGet(string $drink = null) : ResourceObject
     {
         if ($drink === null) {
             $this->body = $this->menu;
@@ -55,7 +55,7 @@ class Order extends ResourceObject
 {
     private $orders = [];
 
-    public function onGet($id) : ResourceObject
+    public function onGet(int $id) : ResourceObject
     {
         $this->body = $this->orders[$id];
 
@@ -65,7 +65,7 @@ class Order extends ResourceObject
     /**
      * @Link(rel="payment", href="app://self/payment{?order_id,credit_card_number,expires,name,amount}", method="put")
      */
-    public function onPost($drink) : ResourceObject
+    public function onPost(string $drink) : ResourceObject
     {
         // data store here
         //   .. and get order id.
