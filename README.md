@@ -10,7 +10,7 @@
 
 In order to introduce flexibility and longevity to your existing domain model or application data you can introduce an API as the driving force in your develpment by making your application REST-Centric in it's approach.
 
-### Resource Object
+## Resource Object
 
 The resource object is an object that has resource behavior.
 
@@ -20,7 +20,7 @@ The resource object is an object that has resource behavior.
 
 
 ```php
-
+<?php
 namespace MyVendor\Sandbox\Blog;
 
 class Author extends ResourceObject
@@ -28,6 +28,7 @@ class Author extends ResourceObject
     public $code = 200;
 
     public $headers = [
+        'Content-Type' => 'application/json'
     ];
 
     public $body = [
@@ -38,29 +39,34 @@ class Author extends ResourceObject
     /**
      * @Link(rel="blog", href="app://self/blog/post?author_id={id}")
      */
-    public function onGet($id)
+    public function onGet(int $id) : ResourceObject
     {
         return $this;
     }
 
-    public function onPost($name)
+    public function onPost(string $name) : ResourceObject
     {
         $this->code = 201; // created
         // ...
         return $this;
     }
 
-    public function onPut($id, $name)
+    public function onPut(int $id, string $name) : ResourceObject
     {
+        $this->code = 203; // no content
         //...
+        return $this;
     }
 
-    public function onDelete($id)
+    public function onDelete($id) : ResourceObject
     {
+        $this->code = 203; // no content
         //...
+        return $this;
     }
+}
 ```
-### Instance retrieval
+## Instance retrieval
 
 You can retrieve a client instance by using an injector that resolves dependencies.
 
@@ -72,9 +78,35 @@ $resource = (new Injector(new ResourceModule('FakeVendor/Sandbox')))->getInstanc
 
 By either method the resource client that resolves a URI such as **app://self/user** to the mapped **Sandbox\Resource\App\User** can be provisioned.
 
-### Resource request
+## Resource request
 
 Using the URI and a query the resource is requested.
+
+```php
+$user = $resource->get('app://self/user', ['id' => 1]);
+```
+
+ * This request passes 1 to the **onGet($id)** method in the **Sandbox\Resource\App\User** class that conforms to [PSR0](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md).
+ * The retrieved resource has 3 properties **code**, **headers** and **body**.
+
+```php
+var_dump($user->body);
+```
+
+```php
+Array
+(
+ [name] => Athos
+ [age] => 15
+ [blog_id] => 0
+)
+```
+
+There are two ways to request. One is `eager request` and the other is `lazy reuqust`.
+
+### Eager Request
+
+An eager request is a way to execute a request immediately. It is the same as normal PHP method execution. There are other different ways of writing with some reasons.
 
 ```php
 $user = $resource
@@ -85,27 +117,32 @@ $user = $resource
   ->request();
 ```
 
-In syntax sugar.
-
 ```php
 $user = $resource->get->uri('app://self/user')(['id' => 1]);
-$user = $resource->uri('app://self/user')(['id' => 1]); // GET request method can be omitted
 ```
-
- * This request passes 1 to the **onGet($id)** method in the **Sandbox\Resource\App\User** class that conforms to [PSR0](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md).
- * The retrieved resource has 3 properties **code**, **headers** and **body**.
 
 ```php
-var_dump($user->body);
-
-// Array
-// (
-//  [name] => Athos
-//  [age] => 15
-//  [blog_id] => 0
-//)
+$user = $resource->uri('app://self/user')(['id' => 1]); // 'get' request method can be omitted
 ```
 
+### Lazy Request
+ 
+ As known as [Lazy Loading](https://en.wikipedia.org/wiki/Lazy_loading), Request to resource until the point at which it is needed. One common use case is that assign to template `the resource request object` not the instance.
+
+```php
+// get `ResourceRequest` objcet 
+$user = $resource->get->uri('app://self/user')->withQuery(['id' => 1]);
+// assign to the template
+echo "User resource body is {$user}"; // same in the template enigne template
+```
+
+It is callable object, you can invoke with other parameters;
+
+```php
+// invoke
+$user1 = $user(); // $id = 1
+$user2 = $user(['id' => 2);
+```
 
 ## Hypermedia
 
@@ -349,8 +386,10 @@ class News extends ResourceObject
      */
     public function onGet()
     {
-        $this['headline'] = "...";
-        $this['sports'] = "...";
+        $this->body = [
+            'headline' => "...",
+            'sports'] = "..."
+        ];
         
         return $this;
     }
@@ -381,7 +420,7 @@ Embedded resource evaluate when it is present.
 
 Result
 
-```javascript
+```json
     "headline": "40th anniversary of Rubik's Cube invention.",
     "sports": "Pieter Weening wins Giro d'Italia.",
     "_links": {
@@ -410,8 +449,55 @@ Result
 
  [A demo application code](https://github.com/koriym/BEAR.Resource/tree/develop/docs/sample/06.HAL) is available.
 
+## Representation
 
-## Performance boost ##
+Cast `ResourceObject` to string to get the resource view.
+
+```php
+$userView = (string) $resource->get('app://self/user?id=1');
+echo $userView; // get JSON
+```
+
+You can change the view format (media type) by injecting renderer. Following exmaple illustrates how simple json representation renderer "injected" in the constructor. Normally it is injected by dependency injection library.
+
+```php
+class User extends ResourceObject
+{
+    public function __construct()
+    {
+        $this->setRenderer(new class implements RenderInterface{
+            public function render(ResourceObject $ro)
+            {
+                $ro->headers['content-type'] = 'application/json';
+                $ro->view = json_encode($ro->body);
+
+                return $ro->view;
+            }
+        });
+    }
+}
+```
+
+## Transfer
+
+REST stands for representational state "transfer". `transfer()` method in `ResourceObject` output resource view to the client.
+
+```php
+$user = $resource->get('app://self/user?id=1');
+$user->transfer(new class implements TransferInterface {
+	public function __invoke(ResourceObject $ro, array $server)
+	{
+	    foreach ($ro->headers as $label => $value) {
+	        header("{$label}: {$value}", false);
+	    }
+	    http_response_code($ro->code);
+	    echo $ro->view;
+	}
+);
+```
+The above is simple http resoponse transfer example. This would be changed in different enviroment such as "console", "stream" or "socket serevr".
+
+## Performance boost
 
 A resource client is serializable. It has huge performance boosts. Recommended in production use.
 
@@ -425,13 +511,13 @@ $cachedResource = serialize($resource);
 
 // load
 $resource = unserialize($cachedResource);
-$news = $resource->get->uri('app://self/news')->request();
+$news = $resource->get('app://self/news');
 ```
 
 ## Installation
 
 ```javascript
-composer require bear/resource ^1.0
+composer require bear/resource ^1.10
 ```
 
 ## A Resource Oriented Framework
@@ -452,6 +538,6 @@ Here's how to install BEAR.Resource from source and run the unit tests and demos
 ```
 composer create-project bear/resource BEAR.Resource
 cd BEAR.Resource
-phpunit
-php docs/demo/run.php
+./vendor/bin/phpunit
+php demo/run.php
 ```

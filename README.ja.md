@@ -21,8 +21,8 @@ RESTのWebサービスの特徴をオブジェクトに持たせます。
  * 統一されたリソースリクエストに対応したメソッドを持ち名前付き引き数でリクエストします。
  * メソッドはリクエストに応じてリソース状態を変更して自身`$this`を返します。
 
-
 ```php
+<?php
 namespace MyVendor\Sandbox\Blog;
 
 class Author extends ResourceObject
@@ -30,6 +30,7 @@ class Author extends ResourceObject
     public $code = 200;
 
     public $headers = [
+        'Content-Type' => 'application/json'
     ];
 
     public $body = [
@@ -40,28 +41,34 @@ class Author extends ResourceObject
     /**
      * @Link(rel="blog", href="app://self/blog/post?author_id={id}")
      */
-    public function onGet($id)
+    public function onGet(int $id) : ResourceObject
     {
         return $this;
     }
 
-    public function onPost($name)
+    public function onPost(string $name) : ResourceObject
     {
         $this->code = 201; // created
         // ...
         return $this;
     }
 
-    public function onPut($id, $name)
+    public function onPut(int $id, string $name) : ResourceObject
     {
+        $this->code = 203; // no content
         //...
+        return $this;
     }
 
-    public function onDelete($id)
+    public function onDelete($id) : ResourceObject
     {
+        $this->code = 203; // no content
         //...
+        return $this;
     }
+}
 ```
+
 ### インスタンスの取得
 
 ディペンデンシーインジェクターを使ってクライアントインスタンスを取得します。
@@ -77,6 +84,32 @@ $resource = (new Injector(new ResourceModule('FakeVendor/Sandbox')))->getInstanc
 URIとクエリーを使ってリソースをリクエストします。
 
 ```php
+$user = $resource->get('app://self/user', ['id' => 1]);
+```
+
+ * このリクエストは[PSR0](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md)に準拠した **MyVendor\Sandbox\Resource\App\User** クラスの **onGet($id)** メソッドに1を渡します。
+ * 得られたリソースは **code**, **headers** それに **body**の３つのプロパティを持ちます。
+
+```php
+var_dump($user->body);
+```
+
+```php
+Array
+(
+ [name] => Athos
+ [age] => 15
+ [blog_id] => 0
+)
+```
+
+リソースリクエストには２種類の方法があります。即時実行(eager request)と遅延実行(lazy request)です。
+
+### 即時実行
+
+即時実行は通常のPHPのメソッドと同様にすぐに実行して結果を求めます。いくつかの書き方があります。
+
+```php
 $user = $resource
   ->get
   ->uri('app://self/user')
@@ -85,22 +118,34 @@ $user = $resource
   ->request();
 ```
 
- * このリクエストは[PSR0](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md)に準拠した **MyVendor\Sandbox\Resource\App\User** クラスの **onGet($id)** メソッドに1を渡します。
- * 得られたリソースは **code**, **headers** それに **body**の３つのプロパティを持ちます。
-
 ```php
-var_dump($user->body);
-
-// Array
-// (
-//  [name] => Athos
-//  [age] => 15
-//  [blog_id] => 0
-//)
+$user = $resource->get->uri('app://self/user')(['id' => 1]);
 ```
 
+```php
+$user = $resource->uri('app://self/user')(['id' => 1]); // 'get' request method can be omitted
+```
 
-## Hypermedia
+### 遅延実行
+ 
+[遅延評価](https://ja.wikipedia.org/wiki/%E9%81%85%E5%BB%B6%E8%A9%95%E4%BE%A1)として Request to resource until the point at which it is needed. One common use case is that assign to template `the resource request object` not the instance.
+
+```php
+// get `ResourceRequest` objcet 
+$user = $resource->get->uri('app://self/user')->withQuery(['id' => 1]);
+// assign to the template
+echo "User resource body is {$user}"; // same in the template enigne template
+```
+
+It is callable object, you can invoke with other parameters;
+
+```php
+// invoke
+$user1 = $user(); // $id = 1
+$user2 = $user(['id' => 2);
+```
+
+## ハイパーメディア
 
 リソースは関連するリソースの [ハイパーリンク](http://en.wikipedia.org/wiki/Hyperlink)を持つ事ができます
 **@Link**アノテーションをメソッドにアノテートしてハイパーリンクを表します。
@@ -365,6 +410,7 @@ HAL Moduleを使うとリソース表現が[HAL](http://stateless.co/hal_specifi
 ```
 
 結果
+
 ```javascript
 {
     "headline": "40th anniversary of Rubik's Cube invention.",
@@ -392,15 +438,77 @@ HAL Moduleを使うとリソース表現が[HAL](http://stateless.co/hal_specifi
 }
 
 ```
+## リソース表現
 
-### Installation
+`ResourceObject` を文字列評価するとリソース表現（リプレゼンテーション）が取得できます。
 
-```javascript
-composer require bear/resource ^1.0
+```php
+$userView = (string) $resource->get('app://self/user?id=1');
+echo $userView; // get JSON
 ```
 
-### A Resource Oriented Framework
+レンダラーを変えて、リソースを他のメディアタイプで表現する事ができます。通常はDIでレンダラーを依存として注入します。
+
+```php
+class User extends ResourceObject
+{
+    public function __construct()
+    {
+        $this->setRenderer(new class implements RenderInterface{
+            public function render(ResourceObject $ro)
+            {
+                $ro->headers['content-type'] = 'application/json';
+                $ro->view = json_encode($ro->body);
+
+                return $ro->view;
+            }
+        });
+    }
+}
+```
+
+## 転送
+
+REST は representational state "transfer" の略です。 `ResourceObject`の`transfer()` メソッドでリソースをクライアントに出力します。
+
+```php
+$user = $resource->get('app://self/user?id=1');
+$user->transfer(new class implements TransferInterface {
+	public function __invoke(ResourceObject $ro, array $server)
+	{
+	    foreach ($ro->headers as $label => $value) {
+	        header("{$label}: {$value}", false);
+	    }
+	    http_response_code($ro->code);
+	    echo $ro->view;
+	}
+);
+```
+
+## インストール
+
+```javascript
+composer require bear/resource ^1.10
+```
+
+## A Resource Oriented Framework
 
 __BEAR.Sunday__ はリソース指向のフレームワークです。BEAR.Resourceに Webでの振る舞いやアプリケーションスタックの機能を、
 Google GuiceスタイルのDI/AOPシステムの[Ray](https://github.com/koriym/Ray.Di)で追加してフルスタックのWebアプリケーションフレームワークとして機能します。
 [BEAR.Sunday GitHub](https://github.com/koriym/BEAR.Sunday)をご覧下さい。
+
+## See Also
+
+ * [BEAR.QueryRepository](https://github.com/bearsunday/BEAR.QueryRepository) - 読み込みと書き込みのレポジトリを分離します。
+ * [Ray.WebParamModule](https://github.com/ray-di/Ray.WebParamModule) - Webコンテキストをパラメーターにバインドします。
+ 
+## Testing BEAR.Resource
+
+以下はインストールしてテスト実行するための手順です。
+
+```
+composer create-project bear/resource BEAR.Resource
+cd BEAR.Resource
+./vendor/bin/phpunit
+php demo/run.php
+```
