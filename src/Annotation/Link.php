@@ -30,6 +30,7 @@ final class Link
      * A method for the Link
      *
      * @var string
+     * @Enum({"get", "post", "put", "patch", "delete"})
      */
     public $method = 'get';
 
