@@ -17,6 +17,7 @@
     ],
     "require": {
         "php": ">=7.0.0",
+        "ext-json": "*",
         "ray/di": "^2.7.1",
         "nocarrier/hal":"^0.9.12",
         "doctrine/cache":"^1.6",
