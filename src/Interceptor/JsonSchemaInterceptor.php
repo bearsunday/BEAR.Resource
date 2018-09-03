@@ -33,15 +33,21 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     private $validateDir;
 
     /**
+     * @var string
+     */
+    private $schemaHost;
+
+    /**
      * @param string $schemaDir
      * @param string $validateDir
      *
-     * @Named("schemaDir=json_schema_dir,validateDir=json_validate_dir")
+     * @Named("schemaDir=json_schema_dir,validateDir=json_validate_dir,schemaHost=json_schema_host")
      */
-    public function __construct($schemaDir, $validateDir)
+    public function __construct(string $schemaDir, string $validateDir, string $schemaHost)
     {
         $this->schemaDir = $schemaDir;
         $this->validateDir = $validateDir;
+        $this->schemaHost = $schemaHost;
     }
 
     /**
@@ -62,6 +68,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         if ($ro->code === 200 || $ro->code == 201) {
             $this->validateResponse($jsonSchema, $ro);
         }
+        $ro->headers['Link'] = sprintf('<%s%s>; rel="describedby"', $this->schemaHost, $jsonSchema->schema);
 
         return $ro;
     }

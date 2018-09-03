@@ -23,6 +23,7 @@ class JsonSchemaModuleTest extends TestCase
         $ro = $this->getFakeUser();
         $ro->onGet(20);
         $this->assertSame($ro->body['name']['firstName'], 'mucha');
+        $this->assertSame('<http://example.com/schema/user.json>; rel="describedby"', $ro->headers['Link']);
     }
 
     public function testValidArrayRef()
@@ -119,7 +120,8 @@ class JsonSchemaModuleTest extends TestCase
     {
         $jsonSchema = dirname(__DIR__) . '/Fake/json_schema';
         $jsonValidate = dirname(__DIR__) . '/Fake/json_validate';
-        $ro = (new Injector(new JsonSchemaModule($jsonSchema, $jsonValidate), $_ENV['TMP_DIR']))->getInstance($class);
+        $jsonSchemaHost = 'http://example.com/schema/';
+        $ro = (new Injector(new JsonSchemaModule($jsonSchema, $jsonValidate, $jsonSchemaHost), $_ENV['TMP_DIR']))->getInstance($class);
         /* @var $ro FakeUser */
         $ro->uri = new Uri('app://self/user?id=1');
 
