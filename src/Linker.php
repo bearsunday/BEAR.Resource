@@ -10,6 +10,7 @@ use BEAR\Resource\Annotation\Link;
 use BEAR\Resource\Exception\LinkQueryException;
 use BEAR\Resource\Exception\LinkRelException;
 use Doctrine\Common\Annotations\Reader;
+use function get_class;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -109,7 +110,7 @@ final class Linker implements LinkerInterface
             throw new Exception\LinkQueryException('Only array is allowed for link in ' . get_class($current), 500);
         }
         $classMethod = 'on' . ucfirst($request->method);
-        $annotations = $this->reader->getMethodAnnotations(new \ReflectionMethod($current, $classMethod));
+        $annotations = $this->reader->getMethodAnnotations(new \ReflectionMethod(get_class($current), $classMethod));
         if ($link->type === LinkType::CRAWL_LINK) {
             return $this->annotationCrawl($annotations, $link, $current);
         }

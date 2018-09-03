@@ -9,6 +9,7 @@ namespace BEAR\Resource;
 use BEAR\Resource\Annotation\Link as LinkAnnotation;
 use BEAR\Resource\Exception\LinkException;
 use Doctrine\Common\Annotations\Reader;
+use function get_class;
 
 final class Anchor implements AnchorInterface
 {
@@ -33,7 +34,7 @@ final class Anchor implements AnchorInterface
     public function href(string $rel, AbstractRequest $request, array $query)
     {
         $classMethod = 'on' . ucfirst($request->method);
-        $annotations = $this->reader->getMethodAnnotations(new \ReflectionMethod($request->resourceObject, $classMethod));
+        $annotations = $this->reader->getMethodAnnotations(new \ReflectionMethod(get_class($request->resourceObject), $classMethod));
         foreach ($annotations as $annotation) {
             if ($this->isValidLinkAnnotation($annotation, $rel)) {
                 return $this->getMethodUdi($request, $query, $annotation);
