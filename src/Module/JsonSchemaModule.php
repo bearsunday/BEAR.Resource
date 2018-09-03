@@ -41,7 +41,7 @@ class JsonSchemaModule extends AbstractModule
         string $jsonValidateDir = '',
         string $jsonSchemaHost = '',
         AbstractModule $module = null
-    ){
+    ) {
         $this->jsonSchemaDir = $jsonSchemaDir;
         $this->jsonValidateDir = $jsonValidateDir;
         $this->jsonSchemaHost = $jsonSchemaHost;
