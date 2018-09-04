@@ -49,7 +49,7 @@ final class OptionsMethods
 
     public function __invoke(ResourceObject $ro, string $requestMethod) : array
     {
-        $method = new \ReflectionMethod($ro, 'on' . $requestMethod);
+        $method = new \ReflectionMethod(get_class($ro), 'on' . $requestMethod);
         $ins = $this->getInMap($method);
         list($doc, $paramDoc) = (new OptionsMethodDocBolck)($method);
         $paramMetas = (new OptionsMethodRequest($this->reader))($method, $paramDoc, $ins);

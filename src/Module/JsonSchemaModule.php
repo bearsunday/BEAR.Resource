@@ -14,21 +14,25 @@ use Ray\Di\AbstractModule;
 class JsonSchemaModule extends AbstractModule
 {
     /**
-     * Json-schema json file directory
-     *
      * @var string
      */
     private $jsonSchemaDir;
 
     /**
-     * Json-schema validator json file directory
-     *
      * @var string
      */
     private $jsonValidateDir;
 
-    public function __construct($jsonSchemaDir = '', $jsonValidateDir = '', AbstractModule $module = null)
-    {
+    /**
+     * @param string              $jsonSchemaDir   Json-schema json file directory
+     * @param string              $jsonValidateDir Json-schema validator json file directory
+     * @param AbstractModule|null $module
+     */
+    public function __construct(
+        string $jsonSchemaDir = '',
+        string $jsonValidateDir = '',
+        AbstractModule $module = null
+    ) {
         $this->jsonSchemaDir = $jsonSchemaDir;
         $this->jsonValidateDir = $jsonValidateDir;
         parent::__construct($module);
@@ -41,6 +45,7 @@ class JsonSchemaModule extends AbstractModule
     {
         $this->bind()->annotatedWith('json_schema_dir')->toInstance($this->jsonSchemaDir);
         $this->bind()->annotatedWith('json_validate_dir')->toInstance($this->jsonValidateDir);
+
         $this->bindInterceptor(
             $this->matcher->subclassesOf(ResourceObject::class),
             $this->matcher->annotatedWith(JsonSchema::class),

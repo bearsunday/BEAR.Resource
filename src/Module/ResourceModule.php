@@ -17,9 +17,9 @@ class ResourceModule extends AbstractModule
     private $appName;
 
     /**
-     * @param string $appName
+     * @param string $appName Application name ex) 'Vendor\Project'
      */
-    public function __construct($appName)
+    public function __construct(string $appName)
     {
         $this->appName = $appName;
         parent::__construct();
