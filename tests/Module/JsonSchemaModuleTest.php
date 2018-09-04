@@ -20,14 +20,14 @@ class JsonSchemaModuleTest extends TestCase
 {
     public function testValid()
     {
-        $ro = $this->getFakeUser();
+        $ro = $this->getRo(FakeUser::class);
         $ro->onGet(20);
         $this->assertSame($ro->body['name']['firstName'], 'mucha');
     }
 
     public function testValidArrayRef()
     {
-        $ro = $this->getFakeUsers();
+        $ro = $this->getRo(FakeUsers::class);
         $ro->onGet(20);
         $this->assertSame($ro->body[0]['name']['firstName'], 'mucha');
     }
@@ -109,16 +109,6 @@ class JsonSchemaModuleTest extends TestCase
         } catch (JsonSchemaException $e) {
             return $e;
         }
-    }
-
-    private function getFakeUser() : FakeUser
-    {
-        return $this->getRo(FakeUser::class);
-    }
-
-    private function getFakeUsers() : FakeUsers
-    {
-        return $this->getRo(FakeUsers::class);
     }
 
     private function getRo(string $class)
