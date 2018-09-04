@@ -23,7 +23,6 @@ class JsonSchemaModuleTest extends TestCase
         $ro = $this->getFakeUser();
         $ro->onGet(20);
         $this->assertSame($ro->body['name']['firstName'], 'mucha');
-        $this->assertSame('<http://example.com/schema/user.json>; rel="describedby"', $ro->headers['Link']);
     }
 
     public function testValidArrayRef()
@@ -96,6 +95,12 @@ class JsonSchemaModuleTest extends TestCase
         $ro->onPatch();
     }
 
+    public function linkHeaderTest()
+    {
+        $ro = $this->getLinkHeaderRo(FakeUser::class);
+        $this->assertSame('<http://example.com/schema/user.json>; rel="describedby"', $ro->headers['Link']);
+    }
+
     private function createJsonSchemaException($class)
     {
         $ro = $this->getRo($class);
@@ -118,13 +123,32 @@ class JsonSchemaModuleTest extends TestCase
 
     private function getRo(string $class)
     {
-        $jsonSchema = dirname(__DIR__) . '/Fake/json_schema';
-        $jsonValidate = dirname(__DIR__) . '/Fake/json_validate';
-        $jsonSchemaHost = 'http://example.com/schema/';
-        $ro = (new Injector(new JsonSchemaModule($jsonSchema, $jsonValidate, $jsonSchemaHost), $_ENV['TMP_DIR']))->getInstance($class);
+        $module = $this->getModule();
+        $ro = (new Injector($module, $_ENV['TMP_DIR']))->getInstance($class);
         /* @var $ro FakeUser */
         $ro->uri = new Uri('app://self/user?id=1');
 
         return $ro;
+    }
+
+    private function getLinkHeaderRo(string $class)
+    {
+        $jsonSchemaHost = 'http://example.com/schema/';
+        $module = $this->getModule();
+        $module->install(new JsonSchemaLinkHeaderModule($jsonSchemaHost));
+        $ro = (new Injector($module, $_ENV['TMP_DIR']))->getInstance($class);
+        /* @var $ro FakeUser */
+        $ro->uri = new Uri('app://self/user?id=1');
+
+        return $ro;
+    }
+
+    private function getModule() : JsonSchemaModule
+    {
+        $jsonSchema = dirname(__DIR__) . '/Fake/json_schema';
+        $jsonValidate = dirname(__DIR__) . '/Fake/json_validate';
+        $module = new JsonSchemaModule($jsonSchema, $jsonValidate);
+
+        return $module;
     }
 }

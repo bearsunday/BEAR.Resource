@@ -8,7 +8,6 @@ namespace BEAR\Resource\Interceptor;
 
 use BEAR\Resource\Annotation\JsonSchema;
 use BEAR\Resource\Code;
-use BEAR\Resource\Exception\InvalidSchemaUriException;
 use BEAR\Resource\Exception\JsonSchemaErrorException;
 use BEAR\Resource\Exception\JsonSchemaException;
 use BEAR\Resource\Exception\JsonSchemaNotFoundException;
@@ -35,7 +34,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     private $validateDir;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $schemaHost;
 
@@ -49,9 +48,6 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     {
         $this->schemaDir = $schemaDir;
         $this->validateDir = $validateDir;
-        if (is_string($schemaHost) && ! filter_var($schemaHost, FILTER_VALIDATE_URL)) {
-            throw new InvalidSchemaUriException($schemaHost);
-        }
         $this->schemaHost = $schemaHost;
     }
 
