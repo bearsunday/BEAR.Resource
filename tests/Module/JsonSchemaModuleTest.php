@@ -113,7 +113,7 @@ class JsonSchemaModuleTest extends TestCase
 
     private function getRo(string $class)
     {
-        $module = $this->getModule();
+        $module = $this->getJsonSchemaModule();
         $ro = (new Injector($module, $_ENV['TMP_DIR']))->getInstance($class);
         /* @var $ro FakeUser */
         $ro->uri = new Uri('app://self/user?id=1');
@@ -124,7 +124,7 @@ class JsonSchemaModuleTest extends TestCase
     private function getLinkHeaderRo(string $class)
     {
         $jsonSchemaHost = 'http://example.com/schema/';
-        $module = $this->getModule();
+        $module = $this->getJsonSchemaModule();
         $module->install(new JsonSchemaLinkHeaderModule($jsonSchemaHost));
         $ro = (new Injector($module, $_ENV['TMP_DIR']))->getInstance($class);
         /* @var $ro FakeUser */
@@ -133,12 +133,11 @@ class JsonSchemaModuleTest extends TestCase
         return $ro;
     }
 
-    private function getModule() : JsonSchemaModule
+    private function getJsonSchemaModule() : JsonSchemaModule
     {
         $jsonSchema = dirname(__DIR__) . '/Fake/json_schema';
         $jsonValidate = dirname(__DIR__) . '/Fake/json_validate';
-        $module = new JsonSchemaModule($jsonSchema, $jsonValidate);
 
-        return $module;
+        return new JsonSchemaModule($jsonSchema, $jsonValidate);
     }
 }
