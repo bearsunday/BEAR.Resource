@@ -8,6 +8,7 @@ namespace BEAR\Resource\Interceptor;
 
 use BEAR\Resource\Annotation\JsonSchema;
 use BEAR\Resource\Code;
+use BEAR\Resource\Exception\InvalidSchemaUriException;
 use BEAR\Resource\Exception\JsonSchemaErrorException;
 use BEAR\Resource\Exception\JsonSchemaException;
 use BEAR\Resource\Exception\JsonSchemaNotFoundException;
@@ -19,6 +20,7 @@ use Ray\Aop\MethodInvocation;
 use Ray\Aop\ReflectionMethod;
 use Ray\Aop\WeavedInterface;
 use Ray\Di\Di\Named;
+use function is_string;
 
 final class JsonSchemaInterceptor implements MethodInterceptor
 {
@@ -43,10 +45,13 @@ final class JsonSchemaInterceptor implements MethodInterceptor
      *
      * @Named("schemaDir=json_schema_dir,validateDir=json_validate_dir,schemaHost=json_schema_host")
      */
-    public function __construct(string $schemaDir, string $validateDir, string $schemaHost)
+    public function __construct(string $schemaDir, string $validateDir, string $schemaHost = null)
     {
         $this->schemaDir = $schemaDir;
         $this->validateDir = $validateDir;
+        if (is_string($schemaHost) && ! filter_var($schemaHost, FILTER_VALIDATE_URL)) {
+            throw new InvalidSchemaUriException($schemaHost);
+        }
         $this->schemaHost = $schemaHost;
     }
 
@@ -68,7 +73,9 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         if ($ro->code === 200 || $ro->code == 201) {
             $this->validateResponse($jsonSchema, $ro);
         }
-        $ro->headers['Link'] = sprintf('<%s%s>; rel="describedby"', $this->schemaHost, $jsonSchema->schema);
+        if (is_string($this->schemaHost)) {
+            $ro->headers['Link'] = sprintf('<%s%s>; rel="describedby"', $this->schemaHost, $jsonSchema->schema);
+        }
 
         return $ro;
     }
