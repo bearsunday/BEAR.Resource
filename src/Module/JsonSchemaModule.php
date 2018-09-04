@@ -29,8 +29,6 @@ class JsonSchemaModule extends AbstractModule
     private $jsonSchemaHost;
 
     /**
-     * JsonSchemaModule constructor.
-     *
      * @param string              $jsonSchemaDir   Json-schema json file directory
      * @param string              $jsonValidateDir Json-schema validator json file directory
      * @param string              $jsonSchemaHost  Json-schema host name ex) https://example.com/schema/
