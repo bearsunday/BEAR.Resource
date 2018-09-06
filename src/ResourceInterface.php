@@ -70,4 +70,9 @@ interface ResourceInterface
      * Invoke HEAD request
      */
     public function head(string $uri, array $query = []) : ResourceObject;
+
+    /**
+     * Invoke OPTIONS request
+     */
+    public function options(string $uri, array $query = []) : ResourceObject;
 }
