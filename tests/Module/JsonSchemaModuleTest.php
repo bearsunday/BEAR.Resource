@@ -20,14 +20,14 @@ class JsonSchemaModuleTest extends TestCase
 {
     public function testValid()
     {
-        $ro = $this->getFakeUser();
+        $ro = $this->getRo(FakeUser::class);
         $ro->onGet(20);
         $this->assertSame($ro->body['name']['firstName'], 'mucha');
     }
 
     public function testValidArrayRef()
     {
-        $ro = $this->getFakeUsers();
+        $ro = $this->getRo(FakeUsers::class);
         $ro->onGet(20);
         $this->assertSame($ro->body[0]['name']['firstName'], 'mucha');
     }
@@ -95,6 +95,12 @@ class JsonSchemaModuleTest extends TestCase
         $ro->onPatch();
     }
 
+    public function linkHeaderTest()
+    {
+        $ro = $this->getLinkHeaderRo(FakeUser::class);
+        $this->assertSame('<http://example.com/schema/user.json>; rel="describedby"', $ro->headers['Link']);
+    }
+
     private function createJsonSchemaException($class)
     {
         $ro = $this->getRo($class);
@@ -105,24 +111,33 @@ class JsonSchemaModuleTest extends TestCase
         }
     }
 
-    private function getFakeUser() : FakeUser
-    {
-        return $this->getRo(FakeUser::class);
-    }
-
-    private function getFakeUsers() : FakeUsers
-    {
-        return $this->getRo(FakeUsers::class);
-    }
-
     private function getRo(string $class)
     {
-        $jsonSchema = dirname(__DIR__) . '/Fake/json_schema';
-        $jsonValidate = dirname(__DIR__) . '/Fake/json_validate';
-        $ro = (new Injector(new JsonSchemaModule($jsonSchema, $jsonValidate), $_ENV['TMP_DIR']))->getInstance($class);
+        $module = $this->getJsonSchemaModule();
+        $ro = (new Injector($module, $_ENV['TMP_DIR']))->getInstance($class);
         /* @var $ro FakeUser */
         $ro->uri = new Uri('app://self/user?id=1');
 
         return $ro;
+    }
+
+    private function getLinkHeaderRo(string $class)
+    {
+        $jsonSchemaHost = 'http://example.com/schema/';
+        $module = $this->getJsonSchemaModule();
+        $module->install(new JsonSchemaLinkHeaderModule($jsonSchemaHost));
+        $ro = (new Injector($module, $_ENV['TMP_DIR']))->getInstance($class);
+        /* @var $ro FakeUser */
+        $ro->uri = new Uri('app://self/user?id=1');
+
+        return $ro;
+    }
+
+    private function getJsonSchemaModule() : JsonSchemaModule
+    {
+        $jsonSchema = dirname(__DIR__) . '/Fake/json_schema';
+        $jsonValidate = dirname(__DIR__) . '/Fake/json_validate';
+
+        return new JsonSchemaModule($jsonSchema, $jsonValidate);
     }
 }
