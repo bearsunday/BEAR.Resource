@@ -19,6 +19,7 @@ use Ray\Aop\MethodInvocation;
 use Ray\Aop\ReflectionMethod;
 use Ray\Aop\WeavedInterface;
 use Ray\Di\Di\Named;
+use function is_string;
 
 final class JsonSchemaInterceptor implements MethodInterceptor
 {
@@ -33,15 +34,21 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     private $validateDir;
 
     /**
+     * @var string|null
+     */
+    private $schemaHost;
+
+    /**
      * @param string $schemaDir
      * @param string $validateDir
      *
-     * @Named("schemaDir=json_schema_dir,validateDir=json_validate_dir")
+     * @Named("schemaDir=json_schema_dir,validateDir=json_validate_dir,schemaHost=json_schema_host")
      */
-    public function __construct($schemaDir, $validateDir)
+    public function __construct(string $schemaDir, string $validateDir, string $schemaHost = null)
     {
         $this->schemaDir = $schemaDir;
         $this->validateDir = $validateDir;
+        $this->schemaHost = $schemaHost;
     }
 
     /**
@@ -61,6 +68,9 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         $ro = $invocation->proceed();
         if ($ro->code === 200 || $ro->code == 201) {
             $this->validateResponse($jsonSchema, $ro);
+        }
+        if (is_string($this->schemaHost)) {
+            $ro->headers['Link'] = sprintf('<%s%s>; rel="describedby"', $this->schemaHost, $jsonSchema->schema);
         }
 
         return $ro;
