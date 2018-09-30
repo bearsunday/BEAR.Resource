@@ -46,5 +46,6 @@
         <ImplicitToStringCast errorLevel="info" />
         <ReservedWord errorLevel="info" />
         <InvalidArrayOffset errorLevel="info" />
+        <NoInterfaceProperties errorLevel="info" />
     </issueHandlers>
 </psalm>
