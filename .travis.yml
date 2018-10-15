@@ -14,7 +14,7 @@ env:
     - DEPENDENCIES=""
     - DEPENDENCIES="--prefer-lowest --prefer-stable"
 before_script:
-  - cp $HOME/.phpenv/versions/$(phpenv global)/etc/conf.d/xdebug.ini /tmp
+  - if [[ $TRAVIS_PHP_VERSION = '7.2' ]]; cp $HOME/.phpenv/versions/$(phpenv global)/etc/conf.d/xdebug.ini /tmp; fi
   - phpenv config-rm xdebug.ini
   - composer self-update
   - composer update $DEPENDENCIES
