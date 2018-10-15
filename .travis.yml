@@ -15,7 +15,7 @@ env:
     - DEPENDENCIES="--prefer-lowest --prefer-stable"
 before_script:
   - if [[ $TRAVIS_PHP_VERSION = '7.2' ]]; then cp $HOME/.phpenv/versions/$(phpenv global)/etc/conf.d/xdebug.ini /tmp; fi
-  - phpenv config-rm xdebug.ini
+  - if [[ $TRAVIS_PHP_VERSION != '7.3' ]]; then phpenv config-rm xdebug.ini ; fi
   - composer self-update
   - composer update $DEPENDENCIES
   - if [[ $TRAVIS_PHP_VERSION = '7.2' ]]; then composer require --dev phpstan/phpstan-shim ^0.9 friendsofphp/php-cs-fixer ^2.0 vimeo/psalm ^2.0; fi
