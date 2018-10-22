@@ -1,10 +1,9 @@
-<?php declare(strict_types=1);
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+<?php
+
+declare(strict_types=1);
+
 namespace MyVendor\Demo\Resource\App;
+
 /*
  * This file is part of the BEAR.Resource package.
  *
@@ -24,9 +23,6 @@ class Menu extends ResourceObject
 {
     private $menu = [];
 
-    /**
-     * @param resource $resource
-     */
     public function __construct()
     {
         $this->menu = ['coffee' => 300, 'latte' => 400];
@@ -75,7 +71,7 @@ class Order extends ResourceObject
             'order_id' => $orderId
         ];
         $this->code = 201; // created
-        $this->headers['Location'] = "/order/?id=$orderId"; // hyper link
+        $this->headers['Location'] = "/order/?id=${orderId}"; // hyper link
 
         return $this;
     }
@@ -113,7 +109,7 @@ $ro = $resource->href('payment', $payment);
 
 // payment done, enjoy coffee !
 $code = new Code;
-echo "$ro->code: " . $code->statusText[$ro->code] . PHP_EOL;
+echo "{$ro->code}: " . $code->statusText[$ro->code] . PHP_EOL;
 echo 'Location: ' . $ro->headers['Location'] . PHP_EOL;
 echo 'Order: ' . (($ro->code === 201) ? 'Success' : 'Failure') . PHP_EOL;
 

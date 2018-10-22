@@ -1,9 +1,7 @@
-<?php declare(strict_types=1);
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+<?php
+
+declare(strict_types=1);
+
 namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\Embed;
@@ -25,10 +23,6 @@ final class EmbedInterceptor implements MethodInterceptor
      */
     private $reader;
 
-    /**
-     * @param ResourceInterface $resource
-     * @param Reader            $reader
-     */
     public function __construct(ResourceInterface $resource, Reader $reader)
     {
         $this->resource = clone $resource;
@@ -48,15 +42,12 @@ final class EmbedInterceptor implements MethodInterceptor
         $query = $this->getArgsByInvocation($invocation);
         $embeds = $this->reader->getMethodAnnotations($method);
         $this->embedResource($embeds, $ro, $query);
-        $result = $invocation->proceed();
 
-        return $result;
+        return $invocation->proceed();
     }
 
     /**
-     * @param Embed[]        $embeds
-     * @param ResourceObject $ro
-     * @param array          $query
+     * @param Embed[] $embeds
      *
      * @throws EmbedException
      */

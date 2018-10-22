@@ -1,9 +1,7 @@
-<?php declare(strict_types=1);
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+<?php
+
+declare(strict_types=1);
+
 namespace BEAR\Resource;
 
 use PHPUnit\Framework\TestCase;
@@ -18,8 +16,8 @@ class AssistedWebContextParamTest extends TestCase
         $cookieParam->key = 'cookie_key';
         $cookieParam->param = 'param_name';
         $fakeGlobals = [
-                '_COOKIE' => ['cookie_key' => '__COOKIE_VAL__']
-            ];
+            '_COOKIE' => ['cookie_key' => '__COOKIE_VAL__']
+        ];
         $assistedWebContextParam = new AssistedWebContextParam($cookieParam, new NoDefaultParam);
         AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose($fakeGlobals);
         $injector = (new \ReflectionClass(Injector::class))->newInstanceWithoutConstructor();

@@ -1,9 +1,7 @@
-<?php declare(strict_types=1);
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+<?php
+
+declare(strict_types=1);
+
 namespace BEAR\Resource;
 
 /**
@@ -13,26 +11,38 @@ final class Code
 {
     // 20X Success
     const OK = 200;
+
     const CREATED = 201;
+
     const ACCEPTED = 202;
+
     const NO_CONTENT = 204;
 
     // 30X Redirection
     const MOVED_PERMANENTLY = 301;
+
     const FOUND = 302;
+
     const SEE_OTHER = 303;
+
     const NOT_MODIFIED = 304;
+
     const TEMPORARY_REDIRECT = 307;
+
     const PERMANENT_REDIRECT = 308;
 
     // 40X Client Error
     const BAD_REQUEST = 400;
+
     const UNAUTHORIZED = 401;
+
     const FORBIDDEN = 403;
+
     const NOT_FOUND = 404;
 
     // 50X Service Error
     const ERROR = 500;
+
     const SERVICE_UNAVAILABLE = 503;
 
     /**

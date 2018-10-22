@@ -1,9 +1,7 @@
-<?php declare(strict_types=1);
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+<?php
+
+declare(strict_types=1);
+
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\MethodException;
@@ -18,11 +16,17 @@ use BEAR\Resource\Exception\OutOfBoundsException;
 abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \IteratorAggregate, \Serializable
 {
     const GET = 'get';
+
     const POST = 'post';
+
     const PUT = 'put';
+
     const PATCH = 'patch';
+
     const DELETE = 'delete';
+
     const HEAD = 'head';
+
     const OPTIONS = 'options';
 
     /**
@@ -85,7 +89,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     protected $invoker;
 
     /**
-     * @var LinkerInterface|null
+     * @var null|LinkerInterface
      */
     private $linker;
 
@@ -147,7 +151,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     {
         $this->result = $this->invoke();
 
-        return $this->result->$name;
+        return $this->result->{$name};
     }
 
     /**
@@ -168,6 +172,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     public function offsetUnset($offset)
     {
         unset($offset);
+
         throw new OutOfBoundsException(__METHOD__ . ' is unavailable.', 400);
     }
 
@@ -194,7 +199,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     {
         $this->invoke();
         if (! isset($this->result->body[$offset])) {
-            throw new OutOfBoundsException("[$offset] for object[" . get_class($this->result) . ']', 400);
+            throw new OutOfBoundsException("[${offset}] for object[" . get_class($this->result) . ']', 400);
         }
 
         return $this->result->body[$offset];
@@ -217,9 +222,8 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     {
         $this->invoke();
         $isArray = (is_array($this->result->body) || $this->result->body instanceof \Traversable);
-        $iterator = $isArray ? new \ArrayIterator($this->result->body) : new \ArrayIterator([]);
 
-        return $iterator;
+        return $isArray ? new \ArrayIterator($this->result->body) : new \ArrayIterator([]);
     }
 
     /**

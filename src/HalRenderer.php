@@ -1,9 +1,7 @@
-<?php declare(strict_types=1);
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+<?php
+
+declare(strict_types=1);
+
 namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\Link;
@@ -50,6 +48,7 @@ class HalRenderer implements RenderInterface
                 if ($isDefferentSchema === true) {
                     $ro->body['_embedded'][$key] = $embeded()->body;
                     unset($ro->body[$key]);
+
                     continue;
                 }
                 unset($ro->body[$key]);

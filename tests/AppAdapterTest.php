@@ -1,9 +1,7 @@
-<?php declare(strict_types=1);
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+<?php
+
+declare(strict_types=1);
+
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\ResourceNotFoundException;
@@ -66,8 +64,7 @@ class AppAdapterTest extends TestCase
         $scriptDir = __DIR__ . '/tmp';
         $compiler = new DiCompiler(new AppModule, $scriptDir);
         $compiler->compile();
-        $injector = new ScriptInjector($scriptDir);
 
-        return $injector;
+        return new ScriptInjector($scriptDir);
     }
 }

@@ -1,9 +1,7 @@
-<?php declare(strict_types=1);
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+<?php
+
+declare(strict_types=1);
+
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\UriException;
@@ -36,6 +34,7 @@ final class Uri extends AbstractUri
     {
         if (! filter_var($uri, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED)) {
             $msg = is_string($uri) ? $uri : gettype($uri);
+
             throw new UriException($msg, 500);
         }
     }

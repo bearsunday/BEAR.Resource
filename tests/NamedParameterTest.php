@@ -1,9 +1,7 @@
-<?php declare(strict_types=1);
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+<?php
+
+declare(strict_types=1);
+
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\ParameterException;
@@ -19,7 +17,7 @@ class NamedParameterTest extends TestCase
      */
     private $params;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         $this->params = new NamedParameter(new NamedParamMetas(new ArrayCache, new AnnotationReader), new Injector);

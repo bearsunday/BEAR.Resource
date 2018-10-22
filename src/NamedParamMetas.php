@@ -1,9 +1,7 @@
-<?php declare(strict_types=1);
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+<?php
+
+declare(strict_types=1);
+
 namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\ResourceParam;
@@ -90,8 +88,6 @@ final class NamedParamMetas implements NamedParamMetasInterface
 
     /**
      * @param \ReflectionParameter[] $parameters
-     * @param array                  $assistedNames
-     * @param array                  $webcontext
      *
      * @return ParamInterface[]
      */
@@ -101,11 +97,13 @@ final class NamedParamMetas implements NamedParamMetasInterface
         foreach ($parameters as $parameter) {
             if (isset($assistedNames[$parameter->name])) {
                 $names[$parameter->name] = $assistedNames[$parameter->name];
+
                 continue;
             }
             if (isset($webcontext[$parameter->name])) {
                 $default = $this->getDefault($parameter);
                 $names[$parameter->name] = new AssistedWebContextParam($webcontext[$parameter->name], $default);
+
                 continue;
             }
             $names[$parameter->name] = $this->getParam($parameter);

@@ -1,9 +1,7 @@
-<?php declare(strict_types=1);
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+<?php
+
+declare(strict_types=1);
+
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\LinkQueryException;
@@ -234,8 +232,8 @@ class LinkerTest extends TestCase
                             'tag_id' => '3',
                             'tag_name' => [
                                 [
-                                        'id' => '3',
-                                        'name' => 'gir',
+                                    'id' => '3',
+                                    'name' => 'gir',
                                 ],
                             ],
                             'tag_type' => [

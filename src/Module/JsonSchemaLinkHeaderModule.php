@@ -1,9 +1,7 @@
-<?php declare(strict_types=1);
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+<?php
+
+declare(strict_types=1);
+
 namespace BEAR\Resource\Module;
 
 use BEAR\Resource\Exception\InvalidSchemaUriException;
@@ -17,8 +15,7 @@ class JsonSchemaLinkHeaderModule extends AbstractModule
     private $jsonSchemaHost;
 
     /**
-     * @param string              $jsonSchemaHost Json-schema host name ex) https://example.com/schema/
-     * @param AbstractModule|null $module
+     * @param string $jsonSchemaHost Json-schema host name ex) https://example.com/schema/
      */
     public function __construct(
         string $jsonSchemaHost,

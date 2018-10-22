@@ -1,9 +1,7 @@
-<?php declare(strict_types=1);
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+<?php
+
+declare(strict_types=1);
+
 namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\Link;
@@ -70,10 +68,6 @@ final class Linker implements LinkerInterface
 
     /**
      * How next linked resource treated (add ? replace ?)
-     *
-     * @param LinkType       $link
-     * @param ResourceObject $ro
-     * @param mixed          $nextResource
      */
     private function nextLink(LinkType $link, ResourceObject $ro, $nextResource) : ResourceObject
     {
@@ -102,7 +96,7 @@ final class Linker implements LinkerInterface
      * @throws \BEAR\Resource\Exception\LinkRelException
      * @throws Exception\LinkQueryException
      *
-     * @return ResourceObject|mixed
+     * @return mixed|ResourceObject
      */
     private function annotationLink(LinkType $link, ResourceObject $current, AbstractRequest $request)
     {
@@ -123,8 +117,6 @@ final class Linker implements LinkerInterface
      * Annotation link (new, self)
      *
      * @param \BEAR\Resource\Annotation\Link[] $annotations
-     * @param LinkType                         $link
-     * @param ResourceObject                   $current
      *
      * @throws \BEAR\Resource\Exception\UriException
      * @throws \BEAR\Resource\Exception\MethodException
@@ -142,10 +134,10 @@ final class Linker implements LinkerInterface
             $rel = $this->factory->newInstance($uri);
             /* @noinspection UnnecessaryParenthesesInspection */
             $request = new Request($this->invoker, $rel, Request::GET, (new Uri($uri))->query);
-            $linkedResource = $this->invoker->invoke($request);
 
-            return $linkedResource;
+            return $this->invoker->invoke($request);
         }
+
         throw new LinkRelException("rel:{$link->key} class:" . get_class($current), 500);
     }
 
@@ -195,9 +187,6 @@ final class Linker implements LinkerInterface
         }
     }
 
-    /**
-     * @param mixed $value
-     */
     private function isList($value) : bool
     {
         $list = $value;

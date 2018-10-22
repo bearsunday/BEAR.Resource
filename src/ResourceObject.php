@@ -1,9 +1,7 @@
-<?php declare(strict_types=1);
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+<?php
+
+declare(strict_types=1);
+
 namespace BEAR\Resource;
 
 use ArrayAccess;
@@ -38,7 +36,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * Resource representation
      *
-     * @var string|null
+     * @var null|string
      */
     public $view;
 
@@ -94,8 +92,6 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      * Returns the body value at the specified index
      *
      * @param mixed $offset offset
-     *
-     * @return mixed
      */
     public function offsetGet($offset)
     {
@@ -182,8 +178,6 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * Set renderer
      *
-     * @param RenderInterface $renderer
-     *
      * @return $this
      * @Ray\Di\Di\Inject(optional=true)
      */
@@ -209,9 +203,6 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         return $this->renderer->render($this);
     }
 
-    /**
-     * @return mixed
-     */
     public function jsonSerialize()
     {
         $body = $this->evaluate($this->body);
@@ -231,11 +222,6 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         $responder($this, $server);
     }
 
-    /**
-     * @param mixed $body
-     *
-     * @return mixed
-     */
     private function evaluate($body)
     {
         if (is_array($body)) {

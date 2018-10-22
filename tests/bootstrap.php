@@ -1,9 +1,7 @@
-<?php declare(strict_types=1);
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+<?php
+
+declare(strict_types=1);
+
 $_ENV['schema_dir'] = __DIR__ . '/Fake/json_schema';
 $_ENV['TMP_DIR'] = __DIR__ . '/tmp';
 $unlink = function ($path) use (&$unlink) {

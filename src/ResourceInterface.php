@@ -1,9 +1,7 @@
-<?php declare(strict_types=1);
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+<?php
+
+declare(strict_types=1);
+
 namespace BEAR\Resource;
 
 /**
@@ -20,7 +18,7 @@ interface ResourceInterface
     /**
      * Return new resource object instance
      *
-     * @param string|AbstractUri $uri
+     * @param AbstractUri|string $uri
      */
     public function newInstance($uri) : ResourceObject;
 
@@ -32,7 +30,7 @@ interface ResourceInterface
     /**
      * Set URI
      *
-     * @param string|AbstractUri $uri
+     * @param AbstractUri|string $uri
      */
     public function uri($uri) : RequestInterface;
 
