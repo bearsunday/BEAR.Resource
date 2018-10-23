@@ -1,9 +1,7 @@
-<?php declare(strict_types=1);
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+<?php
+
+declare(strict_types=1);
+
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\MethodNotAllowedException;
@@ -58,6 +56,6 @@ final class Invoker implements InvokerInterface
             return $ro;
         }
 
-        throw new MethodNotAllowedException(get_class($request->resourceObject) . "::{($request->method}()", 405);
+        throw new MethodNotAllowedException(get_class($request->resourceObject) . "::{({$request->method}}()", 405);
     }
 }

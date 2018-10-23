@@ -1,9 +1,7 @@
-<?php declare(strict_types=1);
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+<?php
+
+declare(strict_types=1);
+
 namespace MyVendor\Demo\Resource\App {
     require dirname(__DIR__) . '/vendor/autoload.php';
 
@@ -197,6 +195,7 @@ namespace MyVendor\Demo\Resource\App {
         }
     }
 }
+
 namespace MyVendor\Demo\Resource\App\Tag {
     use BEAR\Resource\ResourceObject;
     use MyVendor\Demo\Resource\App\SelectTrait;
@@ -228,6 +227,7 @@ namespace MyVendor\Demo\Resource\App\Tag {
         }
     }
 }
+
 namespace Main {
     use BEAR\Resource\Module\HalModule;
     use BEAR\Resource\Module\ResourceModule;

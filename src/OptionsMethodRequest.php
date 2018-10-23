@@ -1,9 +1,7 @@
-<?php declare(strict_types=1);
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+<?php
+
+declare(strict_types=1);
+
 namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\ResourceParam;
@@ -22,17 +20,12 @@ final class OptionsMethodRequest
     public function __invoke(\ReflectionMethod $method, array $paramDoc, array $ins) : array
     {
         $paramMetas = $this->getParamMetas($method->getParameters(), $paramDoc, $ins);
-        $paramMetas = $this->ignoreAnnotatedPrameter($method, $paramMetas);
 
-        return $paramMetas;
+        return $this->ignoreAnnotatedPrameter($method, $paramMetas);
     }
 
     /**
-     * @param \ReflectionParameter $parameter
-     * @param array                $paramDoc
-     * @param string               $name
-     *
-     * @return string|null
+     * @return null|string
      */
     private function getParameterType(\ReflectionParameter $parameter, array $paramDoc, string $name)
     {
@@ -58,9 +51,8 @@ final class OptionsMethodRequest
             $paramDoc = $this->paramDefault($paramDoc, $parameter);
         }
         $required = $this->getRequired($parameters);
-        $paramMetas = $this->setParamMetas($paramDoc, $required);
 
-        return $paramMetas;
+        return $this->setParamMetas($paramDoc, $required);
     }
 
     /**
@@ -98,9 +90,6 @@ final class OptionsMethodRequest
         return $paramDoc;
     }
 
-    /**
-     * @param \ReflectionParameter $parameter
-     */
     private function getType(\ReflectionParameter $parameter) : string
     {
         $type = (string) $parameter->getType();

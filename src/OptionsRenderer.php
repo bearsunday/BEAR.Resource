@@ -1,9 +1,7 @@
-<?php declare(strict_types=1);
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+<?php
+
+declare(strict_types=1);
+
 namespace BEAR\Resource;
 
 /**
@@ -11,7 +9,7 @@ namespace BEAR\Resource;
  *
  * Set resource request information to `headers` and `view` in ResourceObject.
  *
- * @link https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html
+ * @see https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html
  * @see /docs/options/README.md
  */
 final class OptionsRenderer implements RenderInterface
@@ -61,13 +59,8 @@ final class OptionsRenderer implements RenderInterface
 
     /**
      * Return OPTIONS entity body
-     *
-     * @param ResourceObject $ro
-     * @param array          $allows
-     *
-     * @return array
      */
-    private function getEntityBody(ResourceObject $ro, $allows)
+    private function getEntityBody(ResourceObject $ro, array $allows) : array
     {
         $mehtodList = [];
         foreach ($allows as $method) {

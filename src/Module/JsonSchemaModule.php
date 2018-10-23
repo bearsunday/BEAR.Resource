@@ -1,9 +1,7 @@
-<?php declare(strict_types=1);
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+<?php
+
+declare(strict_types=1);
+
 namespace BEAR\Resource\Module;
 
 use BEAR\Resource\Annotation\JsonSchema;
@@ -24,9 +22,8 @@ class JsonSchemaModule extends AbstractModule
     private $jsonValidateDir;
 
     /**
-     * @param string              $jsonSchemaDir   Json-schema json file directory
-     * @param string              $jsonValidateDir Json-schema validator json file directory
-     * @param AbstractModule|null $module
+     * @param string $jsonSchemaDir   Json-schema json file directory
+     * @param string $jsonValidateDir Json-schema validator json file directory
      */
     public function __construct(
         string $jsonSchemaDir = '',

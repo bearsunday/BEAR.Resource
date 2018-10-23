@@ -1,9 +1,7 @@
-<?php declare(strict_types=1);
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+<?php
+
+declare(strict_types=1);
+
 namespace BEAR\Resource\Module;
 
 use BEAR\Resource\ImportApp;
@@ -14,7 +12,7 @@ use Ray\Di\Injector;
 
 class ImportModuleTest extends TestCase
 {
-    public function setUp()
+    protected function setUp()
     {
         $rm = function ($dir) use (&$rm) {
             foreach (glob($dir . '/*') as $file) {
@@ -22,7 +20,7 @@ class ImportModuleTest extends TestCase
                 @rmdir($file);
             }
         };
-        $tmpDir = dirname(dirname(__DIR__)) . '/tests/Fake/FakeVendor/Blog/var/tmp';
+        $tmpDir = dirname(__DIR__, 2) . '/tests/Fake/FakeVendor/Blog/var/tmp';
         $rm($tmpDir);
         file_put_contents($tmpDir . '/tmp.text', '1');
         parent::setUp();

@@ -1,9 +1,7 @@
-<?php declare(strict_types=1);
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+<?php
+
+declare(strict_types=1);
+
 namespace BEAR\Resource;
 
 use Ray\Di\InjectorInterface;
@@ -26,11 +24,9 @@ class FakeSchemeCollectionProvider implements ProviderInterface
      */
     public function get()
     {
-        $scheme = (new SchemeCollection)
+        return (new SchemeCollection)
             ->scheme('app')->host('self')->toAdapter(new AppAdapter($this->injector, 'FakeVendor\Sandbox'))
             ->scheme('page')->host('self')->toAdapter(new AppAdapter($this->injector, 'FakeVendor\Sandbox'))
             ->scheme('nop')->host('self')->toAdapter(new FakeNop);
-
-        return $scheme;
     }
 }

@@ -1,9 +1,7 @@
-<?php declare(strict_types=1);
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+<?php
+
+declare(strict_types=1);
+
 namespace BEAR\Resource;
 
 /**
@@ -13,17 +11,21 @@ namespace BEAR\Resource;
 final class Request extends AbstractRequest
 {
     const GET = 'get';
+
     const POST = 'post';
+
     const PUT = 'put';
+
     const PATCH = 'patch';
+
     const DELETE = 'delete';
+
     const HEAD = 'head';
+
     const OPTIONS = 'options';
 
     /**
-     * @param string $name
-     *
-     * @return $this|int|string|array
+     * @return $this|array|int|string
      */
     public function __get(string $name)
     {

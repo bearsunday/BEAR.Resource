@@ -1,9 +1,7 @@
-<?php declare(strict_types=1);
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+<?php
+
+declare(strict_types=1);
+
 namespace BEAR\Resource\Module;
 
 use BEAR\Resource\ResourceInterface;
@@ -13,7 +11,7 @@ use Ray\Di\Injector;
 
 class HalModuleTest extends TestCase
 {
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
     }

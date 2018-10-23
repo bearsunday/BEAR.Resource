@@ -1,9 +1,7 @@
-<?php declare(strict_types=1);
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+<?php
+
+declare(strict_types=1);
+
 namespace BEAR\Resource;
 
 final class Meta
@@ -41,9 +39,8 @@ final class Meta
         $this->extras[self::EXTRAS_PACKAGE] = array_shift($classPath);
         array_shift($classPath); // "/Resource/"
         $scheme = array_shift($classPath);
-        $uri = strtolower("{$scheme}://self/" . implode('/', $classPath));
 
-        return $uri;
+        return strtolower("{$scheme}://self/" . implode('/', $classPath));
     }
 
     /**
@@ -57,9 +54,8 @@ final class Meta
         foreach ($allows as $method) {
             $params[] = $this->getParams($class, $method);
         }
-        $options = new Options($allows, $params);
 
-        return $options;
+        return new Options($allows, $params);
     }
 
     /**
@@ -87,6 +83,7 @@ final class Meta
             $name = $parameter->name;
             if ($parameter->isOptional()) {
                 $optionalParams[] = $name;
+
                 continue;
             }
             $requiredParams[] = $name;

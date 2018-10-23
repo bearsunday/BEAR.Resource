@@ -1,9 +1,7 @@
-<?php declare(strict_types=1);
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+<?php
+
+declare(strict_types=1);
+
 namespace BEAR\Resource\Interceptor;
 
 use BEAR\Resource\Annotation\JsonSchema;
@@ -34,14 +32,11 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     private $validateDir;
 
     /**
-     * @var string|null
+     * @var null|string
      */
     private $schemaHost;
 
     /**
-     * @param string $schemaDir
-     * @param string $validateDir
-     *
      * @Named("schemaDir=json_schema_dir,validateDir=json_validate_dir,schemaHost=json_schema_host")
      */
     public function __construct(string $schemaDir, string $validateDir, string $schemaHost = null)
@@ -104,6 +99,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
             $msg = sprintf('[%s] %s', $error['property'], $error['message']);
             $e = $e ? new JsonSchemaErrorException($msg, 0, $e) : new JsonSchemaErrorException($msg);
         }
+
         throw new JsonSchemaException($schemaFile, Code::ERROR, $e);
     }
 
