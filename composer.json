@@ -29,7 +29,9 @@
         "bear/cs": "^1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.2"
+        "phpunit/phpunit": "^6.2",
+        "vimeo/psalm": "^2.0",
+        "phpstan/phpstan-shim": "^0.9"
     },
     "autoload": {
         "psr-4": {
