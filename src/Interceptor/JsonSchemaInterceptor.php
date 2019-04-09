@@ -108,6 +108,9 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         if (! $jsonSchema->schema) {
             // for BC only
             $ref = new \ReflectionClass($ro);
+            if (! $ref instanceof \ReflectionClass) {
+                throw new \ReflectionException(get_class($ro)); // @codeCoverageIgnore
+            }
             $roFileName = $ro instanceof WeavedInterface ? $roFileName = $ref->getParentClass()->getFileName() : $ref->getFileName();
             $bcFile = str_replace('.php', '.json', $roFileName);
             if (file_exists($bcFile)) {
