@@ -74,7 +74,8 @@ final class OptionsMethodRequest
     {
         $hasDefault = $parameter->isDefaultValueAvailable() && $parameter->getDefaultValue() !== null;
         if ($hasDefault) {
-            $paramDoc[$parameter->name]['default'] = (string) $parameter->getDefaultValue();
+            $default = $parameter->getDefaultValue();
+            $paramDoc[$parameter->name]['default'] = is_array($default) ? '[]' : (string) $parameter->getDefaultValue();
         }
 
         return $paramDoc;
