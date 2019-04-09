@@ -10,6 +10,7 @@ use BEAR\Resource\Exception\JsonSchemaErrorException;
 use BEAR\Resource\Exception\JsonSchemaException;
 use BEAR\Resource\Exception\JsonSchemaNotFoundException;
 use BEAR\Resource\ResourceObject;
+use function is_string;
 use JsonSchema\Constraints\Constraint;
 use JsonSchema\Validator;
 use Ray\Aop\MethodInterceptor;
@@ -17,7 +18,6 @@ use Ray\Aop\MethodInvocation;
 use Ray\Aop\ReflectionMethod;
 use Ray\Aop\WeavedInterface;
 use Ray\Di\Di\Named;
-use function is_string;
 
 final class JsonSchemaInterceptor implements MethodInterceptor
 {

@@ -19,11 +19,15 @@ class NullRequest extends AbstractRequest
 
     public function withQuery(array $query) : RequestInterface
     {
+        unset($query);
+
         return $this;
     }
 
     public function addQuery(array $query) : RequestInterface
     {
+        unset($query);
+
         return $this;
     }
 
@@ -39,16 +43,22 @@ class NullRequest extends AbstractRequest
 
     public function linkSelf(string $linkKey) : RequestInterface
     {
+        unset($linkKey);
+
         return $this;
     }
 
     public function linkNew(string $linkKey) : RequestInterface
     {
+        unset($linkKey);
+
         return $this;
     }
 
     public function linkCrawl(string $linkKey) : RequestInterface
     {
+        unset($linkKey);
+
         return $this;
     }
 }
