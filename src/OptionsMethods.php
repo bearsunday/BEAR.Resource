@@ -50,14 +50,16 @@ final class OptionsMethods
         $method = new \ReflectionMethod(get_class($ro), 'on' . $requestMethod);
         $ins = $this->getInMap($method);
         list($doc, $paramDoc) = (new OptionsMethodDocBolck)($method);
+        $methodOption = $doc;
         $paramMetas = (new OptionsMethodRequest($this->reader))($method, $paramDoc, $ins);
         $schema = $this->getJsonSchema($method);
         $request = $paramMetas ? ['request' => $paramMetas] : [];
+        $methodOption += $request;
         if (! empty($schema)) {
-            return $doc + $request + ['schema' => $schema];
+            return $methodOption + ['schema' => $schema];
         }
 
-        return $doc + $request;
+        return $methodOption;
     }
 
     private function getInMap(\ReflectionMethod $method) : array
