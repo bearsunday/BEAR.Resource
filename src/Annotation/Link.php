@@ -8,7 +8,7 @@ namespace BEAR\Resource\Annotation;
  * @Annotation
  * @Target("METHOD")
  */
-final class Link
+final class Link implements \JsonSerializable
 {
     /**
      * Relation to the target resource of the link
@@ -45,4 +45,18 @@ final class Link
      * @var string
      */
     public $crawl = '';
+
+    public function jsonSerialize()
+    {
+        $json = [
+            'rel' => $this->rel,
+            'href' => $this->href,
+            'method' => $this->method
+        ];
+        if ($this->title) {
+            $json += ['title' => $this->title];
+        }
+
+        return $json;
+    }
 }

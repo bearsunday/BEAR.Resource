@@ -7,6 +7,7 @@
 namespace FakeVendor\Sandbox\Resource\App;
 
 use BEAR\Resource\Annotation\Embed;
+use BEAR\Resource\Annotation\JsonSchema;
 use BEAR\Resource\Annotation\Link;
 use BEAR\Resource\ResourceObject;
 
@@ -21,9 +22,10 @@ class Doc extends ResourceObject
      *
      * @param string $id User ID
      *
-     * @Link(rel="friend", href="/fiend{?id}")
+     * @Link(rel="friend", href="/fiend{?id}", method="get", title="Friend profile")
      * @Link(rel="task", href="/task{?id}")
      * @Embed(rel="profile", src="/profile{?id}")
+     * @JsonSchema(schema="user.json")
      */
     public function onGet(string $id)
     {
