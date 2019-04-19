@@ -123,7 +123,26 @@ class InvokerTest extends TestCase
             "required": [
                 "id"
             ]
-        }
+        },
+        "links": [
+            {
+                "rel": "friend",
+                "href": "/fiend{?id}",
+                "method": "get",
+                "title": "Friend profile"
+            },
+            {
+                "rel": "task",
+                "href": "/task{?id}",
+                "method": "get"
+            }
+        ],
+        "embed": [
+            {
+                "rel": "profile",
+                "src": "/profile{?id}"
+            }
+        ]
     },
     "POST": {
         "request": {

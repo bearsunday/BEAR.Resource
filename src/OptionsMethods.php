@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+use BEAR\Resource\Annotation\Embed;
 use BEAR\Resource\Annotation\JsonSchema;
+use BEAR\Resource\Annotation\Link;
 use Doctrine\Common\Annotations\Reader;
 use Ray\Di\Di\Named;
 use Ray\WebContextParam\Annotation\AbstractWebContextParam;
@@ -50,14 +52,36 @@ final class OptionsMethods
         $method = new \ReflectionMethod(get_class($ro), 'on' . $requestMethod);
         $ins = $this->getInMap($method);
         list($doc, $paramDoc) = (new OptionsMethodDocBolck)($method);
+        $methodOption = $doc;
         $paramMetas = (new OptionsMethodRequest($this->reader))($method, $paramDoc, $ins);
         $schema = $this->getJsonSchema($method);
         $request = $paramMetas ? ['request' => $paramMetas] : [];
+        $methodOption += $request;
         if (! empty($schema)) {
-            return $doc + $request + ['schema' => $schema];
+            $methodOption += ['schema' => $schema];
+        }
+        $extras = $this->getMethodExtras($method);
+        if (! empty($extras)) {
+            $methodOption += $extras;
         }
 
-        return $doc + $request;
+        return $methodOption;
+    }
+
+    private function getMethodExtras(\ReflectionMethod $method) : array
+    {
+        $extras = [];
+        $annotations = $this->reader->getMethodAnnotations($method);
+        foreach ($annotations as $annotation) {
+            if ($annotation instanceof Link) {
+                $extras['links'][] = $annotation;
+            }
+            if ($annotation instanceof Embed) {
+                $extras['embed'][] = $annotation;
+            }
+        }
+
+        return $extras;
     }
 
     private function getInMap(\ReflectionMethod $method) : array

@@ -125,13 +125,36 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     {
         $schemaFile = $this->getSchemaFile($jsonSchema, $ro);
         $body = isset($ro->body[$jsonSchema->key]) ? $ro->body[$jsonSchema->key] : $ro->body;
-        $this->validate($body, $schemaFile);
+        $this->validateRo($ro, $schemaFile);
+    }
+
+    private function validateRo(ResourceObject $ro, string $schemaFile)
+    {
+        $validator = new Validator;
+        $schema = (object) ['$ref' => 'file://' . $schemaFile];
+        $view = (string) $ro;
+        $data = json_decode($view);
+        $validator->validate($data, $schema, Constraint::CHECK_MODE_TYPE_CAST);
+        $isValid = $validator->isValid();
+        if ($isValid) {
+            return;
+        }
+        $e = null;
+        $msgList = '';
+        foreach ($validator->getErrors() as $error) {
+            $msg = sprintf('[%s] %s', $error['property'], $error['message']);
+            $msgList .= $msg . '; ';
+            $e = $e ? new JsonSchemaErrorException($msg, 0, $e) : new JsonSchemaErrorException($msg);
+        }
+
+        throw new JsonSchemaException("{$msgList} in {$schemaFile}", Code::ERROR, $e);
     }
 
     private function validate($scanObject, $schemaFile)
     {
         $validator = new Validator;
         $schema = (object) ['$ref' => 'file://' . $schemaFile];
+
         $validator->validate($scanObject, $schema, Constraint::CHECK_MODE_TYPE_CAST);
         $isValid = $validator->isValid();
         if ($isValid) {
