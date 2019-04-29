@@ -9,6 +9,7 @@ use BEAR\Resource\Code;
 use BEAR\Resource\Exception\JsonSchemaErrorException;
 use BEAR\Resource\Exception\JsonSchemaException;
 use BEAR\Resource\Exception\JsonSchemaNotFoundException;
+use BEAR\Resource\JsonSchemaExceptionHandlerInterface;
 use BEAR\Resource\ResourceObject;
 use function is_string;
 use JsonSchema\Constraints\Constraint;
@@ -37,13 +38,19 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     private $schemaHost;
 
     /**
+     * @var JsonSchemaExceptionHandlerInterface
+     */
+    private $handler;
+
+    /**
      * @Named("schemaDir=json_schema_dir,validateDir=json_validate_dir,schemaHost=json_schema_host")
      */
-    public function __construct(string $schemaDir, string $validateDir, string $schemaHost = null)
+    public function __construct(string $schemaDir, string $validateDir, JsonSchemaExceptionHandlerInterface $handler, string $schemaHost = null)
     {
         $this->schemaDir = $schemaDir;
         $this->validateDir = $validateDir;
         $this->schemaHost = $schemaHost;
+        $this->handler = $handler;
     }
 
     /**
@@ -62,10 +69,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         /** @var ResourceObject $ro */
         $ro = $invocation->proceed();
         if ($ro->code === 200 || $ro->code == 201) {
-            $this->validateResponse($jsonSchema, $ro);
-        }
-        if (is_string($this->schemaHost)) {
-            $ro->headers['Link'] = sprintf('<%s%s>; rel="describedby"', $this->schemaHost, $jsonSchema->schema);
+            $this->validateResponse($ro, $jsonSchema);
         }
 
         return $ro;
@@ -78,11 +82,17 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         $this->validate($arguments, $schemaFile);
     }
 
-    private function validateResponse(JsonSchema $jsonSchema, ResourceObject $ro)
+    private function validateResponse(ResourceObject $ro, JsonSchema $jsonSchema)
     {
         $schemaFile = $this->getSchemaFile($jsonSchema, $ro);
-        $body = isset($ro->body[$jsonSchema->key]) ? $ro->body[$jsonSchema->key] : $ro->body;
-        $this->validateRo($ro, $schemaFile);
+        try {
+            $this->validateRo($ro, $schemaFile);
+            if (is_string($this->schemaHost)) {
+                $ro->headers['Link'] = sprintf('<%s%s>; rel="describedby"', $this->schemaHost, $jsonSchema->schema);
+            }
+        } catch (JsonSchemaException $e) {
+            $this->handler->handle($ro, $e, $schemaFile);
+        }
     }
 
     private function validateRo(ResourceObject $ro, string $schemaFile)

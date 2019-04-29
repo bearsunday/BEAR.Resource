@@ -16,7 +16,7 @@
         }
     ],
     "require": {
-        "php": ">=7.0.0",
+        "php": ">=7.1.0",
         "ext-json": "*",
         "ray/di": "^2.7.1",
         "nocarrier/hal":"^0.9.12",
@@ -26,14 +26,21 @@
         "koriym/http-constants": "^1.0",
         "ray/web-param-module": "^2.0",
         "justinrainbow/json-schema": "^5.2",
-        "bear/cs": "^1.0"
+        "bear/cs": "^1.0",
+        "koriym/json-schema-faker": "^0.1.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.2",
         "vimeo/psalm": "^2.0",
         "phpstan/phpstan-shim": "^0.9"
     },
-    "autoload": {
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/koriym/php-json-schema-faker"
+        }
+    ],
+      "autoload": {
         "psr-4": {
             "BEAR\\Resource\\": ["src/", "src-deprecated"]
         },
