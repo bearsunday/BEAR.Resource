@@ -6,7 +6,6 @@ namespace BEAR\Resource\Interceptor;
 
 use BEAR\Resource\Annotation\JsonSchema;
 use BEAR\Resource\Code;
-use BEAR\Resource\Exception\JsonSchemaErrorException;
 use BEAR\Resource\Exception\JsonSchemaException;
 use BEAR\Resource\Exception\JsonSchemaNotFoundException;
 use BEAR\Resource\JsonSchemaExceptionHandlerInterface;
@@ -98,42 +97,32 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     private function validateRo(ResourceObject $ro, string $schemaFile)
     {
         $validator = new Validator;
-        $schema = (object) ['$ref' => 'file://' . $schemaFile];
-        $view = (string) $ro;
-        $data = json_decode($view);
-        $validator->validate($data, $schema, Constraint::CHECK_MODE_TYPE_CAST);
-        $isValid = $validator->isValid();
-        if ($isValid) {
-            return;
-        }
-        $e = null;
-        $msgList = '';
-        foreach ($validator->getErrors() as $error) {
-            $msg = sprintf('[%s] %s', $error['property'], $error['message']);
-            $msgList .= $msg . '; ';
-            $e = $e ? new JsonSchemaErrorException($msg, 0, $e) : new JsonSchemaErrorException($msg);
-        }
-
-        throw new JsonSchemaException("{$msgList} in {$schemaFile}", Code::ERROR, $e);
+        $json = json_decode((string) $ro);
+        $this->validate($json, $schemaFile);
     }
 
     private function validate($scanObject, $schemaFile)
     {
         $validator = new Validator;
         $schema = (object) ['$ref' => 'file://' . $schemaFile];
-
         $validator->validate($scanObject, $schema, Constraint::CHECK_MODE_TYPE_CAST);
         $isValid = $validator->isValid();
         if ($isValid) {
             return;
         }
-        $e = null;
-        foreach ($validator->getErrors() as $error) {
-            $msg = sprintf('[%s] %s', $error['property'], $error['message']);
-            $e = $e ? new JsonSchemaErrorException($msg, 0, $e) : new JsonSchemaErrorException($msg);
+
+        throw $this->throwJsonSchemaException($validator);
+    }
+
+    private function throwJsonSchemaException(Validator $validator) : JsonSchemaException
+    {
+        $errors = $validator->getErrors();
+        $msg = '';
+        foreach ($errors as $error) {
+            $msg .= sprintf('[%s] %s; ', $error['property'], $error['message']);
         }
 
-        throw new JsonSchemaException($schemaFile, Code::ERROR, $e);
+        return new JsonSchemaException($msg, Code::ERROR);
     }
 
     private function getSchemaFile(JsonSchema $jsonSchema, ResourceObject $ro) : string
