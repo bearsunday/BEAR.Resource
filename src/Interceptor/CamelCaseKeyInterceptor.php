@@ -15,8 +15,8 @@ final class CamelCaseKeyInterceptor implements MethodInterceptor
      */
     public function invoke(MethodInvocation $invocation)
     {
+        /** @var ResourceObject $ro */
         $ro = $invocation->getThis();
-        /* @var ResourceObject $ro */
         $ro->body = $this->camelCaseKey($ro->body);
 
         return $invocation->proceed();
@@ -33,6 +33,6 @@ final class CamelCaseKeyInterceptor implements MethodInterceptor
             return array_shift($parts) . implode('', array_map('ucfirst', $parts));
         }, array_keys($array));
 
-        return array_combine($keys, $array);
+        return (array) array_combine($keys, $array);
     }
 }
