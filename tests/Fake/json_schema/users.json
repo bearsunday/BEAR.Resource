@@ -3,7 +3,6 @@
   "type": "array",
   "items": {
     "$ref": "user.json"
-  },
-  "minItems": 1
+  }
 }
 
