@@ -34,13 +34,7 @@
         "vimeo/psalm": "^2.0",
         "phpstan/phpstan-shim": "^0.9"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/koriym/php-json-schema-faker"
-        }
-    ],
-      "autoload": {
+    "autoload": {
         "psr-4": {
             "BEAR\\Resource\\": ["src/", "src-deprecated"]
         },
