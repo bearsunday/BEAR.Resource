@@ -27,7 +27,7 @@
         "ray/web-param-module": "^2.0",
         "justinrainbow/json-schema": "^5.2",
         "bear/cs": "^1.0",
-        "leko/json-schema-faker": "dev-ref-schema"
+        "koriym/json-schema-faker": "^0.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.2",
