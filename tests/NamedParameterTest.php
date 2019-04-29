@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\ParameterException;
+use function call_user_func_array;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
 use PHPUnit\Framework\TestCase;
@@ -94,5 +95,15 @@ class NamedParameterTest extends TestCase
         AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose([]);
         $object = new FakeParamResource;
         $args = $this->params->getParameters([$object, 'onDelete'], []);
+    }
+
+    public function testCameCaseParam()
+    {
+        $object = new FakeCamelCaseParamResource;
+        $namedArgs = ['user_id' => 'koriym', 'user_role' => 'lead'];
+        $args = $this->params->getParameters([$object, 'onGet'], $namedArgs);
+        $this->assertSame(['koriym', 'lead'], $args);
+        $ro = call_user_func_array([$object, 'onGet'], $args);
+        $this->assertSame(['userId' => 'koriym', 'userRole' => 'lead'], (array) $ro->body);
     }
 }
