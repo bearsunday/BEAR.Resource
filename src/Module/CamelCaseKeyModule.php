@@ -10,7 +10,7 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\Reader;
 use Ray\Di\AbstractModule;
 
-class CamelCakeKeyModule extends AbstractModule
+class CamelCaseKeyModule extends AbstractModule
 {
     /**
      * {@inheritdoc}
