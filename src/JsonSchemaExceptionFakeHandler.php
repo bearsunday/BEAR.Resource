@@ -18,6 +18,7 @@ class JsonSchemaExceptionFakeHandler implements JsonSchemaExceptionHandlerInterf
         $ro->headers[self::X_FAKE_JSON] = $schemaFile;
         $ro->headers[self::X_JSON_SCHEMA_EXCEPTION] = $e->getMessage();
         $ro->body = $this->fakeResponse($schemaFile);
+        $ro->view = null;
     }
 
     private function fakeResponse(string $schemaFile) : array

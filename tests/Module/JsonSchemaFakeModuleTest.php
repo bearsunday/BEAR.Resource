@@ -37,12 +37,8 @@ class JsonSchemaFakeModuleTest extends TestCase
      */
     public function testBCValidateErrorException(JsonSchemaException $e)
     {
-        $errors = [];
-        while ($e = $e->getPrevious()) {
-            $errors[] = $e->getMessage();
-        }
-        $expected = ['[age] Must have a minimum value of 20'];
-        $this->assertSame($expected, $errors);
+        $expected = '[age] Must have a minimum value of 20';
+        $this->assertContains($expected, $e->getMessage());
     }
 
     public function testException()
