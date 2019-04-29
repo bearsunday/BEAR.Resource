@@ -11,15 +11,18 @@ class JsonSchemaExceptionFakeHandler implements JsonSchemaExceptionHandlerInterf
 {
     const X_FAKE_JSON = 'X-Fake-JSON';
 
+    const X_JSON_SCHEMA_EXCEPTION = 'X-JSON-Schema-Exception';
+
     public function handle(ResourceObject $ro, JsonSchemaException $e, string $schemaFile)
     {
         $ro->headers[self::X_FAKE_JSON] = $schemaFile;
+        $ro->headers[self::X_JSON_SCHEMA_EXCEPTION] = $e->getMessage();
         $ro->body = $this->fakeResponse($schemaFile);
     }
 
     private function fakeResponse(string $schemaFile) : array
     {
-        $fakeObject = (new Faker())->generate(new \SplFileInfo($schemaFile));
+        $fakeObject = (new Faker)->generate(new \SplFileInfo($schemaFile));
 
         return $this->deepArray($fakeObject);
     }
