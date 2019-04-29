@@ -9,7 +9,6 @@ use BEAR\Resource\Code;
 use BEAR\Resource\Exception\JsonSchemaErrorException;
 use BEAR\Resource\Exception\JsonSchemaException;
 use BEAR\Resource\Exception\JsonSchemaNotFoundException;
-use BEAR\Resource\JsonSchemaExceptionFakeHandler;
 use BEAR\Resource\JsonSchemaExceptionHandlerInterface;
 use BEAR\Resource\ResourceObject;
 use function is_string;
@@ -39,7 +38,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     private $schemaHost;
 
     /**
-     * @var JsonSchemaExceptionFakeHandler
+     * @var JsonSchemaExceptionHandlerInterface
      */
     private $handler;
 
@@ -70,12 +69,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         /** @var ResourceObject $ro */
         $ro = $invocation->proceed();
         if ($ro->code === 200 || $ro->code == 201) {
-            try {
-                $schemaFile = $this->getSchemaFile($jsonSchema, $ro);
-                $this->validateResponse($ro, $schemaFile, $jsonSchema);
-            } catch (JsonSchemaException $e) {
-                $this->handler->handle($ro, $e, $schemaFile);
-            }
+            $this->validateResponse($ro, $jsonSchema);
         }
 
         return $ro;
@@ -88,11 +82,16 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         $this->validate($arguments, $schemaFile);
     }
 
-    private function validateResponse($ro, $schemaFile, $jsonSchema)
+    private function validateResponse(ResourceObject $ro, JsonSchema $jsonSchema)
     {
-        $this->validateRo($ro, $schemaFile);
-        if (is_string($this->schemaHost)) {
-            $ro->headers['Link'] = sprintf('<%s%s>; rel="describedby"', $this->schemaHost, $jsonSchema->schema);
+        $schemaFile = $this->getSchemaFile($jsonSchema, $ro);
+        try {
+            $this->validateRo($ro, $schemaFile);
+            if (is_string($this->schemaHost)) {
+                $ro->headers['Link'] = sprintf('<%s%s>; rel="describedby"', $this->schemaHost, $jsonSchema->schema);
+            }
+        } catch (JsonSchemaException $e) {
+            $this->handler->handle($ro, $e, $schemaFile);
         }
     }
 
