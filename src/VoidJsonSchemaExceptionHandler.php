@@ -8,7 +8,7 @@ use BEAR\Resource\Exception\JsonSchemaException;
 
 class VoidJsonSchemaExceptionHandler implements JsonSchemaExceptionHandlerInterface
 {
-    public function handle(ResourceObject $ro, JsonSchemaException $e)
+    public function handle(ResourceObject $ro, JsonSchemaException $e, string $schemaFile)
     {
         throw $e;
     }
