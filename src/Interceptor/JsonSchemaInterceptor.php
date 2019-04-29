@@ -46,7 +46,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     /**
      * @Named("schemaDir=json_schema_dir,validateDir=json_validate_dir,schemaHost=json_schema_host")
      */
-    public function __construct(string $schemaDir, string $validateDir, string $schemaHost = null, JsonSchemaExceptionHandlerInterface $handler)
+    public function __construct(string $schemaDir, string $validateDir, JsonSchemaExceptionHandlerInterface $handler, string $schemaHost = null)
     {
         $this->schemaDir = $schemaDir;
         $this->validateDir = $validateDir;
