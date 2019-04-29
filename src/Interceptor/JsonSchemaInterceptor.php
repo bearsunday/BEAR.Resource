@@ -98,8 +98,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     {
         $schemaFile = $this->schemaDir . '/' . $jsonSchema->schema;
         $this->validateFileExists($schemaFile);
-        $schema = json_decode(file_get_contents($schemaFile));
-        $fakeJson = (new Faker($this->schemaDir))->generate($schema);
+        $fakeJson = (new Faker)->generate(new \SplFileInfo($schemaFile));
 
         return $this->deepArray($fakeJson);
     }
