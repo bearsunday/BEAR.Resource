@@ -10,12 +10,9 @@ use BEAR\Resource\Exception\JsonSchemaErrorException;
 use BEAR\Resource\Exception\JsonSchemaException;
 use BEAR\Resource\Exception\JsonSchemaNotFoundException;
 use BEAR\Resource\ResourceObject;
-use function file_get_contents;
 use function is_string;
-use function json_decode;
 use JsonSchema\Constraints\Constraint;
 use JsonSchema\Validator;
-use JSONSchemaFaker\Faker;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
 use Ray\Aop\ReflectionMethod;
@@ -24,8 +21,6 @@ use Ray\Di\Di\Named;
 
 final class JsonSchemaInterceptor implements MethodInterceptor
 {
-    const X_FAKE_JSON = 'X-Fake-JSON';
-
     /**
      * @var string
      */
@@ -42,19 +37,13 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     private $schemaHost;
 
     /**
-     * @var bool
+     * @Named("schemaDir=json_schema_dir,validateDir=json_validate_dir,schemaHost=json_schema_host")
      */
-    private $enableFakeJson;
-
-    /**
-     * @Named("schemaDir=json_schema_dir,validateDir=json_validate_dir,schemaHost=json_schema_host,enableFakeJson=enable_fake_json")
-     */
-    public function __construct(string $schemaDir, string $validateDir, string $schemaHost = null, bool $enableFakeJson = false)
+    public function __construct(string $schemaDir, string $validateDir, string $schemaHost = null)
     {
         $this->schemaDir = $schemaDir;
         $this->validateDir = $validateDir;
         $this->schemaHost = $schemaHost;
-        $this->enableFakeJson = $enableFakeJson;
     }
 
     /**
@@ -72,46 +61,14 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         }
         /** @var ResourceObject $ro */
         $ro = $invocation->proceed();
+        if ($ro->code === 200 || $ro->code == 201) {
+            $this->validateResponse($jsonSchema, $ro);
+        }
         if (is_string($this->schemaHost)) {
             $ro->headers['Link'] = sprintf('<%s%s>; rel="describedby"', $this->schemaHost, $jsonSchema->schema);
         }
-        if ($ro->code !== 200 && $ro->code !== 201) {
-            return $ro;
-        }
-        try {
-            $this->validateResponse($jsonSchema, $ro);
-        } catch (JsonSchemaException $e) {
-            if ($this->enableFakeJson) {
-                $ro->headers[self::X_FAKE_JSON] = $jsonSchema->schema;
-                $ro->body = $this->fakeResponse($jsonSchema);
-
-                return $ro;
-            }
-
-            throw $e;
-        }
 
         return $ro;
-    }
-
-    private function fakeResponse(JsonSchema $jsonSchema) : array
-    {
-        $schemaFile = $this->schemaDir . '/' . $jsonSchema->schema;
-        $this->validateFileExists($schemaFile);
-        $schema = json_decode(file_get_contents($schemaFile));
-        $fakeJson = (new Faker($this->schemaDir))->generate($schema);
-
-        return $this->deepArray($fakeJson);
-    }
-
-    private function deepArray($values) : array
-    {
-        $result = [];
-        foreach ($values as $key => $value) {
-            $result[$key] = is_object($value) ? $this->deepArray((array) $value) : $result[$key] = $value;
-        }
-
-        return $result;
     }
 
     private function validateRequest(JsonSchema $jsonSchema, array $arguments)
