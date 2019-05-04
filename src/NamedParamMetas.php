@@ -119,6 +119,11 @@ final class NamedParamMetas implements NamedParamMetasInterface
 
     private function getParam(\ReflectionParameter $parameter) : ParamInterface
     {
+        $class = $parameter->getClass();
+        if ($class instanceof \ReflectionClass) {
+            return new ClassParam($class, $parameter);
+        }
+
         return $parameter->isDefaultValueAvailable() === true ? new OptionalParam($parameter->getDefaultValue()) : new RequiredParam;
     }
 }
