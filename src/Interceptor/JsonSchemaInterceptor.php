@@ -111,16 +111,17 @@ final class JsonSchemaInterceptor implements MethodInterceptor
             return;
         }
 
-        throw $this->throwJsonSchemaException($validator);
+        throw $this->throwJsonSchemaException($validator, $schemaFile);
     }
 
-    private function throwJsonSchemaException(Validator $validator) : JsonSchemaException
+    private function throwJsonSchemaException(Validator $validator, string $schemaFile) : JsonSchemaException
     {
         $errors = $validator->getErrors();
         $msg = '';
         foreach ($errors as $error) {
             $msg .= sprintf('[%s] %s; ', $error['property'], $error['message']);
         }
+        $msg .= "by {$schemaFile}";
 
         return new JsonSchemaException($msg, Code::ERROR);
     }
