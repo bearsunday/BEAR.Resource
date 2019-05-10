@@ -6,6 +6,7 @@ namespace BEAR\Resource;
 
 use ArrayAccess;
 use Countable;
+use const E_USER_ERROR;
 use Exception;
 use IteratorAggregate;
 use JsonSerializable;
@@ -66,8 +67,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         try {
             $view = $this->toString();
         } catch (Exception $e) {
-            $msg = sprintf("%s(%s)\n%s", get_class($e), $e->getMessage(), $e->getTraceAsString());
-            trigger_error($msg, E_USER_WARNING);
+            $msg = sprintf('%s(%s) in %s on %s', get_class($e), $e->getMessage(), $e->getFile(), $e->getLine());
+            trigger_error($msg, E_USER_ERROR);
 
             return '';
         }
