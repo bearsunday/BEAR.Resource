@@ -10,6 +10,8 @@ use BEAR\Resource\Exception\JsonSchemaException;
 use BEAR\Resource\Exception\JsonSchemaNotFoundException;
 use BEAR\Resource\JsonSchemaExceptionHandlerInterface;
 use BEAR\Resource\ResourceObject;
+use function is_array;
+use function is_object;
 use function is_string;
 use JsonSchema\Constraints\Constraint;
 use JsonSchema\Validator;
@@ -96,7 +98,6 @@ final class JsonSchemaInterceptor implements MethodInterceptor
 
     private function validateRo(ResourceObject $ro, string $schemaFile)
     {
-        $validator = new Validator;
         $json = json_decode((string) $ro);
         $this->validate($json, $schemaFile);
     }
@@ -105,13 +106,27 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     {
         $validator = new Validator;
         $schema = (object) ['$ref' => 'file://' . $schemaFile];
-        $validator->validate($scanObject, $schema, Constraint::CHECK_MODE_TYPE_CAST);
+        $scanArray = $this->deepArray($scanObject);
+        $validator->validate($scanArray, $schema, Constraint::CHECK_MODE_TYPE_CAST);
         $isValid = $validator->isValid();
         if ($isValid) {
             return;
         }
 
         throw $this->throwJsonSchemaException($validator, $schemaFile);
+    }
+
+    private function deepArray($values)
+    {
+        if (! is_array($values)) {
+            return $values;
+        }
+        $result = [];
+        foreach ($values as $key => $value) {
+            $result[$key] = is_object($value) ? $this->deepArray((array) $value) : $result[$key] = $value;
+        }
+
+        return $result;
     }
 
     private function throwJsonSchemaException(Validator $validator, string $schemaFile) : JsonSchemaException
