@@ -41,7 +41,8 @@ class ResourceTest extends TestCase
             ->scheme('nop')->host('self')->toAdapter(new FakeNop);
         $invoker = new Invoker(new NamedParameter(new NamedParamMetas(new ArrayCache, new AnnotationReader), new Injector), new OptionsRenderer(new OptionsMethods($reader)));
         $factory = new Factory($scheme);
-        $resource = new Resource($factory, $invoker, new Anchor($reader), new Linker($reader, $invoker, $factory));
+        $uri = new UriFactory('app://self');
+        $resource = new Resource($factory, $invoker, new Anchor($reader), new Linker($reader, $invoker, $factory, $uri), $uri);
         $this->assertInstanceOf(ResourceInterface::class, $resource);
     }
 
