@@ -11,7 +11,7 @@ use Ray\Di\Di\Qualifier;
  * @Target("METHOD")
  * @Qualifier
  */
-final class ContextSchema
+final class ContextScheme
 {
     public $value;
 }

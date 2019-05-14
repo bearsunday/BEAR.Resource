@@ -40,9 +40,9 @@ class ResourceTest extends TestCase
             ->scheme('page')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox'))
             ->scheme('nop')->host('self')->toAdapter(new FakeNop);
         $invoker = new Invoker(new NamedParameter(new NamedParamMetas(new ArrayCache, new AnnotationReader), new Injector), new OptionsRenderer(new OptionsMethods($reader)));
-        $factory = new Factory($scheme);
+        $factory = new Factory($scheme, new UriFactory);
         $uri = new UriFactory('app://self');
-        $resource = new Resource($factory, $invoker, new Anchor($reader), new Linker($reader, $invoker, $factory, $uri), $uri);
+        $resource = new Resource($factory, $invoker, new Anchor($reader), new Linker($reader, $invoker, $factory), $uri);
         $this->assertInstanceOf(ResourceInterface::class, $resource);
     }
 

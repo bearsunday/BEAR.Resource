@@ -31,7 +31,7 @@ class FactoryTest extends TestCase
             ->scheme('page')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox'))
             ->scheme('prov')->host('self')->toAdapter(new FakeProv)
             ->scheme('nop')->host('self')->toAdapter(new FakeNop);
-        $this->factory = new Factory($scheme);
+        $this->factory = new Factory($scheme, new UriFactory);
     }
 
     public function testNewInstanceNop()
