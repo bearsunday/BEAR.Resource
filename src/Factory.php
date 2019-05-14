@@ -15,9 +15,15 @@ final class Factory implements FactoryInterface
      */
     private $scheme;
 
-    public function __construct(SchemeCollectionInterface $scheme)
+    /**
+     * @var UriFactory
+     */
+    private $uri;
+
+    public function __construct(SchemeCollectionInterface $scheme, UriFactory $uri)
     {
         $this->scheme = $scheme;
+        $this->uri = $uri;
     }
 
     /**
@@ -39,10 +45,11 @@ final class Factory implements FactoryInterface
     public function newInstance($uri) : ResourceObject
     {
         if (is_string($uri)) {
-            $uri = new Uri($uri);
+            $uri = ($this->uri)($uri);
         }
-        $adapter = $this->scheme->getAdapter($uri);
+        $ro = $this->scheme->getAdapter($uri)->get($uri);
+        $ro->uri = $uri;
 
-        return $adapter->get($uri);
+        return $ro;
     }
 }

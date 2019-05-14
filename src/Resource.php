@@ -100,6 +100,10 @@ final class Resource implements ResourceInterface
      */
     public function newInstance($uri) : ResourceObject
     {
+        if (is_string($uri)) {
+            $uri = ($this->uri)($uri);
+        }
+
         return $this->factory->newInstance($uri);
     }
 
@@ -118,14 +122,11 @@ final class Resource implements ResourceInterface
      */
     public function uri($uri) : RequestInterface
     {
-        if (is_string($uri)) {
-            $uri = ($this->uri)($uri);
-        }
-        $uri->method = $this->method;
-        $ro = $this->newInstance($uri);
-        $ro->uri = $uri;
-        $this->request = new Request($this->invoker, $ro, $uri->method, $uri->query, [], $this->linker);
+        $method = $this->method; // save method, this may change on newInstance(), this is singleton!
         $this->method = 'get';
+        $ro = $this->newInstance($uri);
+        $ro->uri->method = $method;
+        $this->request = new Request($this->invoker, $ro, $ro->uri->method, $ro->uri->query, [], $this->linker);
 
         return $this->request;
     }
@@ -142,52 +143,43 @@ final class Resource implements ResourceInterface
 
     public function get(string $uri, array $query = []) : ResourceObject
     {
-        $this->method = Request::GET;
-
-        ($this->uri)($uri);
-
-        return $this->uri(($this->uri)($uri))($query);
+        return $this->methodUri(Request::GET, $uri)($query);
     }
 
     public function post(string $uri, array $query = []) : ResourceObject
     {
-        $this->method = Request::POST;
-
-        return $this->uri(($this->uri)($uri))($query);
+        return $this->methodUri(Request::POST, $uri)($query);
     }
 
     public function put(string $uri, array $query = []) : ResourceObject
     {
-        $this->method = Request::PUT;
-
-        return $this->uri(($this->uri)($uri))($query);
+        return $this->methodUri(Request::PUT, $uri)($query);
     }
 
     public function patch(string $uri, array $query = []) : ResourceObject
     {
-        $this->method = Request::PATCH;
-
-        return $this->uri(($this->uri)($uri))($query);
+        return $this->methodUri(Request::PATCH, $uri)($query);
     }
 
     public function delete(string $uri, array $query = []) : ResourceObject
     {
-        $this->method = Request::DELETE;
-
-        return $this->uri(($this->uri)($uri))($query);
+        return $this->methodUri(Request::DELETE, $uri)($query);
     }
 
     public function options(string $uri, array $query = []) : ResourceObject
     {
-        $this->method = Request::OPTIONS;
-
-        return $this->uri(($this->uri)($uri))($query);
+        return $this->methodUri(Request::OPTIONS, $uri)($query);
     }
 
     public function head(string $uri, array $query = []) : ResourceObject
     {
-        $this->method = Request::HEAD;
+        return $this->methodUri(Request::HEAD, $uri)($query);
+    }
 
-        return $this->uri(($this->uri)($uri))($query);
+    private function methodUri(string $method, $uri) : RequestInterface
+    {
+        $this->method = $method;
+
+        return $this->uri($uri);
     }
 }
