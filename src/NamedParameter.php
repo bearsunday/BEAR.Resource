@@ -37,11 +37,7 @@ final class NamedParameter implements NamedParameterInterface
         $parameters = [];
         foreach ($metas as $varName => $param) {
             /* @var $param ParamInterface */
-            try {
-                $parameters[] = $param($varName, $query, $this->injector);
-            } catch (ParameterException $e) {
-                throw new ParameterException($this->getErrorMessage($callable, $e));
-            }
+            $parameters[] = $param($varName, $query, $this->injector);
         }
 
         return $parameters;
