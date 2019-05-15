@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\MethodNotAllowedException;
+use function is_callable;
 use Ray\Di\Di\Named;
 
 final class Invoker implements InvokerInterface
@@ -33,12 +34,12 @@ final class Invoker implements InvokerInterface
      */
     public function invoke(AbstractRequest $request) : ResourceObject
     {
-        $onMethod = 'on' . ucfirst($request->method);
-        if (! method_exists($request->resourceObject, $onMethod) === true) {
-            return $this->methodNoExists($request);
+        $callable = [$request->resourceObject, 'on' . ucfirst($request->method)];
+        if (! is_callable($callable)) {
+            return $this->noMethod($request);
         }
-        $params = $this->params->getParameters([$request->resourceObject, $onMethod], $request->query);
-        $response = call_user_func_array([$request->resourceObject, $onMethod], $params);
+        $params = $this->params->getParameters($callable, $request->query);
+        $response = call_user_func_array($callable, $params);
         if (! $response instanceof ResourceObject) {
             $request->resourceObject->body = $response;
             $response = $request->resourceObject;
@@ -47,7 +48,7 @@ final class Invoker implements InvokerInterface
         return $response;
     }
 
-    private function methodNoExists(AbstractRequest $request) : ResourceObject
+    private function noMethod(AbstractRequest $request) : ResourceObject
     {
         if ($request->method === Request::OPTIONS) {
             $ro = $request->resourceObject;
