@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\ParameterException;
-use function get_class;
-use function is_array;
-use Ray\Aop\WeavedInterface;
 use Ray\Di\InjectorInterface;
 
 final class NamedParameter implements NamedParameterInterface
