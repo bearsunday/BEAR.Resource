@@ -19,7 +19,7 @@ final class Uri extends AbstractUri
             $uri = uri_template($uri, $query);
         }
         $parsedUrl = (array) parse_url($uri);
-        list($this->scheme, $this->host, $this->path) = array_values((array) $parsedUrl);
+        list($this->scheme, $this->host, $this->path) = array_values($parsedUrl);
         if (array_key_exists('query', $parsedUrl)) {
             parse_str($parsedUrl['query'], $this->query);
         }

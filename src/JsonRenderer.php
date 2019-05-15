@@ -24,6 +24,6 @@ final class JsonRenderer implements RenderInterface
             // @codeCoverageIgnoreEnd
         }
 
-        return (string) $ro->view;
+        return $ro->view;
     }
 }
