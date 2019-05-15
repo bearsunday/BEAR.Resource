@@ -10,6 +10,6 @@ final class NullRenderer implements RenderInterface
     {
         unset($ro);
 
-        return new NullResourceObject;
+        return '';
     }
 }
