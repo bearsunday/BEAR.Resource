@@ -2,3 +2,5 @@ parameters:
 	ignoreErrors:
 		- '#Access to an undefined property BEAR\\Resource\\Request::\$__invalid__#'
 		- '#does not call parent constructor from BEAR\\Resource\\AbstractRequest.#'
+	excludes_analyse:
+		- '%currentWorkingDirectory%/tests/tmp/*'
