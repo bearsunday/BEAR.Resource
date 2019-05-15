@@ -15,7 +15,7 @@ class UriTest extends TestCase
         $this->assertSame('self', $uri->host);
         $this->assertSame('/', $uri->path);
         $this->assertSame('app', $uri->scheme);
-        $this->assertNull($uri->method);
+        $this->assertSame('get', $uri->method);
     }
 
     public function testUriWithQuery()

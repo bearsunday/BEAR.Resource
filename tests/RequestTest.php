@@ -10,7 +10,6 @@ use BEAR\Resource\Renderer\FakeErrorRenderer;
 use BEAR\Resource\Renderer\FakeTestRenderer;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
-use const E_USER_ERROR;
 use FakeVendor\Sandbox\Resource\App\User\Entry;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
@@ -158,8 +157,8 @@ class RequestTest extends TestCase
             $str = $errstr;
         });
         (string) $request;
-        $this->assertSame(E_USER_ERROR, $no);
-        $this->assertContains('ErrorException', $str);
+        $this->assertSame(E_USER_WARNING, $no);
+        $this->assertContains('FakeErrorRenderer->render', $str);
         $this->assertSame('', (string) $request);
         restore_error_handler();
     }
