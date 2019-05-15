@@ -42,16 +42,4 @@ final class NamedParameter implements NamedParameterInterface
 
         return $parameters;
     }
-
-    private function getErrorMessage(callable $callable, ParameterException $e) : string
-    {
-        if (is_array($callable) && count($callable) === 2) {
-            $object = $callable[0];
-            $class = $callable[0] instanceof WeavedInterface ? (new \ReflectionClass($object))->getParentClass()->getName() : get_class($object);
-
-            return sprintf('%s in %s::%s', $e->getMessage(), $class, (string) $callable[1]);
-        }
-
-        return sprintf('%s', $e->getMessage());
-    }
 }
