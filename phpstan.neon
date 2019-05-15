@@ -2,5 +2,7 @@ parameters:
 	ignoreErrors:
 		- '#Access to an undefined property BEAR\\Resource\\Request::\$__invalid__#'
 		- '#does not call parent constructor from BEAR\\Resource\\AbstractRequest.#'
+		- '#Argument of an invalid type array<int, string>|false supplied for foreach, only iterables are supported.#'
 	excludes_analyse:
 		- '%currentWorkingDirectory%/tests/tmp/*'
+		- '%currentWorkingDirectory%/tests/Fake/*'

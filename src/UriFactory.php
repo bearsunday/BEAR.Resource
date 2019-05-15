@@ -24,7 +24,8 @@ final class UriFactory
 
     public function __invoke($uri, array $query = [])
     {
-        if (! array_key_exists('scheme', parse_url($uri))) {
+        $parsedUrl = (array) parse_url($uri);
+        if (! array_key_exists('scheme', $parsedUrl)) {
             $uri = $this->schemaHost . $uri;
         }
 
