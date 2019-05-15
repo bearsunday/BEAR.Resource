@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BEAR\Resource\Interceptor;
 
 use BEAR\Resource\Annotation\JsonSchema;
+use BEAR\Resource\ClassFileName;
 use BEAR\Resource\Code;
 use BEAR\Resource\Exception\JsonSchemaException;
 use BEAR\Resource\Exception\JsonSchemaNotFoundException;
@@ -18,7 +19,6 @@ use JsonSchema\Validator;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
 use Ray\Aop\ReflectionMethod;
-use Ray\Aop\WeavedInterface;
 use Ray\Di\Di\Named;
 
 final class JsonSchemaInterceptor implements MethodInterceptor
@@ -147,10 +147,10 @@ final class JsonSchemaInterceptor implements MethodInterceptor
             // for BC only
             $ref = new \ReflectionClass($ro);
             if (! $ref instanceof \ReflectionClass) {
-                throw new \ReflectionException(get_class($ro)); // @codeCoverageIgnore
+                throw new \ReflectionException((string) get_class($ro)); // @codeCoverageIgnore
             }
-            $roFileName = $ro instanceof WeavedInterface ? $roFileName = $ref->getParentClass()->getFileName() : $ref->getFileName();
-            $bcFile = str_replace('.php', '.json', $roFileName);
+            $roFileName = (new ClassFileName)($ro);
+            $bcFile = str_replace('.php', '.json', (string) $roFileName);
             if (file_exists($bcFile)) {
                 return $bcFile;
             }
