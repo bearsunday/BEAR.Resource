@@ -6,6 +6,7 @@ namespace BEAR\Resource;
 
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
+use Ray\Di\InjectorInterface;
 use Ray\WebContextParam\Annotation\CookieParam;
 
 class AssistedWebContextParamTest extends TestCase
@@ -21,7 +22,9 @@ class AssistedWebContextParamTest extends TestCase
         $assistedWebContextParam = new AssistedWebContextParam($cookieParam, new NoDefaultParam);
         AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose($fakeGlobals);
         $injector = (new \ReflectionClass(Injector::class))->newInstanceWithoutConstructor();
-        /* @var Injector $injector */
+        if (! $injector instanceof InjectorInterface) {
+            throw new \LogicException;
+        }
         $param = ($assistedWebContextParam)('a', [], $injector);
         $this->assertSame('__COOKIE_VAL__', $param);
     }

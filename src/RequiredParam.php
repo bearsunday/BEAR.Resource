@@ -18,7 +18,7 @@ final class RequiredParam implements ParamInterface
             return $query[$varName];
         }
         // try camelCase variable name
-        $snakeName = ltrim(strtolower(preg_replace('/[A-Z]/', '_\0', $varName)), '_');
+        $snakeName = ltrim(strtolower((string) preg_replace('/[A-Z]/', '_\0', $varName)), '_');
         if (isset($query[$snakeName])) {
             return $query[$snakeName];
         }
