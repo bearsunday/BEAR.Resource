@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace BEAR\Resource\Module;
 
+use BEAR\Resource\JsonSchemaExceptionFakeHandler;
+use BEAR\Resource\JsonSchemaExceptionHandlerInterface;
 use Ray\Di\AbstractModule;
 
 class FakeJsonModule extends AbstractModule
@@ -13,6 +15,6 @@ class FakeJsonModule extends AbstractModule
      */
     protected function configure()
     {
-        $this->bind()->annotatedWith('enable_fake_json')->toInstance(true);
+        $this->bind(JsonSchemaExceptionHandlerInterface::class)->to(JsonSchemaExceptionFakeHandler::class);
     }
 }

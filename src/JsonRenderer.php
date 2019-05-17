@@ -14,7 +14,7 @@ final class JsonRenderer implements RenderInterface
         if (! array_key_exists('content-type', $ro->headers)) {
             $ro->headers['content-type'] = 'application/json';
         }
-        $ro->view = json_encode($ro);
+        $ro->view = (string) json_encode($ro);
         $e = json_last_error();
         if ($e) {
             // @codeCoverageIgnoreStart

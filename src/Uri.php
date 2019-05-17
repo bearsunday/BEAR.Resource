@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+use function array_key_exists;
 use BEAR\Resource\Exception\UriException;
 
 final class Uri extends AbstractUri
@@ -17,9 +18,9 @@ final class Uri extends AbstractUri
         if (count($query) !== 0) {
             $uri = uri_template($uri, $query);
         }
-        $parsedUrl = parse_url($uri);
+        $parsedUrl = (array) parse_url($uri);
         list($this->scheme, $this->host, $this->path) = array_values($parsedUrl);
-        if (isset($parsedUrl['query'])) {
+        if (array_key_exists('query', $parsedUrl)) {
             parse_str($parsedUrl['query'], $this->query);
         }
         if (count($query) !== 0) {
@@ -32,10 +33,10 @@ final class Uri extends AbstractUri
      */
     private function validate(string $uri)
     {
-        if (! filter_var($uri, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED)) {
-            $msg = is_string($uri) ? $uri : gettype($uri);
-
-            throw new UriException($msg, 500);
+        if (filter_var($uri, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED)) {
+            return;
         }
+
+        throw new UriException($uri, 500);
     }
 }

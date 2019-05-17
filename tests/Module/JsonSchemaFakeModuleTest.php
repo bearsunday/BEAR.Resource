@@ -6,10 +6,10 @@ namespace BEAR\Resource\Module;
 
 use BEAR\Resource\Exception\JsonSchemaException;
 use BEAR\Resource\Exception\JsonSchemaNotFoundException;
-use BEAR\Resource\Interceptor\JsonSchemaInterceptor;
 use BEAR\Resource\JsonSchema\FakeUser;
 use BEAR\Resource\JsonSchema\FakeVoidUser;
 use BEAR\Resource\JsonSchema\FakeVoidUsers;
+use BEAR\Resource\JsonSchemaExceptionFakeHandler;
 use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Uri;
 use PHPUnit\Framework\TestCase;
@@ -21,15 +21,14 @@ class JsonSchemaFakeModuleTest extends TestCase
     {
         $ro = $this->getRo(FakeVoidUser::class);
         $ro->onGet(20);
-        $this->assertSame($ro->headers[JsonSchemaInterceptor::X_FAKE_JSON], 'user.json');
-        $this->assertInternalType('string', $ro->body['name']['firstName']);
+        $this->assertContains('user.json', $ro->headers[JsonSchemaExceptionFakeHandler::X_FAKE_JSON]);
     }
 
     public function testValidArrayRef()
     {
         $ro = $this->getRo(FakeVoidUsers::class);
         $ro->onGet(20);
-        $this->assertSame($ro->headers[JsonSchemaInterceptor::X_FAKE_JSON], 'users.json');
+        $this->assertContains('users.json', $ro->headers[JsonSchemaExceptionFakeHandler::X_FAKE_JSON]);
         $this->assertInternalType('string', $ro->body[0]['name']['firstName']);
     }
 
@@ -38,12 +37,8 @@ class JsonSchemaFakeModuleTest extends TestCase
      */
     public function testBCValidateErrorException(JsonSchemaException $e)
     {
-        $errors = [];
-        while ($e = $e->getPrevious()) {
-            $errors[] = $e->getMessage();
-        }
-        $expected = ['[age] Must have a minimum value of 20'];
-        $this->assertSame($expected, $errors);
+        $expected = '[age] Must have a minimum value of 20';
+        $this->assertContains($expected, $e->getMessage());
     }
 
     public function testException()
@@ -118,11 +113,11 @@ class JsonSchemaFakeModuleTest extends TestCase
         return $ro;
     }
 
-    private function getJsonSchemaModule() : JsonSchemaModule
+    private function getJsonSchemaModule() : FakeJsonModule
     {
         $jsonSchema = dirname(__DIR__) . '/Fake/json_schema';
         $jsonValidate = dirname(__DIR__) . '/Fake/json_validate';
 
-        return new JsonSchemaModule($jsonSchema, $jsonValidate, new FakeJsonModule);
+        return new FakeJsonModule(new JsonSchemaModule($jsonSchema, $jsonValidate));
     }
 }

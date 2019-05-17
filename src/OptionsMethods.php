@@ -108,6 +108,6 @@ final class OptionsMethods
             return [];
         }
 
-        return (array) json_decode(file_get_contents($schemaFile));
+        return (array) json_decode((string) file_get_contents($schemaFile));
     }
 }

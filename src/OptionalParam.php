@@ -24,6 +24,11 @@ final class OptionalParam implements ParamInterface
         if (isset($query[$varName])) {
             return $query[$varName];
         }
+        // try camelCase variable name
+        $snakeName = ltrim(strtolower((string) preg_replace('/[A-Z]/', '_\0', $varName)), '_');
+        if (isset($query[$snakeName])) {
+            return $query[$snakeName];
+        }
 
         return $this->defaultValue;
     }

@@ -6,26 +6,22 @@ namespace BEAR\Resource\Interceptor;
 
 use BEAR\Resource\Annotation\JsonSchema;
 use BEAR\Resource\Code;
-use BEAR\Resource\Exception\JsonSchemaErrorException;
 use BEAR\Resource\Exception\JsonSchemaException;
 use BEAR\Resource\Exception\JsonSchemaNotFoundException;
+use BEAR\Resource\JsonSchemaExceptionHandlerInterface;
 use BEAR\Resource\ResourceObject;
-use function file_get_contents;
+use function is_array;
+use function is_object;
 use function is_string;
-use function json_decode;
 use JsonSchema\Constraints\Constraint;
 use JsonSchema\Validator;
-use JSONSchemaFaker\Faker;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
 use Ray\Aop\ReflectionMethod;
-use Ray\Aop\WeavedInterface;
 use Ray\Di\Di\Named;
 
 final class JsonSchemaInterceptor implements MethodInterceptor
 {
-    const X_FAKE_JSON = 'X-Fake-JSON';
-
     /**
      * @var string
      */
@@ -42,19 +38,19 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     private $schemaHost;
 
     /**
-     * @var bool
+     * @var JsonSchemaExceptionHandlerInterface
      */
-    private $enableFakeJson;
+    private $handler;
 
     /**
-     * @Named("schemaDir=json_schema_dir,validateDir=json_validate_dir,schemaHost=json_schema_host,enableFakeJson=enable_fake_json")
+     * @Named("schemaDir=json_schema_dir,validateDir=json_validate_dir,schemaHost=json_schema_host")
      */
-    public function __construct(string $schemaDir, string $validateDir, string $schemaHost = null, bool $enableFakeJson = false)
+    public function __construct(string $schemaDir, string $validateDir, JsonSchemaExceptionHandlerInterface $handler, string $schemaHost = null)
     {
         $this->schemaDir = $schemaDir;
         $this->validateDir = $validateDir;
         $this->schemaHost = $schemaHost;
-        $this->enableFakeJson = $enableFakeJson;
+        $this->handler = $handler;
     }
 
     /**
@@ -72,23 +68,8 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         }
         /** @var ResourceObject $ro */
         $ro = $invocation->proceed();
-        if (is_string($this->schemaHost)) {
-            $ro->headers['Link'] = sprintf('<%s%s>; rel="describedby"', $this->schemaHost, $jsonSchema->schema);
-        }
-        if ($ro->code !== 200 && $ro->code !== 201) {
-            return $ro;
-        }
-        try {
-            $this->validateResponse($jsonSchema, $ro);
-        } catch (JsonSchemaException $e) {
-            if ($this->enableFakeJson) {
-                $ro->headers[self::X_FAKE_JSON] = $jsonSchema->schema;
-                $ro->body = $this->fakeResponse($jsonSchema);
-
-                return $ro;
-            }
-
-            throw $e;
+        if ($ro->code === 200 || $ro->code == 201) {
+            $this->validateResponse($ro, $jsonSchema);
         }
 
         return $ro;
@@ -120,52 +101,62 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         $this->validate($arguments, $schemaFile);
     }
 
-    private function validateResponse(JsonSchema $jsonSchema, ResourceObject $ro)
+    private function validateResponse(ResourceObject $ro, JsonSchema $jsonSchema)
     {
         $schemaFile = $this->getSchemaFile($jsonSchema, $ro);
-        $body = isset($ro->body[$jsonSchema->key]) ? $ro->body[$jsonSchema->key] : $ro->body;
-        $this->validateRo($ro, $schemaFile);
+        try {
+            $this->validateRo($ro, $schemaFile);
+            if (is_string($this->schemaHost)) {
+                $ro->headers['Link'] = sprintf('<%s%s>; rel="describedby"', $this->schemaHost, $jsonSchema->schema);
+            }
+        } catch (JsonSchemaException $e) {
+            $this->handler->handle($ro, $e, $schemaFile);
+        }
     }
 
     private function validateRo(ResourceObject $ro, string $schemaFile)
     {
-        $validator = new Validator;
-        $schema = (object) ['$ref' => 'file://' . $schemaFile];
-        $view = (string) $ro;
-        $data = json_decode($view);
-        $validator->validate($data, $schema, Constraint::CHECK_MODE_TYPE_CAST);
-        $isValid = $validator->isValid();
-        if ($isValid) {
-            return;
-        }
-        $e = null;
-        $msgList = '';
-        foreach ($validator->getErrors() as $error) {
-            $msg = sprintf('[%s] %s', $error['property'], $error['message']);
-            $msgList .= $msg . '; ';
-            $e = $e ? new JsonSchemaErrorException($msg, 0, $e) : new JsonSchemaErrorException($msg);
-        }
-
-        throw new JsonSchemaException("{$msgList} in {$schemaFile}", Code::ERROR, $e);
+        $json = json_decode((string) $ro);
+        $this->validate($json, $schemaFile);
     }
 
     private function validate($scanObject, $schemaFile)
     {
         $validator = new Validator;
         $schema = (object) ['$ref' => 'file://' . $schemaFile];
-
-        $validator->validate($scanObject, $schema, Constraint::CHECK_MODE_TYPE_CAST);
+        $scanArray = $this->deepArray($scanObject);
+        $validator->validate($scanArray, $schema, Constraint::CHECK_MODE_TYPE_CAST);
         $isValid = $validator->isValid();
         if ($isValid) {
             return;
         }
-        $e = null;
-        foreach ($validator->getErrors() as $error) {
-            $msg = sprintf('[%s] %s', $error['property'], $error['message']);
-            $e = $e ? new JsonSchemaErrorException($msg, 0, $e) : new JsonSchemaErrorException($msg);
+
+        throw $this->throwJsonSchemaException($validator, $schemaFile);
+    }
+
+    private function deepArray($values)
+    {
+        if (! is_array($values)) {
+            return $values;
+        }
+        $result = [];
+        foreach ($values as $key => $value) {
+            $result[$key] = is_object($value) ? $this->deepArray((array) $value) : $result[$key] = $value;
         }
 
-        throw new JsonSchemaException($schemaFile, Code::ERROR, $e);
+        return $result;
+    }
+
+    private function throwJsonSchemaException(Validator $validator, string $schemaFile) : JsonSchemaException
+    {
+        $errors = $validator->getErrors();
+        $msg = '';
+        foreach ($errors as $error) {
+            $msg .= sprintf('[%s] %s; ', $error['property'], $error['message']);
+        }
+        $msg .= "by {$schemaFile}";
+
+        return new JsonSchemaException($msg, Code::ERROR);
     }
 
     private function getSchemaFile(JsonSchema $jsonSchema, ResourceObject $ro) : string
@@ -174,10 +165,10 @@ final class JsonSchemaInterceptor implements MethodInterceptor
             // for BC only
             $ref = new \ReflectionClass($ro);
             if (! $ref instanceof \ReflectionClass) {
-                throw new \ReflectionException(get_class($ro)); // @codeCoverageIgnore
+                throw new \ReflectionException((string) get_class($ro)); // @codeCoverageIgnore
             }
-            $roFileName = $ro instanceof WeavedInterface ? $roFileName = $ref->getParentClass()->getFileName() : $ref->getFileName();
-            $bcFile = str_replace('.php', '.json', $roFileName);
+            $roFileName = $this->getParentClassName($ro);
+            $bcFile = str_replace('.php', '.json', (string) $roFileName);
             if (file_exists($bcFile)) {
                 return $bcFile;
             }
@@ -186,6 +177,13 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         $this->validateFileExists($schemaFile);
 
         return $schemaFile;
+    }
+
+    private function getParentClassName(ResourceObject $ro) : string
+    {
+        $parent = (new \ReflectionClass($ro))->getParentClass();
+
+        return  $parent instanceof \ReflectionClass ? (string) $parent->getFileName() : '';
     }
 
     private function validateFileExists(string $schemaFile)

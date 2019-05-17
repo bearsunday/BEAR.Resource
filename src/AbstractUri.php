@@ -31,7 +31,7 @@ abstract class AbstractUri
     /**
      * @var string
      */
-    public $method;
+    public $method = 'get';
 
     /**
      * @return string

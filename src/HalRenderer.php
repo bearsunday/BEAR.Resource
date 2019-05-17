@@ -6,6 +6,7 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\Link;
 use Doctrine\Common\Annotations\Reader;
+use function is_array;
 use Nocarrier\Hal;
 
 class HalRenderer implements RenderInterface
@@ -27,8 +28,7 @@ class HalRenderer implements RenderInterface
      */
     public function render(ResourceObject $ro)
     {
-        list($ro, $body) = $this->valuate($ro);
-
+        [$ro, $body] = $this->valuate($ro);
         $method = 'on' . ucfirst($ro->uri->method);
         $hasMethod = method_exists($ro, $method);
         $annotations = $hasMethod ? $this->reader->getMethodAnnotations(new \ReflectionMethod($ro, $method)) : [];
@@ -40,17 +40,18 @@ class HalRenderer implements RenderInterface
         return $ro->view;
     }
 
-    private function valuateElements(ResourceObject &$ro)
+    private function valuateElements(ResourceObject $ro)
     {
         foreach ($ro->body as $key => &$embeded) {
             if ($embeded instanceof AbstractRequest) {
-                $isDefferentSchema = $this->isDifferentSchema($ro, $embeded->resourceObject);
-                if ($isDefferentSchema === true) {
+                // @codeCoverageIgnoreStart
+                if ($this->isDifferentSchema($ro, $embeded->resourceObject)) {
                     $ro->body['_embedded'][$key] = $embeded()->body;
                     unset($ro->body[$key]);
 
                     continue;
                 }
+                // @codeCoverageIgnoreEnd
                 unset($ro->body[$key]);
                 $view = $this->render($embeded());
                 $ro->body['_embedded'][$key] = json_decode($view);
@@ -59,7 +60,7 @@ class HalRenderer implements RenderInterface
     }
 
     /**
-     * Return "is different schema" (page <-> app)
+     * @codeCoverageIgnore
      */
     private function isDifferentSchema(ResourceObject $parentRo, ResourceObject $childRo) : bool
     {
@@ -84,19 +85,11 @@ class HalRenderer implements RenderInterface
 
     private function valuate(ResourceObject $ro) : array
     {
+        $ro->body = is_array($ro->body) ? $ro->body : ['value' => $ro->body];
         // evaluate all request in body.
-        if (is_array($ro->body)) {
-            $this->valuateElements($ro);
-        }
-        // HAL
-        $body = $ro->body ?: [];
-        if (is_scalar($body)) {
-            $body = ['value' => $body];
+        $this->valuateElements($ro);
 
-            return [$ro, $body];
-        }
-
-        return[$ro, (array) $body];
+        return [$ro, $ro->body];
     }
 
     private function addLinks(array $body, array $annotations, Hal $hal)

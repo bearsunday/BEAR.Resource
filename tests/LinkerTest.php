@@ -42,7 +42,7 @@ class LinkerTest extends TestCase
         $this->linker = new Linker(
             new AnnotationReader,
             $this->invoker,
-            new Factory($schemeCollection)
+            new Factory($schemeCollection, new UriFactory)
         );
     }
 

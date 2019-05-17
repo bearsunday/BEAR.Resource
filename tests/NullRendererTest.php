@@ -10,6 +10,6 @@ class NullRendererTest extends TestCase
 {
     public function test__toString()
     {
-        $this->assertInstanceOf(NullResourceObject::class, (new NullRenderer)->render(new NullResourceObject));
+        $this->assertSame('', (new NullRenderer)->render(new NullResourceObject));
     }
 }

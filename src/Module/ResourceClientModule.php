@@ -23,6 +23,7 @@ use BEAR\Resource\RenderInterface;
 use BEAR\Resource\Resource;
 use BEAR\Resource\ResourceInterface;
 use BEAR\Resource\SchemeCollectionInterface;
+use BEAR\Resource\UriFactory;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\Cache;
 use Ray\Di\AbstractModule;
@@ -40,6 +41,7 @@ class ResourceClientModule extends AbstractModule
      */
     protected function configure()
     {
+        $this->bind(UriFactory::class);
         $this->bind(ResourceInterface::class)->to(Resource::class)->in(Scope::SINGLETON);
         $this->bind(InvokerInterface::class)->to(Invoker::class);
         $this->bind(LinkerInterface::class)->to(Linker::class);

@@ -8,6 +8,7 @@ use BEAR\Resource\Exception\MethodNotAllowedException;
 use BEAR\Resource\Exception\ParameterException;
 use BEAR\Resource\Interceptor\FakeLogInterceptor;
 use BEAR\Resource\Mock\Comment;
+use BEAR\Resource\Mock\Json;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
 use FakeVendor\Sandbox\Resource\App\Doc;
@@ -217,5 +218,30 @@ class InvokerTest extends TestCase
         $invoker = new Invoker(new NamedParameter(new NamedParamMetas(new ArrayCache, new AnnotationReader), new Injector), new VoidOptionsRenderer);
         $request = new Request($this->invoker, new Order, Request::DELETE);
         $invoker->invoke($request);
+    }
+
+    public function testInvokeClassTyped()
+    {
+        $person = ['age' => 28, 'name' => 'monsley'];
+        $request = new Request($this->invoker, new Json, Request::GET, ['specialPerson' => $person]);
+        $actual = $this->invoker->invoke($request)->body;
+        $this->assertSame($actual->name, 'monsley');
+        $this->assertSame($actual->age, 28);
+    }
+
+    public function testInvokeClassTypedSnakeCase()
+    {
+        $person = ['age' => 28, 'name' => 'monsley'];
+        $request = new Request($this->invoker, new Json, Request::GET, ['special_person' => $person]);
+        $actual = $this->invoker->invoke($request)->body;
+        $this->assertSame($actual->name, 'monsley');
+        $this->assertSame($actual->age, 28);
+    }
+
+    public function testInvokeClassTypedSnakeParamException()
+    {
+        $this->expectException(ParameterException::class);
+        $request = new Request($this->invoker, new Json, Request::GET, []);
+        $this->invoker->invoke($request);
     }
 }
