@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace BEAR\Resource\Interceptor;
 
 use BEAR\Resource\Annotation\JsonSchema;
-use BEAR\Resource\ClassFileName;
 use BEAR\Resource\Code;
 use BEAR\Resource\Exception\JsonSchemaException;
 use BEAR\Resource\Exception\JsonSchemaNotFoundException;
@@ -149,7 +148,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
             if (! $ref instanceof \ReflectionClass) {
                 throw new \ReflectionException((string) get_class($ro)); // @codeCoverageIgnore
             }
-            $roFileName = (new ClassFileName)($ro);
+            $roFileName = $this->getParentClassName($ro);
             $bcFile = str_replace('.php', '.json', (string) $roFileName);
             if (file_exists($bcFile)) {
                 return $bcFile;
@@ -159,6 +158,13 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         $this->validateFileExists($schemaFile);
 
         return $schemaFile;
+    }
+
+    private function getParentClassName(ResourceObject $ro) : string
+    {
+        $parent = (new \ReflectionClass($ro))->getParentClass();
+
+        return  $parent instanceof \ReflectionClass ? (string) $parent->getFileName() : '';
     }
 
     private function validateFileExists(string $schemaFile)
