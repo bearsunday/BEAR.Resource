@@ -223,9 +223,25 @@ class InvokerTest extends TestCase
     public function testInvokeClassTyped()
     {
         $person = ['age' => 28, 'name' => 'monsley'];
-        $request = new Request($this->invoker, new Json, Request::GET, ['person' => $person]);
+        $request = new Request($this->invoker, new Json, Request::GET, ['specialPerson' => $person]);
         $actual = $this->invoker->invoke($request)->body;
         $this->assertSame($actual->name, 'monsley');
         $this->assertSame($actual->age, 28);
+    }
+
+    public function testInvokeClassTypedSnakeCase()
+    {
+        $person = ['age' => 28, 'name' => 'monsley'];
+        $request = new Request($this->invoker, new Json, Request::GET, ['special_person' => $person]);
+        $actual = $this->invoker->invoke($request)->body;
+        $this->assertSame($actual->name, 'monsley');
+        $this->assertSame($actual->age, 28);
+    }
+
+    public function testInvokeClassTypedSnakeParamException()
+    {
+        $this->expectException(ParameterException::class);
+        $request = new Request($this->invoker, new Json, Request::GET, []);
+        $this->invoker->invoke($request);
     }
 }
