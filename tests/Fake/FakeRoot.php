@@ -27,9 +27,11 @@ class FakeRoot extends ResourceObject
                         ),
                         new Injector
                     ),
-                    new OptionsRenderer(
-                        new OptionsMethods(
-                            new AnnotationReader
+                    new ExtraMethodInvoker(
+                        new OptionsRenderer(
+                            new OptionsMethods(
+                                new AnnotationReader
+                            )
                         )
                     )
                 ),

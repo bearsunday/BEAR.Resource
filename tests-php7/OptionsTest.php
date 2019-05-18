@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Cache\ArrayCache;
 use FakeVendor\Sandbox\Resource\App\DocInvalidFile;
 use FakeVendor\Sandbox\Resource\App\DocPhp7;
 use FakeVendor\Sandbox\Resource\App\DocUser;
 use PHPUnit\Framework\TestCase;
-use Ray\Di\Injector;
 
 class OptionsTest extends TestCase
 {
@@ -31,7 +28,7 @@ class OptionsTest extends TestCase
 
     protected function setUp()
     {
-        $this->invoker = new Invoker(new NamedParameter(new NamedParamMetas(new ArrayCache, new AnnotationReader), new Injector), new OptionsRenderer(new OptionsMethods(new AnnotationReader, $_ENV['schema_dir'])));
+        $this->invoker = (new InvokerFactory)($_ENV['schema_dir']);
     }
 
     public function testOptionsMethod()
