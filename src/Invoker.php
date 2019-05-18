@@ -36,7 +36,7 @@ final class Invoker implements InvokerInterface
     {
         $callable = [$request->resourceObject, 'on' . ucfirst($request->method)];
         if (! is_callable($callable)) {
-            return $this->noMethod($request);
+            return $this->tryExtraMethod($request);
         }
         $params = $this->params->getParameters($callable, $request->query);
         $response = call_user_func_array($callable, $params);
@@ -48,11 +48,20 @@ final class Invoker implements InvokerInterface
         return $response;
     }
 
-    private function noMethod(AbstractRequest $request) : ResourceObject
+    private function tryExtraMethod(AbstractRequest $request) : ResourceObject
     {
         if ($request->method === Request::OPTIONS) {
             $ro = $request->resourceObject;
             $ro->view = $this->optionsRenderer->render($request->resourceObject);
+
+            return $ro;
+        }
+
+        if ($request->method === Request::HEAD) {
+            $getRequest = clone $request;
+            $getRequest->method = 'get';
+            $ro = $this->invoke($getRequest);
+            $ro->body = null;
 
             return $ro;
         }

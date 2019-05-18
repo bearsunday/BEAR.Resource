@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+use BEAR\Resource\Exception\MethodNotAllowedException;
 use BEAR\Resource\Module\HalModule;
 use BEAR\Resource\Module\ResourceModule;
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -279,5 +280,18 @@ class ResourceTest extends TestCase
     {
         $ro = $this->resource->delete('page://self/index', ['name' => 'bear']);
         $this->assertSame('delete bear', $ro->body);
+    }
+
+    public function testHead()
+    {
+        $ro = $this->resource->head('page://self/index', ['name' => 'bear']);
+        $this->assertSame('1', $ro->headers['X-BEAR']);
+        $this->assertNull($ro->body);
+    }
+
+    public function testHeadNotAllowed()
+    {
+        $this->expectException(MethodNotAllowedException::class);
+        $this->resource->head('page://self/hello-world');
     }
 }
