@@ -24,7 +24,7 @@ class ResourceTest extends TestCase
      */
     private $resource;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
         $injector = new Injector(new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox')), $_ENV['TMP_DIR']);

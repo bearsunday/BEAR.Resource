@@ -14,7 +14,7 @@ class SchemeCollectionTest extends TestCase
      */
     private $scheme;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
         $this->scheme = new SchemeCollection;

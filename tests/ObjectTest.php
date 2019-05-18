@@ -14,7 +14,7 @@ class ObjectTest extends TestCase
      */
     protected $ro;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
         $this->ro = new Mock\Entry;

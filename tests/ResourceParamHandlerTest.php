@@ -16,7 +16,7 @@ class ResourceParamHandlerTest extends TestCase
      */
     private $resource;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
         $module = new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox'));

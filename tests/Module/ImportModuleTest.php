@@ -12,7 +12,7 @@ use Ray\Di\Injector;
 
 class ImportModuleTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp() : void
     {
         $rm = function ($dir) use (&$rm) {
             foreach ((array) glob($dir . '/*') as $f) {

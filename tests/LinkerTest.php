@@ -30,7 +30,7 @@ class LinkerTest extends TestCase
      */
     private $invoker;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
         $this->invoker = (new InvokerFactory)();

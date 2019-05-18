@@ -18,7 +18,7 @@ class JsonRendererTest extends TestCase
      */
     private $ro;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->ro = new FakeRoot;
         $this->ro->uri = new Uri('app://self/dummy');

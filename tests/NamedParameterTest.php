@@ -18,7 +18,7 @@ class NamedParameterTest extends TestCase
      */
     private $params;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
         $this->params = new NamedParameter(new NamedParamMetas(new ArrayCache, new AnnotationReader), new Injector);
