@@ -12,6 +12,11 @@ use Ray\Di\Injector;
 
 class VoidOptionsRendererTest extends TestCase
 {
+    /**
+     * Test option renderer is disabled.
+     *
+     * VoidOptionsMethodModule supposed to install in production to disable "OPTIONS" method.
+     */
     public function testVoidOptionsRenderer()
     {
         $this->expectException(MethodNotAllowedException::class);
