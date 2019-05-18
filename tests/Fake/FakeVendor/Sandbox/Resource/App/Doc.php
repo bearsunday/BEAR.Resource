@@ -13,8 +13,6 @@ use BEAR\Resource\ResourceObject;
 
 class Doc extends ResourceObject
 {
-    public $uri = 'app://self/Doc';
-
     /**
      * User
      *

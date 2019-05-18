@@ -49,7 +49,7 @@ class LinkerTest extends TestCase
     {
         $request = new Request(
             $this->invoker,
-            new Author,
+            (new FakeRo)(new Author),
             Request::GET,
             ['id' => 1],
             [new LinkType('blog', LinkType::SELF_LINK)]
@@ -66,7 +66,7 @@ class LinkerTest extends TestCase
     {
         $request = new Request(
             $this->invoker,
-            new Author,
+            (new FakeRo)(new Author),
             Request::GET,
             ['id' => 1],
             [new LinkType('blog', LinkType::NEW_LINK)]
@@ -88,7 +88,7 @@ class LinkerTest extends TestCase
     {
         $request = new Request(
             $this->invoker,
-            new Blog,
+            (new FakeRo)(new Blog),
             Request::GET,
             ['id' => 11],
             [new LinkType('tree', LinkType::CRAWL_LINK)]
@@ -147,7 +147,7 @@ class LinkerTest extends TestCase
     {
         $request = new Request(
             $this->invoker,
-            new Blog,
+            (new FakeRo)(new Blog),
             Request::GET,
             ['id' => 16],
             [new LinkType('tree', LinkType::CRAWL_LINK)]
@@ -250,7 +250,7 @@ class LinkerTest extends TestCase
     {
         $request = new Request(
             $this->invoker,
-            new Blog,
+            (new FakeRo)(new Blog),
             Request::GET,
             ['id' => 17],
             [new LinkType('tree', LinkType::CRAWL_LINK)]
@@ -283,7 +283,7 @@ class LinkerTest extends TestCase
         $this->expectException(LinkQueryException::class);
         $request = new Request(
             $this->invoker,
-            new Name,
+            (new FakeRo)(new Name),
             Request::GET,
             ['name' => 'bear'],
             [new LinkType('blog', LinkType::SELF_LINK)]
@@ -296,7 +296,7 @@ class LinkerTest extends TestCase
         $this->expectException(LinkRelException::class);
         $request = new Request(
             $this->invoker,
-            new Author,
+            (new FakeRo)(new Author),
             Request::GET,
             ['id' => '1'],
             [new LinkType('invalid-link', LinkType::SELF_LINK)]
