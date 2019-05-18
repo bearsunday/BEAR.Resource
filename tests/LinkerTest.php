@@ -7,7 +7,6 @@ namespace BEAR\Resource;
 use BEAR\Resource\Exception\LinkQueryException;
 use BEAR\Resource\Exception\LinkRelException;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Cache\ArrayCache;
 use FakeVendor\Sandbox\Resource\App\Author;
 use FakeVendor\Sandbox\Resource\App\Blog;
 use FakeVendor\Sandbox\Resource\App\Link\Scalar\Name;
@@ -34,7 +33,7 @@ class LinkerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->invoker = new Invoker(new NamedParameter(new NamedParamMetas(new ArrayCache, new AnnotationReader), new Injector), new OptionsRenderer(new OptionsMethods(new AnnotationReader)));
+        $this->invoker = (new InvokerFactory)();
         $schemeCollection = (new SchemeCollection)
             ->scheme('app')
             ->host('self')

@@ -9,8 +9,6 @@ use BEAR\Resource\Exception\ParameterException;
 use BEAR\Resource\Interceptor\FakeLogInterceptor;
 use BEAR\Resource\Mock\Comment;
 use BEAR\Resource\Mock\Json;
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Cache\ArrayCache;
 use FakeVendor\Sandbox\Resource\App\Doc;
 use FakeVendor\Sandbox\Resource\App\Restbucks\Order;
 use FakeVendor\Sandbox\Resource\App\User;
@@ -18,7 +16,6 @@ use FakeVendor\Sandbox\Resource\App\Weave\Book;
 use PHPUnit\Framework\TestCase;
 use Ray\Aop\Bind;
 use Ray\Aop\Compiler;
-use Ray\Di\Injector;
 
 class InvokerTest extends TestCase
 {
@@ -39,7 +36,7 @@ class InvokerTest extends TestCase
 
     protected function setUp()
     {
-        $this->invoker = new Invoker(new NamedParameter(new NamedParamMetas(new ArrayCache, new AnnotationReader), new Injector), new OptionsRenderer(new OptionsMethods(new AnnotationReader)));
+        $this->invoker = (new InvokerFactory)();
     }
 
     public function testInvoke()
@@ -215,9 +212,8 @@ class InvokerTest extends TestCase
     public function testOptionsNotAllowed()
     {
         $this->expectException(MethodNotAllowedException::class);
-        $invoker = new Invoker(new NamedParameter(new NamedParamMetas(new ArrayCache, new AnnotationReader), new Injector), new VoidOptionsRenderer);
         $request = new Request($this->invoker, new Order, Request::DELETE);
-        $invoker->invoke($request);
+        $this->invoker->invoke($request);
     }
 
     public function testInvokeClassTyped()

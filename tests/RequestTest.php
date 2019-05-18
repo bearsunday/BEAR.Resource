@@ -8,11 +8,8 @@ use BEAR\Resource\Exception\MethodException;
 use BEAR\Resource\Exception\OutOfBoundsException;
 use BEAR\Resource\Renderer\FakeErrorRenderer;
 use BEAR\Resource\Renderer\FakeTestRenderer;
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Cache\ArrayCache;
 use FakeVendor\Sandbox\Resource\App\User\Entry;
 use PHPUnit\Framework\TestCase;
-use Ray\Di\Injector;
 
 class RequestTest extends TestCase
 {
@@ -43,7 +40,7 @@ class RequestTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->invoker = new Invoker(new NamedParameter(new NamedParamMetas(new ArrayCache, new AnnotationReader), new Injector), new OptionsRenderer(new OptionsMethods(new AnnotationReader)));
+        $this->invoker = (new InvokerFactory)();
         $entry = new Entry;
         $entry->uri = new Uri('test://self/path/to/resource');
         $this->request = new Request($this->invoker, $entry);
