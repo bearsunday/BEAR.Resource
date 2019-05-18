@@ -9,6 +9,7 @@ use BEAR\Resource\AnchorInterface;
 use BEAR\Resource\ExtraMethodInvoker;
 use BEAR\Resource\Factory;
 use BEAR\Resource\FactoryInterface;
+use BEAR\Resource\HalLink;
 use BEAR\Resource\Invoker;
 use BEAR\Resource\InvokerInterface;
 use BEAR\Resource\Linker;
@@ -17,12 +18,14 @@ use BEAR\Resource\NamedParameter;
 use BEAR\Resource\NamedParameterInterface;
 use BEAR\Resource\NamedParamMetas;
 use BEAR\Resource\NamedParamMetasInterface;
+use BEAR\Resource\NullReverseLink;
 use BEAR\Resource\OptionsMethods;
 use BEAR\Resource\OptionsRenderer;
 use BEAR\Resource\PrettyJsonRenderer;
 use BEAR\Resource\RenderInterface;
 use BEAR\Resource\Resource;
 use BEAR\Resource\ResourceInterface;
+use BEAR\Resource\ReverseLinkInterface;
 use BEAR\Resource\SchemeCollectionInterface;
 use BEAR\Resource\UriFactory;
 use Doctrine\Common\Cache\ArrayCache;
@@ -56,5 +59,7 @@ class ResourceClientModule extends AbstractModule
         $this->bind(OptionsMethods::class);
         $this->bind(NamedParamMetasInterface::class)->to(NamedParamMetas::class);
         $this->bind(ExtraMethodInvoker::class);
+        $this->bind(HalLink::class);
+        $this->bind(ReverseLinkInterface::class)->to(NullReverseLink::class);
     }
 }
