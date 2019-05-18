@@ -32,15 +32,6 @@ class JsonSchemaFakeModuleTest extends TestCase
         $this->assertInternalType('string', $ro->body[0]['name']['firstName']);
     }
 
-    /**
-     * @depends testValidateException
-     */
-    public function testBCValidateErrorException(JsonSchemaException $e)
-    {
-        $expected = '[age] Must have a minimum value of 20';
-        $this->assertContains($expected, $e->getMessage());
-    }
-
     public function testException()
     {
         $this->expectException(JsonSchemaNotFoundException::class);
@@ -79,16 +70,6 @@ class JsonSchemaFakeModuleTest extends TestCase
     {
         $ro = $this->getLinkHeaderRo(FakeUser::class);
         $this->assertSame('<http://example.com/schema/user.json>; rel="describedby"', $ro->headers['Link']);
-    }
-
-    private function createJsonSchemaException($class)
-    {
-        $ro = $this->getRo($class);
-        try {
-            $ro->onGet(10);
-        } catch (JsonSchemaException $e) {
-            return $e;
-        }
     }
 
     private function getRo(string $class)

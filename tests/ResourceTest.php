@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+use BEAR\Resource\Exception\MethodNotAllowedException;
 use BEAR\Resource\Module\HalModule;
 use BEAR\Resource\Module\ResourceModule;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Cache\ArrayCache;
 use FakeVendor\Sandbox\Resource\App\Blog;
 use FakeVendor\Sandbox\Resource\App\Href\Hasembed;
 use FakeVendor\Sandbox\Resource\App\Href\Origin;
@@ -39,7 +39,7 @@ class ResourceTest extends TestCase
             ->scheme('app')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox'))
             ->scheme('page')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox'))
             ->scheme('nop')->host('self')->toAdapter(new FakeNop);
-        $invoker = new Invoker(new NamedParameter(new NamedParamMetas(new ArrayCache, new AnnotationReader), new Injector), new OptionsRenderer(new OptionsMethods($reader)));
+        $invoker = (new InvokerFactory)();
         $factory = new Factory($scheme, new UriFactory);
         $uri = new UriFactory('app://self');
         $resource = new Resource($factory, $invoker, new Anchor($reader), new Linker($reader, $invoker, $factory), $uri);
@@ -279,5 +279,18 @@ class ResourceTest extends TestCase
     {
         $ro = $this->resource->delete('page://self/index', ['name' => 'bear']);
         $this->assertSame('delete bear', $ro->body);
+    }
+
+    public function testHead()
+    {
+        $ro = $this->resource->head('page://self/index', ['name' => 'bear']);
+        $this->assertSame('1', $ro->headers['X-BEAR']);
+        $this->assertNull($ro->body);
+    }
+
+    public function testHeadNotAllowed()
+    {
+        $this->expectException(MethodNotAllowedException::class);
+        $this->resource->head('page://self/hello-world');
     }
 }

@@ -10,6 +10,8 @@ use BEAR\Resource\ResourceObject;
 
 class Index extends ResourceObject
 {
+    public $headers = ['X-BEAR' => '1'];
+
     public function onGet($id = 0)
     {
         return $id;
