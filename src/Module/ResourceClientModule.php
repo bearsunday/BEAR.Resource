@@ -13,10 +13,12 @@ use BEAR\Resource\Invoker;
 use BEAR\Resource\InvokerInterface;
 use BEAR\Resource\Linker;
 use BEAR\Resource\LinkerInterface;
+use BEAR\Resource\LoggerInterface;
 use BEAR\Resource\NamedParameter;
 use BEAR\Resource\NamedParameterInterface;
 use BEAR\Resource\NamedParamMetas;
 use BEAR\Resource\NamedParamMetasInterface;
+use BEAR\Resource\NullLogger;
 use BEAR\Resource\OptionsMethods;
 use BEAR\Resource\OptionsRenderer;
 use BEAR\Resource\PrettyJsonRenderer;
@@ -56,5 +58,6 @@ class ResourceClientModule extends AbstractModule
         $this->bind(OptionsMethods::class);
         $this->bind(NamedParamMetasInterface::class)->to(NamedParamMetas::class);
         $this->bind(ExtraMethodInvoker::class);
+        $this->bind(LoggerInterface::class)->to(NullLogger::class);
     }
 }

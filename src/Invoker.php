@@ -18,10 +18,16 @@ final class Invoker implements InvokerInterface
      */
     private $extraMethod;
 
-    public function __construct(NamedParameterInterface $params, ExtraMethodInvoker $extraMethod)
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    public function __construct(NamedParameterInterface $params, ExtraMethodInvoker $extraMethod, LoggerInterface $logger)
     {
         $this->params = $params;
         $this->extraMethod = $extraMethod;
+        $this->logger = $logger;
     }
 
     /**
@@ -40,6 +46,7 @@ final class Invoker implements InvokerInterface
             $request->resourceObject->body = $response;
             $response = $request->resourceObject;
         }
+        ($this->logger)($response);
 
         return $response;
     }

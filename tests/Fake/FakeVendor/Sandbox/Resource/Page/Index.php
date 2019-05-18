@@ -6,6 +6,7 @@
  */
 namespace FakeVendor\Sandbox\Resource\Page;
 
+use BEAR\Resource\Code;
 use BEAR\Resource\ResourceObject;
 
 class Index extends ResourceObject
@@ -19,6 +20,7 @@ class Index extends ResourceObject
 
     public function onPost(string $name)
     {
+        $this->code = Code::CREATED;
         return 'post ' . $name;
     }
 
