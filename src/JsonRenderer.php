@@ -18,7 +18,8 @@ final class JsonRenderer implements RenderInterface
         $e = json_last_error();
         if ($e) {
             // @codeCoverageIgnoreStart
-            error_log('json_encode error: ' . json_last_error_msg() . ' in ' . __METHOD__);
+            $msg = json_last_error_msg();
+            error_log('json_encode error: ' . $msg . ' in ' . __METHOD__);
 
             return '';
             // @codeCoverageIgnoreEnd
