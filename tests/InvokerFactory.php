@@ -29,7 +29,8 @@ final class InvokerFactory
                         $schemaDir
                     )
                 )
-            )
+            ),
+            new NullLogger
         );
     }
 }
