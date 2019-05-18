@@ -16,9 +16,26 @@ class HalRenderer implements RenderInterface
      */
     private $reader;
 
-    public function __construct(Reader $reader)
+    /**
+     * @var HalLink
+     */
+    private $link;
+
+    public function __construct(Reader $reader, HalLink $link)
     {
         $this->reader = $reader;
+        $this->link = $link;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function render(ResourceObject $ro)
+    {
+        $this->renderHal($ro);
+        $this->updateHeaders($ro);
+
+        return (string) $ro->view;
     }
 
     /**
@@ -26,7 +43,7 @@ class HalRenderer implements RenderInterface
      *
      * @throws \RuntimeException
      */
-    public function render(ResourceObject $ro)
+    public function renderHal(ResourceObject $ro)
     {
         [$ro, $body] = $this->valuate($ro);
         $method = 'on' . ucfirst($ro->uri->method);
@@ -36,8 +53,6 @@ class HalRenderer implements RenderInterface
         $hal = $this->getHal($ro->uri, $body, $annotations);
         $ro->view = $hal->asJson(true) . PHP_EOL;
         $ro->headers['Content-Type'] = 'application/hal+json';
-
-        return $ro->view;
     }
 
     private function valuateElements(ResourceObject $ro)
@@ -78,9 +93,8 @@ class HalRenderer implements RenderInterface
         $path = $uri->path . $query;
         $selfLink = $this->getReverseMatchedLink($path);
         $hal = new Hal($selfLink, $body);
-        $this->addLinks($body, $annotations, $hal);
 
-        return $hal;
+        return $this->link->addHalLink($body, $annotations, $hal);
     }
 
     private function valuate(ResourceObject $ro) : array
@@ -92,14 +106,11 @@ class HalRenderer implements RenderInterface
         return [$ro, $ro->body];
     }
 
-    private function addLinks(array $body, array $annotations, Hal $hal)
+    private function updateHeaders(ResourceObject $ro)
     {
-        foreach ($annotations as $annotation) {
-            if ($annotation instanceof Link) {
-                $uri = uri_template($annotation->href, $body);
-                $reverseUri = $this->getReverseMatchedLink($uri);
-                $hal->addLink($annotation->rel, $reverseUri);
-            }
+        $ro->headers['content-type'] = 'application/hal+json';
+        if (isset($ro->headers['Location'])) {
+            $ro->headers['Location'] = $this->link->getReverseLink($ro->headers['Location']);
         }
     }
 }
