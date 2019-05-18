@@ -6,6 +6,7 @@ namespace BEAR\Resource\Module;
 
 use BEAR\Resource\Anchor;
 use BEAR\Resource\AnchorInterface;
+use BEAR\Resource\ExtraMethodInvoker;
 use BEAR\Resource\Factory;
 use BEAR\Resource\FactoryInterface;
 use BEAR\Resource\Invoker;
@@ -54,5 +55,6 @@ class ResourceClientModule extends AbstractModule
         $this->bind(RenderInterface::class)->annotatedWith('options')->to(OptionsRenderer::class);
         $this->bind(OptionsMethods::class);
         $this->bind(NamedParamMetasInterface::class)->to(NamedParamMetas::class);
+        $this->bind(ExtraMethodInvoker::class);
     }
 }

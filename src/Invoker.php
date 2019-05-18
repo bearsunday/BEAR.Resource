@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\MethodNotAllowedException;
 use function is_callable;
-use Ray\Di\Di\Named;
 
 final class Invoker implements InvokerInterface
 {
@@ -16,17 +14,14 @@ final class Invoker implements InvokerInterface
     private $params;
 
     /**
-     * @var RenderInterface
+     * @var ExtraMethodInvoker
      */
-    private $optionsRenderer;
+    private $extraMethod;
 
-    /**
-     * @Named("optionsRenderer=options")
-     */
-    public function __construct(NamedParameterInterface $params, RenderInterface $optionsRenderer)
+    public function __construct(NamedParameterInterface $params, ExtraMethodInvoker $extraMethod)
     {
         $this->params = $params;
-        $this->optionsRenderer = $optionsRenderer;
+        $this->extraMethod = $extraMethod;
     }
 
     /**
@@ -36,7 +31,8 @@ final class Invoker implements InvokerInterface
     {
         $callable = [$request->resourceObject, 'on' . ucfirst($request->method)];
         if (! is_callable($callable)) {
-            return $this->tryExtraMethod($request);
+            // OPTIONS or HEAD
+            return ($this->extraMethod)($request, $this);
         }
         $params = $this->params->getParameters($callable, $request->query);
         $response = call_user_func_array($callable, $params);
@@ -46,26 +42,5 @@ final class Invoker implements InvokerInterface
         }
 
         return $response;
-    }
-
-    private function tryExtraMethod(AbstractRequest $request) : ResourceObject
-    {
-        if ($request->method === Request::OPTIONS) {
-            $ro = $request->resourceObject;
-            $ro->view = $this->optionsRenderer->render($request->resourceObject);
-
-            return $ro;
-        }
-
-        if ($request->method === Request::HEAD) {
-            $getRequest = clone $request;
-            $getRequest->method = 'get';
-            $ro = $this->invoke($getRequest);
-            $ro->body = null;
-
-            return $ro;
-        }
-
-        throw new MethodNotAllowedException(get_class($request->resourceObject) . "::{({$request->method}}()", 405);
     }
 }
