@@ -18,7 +18,7 @@ class HalModuleTest extends TestCase
 
     public function testConfigure()
     {
-        $resource = (new Injector(new AppModule, $_ENV['TMP_DIR']))->getInstance(ResourceInterface::class);
+        $resource = (new Injector(new AppModule, __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
         // request
         $news = $resource
             ->uri('app://self/news')

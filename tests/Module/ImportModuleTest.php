@@ -34,7 +34,7 @@ class ImportModuleTest extends TestCase
             new ImportApp('blog', 'FakeVendor\Blog', 'app')
         ];
         $module->override(new ImportAppModule($importConfig));
-        $resource = (new Injector($module, $_ENV['TMP_DIR']))->getInstance(ResourceInterface::class);
+        $resource = (new Injector($module, __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
         // request
         $news = $resource
             ->get

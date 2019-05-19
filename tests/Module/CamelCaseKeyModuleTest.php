@@ -22,7 +22,7 @@ class CamelCaseKeyModuleTest extends TestCase
 
     private function getRo(string $class)
     {
-        $ro = (new Injector(new CamelCaseKeyModule, $_ENV['TMP_DIR']))->getInstance($class);
+        $ro = (new Injector(new CamelCaseKeyModule, __DIR__ . '/tmp'))->getInstance($class);
         /* @var $ro FakeUser */
 //        $ro->uri = new Uri('app://self/snake');
 

@@ -20,7 +20,7 @@ class ResourceParamHandlerTest extends TestCase
     {
         parent::setUp();
         $module = new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox'));
-        $this->resource = (new Injector($module, $_ENV['TMP_DIR']))->getInstance(ResourceInterface::class);
+        $this->resource = (new Injector($module, __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
     }
 
     public function testResourceParam()
