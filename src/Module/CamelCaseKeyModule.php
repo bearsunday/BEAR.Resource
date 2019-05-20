@@ -18,9 +18,9 @@ class CamelCaseKeyModule extends AbstractModule
     protected function configure()
     {
         $this->bind(Reader::class)->to(AnnotationReader::class);
-        $this->bindInterceptor(
+        $this->bindPriorityInterceptor(
             $this->matcher->subclassesOf(ResourceObject::class),
-            $this->matcher->startsWith('toString'),
+            $this->matcher->startsWith('on'),
             [CamelCaseKeyInterceptor::class]
         );
     }
