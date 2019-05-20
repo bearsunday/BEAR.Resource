@@ -24,16 +24,16 @@ class ResourceTest extends TestCase
      */
     private $resource;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
-        $injector = new Injector(new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox')), $_ENV['TMP_DIR']);
+        $injector = new Injector(new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox')), __DIR__ . '/tmp');
         $this->resource = $injector->getInstance(ResourceInterface::class);
     }
 
     public function testManualConstruction()
     {
-        $injector = new Injector(new NullModule, $_ENV['TMP_DIR']);
+        $injector = new Injector(new NullModule, __DIR__ . '/tmp');
         $reader = new AnnotationReader;
         $scheme = (new SchemeCollection)
             ->scheme('app')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox'))
@@ -203,7 +203,7 @@ class ResourceTest extends TestCase
 
     public function testHal()
     {
-        $resource = (new Injector(new HalModule(new ResourceModule('FakeVendor\Sandbox')), $_ENV['TMP_DIR']))->getInstance(
+        $resource = (new Injector(new HalModule(new ResourceModule('FakeVendor\Sandbox')), __DIR__ . '/tmp'))->getInstance(
             'BEAR\Resource\ResourceInterface'
         );
         $user = $resource->get->uri('app://self/author')->withQuery(['id' => 1])->eager->request();
@@ -232,7 +232,7 @@ class ResourceTest extends TestCase
 
     public function testAssistedParameter()
     {
-        $injector = new Injector(new FakeAssistedModule(new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox'))), $_ENV['TMP_DIR']);
+        $injector = new Injector(new FakeAssistedModule(new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox'))), __DIR__ . '/tmp');
         $this->resource = $injector->getInstance(ResourceInterface::class);
         $ro = $this->resource->get->uri('page://self/assist')->eager->request();
         /* @var $ro \BEAR\Resource\ResourceObject */

@@ -22,7 +22,7 @@ class FakeFreeze extends ResourceObject
         };
         $module = new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox'));
         /* @var $resource ResourceInterface */
-        $resource = (new Injector($module, $_ENV['TMP_DIR']))->getInstance(ResourceInterface::class);
+        $resource = (new Injector($module, __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
         $this['user'] = $resource->get->uri('app://self/author')->withQuery(['id' => 1])->eager->request();
     }
 }

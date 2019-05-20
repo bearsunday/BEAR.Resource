@@ -11,7 +11,7 @@ use Ray\Di\Injector;
 
 class ResourceModuleTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
     }

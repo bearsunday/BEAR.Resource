@@ -35,7 +35,7 @@ class InvokerTest extends TestCase
      */
     protected $request;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->invoker = (new InvokerFactory)();
     }
@@ -80,7 +80,7 @@ class InvokerTest extends TestCase
 
     public function testInvokeWeave()
     {
-        $compiler = new Compiler($_ENV['TMP_DIR']);
+        $compiler = new Compiler(__DIR__ . '/tmp');
         $book = $compiler->newInstance(Book::class, [], (new Bind)->bindInterceptors('onGet', [new FakeLogInterceptor]));
         if (! $book instanceof Book) {
             throw new \LogicException;
@@ -185,7 +185,7 @@ class InvokerTest extends TestCase
 
     public function testOptionsWeaver()
     {
-        $ro = (new Compiler($_ENV['TMP_DIR']))->newInstance(Order::class, [], new Bind);
+        $ro = (new Compiler(__DIR__ . '/tmp'))->newInstance(Order::class, [], new Bind);
         if (! $ro instanceof Order) {
             throw new \LogicException;
         }

@@ -19,9 +19,9 @@ class AppAdapterTest extends TestCase
      */
     private $appAdapter;
 
-    protected function setUp()
+    protected function setUp() : void
     {
-        $injector = new Injector(new AppModule, $_ENV['TMP_DIR']);
+        $injector = new Injector(new AppModule, __DIR__ . '/tmp');
         $this->appAdapter = new AppAdapter($injector, 'FakeVendor\Sandbox');
     }
 

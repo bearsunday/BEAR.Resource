@@ -23,9 +23,9 @@ class EmbedInterceptorTest extends TestCase
      */
     private $embedInterceptor;
 
-    protected function setUp()
+    protected function setUp() : void
     {
-        $this->resource = (new Injector(new EmbedResourceModule(new ResourceModule('FakeVendor\Sandbox')), $_ENV['TMP_DIR']))->getInstance(ResourceInterface::class);
+        $this->resource = (new Injector(new EmbedResourceModule(new ResourceModule('FakeVendor\Sandbox')), __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
     }
 
     public function testInvoke()
