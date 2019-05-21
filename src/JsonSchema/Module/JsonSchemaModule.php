@@ -7,7 +7,7 @@ namespace BEAR\Resource\Module;
 use BEAR\Resource\Annotation\JsonSchema;
 use BEAR\Resource\Interceptor\JsonSchemaInterceptor;
 use BEAR\Resource\JsonSchemaExceptionHandlerInterface;
-use BEAR\Resource\JsonSchemaExceptionVoidHandler;
+use BEAR\Resource\JsonSchemaExceptionNullHandler;
 use BEAR\Resource\ResourceObject;
 use Ray\Di\AbstractModule;
 
@@ -44,7 +44,7 @@ class JsonSchemaModule extends AbstractModule
     {
         $this->bind()->annotatedWith('json_schema_dir')->toInstance($this->jsonSchemaDir);
         $this->bind()->annotatedWith('json_validate_dir')->toInstance($this->jsonValidateDir);
-        $this->bind(JsonSchemaExceptionHandlerInterface::class)->to(JsonSchemaExceptionVoidHandler::class);
+        $this->bind(JsonSchemaExceptionHandlerInterface::class)->to(JsonSchemaExceptionNullHandler::class);
         $this->bindInterceptor(
             $this->matcher->subclassesOf(ResourceObject::class),
             $this->matcher->annotatedWith(JsonSchema::class),

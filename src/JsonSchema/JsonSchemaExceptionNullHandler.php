@@ -6,7 +6,7 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\JsonSchemaException;
 
-class VoidJsonSchemaExceptionHandler implements JsonSchemaExceptionHandlerInterface
+class JsonSchemaExceptionNullHandler implements JsonSchemaExceptionHandlerInterface
 {
     public function handle(ResourceObject $ro, JsonSchemaException $e, string $schemaFile)
     {
