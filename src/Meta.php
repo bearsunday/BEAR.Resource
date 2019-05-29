@@ -48,6 +48,9 @@ final class Meta
      */
     private function getOptions(string $class) : Options
     {
+        if (! class_exists($class)) {
+            throw new \LogicException; // @codeCoverageIgnore
+        }
         $ref = new \ReflectionClass($class);
         $allows = $this->getAllows($ref->getMethods());
         $params = [];
