@@ -171,7 +171,7 @@ final class Linker implements LinkerInterface
     {
         foreach ($annotations as $annotation) {
             /* @var $annotation Link */
-            if ($annotation->crawl !== $link->key) {
+            if (! $annotation instanceof Link || $annotation->crawl !== $link->key) {
                 continue;
             }
             $uri = uri_template($annotation->href, $body);
