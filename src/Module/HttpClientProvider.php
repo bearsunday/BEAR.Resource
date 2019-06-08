@@ -1,0 +1,20 @@
+<?php
+
+declare(strict_types=1);
+
+namespace BEAR\Resource\Module;
+
+use Ray\Di\ProviderInterface;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+
+final class HttpClientProvider implements ProviderInterface
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function get() : HttpClientInterface
+    {
+        return HttpClient::create();
+    }
+}

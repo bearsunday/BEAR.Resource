@@ -6,6 +6,7 @@ namespace BEAR\Resource\Module;
 
 use BEAR\Resource\Annotation\AppName;
 use BEAR\Resource\AppAdapter;
+use BEAR\Resource\HttpAdapter;
 use BEAR\Resource\SchemeCollection;
 use Ray\Di\InjectorInterface;
 use Ray\Di\ProviderInterface;
@@ -45,6 +46,7 @@ class SchemeCollectionProvider implements ProviderInterface
         $appAdapter = new AppAdapter($this->injector, $this->appName);
         $schemeCollection->scheme('page')->host('self')->toAdapter($pageAdapter);
         $schemeCollection->scheme('app')->host('self')->toAdapter($appAdapter);
+        $schemeCollection->scheme('http')->host('self')->toAdapter(new HttpAdapter($this->injector));
 
         return $schemeCollection;
     }
