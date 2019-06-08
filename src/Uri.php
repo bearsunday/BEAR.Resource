@@ -6,6 +6,7 @@ namespace BEAR\Resource;
 
 use function array_key_exists;
 use BEAR\Resource\Exception\UriException;
+use function sprintf;
 
 final class Uri extends AbstractUri
 {
@@ -18,10 +19,11 @@ final class Uri extends AbstractUri
         if (count($query) !== 0) {
             $uri = uri_template($uri, $query);
         }
-        $parsedUrl = (array) parse_url($uri);
-        list($this->scheme, $this->host, $this->path) = array_values($parsedUrl);
-        if (array_key_exists('query', $parsedUrl)) {
-            parse_str($parsedUrl['query'], $this->query);
+        $parts = (array) parse_url($uri);
+        $host = isset($parts['port']) ? sprintf('%s:%s', $parts['host'], $parts['port']) : $parts['host'];
+        [$this->scheme, $this->host, $this->path] = [$parts['scheme'], $host, $parts['path']];
+        if (array_key_exists('query', $parts)) {
+            parse_str($parts['query'], $this->query);
         }
         if (count($query) !== 0) {
             $this->query = $query + $this->query;
