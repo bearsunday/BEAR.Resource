@@ -35,6 +35,9 @@ final class Invoker implements InvokerInterface
      */
     public function invoke(AbstractRequest $request) : ResourceObject
     {
+        if ($request->resourceObject instanceof HttpResourceObject) {
+            return $request->resourceObject->request($request);
+        }
         $callable = [$request->resourceObject, 'on' . ucfirst($request->method)];
         if (! is_callable($callable)) {
             // OPTIONS or HEAD

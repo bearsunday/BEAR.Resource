@@ -35,18 +35,6 @@ final class HttpResourceObject extends ResourceObject
         unset($this->code, $this->headers, $this->body, $this->view);
     }
 
-    public function __call(string $name, array $arguments = ['get', []])
-    {
-        $method = strtoupper($name);
-        $params = isset($arguments[1]) ? $arguments[1] : [];
-        $options = ($method === 'GET') ? ['query' => $params] : ['body' => $params];
-        $clientOptions = isset($arguments['_options']) && is_array($arguments['_options']) ? $arguments['_options'] : [];
-        $options += $clientOptions;
-        $this->response = $this->client->request(strtoupper($name), $arguments[0], $options);
-
-        return $this;
-    }
-
     public function __get(string $name)
     {
         if ($name === 'code') {
@@ -78,5 +66,17 @@ final class HttpResourceObject extends ResourceObject
     public function __toString() : string
     {
         return $this->response->getContent();
+    }
+
+    public function request(AbstractRequest $request)
+    {
+        $uri = $request->resourceObject->uri;
+        $method = strtoupper($uri->method);
+        $options = ($method === 'GET') ? ['query' => $uri->query] : ['body' => $uri->query];
+        $clientOptions = isset($uri->query['_options']) && is_array($uri->query['_options']) ? $uri->query['_options'] : [];
+        $options += $clientOptions;
+        $this->response = $this->client->request($method, (string) $uri, $options);
+
+        return $this;
     }
 }

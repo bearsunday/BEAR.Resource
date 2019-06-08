@@ -46,7 +46,7 @@ class SchemeCollectionProvider implements ProviderInterface
         $appAdapter = new AppAdapter($this->injector, $this->appName);
         $schemeCollection->scheme('page')->host('self')->toAdapter($pageAdapter);
         $schemeCollection->scheme('app')->host('self')->toAdapter($appAdapter);
-        $schemeCollection->scheme('http')->toAdapter(new HttpAdapter($this->injector));
+        $schemeCollection->scheme('http')->host('self')->toAdapter(new HttpAdapter($this->injector));
 
         return $schemeCollection;
     }
