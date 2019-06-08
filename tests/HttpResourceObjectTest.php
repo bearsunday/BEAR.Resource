@@ -12,19 +12,12 @@ use Symfony\Component\HttpClient\HttpClient;
 class HttpResourceObjectTest extends TestCase
 {
     /**
-     * @var HttpResourceObject
-     */
-    private $ro;
-
-    /**
      * @var ResourceInterface
      */
     private $resource;
 
     protected function setUp() : void
     {
-        $client = HttpClient::create();
-        $this->ro = new HttpResourceObject($client);
         $injector = new Injector(new ResourceModule('FakeVendor\Sandbox'), __DIR__ . '/tmp');
         $this->resource = $injector->getInstance(ResourceInterface::class);
     }
