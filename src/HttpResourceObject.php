@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+use function is_array;
 use function strtoupper;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -39,6 +40,8 @@ final class HttpResourceObject extends ResourceObject
         $method = strtoupper($name);
         $params = isset($arguments[1]) ? $arguments[1] : [];
         $options = ($method === 'GET') ? ['query' => $params] : ['body' => $params];
+        $clientOptions = isset($arguments['_options']) && is_array($arguments['_options']) ? $arguments['_options'] : [];
+        $options += $clientOptions;
         $this->response = $this->client->request(strtoupper($name), $arguments[0], $options);
 
         return $this;
@@ -64,7 +67,7 @@ final class HttpResourceObject extends ResourceObject
 
     public function __set(string $name, $value) : void
     {
-        $this->{$name} = $value;
+        throw new \InvalidArgumentException($name);
     }
 
     public function __isset(string $name) : bool
