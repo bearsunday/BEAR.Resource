@@ -26,6 +26,8 @@ final class HttpAdapter implements AdapterInterface
      */
     public function get(AbstractUri $uri) : ResourceObject
     {
+        unset($uri);
+
         return $this->injector->getInstance(HttpResourceObject::class);
     }
 }

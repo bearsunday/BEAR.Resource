@@ -55,6 +55,8 @@ final class HttpResourceObject extends ResourceObject
 
     public function __set(string $name, $value) : void
     {
+        unset($value);
+
         throw new \InvalidArgumentException($name);
     }
 
