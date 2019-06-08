@@ -7,7 +7,6 @@ namespace BEAR\Resource;
 use BEAR\Resource\Module\ResourceModule;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
-use Symfony\Component\HttpClient\HttpClient;
 
 class HttpResourceObjectTest extends TestCase
 {
