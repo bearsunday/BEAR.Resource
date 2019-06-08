@@ -20,8 +20,8 @@ final class Uri extends AbstractUri
             $uri = uri_template($uri, $query);
         }
         $parts = (array) parse_url($uri);
-        $host = isset($parts['port']) ? sprintf('%s:%s', $parts['host'], $parts['port']) : $parts['host'];
-        [$this->scheme, $this->host, $this->path] = [$parts['scheme'], $host, $parts['path']];
+        $host = isset($parts['port']) ? sprintf('%s:%s', $parts['host'] ?? null, $parts['port'] ?? null) : $parts['host'] ?? null;
+        [$this->scheme, $this->host, $this->path] = [$parts['scheme'] ?? null, $host, $parts['path'] ?? null];
         if (array_key_exists('query', $parts)) {
             parse_str($parts['query'], $this->query);
         }
