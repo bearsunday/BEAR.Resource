@@ -11,19 +11,27 @@ use ReflectionClass;
 final class ClassParam implements ParamInterface
 {
     /**
-     * @var ReflectionClass
+     * @var string
      */
     private $class;
 
     /**
-     * @var \ReflectionParameter
+     * @var bool
      */
-    private $parameter;
+    private $isDefaultAvailable;
+
+    /**
+     * @var mixed
+     */
+    private $defaultValue;
 
     public function __construct(ReflectionClass $class, \ReflectionParameter $parameter)
     {
-        $this->class = $class;
-        $this->parameter = $parameter;
+        $this->class = $class->name;
+        $this->isDefaultAvailable = $parameter->isDefaultValueAvailable();
+        if ($this->isDefaultAvailable) {
+            $this->defaultValue = $parameter->getDefaultValue();
+        }
     }
 
     /**
@@ -34,13 +42,13 @@ final class ClassParam implements ParamInterface
         try {
             $props = $this->getProps($varName, $query, $injector);
         } catch (ParameterException $e) {
-            if ($this->parameter->isDefaultValueAvailable()) {
-                return $this->parameter->getDefaultValue();
+            if ($this->isDefaultAvailable) {
+                return $this->defaultValue;
             }
 
             throw $e;
         }
-        $obj = $this->class->newInstanceWithoutConstructor();
+        $obj = new $this->class;
         foreach ($props as $propName => $propValue) {
             $obj->{$propName} = $propValue;
         }
@@ -58,7 +66,6 @@ final class ClassParam implements ParamInterface
         if (isset($query[$snakeName])) {
             return $query[$snakeName];
         }
-
         unset($injector);
 
         throw new ParameterException($varName);
