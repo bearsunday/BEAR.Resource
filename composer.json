@@ -26,7 +26,8 @@
         "ray/web-param-module": "^2.0",
         "justinrainbow/json-schema": "^5.2",
         "phpdocumentor/reflection-docblock": "^4.3",
-        "symfony/http-client": "^4.3"
+        "symfony/http-client": "^4.3",
+        "psr/log": "^1.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.5",
