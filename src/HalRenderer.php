@@ -82,16 +82,11 @@ class HalRenderer implements RenderInterface
         return $parentRo->uri->scheme . $parentRo->uri->host !== $childRo->uri->scheme . $childRo->uri->host;
     }
 
-    private function getReverseMatchedLink(string $uri) : string
-    {
-        return $uri;
-    }
-
     private function getHal(AbstractUri $uri, array $body, array $annotations) : Hal
     {
         $query = $uri->query ? '?' . http_build_query($uri->query) : '';
         $path = $uri->path . $query;
-        $selfLink = $this->getReverseMatchedLink($path);
+        $selfLink = $this->link->getReverseLink($path);
         $hal = new Hal($selfLink, $body);
 
         return $this->link->addHalLink($body, $annotations, $hal);
