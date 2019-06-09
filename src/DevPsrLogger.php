@@ -10,7 +10,7 @@ use function sprintf;
 final class DevPsrLogger implements LoggerInterface
 {
     /**
-     * @var LoggerInterface
+     * @var PsrLoggerInterface
      */
     private $logger;
 
