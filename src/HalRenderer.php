@@ -6,7 +6,8 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\Link;
 use Doctrine\Common\Annotations\Reader;
-use function is_array;
+use function is_iterable;
+use function is_scalar;
 use Nocarrier\Hal;
 
 class HalRenderer implements RenderInterface
@@ -50,13 +51,16 @@ class HalRenderer implements RenderInterface
         $hasMethod = method_exists($ro, $method);
         $annotations = $hasMethod ? $this->reader->getMethodAnnotations(new \ReflectionMethod($ro, $method)) : [];
         /* @var $annotations Link[] */
-        $hal = $this->getHal($ro->uri, $body, $annotations);
+        $hal = $this->getHal($ro->uri, (array) $body, $annotations);
         $ro->view = $hal->asJson(true) . PHP_EOL;
         $ro->headers['Content-Type'] = 'application/hal+json';
     }
 
-    private function valuateElements(ResourceObject $ro)
+    private function valuateElements(ResourceObject $ro) : void
     {
+        if (! is_iterable($ro->body)) {
+            return;
+        }
         foreach ($ro->body as $key => &$embeded) {
             if ($embeded instanceof AbstractRequest) {
                 // @codeCoverageIgnoreStart
@@ -94,14 +98,16 @@ class HalRenderer implements RenderInterface
 
     private function valuate(ResourceObject $ro) : array
     {
-        $ro->body = is_array($ro->body) ? $ro->body : ['value' => $ro->body];
+        if (is_scalar($ro->body) && $ro->body !== null) {
+            $ro->body = ['value' => $ro->body];
+        }
         // evaluate all request in body.
         $this->valuateElements($ro);
 
         return [$ro, $ro->body];
     }
 
-    private function updateHeaders(ResourceObject $ro)
+    private function updateHeaders(ResourceObject $ro) : void
     {
         $ro->headers['content-type'] = 'application/hal+json';
         if (isset($ro->headers['Location'])) {
