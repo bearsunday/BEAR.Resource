@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\ParameterException;
+use function class_exists;
 use Ray\Di\InjectorInterface;
 use ReflectionClass;
 
@@ -48,6 +49,7 @@ final class ClassParam implements ParamInterface
 
             throw $e;
         }
+        assert(class_exists($this->class));
         $obj = new $this->class;
         foreach ($props as $propName => $propValue) {
             $obj->{$propName} = $propValue;
