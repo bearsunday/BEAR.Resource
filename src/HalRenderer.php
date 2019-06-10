@@ -6,7 +6,7 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\Link;
 use Doctrine\Common\Annotations\Reader;
-use function is_iterable;
+use function is_array;
 use function is_scalar;
 use Nocarrier\Hal;
 
@@ -58,7 +58,7 @@ class HalRenderer implements RenderInterface
 
     private function valuateElements(ResourceObject $ro) : void
     {
-        if (! is_iterable($ro->body)) {
+        if (! is_array($ro->body)) {
             return;
         }
         foreach ($ro->body as $key => &$embeded) {
