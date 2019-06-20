@@ -26,7 +26,8 @@ class LoggerModuleTest extends TestCase
         };
         $logger = (new Injector(new ProdLoggerModule($psrLoggerModule)))->getInstance(LoggerInterface::class);
         $this->assertInstanceOf(ProdLogger::class, $logger);
-        $roClass = new class extends ResourceObject{};
+        $roClass = new class extends ResourceObject {
+        };
         $ro = new $roClass;
         $ro->uri = new Uri('app://self/');
         ($logger)($ro);

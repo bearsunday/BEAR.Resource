@@ -12,7 +12,7 @@ final class ErrorLogLogger implements LoggerInterface
     public function __invoke(ResourceObject $ro) : void
     {
         $requestLog = sprintf('request: %s %s', $ro->uri->method, (string) $ro->uri);
-        $responseLog = sprintf('response %s %s', $ro->code, $ro->view);
+        $responseLog = sprintf('response %s %s', $ro->code, (string) $ro->view);
         error_log($requestLog);
         error_log($responseLog);
     }

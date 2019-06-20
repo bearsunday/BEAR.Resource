@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use function in_array;
-use function sprintf;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
+use function sprintf;
 
 final class ProdLogger implements LoggerInterface
 {
@@ -30,4 +30,3 @@ final class ProdLogger implements LoggerInterface
         $this->logger->info($msg);
     }
 }
-
