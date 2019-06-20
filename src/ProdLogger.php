@@ -27,7 +27,7 @@ final class ProdLogger implements LoggerInterface
             return;
         }
         $msg = sprintf('%s %s %s', $ro->code, $ro->uri->method, (string) $ro->uri);
-        $this->logger->info('request', $msg);
+        $this->logger->info($msg);
     }
 }
 
