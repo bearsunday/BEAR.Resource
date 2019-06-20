@@ -4,20 +4,30 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-use function error_log;
 use function in_array;
 use function sprintf;
+use Psr\Log\LoggerInterface as PsrLoggerInterface;
 
 final class ProdLogger implements LoggerInterface
 {
+    /**
+     * @var PsrLoggerInterface
+     */
+    private $logger;
+
+    public function __construct(PsrLoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
     public function __invoke(ResourceObject $ro) : void
     {
-        $method = $ro->uri->method;
-        $unsafeMethod = ['put', 'post', 'delete'];
-        if (! in_array($method, $unsafeMethod, true)) {
+        $unsafeMethod = ['post', 'put', 'patch', 'delete'];
+        if (! in_array($ro->uri->method, $unsafeMethod, true)) {
             return;
         }
         $msg = sprintf('%s %s %s', $ro->code, $ro->uri->method, (string) $ro->uri);
-        error_log($msg);
+        $this->logger->info($msg);
     }
 }
+
