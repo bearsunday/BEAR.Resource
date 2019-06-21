@@ -80,18 +80,6 @@ EOT;
         $this->assertSame($expected, $data);
     }
 
-    public function testError()
-    {
-        $log = ini_get('error_log');
-        $logFile = dirname(__DIR__) . '/log/error.log';
-        ini_set('error_log', $logFile);
-        $this->ro['inf'] = log(0);
-        $data = (string) $this->ro;
-        $this->assertIsString($data);
-        ini_set('error_log', $log);
-        $this->assertContains('json_encode error', (string) file_get_contents($logFile));
-    }
-
     public function testHeader()
     {
         /* @var $ro ResourceObject */
