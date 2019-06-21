@@ -7,6 +7,7 @@ namespace BEAR\Resource;
 use BEAR\Resource\Annotation\ResourceParam;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Cache\Cache;
+use function is_object;
 use Ray\Di\Di\Assisted;
 use Ray\WebContextParam\Annotation\AbstractWebContextParam;
 
@@ -30,7 +31,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
 
     public function __invoke(callable $callable) : array
     {
-        if (! is_array($callable)) {
+        if (! is_array($callable) || ! is_object($callable[0])) {
             throw new \LogicException('callable should be an array'); // @codeCoverageIgnore
         }
         $cacheId = __CLASS__ . get_class($callable[0]) . $callable[1];
