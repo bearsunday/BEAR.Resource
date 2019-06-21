@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\Link;
+use function is_string;
 use Nocarrier\Hal;
 
 final class HalLink
@@ -57,9 +58,11 @@ final class HalLink
     private function bodyLink(array $body, Hal $hal) : Hal
     {
         foreach ((array) $body['_links'] as $rel => $link) {
-            $attr = $link;
-            unset($attr['href']);
-            $hal->addLink($rel, $link['href'], $attr);
+            if (is_string($rel) && isset($link['href'])) {
+                $attr = $link;
+                unset($attr['href']);
+                $hal->addLink($rel, $link['href'], $attr);
+            }
         }
 
         return $hal;
