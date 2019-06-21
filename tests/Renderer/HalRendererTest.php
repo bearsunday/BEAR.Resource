@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace BEAR\Resource\Renderer;
 
 use BEAR\Resource\FakeHal;
-use BEAR\Resource\FakeRoot;
 use BEAR\Resource\HalLink;
 use BEAR\Resource\HalRenderer;
 use BEAR\Resource\NullReverseLink;
@@ -18,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 class HalRendererTest extends TestCase
 {
     /**
-     * @var FakeRoot
+     * @var FakeHal
      */
     private $ro;
 
@@ -100,5 +99,45 @@ EOT;
         (string) $ro;
         $expected = 'application/hal+json';
         $this->assertSame($expected, $ro->headers['content-type']);
+    }
+
+    public function testBodyLink()
+    {
+        $ro = $this->ro->onGet(true);
+        $actual = (string) $ro;
+        $expected = <<<'EOT'
+{
+    "one": 1,
+    "_links": {
+        "self": {
+            "href": "/dummy"
+        },
+        "profile": {
+            "href": "/changed-profile"
+        }
+    },
+    "_embedded": {
+        "two": {
+            "tree": 3,
+            "_links": {
+                "self": {
+                    "href": "/bear/resource/fakechild"
+                }
+            }
+        }
+    }
+}
+
+EOT;
+        $this->assertSame($expected, $actual);
+    }
+
+    public function testLocationHeader()
+    {
+        $ro = $this->ro->onGet();
+        (string) $ro;
+        $expected = 'application/hal+json';
+        $this->assertSame($expected, $ro->headers['Location']);
+
     }
 }
