@@ -11,7 +11,6 @@ use BEAR\Resource\NullReverseLink;
 use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Uri;
 use Doctrine\Common\Annotations\AnnotationReader;
-use function file_get_contents;
 use PHPUnit\Framework\TestCase;
 
 class HalRendererTest extends TestCase
