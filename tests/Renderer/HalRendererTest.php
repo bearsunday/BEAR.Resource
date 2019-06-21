@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BEAR\Resource\Renderer;
 
+use BEAR\Resource\FakeHal;
 use BEAR\Resource\FakeRoot;
 use BEAR\Resource\HalLink;
 use BEAR\Resource\HalRenderer;
@@ -23,7 +24,7 @@ class HalRendererTest extends TestCase
 
     protected function setUp() : void
     {
-        $this->ro = new FakeRoot;
+        $this->ro = new FakeHal;
         $this->ro->uri = new Uri('app://self/dummy');
         $this->ro->setRenderer(new HalRenderer(new AnnotationReader(), new HalLink(new NullReverseLink)));
     }
@@ -48,6 +49,9 @@ class HalRendererTest extends TestCase
     "_links": {
         "self": {
             "href": "/dummy"
+        },
+        "profile": {
+            "href": "/profile"
         }
     }
 }
@@ -66,6 +70,9 @@ EOT;
     "_links": {
         "self": {
             "href": "/dummy"
+        },
+        "profile": {
+            "href": "/profile"
         }
     }
 }
