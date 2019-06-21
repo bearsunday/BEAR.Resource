@@ -139,4 +139,26 @@ EOT;
         (string) $ro;
         $this->assertSame('/foo', $ro->headers['Location']);
     }
+
+    public function testNonArrayBody()
+    {
+        $ro = $this->ro->onGet();
+        $ro->body = '1';
+        $actual = (string) $ro;
+        $expected = <<<'EOT'
+{
+    "value": "1",
+    "_links": {
+        "self": {
+            "href": "/dummy"
+        },
+        "profile": {
+            "href": "/profile"
+        }
+    }
+}
+
+EOT;
+        $this->assertSame($expected, $actual);
+    }
 }
