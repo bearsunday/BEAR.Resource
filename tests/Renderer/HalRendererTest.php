@@ -135,9 +135,8 @@ EOT;
     public function testLocationHeader()
     {
         $ro = $this->ro->onGet();
+        $ro->headers['Location'] = '/foo';
         (string) $ro;
-        $expected = 'application/hal+json';
-        $this->assertSame($expected, $ro->headers['Location']);
-
+        $this->assertSame('/foo', $ro->headers['Location']);
     }
 }
