@@ -57,7 +57,7 @@ final class HttpResourceObject extends ResourceObject
     {
         unset($value);
 
-        throw new \InvalidArgumentException($name);
+        throw new \BadFunctionCallException($name);
     }
 
     public function __isset(string $name) : bool

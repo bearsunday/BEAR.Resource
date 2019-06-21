@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+use BadFunctionCallException;
 use BEAR\Resource\Module\ResourceModule;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
@@ -68,5 +70,33 @@ class HttpResourceObjectTest extends TestCase
         $body = $response->body;
         $this->assertSame('bar', $body['form']['foo']);
         $this->assertContains('"form": {', $response->view);
+    }
+
+    public function testToString()
+    {
+        $response = $this->resource->get('http://httpbin.org/get', ['foo' => 'bar']);
+        $actual = (string) $response;
+        $this->assertContains('"args": {', $actual);
+    }
+
+    public function testIsSet()
+    {
+        $response = $this->resource->get('http://httpbin.org/get', ['foo' => 'bar']);
+        $isSet = isset($response->__invalid);
+        $this->assertFalse($isSet);
+    }
+
+    public function testSet()
+    {
+        $this->expectException(BadFunctionCallException::class);
+        $response = $this->resource->get('http://httpbin.org/get', ['foo' => 'bar']);
+        $response->foo = '1';
+    }
+
+    public function testInvalidGet()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $response = $this->resource->get('http://httpbin.org/get', ['foo' => 'bar']);
+        $response->foo;
     }
 }
