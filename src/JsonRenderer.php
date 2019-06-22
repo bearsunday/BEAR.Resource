@@ -11,8 +11,8 @@ final class JsonRenderer implements RenderInterface
      */
     public function render(ResourceObject $ro)
     {
-        if (! array_key_exists('content-type', $ro->headers)) {
-            $ro->headers['content-type'] = 'application/json';
+        if (! array_key_exists('Content-Type', $ro->headers)) {
+            $ro->headers['Content-Type'] = 'application/json';
         }
         $ro->view = (string) json_encode($ro);
         $e = json_last_error();

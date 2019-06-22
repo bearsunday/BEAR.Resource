@@ -85,7 +85,7 @@ EOT;
         $ro = $this->ro->onGet();
         (string) $ro;
         $expected = 'application/hal+json';
-        $this->assertSame($expected, $ro->headers['content-type']);
+        $this->assertSame($expected, $ro->headers['Content-Type']);
     }
 
     public function testBodyLink()
