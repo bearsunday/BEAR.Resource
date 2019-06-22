@@ -109,7 +109,7 @@ class HalRenderer implements RenderInterface
 
     private function updateHeaders(ResourceObject $ro) : void
     {
-        $ro->headers['content-type'] = 'application/hal+json';
+        $ro->headers['Content-Type'] = 'application/hal+json';
         if (isset($ro->headers['Location'])) {
             $ro->headers['Location'] = $this->link->getReverseLink($ro->headers['Location']);
         }

@@ -59,6 +59,6 @@ class JsonRendererTest extends TestCase
         $ro = $this->ro->onGet();
         (string) $ro;
         $expected = 'application/json';
-        $this->assertSame($expected, $ro->headers['content-type']);
+        $this->assertSame($expected, $ro->headers['Content-Type']);
     }
 }
