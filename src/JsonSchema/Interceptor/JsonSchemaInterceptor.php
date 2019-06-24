@@ -10,6 +10,7 @@ use BEAR\Resource\Exception\JsonSchemaException;
 use BEAR\Resource\Exception\JsonSchemaNotFoundException;
 use BEAR\Resource\JsonSchemaExceptionHandlerInterface;
 use BEAR\Resource\ResourceObject;
+use http\Exception\RuntimeException;
 use function is_array;
 use function is_object;
 use function is_string;
@@ -86,7 +87,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     {
         $schemaFile = $this->getSchemaFile($jsonSchema, $ro);
         try {
-            $this->validateRo($ro, $schemaFile);
+            $this->validateRo($ro, $schemaFile, $jsonSchema);
             if (is_string($this->schemaHost)) {
                 $ro->headers['Link'] = sprintf('<%s%s>; rel="describedby"', $this->schemaHost, $jsonSchema->schema);
             }
@@ -95,10 +96,26 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         }
     }
 
-    private function validateRo(ResourceObject $ro, string $schemaFile)
+    private function validateRo(ResourceObject $ro, string $schemaFile, JsonSchema $jsonSchema)
     {
         $json = json_decode((string) $ro);
-        $this->validate($json, $schemaFile);
+        if (! $json) {
+            return;
+        }
+        $target = $json ? $this->getTarget($json, $jsonSchema) : [];
+        $this->validate($target, $schemaFile);
+    }
+
+    private function getTarget(\stdClass $json, JsonSchema $jsonSchema)
+    {
+        if ($jsonSchema->key === null) {
+            return $json;
+        }
+        if (! $json->{$jsonSchema->key}) {
+            throw new RuntimeException($jsonSchema->key);
+        }
+
+        return $json->{$jsonSchema->key};
     }
 
     private function validate($scanObject, $schemaFile)
