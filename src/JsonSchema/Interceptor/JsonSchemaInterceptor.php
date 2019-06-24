@@ -7,6 +7,7 @@ namespace BEAR\Resource\Interceptor;
 use BEAR\Resource\Annotation\JsonSchema;
 use BEAR\Resource\Code;
 use BEAR\Resource\Exception\JsonSchemaException;
+use BEAR\Resource\Exception\JsonSchemaKeytFoundException;
 use BEAR\Resource\Exception\JsonSchemaNotFoundException;
 use BEAR\Resource\JsonSchemaExceptionHandlerInterface;
 use BEAR\Resource\ResourceObject;
@@ -102,7 +103,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         if (! $json) {
             return;
         }
-        $target = $json ? $this->getTarget($json, $jsonSchema) : [];
+        $target = is_object($json) ? $this->getTarget($json, $jsonSchema) : $json;
         $this->validate($target, $schemaFile);
     }
 
@@ -112,7 +113,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
             return $json;
         }
         if (! $json->{$jsonSchema->key}) {
-            throw new RuntimeException($jsonSchema->key);
+            throw new JsonSchemaKeytFoundException($jsonSchema->key);
         }
 
         return $json->{$jsonSchema->key};
