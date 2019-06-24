@@ -11,7 +11,6 @@ use BEAR\Resource\Exception\JsonSchemaKeytFoundException;
 use BEAR\Resource\Exception\JsonSchemaNotFoundException;
 use BEAR\Resource\JsonSchemaExceptionHandlerInterface;
 use BEAR\Resource\ResourceObject;
-use http\Exception\RuntimeException;
 use function is_array;
 use function is_object;
 use function is_string;
@@ -107,7 +106,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         $this->validate($target, $schemaFile);
     }
 
-    private function getTarget(\stdClass $json, JsonSchema $jsonSchema)
+    private function getTarget($json, JsonSchema $jsonSchema)
     {
         if ($jsonSchema->key === null) {
             return $json;
