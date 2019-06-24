@@ -18,7 +18,7 @@
     "require": {
         "php": ">=7.1.0",
         "ext-json": "*",
-        "ray/di": "^2.8",
+        "ray/di": "^2.8.4",
         "nocarrier/hal":"^0.9.12",
         "doctrine/cache":"^1.8",
         "rize/uri-template": "^0.3",
