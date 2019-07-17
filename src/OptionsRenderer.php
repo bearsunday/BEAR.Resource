@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+use BEAR\Resource\Annotation\OptionsBody;
+use const PHP_EOL;
+
 /**
  * RFC2616 OPTIONS method renderer
  *
@@ -19,9 +22,18 @@ final class OptionsRenderer implements RenderInterface
      */
     private $optionsMethod;
 
-    public function __construct(OptionsMethods $optionsMethods)
+    /**
+     * @var bool
+     */
+    private $optionsBody;
+
+    /**
+     * @OptionsBody("optionsBody")
+     */
+    public function __construct(OptionsMethods $optionsMethods, bool $optionsBody = true)
     {
         $this->optionsMethod = $optionsMethods;
+        $this->optionsBody = $optionsBody;
     }
 
     /**
@@ -32,8 +44,7 @@ final class OptionsRenderer implements RenderInterface
         $ro->headers['Content-Type'] = 'application/json';
         $allows = $this->getAllows((new \ReflectionClass($ro))->getMethods());
         $ro->headers['Allow'] = implode(', ', $allows);
-        $body = $this->getEntityBody($ro, $allows);
-        $ro->view = json_encode($body, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL;
+        $ro->view = $this->optionsBody ? json_encode($this->getEntityBody($ro, $allows), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL : '';
 
         return $ro->view;
     }
