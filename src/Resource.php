@@ -72,8 +72,8 @@ final class Resource implements ResourceInterface
     public function __construct(
         FactoryInterface $factory,
         InvokerInterface $invoker,
-        AnchorInterface  $anchor,
-        LinkerInterface  $linker,
+        AnchorInterface $anchor,
+        LinkerInterface $linker,
         UriFactory $uri
     ) {
         $this->factory = $factory;
