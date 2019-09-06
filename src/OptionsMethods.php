@@ -12,6 +12,7 @@ use Ray\Di\Di\Named;
 use Ray\WebContextParam\Annotation\AbstractWebContextParam;
 use Ray\WebContextParam\Annotation\CookieParam;
 use Ray\WebContextParam\Annotation\EnvParam;
+use Ray\WebContextParam\Annotation\FilesParam;
 use Ray\WebContextParam\Annotation\FormParam;
 use Ray\WebContextParam\Annotation\QueryParam;
 use Ray\WebContextParam\Annotation\ServerParam;
@@ -28,7 +29,8 @@ final class OptionsMethods
         EnvParam::class => 'env',
         FormParam::class => 'formData',
         QueryParam::class => 'query',
-        ServerParam::class => 'server'
+        ServerParam::class => 'server',
+        FilesParam::class => 'files'
     ];
 
     private $reader;

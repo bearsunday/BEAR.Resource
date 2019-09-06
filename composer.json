@@ -23,7 +23,7 @@
         "doctrine/cache":"^1.8",
         "rize/uri-template": "^0.3",
         "koriym/http-constants": "^1.1",
-        "ray/web-param-module": "^2.0",
+        "ray/web-param-module": "^2.0.3",
         "justinrainbow/json-schema": "^5.2",
         "phpdocumentor/reflection-docblock": "^4.3",
         "symfony/http-client": "^4.3",
