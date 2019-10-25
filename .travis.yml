@@ -24,6 +24,7 @@ install:
 
 script:
   - ./vendor/bin/phpunit;
+  - ./demo/run.php
 
 jobs:
   include:
