@@ -4,42 +4,14 @@ declare(strict_types=1);
 
 namespace MyVendor\Demo\Resource\App;
 
-use BEAR\Resource\Annotation\Embed;
 use BEAR\Resource\Module\HalModule;
 use BEAR\Resource\Module\ResourceModule;
 use BEAR\Resource\ResourceInterface;
-use BEAR\Resource\ResourceObject;
 use Ray\Di\Injector;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
-
-class News extends ResourceObject
-{
-    /**
-     * @Embed(rel="weather", src="/weather{?date}")
-     */
-    public function onGet(string $date) : ResourceObject
-    {
-        $this->body += [
-            'headline' => "40th anniversary of Rubik's Cube invention.",
-            'sports' => "Pieter Weening wins Giro d'Italia."
-        ];
-
-        return $this;
-    }
-}
-
-class Weather extends ResourceObject
-{
-    public function onGet(string $date) : ResourceObject
-    {
-        $this->body = [
-            'today' => "the weather of {$date} is sunny"
-        ];
-
-        return $this;
-    }
-}
+require __DIR__ . '/demo5/News.php';
+require __DIR__ . '/demo5/Weather.php';
 
 /* @var ResourceInterface $resource */
 $resource = (new Injector(new HalModule(new ResourceModule('MyVendor\Demo')), __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
