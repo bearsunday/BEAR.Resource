@@ -16,7 +16,7 @@
         }
     ],
     "require": {
-        "php": ">=7.1.0",
+        "php": ">=7.2.0",
         "ext-json": "*",
         "ray/di": "^2.8.4",
         "nocarrier/hal":"^0.9.12",
