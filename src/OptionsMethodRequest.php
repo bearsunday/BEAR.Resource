@@ -93,7 +93,9 @@ final class OptionsMethodRequest
 
     private function getType(\ReflectionParameter $parameter) : string
     {
-        $type = (string) $parameter->getType();
+        $namedType = $parameter->getType();
+        assert($namedType instanceof \ReflectionNamedType);
+        $type = $namedType->getName();
         if ($type === 'int') {
             $type = 'integer';
         }
