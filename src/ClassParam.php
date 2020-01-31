@@ -40,36 +40,20 @@ final class ClassParam implements ParamInterface
      */
     public function __invoke(string $varName, array $query, InjectorInterface $injector)
     {
-        try {
-            $props = $this->getProps($varName, $query, $injector);
-        } catch (ParameterException $e) {
-            if ($this->isDefaultAvailable) {
-                return $this->defaultValue;
-            }
-
-            throw $e;
-        }
         assert(class_exists($this->class));
         $obj = new $this->class;
-        foreach ($props as $propName => $propValue) {
-            $obj->{$propName} = $propValue;
+        foreach ($query as $queryName => $queryValue) {
+            if (property_exists($obj, $queryName)) {
+                $obj->{$queryName} = $queryValue;
+                continue;
+            }
+            $camelName = lcfirst(strtr(ucwords(strtr($queryName, ['_' => ' '])), [' ' => '']));
+            if (property_exists($obj, $camelName)) {
+                $obj->{$camelName} = $queryValue;
+                continue;
+            }
         }
 
         return $obj;
-    }
-
-    private function getProps(string $varName, array $query, InjectorInterface $injector) : array
-    {
-        if (isset($query[$varName])) {
-            return $query[$varName];
-        }
-        // try camelCase variable name
-        $snakeName = ltrim(strtolower((string) preg_replace('/[A-Z]/', '_\0', $varName)), '_');
-        if (isset($query[$snakeName])) {
-            return $query[$snakeName];
-        }
-        unset($injector);
-
-        throw new ParameterException($varName);
     }
 }
