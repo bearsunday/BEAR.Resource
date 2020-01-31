@@ -13,7 +13,7 @@ class ClassParamTest extends TestCase
     /** @var ResourceInterface */
     private $resource;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 

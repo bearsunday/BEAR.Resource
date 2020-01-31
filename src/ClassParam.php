@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\ParameterException;
 use function class_exists;
 use Ray\Di\InjectorInterface;
 use ReflectionClass;
@@ -45,11 +44,13 @@ final class ClassParam implements ParamInterface
         foreach ($query as $queryName => $queryValue) {
             if (property_exists($obj, $queryName)) {
                 $obj->{$queryName} = $queryValue;
+
                 continue;
             }
             $camelName = lcfirst(strtr(ucwords(strtr($queryName, ['_' => ' '])), [' ' => '']));
             if (property_exists($obj, $camelName)) {
                 $obj->{$camelName} = $queryValue;
+
                 continue;
             }
         }
