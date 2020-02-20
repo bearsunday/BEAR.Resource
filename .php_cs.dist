@@ -11,6 +11,7 @@ EOF;
 
 $finder = PhpCsFixer\Finder::create()
     ->exclude(['tests/Fake', 'tests/tmp', 'src-deprecated'])
+    ->notPath('src/ClassParam.php')
     ->in(__DIR__);
 
 return \PhpCsFixer\Config::create()
