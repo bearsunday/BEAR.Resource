@@ -13,7 +13,6 @@ use BEAR\Resource\ResourceObject;
 class NotFound extends ResourceObject
 {
     /**
-     * @return $this
      * @Link(href="app://self/user{?id}", rel="user", crawl="meta")
      */
     public function onGet()
