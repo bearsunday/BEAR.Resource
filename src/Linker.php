@@ -57,6 +57,10 @@ final class Linker implements LinkerInterface
     {
         $this->invoker->invoke($request);
         $current = clone $request->resourceObject;
+        if ($current->code >= Code::BAD_REQUEST) {
+            return $current;
+        }
+
         foreach ($request->links as $link) {
             /* @noinspection ExceptionsAnnotatingAndHandlingInspection */
             $nextResource = $this->annotationLink($link, $current, $request);

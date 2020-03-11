@@ -303,4 +303,37 @@ class LinkerTest extends TestCase
         );
         $this->linker->invoke($request);
     }
+
+    public function testNotFoundResourceHasBody()
+    {
+        $request = new Request(
+            $this->invoker,
+            (new FakeRo)(new Blog\NotFound),
+            Request::GET,
+            [],
+            [new LinkType('meta', LinkType::CRAWL_LINK)]
+        );
+        $this->linker->invoke($request);
+        $this->assertSame(['message' => 'blog not found'], $request->body);
+
+        $request = new Request(
+            $this->invoker,
+            (new FakeRo)(new Blog\NotFound),
+            Request::GET,
+            [],
+            [new LinkType('user', LinkType::SELF_LINK)]
+        );
+        $this->linker->invoke($request);
+        $this->assertSame(['message' => 'blog not found'], $request->body);
+
+        $request = new Request(
+            $this->invoker,
+            (new FakeRo)(new Blog\NotFound),
+            Request::GET,
+            [],
+            [new LinkType('user', LinkType::NEW_LINK)]
+        );
+        $this->linker->invoke($request);
+        $this->assertSame(['message' => 'blog not found'], $request->body);
+    }
 }
