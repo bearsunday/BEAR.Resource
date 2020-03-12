@@ -293,4 +293,28 @@ class ResourceTest extends TestCase
         $this->expectException(MethodNotAllowedException::class);
         $this->resource->head('page://self/hello-world');
     }
+
+    public function testMultipleRequest()
+    {
+        $view = (string) $this->resource->get('/fake-loop');
+        $expected = '{
+    "1": {
+        "num": "1"
+    },
+    "2": {
+        "num": "2"
+    },
+    "3": {
+        "num": "3"
+    },
+    "4": {
+        "num": "4"
+    },
+    "5": {
+        "num": "5"
+    }
+}
+';
+        $this->assertSame($expected, $view);
+    }
 }
