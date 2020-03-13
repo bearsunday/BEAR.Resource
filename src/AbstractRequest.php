@@ -141,7 +141,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
             return $this->linker->invoke($this);
         }
 
-        return $this->invoker->invoke($this);
+        return clone $this->invoker->invoke($this);
     }
 
     /**
