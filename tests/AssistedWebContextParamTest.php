@@ -11,7 +11,7 @@ use Ray\WebContextParam\Annotation\CookieParam;
 
 class AssistedWebContextParamTest extends TestCase
 {
-    public function testAssistedWebContextParam()
+    public function testAssistedWebContextParam() : void
     {
         $cookieParam = new CookieParam;
         $cookieParam->key = 'cookie_key';

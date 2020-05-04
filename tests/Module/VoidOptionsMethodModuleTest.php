@@ -11,7 +11,7 @@ use Ray\Di\Injector;
 
 class VoidOptionsMethodModuleTest extends TestCase
 {
-    public function testOptionsMethodModule()
+    public function testOptionsMethodModule() : void
     {
         $injector = new Injector(new VoidOptionsMethodModule);
         $renderer = $injector->getInstance(RenderInterface::class, 'options');

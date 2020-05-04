@@ -27,7 +27,7 @@ class ImportModuleTest extends TestCase
         parent::setUp();
     }
 
-    public function testConfigure()
+    public function testConfigure() : void
     {
         $module = new AppModule;
         $importConfig = [

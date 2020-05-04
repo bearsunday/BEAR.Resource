@@ -16,7 +16,7 @@ class HalModuleTest extends TestCase
         parent::setUp();
     }
 
-    public function testConfigure()
+    public function testConfigure() : void
     {
         $resource = (new Injector(new AppModule, __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
         // request

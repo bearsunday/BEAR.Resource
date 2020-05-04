@@ -20,14 +20,14 @@ class SchemeCollectionTest extends TestCase
         $this->scheme = new SchemeCollection;
     }
 
-    public function testScheme()
+    public function testScheme() : void
     {
         $this->scheme->scheme('app')->host('self')->toAdapter(new FakeNop);
         $adapter = $this->scheme->getAdapter(new Uri('app://self/'));
         $this->assertInstanceOf(FakeNop::class, $adapter);
     }
 
-    public function testInvalidScheme()
+    public function testInvalidScheme() : void
     {
         $this->expectException(SchemeException::class);
         $this->scheme->getAdapter(new Uri('app://self/'));
