@@ -23,7 +23,7 @@ class ResourceObjectTest extends TestCase
         $ro->uri = new Uri('app://self/freeze');
         $body = $ro->body;
         $serialized = serialize($ro);
-        $this->assertInternalType('string', $serialized);
+        $this->assertIsString($serialized);
         $ro = unserialize($serialized);
         $this->assertInstanceOf(Author::class, $ro['user']);
         $expected = 'app://self/freeze';
@@ -35,7 +35,7 @@ class ResourceObjectTest extends TestCase
         $ro = new FakeFreeze;
         $ro->uri = new Uri('app://self/freeze');
         $json = json_encode($ro);
-        $this->assertInternalType('string', $json);
+        $this->assertIsString($json);
         $expected = '{"php":"7","user":{"name":"Aramis","age":16,"blog_id":12}}';
         $this->assertSame($expected, $json);
     }

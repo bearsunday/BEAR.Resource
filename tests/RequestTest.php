@@ -126,7 +126,8 @@ class RequestTest extends TestCase
 
     public function testToStringWithRenderableResourceObject() : void
     {
-        $ro = (new FakeResource)->setRenderer(new FakeTestRenderer);
+        $ro = new FakeResource;
+        $ro->setRenderer(new FakeTestRenderer);
         $ro->uri = new Uri('app://self/dummy');
         $request = new Request(
             $this->invoker,
@@ -140,7 +141,8 @@ class RequestTest extends TestCase
 
     public function testToStringWithErrorRenderer() : void
     {
-        $ro = (new FakeResource)->setRenderer(new FakeErrorRenderer);
+        $ro = new FakeResource;
+        $ro->setRenderer(new FakeErrorRenderer);
         $ro->uri = new Uri('app://self/dummy');
         $request = new Request(
             $this->invoker,
@@ -155,7 +157,7 @@ class RequestTest extends TestCase
         });
         (string) $request;
         $this->assertSame(E_USER_WARNING, $no);
-        $this->assertContains('FakeErrorRenderer->render', $str);
+        $this->assertStringContainsString('FakeErrorRenderer->render', $str);
         $this->assertSame('', (string) $request);
         restore_error_handler();
     }
@@ -248,7 +250,7 @@ class RequestTest extends TestCase
 
     public function testHash() : void
     {
-        $this->assertInternalType('string', $this->request->hash());
+        $this->assertIsString($this->request->hash());
     }
 
     public function testRequestExceptionString() : void
@@ -266,7 +268,7 @@ class RequestTest extends TestCase
         });
         (string) $request;
         $this->assertSame(256, $no);
-        $this->assertContains('BEAR\Resource\FakeNopResource', $str);
+        $this->assertStringContainsString(FakeNopResource::class, $str);
         restore_error_handler();
     }
 

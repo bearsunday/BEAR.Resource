@@ -130,7 +130,7 @@ class ObjectTest extends TestCase
     {
         $this->ro->headers['X-TEST'] = __FUNCTION__;
         $str = (string) $this->ro;
-        $this->assertInternalType('string', $str);
+        $this->assertIsString($str);
     }
 
     public function testToStringScalarBody() : void
@@ -138,7 +138,7 @@ class ObjectTest extends TestCase
         $this->ro->headers['X-TEST'] = __FUNCTION__;
         $this->ro->body = 'OK';
         $str = (string) $this->ro;
-        $this->assertInternalType('string', $str);
+        $this->assertIsString($str);
     }
 
     public function testToStringWithRenderer() : void

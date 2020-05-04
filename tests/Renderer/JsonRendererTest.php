@@ -48,9 +48,9 @@ class JsonRendererTest extends TestCase
         ini_set('error_log', $logFile);
         $this->ro['inf'] = log(0);
         $data = (string) $this->ro;
-        $this->assertInternalType('string', $data);
+        $this->assertIsString($data);
         ini_set('error_log', $log);
-        $this->assertContains('json_encode error', (string) file_get_contents($logFile));
+        $this->assertStringContainsString('json_encode error', (string) file_get_contents($logFile));
     }
 
     public function testHeader() : void

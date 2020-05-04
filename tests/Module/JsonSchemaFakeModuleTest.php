@@ -21,15 +21,15 @@ class JsonSchemaFakeModuleTest extends TestCase
     {
         $ro = $this->getRo(FakeVoidUser::class);
         $ro->onGet(20);
-        $this->assertContains('user.json', $ro->headers[JsonSchemaExceptionFakeHandler::X_FAKE_JSON]);
+        $this->assertStringContainsString('user.json', $ro->headers[JsonSchemaExceptionFakeHandler::X_FAKE_JSON]);
     }
 
     public function testValidArrayRef() : void
     {
         $ro = $this->getRo(FakeVoidUsers::class);
         $ro->onGet(20);
-        $this->assertContains('users.json', $ro->headers[JsonSchemaExceptionFakeHandler::X_FAKE_JSON]);
-        $this->assertInternalType('string', $ro->body[0]['name']['firstName']);
+        $this->assertStringContainsString('users.json', $ro->headers[JsonSchemaExceptionFakeHandler::X_FAKE_JSON]);
+        $this->assertIsString($ro->body[0]['name']['firstName']);
     }
 
     public function testException() : void

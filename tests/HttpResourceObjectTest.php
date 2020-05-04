@@ -29,7 +29,7 @@ class HttpResourceObjectTest extends TestCase
         $this->assertSame(200, $response->code);
         $this->assertArrayHasKey('access-control-allow-credentials', $response->headers);
         $this->assertArrayHasKey('args', $response->body);
-        $this->assertContains('"args": {', $response->view);
+        $this->assertStringContainsString('"args": {', $response->view);
     }
 
     public function testPost() : void
@@ -39,7 +39,7 @@ class HttpResourceObjectTest extends TestCase
         $this->assertArrayHasKey('access-control-allow-credentials', $response->headers);
         $body = $response->body;
         $this->assertSame('bar', $body['form']['foo']);
-        $this->assertContains('"form": {', $response->view);
+        $this->assertStringContainsString('"form": {', $response->view);
     }
 
     public function testPut() : void
@@ -49,7 +49,7 @@ class HttpResourceObjectTest extends TestCase
         $this->assertArrayHasKey('access-control-allow-credentials', $response->headers);
         $body = $response->body;
         $this->assertSame('bar', $body['form']['foo']);
-        $this->assertContains('"form": {', $response->view);
+        $this->assertStringContainsString('"form": {', $response->view);
     }
 
     public function testPatch() : void
@@ -59,7 +59,7 @@ class HttpResourceObjectTest extends TestCase
         $this->assertArrayHasKey('access-control-allow-credentials', $response->headers);
         $body = $response->body;
         $this->assertSame('bar', $body['form']['foo']);
-        $this->assertContains('"form": {', $response->view);
+        $this->assertStringContainsString('"form": {', $response->view);
     }
 
     public function testDelete() : void
@@ -69,14 +69,14 @@ class HttpResourceObjectTest extends TestCase
         $this->assertArrayHasKey('access-control-allow-credentials', $response->headers);
         $body = $response->body;
         $this->assertSame('bar', $body['form']['foo']);
-        $this->assertContains('"form": {', $response->view);
+        $this->assertStringContainsString('"form": {', $response->view);
     }
 
     public function testToString() : void
     {
         $response = $this->resource->get('http://httpbin.org/get', ['foo' => 'bar']);
         $actual = (string) $response;
-        $this->assertContains('"args": {', $actual);
+        $this->assertStringContainsString('"args": {', $actual);
     }
 
     public function testIsSet() : void
