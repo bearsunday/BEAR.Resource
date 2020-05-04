@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class UriTest extends TestCase
 {
-    public function testUri()
+    public function testUri() : void
     {
         $uri = new Uri('app://self/?id=1');
         $this->assertSame('app', $uri->scheme);
@@ -18,7 +18,7 @@ class UriTest extends TestCase
         $this->assertSame('get', $uri->method);
     }
 
-    public function testUriWithQuery()
+    public function testUriWithQuery() : void
     {
         $uri = new Uri('app://self/', ['id' => 1]);
         $expect = 'app://self/?id=1';
@@ -26,7 +26,7 @@ class UriTest extends TestCase
         $this->assertSame(['id' => 1], $uri->query);
     }
 
-    public function testUriWithMoreQuery()
+    public function testUriWithMoreQuery() : void
     {
         $uri = new Uri('app://self/{?id}', ['id' => 1, 'name' => 'sunday']);
         $expect = 'app://self/?id=1&name=sunday';

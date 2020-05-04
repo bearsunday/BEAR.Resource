@@ -25,19 +25,19 @@ class AppAdapterTest extends TestCase
         $this->appAdapter = new AppAdapter($injector, 'FakeVendor\Sandbox');
     }
 
-    public function testGet()
+    public function testGet() : void
     {
         $index = $this->appAdapter->get(new Uri('page://self/index'));
         $this->assertInstanceOf(Index::class, $index);
     }
 
-    public function testNotFound()
+    public function testNotFound() : void
     {
         $this->expectException(ResourceNotFoundException::class);
         $this->appAdapter->get(new Uri('page://self/__not_found__'));
     }
 
-    public function testGetWithCompiler()
+    public function testGetWithCompiler() : void
     {
         $injector = $this->getScriptInjector();
         $appAdapter = new AppAdapter($injector, 'FakeVendor\Sandbox');
@@ -45,7 +45,7 @@ class AppAdapterTest extends TestCase
         $this->assertInstanceOf(Index::class, $index);
     }
 
-    public function testNotFoundWithCompiler()
+    public function testNotFoundWithCompiler() : void
     {
         $this->expectException(ResourceNotFoundException::class);
         $scriptDir = __DIR__ . '/tmp';

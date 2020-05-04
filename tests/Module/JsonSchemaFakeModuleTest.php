@@ -17,14 +17,14 @@ use Ray\Di\Injector;
 
 class JsonSchemaFakeModuleTest extends TestCase
 {
-    public function testValid()
+    public function testValid() : void
     {
         $ro = $this->getRo(FakeVoidUser::class);
         $ro->onGet(20);
         $this->assertContains('user.json', $ro->headers[JsonSchemaExceptionFakeHandler::X_FAKE_JSON]);
     }
 
-    public function testValidArrayRef()
+    public function testValidArrayRef() : void
     {
         $ro = $this->getRo(FakeVoidUsers::class);
         $ro->onGet(20);
@@ -32,14 +32,14 @@ class JsonSchemaFakeModuleTest extends TestCase
         $this->assertInternalType('string', $ro->body[0]['name']['firstName']);
     }
 
-    public function testException()
+    public function testException() : void
     {
         $this->expectException(JsonSchemaNotFoundException::class);
         $ro = $this->getRo(FakeUser::class);
         $ro->onPost();
     }
 
-    public function testParameterException()
+    public function testParameterException() : void
     {
         $caughtException = null;
         $ro = $this->getRo(FakeUser::class);
@@ -52,7 +52,7 @@ class JsonSchemaFakeModuleTest extends TestCase
         $this->assertInstanceOf(JsonSchemaException::class, $caughtException);
     }
 
-    public function testWorksOnlyCode200()
+    public function testWorksOnlyCode200() : void
     {
         $ro = $this->getRo(FakeUser::class);
         $ro->onPut();

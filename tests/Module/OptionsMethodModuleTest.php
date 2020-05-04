@@ -15,7 +15,7 @@ use Ray\Di\Injector;
 
 class OptionsMethodModuleTest extends TestCase
 {
-    public function testOptionsMethodModule()
+    public function testOptionsMethodModule() : void
     {
         $injector = new Injector(new OptionsMethodModule(new class extends AbstractModule {
             protected function configure()

@@ -17,7 +17,7 @@ class VoidOptionsRendererTest extends TestCase
      *
      * VoidOptionsMethodModule supposed to install in production to disable "OPTIONS" method.
      */
-    public function testVoidOptionsRenderer()
+    public function testVoidOptionsRenderer() : void
     {
         $this->expectException(MethodNotAllowedException::class);
         $injector = new Injector(new VoidOptionsMethodModule(new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox'))), __DIR__ . '/tmp');

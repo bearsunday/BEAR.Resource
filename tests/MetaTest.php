@@ -20,17 +20,17 @@ class MetaTest extends TestCase
         $this->meta = new Meta(Doc::class);
     }
 
-    public function testUri()
+    public function testUri() : void
     {
         $this->assertSame('app://self/doc', $this->meta->uri);
     }
 
-    public function testAllow()
+    public function testAllow() : void
     {
         $this->assertSame(['get', 'post', 'delete'], $this->meta->options->allow);
     }
 
-    public function testParams()
+    public function testParams() : void
     {
         /** @var Params $params */
         $params = $this->meta->options->params[1];

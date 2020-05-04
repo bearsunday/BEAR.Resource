@@ -40,7 +40,7 @@ class InvokerTest extends TestCase
         $this->invoker = (new InvokerFactory)();
     }
 
-    public function testInvoke()
+    public function testInvoke() : void
     {
         $request = new Request($this->invoker, (new FakeRo)(new User), Request::GET, ['id' => 1]);
         $actual = $this->invoker->invoke($request)->body;
@@ -48,7 +48,7 @@ class InvokerTest extends TestCase
         $this->assertSame($actual, $expected);
     }
 
-    public function testInvokerInterfaceDefaultParam()
+    public function testInvokerInterfaceDefaultParam() : void
     {
         $request = new Request($this->invoker, (new FakeRo)(new User), Request::POST, ['id' => 1]);
         $actual = $this->invoker->invoke($request)->body;
@@ -56,21 +56,21 @@ class InvokerTest extends TestCase
         $this->assertSame($actual, $expected);
     }
 
-    public function testInvokerInterfaceDefaultParamWithNoProvider()
+    public function testInvokerInterfaceDefaultParamWithNoProvider() : void
     {
         $this->expectException(ParameterException::class);
         $request = new Request($this->invoker, (new FakeRo)(new User), Request::PUT);
         $this->invoker->invoke($request);
     }
 
-    public function testInvokerInterfaceWithNoProvider()
+    public function testInvokerInterfaceWithNoProvider() : void
     {
         $this->expectException(ParameterException::class);
         $request = new Request($this->invoker, (new FakeRo)(new Blog), Request::GET, []);
         $this->invoker->invoke($request);
     }
 
-    public function testInvokerInterfaceWithUnspecificProviderButNoResult()
+    public function testInvokerInterfaceWithUnspecificProviderButNoResult() : void
     {
         $this->expectException(ParameterException::class);
         $request = new Request($this->invoker, (new FakeRo)(new Comment));
@@ -78,7 +78,7 @@ class InvokerTest extends TestCase
         $this->assertSame('entry1', $actual);
     }
 
-    public function testInvokeWeave()
+    public function testInvokeWeave() : void
     {
         $compiler = new Compiler(__DIR__ . '/tmp');
         $book = $compiler->newInstance(Book::class, [], (new Bind)->bindInterceptors('onGet', [new FakeLogInterceptor]));
@@ -92,7 +92,7 @@ class InvokerTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function testOptionsMethod()
+    public function testOptionsMethod() : string
     {
         $ro = new Doc;
         $request = new Request($this->invoker, $ro, Request::OPTIONS);
@@ -107,7 +107,7 @@ class InvokerTest extends TestCase
     /**
      * @depends testOptionsMethod
      */
-    public function testOptionsMethodBody(string $view)
+    public function testOptionsMethodBody(string $view) : void
     {
         $expected = '{
     "GET": {
@@ -173,7 +173,7 @@ class InvokerTest extends TestCase
         $this->assertSame($expected, $view);
     }
 
-    public function testOptionsMethod2()
+    public function testOptionsMethod2() : void
     {
         $ro = new Order;
         $request = new Request($this->invoker, $ro, Request::OPTIONS);
@@ -183,7 +183,7 @@ class InvokerTest extends TestCase
         $this->assertSame($actual, $expected);
     }
 
-    public function testOptionsWeaver()
+    public function testOptionsWeaver() : void
     {
         $ro = (new Compiler(__DIR__ . '/tmp'))->newInstance(Order::class, [], new Bind);
         if (! $ro instanceof Order) {
@@ -196,7 +196,7 @@ class InvokerTest extends TestCase
         $this->assertSame($actual, $expected);
     }
 
-    public function testInvokeExceptionHandle()
+    public function testInvokeExceptionHandle() : void
     {
         $this->expectException(\InvalidArgumentException::class);
         $outOfRangeId = 4;
@@ -204,21 +204,21 @@ class InvokerTest extends TestCase
         $this->invoker->invoke($request);
     }
 
-    public function testInvalidMethod()
+    public function testInvalidMethod() : void
     {
         $this->expectException(MethodNotAllowedException::class);
         $request = new Request($this->invoker, new Order, Request::DELETE);
         $this->invoker->invoke($request);
     }
 
-    public function testOptionsNotAllowed()
+    public function testOptionsNotAllowed() : void
     {
         $this->expectException(MethodNotAllowedException::class);
         $request = new Request($this->invoker, new Order, Request::DELETE);
         $this->invoker->invoke($request);
     }
 
-    public function testInvokeClassTyped()
+    public function testInvokeClassTyped() : void
     {
         $person = ['age' => 28, 'name' => 'monsley'];
         $request = new Request($this->invoker, (new FakeRo)(new Json), Request::GET, ['specialPerson' => $person]);
@@ -227,7 +227,7 @@ class InvokerTest extends TestCase
         $this->assertSame($actual->age, 28);
     }
 
-    public function testInvokeClassTypedSnakeCase()
+    public function testInvokeClassTypedSnakeCase() : void
     {
         $person = ['age' => 28, 'name' => 'monsley'];
         $request = new Request($this->invoker, (new FakeRo)(new Json), Request::GET, ['special_person' => $person]);
@@ -236,7 +236,7 @@ class InvokerTest extends TestCase
         $this->assertSame($actual->age, 28);
     }
 
-    public function testInvokeClassTypedSnakeParamException()
+    public function testInvokeClassTypedSnakeParamException() : void
     {
         $this->expectException(ParameterException::class);
         $request = new Request($this->invoker, new Json, Request::GET, []);

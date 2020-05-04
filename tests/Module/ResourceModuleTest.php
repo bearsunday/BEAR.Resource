@@ -16,7 +16,7 @@ class ResourceModuleTest extends TestCase
         parent::setUp();
     }
 
-    public function testConfigure()
+    public function testConfigure() : void
     {
         $resource = (new Injector(new ResourceModule('FakeVendor/Sandbox')))->getInstance(ResourceInterface::class);
         $this->assertInstanceOf(Resource::class, $resource);

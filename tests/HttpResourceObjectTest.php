@@ -23,7 +23,7 @@ class HttpResourceObjectTest extends TestCase
         $this->resource = $injector->getInstance(ResourceInterface::class);
     }
 
-    public function testGet()
+    public function testGet() : void
     {
         $response = $this->resource->get('http://httpbin.org/get', ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
@@ -32,7 +32,7 @@ class HttpResourceObjectTest extends TestCase
         $this->assertContains('"args": {', $response->view);
     }
 
-    public function testPost()
+    public function testPost() : void
     {
         $response = $this->resource->post('http://httpbin.org/post', ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
@@ -42,7 +42,7 @@ class HttpResourceObjectTest extends TestCase
         $this->assertContains('"form": {', $response->view);
     }
 
-    public function testPut()
+    public function testPut() : void
     {
         $response = $this->resource->put('http://httpbin.org/put', ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
@@ -52,7 +52,7 @@ class HttpResourceObjectTest extends TestCase
         $this->assertContains('"form": {', $response->view);
     }
 
-    public function testPatch()
+    public function testPatch() : void
     {
         $response = $this->resource->patch('http://httpbin.org/patch', ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
@@ -62,7 +62,7 @@ class HttpResourceObjectTest extends TestCase
         $this->assertContains('"form": {', $response->view);
     }
 
-    public function testDelete()
+    public function testDelete() : void
     {
         $response = $this->resource->delete('http://httpbin.org/delete', ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
@@ -72,28 +72,28 @@ class HttpResourceObjectTest extends TestCase
         $this->assertContains('"form": {', $response->view);
     }
 
-    public function testToString()
+    public function testToString() : void
     {
         $response = $this->resource->get('http://httpbin.org/get', ['foo' => 'bar']);
         $actual = (string) $response;
         $this->assertContains('"args": {', $actual);
     }
 
-    public function testIsSet()
+    public function testIsSet() : void
     {
         $response = $this->resource->get('http://httpbin.org/get', ['foo' => 'bar']);
         $isSet = isset($response->__invalid);
         $this->assertFalse($isSet);
     }
 
-    public function testSet()
+    public function testSet() : void
     {
         $this->expectException(BadFunctionCallException::class);
         $response = $this->resource->get('http://httpbin.org/get', ['foo' => 'bar']);
         $response->foo = '1';
     }
 
-    public function testInvalidGet()
+    public function testInvalidGet() : void
     {
         $this->expectException(InvalidArgumentException::class);
         $response = $this->resource->get('http://httpbin.org/get', ['foo' => 'bar']);
