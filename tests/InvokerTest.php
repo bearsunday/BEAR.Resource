@@ -101,7 +101,7 @@ class InvokerTest extends TestCase
         $expected = 'GET, POST, DELETE';
         $this->assertSame($actual, $expected);
 
-        return $response->view;
+        return (string) $response->view;
     }
 
     /**

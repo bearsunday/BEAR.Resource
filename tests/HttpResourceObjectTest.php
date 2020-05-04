@@ -29,7 +29,7 @@ class HttpResourceObjectTest extends TestCase
         $this->assertSame(200, $response->code);
         $this->assertArrayHasKey('access-control-allow-credentials', $response->headers);
         $this->assertArrayHasKey('args', $response->body);
-        $this->assertStringContainsString('"args": {', $response->view);
+        $this->assertStringContainsString('"args": {', (string) $response->view);
     }
 
     public function testPost() : void
@@ -39,7 +39,7 @@ class HttpResourceObjectTest extends TestCase
         $this->assertArrayHasKey('access-control-allow-credentials', $response->headers);
         $body = $response->body;
         $this->assertSame('bar', $body['form']['foo']);
-        $this->assertStringContainsString('"form": {', $response->view);
+        $this->assertStringContainsString('"form": {', (string) $response->view);
     }
 
     public function testPut() : void
@@ -49,7 +49,7 @@ class HttpResourceObjectTest extends TestCase
         $this->assertArrayHasKey('access-control-allow-credentials', $response->headers);
         $body = $response->body;
         $this->assertSame('bar', $body['form']['foo']);
-        $this->assertStringContainsString('"form": {', $response->view);
+        $this->assertStringContainsString('"form": {', (string) $response->view);
     }
 
     public function testPatch() : void
@@ -59,7 +59,7 @@ class HttpResourceObjectTest extends TestCase
         $this->assertArrayHasKey('access-control-allow-credentials', $response->headers);
         $body = $response->body;
         $this->assertSame('bar', $body['form']['foo']);
-        $this->assertStringContainsString('"form": {', $response->view);
+        $this->assertStringContainsString('"form": {', (string) $response->view);
     }
 
     public function testDelete() : void
@@ -69,7 +69,7 @@ class HttpResourceObjectTest extends TestCase
         $this->assertArrayHasKey('access-control-allow-credentials', $response->headers);
         $body = $response->body;
         $this->assertSame('bar', $body['form']['foo']);
-        $this->assertStringContainsString('"form": {', $response->view);
+        $this->assertStringContainsString('"form": {', (string) $response->view);
     }
 
     public function testToString() : void
