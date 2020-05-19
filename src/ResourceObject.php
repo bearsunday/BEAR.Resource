@@ -5,11 +5,16 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use ArrayAccess;
+use ArrayIterator;
 use Countable;
 use Exception;
 use IteratorAggregate;
 use JsonSerializable;
 
+/**
+ * @phpstan-implements \ArrayAccess<string, mixed>
+ * @phpstan-implements \IteratorAggregate<string, mixed>
+ */
 abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, Countable, IteratorAggregate, JsonSerializable, ToStringInterface
 {
     /**
@@ -29,7 +34,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * Resource header
      *
-     * @var array
+     * @var array<string, string>
      */
     public $headers = [];
 
@@ -50,7 +55,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * Renderer
      *
-     * @var \BEAR\Resource\RenderInterface
+     * @var RenderInterface
      */
     protected $renderer;
 
@@ -92,6 +97,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      * Returns the body value at the specified index
      *
      * @param mixed $offset offset
+     *
+     * @return mixed
      */
     public function offsetGet($offset)
     {
@@ -103,6 +110,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      *
      * @param mixed $offset offset
      * @param mixed $value  value
+     *
+     * @return mixed
      */
     public function offsetSet($offset, $value)
     {
@@ -126,7 +135,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      *
      * @param mixed $offset offset
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset) : void
     {
         unset($this->body[$offset]);
     }
@@ -144,7 +153,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * Sort the entries by key
      */
-    public function ksort()
+    public function ksort() : void
     {
         if (! is_array($this->body)) {
             return;
@@ -155,7 +164,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * Sort the entries by key
      */
-    public function asort()
+    public function asort() : void
     {
         if (! is_array($this->body)) {
             return;
@@ -164,28 +173,21 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     }
 
     /**
-     * Get array iterator
-     *
-     * @return \ArrayIterator
+     * @return ArrayIterator<string, mixed>
      */
-    public function getIterator()
+    public function getIterator() : ArrayIterator
     {
         $isTraversal = (is_array($this->body) || $this->body instanceof \Traversable);
 
-        return $isTraversal ? new \ArrayIterator($this->body) : new \ArrayIterator([]);
+        return $isTraversal ? new ArrayIterator($this->body) : new ArrayIterator([]);
     }
 
     /**
-     * Set renderer
-     *
-     * @return $this
      * @Ray\Di\Di\Inject(optional=true)
      */
-    public function setRenderer(RenderInterface $renderer)
+    public function setRenderer(RenderInterface $renderer) : void
     {
         $this->renderer = $renderer;
-
-        return $this;
     }
 
     /**
@@ -193,9 +195,6 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      */
     public function toString()
     {
-        if ($this->view !== null) {
-            return $this->view;
-        }
         if (! $this->renderer instanceof RenderInterface) {
             $this->renderer = new JsonRenderer;
         }
@@ -203,11 +202,13 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         return $this->renderer->render($this);
     }
 
-    public function jsonSerialize()
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize() : array
     {
         $body = $this->evaluate($this->body);
-        $isTraversable = is_array($body) || $body instanceof \Traversable;
-        if (! $isTraversable) {
+        if (! is_iterable($body)) {
             return ['value' => $body];
         }
 
@@ -217,11 +218,16 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * {@inheritdoc}
      */
-    public function transfer(TransferInterface $responder, array $server)
+    public function transfer(TransferInterface $responder, array $server) : void
     {
         $responder($this, $server);
     }
 
+    /**
+     * @param mixed $body
+     *
+     * @return array<string, mixed>|bool|int|string
+     */
     private function evaluate($body)
     {
         if (is_array($body)) {

@@ -13,6 +13,9 @@ class JsonSchemaExceptionFakeHandler implements JsonSchemaExceptionHandlerInterf
 
     const X_JSON_SCHEMA_EXCEPTION = 'X-JSON-Schema-Exception';
 
+    /**
+     * {@inheritdoc}
+     */
     public function handle(ResourceObject $ro, JsonSchemaException $e, string $schemaFile)
     {
         $ro->headers[self::X_FAKE_JSON] = $schemaFile;
@@ -21,6 +24,9 @@ class JsonSchemaExceptionFakeHandler implements JsonSchemaExceptionHandlerInterf
         $ro->view = null;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function fakeResponse(string $schemaFile) : array
     {
         $fakeObject = (new Faker)->generate(new \SplFileInfo($schemaFile));
@@ -28,6 +34,11 @@ class JsonSchemaExceptionFakeHandler implements JsonSchemaExceptionHandlerInterf
         return $this->deepArray($fakeObject);
     }
 
+    /**
+     * @param array<string, mixed> $values
+     *
+     * @return array<string, mixed>
+     */
     private function deepArray($values) : array
     {
         $result = [];

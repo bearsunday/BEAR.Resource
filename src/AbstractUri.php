@@ -24,7 +24,7 @@ abstract class AbstractUri
     /**
      * Associative query array
      *
-     * @var array
+     * @var array<string, mixed>
      */
     public $query = [];
 

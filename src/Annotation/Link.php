@@ -46,7 +46,10 @@ final class Link implements \JsonSerializable
      */
     public $crawl = '';
 
-    public function jsonSerialize()
+    /**
+     * @return array<string, string>
+     */
+    public function jsonSerialize() : array
     {
         $json = [
             'rel' => $this->rel,

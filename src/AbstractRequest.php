@@ -4,16 +4,23 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+use ArrayAccess;
+use ArrayIterator;
 use BEAR\Resource\Exception\MethodException;
 use BEAR\Resource\Exception\OutOfBoundsException;
+use IteratorAggregate;
+use Serializable;
 
 /**
  * @property string $code
  * @property array  $headers
  * @property mixed  $body
  * @property string $view
+ *
+ * @implements IteratorAggregate<string|null, mixed>
+ * @implements ArrayAccess<string, mixed>
  */
-abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \IteratorAggregate, \Serializable
+abstract class AbstractRequest implements RequestInterface, ArrayAccess, IteratorAggregate, Serializable
 {
     const GET = 'get';
 
@@ -46,14 +53,14 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     /**
      * Query
      *
-     * @var array
+     * @var array<string, mixed>
      */
     public $query = [];
 
     /**
      * Options
      *
-     * @var array
+     * @var array<mixed>
      */
     public $options = [];
 
@@ -67,12 +74,12 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     /**
      * Links
      *
-     * @var \BEAR\Resource\LinkType[]
+     * @var LinkType[]
      */
     public $links = [];
 
     /**
-     * @var ResourceObject
+     * @var ResourceObject<string, mixed>
      */
     public $resourceObject;
 
@@ -94,6 +101,9 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     private $linker;
 
     /**
+     * @param array<string, mixed> $query
+     * @param array<int, LinkType> $links
+     *
      * @throws MethodException
      */
     public function __construct(
@@ -130,6 +140,8 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
 
     /**
      * {@inheritdoc}
+     *
+     * @param array<string, mixed> $query
      */
     public function __invoke(array $query = null) : ResourceObject
     {
@@ -146,6 +158,8 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
 
     /**
      * {@inheritdoc}
+     *
+     * @return array<string, string>|int
      */
     public function __get(string $name)
     {
@@ -208,7 +222,7 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     /**
      * {@inheritdoc}
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset) : bool
     {
         $this->invoke();
 
@@ -216,14 +230,16 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
     }
 
     /**
-     * {@inheritdoc}
+     * Invoke resource request then return resource body iterator
+     *
+     * @return ArrayIterator<null|string, mixed>
      */
-    public function getIterator()
+    public function getIterator() : ArrayIterator
     {
         $this->invoke();
         $isArray = (is_array($this->result->body) || $this->result->body instanceof \Traversable);
 
-        return $isArray ? new \ArrayIterator($this->result->body) : new \ArrayIterator([]);
+        return $isArray ? new ArrayIterator($this->result->body) : new ArrayIterator([]);
     }
 
     /**
@@ -236,6 +252,8 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
 
     /**
      * {@inheritdoc}
+     *
+     * @return string
      */
     public function serialize()
     {
@@ -244,8 +262,10 @@ abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \Itera
 
     /**
      * {@inheritdoc}
+     *
+     * @param string $serialized
      */
-    public function unserialize($serialized)
+    public function unserialize($serialized) : void
     {
         throw new \LogicException(__METHOD__ . ' not supported');
     }

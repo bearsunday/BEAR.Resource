@@ -29,6 +29,9 @@ final class NamedParamMetas implements NamedParamMetasInterface
         $this->reader = $reader;
     }
 
+    /**
+     * @return array|ParamInterface[]
+     */
     public function __invoke(callable $callable) : array
     {
         if (! is_array($callable) || ! is_object($callable[0])) {
@@ -50,6 +53,11 @@ final class NamedParamMetas implements NamedParamMetasInterface
         return $namedParamMetas;
     }
 
+    /**
+     * @param array<Assisted|ResourceParam> $annotations
+     *
+     * @return array<string, ParamInterface>
+     */
     private function getAssistedNames(array $annotations) : array
     {
         $names = [];
@@ -65,6 +73,11 @@ final class NamedParamMetas implements NamedParamMetasInterface
         return $names;
     }
 
+    /**
+     * @param array<object> $annotations
+     *
+     * @return array<string, AbstractWebContextParam>
+     */
     private function getWebContext(array $annotations) : array
     {
         $webcontext = [];
@@ -77,9 +90,13 @@ final class NamedParamMetas implements NamedParamMetasInterface
         return $webcontext;
     }
 
+    /**
+     * @param array<string, ParamInterface> $names
+     *
+     * @return array<string, ParamInterface>
+     */
     private function setAssistedAnnotation(array $names, Assisted $assisted) : array
     {
-        /* @var $annotation Assisted */
         foreach ($assisted->values as $assistedParam) {
             $names[$assistedParam] = new AssistedParam;
         }
@@ -88,7 +105,9 @@ final class NamedParamMetas implements NamedParamMetasInterface
     }
 
     /**
-     * @param \ReflectionParameter[] $parameters
+     * @param \ReflectionParameter[]                 $parameters
+     * @param array<string, ParamInterface>          $assistedNames
+     * @param array<string, AbstractWebContextParam> $webcontext
      *
      * @return ParamInterface[]
      */

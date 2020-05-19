@@ -7,9 +7,13 @@ namespace BEAR\Resource;
 use BEAR\Resource\Annotation\ResourceParam;
 use Doctrine\Common\Annotations\Reader;
 use Ray\Di\Di\Assisted;
+use ReflectionParameter;
 
 final class OptionsMethodRequest
 {
+    /**
+     * @var Reader
+     */
     private $reader;
 
     public function __construct(Reader $reader)
@@ -17,17 +21,28 @@ final class OptionsMethodRequest
         $this->reader = $reader;
     }
 
+    /**
+     * Parameter #2 $paramMetas of method BEAR\Resource\OptionsMethodRequest::ignoreAnnotatedPrameter() expects array('parameters' => array<string, array('type' =>
+     *
+     * @param array<string, array{type: string, description?: string}> $paramDoc
+     * @param array<string, string>                                    $ins
+     *
+     * @return array{parameters?: array<string, array{type?: string, description?: string, default?: string}>, required?: array<int, string>}
+     */
     public function __invoke(\ReflectionMethod $method, array $paramDoc, array $ins) : array
     {
+        var_dump($paramDoc);
         $paramMetas = $this->getParamMetas($method->getParameters(), $paramDoc, $ins);
 
         return $this->ignoreAnnotatedPrameter($method, $paramMetas);
     }
 
     /**
-     * @return null|string
+     * @param array<string, array{type?: string, description?: string}> $paramDoc
+     *
+     * @return ?string
      */
-    private function getParameterType(\ReflectionParameter $parameter, array $paramDoc, string $name)
+    private function getParameterType(ReflectionParameter $parameter, array $paramDoc, string $name)
     {
         $hasType = method_exists($parameter, 'getType') && $parameter->getType();
         if ($hasType) {
@@ -36,16 +51,26 @@ final class OptionsMethodRequest
         if (isset($paramDoc[$name]['type'])) {
             return $paramDoc[$name]['type'];
         }
+
+        return null;
     }
 
+    /**
+     * @param array<ReflectionParameter>                               $parameters
+     * @param array<string, array{type: string, description?: string}> $paramDoc
+     * @param array<string, string>                                    $ins
+     *
+     * @return array{parameters?: array<string, array{type?: string}>, required?: array<int, string>}
+     */
     private function getParamMetas(array $parameters, array $paramDoc, array $ins) : array
     {
         foreach ($parameters as $parameter) {
-            if (isset($ins[$parameter->name])) {
-                $paramDoc[$parameter->name]['in'] = $ins[$parameter->name];
+            $name = (string) $parameter->name;
+            if (isset($ins[$name])) {
+                $paramDoc[$name]['in'] = $ins[$parameter->name];
             }
             if (! isset($paramDoc[$parameter->name])) {
-                $paramDoc[$parameter->name] = [];
+                $paramDoc[$name] = [];
             }
             $paramDoc = $this->paramType($paramDoc, $parameter);
             $paramDoc = $this->paramDefault($paramDoc, $parameter);
@@ -56,7 +81,9 @@ final class OptionsMethodRequest
     }
 
     /**
-     * @param \ReflectionParameter[] $parameters
+     * @param array<ReflectionParameter> $parameters
+     *
+     * @return array<int, string>
      */
     private function getRequired(array $parameters) : array
     {
@@ -70,28 +97,40 @@ final class OptionsMethodRequest
         return $required;
     }
 
-    private function paramDefault(array $paramDoc, \ReflectionParameter $parameter) : array
+    /**
+     * @param array<string, array{type?: string, description?: string}> $paramDoc
+     *
+     * @throws \ReflectionException
+     *
+     * @return array<string, array{type?: string, description?: string, default?: string}>
+     */
+    private function paramDefault(array $paramDoc, ReflectionParameter $parameter) : array
     {
         $hasDefault = $parameter->isDefaultValueAvailable() && $parameter->getDefaultValue() !== null;
         if ($hasDefault) {
             $default = $parameter->getDefaultValue();
-            $paramDoc[$parameter->name]['default'] = is_array($default) ? '[]' : (string) $parameter->getDefaultValue();
+            $paramDoc[(string) $parameter->name]['default'] = is_array($default) ? '[]' : (string) $parameter->getDefaultValue();
         }
 
         return $paramDoc;
     }
 
-    private function paramType(array $paramDoc, \ReflectionParameter $parameter) : array
+    /**
+     * @param array<string, array{type?: string, description?: string, default?: string, in?: string}> $paramDoc
+     *
+     * @return array<string, array{type?: string, description?: string, default?: string, in?: string}>
+     */
+    private function paramType(array $paramDoc, ReflectionParameter $parameter) : array
     {
         $type = $this->getParameterType($parameter, $paramDoc, $parameter->name);
         if (is_string($type)) {
-            $paramDoc[$parameter->name]['type'] = $type;
+            $paramDoc[(string) $parameter->name]['type'] = $type; // override type parameter by reflection over phpdoc param type
         }
 
         return $paramDoc;
     }
 
-    private function getType(\ReflectionParameter $parameter) : string
+    private function getType(ReflectionParameter $parameter) : string
     {
         $namedType = $parameter->getType();
         assert($namedType instanceof \ReflectionNamedType);
@@ -105,14 +144,18 @@ final class OptionsMethodRequest
 
     /**
      * Ignore @ Assisted @ ResourceParam parameter
+     *
+     * @param array{parameters?: array<string, array{type?: string}>, required?: array<int, string>} $paramMetas
+     *
+     * @return array{parameters?: array<string, array{type?: string, description?: string}>, required?: array<int, string>}
      */
     private function ignoreAnnotatedPrameter(\ReflectionMethod $method, array $paramMetas) : array
     {
         $annotations = $this->reader->getMethodAnnotations($method);
         foreach ($annotations as $annotation) {
             if ($annotation instanceof ResourceParam) {
-                unset($paramMetas['parameters'][$annotation->param]);
-                $paramMetas['required'] = array_values(array_diff($paramMetas['required'], [$annotation->param]));
+                unset($paramMetas['parameters'][$annotation->param]); // @phpstan-ignore-line
+                $paramMetas['required'] = array_values(array_diff($paramMetas['required'], [$annotation->param])); // @phpstan-ignore-line
             }
             if ($annotation instanceof Assisted) {
                 $paramMetas = $this->ignorreAssisted($paramMetas, $annotation);
@@ -124,17 +167,27 @@ final class OptionsMethodRequest
 
     /**
      * Ignore @ Assisted parameter
+     *
+     * @param array{parameters?: array<string, array{type?: string, description?: string}>, required?: array<int, string>} $paramMetas
+     *
+     * @return array{parameters?: array<string, array{type?: string, description?: string}>, required: array<int, string>}
      */
     private function ignorreAssisted(array $paramMetas, Assisted $annotation) : array
     {
-        $paramMetas['required'] = array_values(array_diff($paramMetas['required'], $annotation->values));
+        $paramMetas['required'] = array_values(array_diff($paramMetas['required'], $annotation->values)); // @phpstan-ignore-line
         foreach ($annotation->values as $varName) {
-            unset($paramMetas['parameters'][$varName]);
+            unset($paramMetas['parameters'][$varName]); // @phpstan-ignore-lineJsonSchemaInterceptor.php
         }
 
         return $paramMetas;
     }
 
+    /**
+     * @param array<string, array{type?: string}> $paramDoc
+     * @param array<int, string>                  $required
+     *
+     * @return array{parameters?: array<string, array{type?: string}>, required?: array<int, string>}
+     */
     private function setParamMetas(array $paramDoc, array $required) : array
     {
         $paramMetas = [];

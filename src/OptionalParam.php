@@ -6,10 +6,19 @@ namespace BEAR\Resource;
 
 use Ray\Di\InjectorInterface;
 
+/**
+ * @template T
+ */
 final class OptionalParam implements ParamInterface
 {
+    /**
+     * @var T
+     */
     private $defaultValue;
 
+    /**
+     * @param T $defaultValue
+     */
     public function __construct($defaultValue)
     {
         $this->defaultValue = $defaultValue;

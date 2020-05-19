@@ -9,6 +9,9 @@ use Ray\Di\InjectorInterface;
 
 final class AssistedResourceParam implements ParamInterface
 {
+    /**
+     * @var ResourceParam
+     */
     private $resourceParam;
 
     public function __construct(ResourceParam $resourceParam)

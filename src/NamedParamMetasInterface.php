@@ -6,5 +6,8 @@ namespace BEAR\Resource;
 
 interface NamedParamMetasInterface
 {
+    /**
+     * @return array<string, ParamInterface>
+     */
     public function __invoke(callable $callable) : array;
 }

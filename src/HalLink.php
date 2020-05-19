@@ -25,6 +25,10 @@ final class HalLink
         return ($this->link)($uri);
     }
 
+    /**
+     * @param array<string, mixed> $body
+     * @param array<int, object>   $methodAnnotations
+     */
     public function addHalLink(array $body, array $methodAnnotations, Hal $hal) : Hal
     {
         if (! empty($methodAnnotations)) {
@@ -37,6 +41,10 @@ final class HalLink
         return $hal;
     }
 
+    /**
+     * @param array<string, mixed> $body
+     * @param array<int, object>   $methodAnnotations
+     */
     private function linkAnnotation(array $body, array $methodAnnotations, Hal $hal) : Hal
     {
         foreach ($methodAnnotations as $annotation) {
@@ -55,6 +63,9 @@ final class HalLink
         return $hal;
     }
 
+    /**
+     * @param array<string, mixed> $body
+     */
     private function bodyLink(array $body, Hal $hal) : Hal
     {
         foreach ((array) $body['_links'] as $rel => $link) {
