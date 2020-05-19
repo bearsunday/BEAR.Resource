@@ -49,7 +49,7 @@ class JsonRendererTest extends TestCase
         $this->ro['inf'] = log(0);
         $data = (string) $this->ro;
         $this->assertIsString($data);
-        ini_set('error_log', $log);
+        ini_set('error_log', (string) $log);
         $this->assertStringContainsString('json_encode error', (string) file_get_contents($logFile));
     }
 
@@ -57,7 +57,7 @@ class JsonRendererTest extends TestCase
     {
         /* @var $ro ResourceObject */
         $ro = $this->ro->onGet();
-        (string) $ro;
+        (string) $ro; // @phpstan-ignore-line
         $expected = 'application/json';
         $this->assertSame($expected, $ro->headers['Content-Type']);
     }

@@ -26,11 +26,6 @@ class InvokerTest extends TestCase
     protected $invoker;
 
     /**
-     * @var array
-     */
-    protected $query = [];
-
-    /**
      * @var Request
      */
     protected $request;

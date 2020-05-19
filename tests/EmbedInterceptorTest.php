@@ -60,7 +60,7 @@ class EmbedInterceptorTest extends TestCase
     public function testInvokeAnotherLink(ResourceObject $result) : ResourceObject
     {
         $profile = $result['bird2'];
-        /* @var $profile Request */
+        assert($profile instanceof Request);
         $this->assertInstanceOf('BEAR\Resource\Request', $profile);
         $this->assertSame('get app://self/bird/sparrow?id=1', $profile->toUriWithMethod());
 
@@ -80,7 +80,7 @@ class EmbedInterceptorTest extends TestCase
     public function testEmbedAnnotation() : Request
     {
         $request = $this->resource->get->uri('app://self/bird/birds')->withQuery(['id' => 1])->request();
-        /* @var $request Request */
+        assert($request instanceof Request);
         $this->assertSame('app://self/bird/birds?id=1', $request->toUri());
         $ro = $request();
         $bird1 = $ro['bird1'];
@@ -124,10 +124,9 @@ class EmbedInterceptorTest extends TestCase
             ->uri('app://self/bird/sparrows')
             ->withQuery(['id_request' => 3, 'id_object' => 5, 'id_eager_request' => 7])
             ->request();
-
+        assert($request instanceof Request);
         $this->assertSame('app://self/bird/sparrows?id_request=3&id_object=5&id_eager_request=7', $request->toUri());
-
-        /* @var $request Request */
+        assert($request instanceof Request);
         $ro = $request();
         /* @var $birdRequest Request */
         $birdRequest = $ro['birdRequest'];

@@ -114,7 +114,7 @@ class ResourceTest extends TestCase
     public function testLinkSelf() : void
     {
         $request = $this->resource->get->uri('app://self/author')->withQuery(['id' => 1])->linkSelf('blog')->request();
-        /* @var $request Request */
+        assert($request instanceof Request);
         $this->assertSame('blog', $request->links[0]->key);
         $this->assertSame(LinkType::SELF_LINK, $request->links[0]->type);
         $ro = $request();
@@ -126,7 +126,7 @@ class ResourceTest extends TestCase
     public function testLinkNew() : void
     {
         $request = $this->resource->get->uri('app://self/author')->withQuery(['id' => 1])->linkNew('blog')->request();
-        /* @var $request Request */
+        assert($request instanceof Request);
         $this->assertSame('blog', $request->links[0]->key);
         $this->assertSame(LinkType::NEW_LINK, $request->links[0]->type);
         $ro = $request();
@@ -142,10 +142,13 @@ class ResourceTest extends TestCase
         );
     }
 
+    /**
+     * @return array<string, array|int|string>
+     */
     public function testLinkCrawl() : array
     {
         $request = $this->resource->get->uri('app://self/blog')->withQuery(['id' => 11])->linkCrawl('tree')->request();
-        /* @var $request Request */
+        assert($request instanceof Request);
         $this->assertSame('tree', $request->links[0]->key);
         $this->assertSame(LinkType::CRAWL_LINK, $request->links[0]->type);
         $ro = $request();
