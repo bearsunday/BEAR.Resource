@@ -115,18 +115,19 @@ final class NamedParamMetas implements NamedParamMetasInterface
     {
         $names = [];
         foreach ($parameters as $parameter) {
-            if (isset($assistedNames[$parameter->name])) {
-                $names[$parameter->name] = $assistedNames[$parameter->name];
+            $name = (string) $parameter->name;
+            if (isset($assistedNames[$name])) {
+                $names[$name] = $assistedNames[$parameter->name];
 
                 continue;
             }
-            if (isset($webcontext[$parameter->name])) {
+            if (isset($webcontext[$name])) {
                 $default = $this->getDefault($parameter);
-                $names[$parameter->name] = new AssistedWebContextParam($webcontext[$parameter->name], $default);
+                $names[$name] = new AssistedWebContextParam($webcontext[$name], $default);
 
                 continue;
             }
-            $names[$parameter->name] = $this->getParam($parameter);
+            $names[$name] = $this->getParam($parameter);
         }
 
         return $names;
