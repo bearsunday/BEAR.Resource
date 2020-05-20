@@ -21,6 +21,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      * Uri
      *
      * @var AbstractUri
+     * @psalm-suppress PropertyNotSetInConstructor
      */
     public $uri;
 
