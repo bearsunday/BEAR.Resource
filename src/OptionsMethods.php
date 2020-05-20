@@ -108,7 +108,9 @@ final class OptionsMethods
         $annotations = $this->reader->getMethodAnnotations($method);
         foreach ($annotations as $annotation) {
             if ($annotation instanceof AbstractWebContextParam) {
-                $ins[$annotation->param] = self::WEB_CONTEXT_NAME[get_class($annotation)];
+                $class = get_class($annotation);
+                assert(class_exists($class));
+                $ins[$annotation->param] = self::WEB_CONTEXT_NAME[$class];
             }
         }
 
