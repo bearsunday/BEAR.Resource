@@ -55,7 +55,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * Renderer
      *
-     * @var RenderInterface
+     * @var ?RenderInterface
      */
     protected $renderer;
 
