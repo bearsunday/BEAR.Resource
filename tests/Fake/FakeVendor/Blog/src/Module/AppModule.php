@@ -12,7 +12,7 @@ use Ray\Di\AbstractModule;
 
 class AppModule extends AbstractModule
 {
-    protected function configure()
+    protected function configure() : void
     {
         $this->install(new ResourceModule('FakeVendor\Blog'));
         $this->install(new HalModule());

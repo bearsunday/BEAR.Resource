@@ -10,7 +10,7 @@ use Ray\Di\AbstractModule;
 
 class FakeAssistedModule extends AbstractModule
 {
-    protected function configure()
+    protected function configure() : void
     {
         $this->bind()->annotatedWith('login_id')->toInstance('assisted01');
     }

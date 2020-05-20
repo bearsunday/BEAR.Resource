@@ -43,7 +43,7 @@ class ImportAppModule extends AbstractModule
      *
      * @throws \Ray\Di\Exception\NotFound
      */
-    protected function configure()
+    protected function configure() : void
     {
         $this->bind()->annotatedWith(ImportAppConfig::class)->toInstance($this->importAppConfig);
         $this->bind(SchemeCollectionInterface::class)->toProvider(ImportSchemeCollectionProvider::class);

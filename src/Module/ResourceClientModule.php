@@ -45,7 +45,7 @@ class ResourceClientModule extends AbstractModule
      *
      * @throws \Ray\Di\Exception\NotFound
      */
-    protected function configure()
+    protected function configure() : void
     {
         $this->bind(UriFactory::class);
         $this->bind(ResourceInterface::class)->to(Resource::class)->in(Scope::SINGLETON);

@@ -15,7 +15,7 @@ class EmbedResourceModule extends AbstractModule
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure() : void
     {
         $this->bind(Reader::class)->to(AnnotationReader::class);
         $this->bindInterceptor(
