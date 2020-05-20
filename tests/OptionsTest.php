@@ -28,7 +28,8 @@ class OptionsTest extends TestCase
 
     protected function setUp() : void
     {
-        $this->invoker = (new InvokerFactory)($_ENV['schema_dir']);
+        $schemaDir = __DIR__ . '/Fake/json_schema';
+        $this->invoker = (new InvokerFactory)($schemaDir);
     }
 
     public function testOptionsMethod() : DocPhp7
