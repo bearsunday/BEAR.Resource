@@ -79,7 +79,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     public $links = [];
 
     /**
-     * @var ResourceObject<string, mixed>
+     * @var ResourceObject
      */
     public $resourceObject;
 

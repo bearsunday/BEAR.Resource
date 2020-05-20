@@ -13,7 +13,7 @@ use JsonSerializable;
 
 /**
  * @phpstan-implements \ArrayAccess<string, mixed>
- * @phpstan-implements \IteratorAggregate<string, mixed>
+ * @phpstan-implements \IteratorAggregate<int|string, mixed>
  */
 abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, Countable, IteratorAggregate, JsonSerializable, ToStringInterface
 {
@@ -173,7 +173,10 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     }
 
     /**
-     * @return ArrayIterator<string, mixed>
+     * @return ArrayIterator<int|string, mixed>
+     *
+     * @phpstan-return ArrayIterator<int|string, mixed>
+     * @psalm-return ArrayIterator<empty, empty>|ArrayIterator<int|string, mixed>
      */
     public function getIterator() : ArrayIterator
     {
