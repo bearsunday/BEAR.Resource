@@ -98,7 +98,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
     private function setAssistedAnnotation(array $names, Assisted $assisted) : array
     {
         foreach ($assisted->values as $assistedParam) {
-            $names[$assistedParam] = new AssistedParam;
+            $names[(string) $assistedParam] = new AssistedParam;
         }
 
         return $names;
