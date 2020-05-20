@@ -111,7 +111,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      * @param mixed $offset offset
      * @param mixed $value  value
      *
-     * @return mixed
+     * @return void
      */
     public function offsetSet($offset, $value)
     {
