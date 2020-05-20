@@ -19,6 +19,7 @@ use Serializable;
  *
  * @implements IteratorAggregate<string|null, mixed>
  * @implements ArrayAccess<string, mixed>
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 abstract class AbstractRequest implements RequestInterface, ArrayAccess, IteratorAggregate, Serializable
 {
@@ -40,6 +41,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      * URI
      *
      * @var string
+     * @psalm-suppress PropertyNotSetInConstructor for DSL
      */
     public $uri;
 
@@ -67,9 +69,9 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     /**
      * Request option (eager or lazy)
      *
-     * @var string
+     * @var 'eager'|'lazy'
      */
-    public $in;
+    public $in = 'lazy';
 
     /**
      * Links
