@@ -28,13 +28,6 @@ final class ImportApp
     public $context;
 
     /**
-     * Script dir
-     *
-     * @var string
-     */
-    public $scriptDir;
-
-    /**
      * @param string $host
      * @param string $appName
      * @param string $context
