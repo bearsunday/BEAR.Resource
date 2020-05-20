@@ -32,6 +32,8 @@ final class Anchor implements AnchorInterface
         $annotations = $this->reader->getMethodAnnotations(new \ReflectionMethod(get_class($request->resourceObject), $classMethod));
         foreach ($annotations as $annotation) {
             if ($this->isValidLinkAnnotation($annotation, $rel)) {
+                assert($annotation instanceof LinkAnnotation);
+
                 return $this->getMethodUri($request, $query, $annotation);
             }
         }
