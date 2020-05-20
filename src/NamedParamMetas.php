@@ -30,7 +30,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
     }
 
     /**
-     * @return array|ParamInterface[]
+     * {@inheritdoc}
      */
     public function __invoke(callable $callable) : array
     {
@@ -109,7 +109,9 @@ final class NamedParamMetas implements NamedParamMetasInterface
      * @param array<string, ParamInterface>          $assistedNames
      * @param array<string, AbstractWebContextParam> $webcontext
      *
-     * @return ParamInterface[]
+     * @return (AssistedWebContextParam|ParamInterface)[]
+     *
+     * @psalm-return array<string, AssistedWebContextParam|ParamInterface>
      */
     private function addNamedParams(array $parameters, array $assistedNames, array $webcontext) : array
     {
@@ -133,12 +135,22 @@ final class NamedParamMetas implements NamedParamMetasInterface
         return $names;
     }
 
-    private function getDefault(\ReflectionParameter $parameter) : ParamInterface
+    /**
+     * @return DefaultParam|NoDefaultParam
+     *
+     * @psalm-return DefaultParam<mixed>|NoDefaultParam
+     */
+    private function getDefault(\ReflectionParameter $parameter)
     {
         return $parameter->isDefaultValueAvailable() === true ? new DefaultParam($parameter->getDefaultValue()) : new NoDefaultParam();
     }
 
-    private function getParam(\ReflectionParameter $parameter) : ParamInterface
+    /**
+     * @return ClassParam|OptionalParam|RequiredParam
+     *
+     * @psalm-return ClassParam|OptionalParam<mixed>|RequiredParam
+     */
+    private function getParam(\ReflectionParameter $parameter)
     {
         $class = $parameter->getClass();
         if ($class instanceof \ReflectionClass) {

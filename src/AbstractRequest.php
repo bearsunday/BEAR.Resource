@@ -19,6 +19,7 @@ use Serializable;
  *
  * @implements IteratorAggregate<string|null, mixed>
  * @implements ArrayAccess<string, mixed>
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 abstract class AbstractRequest implements RequestInterface, ArrayAccess, IteratorAggregate, Serializable
 {
@@ -40,6 +41,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      * URI
      *
      * @var string
+     * @psalm-suppress PropertyNotSetInConstructor for DSL
      */
     public $uri;
 
@@ -67,9 +69,9 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     /**
      * Request option (eager or lazy)
      *
-     * @var string
+     * @var 'eager'|'lazy'
      */
-    public $in;
+    public $in = 'lazy';
 
     /**
      * Links
@@ -79,14 +81,14 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     public $links = [];
 
     /**
-     * @var ResourceObject<string, mixed>
+     * @var ResourceObject
      */
     public $resourceObject;
 
     /**
      * Request Result
      *
-     * @var ResourceObject
+     * @var ?ResourceObject
      */
     protected $result;
 
@@ -212,6 +214,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     public function offsetGet($offset)
     {
         $this->invoke();
+        assert($this->result instanceof ResourceObject);
         if (! isset($this->result->body[$offset])) {
             throw new OutOfBoundsException("[${offset}] for object[" . get_class($this->result) . ']', 400);
         }
@@ -225,6 +228,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     public function offsetExists($offset) : bool
     {
         $this->invoke();
+        assert($this->result instanceof ResourceObject);
 
         return isset($this->result->body[$offset]);
     }
@@ -233,10 +237,13 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      * Invoke resource request then return resource body iterator
      *
      * @return ArrayIterator<null|string, mixed>
+     * @phpstan-return ArrayIterator<null|string, mixed>
+     * @psalm-return ArrayIterator
      */
     public function getIterator() : ArrayIterator
     {
         $this->invoke();
+        assert($this->result instanceof ResourceObject);
         $isArray = (is_array($this->result->body) || $this->result->body instanceof \Traversable);
 
         return $isArray ? new ArrayIterator($this->result->body) : new ArrayIterator([]);

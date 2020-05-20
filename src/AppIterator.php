@@ -122,7 +122,7 @@ final class AppIterator implements Iterator
     {
         $pathName = $file->getPathname();
         $declaredClasses = get_declared_classes();
-        /** @noinspection PhpIncludeInspection */
+        assert(file_exists($pathName));
         include_once $pathName;
         $newClasses = array_values(array_diff_key(get_declared_classes(), $declaredClasses));
         $name = $this->getName($newClasses);
@@ -132,8 +132,10 @@ final class AppIterator implements Iterator
 
     /**
      * @param array<class-string> $newClasses
+     *
+     * @return class-string|string
      */
-    private function getName(array $newClasses) : string
+    private function getName(array $newClasses)
     {
         foreach ($newClasses as $newClass) {
             $parent = (new \ReflectionClass($newClass))->getParentClass();

@@ -45,6 +45,7 @@ final class Resource implements ResourceInterface
      * Request
      *
      * @var Request
+     * @psalm-suppress PropertyNotSetInConstructor
      */
     private $request;
 
@@ -85,10 +86,8 @@ final class Resource implements ResourceInterface
 
     /**
      * @param string $name
-     *
-     * @return $this
      */
-    public function __get($name)
+    public function __get($name) : self
     {
         $this->method = $name;
 

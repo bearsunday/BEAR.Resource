@@ -7,6 +7,8 @@ namespace BEAR\Resource;
 /**
  * @property $this $lazy
  * @property $this $eager
+ *
+ * @psalm-suppress PropertyNotSetInConstructor for DSL
  */
 final class Request extends AbstractRequest
 {
@@ -25,7 +27,9 @@ final class Request extends AbstractRequest
     const OPTIONS = 'options';
 
     /**
-     * @return array<mixed, mixed>|int|self|string
+     * @return array<string, string>|int|self
+     *
+     * @psalm-suppress ImplementedReturnTypeMismatch
      */
     public function __get(string $name)
     {

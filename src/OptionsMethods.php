@@ -55,7 +55,7 @@ final class OptionsMethods
     /**
      * return array{summary?: string, description?: string, request: array, links: array, embed: array}
      *
-     * @return array<string, array|string>
+     * @return array<int|string, array|string>
      */
     public function __invoke(ResourceObject $ro, string $requestMethod) : array
     {
@@ -79,7 +79,10 @@ final class OptionsMethods
     }
 
     /**
-     * @return array<string, mixed>
+     * @return (Embed|Link)[][]
+     *
+     * @phpstan-return (Embed|Link)[][]
+     * @psalm-return array{links?: non-empty-list<Link>, embed?: non-empty-list<Embed>}
      */
     private function getMethodExtras(\ReflectionMethod $method) : array
     {
@@ -106,7 +109,9 @@ final class OptionsMethods
         $annotations = $this->reader->getMethodAnnotations($method);
         foreach ($annotations as $annotation) {
             if ($annotation instanceof AbstractWebContextParam) {
-                $ins[$annotation->param] = self::WEB_CONTEXT_NAME[get_class($annotation)];
+                $class = get_class($annotation);
+                assert(class_exists($class));
+                $ins[$annotation->param] = self::WEB_CONTEXT_NAME[$class];
             }
         }
 

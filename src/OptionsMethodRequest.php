@@ -40,6 +40,8 @@ final class OptionsMethodRequest
      * @param array<string, array{type?: string, description?: string}> $paramDoc
      *
      * @return ?string
+     *
+     * @psalm-suppress RedundantCondition for BC
      */
     private function getParameterType(ReflectionParameter $parameter, array $paramDoc, string $name)
     {
@@ -82,7 +84,9 @@ final class OptionsMethodRequest
     /**
      * @param array<ReflectionParameter> $parameters
      *
-     * @return array<int, string>
+     * @return string[]
+     *
+     * @psalm-return list<string>
      */
     private function getRequired(array $parameters) : array
     {
@@ -153,8 +157,10 @@ final class OptionsMethodRequest
         $annotations = $this->reader->getMethodAnnotations($method);
         foreach ($annotations as $annotation) {
             if ($annotation instanceof ResourceParam) {
+                /* @psalm-suppress UndefinedClass */
                 unset($paramMetas['parameters'][$annotation->param]); // @phpstan-ignore-line
-                $paramMetas['required'] = array_values(array_diff($paramMetas['required'], [$annotation->param])); // @phpstan-ignore-line
+                assert(isset($paramMetas['required']));
+                $paramMetas['required'] = array_values(array_diff($paramMetas['required'], [$annotation->param]));
             }
             if ($annotation instanceof Assisted) {
                 $paramMetas = $this->ignorreAssisted($paramMetas, $annotation);
@@ -169,11 +175,15 @@ final class OptionsMethodRequest
      *
      * @param array{parameters?: array<string, array{type?: string, description?: string}>, required?: array<int, string>} $paramMetas
      *
-     * @return array{parameters?: array<string, array{type?: string, description?: string}>, required: array<int, string>}
+     * @return (string|string[])[][]
+     *
+     * @psalm-return array{parameters?: array<string, array{type?: string, description?: string}>, required?: array<int, string>}
      */
     private function ignorreAssisted(array $paramMetas, Assisted $annotation) : array
     {
-        $paramMetas['required'] = array_values(array_diff($paramMetas['required'], $annotation->values)); // @phpstan-ignore-line
+        if (isset($paramMetas['required'])) {
+            $paramMetas['required'] = array_values(array_diff($paramMetas['required'], $annotation->values));
+        }
         foreach ($annotation->values as $varName) {
             unset($paramMetas['parameters'][$varName]); // @phpstan-ignore-lineJsonSchemaInterceptor.php
         }

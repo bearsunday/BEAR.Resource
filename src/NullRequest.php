@@ -9,6 +9,8 @@ namespace BEAR\Resource;
  * @property array  $headers
  * @property mixed  $body
  * @property string $view
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class NullRequest extends AbstractRequest
 {
@@ -17,6 +19,9 @@ class NullRequest extends AbstractRequest
         $this->resourceObject = new NullResourceObject;
     }
 
+    /**
+     * @return self
+     */
     public function withQuery(array $query) : RequestInterface
     {
         unset($query);
@@ -24,6 +29,9 @@ class NullRequest extends AbstractRequest
         return $this;
     }
 
+    /**
+     * @return self
+     */
     public function addQuery(array $query) : RequestInterface
     {
         unset($query);
@@ -41,6 +49,9 @@ class NullRequest extends AbstractRequest
         return 'get ' . (string) new NullUri;
     }
 
+    /**
+     * @return self
+     */
     public function linkSelf(string $linkKey) : RequestInterface
     {
         unset($linkKey);
@@ -48,6 +59,9 @@ class NullRequest extends AbstractRequest
         return $this;
     }
 
+    /**
+     * @return self
+     */
     public function linkNew(string $linkKey) : RequestInterface
     {
         unset($linkKey);
@@ -55,6 +69,9 @@ class NullRequest extends AbstractRequest
         return $this;
     }
 
+    /**
+     * @return self
+     */
     public function linkCrawl(string $linkKey) : RequestInterface
     {
         unset($linkKey);

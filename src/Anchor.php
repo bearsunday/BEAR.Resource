@@ -32,6 +32,8 @@ final class Anchor implements AnchorInterface
         $annotations = $this->reader->getMethodAnnotations(new \ReflectionMethod(get_class($request->resourceObject), $classMethod));
         foreach ($annotations as $annotation) {
             if ($this->isValidLinkAnnotation($annotation, $rel)) {
+                assert($annotation instanceof LinkAnnotation);
+
                 return $this->getMethodUri($request, $query, $annotation);
             }
         }
@@ -41,6 +43,7 @@ final class Anchor implements AnchorInterface
 
     private function isValidLinkAnnotation(object $annotation, string $rel) : bool
     {
+        /** @psalm-suppress RedundantConditionGivenDocblockType */
         return $annotation instanceof LinkAnnotation && $annotation->rel !== null && $annotation->rel === $rel;
     }
 

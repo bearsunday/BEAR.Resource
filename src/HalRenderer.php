@@ -101,11 +101,11 @@ class HalRenderer implements RenderInterface
     }
 
     /**
-     * @return array{0: ResourceObject, 1: array<string, mixed>}
+     * @return array{0: ResourceObject, 1: mixed|array<string, mixed>}
      */
     private function valuate(ResourceObject $ro) : array
     {
-        if (is_scalar($ro->body) && $ro->body !== null) {
+        if (is_scalar($ro->body)) {
             $ro->body = ['value' => $ro->body];
         }
         // evaluate all request in body.

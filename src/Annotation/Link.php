@@ -47,7 +47,9 @@ final class Link implements \JsonSerializable
     public $crawl = '';
 
     /**
-     * @return array<string, string>
+     * @return string[]
+     *
+     * @psalm-return array{rel: string, href: string, method: string, title?: string}
      */
     public function jsonSerialize() : array
     {

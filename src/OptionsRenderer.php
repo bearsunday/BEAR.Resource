@@ -55,9 +55,11 @@ final class OptionsRenderer implements RenderInterface
      *
      * @param ReflectionMethod[] $methods
      *
-     * @return array<int, string>
+     * @return string[]
+     *
+     * @psalm-return list<string>
      */
-    private function getAllows(array $methods)
+    private function getAllows(array $methods) : array
     {
         $allows = [];
         foreach ($methods as $method) {
@@ -74,13 +76,13 @@ final class OptionsRenderer implements RenderInterface
      *
      * @param array<int, string> $allows
      *
-     * @return array<string, array<string, array|string>>
+     * @return array<string, array<int|string, array|string>>
      */
     private function getEntityBody(ResourceObject $ro, array $allows) : array
     {
         $mehtodList = [];
         foreach ($allows as $method) {
-            $mehtodList[$method] = ($this->optionsMethod)($ro, $method);
+            $mehtodList[(string) $method] = ($this->optionsMethod)($ro, $method);
         }
 
         return $mehtodList;
