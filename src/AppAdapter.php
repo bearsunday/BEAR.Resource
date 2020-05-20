@@ -26,6 +26,8 @@ final class AppAdapter implements AdapterInterface
      * Resource adapter path
      *
      * @var string
+     *
+     * @psalm-suppress PropertyNotSetInConstructor
      */
     private $path;
 
