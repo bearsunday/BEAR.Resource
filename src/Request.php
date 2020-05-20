@@ -25,9 +25,9 @@ final class Request extends AbstractRequest
     const OPTIONS = 'options';
 
     /**
-     * @return int|self|string[]
+     * @return array<string, string>|int|self
      *
-     * @psalm-return array<string, string>|int|self
+     * @psalm-suppress ImplementedReturnTypeMismatch
      */
     public function __get(string $name)
     {
