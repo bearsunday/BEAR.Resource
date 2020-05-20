@@ -233,6 +233,8 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      * Invoke resource request then return resource body iterator
      *
      * @return ArrayIterator<null|string, mixed>
+     * @phpstan-return ArrayIterator<null|string, mixed>
+     * @psalm-return ArrayIterator
      */
     public function getIterator() : ArrayIterator
     {
