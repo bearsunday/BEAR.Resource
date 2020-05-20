@@ -122,7 +122,7 @@ final class AppIterator implements Iterator
     {
         $pathName = $file->getPathname();
         $declaredClasses = get_declared_classes();
-        /** @noinspection PhpIncludeInspection */
+        assert(file_exists($pathName));
         include_once $pathName;
         $newClasses = array_values(array_diff_key(get_declared_classes(), $declaredClasses));
         $name = $this->getName($newClasses);
