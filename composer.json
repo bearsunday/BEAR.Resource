@@ -21,6 +21,7 @@
         "ray/di": "^2.10",
         "nocarrier/hal":"^0.9.12",
         "doctrine/cache":"^1.10",
+        "doctrine/annotations": "^1.10",
         "rize/uri-template": "^0.3",
         "koriym/http-constants": "^1.1",
         "ray/web-param-module": "^2.0.3",
