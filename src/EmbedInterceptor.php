@@ -82,7 +82,7 @@ final class EmbedInterceptor implements MethodInterceptor
     /**
      * @return string[]
      *
-     * @psalm-return array<string, string>
+     * @psalm-return array<string, string|object>
      */
     private function getArgsByInvocation(MethodInvocation $invocation) : array
     {
@@ -90,7 +90,7 @@ final class EmbedInterceptor implements MethodInterceptor
         $params = $invocation->getMethod()->getParameters();
         $namedParameters = [];
         foreach ($params as $param) {
-            $namedParameters[(string) $param->name] = (string) array_shift($args);
+            $namedParameters[(string) $param->name] = array_shift($args);
         }
 
         return $namedParameters;
