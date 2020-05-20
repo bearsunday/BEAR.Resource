@@ -47,7 +47,7 @@ final class EmbedInterceptor implements MethodInterceptor
     }
 
     /**
-     * @param Embed[]              $embeds
+     * @param array<Embed|object>  $embeds
      * @param array<string, mixed> $query
      *
      * @throws EmbedException
@@ -55,7 +55,6 @@ final class EmbedInterceptor implements MethodInterceptor
     private function embedResource(array $embeds, ResourceObject $ro, array $query) : void
     {
         foreach ($embeds as $embed) {
-            /* @var $embed Embed */
             if (! $embed instanceof Embed) {
                 continue;
             }
