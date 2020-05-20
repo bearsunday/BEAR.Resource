@@ -86,7 +86,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     /**
      * Request Result
      *
-     * @var ResourceObject
+     * @var ?ResourceObject
      */
     protected $result;
 
@@ -212,6 +212,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     public function offsetGet($offset)
     {
         $this->invoke();
+        assert($this->result instanceof ResourceObject);
         if (! isset($this->result->body[$offset])) {
             throw new OutOfBoundsException("[${offset}] for object[" . get_class($this->result) . ']', 400);
         }
@@ -225,6 +226,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     public function offsetExists($offset) : bool
     {
         $this->invoke();
+        assert($this->result instanceof ResourceObject);
 
         return isset($this->result->body[$offset]);
     }
@@ -239,6 +241,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     public function getIterator() : ArrayIterator
     {
         $this->invoke();
+        assert($this->result instanceof ResourceObject);
         $isArray = (is_array($this->result->body) || $this->result->body instanceof \Traversable);
 
         return $isArray ? new ArrayIterator($this->result->body) : new ArrayIterator([]);
