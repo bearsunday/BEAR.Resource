@@ -31,7 +31,6 @@ final class OptionsMethodRequest
      */
     public function __invoke(\ReflectionMethod $method, array $paramDoc, array $ins) : array
     {
-        var_dump($paramDoc);
         $paramMetas = $this->getParamMetas($method->getParameters(), $paramDoc, $ins);
 
         return $this->ignoreAnnotatedPrameter($method, $paramMetas);
