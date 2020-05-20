@@ -7,6 +7,8 @@ namespace BEAR\Resource;
 /**
  * @property $this $lazy
  * @property $this $eager
+ *
+ * @psalm-suppress PropertyNotSetInConstructor for DSL
  */
 final class Request extends AbstractRequest
 {
