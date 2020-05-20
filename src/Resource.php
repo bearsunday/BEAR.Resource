@@ -45,6 +45,7 @@ final class Resource implements ResourceInterface
      * Request
      *
      * @var Request
+     * @psalm-suppress PropertyNotSetInConstructor
      */
     private $request;
 
