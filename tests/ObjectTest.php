@@ -155,7 +155,7 @@ class ObjectTest extends TestCase
         $this->assertSame('["entry1","entry2","entry3"]', $result);
     }
 
-    public function estResourceHasView()
+    public function estResourceHasView() : void
     {
         $this->ro->view = 'view-is-override';
         $result = (string) ($this->ro);

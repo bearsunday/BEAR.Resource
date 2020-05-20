@@ -35,6 +35,9 @@ final class HttpResourceObject extends ResourceObject
         unset($this->code, $this->headers, $this->body, $this->view);
     }
 
+    /**
+     * @return array<string, mixed>|int|string
+     */
     public function __get(string $name)
     {
         if ($name === 'code') {
@@ -53,6 +56,9 @@ final class HttpResourceObject extends ResourceObject
         throw new \InvalidArgumentException($name);
     }
 
+    /**
+     * @param mixed $value
+     */
     public function __set(string $name, $value) : void
     {
         unset($value);
@@ -70,7 +76,7 @@ final class HttpResourceObject extends ResourceObject
         return $this->response->getContent();
     }
 
-    public function request(AbstractRequest $request)
+    public function request(AbstractRequest $request) : self
     {
         $uri = $request->resourceObject->uri;
         $method = strtoupper($uri->method);

@@ -33,7 +33,7 @@ final class Linker implements LinkerInterface
     /**
      * memory cache for linker
      *
-     * @var array
+     * @var array<string,array<string, mixed>>
      */
     private $cache = [];
 
@@ -72,6 +72,8 @@ final class Linker implements LinkerInterface
 
     /**
      * How next linked resource treated (add ? replace ?)
+     *
+     * @param mixed|ResourceObject $nextResource
      */
     private function nextLink(LinkType $link, ResourceObject $ro, $nextResource) : ResourceObject
     {
@@ -149,6 +151,8 @@ final class Linker implements LinkerInterface
     /**
      * Link annotation crawl
      *
+     * @param array<object> $annotations
+     *
      * @throws \BEAR\Resource\Exception\MethodException
      */
     private function annotationCrawl(array $annotations, LinkType $link, ResourceObject $current) : ResourceObject
@@ -167,12 +171,15 @@ final class Linker implements LinkerInterface
     }
 
     /**
+     * @param array<object>        $annotations
+     * @param array<string, mixed> $body
+     *
      * @throws \BEAR\Resource\Exception\LinkQueryException
      * @throws \BEAR\Resource\Exception\MethodException
      * @throws \BEAR\Resource\Exception\LinkRelException
      * @throws \BEAR\Resource\Exception\UriException
      */
-    private function crawl(array $annotations, LinkType $link, array &$body)
+    private function crawl(array $annotations, LinkType $link, array &$body) : void
     {
         foreach ($annotations as $annotation) {
             /* @var $annotation Link */
@@ -194,6 +201,9 @@ final class Linker implements LinkerInterface
         }
     }
 
+    /**
+     * @param mixed $value
+     */
     private function isList($value) : bool
     {
         $list = $value;
@@ -206,6 +216,10 @@ final class Linker implements LinkerInterface
         return $isSingleColumnList || $isMultiColumnMultiRowList || $isMultiColumnList;
     }
 
+    /**
+     * @param array<int, int|string> $keys
+     * @param array<mixed, mixed>    $list
+     */
     private function isMultiColumnMultiRowList(array $keys, array $list) : bool
     {
         if ($keys === [0 => 0]) {
@@ -221,11 +235,20 @@ final class Linker implements LinkerInterface
         return true;
     }
 
+    /**
+     * @param array<int|string, mixed> $value
+     * @param mixed                    $firstRow
+     */
     private function isMultiColumnList(array $value, $firstRow) : bool
     {
         return is_array($firstRow) && array_filter(array_keys($value), 'is_numeric') === array_keys($value);
     }
 
+    /**
+     * @param array<int|string, mixed> $value
+     * @param array<string>            $keys
+     * @param array<mixed, mixed>      $list
+     */
     private function isSingleColumnList(array $value, array $keys, array $list) : bool
     {
         return (count($value) === 1) && $keys === array_keys($list);

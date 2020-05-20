@@ -25,7 +25,7 @@ final class Request extends AbstractRequest
     const OPTIONS = 'options';
 
     /**
-     * @return $this|array|int|string
+     * @return array<mixed, mixed>|int|self|string
      */
     public function __get(string $name)
     {
@@ -43,6 +43,8 @@ final class Request extends AbstractRequest
 
     /**
      * {@inheritdoc}
+     *
+     * @param array<string, mixed> $query
      */
     public function withQuery(array $query) : RequestInterface
     {

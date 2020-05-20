@@ -33,6 +33,9 @@ final class OptionsMethods
         FilesParam::class => 'files'
     ];
 
+    /**
+     * @var Reader
+     */
     private $reader;
 
     /**
@@ -49,15 +52,20 @@ final class OptionsMethods
         $this->schemaDir = $schemaDir;
     }
 
+    /**
+     * return array{summary?: string, description?: string, request: array, links: array, embed: array}
+     *
+     * @return array<string, array|string>
+     */
     public function __invoke(ResourceObject $ro, string $requestMethod) : array
     {
         $method = new \ReflectionMethod(get_class($ro), 'on' . $requestMethod);
         $ins = $this->getInMap($method);
-        list($doc, $paramDoc) = (new OptionsMethodDocBolck)($method);
+        [$doc, $paramDoc] = (new OptionsMethodDocBolck)($method);
         $methodOption = $doc;
         $paramMetas = (new OptionsMethodRequest($this->reader))($method, $paramDoc, $ins);
         $schema = $this->getJsonSchema($method);
-        $request = $paramMetas ? ['request' => $paramMetas] : [];
+        $request = $paramMetas ? ['request' => $paramMetas] : []; // @phpstan-ignore-line
         $methodOption += $request;
         if (! empty($schema)) {
             $methodOption += ['schema' => $schema];
@@ -70,6 +78,9 @@ final class OptionsMethods
         return $methodOption;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getMethodExtras(\ReflectionMethod $method) : array
     {
         $extras = [];
@@ -86,6 +97,9 @@ final class OptionsMethods
         return $extras;
     }
 
+    /**
+     * @return array<string, string>
+     */
     private function getInMap(\ReflectionMethod $method) : array
     {
         $ins = [];
@@ -99,6 +113,9 @@ final class OptionsMethods
         return $ins;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getJsonSchema(\ReflectionMethod $method) : array
     {
         $schema = $this->reader->getMethodAnnotation($method, JsonSchema::class);

@@ -155,7 +155,7 @@ class RequestTest extends TestCase
             $no = $errno;
             $str = $errstr;
         });
-        (string) $request;
+        (string) $request; // @phpstan-ignore-line
         $this->assertSame(E_USER_WARNING, $no);
         $this->assertStringContainsString('FakeErrorRenderer->render', $str);
         $this->assertSame('', (string) $request);
@@ -192,7 +192,7 @@ class RequestTest extends TestCase
     public function testArrayAccess() : void
     {
         $request = new Request($this->invoker, $this->entry);
-        $result = $request[100];
+        $result = $request[100]; // @phpstan-ignore-line
         $expected = [
             'id' => 100,
             'title' => 'Entry1'
@@ -207,13 +207,13 @@ class RequestTest extends TestCase
             $this->invoker,
             $this->entry
         );
-        $request[0];
+        $request[0]; // @phpstan-ignore-line
     }
 
     public function testIsSet() : void
     {
         $request = new Request($this->invoker, $this->entry);
-        $result = isset($request[100]);
+        $result = isset($request[100]); // @phpstan-ignore-line
         $this->assertTrue($result);
     }
 
@@ -223,7 +223,7 @@ class RequestTest extends TestCase
             $this->invoker,
             $this->entry
         );
-        $result = isset($request[0]);
+        $result = isset($request[0]); // @phpstan-ignore-line
         $this->assertFalse($result);
     }
 
@@ -266,7 +266,7 @@ class RequestTest extends TestCase
             $no = $errno;
             $str = $errstr;
         });
-        (string) $request;
+        (string) $request; // @phpstan-ignore-line
         $this->assertSame(256, $no);
         $this->assertStringContainsString(FakeNopResource::class, $str);
         restore_error_handler();
@@ -318,6 +318,6 @@ class RequestTest extends TestCase
     public function testInvalidProp(Request $request) : void
     {
         $this->expectException(\OutOfRangeException::class);
-        $request->__invalid__;
+        $request->__invalid__; // @phpstan-ignore-line
     }
 }

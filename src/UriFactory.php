@@ -22,7 +22,10 @@ final class UriFactory
         $this->schemaHost = $schemaHost;
     }
 
-    public function __invoke($uri, array $query = [])
+    /**
+     * @param array<string, mixed> $query
+     */
+    public function __invoke(string $uri, array $query = []) : Uri
     {
         $parsedUrl = (array) parse_url($uri);
         if (! array_key_exists('scheme', $parsedUrl)) {

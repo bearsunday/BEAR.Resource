@@ -33,7 +33,7 @@ class AnchorTest extends TestCase
 
     public function testHref() : void
     {
-        list($method, $uri) = $this->anchor->href('blog', $this->request, []);
+        [$method, $uri] = $this->anchor->href('blog', $this->request, []);
         $this->assertSame(Request::GET, $method);
         $this->assertSame('app://self/blog?id=12', $uri);
     }

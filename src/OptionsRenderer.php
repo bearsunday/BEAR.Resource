@@ -6,6 +6,7 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\OptionsBody;
 use const PHP_EOL;
+use ReflectionMethod;
 
 /**
  * RFC2616 OPTIONS method renderer
@@ -52,9 +53,9 @@ final class OptionsRenderer implements RenderInterface
     /**
      * Return allowed methods
      *
-     * @param \ReflectionMethod[] $methods
+     * @param ReflectionMethod[] $methods
      *
-     * @return array
+     * @return array<int, string>
      */
     private function getAllows(array $methods)
     {
@@ -70,6 +71,10 @@ final class OptionsRenderer implements RenderInterface
 
     /**
      * Return OPTIONS entity body
+     *
+     * @param array<int, string> $allows
+     *
+     * @return array<string, array<string, array|string>>
      */
     private function getEntityBody(ResourceObject $ro, array $allows) : array
     {

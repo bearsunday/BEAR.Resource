@@ -24,7 +24,7 @@ final class NullUri extends AbstractUri
     /**
      * Associative query array
      *
-     * @var array
+     * @var array<string, mixed>
      */
     public $query = [];
 

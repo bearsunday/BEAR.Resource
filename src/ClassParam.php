@@ -24,6 +24,9 @@ final class ClassParam implements ParamInterface
      */
     private $defaultValue;
 
+    /**
+     * @param ReflectionClass<ResourceObject> $class
+     */
     public function __construct(ReflectionClass $class, \ReflectionParameter $parameter)
     {
         $this->class = $class->name;
@@ -56,6 +59,11 @@ final class ClassParam implements ParamInterface
         return $obj;
     }
 
+    /**
+     * @param array<string, mixed> $query
+     *
+     * @return array<string, array<string,mixed>>
+     */
     private function getProps(string $varName, array $query, InjectorInterface $injector) : array
     {
         if (isset($query[$varName])) {

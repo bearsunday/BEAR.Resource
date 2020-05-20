@@ -76,14 +76,17 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         return $ro;
     }
 
-    private function validateRequest(JsonSchema $jsonSchema, array $arguments)
+    /**
+     * @param array<string, mixed> $arguments
+     */
+    private function validateRequest(JsonSchema $jsonSchema, array $arguments) : void
     {
         $schemaFile = $this->validateDir . '/' . $jsonSchema->params;
         $this->validateFileExists($schemaFile);
         $this->validate($arguments, $schemaFile);
     }
 
-    private function validateResponse(ResourceObject $ro, JsonSchema $jsonSchema)
+    private function validateResponse(ResourceObject $ro, JsonSchema $jsonSchema) : void
     {
         $schemaFile = $this->getSchemaFile($jsonSchema, $ro);
         try {
@@ -96,7 +99,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         }
     }
 
-    private function validateRo(ResourceObject $ro, string $schemaFile, JsonSchema $jsonSchema)
+    private function validateRo(ResourceObject $ro, string $schemaFile, JsonSchema $jsonSchema) : void
     {
         $json = json_decode((string) $ro);
         if (! $json) {
@@ -106,7 +109,10 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         $this->validate($target, $schemaFile);
     }
 
-    private function getTarget($json, JsonSchema $jsonSchema)
+    /**
+     * @return mixed
+     */
+    private function getTarget(object $json, JsonSchema $jsonSchema)
     {
         if ($jsonSchema->key === null) {
             return $json;
@@ -118,11 +124,14 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         return $json->{$jsonSchema->key};
     }
 
-    private function validate($scanObject, $schemaFile)
+    /**
+     * @param array<string, mixed>|object $scanObject
+     */
+    private function validate($scanObject, string $schemaFile) : void
     {
         $validator = new Validator;
         $schema = (object) ['$ref' => 'file://' . $schemaFile];
-        $scanArray = $this->deepArray($scanObject);
+        $scanArray = is_array($scanObject) ? $scanObject : $this->deepArray($scanObject);
         $validator->validate($scanArray, $schema, Constraint::CHECK_MODE_TYPE_CAST);
         $isValid = $validator->isValid();
         if ($isValid) {
@@ -132,14 +141,14 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         throw $this->throwJsonSchemaException($validator, $schemaFile);
     }
 
-    private function deepArray($values)
+    /**
+     * @return array<int|string, mixed>
+     */
+    private function deepArray(object $values) : array
     {
-        if (! is_array($values)) {
-            return $values;
-        }
         $result = [];
-        foreach ($values as $key => $value) {
-            $result[$key] = is_object($value) ? $this->deepArray((array) $value) : $result[$key] = $value;
+        foreach ($values as $key => $value) { // @phpstan-ignore-line
+            $result[$key] = is_object($value) ? $this->deepArray($value) : $result[$key] = $value;
         }
 
         return $result;
@@ -181,20 +190,23 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         return  $parent instanceof \ReflectionClass ? (string) $parent->getFileName() : '';
     }
 
-    private function validateFileExists(string $schemaFile)
+    private function validateFileExists(string $schemaFile) : void
     {
         if (! file_exists($schemaFile) || is_dir($schemaFile)) {
             throw new JsonSchemaNotFoundException($schemaFile);
         }
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getNamedArguments(MethodInvocation $invocation)
     {
         $parameters = $invocation->getMethod()->getParameters();
         $values = $invocation->getArguments();
         $arguments = [];
         foreach ($parameters as $index => $parameter) {
-            $arguments[$parameter->name] = $values[$index] ?? $parameter->getDefaultValue();
+            $arguments[(string) $parameter->name] = $values[$index] ?? $parameter->getDefaultValue();
         }
 
         return $arguments;

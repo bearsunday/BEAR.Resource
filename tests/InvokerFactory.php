@@ -10,7 +10,7 @@ use Ray\Di\Injector;
 
 final class InvokerFactory
 {
-    public function __invoke(string $schemaDir = '')
+    public function __invoke(string $schemaDir = '') : Invoker
     {
         $reader = new AnnotationReader;
 

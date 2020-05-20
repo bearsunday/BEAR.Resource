@@ -10,6 +10,8 @@ interface JsonSchemaExceptionHandlerInterface
 {
     /**
      * Handle invalid JSON schema resource object
+     *
+     * @return void
      */
     public function handle(ResourceObject $ro, JsonSchemaException $e, string $schemaFile);
 }

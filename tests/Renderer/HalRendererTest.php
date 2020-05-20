@@ -83,7 +83,7 @@ EOT;
     {
         /* @var $ro ResourceObject */
         $ro = $this->ro->onGet();
-        (string) $ro;
+        (string) $ro; // @phpstan-ignore-line
         $expected = 'application/hal+json';
         $this->assertSame($expected, $ro->headers['Content-Type']);
     }
@@ -123,7 +123,7 @@ EOT;
     {
         $ro = $this->ro->onGet();
         $ro->headers['Location'] = '/foo';
-        (string) $ro;
+        (string) $ro; // @phpstan-ignore-line
         $this->assertSame('/foo', $ro->headers['Location']);
     }
 

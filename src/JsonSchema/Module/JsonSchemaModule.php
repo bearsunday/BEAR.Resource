@@ -40,7 +40,7 @@ class JsonSchemaModule extends AbstractModule
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure() : void
     {
         $this->bind()->annotatedWith('json_schema_dir')->toInstance($this->jsonSchemaDir);
         $this->bind()->annotatedWith('json_validate_dir')->toInstance($this->jsonValidateDir);

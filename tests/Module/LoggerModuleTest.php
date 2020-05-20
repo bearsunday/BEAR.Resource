@@ -19,7 +19,7 @@ class LoggerModuleTest extends TestCase
     public function testProdLoggerModule() : void
     {
         $psrLoggerModule = new class extends AbstractModule {
-            protected function configure()
+            protected function configure() : void
             {
                 $this->bind(\Psr\Log\LoggerInterface::class)->to(NullLogger::class);
             }

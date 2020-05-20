@@ -44,7 +44,7 @@ class HalRenderer implements RenderInterface
      *
      * @throws \RuntimeException
      */
-    public function renderHal(ResourceObject $ro)
+    public function renderHal(ResourceObject $ro) : void
     {
         [$ro, $body] = $this->valuate($ro);
         $method = 'on' . ucfirst($ro->uri->method);
@@ -86,6 +86,10 @@ class HalRenderer implements RenderInterface
         return $parentRo->uri->scheme . $parentRo->uri->host !== $childRo->uri->scheme . $childRo->uri->host;
     }
 
+    /**
+     * @param array<string, mixed> $body
+     * @param array<int, object>   $annotations
+     */
     private function getHal(AbstractUri $uri, array $body, array $annotations) : Hal
     {
         $query = $uri->query ? '?' . http_build_query($uri->query) : '';
@@ -96,6 +100,9 @@ class HalRenderer implements RenderInterface
         return $this->link->addHalLink($body, $annotations, $hal);
     }
 
+    /**
+     * @return array{0: ResourceObject, 1: array<string, mixed>}
+     */
     private function valuate(ResourceObject $ro) : array
     {
         if (is_scalar($ro->body) && $ro->body !== null) {

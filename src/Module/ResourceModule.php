@@ -26,7 +26,7 @@ class ResourceModule extends AbstractModule
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure() : void
     {
         $this->bind()->annotatedWith(AppName::class)->toInstance($this->appName);
         $this->install(new ResourceClientModule);

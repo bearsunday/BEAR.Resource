@@ -8,6 +8,10 @@ interface NamedParameterInterface
 {
     /**
      * Return ordered parameters from named query
+     *
+     * @param array<string, mixed> $query
+     *
+     * @return array<int, mixed>
      */
     public function getParameters(callable $callable, array $query) : array;
 }

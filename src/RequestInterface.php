@@ -12,16 +12,22 @@ interface RequestInterface
 {
     /**
      * InvokerInterface resource request
+     *
+     * @param array<string, mixed> $query
      */
     public function __invoke(array $query = null) : ResourceObject;
 
     /**
      * Set query
+     *
+     * @param array<string, mixed> $query
      */
     public function withQuery(array $query) : self;
 
     /**
-     * Add(merge) query
+     * Merge query
+     *
+     * @param array<string, mixed> $query
      */
     public function addQuery(array $query) : self;
 
@@ -41,7 +47,7 @@ interface RequestInterface
     public function hash() : string;
 
     /**
-     * @return mixed ResourceObject | Request
+     * @return AbstractRequest|ResourceObject
      */
     public function request();
 

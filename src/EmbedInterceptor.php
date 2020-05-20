@@ -47,11 +47,12 @@ final class EmbedInterceptor implements MethodInterceptor
     }
 
     /**
-     * @param Embed[] $embeds
+     * @param Embed[]              $embeds
+     * @param array<string, mixed> $query
      *
      * @throws EmbedException
      */
-    private function embedResource(array $embeds, ResourceObject $ro, array $query)
+    private function embedResource(array $embeds, ResourceObject $ro, array $query) : void
     {
         foreach ($embeds as $embed) {
             /* @var $embed Embed */
@@ -78,13 +79,16 @@ final class EmbedInterceptor implements MethodInterceptor
         return $uri;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getArgsByInvocation(MethodInvocation $invocation) : array
     {
         $args = $invocation->getArguments()->getArrayCopy();
         $params = $invocation->getMethod()->getParameters();
         $namedParameters = [];
         foreach ($params as $param) {
-            $namedParameters[$param->name] = array_shift($args);
+            $namedParameters[(string) $param->name] = (string) array_shift($args);
         }
 
         return $namedParameters;

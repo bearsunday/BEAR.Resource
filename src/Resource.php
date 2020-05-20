@@ -136,7 +136,7 @@ final class Resource implements ResourceInterface
      */
     public function href(string $rel, array $query = []) : ResourceObject
     {
-        list($method, $uri) = $this->anchor->href($rel, $this->request, $query);
+        [$method, $uri] = $this->anchor->href($rel, $this->request, $query);
 
         return $this->{$method}->uri($uri)->addQuery($query)->eager->request();
     }
@@ -176,7 +176,7 @@ final class Resource implements ResourceInterface
         return $this->methodUri(Request::HEAD, $uri)($query);
     }
 
-    private function methodUri(string $method, $uri) : RequestInterface
+    private function methodUri(string $method, string $uri) : RequestInterface
     {
         $this->method = $method;
 

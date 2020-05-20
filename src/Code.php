@@ -58,7 +58,7 @@ final class Code
      *
      * @see http://www.iana.org/assignments/http-status-codes
      *
-     * @var array
+     * @var array<int, string>
      */
     public $statusText = [
         100 => 'Continue',

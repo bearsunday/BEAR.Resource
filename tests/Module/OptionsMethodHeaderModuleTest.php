@@ -19,7 +19,7 @@ class OptionsMethodHeaderModuleTest extends TestCase
     public function testOptionsMethodHeaderModule() : void
     {
         $injector = new Injector(new OptionsMethodHeaderModule(new class extends AbstractModule {
-            protected function configure()
+            protected function configure() : void
             {
                 $this->bind(OptionsMethods::class);
                 $this->bind(Reader::class)->to(AnnotationReader::class);

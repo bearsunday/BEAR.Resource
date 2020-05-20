@@ -12,7 +12,7 @@ final class AssistedWebContextParam implements ParamInterface
     /**
      * $GLOBALS for testing
      *
-     * @var array
+     * @var array<string, array<string, string>>
      */
     private static $globals = [];
 
@@ -48,7 +48,10 @@ final class AssistedWebContextParam implements ParamInterface
         return ($this->defaultParam)($varName, $query, $injector);
     }
 
-    public static function setSuperGlobalsOnlyForTestingPurpose(array $globals)
+    /**
+     * @param array<string, array<string, string>> $globals
+     */
+    public static function setSuperGlobalsForTesting(array $globals) : void
     {
         self::$globals = $globals;
     }

@@ -11,7 +11,9 @@ use function sprintf;
 final class Uri extends AbstractUri
 {
     /**
-     * @throws \BEAR\Resource\Exception\UriException
+     * @param array<string, mixed> $query
+     *
+     * @throws UriException
      */
     public function __construct(string $uri, array $query = [])
     {
@@ -33,7 +35,7 @@ final class Uri extends AbstractUri
     /**
      * @throws UriException
      */
-    private function validate(string $uri)
+    private function validate(string $uri) : void
     {
         if (filter_var($uri, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED)) {
             return;

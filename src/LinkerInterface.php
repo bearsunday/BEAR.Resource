@@ -8,6 +8,8 @@ interface LinkerInterface
 {
     /**
      * InvokerInterface link
+     *
+     * @return ResourceObject
      */
     public function invoke(AbstractRequest $request);
 }
