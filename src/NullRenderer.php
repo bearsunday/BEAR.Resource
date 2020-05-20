@@ -6,6 +6,9 @@ namespace BEAR\Resource;
 
 final class NullRenderer implements RenderInterface
 {
+    /**
+     * @return string
+     */
     public function render(ResourceObject $ro)
     {
         unset($ro);

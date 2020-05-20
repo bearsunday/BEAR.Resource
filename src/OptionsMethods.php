@@ -79,7 +79,9 @@ final class OptionsMethods
     }
 
     /**
-     * @return array<string, mixed>
+     * @return (Embed|Link)[][]
+     *
+     * @psalm-return array{links?: non-empty-list<Link>, embed?: non-empty-list<Embed>}
      */
     private function getMethodExtras(\ReflectionMethod $method) : array
     {

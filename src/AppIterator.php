@@ -132,8 +132,10 @@ final class AppIterator implements Iterator
 
     /**
      * @param array<class-string> $newClasses
+     *
+     * @return class-string|string
      */
-    private function getName(array $newClasses) : string
+    private function getName(array $newClasses) 
     {
         foreach ($newClasses as $newClass) {
             $parent = (new \ReflectionClass($newClass))->getParentClass();

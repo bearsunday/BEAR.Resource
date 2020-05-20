@@ -17,6 +17,9 @@ class NullRequest extends AbstractRequest
         $this->resourceObject = new NullResourceObject;
     }
 
+    /**
+     * @return self
+     */
     public function withQuery(array $query) : RequestInterface
     {
         unset($query);
@@ -24,6 +27,9 @@ class NullRequest extends AbstractRequest
         return $this;
     }
 
+    /**
+     * @return self
+     */
     public function addQuery(array $query) : RequestInterface
     {
         unset($query);
@@ -36,11 +42,17 @@ class NullRequest extends AbstractRequest
         return (string) new NullUri;
     }
 
+    /**
+     * @return string
+     */
     public function toUriWithMethod() : string
     {
         return 'get ' . (string) new NullUri;
     }
 
+    /**
+     * @return self
+     */
     public function linkSelf(string $linkKey) : RequestInterface
     {
         unset($linkKey);
@@ -48,6 +60,9 @@ class NullRequest extends AbstractRequest
         return $this;
     }
 
+    /**
+     * @return self
+     */
     public function linkNew(string $linkKey) : RequestInterface
     {
         unset($linkKey);
@@ -55,6 +70,9 @@ class NullRequest extends AbstractRequest
         return $this;
     }
 
+    /**
+     * @return self
+     */
     public function linkCrawl(string $linkKey) : RequestInterface
     {
         unset($linkKey);

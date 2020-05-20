@@ -25,7 +25,9 @@ final class Request extends AbstractRequest
     const OPTIONS = 'options';
 
     /**
-     * @return array<mixed, mixed>|int|self|string
+     * @return int|self|string[]
+     *
+     * @psalm-return array<string, string>|int|self
      */
     public function __get(string $name)
     {

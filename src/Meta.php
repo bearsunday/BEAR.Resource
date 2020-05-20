@@ -31,6 +31,9 @@ final class Meta
         $this->options = $this->getOptions($class);
     }
 
+    /**
+     * @return string
+     */
     private function getUri(string $class) : string
     {
         $classPath = explode('\\', $class);
@@ -64,7 +67,9 @@ final class Meta
     /**
      * @param \ReflectionMethod[] $methods
      *
-     * @return array<int, string>
+     * @return string[]
+     *
+     * @psalm-return list<string>
      */
     private function getAllows(array $methods) : array
     {

@@ -80,7 +80,9 @@ final class EmbedInterceptor implements MethodInterceptor
     }
 
     /**
-     * @return array<string, mixed>
+     * @return string[]
+     *
+     * @psalm-return array<string, string>
      */
     private function getArgsByInvocation(MethodInvocation $invocation) : array
     {
