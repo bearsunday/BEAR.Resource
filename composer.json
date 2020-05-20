@@ -32,7 +32,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^8.5",
-        "koriym/json-schema-faker": "^0.1.2"
+        "koriym/json-schema-faker": "^0.1.2",
+        "fzaninotto/faker": "^1.9.1"
     },
     "autoload": {
         "psr-4": {
