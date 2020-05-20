@@ -59,7 +59,6 @@ final class JsonSchemaInterceptor implements MethodInterceptor
      */
     public function invoke(MethodInvocation $invocation)
     {
-        /** @var ReflectionMethod $method */
         $method = $invocation->getMethod();
         /** @var JsonSchema $jsonSchema */
         $jsonSchema = $method->getAnnotation(JsonSchema::class);
@@ -170,7 +169,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     {
         if (! $jsonSchema->schema) {
             // for BC only
-            $ref = new \ReflectionClass($ro);
+            new \ReflectionClass($ro);
             $roFileName = $this->getParentClassName($ro);
             $bcFile = str_replace('.php', '.json', (string) $roFileName);
             if (file_exists($bcFile)) {
