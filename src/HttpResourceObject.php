@@ -26,6 +26,8 @@ final class HttpResourceObject extends ResourceObject
 
     /**
      * @var ResponseInterface
+     *
+     * @psalm-suppress PropertyNotSetInConstructor
      */
     private $response;
 
