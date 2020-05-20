@@ -23,13 +23,16 @@ class HttpResourceObjectTest extends TestCase
         $this->resource = $injector->getInstance(ResourceInterface::class);
     }
 
-    public function testGet() : void
+    public function testGet() : HttpResourceObject
     {
         $response = $this->resource->get('http://httpbin.org/get', ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
         $this->assertArrayHasKey('access-control-allow-credentials', $response->headers);
         $this->assertArrayHasKey('args', $response->body);
         $this->assertStringContainsString('"args": {', (string) $response->view);
+        assert($response instanceof HttpResourceObject);
+
+        return $response;
     }
 
     public function testPost() : void
@@ -72,31 +75,39 @@ class HttpResourceObjectTest extends TestCase
         $this->assertStringContainsString('"form": {', (string) $response->view);
     }
 
-    public function testToString() : void
+    /**
+     * @depends testGet
+     */
+    public function testToString(HttpResourceObject $response) : void
     {
-        $response = $this->resource->get('http://httpbin.org/get', ['foo' => 'bar']);
         $actual = (string) $response;
         $this->assertStringContainsString('"args": {', $actual);
     }
 
-    public function testIsSet() : void
+    /**
+     * @depends testGet
+     */
+    public function testIsSet(HttpResourceObject $response) : void
     {
-        $response = $this->resource->get('http://httpbin.org/get', ['foo' => 'bar']);
         $isSet = isset($response->__invalid);
         $this->assertFalse($isSet);
     }
 
-    public function testSet() : void
+    /**
+     * @depends testGet
+     */
+    public function testSet(HttpResourceObject $response) : void
     {
         $this->expectException(BadFunctionCallException::class);
-        $response = $this->resource->get('http://httpbin.org/get', ['foo' => 'bar']);
         $response->foo = '1'; // @phpstan-ignore-line
     }
 
-    public function testInvalidGet() : void
+    /**
+     * @depends testGet
+     */
+    public function testInvalidGet(HttpResourceObject $response) : void
     {
         $this->expectException(InvalidArgumentException::class);
-        $response = $this->resource->get('http://httpbin.org/get', ['foo' => 'bar']);
         $response->foo; // @phpstan-ignore-line
     }
 }
