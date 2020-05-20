@@ -30,7 +30,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
     }
 
     /**
-     * @return array|ParamInterface[]
+     * {@inheritdoc}
      */
     public function __invoke(callable $callable) : array
     {
