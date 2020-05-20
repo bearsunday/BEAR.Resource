@@ -42,9 +42,6 @@ class NullRequest extends AbstractRequest
         return (string) new NullUri;
     }
 
-    /**
-     * @return string
-     */
     public function toUriWithMethod() : string
     {
         return 'get ' . (string) new NullUri;

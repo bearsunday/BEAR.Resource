@@ -31,9 +31,6 @@ final class Meta
         $this->options = $this->getOptions($class);
     }
 
-    /**
-     * @return string
-     */
     private function getUri(string $class) : string
     {
         $classPath = explode('\\', $class);

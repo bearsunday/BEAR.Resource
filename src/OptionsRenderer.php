@@ -59,7 +59,7 @@ final class OptionsRenderer implements RenderInterface
      *
      * @psalm-return list<string>
      */
-    private function getAllows(array $methods): array
+    private function getAllows(array $methods) : array
     {
         $allows = [];
         foreach ($methods as $method) {

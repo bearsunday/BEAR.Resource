@@ -140,7 +140,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
      *
      * @psalm-return DefaultParam<mixed>|NoDefaultParam
      */
-    private function getDefault(\ReflectionParameter $parameter) 
+    private function getDefault(\ReflectionParameter $parameter)
     {
         return $parameter->isDefaultValueAvailable() === true ? new DefaultParam($parameter->getDefaultValue()) : new NoDefaultParam();
     }
@@ -150,7 +150,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
      *
      * @psalm-return ClassParam|OptionalParam<mixed>|RequiredParam
      */
-    private function getParam(\ReflectionParameter $parameter) 
+    private function getParam(\ReflectionParameter $parameter)
     {
         $class = $parameter->getClass();
         if ($class instanceof \ReflectionClass) {

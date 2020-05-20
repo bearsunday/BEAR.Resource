@@ -85,10 +85,8 @@ final class Resource implements ResourceInterface
 
     /**
      * @param string $name
-     *
-     * @return self
      */
-    public function __get($name): self
+    public function __get($name) : self
     {
         $this->method = $name;
 
