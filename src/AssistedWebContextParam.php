@@ -51,7 +51,7 @@ final class AssistedWebContextParam implements ParamInterface
     /**
      * @param array<string, array<string, string>> $globals
      */
-    public static function setSuperGlobalsForTesting(array $globals) : void
+    public static function setSuperGlobalsOnlyForTestingPurpose(array $globals) : void
     {
         self::$globals = $globals;
     }

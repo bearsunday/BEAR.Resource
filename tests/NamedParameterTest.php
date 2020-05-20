@@ -57,7 +57,7 @@ class NamedParameterTest extends TestCase
             '_GET' => ['q' => 'get_val'],
             '_SERVER' => ['s' => 'server_val']
         ];
-        AssistedWebContextParam::setSuperGlobalsForTesting($fakeGlobals);
+        AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose($fakeGlobals);
         $object = new FakeParamResource;
         $expected = [
             'cookie_val',
@@ -73,14 +73,14 @@ class NamedParameterTest extends TestCase
     public function testParameterWebContextNotExits() : void
     {
         $this->expectException(ParameterException::class);
-        AssistedWebContextParam::setSuperGlobalsForTesting([]);
+        AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose([]);
         $object = new FakeParamResource;
         $args = $this->params->getParameters([$object, 'onPut'], ['cookie' => 1]); // should be ignored
     }
 
     public function testParameterWebContextDefault() : void
     {
-        AssistedWebContextParam::setSuperGlobalsForTesting([]);
+        AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose([]);
         $object = new FakeParamResource;
         $expected = [
             1, 'default'
@@ -92,7 +92,7 @@ class NamedParameterTest extends TestCase
     public function testParameterWebContexRequiredNotGiven() : void
     {
         $this->expectException(ParameterException::class);
-        AssistedWebContextParam::setSuperGlobalsForTesting([]);
+        AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose([]);
         $object = new FakeParamResource;
         $args = $this->params->getParameters([$object, 'onDelete'], []);
     }

@@ -20,7 +20,7 @@ class AssistedWebContextParamTest extends TestCase
             '_COOKIE' => ['cookie_key' => '__COOKIE_VAL__']
         ];
         $assistedWebContextParam = new AssistedWebContextParam($cookieParam, new NoDefaultParam);
-        AssistedWebContextParam::setSuperGlobalsForTesting($fakeGlobals);
+        AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose($fakeGlobals);
         $injector = (new \ReflectionClass(Injector::class))->newInstanceWithoutConstructor();
         if (! $injector instanceof InjectorInterface) {
             throw new \LogicException;
