@@ -9,6 +9,8 @@ namespace BEAR\Resource;
  * @property array  $headers
  * @property mixed  $body
  * @property string $view
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class NullRequest extends AbstractRequest
 {
