@@ -102,6 +102,8 @@ class HalRenderer implements RenderInterface
 
     /**
      * @return array{0: ResourceObject, 1: array<string, mixed>}
+     *
+     * @psalm-suppress RedundantCondition for BC
      */
     private function valuate(ResourceObject $ro) : array
     {
