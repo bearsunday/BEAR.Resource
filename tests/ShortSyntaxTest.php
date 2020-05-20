@@ -26,7 +26,7 @@ class ShortSyntaxTest extends TestCase
     /**
      * @requires PHP 7.0.0
      */
-    public function testShortSyntax()
+    public function testShortSyntax(): void
     {
         $ro = $this->resource->get->uri('page://self/index')(['id' => 'koriym']);
         /* @var $ro ResourceObject */
@@ -37,7 +37,7 @@ class ShortSyntaxTest extends TestCase
     /**
      * @requires PHP 7.0.0
      */
-    public function testShortSyntaxWithQuery()
+    public function testShortSyntaxWithQuery(): void
     {
         $ro = $this->resource->get->uri('page://self/index?id=koriym')();
         /* @var $ro ResourceObject */
@@ -45,14 +45,14 @@ class ShortSyntaxTest extends TestCase
         $this->assertSame('koriym', $ro->body);
     }
 
-    public function testShortSyntaxInvoke()
+    public function testShortSyntaxInvoke(): void
     {
         $ro = $this->resource->get->uri('page://self/index?id=koriym')->__invoke(['id' => 'koriym']);
         $this->assertInstanceOf(Index::class, $ro);
         $this->assertSame('koriym', $ro->body);
     }
 
-    public function testShortSyntaxFunction()
+    public function testShortSyntaxFunction(): AbstractRequest
     {
         $index = $this->resource->get->uri('page://self/index?id=koriym');
         $ro = $index(['id' => 'koriym']);
@@ -65,7 +65,7 @@ class ShortSyntaxTest extends TestCase
     /**
      * @depends testShortSyntaxFunction
      */
-    public function testShortSyntaxReuseRequest(AbstractRequest $index)
+    public function testShortSyntaxReuseRequest(AbstractRequest $index): void
     {
         $ro = $index(['id' => 'bear']);
         $this->assertSame('bear', $ro->body);
@@ -74,7 +74,7 @@ class ShortSyntaxTest extends TestCase
     /**
      * @requires PHP 7.0.0
      */
-    public function testShortSyntaxFunctionWithDefaultGetMethod()
+    public function testShortSyntaxFunctionWithDefaultGetMethod(): void
     {
         $ro = $this->resource->uri('page://self/index')();
         $this->assertInstanceOf(Index::class, $ro);

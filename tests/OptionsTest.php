@@ -31,7 +31,7 @@ class OptionsTest extends TestCase
         $this->invoker = (new InvokerFactory)($_ENV['schema_dir']);
     }
 
-    public function testOptionsMethod()
+    public function testOptionsMethod(): DocPhp7
     {
         $ro = new DocPhp7;
         $request = new Request($this->invoker, $ro, Request::OPTIONS);
@@ -46,7 +46,7 @@ class OptionsTest extends TestCase
     /**
      * @depends testOptionsMethod
      */
-    public function testOptionsMethodBody(ResourceObject $ro)
+    public function testOptionsMethodBody(ResourceObject $ro): void
     {
         $actual = $ro->view;
         $expected = '{
@@ -99,7 +99,7 @@ class OptionsTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function testAssistedResource()
+    public function testAssistedResource(): void
     {
         $ro = new FakeParamResource;
         $request = new Request($this->invoker, $ro, Request::OPTIONS);
@@ -188,7 +188,7 @@ class OptionsTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function testOptionsMethodWithJsonSchema()
+    public function testOptionsMethodWithJsonSchema(): void
     {
         $ro = new DocUser;
         $request = new Request($this->invoker, $ro, Request::OPTIONS);
@@ -235,7 +235,7 @@ class OptionsTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function testOptionsNoSchemaFile()
+    public function testOptionsNoSchemaFile(): void
     {
         $ro = new DocInvalidFile;
         $request = new Request($this->invoker, $ro, Request::OPTIONS);
