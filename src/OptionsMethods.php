@@ -55,7 +55,7 @@ final class OptionsMethods
     /**
      * return array{summary?: string, description?: string, request: array, links: array, embed: array}
      *
-     * @return array<string, array|string>
+     * @return array<int|string, array|string>
      */
     public function __invoke(ResourceObject $ro, string $requestMethod) : array
     {
@@ -81,6 +81,7 @@ final class OptionsMethods
     /**
      * @return (Embed|Link)[][]
      *
+     * @phpstan-return (Embed|Link)[][]
      * @psalm-return array{links?: non-empty-list<Link>, embed?: non-empty-list<Embed>}
      */
     private function getMethodExtras(\ReflectionMethod $method) : array
