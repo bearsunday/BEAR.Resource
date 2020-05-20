@@ -188,8 +188,10 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
 
     /**
      * @Ray\Di\Di\Inject(optional=true)
+     *
+     * @return void
      */
-    public function setRenderer(RenderInterface $renderer) : void
+    public function setRenderer(RenderInterface $renderer)
     {
         $this->renderer = $renderer;
     }
