@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 /**
- * @property string $code
+ * @property int    $code
  * @property array  $headers
  * @property mixed  $body
  * @property string $view
