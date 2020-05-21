@@ -12,7 +12,7 @@ use IteratorAggregate;
 use Serializable;
 
 /**
- * @property string $code
+ * @property int    $code
  * @property array  $headers
  * @property mixed  $body
  * @property string $view
