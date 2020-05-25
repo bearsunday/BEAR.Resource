@@ -209,6 +209,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         $values = $invocation->getArguments();
         $arguments = [];
         foreach ($parameters as $index => $parameter) {
+            /** @psalm-suppress MixedAssignment */
             $arguments[(string) $parameter->name] = $values[$index] ?? $parameter->getDefaultValue();
         }
 
