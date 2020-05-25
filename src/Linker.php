@@ -160,11 +160,11 @@ final class Linker implements LinkerInterface
     private function annotationCrawl(array $annotations, LinkType $link, ResourceObject $current) : ResourceObject
     {
         $isList = $this->isList($current->body);
+        /** @var array<array<string, mixed>> $bodyList */
         $bodyList = $isList ? (array) $current->body : [$current->body];
         $this->cache = [];
         /** @psalm-suppress MixedAssignment */
         foreach ($bodyList as &$body) {
-            /* @noinspection ExceptionsAnnotatingAndHandlingInspection */
             $this->crawl($annotations, $link, $body);
         }
         unset($body);
