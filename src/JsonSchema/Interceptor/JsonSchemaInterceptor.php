@@ -99,6 +99,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
 
     private function validateRo(ResourceObject $ro, string $schemaFile, JsonSchema $jsonSchema) : void
     {
+        /** @var \stdClass|array<\stdClass>|false $json */
         $json = json_decode((string) $ro);
         if (! $json) {
             return;
