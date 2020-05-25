@@ -196,6 +196,7 @@ final class Linker implements LinkerInterface
             $request = new Request($this->invoker, $rel, Request::GET, $query, [$link], $this);
             $hash = $request->hash();
             if (array_key_exists($hash, $this->cache)) {
+                /** @psalm-suppress MixedAssignment */
                 $body[$annotation->rel] = $this->cache[$hash];
 
                 continue;
