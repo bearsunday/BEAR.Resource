@@ -149,6 +149,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         $result = [];
         /** @psalm-suppress MixedAssignment */
         foreach ($values as $key => $value) { // @phpstan-ignore-line
+            /** @psalm-suppress MixedArrayOffset */
             $result[$key] = is_object($value) ? $this->deepArray($value) : $result[$key] = $value;
         }
 
@@ -157,6 +158,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
 
     private function throwJsonSchemaException(Validator $validator, string $schemaFile) : JsonSchemaException
     {
+        /** @var array<array<string, string>> $errors */
         $errors = $validator->getErrors();
         $msg = '';
         foreach ($errors as $error) {
