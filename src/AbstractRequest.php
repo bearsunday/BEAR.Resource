@@ -161,7 +161,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     /**
      * {@inheritdoc}
      *
-     * @return array<string, string>|int
+     * @return mixed
      */
     public function __get(string $name)
     {
