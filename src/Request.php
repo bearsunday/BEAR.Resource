@@ -27,7 +27,7 @@ final class Request extends AbstractRequest
     const OPTIONS = 'options';
 
     /**
-     * @return array<string, string>|int|self
+     * @return array<string, string>|int|mixed|self
      *
      * @psalm-suppress ImplementedReturnTypeMismatch
      */
