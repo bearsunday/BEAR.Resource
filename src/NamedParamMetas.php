@@ -38,12 +38,14 @@ final class NamedParamMetas implements NamedParamMetasInterface
             throw new \LogicException('callable should be an array'); // @codeCoverageIgnore
         }
         $cacheId = __CLASS__ . get_class($callable[0]) . $callable[1];
+        /** @var array<string, ParamInterface>|false $names */
         $names = $this->cache->fetch($cacheId);
         if ($names) {
             return $names;
         }
         $method = new \ReflectionMethod($callable[0], $callable[1]);
         $parameters = $method->getParameters();
+        /** @var array<object> $annotations */
         $annotations = $this->reader->getMethodAnnotations($method);
         $assistedNames = $this->getAssistedNames($annotations);
         $webContext = $this->getWebContext($annotations);
@@ -54,7 +56,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
     }
 
     /**
-     * @param array<Assisted|ResourceParam> $annotations
+     * @param array<Assisted|object|ResourceParam> $annotations
      *
      * @return array<string, ParamInterface>
      */
@@ -154,6 +156,8 @@ final class NamedParamMetas implements NamedParamMetasInterface
     {
         $class = $parameter->getClass();
         if ($class instanceof \ReflectionClass) {
+            /** @var \ReflectionClass<ResourceObject> $class */
+
             return new ClassParam($class, $parameter);
         }
 

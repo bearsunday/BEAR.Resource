@@ -29,10 +29,12 @@ final class NamedParameter implements NamedParameterInterface
      */
     public function getParameters(callable $callable, array $query) : array
     {
+        /** @var array<string, ParamInterface> $metas */
         $metas = ($this->paramMetas)($callable);
         $parameters = [];
-        foreach ($metas as $varName => $param) {
-            /* @var $param ParamInterface */
+        /** @var array<string, array<string, mixed>> $query */
+        foreach ($metas as $varName => $param) { // @phpstan-ignore-line
+            /** @psalm-suppress MixedAssignment */
             $parameters[] = $param($varName, $query, $this->injector);
         }
 

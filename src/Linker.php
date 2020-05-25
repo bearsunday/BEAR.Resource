@@ -33,7 +33,7 @@ final class Linker implements LinkerInterface
     /**
      * memory cache for linker
      *
-     * @var array<string,array<string, mixed>>
+     * @var array<array<int|string, mixed>|mixed>
      */
     private $cache = [];
 
@@ -62,7 +62,7 @@ final class Linker implements LinkerInterface
         }
 
         foreach ($request->links as $link) {
-            /* @noinspection ExceptionsAnnotatingAndHandlingInspection */
+            /** @psalm-suppress MixedAssignment */
             $nextResource = $this->annotationLink($link, $current, $request);
             $current = $this->nextLink($link, $current, $nextResource);
         }
@@ -77,6 +77,7 @@ final class Linker implements LinkerInterface
      */
     private function nextLink(LinkType $link, ResourceObject $ro, $nextResource) : ResourceObject
     {
+        /** @psalm-suppress MixedAssignment */
         $nextBody = $nextResource instanceof ResourceObject ? $nextResource->body : $nextResource;
 
         if ($link->type === LinkType::SELF_LINK) {
@@ -110,6 +111,7 @@ final class Linker implements LinkerInterface
             throw new Exception\LinkQueryException('Only array is allowed for link in ' . get_class($current), 500);
         }
         $classMethod = 'on' . ucfirst($request->method);
+        /** @var array<int, Link> $annotations */
         $annotations = $this->reader->getMethodAnnotations(new \ReflectionMethod(get_class($current), $classMethod));
         if ($link->type === LinkType::CRAWL_LINK) {
             return $this->annotationCrawl($annotations, $link, $current);
@@ -136,7 +138,7 @@ final class Linker implements LinkerInterface
             if ($annotation->rel !== $link->key) {
                 continue;
             }
-            $uri = uri_template($annotation->href, $current->body);
+            $uri = uri_template($annotation->href, (array) $current->body);
             $rel = $this->factory->newInstance($uri);
             /* @noinspection UnnecessaryParenthesesInspection */
             $query = (new Uri($uri))->query;
@@ -158,10 +160,11 @@ final class Linker implements LinkerInterface
     private function annotationCrawl(array $annotations, LinkType $link, ResourceObject $current) : ResourceObject
     {
         $isList = $this->isList($current->body);
+        /** @var array<array<string, mixed>> $bodyList */
         $bodyList = $isList ? (array) $current->body : [$current->body];
         $this->cache = [];
+        /** @psalm-suppress MixedAssignment */
         foreach ($bodyList as &$body) {
-            /* @noinspection ExceptionsAnnotatingAndHandlingInspection */
             $this->crawl($annotations, $link, $body);
         }
         unset($body);
@@ -193,10 +196,12 @@ final class Linker implements LinkerInterface
             $request = new Request($this->invoker, $rel, Request::GET, $query, [$link], $this);
             $hash = $request->hash();
             if (array_key_exists($hash, $this->cache)) {
+                /** @psalm-suppress MixedAssignment */
                 $body[$annotation->rel] = $this->cache[$hash];
 
                 continue;
             }
+            /** @psalm-suppress MixedAssignment */
             $this->cache[$hash] = $body[$annotation->rel] = $this->invoke($request)->body;
         }
     }
@@ -206,7 +211,11 @@ final class Linker implements LinkerInterface
      */
     private function isList($value) : bool
     {
+        if (! is_array($value)) {
+            return false;
+        }
         $list = $value;
+        /** @psalm-suppress MixedAssignment */
         $firstRow = array_pop($list);
         $keys = array_keys((array) $firstRow);
         $isMultiColumnMultiRowList = $this->isMultiColumnMultiRowList($keys, $list);
@@ -218,7 +227,7 @@ final class Linker implements LinkerInterface
 
     /**
      * @param array<int, int|string> $keys
-     * @param array<mixed, mixed>    $list
+     * @param array<mixed>           $list
      */
     private function isMultiColumnMultiRowList(array $keys, array $list) : bool
     {
@@ -226,6 +235,7 @@ final class Linker implements LinkerInterface
             return false;
         }
 
+        /** @psalm-suppress MixedAssignment */
         foreach ($list as $item) {
             if ($keys !== array_keys((array) $item)) {
                 return false;
@@ -246,7 +256,7 @@ final class Linker implements LinkerInterface
 
     /**
      * @param array<int|string, mixed> $value
-     * @param array<string>            $keys
+     * @param list<array-key>          $keys
      * @param array<mixed, mixed>      $list
      */
     private function isSingleColumnList(array $value, array $keys, array $list) : bool

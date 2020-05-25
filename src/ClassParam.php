@@ -51,7 +51,9 @@ final class ClassParam implements ParamInterface
             throw $e;
         }
         assert(class_exists($this->class));
+        /** @psalm-suppress MixedMethodCall */
         $obj = new $this->class;
+        /** @psalm-suppress MixedAssignment */
         foreach ($props as $propName => $propValue) {
             $obj->{$propName} = $propValue;
         }
@@ -60,9 +62,9 @@ final class ClassParam implements ParamInterface
     }
 
     /**
-     * @param array<string, mixed> $query
+     * @param array<string, array<string, mixed>> $query
      *
-     * @return array<string, array<string,mixed>>
+     * @return array<string, mixed>
      */
     private function getProps(string $varName, array $query, InjectorInterface $injector) : array
     {

@@ -126,6 +126,7 @@ final class AppIterator implements Iterator
         include_once $pathName;
         $newClasses = array_values(array_diff_key(get_declared_classes(), $declaredClasses));
         $name = $this->getName($newClasses);
+        assert(is_string($name));
 
         return $name;
     }

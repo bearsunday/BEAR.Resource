@@ -6,6 +6,7 @@ namespace BEAR\Resource;
 
 use ArrayAccess;
 use ArrayIterator;
+use BEAR\Resource\Exception\IlligalAccessException;
 use Countable;
 use Exception;
 use IteratorAggregate;
@@ -49,7 +50,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * Body
      *
-     * @var mixed
+     * @var array<int|string, mixed>|mixed
      */
     public $body;
 
@@ -84,6 +85,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     public function __sleep()
     {
         if (is_array($this->body)) {
+            /** @psalm-suppress MixedAssignment */
             foreach ($this->body as &$item) {
                 if ($item instanceof RequestInterface) {
                     $item = ($item)();
@@ -97,13 +99,17 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * Returns the body value at the specified index
      *
-     * @param mixed $offset offset
+     * @param int|string $offset offset
      *
      * @return mixed
      */
     public function offsetGet($offset)
     {
-        return $this->body[$offset];
+        if (is_array($this->body)) {
+            return $this->body[$offset];
+        }
+
+        throw new IlligalAccessException((string) $offset);
     }
 
     /**
@@ -122,23 +128,29 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * Returns whether the requested index in body exists
      *
-     * @param mixed $offset offset
+     * @param int|string $offset offset
      *
      * @return bool
      */
     public function offsetExists($offset)
     {
-        return isset($this->body[$offset]);
+        if (is_array($this->body)) {
+            return isset($this->body[$offset]);
+        }
+
+        throw new IlligalAccessException((string) $offset);
     }
 
     /**
      * Set the value at the specified index
      *
-     * @param mixed $offset offset
+     * @param int|string $offset offset
      */
     public function offsetUnset($offset) : void
     {
-        unset($this->body[$offset]);
+        if (is_array($this->body)) {
+            unset($this->body[$offset]);
+        }
     }
 
     /**
@@ -148,7 +160,11 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      */
     public function count()
     {
-        return count($this->body);
+        if ($this->body instanceof Countable || is_array($this->body)) {
+            return count($this->body);
+        }
+
+        throw new IlligalAccessException();
     }
 
     /**
@@ -181,9 +197,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      */
     public function getIterator() : ArrayIterator
     {
-        $isTraversal = (is_array($this->body) || $this->body instanceof \Traversable);
-
-        return $isTraversal ? new ArrayIterator($this->body) : new ArrayIterator([]);
+        return is_array($this->body) ? new ArrayIterator((array) $this->body) : new ArrayIterator([]);
     }
 
     /**
@@ -211,14 +225,16 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<int|string, mixed>
      */
     public function jsonSerialize() : array
     {
-        $body = $this->evaluate($this->body);
-        if (! is_iterable($body)) {
-            return ['value' => $body];
+        /** @psalm-suppress MixedAssignment */
+        if (! is_iterable($this->body)) {
+            return ['value' => $this->body];
         }
+        $body = $this->evaluate($this->body);
+        assert(is_array($body));
 
         return $body;
     }
@@ -234,17 +250,16 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * @param mixed $body
      *
-     * @return array<string, mixed>|bool|int|string
+     * @return mixed
      */
     private function evaluate($body)
     {
-        if (is_array($body)) {
-            /* @noinspection ForeachSourceInspection */
-            foreach ($body as &$value) {
-                if ($value instanceof RequestInterface) {
-                    $result = $value();
-                    $value = $result->body;
-                }
+        /* @noinspection ForeachSourceInspection */
+        /** @psalm-suppress MixedAssignment */
+        foreach ($body as &$value) {
+            if ($value instanceof RequestInterface) {
+                $result = $value();
+                $value = $result->body;
             }
         }
 

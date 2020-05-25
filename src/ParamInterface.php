@@ -9,7 +9,7 @@ use Ray\Di\InjectorInterface;
 interface ParamInterface
 {
     /**
-     * @param array<string, mixed> $query
+     * @param array<string, array<string, mixed>> $query
      *
      * @return mixed
      */

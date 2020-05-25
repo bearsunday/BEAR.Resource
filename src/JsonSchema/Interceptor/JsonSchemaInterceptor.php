@@ -99,10 +99,12 @@ final class JsonSchemaInterceptor implements MethodInterceptor
 
     private function validateRo(ResourceObject $ro, string $schemaFile, JsonSchema $jsonSchema) : void
     {
+        /** @var array<\stdClass>|false|\stdClass $json */
         $json = json_decode((string) $ro);
         if (! $json) {
             return;
         }
+        /** @var array<\stdClass>|\stdClass $target */
         $target = is_object($json) ? $this->getTarget($json, $jsonSchema) : $json;
         $this->validate($target, $schemaFile);
     }
@@ -123,15 +125,15 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     }
 
     /**
-     * @param array<string, mixed>|object $scanObject
+     * @param array<\stdClass>|array<string, mixed>|\stdClass $target
      */
-    private function validate($scanObject, string $schemaFile) : void
+    private function validate($target, string $schemaFile) : void
     {
         $validator = new Validator;
         $schema = (object) ['$ref' => 'file://' . $schemaFile];
-        $scanArray = is_array($scanObject) ? $scanObject : $this->deepArray($scanObject);
+        $scanArray = is_array($target) ? $target : $this->deepArray($target);
         $validator->validate($scanArray, $schema, Constraint::CHECK_MODE_TYPE_CAST);
-        $isValid = $validator->isValid();
+        $isValid = (bool) $validator->isValid();
         if ($isValid) {
             return;
         }
@@ -145,7 +147,9 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     private function deepArray(object $values) : array
     {
         $result = [];
+        /** @psalm-suppress MixedAssignment */
         foreach ($values as $key => $value) { // @phpstan-ignore-line
+            /** @psalm-suppress MixedArrayOffset */
             $result[$key] = is_object($value) ? $this->deepArray($value) : $result[$key] = $value;
         }
 
@@ -154,6 +158,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
 
     private function throwJsonSchemaException(Validator $validator, string $schemaFile) : JsonSchemaException
     {
+        /** @var array<array<string, string>> $errors */
         $errors = $validator->getErrors();
         $msg = '';
         foreach ($errors as $error) {
@@ -204,6 +209,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         $values = $invocation->getArguments();
         $arguments = [];
         foreach ($parameters as $index => $parameter) {
+            /** @psalm-suppress MixedAssignment */
             $arguments[(string) $parameter->name] = $values[$index] ?? $parameter->getDefaultValue();
         }
 
