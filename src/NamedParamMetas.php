@@ -38,6 +38,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
             throw new \LogicException('callable should be an array'); // @codeCoverageIgnore
         }
         $cacheId = __CLASS__ . get_class($callable[0]) . $callable[1];
+        /** @var array<string, ParamInterface>|false $names */
         $names = $this->cache->fetch($cacheId);
         if ($names) {
             return $names;
