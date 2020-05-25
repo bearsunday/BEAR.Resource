@@ -247,9 +247,8 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     {
         $this->invoke();
         assert($this->result instanceof ResourceObject);
-        $isArray = (is_array($this->result->body) || $this->result->body instanceof \Traversable);
-
-        return $isArray ? new ArrayIterator($this->result->body) : new ArrayIterator([]);
+        
+        return is_array($this->result->body) ? new ArrayIterator($this->result->body) : new ArrayIterator([]);
     }
 
     /**
