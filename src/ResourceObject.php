@@ -229,6 +229,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      */
     public function jsonSerialize() : array
     {
+        /** @psalm-suppress MixedAssignment */
         $body = $this->evaluate($this->body);
         if (! is_iterable($body)) {
             return ['value' => $body];
@@ -254,6 +255,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     {
         if (is_array($body)) {
             /* @noinspection ForeachSourceInspection */
+            /** @psalm-suppress MixedAssignment */
             foreach ($body as &$value) {
                 if ($value instanceof RequestInterface) {
                     $result = $value();
