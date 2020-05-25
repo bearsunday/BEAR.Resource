@@ -99,11 +99,12 @@ final class JsonSchemaInterceptor implements MethodInterceptor
 
     private function validateRo(ResourceObject $ro, string $schemaFile, JsonSchema $jsonSchema) : void
     {
-        /** @var \stdClass|array<\stdClass>|false $json */
+        /** @var array<\stdClass>|false|\stdClass $json */
         $json = json_decode((string) $ro);
         if (! $json) {
             return;
         }
+        /** @var array<\stdClass>|\stdClass $target */
         $target = is_object($json) ? $this->getTarget($json, $jsonSchema) : $json;
         $this->validate($target, $schemaFile);
     }
@@ -124,13 +125,13 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     }
 
     /**
-     * @param array<string, mixed>|object $scanObject
+     * @param array<\stdClass>|array<string, mixed>|\stdClass $target
      */
-    private function validate($scanObject, string $schemaFile) : void
+    private function validate($target, string $schemaFile) : void
     {
         $validator = new Validator;
         $schema = (object) ['$ref' => 'file://' . $schemaFile];
-        $scanArray = is_array($scanObject) ? $scanObject : $this->deepArray($scanObject);
+        $scanArray = is_array($target) ? $target : $this->deepArray($target);
         $validator->validate($scanArray, $schema, Constraint::CHECK_MODE_TYPE_CAST);
         $isValid = $validator->isValid();
         if ($isValid) {
