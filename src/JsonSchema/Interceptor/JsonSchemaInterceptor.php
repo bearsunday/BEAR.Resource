@@ -147,6 +147,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     private function deepArray(object $values) : array
     {
         $result = [];
+        /** @psalm-suppress MixedAssignment */
         foreach ($values as $key => $value) { // @phpstan-ignore-line
             $result[$key] = is_object($value) ? $this->deepArray($value) : $result[$key] = $value;
         }
