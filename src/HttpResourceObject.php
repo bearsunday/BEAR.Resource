@@ -20,6 +20,11 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 final class HttpResourceObject extends ResourceObject
 {
     /**
+     * @psalm-suppress PropertyNotSetInConstructor
+     */
+    public $body;
+
+    /**
      * @var HttpClientInterface
      */
     private $client;
@@ -38,7 +43,7 @@ final class HttpResourceObject extends ResourceObject
     }
 
     /**
-     * @return array<string, mixed>|int|string
+     * @return array<int|string, mixed>|int|string
      */
     public function __get(string $name)
     {
