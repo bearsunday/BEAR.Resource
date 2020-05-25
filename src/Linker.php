@@ -208,11 +208,12 @@ final class Linker implements LinkerInterface
 
     /**
      * @param mixed $value
-     *
      */
     private function isList($value) : bool
     {
-        /** @psalm-suppress MixedAssignment */
+        if (! is_array($value)) {
+            return false;
+        }
         $list = $value;
         /** @psalm-suppress MixedAssignment */
         $firstRow = array_pop($list);
@@ -226,7 +227,7 @@ final class Linker implements LinkerInterface
 
     /**
      * @param array<int, int|string> $keys
-     * @param array<mixed, mixed>    $list
+     * @param array<mixed>           $list
      */
     private function isMultiColumnMultiRowList(array $keys, array $list) : bool
     {
@@ -255,7 +256,7 @@ final class Linker implements LinkerInterface
 
     /**
      * @param array<int|string, mixed> $value
-     * @param array<string>            $keys
+     * @param list<array-key>          $keys
      * @param array<mixed, mixed>      $list
      */
     private function isSingleColumnList(array $value, array $keys, array $list) : bool
