@@ -127,13 +127,16 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * Returns whether the requested index in body exists
      *
-     * @param mixed $offset offset
+     * @param int|string $offset offset
      *
      * @return bool
      */
     public function offsetExists($offset)
     {
-        return isset($this->body[$offset]);
+        if (is_array($this->body)) {
+            return isset($this->body[$offset]);
+        }
+        throw new IlligalAccessException((string) $offset);
     }
 
     /**
