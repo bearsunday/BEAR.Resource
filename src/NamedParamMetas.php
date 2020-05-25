@@ -45,6 +45,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
         }
         $method = new \ReflectionMethod($callable[0], $callable[1]);
         $parameters = $method->getParameters();
+        /** @var array<object> $annotations */
         $annotations = $this->reader->getMethodAnnotations($method);
         $assistedNames = $this->getAssistedNames($annotations);
         $webContext = $this->getWebContext($annotations);
@@ -55,7 +56,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
     }
 
     /**
-     * @param array<Assisted|ResourceParam> $annotations
+     * @param array<Assisted|ResourceParam|object> $annotations
      *
      * @return array<string, ParamInterface>
      */
