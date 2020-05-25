@@ -162,6 +162,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         if ($this->body instanceof Countable || is_array($this->body)) {
             return count($this->body);
         }
+        throw new IlligalAccessException();
     }
 
     /**
