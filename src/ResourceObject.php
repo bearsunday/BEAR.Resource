@@ -6,6 +6,7 @@ namespace BEAR\Resource;
 
 use ArrayAccess;
 use ArrayIterator;
+use BEAR\Resource\Exception\IlligalAccessException;
 use Countable;
 use Exception;
 use IteratorAggregate;
@@ -49,7 +50,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * Body
      *
-     * @var mixed
+     * @var mixed|array<int|string, mixed>
      */
     public $body;
 
@@ -98,13 +99,16 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * Returns the body value at the specified index
      *
-     * @param mixed $offset offset
+     * @param int|string $offset offset
      *
      * @return mixed
      */
     public function offsetGet($offset)
     {
-        return $this->body[$offset];
+        if (is_array($this->body)) {
+            return $this->body[$offset];
+        }
+        throw new IlligalAccessException((string) $offset);
     }
 
     /**
@@ -149,7 +153,9 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      */
     public function count()
     {
-        return count($this->body);
+        if ($this->body instanceof Countable || is_array($this->body)) {
+            return count($this->body);
+        }
     }
 
     /**
