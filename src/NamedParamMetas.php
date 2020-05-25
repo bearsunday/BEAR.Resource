@@ -56,7 +56,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
     }
 
     /**
-     * @param array<Assisted|ResourceParam|object> $annotations
+     * @param array<Assisted|object|ResourceParam> $annotations
      *
      * @return array<string, ParamInterface>
      */
@@ -156,6 +156,8 @@ final class NamedParamMetas implements NamedParamMetasInterface
     {
         $class = $parameter->getClass();
         if ($class instanceof \ReflectionClass) {
+            /** @var \ReflectionClass<ResourceObject> $class */
+
             return new ClassParam($class, $parameter);
         }
 
