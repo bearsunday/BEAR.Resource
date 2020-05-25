@@ -209,6 +209,7 @@ final class Linker implements LinkerInterface
     private function isList($value) : bool
     {
         $list = $value;
+        /** @psalm-suppress MixedAssignment */
         $firstRow = array_pop($list);
         $keys = array_keys((array) $firstRow);
         $isMultiColumnMultiRowList = $this->isMultiColumnMultiRowList($keys, $list);
@@ -228,6 +229,7 @@ final class Linker implements LinkerInterface
             return false;
         }
 
+        /** @psalm-suppress MixedAssignment */
         foreach ($list as $item) {
             if ($keys !== array_keys((array) $item)) {
                 return false;
