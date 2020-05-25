@@ -9,6 +9,8 @@
     <projectFiles>
         <directory name="src" />
         <ignoreFiles>
+            <file name="src/OptionsMethods.php"/>
+            <file name="src/OptionsMethodRequest.php"/>
             <directory name="vendor" />
         </ignoreFiles>
     </projectFiles>

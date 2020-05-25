@@ -33,6 +33,7 @@ final class NamedParameter implements NamedParameterInterface
         $parameters = [];
         foreach ($metas as $varName => $param) {
             /* @var $param ParamInterface */
+            /** @psalm-suppress MixedAssignment */
             $parameters[] = $param($varName, $query, $this->injector);
         }
 
