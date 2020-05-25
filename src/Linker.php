@@ -33,7 +33,7 @@ final class Linker implements LinkerInterface
     /**
      * memory cache for linker
      *
-     * @var array<string,array<string, mixed>>
+     * @var array<array<int|string, mixed>|mixed>
      */
     private $cache = [];
 
@@ -208,9 +208,11 @@ final class Linker implements LinkerInterface
 
     /**
      * @param mixed $value
+     *
      */
     private function isList($value) : bool
     {
+        /** @psalm-suppress MixedAssignment */
         $list = $value;
         /** @psalm-suppress MixedAssignment */
         $firstRow = array_pop($list);
