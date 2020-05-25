@@ -133,7 +133,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         $schema = (object) ['$ref' => 'file://' . $schemaFile];
         $scanArray = is_array($target) ? $target : $this->deepArray($target);
         $validator->validate($scanArray, $schema, Constraint::CHECK_MODE_TYPE_CAST);
-        $isValid = $validator->isValid();
+        $isValid = (bool) $validator->isValid();
         if ($isValid) {
             return;
         }
