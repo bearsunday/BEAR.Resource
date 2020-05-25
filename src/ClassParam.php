@@ -53,6 +53,7 @@ final class ClassParam implements ParamInterface
         assert(class_exists($this->class));
         $obj = new $this->class;
         foreach ($props as $propName => $propValue) {
+            /** @psalm-suppress MixedAssignment */
             $obj->{$propName} = $propValue;
         }
 
