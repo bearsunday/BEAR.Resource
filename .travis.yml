@@ -45,6 +45,7 @@ jobs:
       name: Static analysis
       php: 7.2
       install:
+        - composer update
         - composer global require --dev phpstan/phpstan ^0.12 vimeo/psalm ^3.11 phpmetrics/phpmetrics ^2.6;
       script:
         - ~/.composer/vendor/bin/phpstan analyse -c phpstan.neon --no-progress --no-interaction;
