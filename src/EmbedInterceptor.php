@@ -88,6 +88,7 @@ final class EmbedInterceptor implements MethodInterceptor
         $params = $invocation->getMethod()->getParameters();
         $namedParameters = [];
         foreach ($params as $param) {
+            /** @psalm-suppress MixedAssignment */
             $namedParameters[(string) $param->name] = array_shift($args);
         }
 
