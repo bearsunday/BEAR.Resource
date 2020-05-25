@@ -26,8 +26,8 @@ final class HalLink
     }
 
     /**
-     * @param array<string, mixed> $body
-     * @param array<int, object>   $methodAnnotations
+     * @param array{_links?: array<string, array{href: string}>} $body
+     * @param array<int, object>                                 $methodAnnotations
      */
     public function addHalLink(array $body, array $methodAnnotations, Hal $hal) : Hal
     {
@@ -42,8 +42,8 @@ final class HalLink
     }
 
     /**
-     * @param array<string, mixed> $body
-     * @param array<int, object>   $methodAnnotations
+     * @param array<int|string, mixed>|array{_links: string} $body
+     * @param array<int, Link|object>                        $methodAnnotations
      */
     private function linkAnnotation(array $body, array $methodAnnotations, Hal $hal) : Hal
     {
@@ -64,7 +64,9 @@ final class HalLink
     }
 
     /**
-     * @param array<string, mixed> $body
+     * @param array{_links: array<int|string, array{href?: string}>} $body
+     *
+     * User can set `_links` array as a `Links` annotation
      */
     private function bodyLink(array $body, Hal $hal) : Hal
     {

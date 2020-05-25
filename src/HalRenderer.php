@@ -46,9 +46,11 @@ class HalRenderer implements RenderInterface
      */
     public function renderHal(ResourceObject $ro) : void
     {
+        /** @psalm-suppress MixedAssignment */
         [$ro, $body] = $this->valuate($ro);
         $method = 'on' . ucfirst($ro->uri->method);
         $hasMethod = method_exists($ro, $method);
+        /** @var array<int, object> $annotations */
         $annotations = $hasMethod ? $this->reader->getMethodAnnotations(new \ReflectionMethod($ro, $method)) : [];
         /* @var $annotations Link[] */
         $hal = $this->getHal($ro->uri, (array) $body, $annotations);
@@ -56,11 +58,15 @@ class HalRenderer implements RenderInterface
         $ro->headers['Content-Type'] = 'application/hal+json';
     }
 
+    /**
+     * @psalm-suppress MixedArrayAssignment
+     */
     private function valuateElements(ResourceObject $ro) : void
     {
         if (! is_array($ro->body)) {
             return;
         }
+        /** @var AbstractRequest|object $embeded */
         foreach ($ro->body as $key => &$embeded) {
             if ($embeded instanceof AbstractRequest) {
                 // @codeCoverageIgnoreStart
@@ -87,8 +93,8 @@ class HalRenderer implements RenderInterface
     }
 
     /**
-     * @param array<string, mixed> $body
-     * @param array<int, object>   $annotations
+     * @param array<int|string, mixed> $body
+     * @param array<int, object>       $annotations
      */
     private function getHal(AbstractUri $uri, array $body, array $annotations) : Hal
     {
@@ -97,11 +103,12 @@ class HalRenderer implements RenderInterface
         $selfLink = $this->link->getReverseLink($path);
         $hal = new Hal($selfLink, $body);
 
+        /** @var array{_links?: array<string, array{href: string}>} $body */
         return $this->link->addHalLink($body, $annotations, $hal);
     }
 
     /**
-     * @return array{0: ResourceObject, 1: mixed|array<string, mixed>}
+     * @return array{0: ResourceObject, 1: array<int|string, mixed>|mixed}
      */
     private function valuate(ResourceObject $ro) : array
     {
