@@ -84,6 +84,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     public function __sleep()
     {
         if (is_array($this->body)) {
+            /** @psalm-suppress MixedAssignment */
             foreach ($this->body as &$item) {
                 if ($item instanceof RequestInterface) {
                     $item = ($item)();
