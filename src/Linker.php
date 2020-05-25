@@ -62,7 +62,7 @@ final class Linker implements LinkerInterface
         }
 
         foreach ($request->links as $link) {
-            /* @noinspection ExceptionsAnnotatingAndHandlingInspection */
+            /** @psalm-suppress MixedAssignment */
             $nextResource = $this->annotationLink($link, $current, $request);
             $current = $this->nextLink($link, $current, $nextResource);
         }
@@ -77,6 +77,7 @@ final class Linker implements LinkerInterface
      */
     private function nextLink(LinkType $link, ResourceObject $ro, $nextResource) : ResourceObject
     {
+        /** @psalm-suppress MixedAssignment */
         $nextBody = $nextResource instanceof ResourceObject ? $nextResource->body : $nextResource;
 
         if ($link->type === LinkType::SELF_LINK) {
@@ -160,6 +161,7 @@ final class Linker implements LinkerInterface
         $isList = $this->isList($current->body);
         $bodyList = $isList ? (array) $current->body : [$current->body];
         $this->cache = [];
+        /** @psalm-suppress MixedAssignment */
         foreach ($bodyList as &$body) {
             /* @noinspection ExceptionsAnnotatingAndHandlingInspection */
             $this->crawl($annotations, $link, $body);
