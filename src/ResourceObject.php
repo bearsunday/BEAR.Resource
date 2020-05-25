@@ -142,11 +142,14 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * Set the value at the specified index
      *
-     * @param mixed $offset offset
+     * @param int|string $offset offset
      */
     public function offsetUnset($offset) : void
     {
-        unset($this->body[$offset]);
+        if (is_array($this->body)) {
+            unset($this->body[$offset]);
+        }
+        throw new IlligalAccessException((string) $offset);
     }
 
     /**
