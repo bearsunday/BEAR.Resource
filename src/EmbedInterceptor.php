@@ -40,6 +40,7 @@ final class EmbedInterceptor implements MethodInterceptor
         $ro = $invocation->getThis();
         $method = $invocation->getMethod();
         $query = $this->getArgsByInvocation($invocation);
+        /** @var array<object> $embeds */
         $embeds = $this->reader->getMethodAnnotations($method);
         $this->embedResource($embeds, $ro, $query);
 
@@ -51,6 +52,9 @@ final class EmbedInterceptor implements MethodInterceptor
      * @param array<string, mixed> $query
      *
      * @throws EmbedException
+     *
+     * @psalm-suppress NoInterfaceProperties
+     * @psalm-suppress MixedMethodCall
      */
     private function embedResource(array $embeds, ResourceObject $ro, array $query) : void
     {
@@ -61,7 +65,6 @@ final class EmbedInterceptor implements MethodInterceptor
             try {
                 $templateUri = $this->getFullUri($embed->src, $ro);
                 $uri = uri_template($templateUri, $query);
-                /** @psalm-suppress NoInterfaceProperties */
                 $ro->body[$embed->rel] = clone $this->resource->get->uri($uri);
             } catch (BadRequestException $e) {
                 // wrap ResourceNotFound or Uri exception
