@@ -55,6 +55,7 @@ final class Anchor implements AnchorInterface
      */
     private function getMethodUri(AbstractRequest $request, array $query, LinkAnnotation $annotation) : array
     {
+        /** @var array|mixed $body */
         $body = $request->resourceObject->body;
         $query = is_array($body) ? array_merge($body, $query) : [];
         $uri = uri_template($annotation->href, $query);
