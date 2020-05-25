@@ -199,9 +199,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      */
     public function getIterator() : ArrayIterator
     {
-        $isTraversal = (is_array($this->body) || $this->body instanceof \Traversable);
-
-        return $isTraversal ? new ArrayIterator((array) $this->body) : new ArrayIterator([]);
+        return is_array($this->body) ? new ArrayIterator((array) $this->body) : new ArrayIterator([]);
     }
 
     /**
