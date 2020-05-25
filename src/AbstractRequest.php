@@ -210,6 +210,8 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      * {@inheritdoc}
      *
      * @throws OutOfBoundsException
+     *
+     * @return mixed
      */
     public function offsetGet($offset)
     {
@@ -218,8 +220,9 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
         if (! isset($this->result->body[$offset])) {
             throw new OutOfBoundsException("[${offset}] for object[" . get_class($this->result) . ']', 400);
         }
-
-        return $this->result->body[$offset];
+        if (is_array($this->result->body)) {
+            return $this->result->body[$offset];
+        }
     }
 
     /**
