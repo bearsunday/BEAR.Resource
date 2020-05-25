@@ -248,7 +248,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * @param mixed $body
      *
-     * @return array<string, mixed>|bool|int|string
+     * @return mixed
      */
     private function evaluate($body)
     {
