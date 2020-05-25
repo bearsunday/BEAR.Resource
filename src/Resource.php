@@ -132,12 +132,17 @@ final class Resource implements ResourceInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @psalm-suppress MixedPropertyFetch
      */
     public function href(string $rel, array $query = []) : ResourceObject
     {
         [$method, $uri] = $this->anchor->href($rel, $this->request, $query);
+        /** @psalm-suppress MixedMethodCall */
+        $resourceObject = $this->{$method}->uri($uri)->addQuery($query)->eager->request();
+        assert($resourceObject instanceof ResourceObject);
 
-        return $this->{$method}->uri($uri)->addQuery($query)->eager->request();
+        return $resourceObject;
     }
 
     public function get(string $uri, array $query = []) : ResourceObject
