@@ -38,9 +38,10 @@ final class AssistedWebContextParam implements ParamInterface
     public function __invoke(string $varName, array $query, InjectorInterface $injector)
     {
         $superGlobals = static::$globals ? static::$globals : $GLOBALS;
+        /** @var array<string, array<string, string>> $superGlobals */
         $webContextParam = $this->webContextParam;
+        assert(is_string($webContextParam::GLOBAL_KEY));
         $phpWebContext = $superGlobals[$webContextParam::GLOBAL_KEY];
-
         if (isset($phpWebContext[$this->webContextParam->key])) {
             return  $phpWebContext[$this->webContextParam->key];
         }
