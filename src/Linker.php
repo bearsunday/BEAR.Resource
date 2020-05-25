@@ -201,6 +201,7 @@ final class Linker implements LinkerInterface
 
                 continue;
             }
+            /** @psalm-suppress MixedAssignment */
             $this->cache[$hash] = $body[$annotation->rel] = $this->invoke($request)->body;
         }
     }
