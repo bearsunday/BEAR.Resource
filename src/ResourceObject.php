@@ -11,6 +11,7 @@ use Countable;
 use Exception;
 use IteratorAggregate;
 use JsonSerializable;
+use Ray\Di\Di\Inject;
 
 /**
  * @phpstan-implements \ArrayAccess<string, mixed>
@@ -70,6 +71,9 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      */
     public function __toString()
     {
+        if (is_string($this->view)) {
+            return $this->view;
+        }
         try {
             $view = $this->toString();
         } catch (Exception $e) {
@@ -201,7 +205,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     }
 
     /**
-     * @Ray\Di\Di\Inject(optional=true)
+     * @Inject(optional=true)
      *
      * @return self
      */
