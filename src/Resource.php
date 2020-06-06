@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 /**
- * @property $this $get
- * @property $this $post
- * @property $this $put
- * @property $this $patch
- * @property $this $delete
- * @property $this $head
- * @property $this $options
+ * @property-read $this $get
+ * @property-read $this $post
+ * @property-read $this $put
+ * @property-read $this $patch
+ * @property-read $this $delete
+ * @property-read $this $head
+ * @property-read $this $options
  */
 final class Resource implements ResourceInterface
 {
@@ -84,10 +84,7 @@ final class Resource implements ResourceInterface
         $this->uri = $uri;
     }
 
-    /**
-     * @param string $name
-     */
-    public function __get($name) : self
+    public function __get(string $name) : self
     {
         $this->method = $name;
 
