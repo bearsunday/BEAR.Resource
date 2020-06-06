@@ -10,12 +10,12 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
- * @method HttpResourceObject get(AbstractUri|string $uri, array $params = [])
- * @method HttpResourceObject head(AbstractUri|string $uri, array $params = [])
- * @method HttpResourceObject put(AbstractUri|string $uri, array $params = [])
- * @method HttpResourceObject post(AbstractUri|string $uri, array $params = [])
- * @method HttpResourceObject patch(AbstractUri|string $uri, array $params = [])
- * @method HttpResourceObject delete(AbstractUri|string $uri, array $params = [])
+ * @method HttpResourceObject get(AbstractUri|string $uri, array<string, mixed> $params = [])
+ * @method HttpResourceObject head(AbstractUri|string $uri, array<string, mixed> $params = [])
+ * @method HttpResourceObject put(AbstractUri|string $uri, array<string, mixed> $params = [])
+ * @method HttpResourceObject post(AbstractUri|string $uri, array<string, mixed> $params = [])
+ * @method HttpResourceObject patch(AbstractUri|string $uri, array<string, mixed> $params = [])
+ * @method HttpResourceObject delete(AbstractUri|string $uri, array<string, mixed> $params = [])
  */
 final class HttpResourceObject extends ResourceObject
 {
