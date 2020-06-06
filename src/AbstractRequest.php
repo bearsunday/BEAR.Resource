@@ -83,7 +83,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     protected $invoker;
 
     /**
-     * @var null|LinkerInterface
+     * @var ?LinkerInterface
      */
     private $linker;
 

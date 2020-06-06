@@ -33,7 +33,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     private $validateDir;
 
     /**
-     * @var null|string
+     * @var ?string
      */
     private $schemaHost;
 

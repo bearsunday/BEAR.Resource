@@ -44,7 +44,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * Resource representation
      *
-     * @var null|string
+     * @var ?string
      */
     public $view;
 
