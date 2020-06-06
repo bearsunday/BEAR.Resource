@@ -9,9 +9,9 @@ use JSONSchemaFaker\Faker;
 
 class JsonSchemaExceptionFakeHandler implements JsonSchemaExceptionHandlerInterface
 {
-    const X_FAKE_JSON = 'X-Fake-JSON';
+    public const X_FAKE_JSON = 'X-Fake-JSON';
 
-    const X_JSON_SCHEMA_EXCEPTION = 'X-JSON-Schema-Exception';
+    public const X_JSON_SCHEMA_EXCEPTION = 'X-JSON-Schema-Exception';
 
     /**
      * {@inheritdoc}

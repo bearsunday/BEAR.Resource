@@ -6,9 +6,9 @@ namespace BEAR\Resource;
 
 final class Meta
 {
-    const EXTRAS_VENDOR = 'vendor';
+    private const EXTRAS_VENDOR = 'vendor';
 
-    const EXTRAS_PACKAGE = 'package';
+    private const EXTRAS_PACKAGE = 'package';
 
     /**
      * @var string

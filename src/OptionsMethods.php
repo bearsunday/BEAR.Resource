@@ -22,9 +22,9 @@ final class OptionsMethods
     /**
      * Constants for annotation name and "in" name
      *
-     * @var array
+     * @var array<string, string>
      */
-    const WEB_CONTEXT_NAME = [
+    private const WEB_CONTEXT_NAME = [
         CookieParam::class => 'cookie',
         EnvParam::class => 'env',
         FormParam::class => 'formData',
