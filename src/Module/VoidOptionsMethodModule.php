@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace BEAR\Resource\Module;
 
-use BEAR\Resource\RenderInterface;
 use BEAR\Resource\NullOptionsRenderer;
+use BEAR\Resource\RenderInterface;
 use Ray\Di\AbstractModule;
 
 class VoidOptionsMethodModule extends AbstractModule
