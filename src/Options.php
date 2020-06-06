@@ -7,7 +7,7 @@ namespace BEAR\Resource;
 final class Options
 {
     /**
-     * @var array<int, string>
+     * @var list<string>
      */
     public $allow = [];
 
@@ -17,8 +17,8 @@ final class Options
     public $params = [];
 
     /**
-     * @param array<int, string> $allow
-     * @param array<Params>      $params
+     * @param list<string>  $allow
+     * @param array<Params> $params
      */
     public function __construct(array $allow, array $params)
     {

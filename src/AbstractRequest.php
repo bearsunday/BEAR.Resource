@@ -89,7 +89,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
 
     /**
      * @param array<string, mixed> $query
-     * @param array<int, LinkType> $links
+     * @param list<LinkType>       $links
      *
      * @throws MethodException
      */
