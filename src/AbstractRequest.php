@@ -12,10 +12,10 @@ use IteratorAggregate;
 use Serializable;
 
 /**
- * @property int    $code
- * @property array  $headers
- * @property mixed  $body
- * @property string $view
+ * @property-write int    $code
+ * @property-write array  $headers
+ * @property-write mixed  $body
+ * @property-write string $view
  *
  * @phpstan-implements IteratorAggregate<string, mixed>
  * @phpstan-implements ArrayAccess<string, mixed>
