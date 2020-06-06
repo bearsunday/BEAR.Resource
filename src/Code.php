@@ -10,40 +10,40 @@ namespace BEAR\Resource;
 final class Code
 {
     // 20X Success
-    const OK = 200;
+    public const OK = 200;
 
-    const CREATED = 201;
+    public const CREATED = 201;
 
-    const ACCEPTED = 202;
+    public const ACCEPTED = 202;
 
-    const NO_CONTENT = 204;
+    public const NO_CONTENT = 204;
 
     // 30X Redirection
-    const MOVED_PERMANENTLY = 301;
+    public const MOVED_PERMANENTLY = 301;
 
-    const FOUND = 302;
+    public const FOUND = 302;
 
-    const SEE_OTHER = 303;
+    public const SEE_OTHER = 303;
 
-    const NOT_MODIFIED = 304;
+    public const NOT_MODIFIED = 304;
 
-    const TEMPORARY_REDIRECT = 307;
+    public const TEMPORARY_REDIRECT = 307;
 
-    const PERMANENT_REDIRECT = 308;
+    public const PERMANENT_REDIRECT = 308;
 
     // 40X Client Error
-    const BAD_REQUEST = 400;
+    public const BAD_REQUEST = 400;
 
-    const UNAUTHORIZED = 401;
+    public const UNAUTHORIZED = 401;
 
-    const FORBIDDEN = 403;
+    public const FORBIDDEN = 403;
 
-    const NOT_FOUND = 404;
+    public const NOT_FOUND = 404;
 
     // 50X Service Error
-    const ERROR = 500;
+    public const ERROR = 500;
 
-    const SERVICE_UNAVAILABLE = 503;
+    public const SERVICE_UNAVAILABLE = 503;
 
     /**
      * Hypertext Transfer Protocol (HTTP) Status Code Registry

@@ -11,21 +11,21 @@ final class LinkType
      *
      * @var string
      */
-    const SELF_LINK = 'self';
+    public const SELF_LINK = 'self';
 
     /**
      * New link
      *
      * @var string
      */
-    const NEW_LINK = 'new';
+    public const NEW_LINK = 'new';
 
     /**
      * Crawl link
      *
      * @var string
      */
-    const CRAWL_LINK = 'crawl';
+    public const CRAWL_LINK = 'crawl';
 
     /**
      * Link key

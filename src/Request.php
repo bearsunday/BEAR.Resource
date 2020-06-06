@@ -12,19 +12,19 @@ namespace BEAR\Resource;
  */
 final class Request extends AbstractRequest
 {
-    const GET = 'get';
+    public const GET = 'get';
 
-    const POST = 'post';
+    public const POST = 'post';
 
-    const PUT = 'put';
+    public const PUT = 'put';
 
-    const PATCH = 'patch';
+    public const PATCH = 'patch';
 
-    const DELETE = 'delete';
+    public const DELETE = 'delete';
 
-    const HEAD = 'head';
+    public const HEAD = 'head';
 
-    const OPTIONS = 'options';
+    public const OPTIONS = 'options';
 
     /**
      * @return array<string, string>|int|mixed|self

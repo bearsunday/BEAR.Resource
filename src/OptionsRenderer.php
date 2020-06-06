@@ -74,7 +74,7 @@ final class OptionsRenderer implements RenderInterface
     /**
      * Return OPTIONS entity body
      *
-     * @param array<int, string> $allows
+     * @param list<string> $allows
      *
      * @return array<string, array<int|string, array|string>>
      */

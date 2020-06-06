@@ -26,7 +26,7 @@ final class AppIterator implements Iterator
     private $metaCollection = [];
 
     /**
-     * @var array<int, string>
+     * @var list<string>
      */
     private $keys = [];
 

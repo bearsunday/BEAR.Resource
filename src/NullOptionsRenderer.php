@@ -6,7 +6,7 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\MethodNotAllowedException;
 
-final class VoidOptionsRenderer implements RenderInterface
+final class NullOptionsRenderer implements RenderInterface
 {
     /**
      * {@inheritdoc}

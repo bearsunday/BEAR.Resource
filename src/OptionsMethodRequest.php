@@ -193,7 +193,7 @@ final class OptionsMethodRequest
 
     /**
      * @param array<string, array{type?: string}> $paramDoc
-     * @param array<int, string>                  $required
+     * @param list<string>                        $required
      *
      * @return array{parameters?: array<string, array{type?: string}>, required?: array<int, string>}
      */

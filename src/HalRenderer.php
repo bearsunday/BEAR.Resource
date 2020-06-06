@@ -50,7 +50,7 @@ class HalRenderer implements RenderInterface
         [$ro, $body] = $this->valuate($ro);
         $method = 'on' . ucfirst($ro->uri->method);
         $hasMethod = method_exists($ro, $method);
-        /** @var array<int, object> $annotations */
+        /** @var list<object> $annotations */
         $annotations = $hasMethod ? $this->reader->getMethodAnnotations(new \ReflectionMethod($ro, $method)) : [];
         /* @var $annotations Link[] */
         $hal = $this->getHal($ro->uri, (array) $body, $annotations);
@@ -94,7 +94,9 @@ class HalRenderer implements RenderInterface
 
     /**
      * @param array<int|string, mixed> $body
-     * @param array<int, object>       $annotations
+     *
+     * @psalm-param list<object>       $annotations
+     * @phpstan-param array<object>    $annotations
      */
     private function getHal(AbstractUri $uri, array $body, array $annotations) : Hal
     {

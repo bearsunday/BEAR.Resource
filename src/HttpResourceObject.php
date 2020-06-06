@@ -10,12 +10,17 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
- * @method HttpResourceObject get(AbstractUri|string $uri, array $params = [])
- * @method HttpResourceObject head(AbstractUri|string $uri, array $params = [])
- * @method HttpResourceObject put(AbstractUri|string $uri, array $params = [])
- * @method HttpResourceObject post(AbstractUri|string $uri, array $params = [])
- * @method HttpResourceObject patch(AbstractUri|string $uri, array $params = [])
- * @method HttpResourceObject delete(AbstractUri|string $uri, array $params = [])
+ * @method HttpResourceObject get(AbstractUri|string $uri, array<string, mixed> $params = [])
+ * @method HttpResourceObject head(AbstractUri|string $uri, array<string, mixed> $params = [])
+ * @method HttpResourceObject put(AbstractUri|string $uri, array<string, mixed> $params = [])
+ * @method HttpResourceObject post(AbstractUri|string $uri, array<string, mixed> $params = [])
+ * @method HttpResourceObject patch(AbstractUri|string $uri, array<string, mixed> $params = [])
+ * @method HttpResourceObject delete(AbstractUri|string $uri, array<string, mixed> $params = [])
+ *
+ * @property-read string        $code
+ * @property-read array<string, string> $headers
+ * @property-read array<string, string> $body
+ * @property-read string        $view
  */
 final class HttpResourceObject extends ResourceObject
 {
@@ -43,6 +48,8 @@ final class HttpResourceObject extends ResourceObject
     }
 
     /**
+     * @param 'code'|'headers'|'body'|'view'|string $name
+     *
      * @return array<int|string, mixed>|int|string
      */
     public function __get(string $name)
