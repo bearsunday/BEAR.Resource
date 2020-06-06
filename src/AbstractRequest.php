@@ -17,31 +17,16 @@ use Serializable;
  * @property mixed  $body
  * @property string $view
  *
- * @implements IteratorAggregate<string|null, mixed>
- * @implements ArrayAccess<string, mixed>
+ * @phpstan-implements IteratorAggregate<string, mixed>
+ * @phpstan-implements ArrayAccess<string, mixed>
  * @psalm-suppress PropertyNotSetInConstructor
  */
 abstract class AbstractRequest implements RequestInterface, ArrayAccess, IteratorAggregate, Serializable
 {
-    const GET = 'get';
-
-    const POST = 'post';
-
-    const PUT = 'put';
-
-    const PATCH = 'patch';
-
-    const DELETE = 'delete';
-
-    const HEAD = 'head';
-
-    const OPTIONS = 'options';
-
     /**
      * URI
      *
      * @var string
-     * @psalm-suppress PropertyNotSetInConstructor for DSL
      */
     public $uri;
 
@@ -118,7 +103,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     ) {
         $this->invoker = $invoker;
         $this->resourceObject = $ro;
-        if (! in_array(strtolower($method), [self::GET, self::POST, self::PUT, self::PATCH, self::DELETE, self::HEAD, self::OPTIONS], true)) {
+        if (! in_array(strtolower($method), ['get', 'post', 'put', 'patch', 'delete', 'head', 'options'], true)) {
             throw new MethodException($method, 400);
         }
         $this->method = $method;
@@ -239,8 +224,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     /**
      * Invoke resource request then return resource body iterator
      *
-     * @return ArrayIterator<null|string, mixed>
-     * @phpstan-return ArrayIterator<null|string, mixed>
+     * @phpstan-return ArrayIterator<string, mixed>
      * @psalm-return ArrayIterator
      */
     public function getIterator() : ArrayIterator
