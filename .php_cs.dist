@@ -130,12 +130,12 @@ return \PhpCsFixer\Config::create()
 //      'php_unit_test_case_static_method_calls' => true,
 //      'php_unit_test_class_requires_covers' => true,
 //      'phpdoc_add_missing_param_annotation' => true,
-        'phpdoc_align' => true, // @Symfony]
+        'phpdoc_align' => ['tags' => ['param', 'return', 'throws', 'type', 'var', 'property-read', 'property-write']], // @Symfony]
         'phpdoc_annotation_without_dot' => true, // @Symfony]
         'phpdoc_indent' => true, // @Symfony]
         'phpdoc_inline_tag' => true, // @Symfony]
         'phpdoc_no_access' => true, // @Symfony]
-        'phpdoc_no_alias_tag' => true, // @Symfony
+        'phpdoc_no_alias_tag' => ['type' => 'var', 'link' => 'see'], // @Symfony
 //      'phpdoc_no_empty_return' => true, // @Symfony
         'phpdoc_no_package' => true, // @Symfony
 //      'phpdoc_no_useless_inheritdoc' => true, // @Symfony
