@@ -191,8 +191,8 @@ return \PhpCsFixer\Config::create()
         'trim_array_spaces' => true, // @Symfony
         'unary_operator_spaces' => true, // @Symfony
         'visibility_required' => ['property', 'method', 'const'],
-        'void_return' => true, // @PHP71Migration:risky
+//      'void_return' => true, // @PHP71Migration:risky
         'whitespace_after_comma_in_array' => true, // @Symfony
-//      'yoda_style' => true
+//g      'yoda_style' => true
     ])
     ->setFinder($finder);
