@@ -193,6 +193,6 @@ return \PhpCsFixer\Config::create()
         'visibility_required' => ['property', 'method', 'const'],
 //      'void_return' => true, // @PHP71Migration:risky
         'whitespace_after_comma_in_array' => true, // @Symfony
-//g      'yoda_style' => true
+//      'yoda_style' => true
     ])
     ->setFinder($finder);
