@@ -61,7 +61,7 @@ final class OptionsMethodDocBolck
     private function docBlogTags(array $tags, array $params) : array
     {
         foreach ($tags as $tag) {
-            $varName = $tag->getVariableName();
+            $varName = (string) $tag->getVariableName();
             $tagType = (string) $tag->getType();
             $type = $tagType === 'int' ? 'integer' : $tagType;
             $params[$varName] = [
