@@ -6,6 +6,7 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\JsonSchemaException;
 use JSONSchemaFaker\Faker;
+use SplFileInfo;
 
 class JsonSchemaExceptionFakeHandler implements JsonSchemaExceptionHandlerInterface
 {
@@ -30,7 +31,7 @@ class JsonSchemaExceptionFakeHandler implements JsonSchemaExceptionHandlerInterf
     private function fakeResponse(string $schemaFile) : array
     {
         /** @var array<int|string, mixed> $fakeObject */
-        $fakeObject = (new Faker)->generate(new \SplFileInfo($schemaFile));
+        $fakeObject = (new Faker)->generate(new SplFileInfo($schemaFile));
 
         return $this->deepArray($fakeObject);
     }

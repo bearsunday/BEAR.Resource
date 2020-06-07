@@ -6,6 +6,7 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\OptionsBody;
 use const PHP_EOL;
+use ReflectionClass;
 use ReflectionMethod;
 
 /**
@@ -43,7 +44,7 @@ final class OptionsRenderer implements RenderInterface
     public function render(ResourceObject $ro)
     {
         $ro->headers['Content-Type'] = 'application/json';
-        $allows = $this->getAllows((new \ReflectionClass($ro))->getMethods());
+        $allows = $this->getAllows((new ReflectionClass($ro))->getMethods());
         $ro->headers['Allow'] = implode(', ', $allows);
         $ro->view = $this->optionsBody ? json_encode($this->getEntityBody($ro, $allows), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL : '';
 

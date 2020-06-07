@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+use BadFunctionCallException;
+use InvalidArgumentException;
 use function is_array;
 use function strtoupper;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -67,7 +69,7 @@ final class HttpResourceObject extends ResourceObject
             return $this->response->getContent();
         }
 
-        throw new \InvalidArgumentException($name);
+        throw new InvalidArgumentException($name);
     }
 
     /**
@@ -77,7 +79,7 @@ final class HttpResourceObject extends ResourceObject
     {
         unset($value);
 
-        throw new \BadFunctionCallException($name);
+        throw new BadFunctionCallException($name);
     }
 
     public function __isset(string $name) : bool

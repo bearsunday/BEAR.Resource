@@ -8,6 +8,7 @@ use BEAR\Resource\Annotation\Link as LinkAnnotation;
 use BEAR\Resource\Exception\LinkException;
 use Doctrine\Common\Annotations\Reader;
 use function get_class;
+use ReflectionMethod;
 
 final class Anchor implements AnchorInterface
 {
@@ -30,7 +31,7 @@ final class Anchor implements AnchorInterface
     {
         $classMethod = 'on' . ucfirst($request->method);
         /** @var list<object> $annotations */
-        $annotations = $this->reader->getMethodAnnotations(new \ReflectionMethod(get_class($request->resourceObject), $classMethod));
+        $annotations = $this->reader->getMethodAnnotations(new ReflectionMethod(get_class($request->resourceObject), $classMethod));
         foreach ($annotations as $annotation) {
             if ($this->isValidLinkAnnotation($annotation, $rel)) {
                 assert($annotation instanceof LinkAnnotation);

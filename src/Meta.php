@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+use LogicException;
+use ReflectionClass;
+use ReflectionMethod;
+
 final class Meta
 {
     private const EXTRAS_VENDOR = 'vendor';
@@ -49,9 +53,9 @@ final class Meta
     private function getOptions(string $class) : Options
     {
         if (! class_exists($class)) {
-            throw new \LogicException; // @codeCoverageIgnore
+            throw new LogicException; // @codeCoverageIgnore
         }
-        $ref = new \ReflectionClass($class);
+        $ref = new ReflectionClass($class);
         $allows = $this->getAllows($ref->getMethods());
         $params = [];
         foreach ($allows as $method) {
@@ -62,7 +66,7 @@ final class Meta
     }
 
     /**
-     * @param \ReflectionMethod[] $methods
+     * @param ReflectionMethod[] $methods
      *
      * @return string[]
      *
@@ -83,7 +87,7 @@ final class Meta
 
     private function getParams(string $class, string $method) : Params
     {
-        $refMethod = new \ReflectionMethod($class, 'on' . $method);
+        $refMethod = new ReflectionMethod($class, 'on' . $method);
         $parameters = $refMethod->getParameters();
         $optionalParams = $requiredParams = [];
         foreach ($parameters as $parameter) {

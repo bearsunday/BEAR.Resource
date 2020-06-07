@@ -8,6 +8,7 @@ use BEAR\Resource\Exception\ResourceDirException;
 use Iterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use ReflectionClass;
 use SplFileInfo;
 
 /**
@@ -139,7 +140,7 @@ final class AppIterator implements Iterator
     private function getName(array $newClasses)
     {
         foreach ($newClasses as $newClass) {
-            $parent = (new \ReflectionClass($newClass))->getParentClass();
+            $parent = (new ReflectionClass($newClass))->getParentClass();
             if ($parent && $parent->name === ResourceObject::class) {
                 return $newClass;
             }

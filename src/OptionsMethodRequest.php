@@ -7,6 +7,9 @@ namespace BEAR\Resource;
 use BEAR\Resource\Annotation\ResourceParam;
 use Doctrine\Common\Annotations\Reader;
 use Ray\Di\Di\Assisted;
+use ReflectionException;
+use ReflectionMethod;
+use ReflectionNamedType;
 use ReflectionParameter;
 
 final class OptionsMethodRequest
@@ -29,7 +32,7 @@ final class OptionsMethodRequest
      *
      * @return array{parameters?: array<string, array{type?: string, description?: string, default?: string}>, required?: array<int, string>}
      */
-    public function __invoke(\ReflectionMethod $method, array $paramDoc, array $ins) : array
+    public function __invoke(ReflectionMethod $method, array $paramDoc, array $ins) : array
     {
         $paramMetas = $this->getParamMetas($method->getParameters(), $paramDoc, $ins);
 
@@ -103,7 +106,7 @@ final class OptionsMethodRequest
     /**
      * @param array<string, array{type?: string, description?: string}> $paramDoc
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @return array<string, array{type?: string, description?: string, default?: string}>
      */
@@ -136,7 +139,7 @@ final class OptionsMethodRequest
     private function getType(ReflectionParameter $parameter) : string
     {
         $namedType = $parameter->getType();
-        assert($namedType instanceof \ReflectionNamedType);
+        assert($namedType instanceof ReflectionNamedType);
         $type = $namedType->getName();
         if ($type === 'int') {
             $type = 'integer';
@@ -152,7 +155,7 @@ final class OptionsMethodRequest
      *
      * @return array{parameters?: array<string, array{type?: string, description?: string}>, required?: array<int, string>}
      */
-    private function ignoreAnnotatedPrameter(\ReflectionMethod $method, array $paramMetas) : array
+    private function ignoreAnnotatedPrameter(ReflectionMethod $method, array $paramMetas) : array
     {
         $annotations = $this->reader->getMethodAnnotations($method);
         foreach ($annotations as $annotation) {

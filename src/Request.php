@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+use OutOfRangeException;
+
 /**
  * @property $this $lazy
  * @property $this $eager
@@ -42,7 +44,7 @@ final class Request extends AbstractRequest
             return parent::__get($name);
         }
 
-        throw new \OutOfRangeException($name);
+        throw new OutOfRangeException($name);
     }
 
     /**

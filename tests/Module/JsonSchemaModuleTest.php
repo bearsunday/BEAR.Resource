@@ -11,6 +11,7 @@ use BEAR\Resource\JsonSchema\FakeUser;
 use BEAR\Resource\JsonSchema\FakeUsers;
 use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Uri;
+use LogicException;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
@@ -111,7 +112,7 @@ class JsonSchemaModuleTest extends TestCase
             return $e;
         }
 
-        throw new \LogicException;
+        throw new LogicException;
     }
 
     private function getRo(string $class) : ResourceObject

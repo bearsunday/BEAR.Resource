@@ -8,7 +8,9 @@ use ArrayAccess;
 use ArrayIterator;
 use BEAR\Resource\Exception\MethodException;
 use BEAR\Resource\Exception\OutOfBoundsException;
+use Exception;
 use IteratorAggregate;
+use LogicException;
 use Serializable;
 
 /**
@@ -118,7 +120,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
             $this->invoke();
 
             return (string) $this->result;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             trigger_error($e->getMessage() . PHP_EOL . $e->getTraceAsString(), E_USER_ERROR);
 
             return '';
@@ -203,7 +205,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
         $this->invoke();
         assert($this->result instanceof ResourceObject);
         if (! isset($this->result->body[$offset])) {
-            throw new OutOfBoundsException("[${offset}] for object[" . get_class($this->result) . ']', 400);
+            throw new OutOfBoundsException("[{$offset}] for object[" . get_class($this->result) . ']', 400);
         }
         if (is_array($this->result->body)) {
             return $this->result->body[$offset];
@@ -250,7 +252,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      */
     public function serialize()
     {
-        throw new \LogicException(__METHOD__ . ' not supported');
+        throw new LogicException(__METHOD__ . ' not supported');
     }
 
     /**
@@ -260,7 +262,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      */
     public function unserialize($serialized) : void
     {
-        throw new \LogicException(__METHOD__ . ' not supported');
+        throw new LogicException(__METHOD__ . ' not supported');
     }
 
     private function invoke() : ResourceObject

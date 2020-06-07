@@ -8,8 +8,12 @@ use BEAR\Resource\Annotation\ResourceParam;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Cache\Cache;
 use function is_object;
+use LogicException;
 use Ray\Di\Di\Assisted;
 use Ray\WebContextParam\Annotation\AbstractWebContextParam;
+use ReflectionClass;
+use ReflectionMethod;
+use ReflectionParameter;
 
 final class NamedParamMetas implements NamedParamMetasInterface
 {
@@ -35,7 +39,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
     public function __invoke(callable $callable) : array
     {
         if (! is_array($callable) || ! is_object($callable[0])) {
-            throw new \LogicException('callable should be an array'); // @codeCoverageIgnore
+            throw new LogicException('callable should be an array'); // @codeCoverageIgnore
         }
         $cacheId = __CLASS__ . get_class($callable[0]) . $callable[1];
         /** @var array<string, ParamInterface>|false $names */
@@ -43,7 +47,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
         if ($names) {
             return $names;
         }
-        $method = new \ReflectionMethod($callable[0], $callable[1]);
+        $method = new ReflectionMethod($callable[0], $callable[1]);
         $parameters = $method->getParameters();
         /** @var array<object> $annotations */
         $annotations = $this->reader->getMethodAnnotations($method);
@@ -107,7 +111,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
     }
 
     /**
-     * @param \ReflectionParameter[]                 $parameters
+     * @param ReflectionParameter[]                  $parameters
      * @param array<string, ParamInterface>          $assistedNames
      * @param array<string, AbstractWebContextParam> $webcontext
      *
@@ -142,7 +146,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
      *
      * @psalm-return DefaultParam<mixed>|NoDefaultParam
      */
-    private function getDefault(\ReflectionParameter $parameter)
+    private function getDefault(ReflectionParameter $parameter)
     {
         return $parameter->isDefaultValueAvailable() === true ? new DefaultParam($parameter->getDefaultValue()) : new NoDefaultParam();
     }
@@ -152,11 +156,11 @@ final class NamedParamMetas implements NamedParamMetasInterface
      *
      * @psalm-return ClassParam|OptionalParam<mixed>|RequiredParam
      */
-    private function getParam(\ReflectionParameter $parameter)
+    private function getParam(ReflectionParameter $parameter)
     {
         $class = $parameter->getClass();
-        if ($class instanceof \ReflectionClass) {
-            /** @var \ReflectionClass<ResourceObject> $class */
+        if ($class instanceof ReflectionClass) {
+            /** @var ReflectionClass<ResourceObject> $class */
 
             return new ClassParam($class, $parameter);
         }
