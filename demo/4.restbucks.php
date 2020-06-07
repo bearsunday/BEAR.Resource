@@ -71,7 +71,7 @@ class Order extends ResourceObject
             'order_id' => $orderId
         ];
         $this->code = 201; // created
-        $this->headers['Location'] = "/order/?id=${orderId}"; // hyper link
+        $this->headers['Location'] = "/order/?id={$orderId}"; // hyper link
 
         return $this;
     }

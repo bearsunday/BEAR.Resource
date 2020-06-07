@@ -9,6 +9,8 @@ use Doctrine\Common\Annotations\Reader;
 use function is_array;
 use function is_scalar;
 use Nocarrier\Hal;
+use ReflectionMethod;
+use RuntimeException;
 
 class HalRenderer implements RenderInterface
 {
@@ -42,7 +44,7 @@ class HalRenderer implements RenderInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function renderHal(ResourceObject $ro) : void
     {
@@ -51,7 +53,7 @@ class HalRenderer implements RenderInterface
         $method = 'on' . ucfirst($ro->uri->method);
         $hasMethod = method_exists($ro, $method);
         /** @var list<object> $annotations */
-        $annotations = $hasMethod ? $this->reader->getMethodAnnotations(new \ReflectionMethod($ro, $method)) : [];
+        $annotations = $hasMethod ? $this->reader->getMethodAnnotations(new ReflectionMethod($ro, $method)) : [];
         /* @var $annotations Link[] */
         $hal = $this->getHal($ro->uri, (array) $body, $annotations);
         $ro->view = $hal->asJson(true) . PHP_EOL;

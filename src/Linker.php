@@ -9,6 +9,7 @@ use BEAR\Resource\Exception\LinkQueryException;
 use BEAR\Resource\Exception\LinkRelException;
 use Doctrine\Common\Annotations\Reader;
 use function get_class;
+use ReflectionMethod;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -112,7 +113,7 @@ final class Linker implements LinkerInterface
         }
         $classMethod = 'on' . ucfirst($request->method);
         /** @var list<Link> $annotations */
-        $annotations = $this->reader->getMethodAnnotations(new \ReflectionMethod(get_class($current), $classMethod));
+        $annotations = $this->reader->getMethodAnnotations(new ReflectionMethod(get_class($current), $classMethod));
         if ($link->type === LinkType::CRAWL_LINK) {
             return $this->annotationCrawl($annotations, $link, $current);
         }

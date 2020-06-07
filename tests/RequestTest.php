@@ -9,6 +9,8 @@ use BEAR\Resource\Exception\OutOfBoundsException;
 use BEAR\Resource\Renderer\FakeErrorRenderer;
 use BEAR\Resource\Renderer\FakeTestRenderer;
 use FakeVendor\Sandbox\Resource\App\User\Entry;
+use LogicException;
+use OutOfRangeException;
 use PHPUnit\Framework\TestCase;
 
 class RequestTest extends TestCase
@@ -274,7 +276,7 @@ class RequestTest extends TestCase
 
     public function testSerialize() : void
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         serialize($this->request);
     }
 
@@ -317,7 +319,7 @@ class RequestTest extends TestCase
      */
     public function testInvalidProp(Request $request) : void
     {
-        $this->expectException(\OutOfRangeException::class);
+        $this->expectException(OutOfRangeException::class);
         $request->__invalid__; // @phpstan-ignore-line
     }
 }

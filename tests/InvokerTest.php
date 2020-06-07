@@ -14,6 +14,8 @@ use FakeVendor\Sandbox\Resource\App\Doc;
 use FakeVendor\Sandbox\Resource\App\Restbucks\Order;
 use FakeVendor\Sandbox\Resource\App\User;
 use FakeVendor\Sandbox\Resource\App\Weave\Book;
+use InvalidArgumentException;
+use LogicException;
 use PHPUnit\Framework\TestCase;
 use Ray\Aop\Bind;
 use Ray\Aop\Compiler;
@@ -78,7 +80,7 @@ class InvokerTest extends TestCase
         $compiler = new Compiler(__DIR__ . '/tmp');
         $book = $compiler->newInstance(Book::class, [], (new Bind)->bindInterceptors('onGet', [new FakeLogInterceptor]));
         if (! $book instanceof Book) {
-            throw new \LogicException;
+            throw new LogicException;
         }
 
         $request = new Request($this->invoker, (new FakeRo)($book), Request::GET, ['id' => 1]);
@@ -182,7 +184,7 @@ class InvokerTest extends TestCase
     {
         $ro = (new Compiler(__DIR__ . '/tmp'))->newInstance(Order::class, [], new Bind);
         if (! $ro instanceof Order) {
-            throw new \LogicException;
+            throw new LogicException;
         }
         $request = new Request($this->invoker, $ro, Request::OPTIONS);
         $this->invoker->invoke($request);
@@ -193,7 +195,7 @@ class InvokerTest extends TestCase
 
     public function testInvokeExceptionHandle() : void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $outOfRangeId = 4;
         $request = new Request($this->invoker, new User, Request::GET, ['id' => $outOfRangeId]);
         $this->invoker->invoke($request);

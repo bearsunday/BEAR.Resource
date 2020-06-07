@@ -16,6 +16,7 @@ use Ray\WebContextParam\Annotation\FilesParam;
 use Ray\WebContextParam\Annotation\FormParam;
 use Ray\WebContextParam\Annotation\QueryParam;
 use Ray\WebContextParam\Annotation\ServerParam;
+use ReflectionMethod;
 
 final class OptionsMethods
 {
@@ -59,7 +60,7 @@ final class OptionsMethods
      */
     public function __invoke(ResourceObject $ro, string $requestMethod) : array
     {
-        $method = new \ReflectionMethod(get_class($ro), 'on' . $requestMethod);
+        $method = new ReflectionMethod(get_class($ro), 'on' . $requestMethod);
         $ins = $this->getInMap($method);
         [$doc, $paramDoc] = (new OptionsMethodDocBolck)($method);
         $methodOption = $doc;
@@ -84,7 +85,7 @@ final class OptionsMethods
      * @phpstan-return (Embed|Link)[][]
      * @psalm-return array{links?: non-empty-list<Link>, embed?: non-empty-list<Embed>}
      */
-    private function getMethodExtras(\ReflectionMethod $method) : array
+    private function getMethodExtras(ReflectionMethod $method) : array
     {
         $extras = [];
         $annotations = $this->reader->getMethodAnnotations($method);
@@ -103,7 +104,7 @@ final class OptionsMethods
     /**
      * @return array<string, string>
      */
-    private function getInMap(\ReflectionMethod $method) : array
+    private function getInMap(ReflectionMethod $method) : array
     {
         $ins = [];
         $annotations = $this->reader->getMethodAnnotations($method);
@@ -121,7 +122,7 @@ final class OptionsMethods
     /**
      * @return array<string, mixed>
      */
-    private function getJsonSchema(\ReflectionMethod $method) : array
+    private function getJsonSchema(ReflectionMethod $method) : array
     {
         $schema = $this->reader->getMethodAnnotation($method, JsonSchema::class);
         if (! $schema instanceof JsonSchema) {

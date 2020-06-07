@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace BEAR\Resource\Exception;
 
-class JsonSchemaNotFoundException extends \LogicException implements ExceptionInterface
+use LogicException;
+
+class JsonSchemaNotFoundException extends LogicException implements ExceptionInterface
 {
 }

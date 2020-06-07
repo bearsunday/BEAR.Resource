@@ -19,6 +19,8 @@ use JsonSchema\Validator;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
 use Ray\Di\Di\Named;
+use ReflectionClass;
+use stdClass;
 
 final class JsonSchemaInterceptor implements MethodInterceptor
 {
@@ -99,12 +101,12 @@ final class JsonSchemaInterceptor implements MethodInterceptor
 
     private function validateRo(ResourceObject $ro, string $schemaFile, JsonSchema $jsonSchema) : void
     {
-        /** @var array<\stdClass>|false|\stdClass $json */
+        /** @var array<stdClass>|false|stdClass $json */
         $json = json_decode((string) $ro);
         if (! $json) {
             return;
         }
-        /** @var array<\stdClass>|\stdClass $target */
+        /** @var array<stdClass>|stdClass $target */
         $target = is_object($json) ? $this->getTarget($json, $jsonSchema) : $json;
         $this->validate($target, $schemaFile);
     }
@@ -125,7 +127,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     }
 
     /**
-     * @param array<\stdClass>|array<string, mixed>|\stdClass $target
+     * @param array<stdClass>|array<string, mixed>|stdClass $target
      */
     private function validate($target, string $schemaFile) : void
     {
@@ -173,7 +175,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     {
         if (! $jsonSchema->schema) {
             // for BC only
-            new \ReflectionClass($ro);
+            new ReflectionClass($ro);
             $roFileName = $this->getParentClassName($ro);
             $bcFile = str_replace('.php', '.json', (string) $roFileName);
             if (file_exists($bcFile)) {
@@ -188,9 +190,9 @@ final class JsonSchemaInterceptor implements MethodInterceptor
 
     private function getParentClassName(ResourceObject $ro) : string
     {
-        $parent = (new \ReflectionClass($ro))->getParentClass();
+        $parent = (new ReflectionClass($ro))->getParentClass();
 
-        return  $parent instanceof \ReflectionClass ? (string) $parent->getFileName() : '';
+        return  $parent instanceof ReflectionClass ? (string) $parent->getFileName() : '';
     }
 
     private function validateFileExists(string $schemaFile) : void

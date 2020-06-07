@@ -54,7 +54,7 @@ return \PhpCsFixer\Config::create()
         'function_to_constant' => true, // @Symfony:risky
         'function_typehint_space' => true, // @Symfony
         'general_phpdoc_annotation_remove' => ['author', 'category', 'package', 'copyright', 'version'],
-        'global_namespace_import' => true,
+        'global_namespace_import' => ['import_classes' => true, 'import_functions' => true, 'import_constants' => true],
         'header_comment' => ['header' => ''],
         'heredoc_to_nowdoc' => true,
         'include' => true, // @Symfony
