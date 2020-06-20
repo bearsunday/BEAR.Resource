@@ -246,7 +246,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * {@inheritdoc}
      */
-    public function transfer(TransferInterface $responder, array $server) : void
+    public function transfer(TransferInterface $responder, array $server)
     {
         $responder($this, $server);
     }
