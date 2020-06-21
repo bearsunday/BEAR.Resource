@@ -103,6 +103,7 @@ final class AppIterator implements Iterator
             if ($resourceClass === '') {
                 continue;
             }
+            assert(class_exists($resourceClass));
             $meta = new Meta($resourceClass);
             $metaCollection[$meta->uri] = $meta;
         }
