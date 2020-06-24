@@ -9,6 +9,7 @@ use ArrayIterator;
 use BEAR\Resource\Exception\IlligalAccessException;
 use Countable;
 use Exception;
+use function is_string;
 use IteratorAggregate;
 use JsonSerializable;
 use Ray\Di\Di\Inject;
@@ -221,6 +222,9 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      */
     public function toString()
     {
+        if (is_string($this->view)) {
+            return $this->view;
+        }
         if (! $this->renderer instanceof RenderInterface) {
             $this->renderer = new JsonRenderer;
         }
