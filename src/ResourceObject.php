@@ -12,6 +12,7 @@ use Exception;
 use IteratorAggregate;
 use JsonSerializable;
 use Ray\Di\Di\Inject;
+use function is_string;
 
 /**
  * @phpstan-implements \ArrayAccess<string, mixed>
@@ -221,6 +222,9 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      */
     public function toString()
     {
+        if (is_string($this->view)) {
+            return $this->view;
+        }
         if (! $this->renderer instanceof RenderInterface) {
             $this->renderer = new JsonRenderer;
         }
