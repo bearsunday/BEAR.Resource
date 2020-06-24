@@ -9,10 +9,10 @@ use ArrayIterator;
 use BEAR\Resource\Exception\IlligalAccessException;
 use Countable;
 use Exception;
+use function is_string;
 use IteratorAggregate;
 use JsonSerializable;
 use Ray\Di\Di\Inject;
-use function is_string;
 
 /**
  * @phpstan-implements \ArrayAccess<string, mixed>
