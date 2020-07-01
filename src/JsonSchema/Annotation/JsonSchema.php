@@ -13,9 +13,9 @@ final class JsonSchema
     /**
      * Json schema body key name
      *
-     * @var ?string
+     * @var string
      */
-    public $key;
+    public $key = '';
 
     /**
      * @var string
