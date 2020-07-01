@@ -116,7 +116,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
      */
     private function getTarget(object $json, JsonSchema $jsonSchema)
     {
-        if ($jsonSchema->key === null) {
+        if ($jsonSchema->key === '') {
             return $json;
         }
         if (! $json->{$jsonSchema->key}) {
