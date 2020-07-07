@@ -6,6 +6,7 @@
  */
 namespace BEAR\Resource\JsonSchema;
 
+use ArrayIterator;
 use BEAR\Resource\Annotation\JsonSchema;
 use BEAR\Resource\Code;
 use BEAR\Resource\ResourceObject;
@@ -54,6 +55,14 @@ class FakeUser extends ResourceObject
      * @JsonSchema(params="__invalid.json")
      */
     public function onPatch()
+    {
+        return $this;
+    }
+
+    /**
+     * @JsonSchema(key="__invalid__", schema="user.json")
+     */
+    public function invalidKey()
     {
         return $this;
     }

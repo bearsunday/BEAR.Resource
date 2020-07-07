@@ -6,6 +6,6 @@ namespace BEAR\Resource\Exception;
 
 use RuntimeException;
 
-class JsonSchemaKeytFoundException extends RuntimeException implements ExceptionInterface
+class JsonSchemaKeytNotFoundException extends RuntimeException implements ExceptionInterface
 {
 }
