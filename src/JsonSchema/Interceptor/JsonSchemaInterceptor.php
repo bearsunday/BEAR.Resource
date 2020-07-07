@@ -7,7 +7,7 @@ namespace BEAR\Resource\Interceptor;
 use BEAR\Resource\Annotation\JsonSchema;
 use BEAR\Resource\Code;
 use BEAR\Resource\Exception\JsonSchemaException;
-use BEAR\Resource\Exception\JsonSchemaKeytFoundException;
+use BEAR\Resource\Exception\JsonSchemaKeytNotFoundException;
 use BEAR\Resource\Exception\JsonSchemaNotFoundException;
 use BEAR\Resource\JsonSchemaExceptionHandlerInterface;
 use BEAR\Resource\ResourceObject;
@@ -16,6 +16,7 @@ use function is_object;
 use function is_string;
 use JsonSchema\Constraints\Constraint;
 use JsonSchema\Validator;
+use function property_exists;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
 use Ray\Di\Di\Named;
@@ -119,8 +120,8 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         if ($jsonSchema->key === '') {
             return $json;
         }
-        if (! $json->{$jsonSchema->key}) {
-            throw new JsonSchemaKeytFoundException($jsonSchema->key);
+        if (! property_exists($json, $jsonSchema->key)) {
+            throw new JsonSchemaKeytNotFoundException($jsonSchema->key);
         }
 
         return $json->{$jsonSchema->key};

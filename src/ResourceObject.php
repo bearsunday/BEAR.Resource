@@ -9,6 +9,7 @@ use ArrayIterator;
 use BEAR\Resource\Exception\IlligalAccessException;
 use Countable;
 use Exception;
+use function is_array;
 use function is_string;
 use IteratorAggregate;
 use JsonSerializable;
@@ -120,20 +121,21 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * Sets the body value at the specified index to renew
      *
-     * @param mixed $offset offset
-     * @param mixed $value  value
+     * @param array-key $offset offset
+     * @param mixed     $value  value
      *
      * @return void
      */
     public function offsetSet($offset, $value)
     {
+        /** @psalm-suppress MixedArrayAssignment */
         $this->body[$offset] = $value;
     }
 
     /**
      * Returns whether the requested index in body exists
      *
-     * @param int|string $offset offset
+     * @param array-key $offset offset
      *
      * @return bool
      */

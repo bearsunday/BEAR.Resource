@@ -67,6 +67,7 @@ final class EmbedInterceptor implements MethodInterceptor
                 $uri = uri_template($templateUri, $query);
                 /** @var Request $request */
                 $request = $this->resource->get->uri($uri);
+                /** @psalm-suppress MixedArrayAssignment */
                 $ro->body[$embed->rel] = clone $request;
             } catch (BadRequestException $e) {
                 // wrap ResourceNotFound or Uri exception
