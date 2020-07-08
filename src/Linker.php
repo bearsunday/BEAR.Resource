@@ -88,7 +88,7 @@ final class Linker implements LinkerInterface
         }
 
         if ($link->type === LinkType::NEW_LINK) {
-            assert(is_array($ro->body) || is_null($ro->body));
+            assert(is_array($ro->body) || $ro->body === null);
             $ro->body[$link->key] = $nextBody;
 
             return $ro;
@@ -220,6 +220,7 @@ final class Linker implements LinkerInterface
         /** @var array */
         $firstRow = array_pop($list);
         $keys = array_keys((array) $firstRow);
+        /** @var array<array> $list */
         $isMultiColumnMultiRowList = $this->isMultiColumnMultiRowList($keys, $list);
         $isMultiColumnList = $this->isMultiColumnList($value, $firstRow);
         $isSingleColumnList = $this->isSingleColumnList($value, $keys, $list);
@@ -229,17 +230,15 @@ final class Linker implements LinkerInterface
 
     /**
      * @param array<int, int|string> $keys
-     * @param array<mixed>           $list
+     * @param array<array>           $list
      */
     private function isMultiColumnMultiRowList(array $keys, array $list) : bool
     {
         if ($keys === [0 => 0]) {
             return false;
         }
-
-        /** @psalm-suppress MixedAssignment */
         foreach ($list as $item) {
-            if ($keys !== array_keys((array) $item)) {
+            if ($keys !== array_keys($item)) {
                 return false;
             }
         }
