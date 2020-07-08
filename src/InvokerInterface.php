@@ -9,5 +9,5 @@ interface InvokerInterface
     /**
      * Invoke resource request
      */
-    public function invoke(AbstractRequest $request): ResourceObject;
+    public function invoke(AbstractRequest $request) : ResourceObject;
 }

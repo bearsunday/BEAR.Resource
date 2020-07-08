@@ -8,16 +8,22 @@ final class LinkType
 {
     /**
      * Self link
+     *
+     * @var string
      */
     public const SELF_LINK = 'self';
 
     /**
      * New link
+     *
+     * @var string
      */
     public const NEW_LINK = 'new';
 
     /**
      * Crawl link
+     *
+     * @var string
      */
     public const CRAWL_LINK = 'crawl';
 

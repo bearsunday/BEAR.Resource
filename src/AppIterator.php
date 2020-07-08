@@ -11,29 +11,24 @@ use RecursiveIteratorIterator;
 use ReflectionClass;
 use SplFileInfo;
 
-use function array_diff_key;
-use function array_key_exists;
-use function array_keys;
-use function array_values;
-use function assert;
-use function class_exists;
-use function file_exists;
-use function get_declared_classes;
-use function is_string;
-use function strpos;
-
 /**
- * @implements Iterator<string, Meta>
+ * @implements \Iterator<string, Meta>
  */
 final class AppIterator implements Iterator
 {
-    /** @var int */
+    /**
+     * @var int
+     */
     private $i = 0;
 
-    /** @var array<string, Meta> */
+    /**
+     * @var array<string, Meta>
+     */
     private $metaCollection = [];
 
-    /** @var list<string> */
+    /**
+     * @var list<string>
+     */
     private $keys = [];
 
     /**
@@ -44,7 +39,6 @@ final class AppIterator implements Iterator
         if (! file_exists($resourceDir)) {
             throw new ResourceDirException($resourceDir);
         }
-
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($resourceDir),
             RecursiveIteratorIterator::SELF_FIRST
@@ -53,27 +47,42 @@ final class AppIterator implements Iterator
         $this->keys = array_keys($this->metaCollection);
     }
 
-    public function current(): Meta
+    /**
+     * {@inheritdoc}
+     */
+    public function current() : Meta
     {
         return $this->metaCollection[$this->keys[$this->i]];
     }
 
-    public function next(): void
+    /**
+     * {@inheritdoc}
+     */
+    public function next() : void
     {
         ++$this->i;
     }
 
-    public function key(): string
+    /**
+     * {@inheritdoc}
+     */
+    public function key() : string
     {
         return $this->keys[$this->i];
     }
 
-    public function valid(): bool
+    /**
+     * {@inheritdoc}
+     */
+    public function valid() : bool
     {
         return array_key_exists($this->i, $this->keys);
     }
 
-    public function rewind(): void
+    /**
+     * {@inheritdoc}
+     */
+    public function rewind() : void
     {
         $this->i = 0;
     }
@@ -83,19 +92,17 @@ final class AppIterator implements Iterator
      *
      * @return array<string, Meta>
      */
-    private function getMetaCollection(Iterator $iterator): array
+    private function getMetaCollection(Iterator $iterator) : array
     {
         $metaCollection = [];
         foreach ($iterator as $item) {
             if ($this->isNotPhp($item)) {
                 continue;
             }
-
             $resourceClass = $this->getResourceClassName($item);
             if ($resourceClass === '') {
                 continue;
             }
-
             assert(class_exists($resourceClass));
             $meta = new Meta($resourceClass);
             $metaCollection[$meta->uri] = $meta;
@@ -104,7 +111,7 @@ final class AppIterator implements Iterator
         return $metaCollection;
     }
 
-    private function isNotPhp(SplFileInfo $item): bool
+    private function isNotPhp(SplFileInfo $item) : bool
     {
         $isPhp = $item->isFile()
             && $item->getExtension() === 'php'
@@ -113,7 +120,7 @@ final class AppIterator implements Iterator
         return ! $isPhp;
     }
 
-    private function getResourceClassName(SplFileInfo $file): string
+    private function getResourceClassName(SplFileInfo $file) : string
     {
         $pathName = $file->getPathname();
         $declaredClasses = get_declared_classes();

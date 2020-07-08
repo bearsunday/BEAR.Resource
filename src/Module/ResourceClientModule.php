@@ -33,7 +33,6 @@ use BEAR\Resource\UriFactory;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\Cache;
 use Ray\Di\AbstractModule;
-use Ray\Di\Exception\NotFound;
 use Ray\Di\Scope;
 
 /**
@@ -44,9 +43,9 @@ class ResourceClientModule extends AbstractModule
     /**
      * {@inheritdoc}
      *
-     * @throws NotFound
+     * @throws \Ray\Di\Exception\NotFound
      */
-    protected function configure(): void
+    protected function configure() : void
     {
         $this->bind(UriFactory::class);
         $this->bind(ResourceInterface::class)->to(Resource::class)->in(Scope::SINGLETON);

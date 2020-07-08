@@ -4,17 +4,9 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\UriException;
-
 use function array_key_exists;
-use function count;
-use function filter_var;
-use function parse_str;
-use function parse_url;
+use BEAR\Resource\Exception\UriException;
 use function sprintf;
-
-use const FILTER_FLAG_PATH_REQUIRED;
-use const FILTER_VALIDATE_URL;
 
 final class Uri extends AbstractUri
 {
@@ -29,7 +21,6 @@ final class Uri extends AbstractUri
         if (count($query) !== 0) {
             $uri = uri_template($uri, $query);
         }
-
         $parts = (array) parse_url($uri);
         $host = isset($parts['port']) ? sprintf('%s:%s', $parts['host'] ?? '', $parts['port'] ?? '') : $parts['host'] ?? '';
         [$this->scheme, $this->host, $this->path] = [$parts['scheme'] ?? '', $host, $parts['path'] ?? ''];
@@ -39,7 +30,6 @@ final class Uri extends AbstractUri
             /** @var array<string, mixed> $parseQuery */
             $this->query = $parseQuery;
         }
-
         if (count($query) !== 0) {
             $this->query = $query + $parseQuery;
         }
@@ -48,7 +38,7 @@ final class Uri extends AbstractUri
     /**
      * @throws UriException
      */
-    private function validate(string $uri): void
+    private function validate(string $uri) : void
     {
         if (filter_var($uri, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED)) {
             return;

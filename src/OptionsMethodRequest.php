@@ -12,16 +12,11 @@ use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
 
-use function array_diff;
-use function array_values;
-use function assert;
-use function is_array;
-use function is_string;
-use function method_exists;
-
 final class OptionsMethodRequest
 {
-    /** @var Reader */
+    /**
+     * @var Reader
+     */
     private $reader;
 
     public function __construct(Reader $reader)
@@ -37,7 +32,7 @@ final class OptionsMethodRequest
      *
      * @return array{parameters?: array<string, array{type?: string, description?: string, default?: string}>, required?: array<int, string>}
      */
-    public function __invoke(ReflectionMethod $method, array $paramDoc, array $ins): array
+    public function __invoke(ReflectionMethod $method, array $paramDoc, array $ins) : array
     {
         $paramMetas = $this->getParamMetas($method->getParameters(), $paramDoc, $ins);
 
@@ -57,7 +52,6 @@ final class OptionsMethodRequest
         if ($hasType) {
             return $this->getType($parameter);
         }
-
         if (isset($paramDoc[$name]['type'])) {
             return $paramDoc[$name]['type'];
         }
@@ -72,22 +66,19 @@ final class OptionsMethodRequest
      *
      * @return array{parameters?: array<string, array{type?: string}>, required?: array<int, string>}
      */
-    private function getParamMetas(array $parameters, array $paramDoc, array $ins): array
+    private function getParamMetas(array $parameters, array $paramDoc, array $ins) : array
     {
         foreach ($parameters as $parameter) {
             $name = (string) $parameter->name;
             if (isset($ins[$name])) {
                 $paramDoc[$name]['in'] = $ins[$parameter->name];
             }
-
             if (! isset($paramDoc[$parameter->name])) {
                 $paramDoc[$name] = [];
             }
-
             $paramDoc = $this->paramType($paramDoc, $parameter);
             $paramDoc = $this->paramDefault($paramDoc, $parameter);
         }
-
         $required = $this->getRequired($parameters);
 
         return $this->setParamMetas($paramDoc, $required);
@@ -100,7 +91,7 @@ final class OptionsMethodRequest
      *
      * @psalm-return list<string>
      */
-    private function getRequired(array $parameters): array
+    private function getRequired(array $parameters) : array
     {
         $required = [];
         foreach ($parameters as $parameter) {
@@ -119,7 +110,7 @@ final class OptionsMethodRequest
      *
      * @return array<string, array{type?: string, description?: string, default?: string}>
      */
-    private function paramDefault(array $paramDoc, ReflectionParameter $parameter): array
+    private function paramDefault(array $paramDoc, ReflectionParameter $parameter) : array
     {
         $hasDefault = $parameter->isDefaultValueAvailable() && $parameter->getDefaultValue() !== null;
         if ($hasDefault) {
@@ -135,7 +126,7 @@ final class OptionsMethodRequest
      *
      * @return array<string, array{type?: string, description?: string, default?: string, in?: string}>
      */
-    private function paramType(array $paramDoc, ReflectionParameter $parameter): array
+    private function paramType(array $paramDoc, ReflectionParameter $parameter) : array
     {
         $type = $this->getParameterType($parameter, $paramDoc, $parameter->name);
         if (is_string($type)) {
@@ -145,7 +136,7 @@ final class OptionsMethodRequest
         return $paramDoc;
     }
 
-    private function getType(ReflectionParameter $parameter): string
+    private function getType(ReflectionParameter $parameter) : string
     {
         $namedType = $parameter->getType();
         assert($namedType instanceof ReflectionNamedType);
@@ -164,7 +155,7 @@ final class OptionsMethodRequest
      *
      * @return array{parameters?: array<string, array{type?: string, description?: string}>, required?: array<int, string>}
      */
-    private function ignoreAnnotatedPrameter(ReflectionMethod $method, array $paramMetas): array
+    private function ignoreAnnotatedPrameter(ReflectionMethod $method, array $paramMetas) : array
     {
         $annotations = $this->reader->getMethodAnnotations($method);
         foreach ($annotations as $annotation) {
@@ -174,7 +165,6 @@ final class OptionsMethodRequest
                 assert(isset($paramMetas['required']));
                 $paramMetas['required'] = array_values(array_diff($paramMetas['required'], [$annotation->param]));
             }
-
             if ($annotation instanceof Assisted) {
                 $paramMetas = $this->ignorreAssisted($paramMetas, $annotation);
             }
@@ -192,12 +182,11 @@ final class OptionsMethodRequest
      *
      * @psalm-return array{parameters?: array<string, array{type?: string, description?: string}>, required?: array<int, string>}
      */
-    private function ignorreAssisted(array $paramMetas, Assisted $annotation): array
+    private function ignorreAssisted(array $paramMetas, Assisted $annotation) : array
     {
         if (isset($paramMetas['required'])) {
             $paramMetas['required'] = array_values(array_diff($paramMetas['required'], $annotation->values));
         }
-
         foreach ($annotation->values as $varName) {
             unset($paramMetas['parameters'][$varName]); // @phpstan-ignore-lineJsonSchemaInterceptor.php
         }
@@ -211,13 +200,12 @@ final class OptionsMethodRequest
      *
      * @return array{parameters?: array<string, array{type?: string}>, required?: array<int, string>}
      */
-    private function setParamMetas(array $paramDoc, array $required): array
+    private function setParamMetas(array $paramDoc, array $required) : array
     {
         $paramMetas = [];
         if ((bool) $paramDoc) {
             $paramMetas['parameters'] = $paramDoc;
         }
-
         if ((bool) $required) {
             $paramMetas['required'] = $required;
         }

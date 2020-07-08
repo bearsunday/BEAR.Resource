@@ -17,7 +17,9 @@ final class JsonSchema
      */
     public $key = '';
 
-    /** @var string */
+    /**
+     * @var string
+     */
     public $schema;
 
     /**

@@ -7,11 +7,11 @@ namespace BEAR\Resource;
 use BEAR\Resource\Exception\MethodNotAllowedException;
 use Ray\Di\Di\Named;
 
-use function get_class;
-
 final class ExtraMethodInvoker
 {
-    /** @var RenderInterface */
+    /**
+     * @var RenderInterface
+     */
     private $optionsRenderer;
 
     /**
@@ -22,7 +22,7 @@ final class ExtraMethodInvoker
         $this->optionsRenderer = $optionsRenderer;
     }
 
-    public function __invoke(AbstractRequest $request, InvokerInterface $invoker): ResourceObject
+    public function __invoke(AbstractRequest $request, InvokerInterface $invoker) : ResourceObject
     {
         if ($request->method === Request::OPTIONS) {
             $ro = $request->resourceObject;

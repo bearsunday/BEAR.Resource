@@ -6,7 +6,7 @@ namespace BEAR\Resource;
 
 final class NullLogger implements LoggerInterface
 {
-    public function __invoke(ResourceObject $ro): void
+    public function __invoke(ResourceObject $ro) : void
     {
     }
 }

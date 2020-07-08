@@ -8,27 +8,25 @@ use LogicException;
 use ReflectionClass;
 use ReflectionMethod;
 
-use function array_shift;
-use function class_exists;
-use function explode;
-use function implode;
-use function strpos;
-use function strtolower;
-use function substr;
-
 final class Meta
 {
     private const EXTRAS_VENDOR = 'vendor';
 
     private const EXTRAS_PACKAGE = 'package';
 
-    /** @var string */
+    /**
+     * @var string
+     */
     public $uri;
 
-    /** @var Options */
+    /**
+     * @var Options
+     */
     public $options;
 
-    /** @var array{vendor?: string, package?: string} */
+    /**
+     * @var array{vendor?: string, package?: string}
+     */
     public $extras = [];
 
     /**
@@ -40,7 +38,7 @@ final class Meta
         $this->options = $this->getOptions($class);
     }
 
-    private function getUri(string $class): string
+    private function getUri(string $class) : string
     {
         $classPath = explode('\\', $class);
         // $class
@@ -55,12 +53,11 @@ final class Meta
     /**
      * Return available resource request method
      */
-    private function getOptions(string $class): Options
+    private function getOptions(string $class) : Options
     {
         if (! class_exists($class)) {
-            throw new LogicException(); // @codeCoverageIgnore
+            throw new LogicException; // @codeCoverageIgnore
         }
-
         $ref = new ReflectionClass($class);
         $allows = $this->getAllows($ref->getMethods());
         $params = [];
@@ -78,7 +75,7 @@ final class Meta
      *
      * @psalm-return list<string>
      */
-    private function getAllows(array $methods): array
+    private function getAllows(array $methods) : array
     {
         $allows = [];
         foreach ($methods as $method) {
@@ -94,7 +91,7 @@ final class Meta
     /**
      * @param class-string $class
      */
-    private function getParams(string $class, string $method): Params
+    private function getParams(string $class, string $method) : Params
     {
         $refMethod = new ReflectionMethod($class, 'on' . $method);
         $parameters = $refMethod->getParameters();
@@ -106,7 +103,6 @@ final class Meta
 
                 continue;
             }
-
             $requiredParams[] = $name;
         }
 

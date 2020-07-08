@@ -6,16 +6,14 @@ namespace BEAR\Resource;
 
 use Ray\Di\InjectorInterface;
 
-use function ltrim;
-use function preg_replace;
-use function strtolower;
-
 /**
  * @template T
  */
 final class OptionalParam implements ParamInterface
 {
-    /** @var T */
+    /**
+     * @var T
+     */
     private $defaultValue;
 
     /**
@@ -35,7 +33,6 @@ final class OptionalParam implements ParamInterface
         if (isset($query[$varName])) {
             return $query[$varName];
         }
-
         // try camelCase variable name
         $snakeName = ltrim(strtolower((string) preg_replace('/[A-Z]/', '_\0', $varName)), '_');
         if (isset($query[$snakeName])) {

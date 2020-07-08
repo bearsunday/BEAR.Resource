@@ -4,11 +4,6 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\MethodException;
-
-use function assert;
-use function is_string;
-
 /**
  * @property-read $this $get
  * @property-read $this $post
@@ -27,7 +22,9 @@ final class Resource implements ResourceInterface
      */
     private $factory;
 
-    /** @var InvokerInterface */
+    /**
+     * @var InvokerInterface
+     */
     private $invoker;
 
     /**
@@ -59,7 +56,9 @@ final class Resource implements ResourceInterface
      */
     private $method = 'get';
 
-    /** @var UriFactory */
+    /**
+     * @var UriFactory
+     */
     private $uri;
 
     /** @noinspection MoreThanThreeArgumentsInspection */
@@ -85,7 +84,7 @@ final class Resource implements ResourceInterface
         $this->uri = $uri;
     }
 
-    public function __get(string $name): self
+    public function __get(string $name) : self
     {
         $this->method = $name;
 
@@ -95,7 +94,7 @@ final class Resource implements ResourceInterface
     /**
      * {@inheritdoc}
      */
-    public function newInstance($uri): ResourceObject
+    public function newInstance($uri) : ResourceObject
     {
         if (is_string($uri)) {
             $uri = ($this->uri)($uri);
@@ -107,9 +106,9 @@ final class Resource implements ResourceInterface
     /**
      * {@inheritdoc}
      *
-     * @throws MethodException
+     * @throws \BEAR\Resource\Exception\MethodException
      */
-    public function object(ResourceObject $ro): RequestInterface
+    public function object(ResourceObject $ro) : RequestInterface
     {
         return new Request($this->invoker, $ro, $this->method);
     }
@@ -117,7 +116,7 @@ final class Resource implements ResourceInterface
     /**
      * {@inheritdoc}
      */
-    public function uri($uri): RequestInterface
+    public function uri($uri) : RequestInterface
     {
         $method = $this->method; // save method, this may change on newInstance(), this is singleton!
         $this->method = 'get';
@@ -133,7 +132,7 @@ final class Resource implements ResourceInterface
      *
      * @psalm-suppress MixedPropertyFetch
      */
-    public function href(string $rel, array $query = []): ResourceObject
+    public function href(string $rel, array $query = []) : ResourceObject
     {
         [$method, $uri] = $this->anchor->href($rel, $this->request, $query);
         /** @psalm-suppress MixedMethodCall */
@@ -199,7 +198,7 @@ final class Resource implements ResourceInterface
         return $this->methodUri(Request::HEAD, $uri)($query);
     }
 
-    private function methodUri(string $method, string $uri): RequestInterface
+    private function methodUri(string $method, string $uri) : RequestInterface
     {
         $this->method = $method;
 

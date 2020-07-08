@@ -7,17 +7,14 @@ namespace BEAR\Resource;
 use BEAR\Resource\Annotation\Link as LinkAnnotation;
 use BEAR\Resource\Exception\LinkException;
 use Doctrine\Common\Annotations\Reader;
-use ReflectionMethod;
-
-use function array_merge;
-use function assert;
 use function get_class;
-use function is_array;
-use function ucfirst;
+use ReflectionMethod;
 
 final class Anchor implements AnchorInterface
 {
-    /** @var Reader */
+    /**
+     * @var Reader
+     */
     private $reader;
 
     public function __construct(Reader $reader)
@@ -30,7 +27,7 @@ final class Anchor implements AnchorInterface
      *
      * @throws LinkException
      */
-    public function href(string $rel, AbstractRequest $request, array $query): array
+    public function href(string $rel, AbstractRequest $request, array $query) : array
     {
         $classMethod = 'on' . ucfirst($request->method);
         /** @var list<object> $annotations */
@@ -46,7 +43,7 @@ final class Anchor implements AnchorInterface
         throw new LinkException("rel:{$rel} class:" . get_class($request->resourceObject), 500);
     }
 
-    private function isValidLinkAnnotation(object $annotation, string $rel): bool
+    private function isValidLinkAnnotation(object $annotation, string $rel) : bool
     {
         /** @psalm-suppress RedundantConditionGivenDocblockType */
         return $annotation instanceof LinkAnnotation && $annotation->rel !== null && $annotation->rel === $rel;
@@ -57,7 +54,7 @@ final class Anchor implements AnchorInterface
      *
      * @return array{0:string, 1:string}
      */
-    private function getMethodUri(AbstractRequest $request, array $query, LinkAnnotation $annotation): array
+    private function getMethodUri(AbstractRequest $request, array $query, LinkAnnotation $annotation) : array
     {
         /** @var array|mixed $body */
         $body = $request->resourceObject->body;

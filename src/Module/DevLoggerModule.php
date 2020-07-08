@@ -10,7 +10,7 @@ use Ray\Di\AbstractModule;
 
 final class DevLoggerModule extends AbstractModule
 {
-    protected function configure(): void
+    protected function configure() : void
     {
         $this->bind(LoggerInterface::class)->to(DevLogger::class);
     }

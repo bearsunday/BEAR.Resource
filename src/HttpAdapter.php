@@ -6,11 +6,11 @@ namespace BEAR\Resource;
 
 use Ray\Di\InjectorInterface;
 
-use function assert;
-
 final class HttpAdapter implements AdapterInterface
 {
-    /** @var InjectorInterface */
+    /**
+     * @var InjectorInterface
+     */
     private $injector;
 
     /**
@@ -21,7 +21,10 @@ final class HttpAdapter implements AdapterInterface
         $this->injector = $injector;
     }
 
-    public function get(AbstractUri $uri): ResourceObject
+    /**
+     * {@inheritdoc}
+     */
+    public function get(AbstractUri $uri) : ResourceObject
     {
         unset($uri);
 

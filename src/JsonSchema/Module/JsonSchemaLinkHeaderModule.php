@@ -7,13 +7,11 @@ namespace BEAR\Resource\Module;
 use BEAR\Resource\Exception\InvalidSchemaUriException;
 use Ray\Di\AbstractModule;
 
-use function filter_var;
-
-use const FILTER_VALIDATE_URL;
-
 class JsonSchemaLinkHeaderModule extends AbstractModule
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     private $jsonSchemaHost;
 
     /**
@@ -21,7 +19,7 @@ class JsonSchemaLinkHeaderModule extends AbstractModule
      */
     public function __construct(
         string $jsonSchemaHost,
-        ?AbstractModule $module = null
+        AbstractModule $module = null
     ) {
         $this->jsonSchemaHost = $jsonSchemaHost;
         if (! filter_var($jsonSchemaHost, FILTER_VALIDATE_URL)) {
@@ -31,7 +29,10 @@ class JsonSchemaLinkHeaderModule extends AbstractModule
         parent::__construct($module);
     }
 
-    protected function configure(): void
+    /**
+     * {@inheritdoc}
+     */
+    protected function configure() : void
     {
         $this->bind()->annotatedWith('json_schema_host')->toInstance($this->jsonSchemaHost);
     }

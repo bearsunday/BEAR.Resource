@@ -6,8 +6,6 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\MethodNotAllowedException;
 
-use function get_class;
-
 final class NullOptionsRenderer implements RenderInterface
 {
     /**

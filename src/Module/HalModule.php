@@ -10,7 +10,10 @@ use Ray\Di\AbstractModule;
 
 class HalModule extends AbstractModule
 {
-    protected function configure(): void
+    /**
+     * {@inheritdoc}
+     */
+    protected function configure() : void
     {
         $this->bind(RenderInterface::class)->to(HalRenderer::class);
     }

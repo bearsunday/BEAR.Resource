@@ -9,7 +9,10 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class HttpClientModule extends AbstractModule
 {
-    protected function configure(): void
+    /**
+     * {@inheritdoc}
+     */
+    protected function configure() : void
     {
         $this->bind(HttpClientInterface::class)->toProvider(HttpClientProvider::class);
     }

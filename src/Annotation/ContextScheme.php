@@ -13,6 +13,8 @@ use Ray\Di\Di\Qualifier;
  */
 final class ContextScheme
 {
-    /** @var mixed */
+    /**
+     * @var mixed
+     */
     public $value;
 }

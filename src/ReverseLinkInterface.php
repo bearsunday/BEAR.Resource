@@ -9,5 +9,5 @@ interface ReverseLinkInterface
     /**
      * Return reverse URI
      */
-    public function __invoke(string $uri): string;
+    public function __invoke(string $uri) : string;
 }

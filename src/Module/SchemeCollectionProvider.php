@@ -13,10 +13,14 @@ use Ray\Di\ProviderInterface;
 
 class SchemeCollectionProvider implements ProviderInterface
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     private $appName;
 
-    /** @var InjectorInterface */
+    /**
+     * @var InjectorInterface
+     */
     private $injector;
 
     /**
@@ -37,7 +41,7 @@ class SchemeCollectionProvider implements ProviderInterface
      */
     public function get()
     {
-        $schemeCollection = new SchemeCollection();
+        $schemeCollection = new SchemeCollection;
         $pageAdapter = new AppAdapter($this->injector, $this->appName);
         $appAdapter = new AppAdapter($this->injector, $this->appName);
         $schemeCollection->scheme('page')->host('self')->toAdapter($pageAdapter);

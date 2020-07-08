@@ -20,73 +20,73 @@ interface ResourceInterface
      *
      * @param AbstractUri|string $uri
      */
-    public function newInstance($uri): ResourceObject;
+    public function newInstance($uri) : ResourceObject;
 
     /**
      * Set resource object
      */
-    public function object(ResourceObject $ro): RequestInterface;
+    public function object(ResourceObject $ro) : RequestInterface;
 
     /**
      * Set URI
      *
      * @param AbstractUri|string $uri
      */
-    public function uri($uri): RequestInterface;
+    public function uri($uri) : RequestInterface;
 
     /**
      * Hyper reference (Hypertext As The Engine Of Application State)
      *
      * @param array<string, mixed> $query
      */
-    public function href(string $rel, array $query = []): ResourceObject;
+    public function href(string $rel, array $query = []) : ResourceObject;
 
     /**
      * Invoke GET request
      *
      * @param array<string, mixed> $query
      */
-    public function get(string $uri, array $query = []): ResourceObject;
+    public function get(string $uri, array $query = []) : ResourceObject;
 
     /**
      * Invoke POST request
      *
      * @param array<string, mixed> $query
      */
-    public function post(string $uri, array $query = []): ResourceObject;
+    public function post(string $uri, array $query = []) : ResourceObject;
 
     /**
      * Invoke PUT request
      *
      * @param array<string, mixed> $query
      */
-    public function put(string $uri, array $query = []): ResourceObject;
+    public function put(string $uri, array $query = []) : ResourceObject;
 
     /**
      * Invoke PATCH request
      *
      * @param array<string, mixed> $query
      */
-    public function patch(string $uri, array $query = []): ResourceObject;
+    public function patch(string $uri, array $query = []) : ResourceObject;
 
     /**
      * Invoke DELETE request
      *
      * @param array<string, mixed> $query
      */
-    public function delete(string $uri, array $query = []): ResourceObject;
+    public function delete(string $uri, array $query = []) : ResourceObject;
 
     /**
      * Invoke HEAD request
      *
      * @param array<string, mixed> $query
      */
-    public function head(string $uri, array $query = []): ResourceObject;
+    public function head(string $uri, array $query = []) : ResourceObject;
 
     /**
      * Invoke OPTIONS request
      *
      * @param array<string, mixed> $query
      */
-    public function options(string $uri, array $query = []): ResourceObject;
+    public function options(string $uri, array $query = []) : ResourceObject;
 }

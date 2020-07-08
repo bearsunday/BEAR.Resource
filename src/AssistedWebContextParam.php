@@ -7,9 +7,6 @@ namespace BEAR\Resource;
 use Ray\Di\InjectorInterface;
 use Ray\WebContextParam\Annotation\AbstractWebContextParam;
 
-use function assert;
-use function is_string;
-
 final class AssistedWebContextParam implements ParamInterface
 {
     /**
@@ -19,10 +16,14 @@ final class AssistedWebContextParam implements ParamInterface
      */
     private static $globals = [];
 
-    /** @var AbstractWebContextParam */
+    /**
+     * @var AbstractWebContextParam
+     */
     private $webContextParam;
 
-    /** @var ParamInterface */
+    /**
+     * @var ParamInterface
+     */
     private $defaultParam;
 
     public function __construct(AbstractWebContextParam $webContextParam, ParamInterface $defaultParam)
@@ -43,7 +44,7 @@ final class AssistedWebContextParam implements ParamInterface
         /** @psalm-suppress MixedArrayOffset */
         $phpWebContext = $superGlobals[$webContextParam::GLOBAL_KEY];
         if (isset($phpWebContext[$this->webContextParam->key])) {
-            return $phpWebContext[$this->webContextParam->key];
+            return  $phpWebContext[$this->webContextParam->key];
         }
 
         return ($this->defaultParam)($varName, $query, $injector);
@@ -52,7 +53,7 @@ final class AssistedWebContextParam implements ParamInterface
     /**
      * @param array<string, array<string, array|string>> $globals
      */
-    public static function setSuperGlobalsOnlyForTestingPurpose(array $globals): void
+    public static function setSuperGlobalsOnlyForTestingPurpose(array $globals) : void
     {
         self::$globals = $globals;
     }

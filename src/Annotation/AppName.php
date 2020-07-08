@@ -13,6 +13,8 @@ use Ray\Di\Di\Qualifier;
  */
 final class AppName
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     public $value;
 }

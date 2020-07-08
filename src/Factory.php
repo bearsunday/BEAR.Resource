@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\UriException;
 use Ray\Di\Di\Inject;
-
-use function is_string;
 
 final class Factory implements FactoryInterface
 {
@@ -18,7 +15,9 @@ final class Factory implements FactoryInterface
      */
     private $scheme;
 
-    /** @var UriFactory */
+    /**
+     * @var UriFactory
+     */
     private $uri;
 
     public function __construct(SchemeCollectionInterface $scheme, UriFactory $uri)
@@ -43,14 +42,13 @@ final class Factory implements FactoryInterface
     /**
      * {@inheritdoc}
      *
-     * @throws UriException
+     * @throws \BEAR\Resource\Exception\UriException
      */
-    public function newInstance($uri): ResourceObject
+    public function newInstance($uri) : ResourceObject
     {
         if (is_string($uri)) {
             $uri = ($this->uri)($uri);
         }
-
         $ro = $this->scheme->getAdapter($uri)->get($uri);
         $ro->uri = $uri;
 

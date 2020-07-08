@@ -12,7 +12,10 @@ use Ray\Di\AbstractModule;
 
 class OptionsMethodHeaderModule extends AbstractModule
 {
-    protected function configure(): void
+    /**
+     * {@inheritdoc}
+     */
+    protected function configure() : void
     {
         $this->bind(OptionsMethods::class);
         $this->bind()->annotatedWith(OptionsBody::class)->toInstance(false);
