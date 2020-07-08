@@ -88,7 +88,7 @@ final class Linker implements LinkerInterface
         }
 
         if ($link->type === LinkType::NEW_LINK) {
-            /** @psalm-suppress MixedArrayAssignment */
+            assert(is_array($ro->body) || is_null($ro->body));
             $ro->body[$link->key] = $nextBody;
 
             return $ro;
