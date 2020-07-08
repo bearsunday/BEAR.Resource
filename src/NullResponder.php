@@ -6,6 +6,7 @@ namespace BEAR\Resource;
 
 final class NullResponder implements TransferInterface
 {
+    /** {@inheritDoc} */
     public function __invoke(ResourceObject $ro, array $server)
     {
     }

@@ -19,7 +19,7 @@ class NullRequest extends AbstractRequest
     }
 
     /**
-     * @return self
+     * {@inheritDoc}
      */
     public function withQuery(array $query): RequestInterface
     {
@@ -29,7 +29,7 @@ class NullRequest extends AbstractRequest
     }
 
     /**
-     * @return self
+     * {@inheritDoc}
      */
     public function addQuery(array $query): RequestInterface
     {

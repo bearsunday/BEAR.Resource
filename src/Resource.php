@@ -143,36 +143,57 @@ final class Resource implements ResourceInterface
         return $resourceObject;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function get(string $uri, array $query = []): ResourceObject
     {
         return $this->methodUri(Request::GET, $uri)($query);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function post(string $uri, array $query = []): ResourceObject
     {
         return $this->methodUri(Request::POST, $uri)($query);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function put(string $uri, array $query = []): ResourceObject
     {
         return $this->methodUri(Request::PUT, $uri)($query);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function patch(string $uri, array $query = []): ResourceObject
     {
         return $this->methodUri(Request::PATCH, $uri)($query);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function delete(string $uri, array $query = []): ResourceObject
     {
         return $this->methodUri(Request::DELETE, $uri)($query);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function options(string $uri, array $query = []): ResourceObject
     {
         return $this->methodUri(Request::OPTIONS, $uri)($query);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function head(string $uri, array $query = []): ResourceObject
     {
         return $this->methodUri(Request::HEAD, $uri)($query);
