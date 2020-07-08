@@ -63,9 +63,9 @@ final class Linker implements LinkerInterface
         }
 
         foreach ($request->links as $link) {
-            /** @psalm-suppress MixedAssignment */
-            $nextResource = $this->annotationLink($link, $current, $request);
-            $current = $this->nextLink($link, $current, $nextResource);
+            /** @var array<mixed> $nextBody */
+            $nextBody = $this->annotationLink($link, $current, $request)->body;
+            $current = $this->nextLink($link, $current, $nextBody);
         }
 
         return $current;
@@ -104,10 +104,8 @@ final class Linker implements LinkerInterface
      * @throws \BEAR\Resource\Exception\MethodException
      * @throws \BEAR\Resource\Exception\LinkRelException
      * @throws Exception\LinkQueryException
-     *
-     * @return mixed|ResourceObject
      */
-    private function annotationLink(LinkType $link, ResourceObject $current, AbstractRequest $request)
+    private function annotationLink(LinkType $link, ResourceObject $current, AbstractRequest $request) : ResourceObject
     {
         if (! is_array($current->body)) {
             throw new Exception\LinkQueryException('Only array is allowed for link in ' . get_class($current), 500);
@@ -120,7 +118,7 @@ final class Linker implements LinkerInterface
         }
 
         /* @noinspection ExceptionsAnnotatingAndHandlingInspection */
-        return $this->annotationRel($annotations, $link, $current)->body;
+        return $this->annotationRel($annotations, $link, $current);
     }
 
     /**
