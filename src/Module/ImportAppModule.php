@@ -20,13 +20,6 @@ class ImportAppModule extends AbstractModule
     private $importAppConfig = [];
 
     /**
-     * Default context namespace
-     *
-     * @var string
-     */
-    private $defaultContextName;
-
-    /**
      * @param array<ImportApp> $importApps
      */
     public function __construct(array $importApps, string $defaultContextName = '')
@@ -36,7 +29,7 @@ class ImportAppModule extends AbstractModule
             $this->importAppConfig[] = $importApp;
         }
 
-        $this->defaultContextName = $defaultContextName;
+        unset($defaultContextName);
         parent::__construct();
     }
 
