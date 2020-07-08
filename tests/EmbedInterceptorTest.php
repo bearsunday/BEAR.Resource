@@ -13,41 +13,37 @@ use FakeVendor\Sandbox\Resource\App\Bird\Sparrow;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
+use function assert;
+use function serialize;
+
 class EmbedInterceptorTest extends TestCase
 {
-    /**
-     * @var \BEAR\Resource\Resource
-     */
+    /** @var ResourceInterface */
     private $resource;
 
-    /**
-     * @var EmbedInterceptor
-     */
-    private $embedInterceptor;
-
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->resource = (new Injector(new EmbedResourceModule(new ResourceModule('FakeVendor\Sandbox')), __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
     }
 
-    public function testInvoke() : Birds
+    public function testInvoke(): Birds
     {
         $result = $this->resource->uri('app://self/bird/birds')(['id' => 1]);
         assert($result instanceof Birds);
         $profile = $result['bird1'];
-        /* @var $profile Request */
+        /** @var Request $profile */
         $this->assertInstanceOf('BEAR\Resource\Request', $profile);
         $this->assertSame('get app://self/bird/canary', $profile->toUriWithMethod());
 
         return $result;
     }
 
-    public function testInvokeRelativePath() : BirdsRel
+    public function testInvokeRelativePath(): BirdsRel
     {
         $result = $this->resource->uri('app://self/bird/birds-rel')(['id' => 1]);
         assert($result instanceof BirdsRel);
         $profile = $result['bird1'];
-        /* @var $profile Request */
+        /** @var Request $profile */
         $this->assertInstanceOf('BEAR\Resource\Request', $profile);
         $this->assertSame('get app://self/bird/canary', $profile->toUriWithMethod());
 
@@ -57,7 +53,7 @@ class EmbedInterceptorTest extends TestCase
     /**
      * @depends testInvoke
      */
-    public function testInvokeAnotherLink(ResourceObject $result) : ResourceObject
+    public function testInvokeAnotherLink(ResourceObject $result): ResourceObject
     {
         $profile = $result['bird2'];
         assert($profile instanceof Request);
@@ -70,14 +66,14 @@ class EmbedInterceptorTest extends TestCase
     /**
      * @depends testInvoke
      */
-    public function testInvokeString(ResourceObject $result) : void
+    public function testInvokeString(ResourceObject $result): void
     {
-        $result->setRenderer(new JsonRenderer);
+        $result->setRenderer(new JsonRenderer());
         $json = $result->toString();
         $this->assertSame('{"bird1":{"name":"chill kun"},"bird2":{"sparrow_id":"1"}}', $json);
     }
 
-    public function testEmbedAnnotation() : Request
+    public function testEmbedAnnotation(): Request
     {
         $request = $this->resource->get->uri('app://self/bird/birds')->withQuery(['id' => 1])->request();
         assert($request instanceof Request);
@@ -85,8 +81,8 @@ class EmbedInterceptorTest extends TestCase
         $ro = $request();
         $bird1 = $ro['bird1'];
         $bird2 = $ro['bird2'];
-        /* @var $bird1 Request */
-        /* @var $bird2 Request */
+        /** @var Request $bird1 */
+        /** @var Request $bird2 */
         $this->assertSame('app://self/bird/canary', $bird1->toUri());
         $this->assertSame('app://self/bird/sparrow?id=1', $bird2->toUri());
 
@@ -96,7 +92,7 @@ class EmbedInterceptorTest extends TestCase
     /**
      * @depends testEmbedAnnotation
      */
-    public function testEmbedChangeQuery(AbstractRequest $request) : void
+    public function testEmbedChangeQuery(AbstractRequest $request): void
     {
         $request->withQuery(['id' => 100]);
         $this->assertSame('app://self/bird/sparrow?id=100', $request->toUri());
@@ -104,19 +100,19 @@ class EmbedInterceptorTest extends TestCase
         $this->assertSame('app://self/bird/sparrow?id=100&option=yes', $request->toUri());
     }
 
-    public function testNotFoundSrc() : void
+    public function testNotFoundSrc(): void
     {
         $this->expectException(EmbedException::class);
         $this->resource->uri('app://self/bird/not-found-bird')(['id' => 1]);
     }
 
-    public function testNotInvalidSrc() : void
+    public function testNotInvalidSrc(): void
     {
         $this->expectException(EmbedException::class);
         $this->resource->uri('app://self/bird/invalid-bird')(['id' => 1]);
     }
 
-    public function testEmbedAnnotationResource() : void
+    public function testEmbedAnnotationResource(): void
     {
         $request = $this
             ->resource
@@ -128,7 +124,7 @@ class EmbedInterceptorTest extends TestCase
         $this->assertSame('app://self/bird/sparrows?id_request=3&id_object=5&id_eager_request=7', $request->toUri());
         assert($request instanceof Request);
         $ro = $request();
-        /* @var $birdRequest Request */
+        /** @var Request $birdRequest */
         $birdRequest = $ro['birdRequest'];
         $birdObject = $ro['birdObject'];
         $this->assertInstanceOf(Request::class, $birdRequest);
