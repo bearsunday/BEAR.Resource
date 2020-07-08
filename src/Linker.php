@@ -34,7 +34,7 @@ final class Linker implements LinkerInterface
     /**
      * memory cache for linker
      *
-     * @var array<array<int|string, mixed>|mixed>
+     * @var array<string, mixed>
      */
     private $cache = [];
 
@@ -163,7 +163,6 @@ final class Linker implements LinkerInterface
         /** @var array<array<string, mixed>> $bodyList */
         $bodyList = $isList ? (array) $current->body : [$current->body];
         $this->cache = [];
-        /** @psalm-suppress MixedAssignment */
         foreach ($bodyList as &$body) {
             $this->crawl($annotations, $link, $body);
         }
@@ -196,7 +195,7 @@ final class Linker implements LinkerInterface
             $request = new Request($this->invoker, $rel, Request::GET, $query, [$link], $this);
             $hash = $request->hash();
             if (array_key_exists($hash, $this->cache)) {
-                /** @psalm-suppress MixedAssignment */
+                /** @var array */
                 $body[$annotation->rel] = $this->cache[$hash];
 
                 continue;
