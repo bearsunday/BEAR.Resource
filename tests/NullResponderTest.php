@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class NullResponderTest extends TestCase
 {
-    public function test__toString(): void
+    public function testToString(): void
     {
         $this->assertNull((new NullResponder())(new NullResourceObject(), [])); // @phpstan-ignore-line
     }

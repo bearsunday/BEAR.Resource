@@ -317,6 +317,6 @@ class RequestTest extends TestCase
     public function testInvalidProp(Request $request): void
     {
         $this->expectException(OutOfRangeException::class);
-        $request->__invalid__; // @phpstan-ignore-line
+        $request->invalid; // @phpstan-ignore-line
     }
 }

@@ -89,7 +89,7 @@ class HttpResourceObjectTest extends TestCase
      */
     public function testIsSet(HttpResourceObject $response): void
     {
-        $isSet = isset($response->__invalid);
+        $isSet = isset($response->invalid);
         $this->assertFalse($isSet);
     }
 

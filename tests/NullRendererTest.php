@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class NullRendererTest extends TestCase
 {
-    public function test__toString(): void
+    public function testToString(): void
     {
         $this->assertSame('', (new NullRenderer())->render(new NullResourceObject()));
     }

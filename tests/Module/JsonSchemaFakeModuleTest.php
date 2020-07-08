@@ -12,7 +12,6 @@ use BEAR\Resource\JsonSchema\FakeVoidUsers;
 use BEAR\Resource\JsonSchemaExceptionFakeHandler;
 use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Uri;
-use FakeVendor\Sandbox\Resource\App\User;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
