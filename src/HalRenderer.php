@@ -60,7 +60,7 @@ class HalRenderer implements RenderInterface
     private function valuateElements(ResourceObject $ro) : void
     {
         if (! is_array($ro->body)) {
-            throw new RuntimeException('body should be array');
+            return;
         }
         /** @var AbstractRequest|object $embeded */
         foreach ($ro->body as $key => &$embeded) {
