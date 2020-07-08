@@ -10,13 +10,13 @@ use function assert;
 use function is_string;
 
 /**
- * @property-read $this $get
- * @property-read $this $post
- * @property-read $this $put
- * @property-read $this $patch
- * @property-read $this $delete
- * @property-read $this $head
- * @property-read $this $options
+ * @property $this $get
+ * @property $this $post
+ * @property $this $put
+ * @property $this $patch
+ * @property $this $delete
+ * @property $this $head
+ * @property $this $options
  */
 final class Resource implements ResourceInterface
 {
