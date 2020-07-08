@@ -176,6 +176,8 @@ final class Linker implements LinkerInterface
      * @param array<object>        $annotations
      * @param array<string, mixed> $body
      *
+     * @param-out array $body
+     *
      * @throws \BEAR\Resource\Exception\LinkQueryException
      * @throws \BEAR\Resource\Exception\MethodException
      * @throws \BEAR\Resource\Exception\LinkRelException
@@ -200,8 +202,9 @@ final class Linker implements LinkerInterface
 
                 continue;
             }
-            /** @psalm-suppress MixedAssignment */
-            $this->cache[$hash] = $body[$annotation->rel] = $this->invoke($request)->body;
+            /** @var array $body */
+            $body = $this->invoke($request)->body;
+            $this->cache[$hash] = $body[$annotation->rel] = $body;
         }
     }
 
