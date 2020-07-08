@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Annotation\Link;
 use Doctrine\Common\Annotations\Reader;
 use function is_array;
 use function is_scalar;
@@ -48,25 +47,20 @@ class HalRenderer implements RenderInterface
      */
     public function renderHal(ResourceObject $ro) : void
     {
-        /** @psalm-suppress MixedAssignment */
         [$ro, $body] = $this->valuate($ro);
         $method = 'on' . ucfirst($ro->uri->method);
         $hasMethod = method_exists($ro, $method);
         /** @var list<object> $annotations */
         $annotations = $hasMethod ? $this->reader->getMethodAnnotations(new ReflectionMethod($ro, $method)) : [];
-        /* @var $annotations Link[] */
-        $hal = $this->getHal($ro->uri, (array) $body, $annotations);
+        $hal = $this->getHal($ro->uri, $body, $annotations);
         $ro->view = $hal->asJson(true) . PHP_EOL;
         $ro->headers['Content-Type'] = 'application/hal+json';
     }
 
-    /**
-     * @psalm-suppress MixedArrayAssignment
-     */
     private function valuateElements(ResourceObject $ro) : void
     {
         if (! is_array($ro->body)) {
-            return;
+            throw new RuntimeException('body should be array');
         }
         /** @var AbstractRequest|object $embeded */
         foreach ($ro->body as $key => &$embeded) {
@@ -95,7 +89,7 @@ class HalRenderer implements RenderInterface
     }
 
     /**
-     * @param array<int|string, mixed> $body
+     * @param array<array-key, mixed> $body
      *
      * @psalm-param list<object>       $annotations
      * @phpstan-param array<object>    $annotations
@@ -107,12 +101,11 @@ class HalRenderer implements RenderInterface
         $selfLink = $this->link->getReverseLink($path);
         $hal = new Hal($selfLink, $body);
 
-        /** @var array{_links?: array<string, array{href: string}>} $body */
         return $this->link->addHalLink($body, $annotations, $hal);
     }
 
     /**
-     * @return array{0: ResourceObject, 1: array<int|string, mixed>|mixed}
+     * @return array{0: ResourceObject, 1: array<array-key, mixed>}
      */
     private function valuate(ResourceObject $ro) : array
     {
@@ -121,6 +114,7 @@ class HalRenderer implements RenderInterface
         }
         // evaluate all request in body.
         $this->valuateElements($ro);
+        assert(is_array($ro->body));
 
         return [$ro, $ro->body];
     }

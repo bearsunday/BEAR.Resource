@@ -26,8 +26,8 @@ final class HalLink
     }
 
     /**
-     * @param array{_links?: array<string, array{href: string}>} $body
-     * @param list<object>                                       $methodAnnotations
+     * @param array<mixed> $body
+     * @param list<object> $methodAnnotations
      */
     public function addHalLink(array $body, array $methodAnnotations, Hal $hal) : Hal
     {
