@@ -70,7 +70,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      *
      * @var 'eager'|'lazy'
      */
-    public $in = 'lazy';
+    public $in = 'lazy'; // phpcs:ignore SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
 
     /**
      * Links
