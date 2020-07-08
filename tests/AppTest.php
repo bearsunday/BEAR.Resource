@@ -10,9 +10,9 @@ use Ray\Di\Injector;
 
 class AppTest extends TestCase
 {
-    public function testGet() : void
+    public function testGet(): void
     {
-        $app = new AppAdapter(new Injector, 'FakeVendor\Sandbox');
+        $app = new AppAdapter(new Injector(), 'FakeVendor\Sandbox');
         $ro = $app->get(new Uri('page://self/index'));
         $this->assertInstanceOf(Index::class, $ro);
     }

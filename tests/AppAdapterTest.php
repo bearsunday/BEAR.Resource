@@ -14,30 +14,28 @@ use Ray\Di\Injector;
 
 class AppAdapterTest extends TestCase
 {
-    /**
-     * @var AppAdapter
-     */
+    /** @var AppAdapter */
     private $appAdapter;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
-        $injector = new Injector(new AppModule, __DIR__ . '/tmp');
+        $injector = new Injector(new AppModule(), __DIR__ . '/tmp');
         $this->appAdapter = new AppAdapter($injector, 'FakeVendor\Sandbox');
     }
 
-    public function testGet() : void
+    public function testGet(): void
     {
         $index = $this->appAdapter->get(new Uri('page://self/index'));
         $this->assertInstanceOf(Index::class, $index);
     }
 
-    public function testNotFound() : void
+    public function testNotFound(): void
     {
         $this->expectException(ResourceNotFoundException::class);
         $this->appAdapter->get(new Uri('page://self/__not_found__'));
     }
 
-    public function testGetWithCompiler() : void
+    public function testGetWithCompiler(): void
     {
         $injector = $this->getScriptInjector();
         $appAdapter = new AppAdapter($injector, 'FakeVendor\Sandbox');
@@ -45,11 +43,11 @@ class AppAdapterTest extends TestCase
         $this->assertInstanceOf(Index::class, $index);
     }
 
-    public function testNotFoundWithCompiler() : void
+    public function testNotFoundWithCompiler(): void
     {
         $this->expectException(ResourceNotFoundException::class);
         $scriptDir = __DIR__ . '/tmp';
-        $compiler = new DiCompiler(new AppModule, $scriptDir);
+        $compiler = new DiCompiler(new AppModule(), $scriptDir);
         $compiler->compile();
         $injector = new ScriptInjector($scriptDir);
         $appAdapter = new AppAdapter($injector, 'FakeVendor\Sandbox');
@@ -62,7 +60,7 @@ class AppAdapterTest extends TestCase
     private function getScriptInjector()
     {
         $scriptDir = __DIR__ . '/tmp';
-        $compiler = new DiCompiler(new AppModule, $scriptDir);
+        $compiler = new DiCompiler(new AppModule(), $scriptDir);
         $compiler->compile();
 
         return new ScriptInjector($scriptDir);
