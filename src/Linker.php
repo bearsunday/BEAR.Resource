@@ -217,7 +217,7 @@ final class Linker implements LinkerInterface
             return false;
         }
         $list = $value;
-        /** @psalm-suppress MixedAssignment */
+        /** @var array */
         $firstRow = array_pop($list);
         $keys = array_keys((array) $firstRow);
         $isMultiColumnMultiRowList = $this->isMultiColumnMultiRowList($keys, $list);
