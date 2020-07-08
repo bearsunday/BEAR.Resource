@@ -90,11 +90,11 @@ final class EmbedInterceptor implements MethodInterceptor
      */
     private function getArgsByInvocation(MethodInvocation $invocation) : array
     {
+        /** @var list<scalar> $args */
         $args = $invocation->getArguments()->getArrayCopy();
         $params = $invocation->getMethod()->getParameters();
         $namedParameters = [];
         foreach ($params as $param) {
-            /** @psalm-suppress MixedAssignment */
             $namedParameters[(string) $param->name] = array_shift($args);
         }
 

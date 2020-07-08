@@ -34,7 +34,7 @@ final class Linker implements LinkerInterface
     /**
      * memory cache for linker
      *
-     * @var array<array<int|string, mixed>|mixed>
+     * @var array<string, mixed>
      */
     private $cache = [];
 
@@ -63,9 +63,9 @@ final class Linker implements LinkerInterface
         }
 
         foreach ($request->links as $link) {
-            /** @psalm-suppress MixedAssignment */
-            $nextResource = $this->annotationLink($link, $current, $request);
-            $current = $this->nextLink($link, $current, $nextResource);
+            /** @var array<mixed> $nextBody */
+            $nextBody = $this->annotationLink($link, $current, $request)->body;
+            $current = $this->nextLink($link, $current, $nextBody);
         }
 
         return $current;
@@ -78,7 +78,7 @@ final class Linker implements LinkerInterface
      */
     private function nextLink(LinkType $link, ResourceObject $ro, $nextResource) : ResourceObject
     {
-        /** @psalm-suppress MixedAssignment */
+        /** @var array<mixed> $nextBody */
         $nextBody = $nextResource instanceof ResourceObject ? $nextResource->body : $nextResource;
 
         if ($link->type === LinkType::SELF_LINK) {
@@ -88,7 +88,7 @@ final class Linker implements LinkerInterface
         }
 
         if ($link->type === LinkType::NEW_LINK) {
-            /** @psalm-suppress MixedArrayAssignment */
+            assert(is_array($ro->body) || $ro->body === null);
             $ro->body[$link->key] = $nextBody;
 
             return $ro;
@@ -104,10 +104,8 @@ final class Linker implements LinkerInterface
      * @throws \BEAR\Resource\Exception\MethodException
      * @throws \BEAR\Resource\Exception\LinkRelException
      * @throws Exception\LinkQueryException
-     *
-     * @return mixed|ResourceObject
      */
-    private function annotationLink(LinkType $link, ResourceObject $current, AbstractRequest $request)
+    private function annotationLink(LinkType $link, ResourceObject $current, AbstractRequest $request) : ResourceObject
     {
         if (! is_array($current->body)) {
             throw new Exception\LinkQueryException('Only array is allowed for link in ' . get_class($current), 500);
@@ -120,7 +118,7 @@ final class Linker implements LinkerInterface
         }
 
         /* @noinspection ExceptionsAnnotatingAndHandlingInspection */
-        return $this->annotationRel($annotations, $link, $current)->body;
+        return $this->annotationRel($annotations, $link, $current);
     }
 
     /**
@@ -165,7 +163,6 @@ final class Linker implements LinkerInterface
         /** @var array<array<string, mixed>> $bodyList */
         $bodyList = $isList ? (array) $current->body : [$current->body];
         $this->cache = [];
-        /** @psalm-suppress MixedAssignment */
         foreach ($bodyList as &$body) {
             $this->crawl($annotations, $link, $body);
         }
@@ -178,6 +175,8 @@ final class Linker implements LinkerInterface
     /**
      * @param array<object>        $annotations
      * @param array<string, mixed> $body
+     *
+     * @param-out array $body
      *
      * @throws \BEAR\Resource\Exception\LinkQueryException
      * @throws \BEAR\Resource\Exception\MethodException
@@ -198,14 +197,24 @@ final class Linker implements LinkerInterface
             $request = new Request($this->invoker, $rel, Request::GET, $query, [$link], $this);
             $hash = $request->hash();
             if (array_key_exists($hash, $this->cache)) {
-                /** @psalm-suppress MixedAssignment */
+                /** @var array<mixed> */
                 $body[$annotation->rel] = $this->cache[$hash];
 
                 continue;
             }
-            /** @psalm-suppress MixedAssignment */
-            $this->cache[$hash] = $body[$annotation->rel] = $this->invoke($request)->body;
+            $this->cache[$hash] = $body[$annotation->rel] = $this->getResponseBody($request);
         }
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    private function getResponseBody(Request $request) : ?array
+    {
+        $body = $this->invoke($request)->body;
+        assert(is_array($body) || $body === null);
+
+        return $body;
     }
 
     /**
@@ -217,9 +226,10 @@ final class Linker implements LinkerInterface
             return false;
         }
         $list = $value;
-        /** @psalm-suppress MixedAssignment */
+        /** @var array<mixed> */
         $firstRow = array_pop($list);
         $keys = array_keys((array) $firstRow);
+        /** @var array<array> $list */
         $isMultiColumnMultiRowList = $this->isMultiColumnMultiRowList($keys, $list);
         $isMultiColumnList = $this->isMultiColumnList($value, $firstRow);
         $isSingleColumnList = $this->isSingleColumnList($value, $keys, $list);
@@ -229,15 +239,13 @@ final class Linker implements LinkerInterface
 
     /**
      * @param array<int, int|string> $keys
-     * @param array<mixed>           $list
+     * @param array<array>           $list
      */
     private function isMultiColumnMultiRowList(array $keys, array $list) : bool
     {
         if ($keys === [0 => 0]) {
             return false;
         }
-
-        /** @psalm-suppress MixedAssignment */
         foreach ($list as $item) {
             if ($keys !== array_keys((array) $item)) {
                 return false;
