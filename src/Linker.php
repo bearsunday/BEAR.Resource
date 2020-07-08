@@ -206,9 +206,9 @@ final class Linker implements LinkerInterface
             $request = new Request($this->invoker, $rel, Request::GET, $query, [$link], $this);
             $hash = $request->hash();
             if (array_key_exists($hash, $this->cache)) {
-                /** @var array<mixed> */
-                $body[$annotation->rel] = $this->cache[$hash];
-
+                /** @var array<array<string, scalar|array>>  $cachedResponse */
+                $cachedResponse = $this->cache[$hash];
+                $body[$annotation->rel] = $cachedResponse;
                 continue;
             }
 
@@ -236,11 +236,11 @@ final class Linker implements LinkerInterface
             return false;
         }
 
+        /** @var array<array> $list */
         $list = $value;
-        /** @var array<mixed> */
+        /** @var array<mixed> $firstRow */
         $firstRow = array_pop($list);
         $keys = array_keys((array) $firstRow);
-        /** @var array<array> $list */
         $isMultiColumnMultiRowList = $this->isMultiColumnMultiRowList($keys, $list);
         $isMultiColumnList = $this->isMultiColumnList($value, $firstRow);
         $isSingleColumnList = $this->isSingleColumnList($value, $keys, $list);
@@ -250,7 +250,7 @@ final class Linker implements LinkerInterface
 
     /**
      * @param array<int, int|string> $keys
-     * @param array<array>           $list
+     * @param array<array<mixed>>    $list
      */
     private function isMultiColumnMultiRowList(array $keys, array $list): bool
     {

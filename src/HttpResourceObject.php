@@ -26,7 +26,10 @@ use function strtoupper;
  */
 final class HttpResourceObject extends ResourceObject
 {
-    /** @psalm-suppress PropertyNotSetInConstructor */
+    /**
+     * @var array<mixed>
+     * @psalm-suppress PropertyNotSetInConstructor
+     */
     public $body;
 
     /** @var HttpClientInterface */

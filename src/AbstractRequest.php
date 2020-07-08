@@ -253,8 +253,6 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
 
     /**
      * {@inheritdoc}
-     *
-     * @return string
      */
     public function serialize()
     {

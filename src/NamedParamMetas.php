@@ -165,7 +165,6 @@ final class NamedParamMetas implements NamedParamMetasInterface
         $class = $parameter->getClass();
         if ($class instanceof ReflectionClass) {
             /** @var ReflectionClass<ResourceObject> $class */
-
             return new ClassParam($class, $parameter);
         }
 
