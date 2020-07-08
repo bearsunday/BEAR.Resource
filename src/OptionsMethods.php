@@ -96,9 +96,11 @@ final class OptionsMethods
                 $extras['links'][] = $annotation;
             }
 
-            if ($annotation instanceof Embed) {
-                $extras['embed'][] = $annotation;
+            if (! ($annotation instanceof Embed)) {
+                continue;
             }
+
+            $extras['embed'][] = $annotation;
         }
 
         return $extras;
@@ -112,11 +114,13 @@ final class OptionsMethods
         $ins = [];
         $annotations = $this->reader->getMethodAnnotations($method);
         foreach ($annotations as $annotation) {
-            if ($annotation instanceof AbstractWebContextParam) {
-                $class = get_class($annotation);
-                assert(class_exists($class));
-                $ins[$annotation->param] = self::WEB_CONTEXT_NAME[$class];
+            if (! ($annotation instanceof AbstractWebContextParam)) {
+                continue;
             }
+
+            $class = get_class($annotation);
+            assert(class_exists($class));
+            $ins[$annotation->param] = self::WEB_CONTEXT_NAME[$class];
         }
 
         return $ins;

@@ -73,9 +73,11 @@ final class NamedParamMetas implements NamedParamMetasInterface
                 $names[$annotation->param] = new AssistedResourceParam($annotation);
             }
 
-            if ($annotation instanceof Assisted) {
-                $names = $this->setAssistedAnnotation($names, $annotation);
+            if (! ($annotation instanceof Assisted)) {
+                continue;
             }
+
+            $names = $this->setAssistedAnnotation($names, $annotation);
         }
 
         return $names;
@@ -90,9 +92,11 @@ final class NamedParamMetas implements NamedParamMetasInterface
     {
         $webcontext = [];
         foreach ($annotations as $annotation) {
-            if ($annotation instanceof AbstractWebContextParam) {
-                $webcontext[$annotation->param] = $annotation;
+            if (! ($annotation instanceof AbstractWebContextParam)) {
+                continue;
             }
+
+            $webcontext[$annotation->param] = $annotation;
         }
 
         return $webcontext;

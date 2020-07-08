@@ -40,9 +40,11 @@ final class Uri extends AbstractUri
             $this->query = $parseQuery;
         }
 
-        if (count($query) !== 0) {
-            $this->query = $query + $parseQuery;
+        if (count($query) === 0) {
+            return;
         }
+
+        $this->query = $query + $parseQuery;
     }
 
     /**

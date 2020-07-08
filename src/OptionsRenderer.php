@@ -69,9 +69,11 @@ final class OptionsRenderer implements RenderInterface
     {
         $allows = [];
         foreach ($methods as $method) {
-            if (in_array($method->name, ['onGet', 'onPost', 'onPut', 'onPatch', 'onDelete', 'onHead'], true)) {
-                $allows[] = strtoupper(substr($method->name, 2));
+            if (! in_array($method->name, ['onGet', 'onPost', 'onPut', 'onPatch', 'onDelete', 'onHead'], true)) {
+                continue;
             }
+
+            $allows[] = strtoupper(substr($method->name, 2));
         }
 
         return $allows;

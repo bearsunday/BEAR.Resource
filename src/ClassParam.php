@@ -33,9 +33,11 @@ final class ClassParam implements ParamInterface
     {
         $this->class = $class->name;
         $this->isDefaultAvailable = $parameter->isDefaultValueAvailable();
-        if ($this->isDefaultAvailable) {
-            $this->defaultValue = $parameter->getDefaultValue();
+        if (! $this->isDefaultAvailable) {
+            return;
         }
+
+        $this->defaultValue = $parameter->getDefaultValue();
     }
 
     /**

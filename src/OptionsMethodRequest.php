@@ -104,9 +104,11 @@ final class OptionsMethodRequest
     {
         $required = [];
         foreach ($parameters as $parameter) {
-            if (! $parameter->isOptional()) {
-                $required[] = $parameter->name;
+            if ($parameter->isOptional()) {
+                continue;
             }
+
+            $required[] = $parameter->name;
         }
 
         return $required;
@@ -175,9 +177,11 @@ final class OptionsMethodRequest
                 $paramMetas['required'] = array_values(array_diff($paramMetas['required'], [$annotation->param]));
             }
 
-            if ($annotation instanceof Assisted) {
-                $paramMetas = $this->ignorreAssisted($paramMetas, $annotation);
+            if (! ($annotation instanceof Assisted)) {
+                continue;
             }
+
+            $paramMetas = $this->ignorreAssisted($paramMetas, $annotation);
         }
 
         return $paramMetas;

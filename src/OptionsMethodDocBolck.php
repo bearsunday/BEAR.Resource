@@ -67,9 +67,11 @@ final class OptionsMethodDocBolck
             $type = $tagType === 'int' ? 'integer' : $tagType;
             $params[$varName] = ['type' => $type];
             $description = (string) $tag->getDescription();
-            if ($description) {
-                $params[$varName]['description'] = $description;
+            if (! $description) {
+                continue;
             }
+
+            $params[$varName]['description'] = $description;
         }
 
         return $params;

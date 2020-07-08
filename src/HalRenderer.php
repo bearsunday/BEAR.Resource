@@ -69,20 +69,22 @@ class HalRenderer implements RenderInterface
 
         /** @var AbstractRequest|object $embeded */
         foreach ($ro->body as $key => &$embeded) {
-            if ($embeded instanceof AbstractRequest) {
-                // @codeCoverageIgnoreStart
-                if ($this->isDifferentSchema($ro, $embeded->resourceObject)) {
-                    $ro->body['_embedded'][$key] = $embeded()->body;
-                    unset($ro->body[$key]);
-
-                    continue;
-                }
-
-                // @codeCoverageIgnoreEnd
-                unset($ro->body[$key]);
-                $view = $this->render($embeded());
-                $ro->body['_embedded'][$key] = json_decode($view);
+            if (! ($embeded instanceof AbstractRequest)) {
+                continue;
             }
+
+            // @codeCoverageIgnoreStart
+            if ($this->isDifferentSchema($ro, $embeded->resourceObject)) {
+                $ro->body['_embedded'][$key] = $embeded()->body;
+                unset($ro->body[$key]);
+
+                continue;
+            }
+
+            // @codeCoverageIgnoreEnd
+            unset($ro->body[$key]);
+            $view = $this->render($embeded());
+            $ro->body['_embedded'][$key] = json_decode($view);
         }
     }
 
@@ -129,8 +131,10 @@ class HalRenderer implements RenderInterface
     private function updateHeaders(ResourceObject $ro): void
     {
         $ro->headers['Content-Type'] = 'application/hal+json';
-        if (isset($ro->headers['Location'])) {
-            $ro->headers['Location'] = $this->link->getReverseLink($ro->headers['Location']);
+        if (! isset($ro->headers['Location'])) {
+            return;
         }
+
+        $ro->headers['Location'] = $this->link->getReverseLink($ro->headers['Location']);
     }
 }

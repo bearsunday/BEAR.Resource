@@ -105,9 +105,11 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         if (is_array($this->body)) {
             /** @psalm-suppress MixedAssignment */
             foreach ($this->body as &$item) {
-                if ($item instanceof RequestInterface) {
-                    $item = ($item)();
+                if (! ($item instanceof RequestInterface)) {
+                    continue;
                 }
+
+                $item = ($item)();
             }
         }
 
@@ -167,9 +169,11 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      */
     public function offsetUnset($offset): void
     {
-        if (is_array($this->body)) {
-            unset($this->body[$offset]);
+        if (! is_array($this->body)) {
+            return;
         }
+
+        unset($this->body[$offset]);
     }
 
     /**
@@ -283,10 +287,12 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         /* @noinspection ForeachSourceInspection */
         /** @psalm-suppress MixedAssignment */
         foreach ($body as &$value) {
-            if ($value instanceof RequestInterface) {
-                $result = $value();
-                $value = $result->body;
+            if (! ($value instanceof RequestInterface)) {
+                continue;
             }
+
+            $result = $value();
+            $value = $result->body;
         }
 
         return $body;
