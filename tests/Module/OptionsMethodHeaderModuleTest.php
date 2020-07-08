@@ -16,10 +16,10 @@ use Ray\Di\Injector;
 
 class OptionsMethodHeaderModuleTest extends TestCase
 {
-    public function testOptionsMethodHeaderModule() : void
+    public function testOptionsMethodHeaderModule(): void
     {
         $injector = new Injector(new OptionsMethodHeaderModule(new class extends AbstractModule {
-            protected function configure() : void
+            protected function configure(): void
             {
                 $this->bind(OptionsMethods::class);
                 $this->bind(Reader::class)->to(AnnotationReader::class);
@@ -28,7 +28,7 @@ class OptionsMethodHeaderModuleTest extends TestCase
         /** @var OptionsRenderer $renderer */
         $renderer = $injector->getInstance(RenderInterface::class, 'options');
         $this->assertInstanceOf(OptionsRenderer::class, $renderer);
-        $view = $renderer->render(new FakeResource);
+        $view = $renderer->render(new FakeResource());
         $this->assertSame('', $view);
     }
 }

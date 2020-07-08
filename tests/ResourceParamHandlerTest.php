@@ -11,37 +11,35 @@ use Ray\Di\Injector;
 
 class ResourceParamHandlerTest extends TestCase
 {
-    /**
-     * @var ResourceInterface
-     */
+    /** @var ResourceInterface */
     private $resource;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
         $module = new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox'));
         $this->resource = (new Injector($module, __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
     }
 
-    public function testResourceParam() : void
+    public function testResourceParam(): void
     {
         $instance = $this->resource->get->uri('app://self/rparam/greeting')->eager->request();
         $this->assertSame('LOGINID', $instance['name']);
     }
 
-    public function testResourceParamInUriTemplate() : void
+    public function testResourceParamInUriTemplate(): void
     {
         $instance = $this->resource->post->uri('app://self/rparam/greeting')->withQuery(['name' => 'BEAR'])->eager->request();
         $this->assertSame('login:BEAR', $instance['id']);
     }
 
-    public function testException() : void
+    public function testException(): void
     {
         $this->expectException(ParameterException::class);
         $this->resource->put->uri('app://self/rparam/greeting')->eager->request();
     }
 
-    public function testNullDefault() : void
+    public function testNullDefault(): void
     {
         $instance = $this->resource->get->uri('app://self/rparam/greeting')->withQuery(['name' => 'IGNORED'])->eager->request();
         $this->assertSame('LOGINID', $instance['name']);

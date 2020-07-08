@@ -11,30 +11,24 @@ use PHPUnit\Framework\TestCase;
 
 class OptionsTest extends TestCase
 {
-    /**
-     * @var Invoker
-     */
+    /** @var Invoker */
     protected $invoker;
 
-    /**
-     * @var array<string, mixed>
-     */
+    /** @var array<string, mixed> */
     protected $query = [];
 
-    /**
-     * @var Request
-     */
+    /** @var Request */
     protected $request;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $schemaDir = __DIR__ . '/Fake/json_schema';
-        $this->invoker = (new InvokerFactory)($schemaDir);
+        $this->invoker = (new InvokerFactory())($schemaDir);
     }
 
-    public function testOptionsMethod() : DocPhp7
+    public function testOptionsMethod(): DocPhp7
     {
-        $ro = new DocPhp7;
+        $ro = new DocPhp7();
         $request = new Request($this->invoker, $ro, Request::OPTIONS);
         $response = $this->invoker->invoke($request);
         $actual = $ro->headers['Allow'];
@@ -47,7 +41,7 @@ class OptionsTest extends TestCase
     /**
      * @depends testOptionsMethod
      */
-    public function testOptionsMethodBody(ResourceObject $ro) : void
+    public function testOptionsMethodBody(ResourceObject $ro): void
     {
         $actual = $ro->view;
         $expected = '{
@@ -100,9 +94,9 @@ class OptionsTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function testAssistedResource() : void
+    public function testAssistedResource(): void
     {
-        $ro = new FakeParamResource;
+        $ro = new FakeParamResource();
         $request = new Request($this->invoker, $ro, Request::OPTIONS);
         $this->invoker->invoke($request);
         $this->assertSame('GET, POST, PUT, DELETE', $ro->headers['Allow']);
@@ -189,9 +183,9 @@ class OptionsTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function testOptionsMethodWithJsonSchema() : void
+    public function testOptionsMethodWithJsonSchema(): void
     {
-        $ro = new DocUser;
+        $ro = new DocUser();
         $request = new Request($this->invoker, $ro, Request::OPTIONS);
         $this->invoker->invoke($request);
         $actual = $ro->headers['Allow'];
@@ -236,9 +230,9 @@ class OptionsTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function testOptionsNoSchemaFile() : void
+    public function testOptionsNoSchemaFile(): void
     {
-        $ro = new DocInvalidFile;
+        $ro = new DocInvalidFile();
         $request = new Request($this->invoker, $ro, Request::OPTIONS);
         $this->invoker->invoke($request);
         $expected = '{

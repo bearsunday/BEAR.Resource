@@ -15,9 +15,12 @@ use LogicException;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
+use function assert;
+use function dirname;
+
 class JsonSchemaModuleTest extends TestCase
 {
-    public function testValid() : void
+    public function testValid(): void
     {
         $ro = $this->getRo(FakeUser::class);
         assert($ro instanceof FakeUser);
@@ -25,7 +28,7 @@ class JsonSchemaModuleTest extends TestCase
         $this->assertSame($ro->body['name']['firstName'], 'mucha');
     }
 
-    public function testValidArrayRef() : void
+    public function testValidArrayRef(): void
     {
         $ro = $this->getRo(FakeUsers::class);
         assert($ro instanceof FakeUsers);
@@ -33,7 +36,7 @@ class JsonSchemaModuleTest extends TestCase
         $this->assertSame($ro->body[0]['name']['firstName'], 'mucha');
     }
 
-    public function testValidateException() : JsonSchemaException
+    public function testValidateException(): JsonSchemaException
     {
         $e = $this->createJsonSchemaException(FakeUser::class);
         $this->assertInstanceOf(JsonSchemaException::class, $e);
@@ -41,7 +44,7 @@ class JsonSchemaModuleTest extends TestCase
         return $e;
     }
 
-    public function testBCValidateException() : JsonSchemaException
+    public function testBCValidateException(): JsonSchemaException
     {
         $e = $this->createJsonSchemaException(FakePerson::class);
         $this->assertInstanceOf(JsonSchemaException::class, $e);
@@ -52,13 +55,13 @@ class JsonSchemaModuleTest extends TestCase
     /**
      * @depends testValidateException
      */
-    public function testBCValidateErrorException(JsonSchemaException $e) : void
+    public function testBCValidateErrorException(JsonSchemaException $e): void
     {
         $expected = '[age] Must have a minimum value of 20';
         $this->assertStringContainsString($expected, $e->getMessage());
     }
 
-    public function testException() : void
+    public function testException(): void
     {
         $this->expectException(JsonSchemaNotFoundException::class);
         $ro = $this->getRo(FakeUser::class);
@@ -66,7 +69,7 @@ class JsonSchemaModuleTest extends TestCase
         $ro->onPost();
     }
 
-    public function testParameterException() : void
+    public function testParameterException(): void
     {
         $caughtException = null;
         $ro = $this->getRo(FakeUser::class);
@@ -76,11 +79,12 @@ class JsonSchemaModuleTest extends TestCase
         } catch (JsonSchemaException $e) {
             $caughtException = $e;
         }
+
         $this->assertEmpty($ro->body);
         $this->assertInstanceOf(JsonSchemaException::class, $caughtException);
     }
 
-    public function testWorksOnlyCode200() : void
+    public function testWorksOnlyCode200(): void
     {
         $ro = $this->getRo(FakeUser::class);
         assert($ro instanceof FakeUser);
@@ -88,7 +92,7 @@ class JsonSchemaModuleTest extends TestCase
         $this->assertInstanceOf(ResourceObject::class, $ro);
     }
 
-    public function invalidRequestTest() : void
+    public function invalidRequestTest(): void
     {
         $this->expectException(JsonSchemaNotFoundException::class);
         $ro = $this->getRo(FakeUser::class);
@@ -96,13 +100,13 @@ class JsonSchemaModuleTest extends TestCase
         $ro->onPatch();
     }
 
-    public function linkHeaderTest() : void
+    public function linkHeaderTest(): void
     {
         $ro = $this->getLinkHeaderRo(FakeUser::class);
         $this->assertSame('<http://example.com/schema/user.json>; rel="describedby"', $ro->headers['Link']);
     }
 
-    private function createJsonSchemaException(string $class) : JsonSchemaException
+    private function createJsonSchemaException(string $class): JsonSchemaException
     {
         $ro = $this->getRo($class);
         assert($ro instanceof ResourceObject);
@@ -112,32 +116,32 @@ class JsonSchemaModuleTest extends TestCase
             return $e;
         }
 
-        throw new LogicException;
+        throw new LogicException();
     }
 
-    private function getRo(string $class) : ResourceObject
+    private function getRo(string $class): ResourceObject
     {
         $module = $this->getJsonSchemaModule();
         $ro = (new Injector($module, __DIR__ . '/tmp'))->getInstance($class);
-        /* @var $ro FakeUser */
+        /** @var FakeUser $ro */
         $ro->uri = new Uri('app://self/user?id=1');
 
         return $ro;
     }
 
-    private function getLinkHeaderRo(string $class) : ResourceObject
+    private function getLinkHeaderRo(string $class): ResourceObject
     {
         $jsonSchemaHost = 'http://example.com/schema/';
         $module = $this->getJsonSchemaModule();
         $module->install(new JsonSchemaLinkHeaderModule($jsonSchemaHost));
         $ro = (new Injector($module, __DIR__ . '/tmp'))->getInstance($class);
-        /* @var $ro FakeUser */
+        /** @var FakeUser $ro */
         $ro->uri = new Uri('app://self/user?id=1');
 
         return $ro;
     }
 
-    private function getJsonSchemaModule() : JsonSchemaModule
+    private function getJsonSchemaModule(): JsonSchemaModule
     {
         $jsonSchema = dirname(__DIR__) . '/Fake/json_schema';
         $jsonValidate = dirname(__DIR__) . '/Fake/json_validate';

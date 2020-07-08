@@ -8,8 +8,8 @@ use PHPUnit\Framework\TestCase;
 
 class NullRendererTest extends TestCase
 {
-    public function test__toString() : void
+    public function test__toString(): void
     {
-        $this->assertSame('', (new NullRenderer)->render(new NullResourceObject));
+        $this->assertSame('', (new NullRenderer())->render(new NullResourceObject()));
     }
 }

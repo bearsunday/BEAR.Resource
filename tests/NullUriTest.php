@@ -8,8 +8,8 @@ use PHPUnit\Framework\TestCase;
 
 class NullUriTest extends TestCase
 {
-    public function test__toString() : void
+    public function test__toString(): void
     {
-        $this->assertSame('app://self/index', (string) new NullUri);
+        $this->assertSame('app://self/index', (string) new NullUri());
     }
 }

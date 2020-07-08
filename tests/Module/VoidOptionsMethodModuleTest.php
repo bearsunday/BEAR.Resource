@@ -11,9 +11,9 @@ use Ray\Di\Injector;
 
 class VoidOptionsMethodModuleTest extends TestCase
 {
-    public function testOptionsMethodModule() : void
+    public function testOptionsMethodModule(): void
     {
-        $injector = new Injector(new VoidOptionsMethodModule);
+        $injector = new Injector(new VoidOptionsMethodModule());
         $renderer = $injector->getInstance(RenderInterface::class, 'options');
         $this->assertInstanceOf(NullOptionsRenderer::class, $renderer);
     }
