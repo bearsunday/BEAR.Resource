@@ -96,8 +96,8 @@ class JsonSchemaFakeModuleTest extends TestCase
         $jsonSchemaHost = 'http://example.com/schema/';
         $module = $this->getJsonSchemaModule();
         $module->install(new JsonSchemaLinkHeaderModule($jsonSchemaHost));
-        /** @var FakeUser $ro */
         $ro = (new Injector($module, __DIR__ . '/tmp'))->getInstance($class);
+        assert($ro instanceof FakeUser);
         $ro->uri = new Uri('app://self/user?id=1');
 
         return $ro;

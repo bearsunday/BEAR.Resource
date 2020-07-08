@@ -79,10 +79,10 @@ class EmbedInterceptorTest extends TestCase
         assert($request instanceof Request);
         $this->assertSame('app://self/bird/birds?id=1', $request->toUri());
         $ro = $request();
-        /** @var Request $bird1 */
         $bird1 = $ro['bird1'];
-        /** @var Request $bird2 */
+        assert($bird1 instanceof Request);
         $bird2 = $ro['bird2'];
+        assert($bird2 instanceof Request);
         $this->assertSame('app://self/bird/canary', $bird1->toUri());
         $this->assertSame('app://self/bird/sparrow?id=1', $bird2->toUri());
 
@@ -124,8 +124,8 @@ class EmbedInterceptorTest extends TestCase
         $this->assertSame('app://self/bird/sparrows?id_request=3&id_object=5&id_eager_request=7', $request->toUri());
         assert($request instanceof Request);
         $ro = $request();
-        /** @var Request $birdRequest */
         $birdRequest = $ro['birdRequest'];
+        assert($birdRequest instanceof Request);
         $birdObject = $ro['birdObject'];
         $this->assertInstanceOf(Request::class, $birdRequest);
         $this->assertSame('get app://self/bird/sparrow?id=3', $birdRequest->toUriWithMethod());

@@ -19,6 +19,7 @@ use Ray\Di\Di\Named;
 use ReflectionClass;
 use stdClass;
 
+use function assert;
 use function file_exists;
 use function is_array;
 use function is_dir;
@@ -60,15 +61,15 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     public function invoke(MethodInvocation $invocation)
     {
         $method = $invocation->getMethod();
-        /** @var JsonSchema $jsonSchema */
         $jsonSchema = $method->getAnnotation(JsonSchema::class);
+        assert($jsonSchema instanceof JsonSchema);
         if ($jsonSchema->params) {
             $arguments = $this->getNamedArguments($invocation);
             $this->validateRequest($jsonSchema, $arguments);
         }
 
-        /** @var ResourceObject $ro */
         $ro = $invocation->proceed();
+        assert($ro instanceof ResourceObject);
         if ($ro->code === 200 || $ro->code === 201) {
             $this->validateResponse($ro, $jsonSchema);
         }

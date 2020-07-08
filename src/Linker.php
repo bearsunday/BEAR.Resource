@@ -194,7 +194,6 @@ final class Linker implements LinkerInterface
     private function crawl(array $annotations, LinkType $link, array &$body): void
     {
         foreach ($annotations as $annotation) {
-            /** @var Link $annotation */
             if (! $annotation instanceof Link || $annotation->crawl !== $link->key) {
                 continue;
             }

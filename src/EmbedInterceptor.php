@@ -12,6 +12,7 @@ use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
 
 use function array_shift;
+use function assert;
 
 final class EmbedInterceptor implements MethodInterceptor
 {
@@ -34,8 +35,8 @@ final class EmbedInterceptor implements MethodInterceptor
      */
     public function invoke(MethodInvocation $invocation)
     {
-        /** @var ResourceObject $ro */
         $ro = $invocation->getThis();
+        assert($ro instanceof ResourceObject);
         $method = $invocation->getMethod();
         $query = $this->getArgsByInvocation($invocation);
         /** @var array<object> $embeds */
@@ -64,7 +65,7 @@ final class EmbedInterceptor implements MethodInterceptor
             try {
                 $templateUri = $this->getFullUri($embed->src, $ro);
                 $uri = uri_template($templateUri, $query);
-                /** @var Request $request */
+                /** @var Request $request */ // phpcs:ignore SlevomatCodingStandard.PHP.RequireExplicitAssertion.RequiredExplicitAssertion
                 $request = $this->resource->get->uri($uri);
                 /** @psalm-suppress MixedArrayAssignment */
                 $ro->body[$embed->rel] = clone $request;

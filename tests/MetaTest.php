@@ -7,6 +7,8 @@ namespace BEAR\Resource;
 use FakeVendor\Sandbox\Resource\App\Doc;
 use PHPUnit\Framework\TestCase;
 
+use function assert;
+
 class MetaTest extends TestCase
 {
     /** @var Meta */
@@ -30,8 +32,8 @@ class MetaTest extends TestCase
 
     public function testParams(): void
     {
-        /** @var Params $params */
         $params = $this->meta->options->params[1];
+        assert($params instanceof Params);
         $this->assertSame('post', $params->method);
         $this->assertSame(['id'], $params->required);
         $this->assertSame(['name', 'age'], $params->optional);

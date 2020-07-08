@@ -14,6 +14,8 @@ use PHPUnit\Framework\TestCase;
 use Ray\Di\AbstractModule;
 use Ray\Di\Injector;
 
+use function assert;
+
 class OptionsMethodHeaderModuleTest extends TestCase
 {
     public function testOptionsMethodHeaderModule(): void
@@ -25,8 +27,8 @@ class OptionsMethodHeaderModuleTest extends TestCase
                 $this->bind(Reader::class)->to(AnnotationReader::class);
             }
         }));
-        /** @var OptionsRenderer $renderer */
         $renderer = $injector->getInstance(RenderInterface::class, 'options');
+        assert($renderer instanceof OptionsRenderer);
         $this->assertInstanceOf(OptionsRenderer::class, $renderer);
         $view = $renderer->render(new FakeResource());
         $this->assertSame('', $view);

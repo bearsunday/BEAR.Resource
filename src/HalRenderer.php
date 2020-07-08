@@ -67,7 +67,7 @@ class HalRenderer implements RenderInterface
             return;
         }
 
-        /** @var AbstractRequest|object $embeded */
+        /** @var mixed $embeded */
         foreach ($ro->body as $key => &$embeded) {
             if (! ($embeded instanceof AbstractRequest)) {
                 continue;
