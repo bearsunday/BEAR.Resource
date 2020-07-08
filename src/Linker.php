@@ -203,8 +203,7 @@ final class Linker implements LinkerInterface
                 continue;
             }
             /** @var array<mixed> $body */
-            $body = $this->invoke($request)->body;
-            $this->cache[$hash] = $body[$annotation->rel] = $body;
+            $this->cache[$hash] = $body[$annotation->rel] = $this->invoke($request)->body;
         }
     }
 
@@ -238,7 +237,7 @@ final class Linker implements LinkerInterface
             return false;
         }
         foreach ($list as $item) {
-            if ($keys !== array_keys($item)) {
+            if ($keys !== array_keys((array) $item)) {
                 return false;
             }
         }
