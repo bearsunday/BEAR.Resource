@@ -100,6 +100,9 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         return $view;
     }
 
+    /**
+     * @return list<string>
+     */
     public function __sleep()
     {
         if (is_array($this->body)) {

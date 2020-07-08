@@ -121,7 +121,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
         $this->linker = $linker;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         try {
             $this->invoke();
