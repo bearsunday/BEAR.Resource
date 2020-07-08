@@ -184,12 +184,12 @@ final class Linker implements LinkerInterface
      * @param array<object>        $annotations
      * @param array<string, mixed> $body
      *
-     * @param-out array $body
-     *
      * @throws LinkQueryException
      * @throws MethodException
      * @throws LinkRelException
      * @throws UriException
+     *
+     * @param-out array $body
      */
     private function crawl(array $annotations, LinkType $link, array &$body): void
     {

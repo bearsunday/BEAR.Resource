@@ -117,9 +117,9 @@ final class OptionsMethodRequest
     /**
      * @param array<string, array{type?: string, description?: string}> $paramDoc
      *
-     * @throws ReflectionException
-     *
      * @return array<string, array{type?: string, description?: string, default?: string}>
+     *
+     * @throws ReflectionException
      */
     private function paramDefault(array $paramDoc, ReflectionParameter $parameter): array
     {

@@ -204,9 +204,9 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     /**
      * {@inheritdoc}
      *
-     * @throws OutOfBoundsException
-     *
      * @return mixed
+     *
+     * @throws OutOfBoundsException
      */
     public function offsetGet($offset)
     {
