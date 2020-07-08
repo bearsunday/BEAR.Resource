@@ -1,4 +1,5 @@
 <?php
+
 namespace FakeVendor\Sandbox\Resource\Page;
 
 use BEAR\Resource\ResourceInterface;
@@ -16,7 +17,7 @@ class FakeLoop extends ResourceObject
         $this->resource = $resource;
     }
 
-    public function onGet() : ResourceObject
+    public function onGet(): ResourceObject
     {
         $request = $this->resource->get->uri('/fake-loop-item');
         foreach (range(1, 5) as $i) {

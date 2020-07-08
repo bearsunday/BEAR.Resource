@@ -6,7 +6,7 @@ namespace BEAR\Resource;
 
 final class FakeRo
 {
-    public function __invoke(ResourceObject $ro) : ResourceObject
+    public function __invoke(ResourceObject $ro): ResourceObject
     {
         $classPath = (new \ReflectionClass($ro))->getName();
         $mockPath = strtolower(str_replace('\\', '/', $classPath));

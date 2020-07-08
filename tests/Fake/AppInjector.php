@@ -1,9 +1,7 @@
-<?php declare(strict_types=1);
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+<?php
+
+declare(strict_types=1);
+
 namespace BEAR\Package;
 
 use FakeVendor\Sandbox\Module\AppModule;
@@ -23,7 +21,7 @@ class AppInjector implements InjectorInterface
 
     public function getInstance($interface, $name = Name::ANY)
     {
-        $injector = new Injector(new AppModule, __DIR__ . '/tmp');
+        $injector = new Injector(new AppModule(), __DIR__ . '/tmp');
 
         return $injector->getInstance($interface, $name);
     }

@@ -22,11 +22,11 @@ class FakeSchemeCollectionProvider implements ProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function get() : SchemeCollection
+    public function get(): SchemeCollection
     {
-        return (new SchemeCollection)
+        return (new SchemeCollection())
             ->scheme('app')->host('self')->toAdapter(new AppAdapter($this->injector, 'FakeVendor\Sandbox'))
             ->scheme('page')->host('self')->toAdapter(new AppAdapter($this->injector, 'FakeVendor\Sandbox'))
-            ->scheme('nop')->host('self')->toAdapter(new FakeNop);
+            ->scheme('nop')->host('self')->toAdapter(new FakeNop());
     }
 }
