@@ -36,7 +36,7 @@ final class Uri extends AbstractUri
         $parseQuery = $this->query;
         if (array_key_exists('query', $parts)) {
             parse_str($parts['query'], $parseQuery);
-            /** @var array<string, mixed> $parseQuery */
+            /** @var array<string, mixed> $parseQuery */ // phpcs:ignore SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration.NoAssignment
             $this->query = $parseQuery;
         }
 
