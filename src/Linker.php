@@ -202,9 +202,19 @@ final class Linker implements LinkerInterface
 
                 continue;
             }
-            /** @var array<mixed> $body */
-            $this->cache[$hash] = $body[$annotation->rel] = $this->invoke($request)->body;
+            $this->cache[$hash] = $body[$annotation->rel] = $this->getResponseBody($request);
         }
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    private function getResponseBody(Request $request) : ?array
+    {
+        $body = $this->invoke($request)->body;
+        assert(is_array($body) || $body === null);
+
+        return $body;
     }
 
     /**
