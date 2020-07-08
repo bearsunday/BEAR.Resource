@@ -10,7 +10,7 @@ use Exception;
 
 class BadRequestException extends BadMethodCallException implements ExceptionInterface
 {
-    public function __construct(string $message = '', int $code = Code::BAD_REQUEST, Exception $previous = null)
+    public function __construct(string $message = '', int $code = Code::BAD_REQUEST, ?Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }

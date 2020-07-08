@@ -4,21 +4,17 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+use function http_build_query;
+
 abstract class AbstractUri
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $scheme;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $host;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $path;
 
     /**
@@ -28,9 +24,7 @@ abstract class AbstractUri
      */
     public $query = [];
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $method = 'get';
 
     /**

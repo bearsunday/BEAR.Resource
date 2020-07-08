@@ -9,20 +9,19 @@ namespace BEAR\Resource;
  * @property array  $headers
  * @property mixed  $body
  * @property string $view
- *
  * @psalm-suppress PropertyNotSetInConstructor
  */
 class NullRequest extends AbstractRequest
 {
     public function __construct()
     {
-        $this->resourceObject = new NullResourceObject;
+        $this->resourceObject = new NullResourceObject();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function withQuery(array $query) : RequestInterface
+    public function withQuery(array $query): RequestInterface
     {
         unset($query);
 
@@ -32,27 +31,27 @@ class NullRequest extends AbstractRequest
     /**
      * {@inheritDoc}
      */
-    public function addQuery(array $query) : RequestInterface
+    public function addQuery(array $query): RequestInterface
     {
         unset($query);
 
         return $this;
     }
 
-    public function toUri() : string
+    public function toUri(): string
     {
-        return (string) new NullUri;
+        return (string) new NullUri();
     }
 
-    public function toUriWithMethod() : string
+    public function toUriWithMethod(): string
     {
-        return 'get ' . (string) new NullUri;
+        return 'get ' . (string) new NullUri();
     }
 
     /**
      * @return self
      */
-    public function linkSelf(string $linkKey) : RequestInterface
+    public function linkSelf(string $linkKey): RequestInterface
     {
         unset($linkKey);
 
@@ -62,7 +61,7 @@ class NullRequest extends AbstractRequest
     /**
      * @return self
      */
-    public function linkNew(string $linkKey) : RequestInterface
+    public function linkNew(string $linkKey): RequestInterface
     {
         unset($linkKey);
 
@@ -72,7 +71,7 @@ class NullRequest extends AbstractRequest
     /**
      * @return self
      */
-    public function linkCrawl(string $linkKey) : RequestInterface
+    public function linkCrawl(string $linkKey): RequestInterface
     {
         unset($linkKey);
 

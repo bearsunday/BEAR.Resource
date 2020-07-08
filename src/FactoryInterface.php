@@ -11,5 +11,5 @@ interface FactoryInterface
      *
      * @param AbstractUri|string $uri resource URI
      */
-    public function newInstance($uri) : ResourceObject;
+    public function newInstance($uri): ResourceObject;
 }

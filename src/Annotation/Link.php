@@ -53,12 +53,12 @@ final class Link implements JsonSerializable
      *
      * @psalm-return array{rel: string, href: string, method: string, title?: string}
      */
-    public function jsonSerialize() : array
+    public function jsonSerialize(): array
     {
         $json = [
             'rel' => $this->rel,
             'href' => $this->href,
-            'method' => $this->method
+            'method' => $this->method,
         ];
         if ($this->title) {
             $json += ['title' => $this->title];

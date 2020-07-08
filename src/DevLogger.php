@@ -6,13 +6,13 @@ namespace BEAR\Resource;
 
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Psr\Log\LogLevel;
+
+use function in_array;
 use function sprintf;
 
 final class DevLogger implements LoggerInterface
 {
-    /**
-     * @var PsrLoggerInterface
-     */
+    /** @var PsrLoggerInterface */
     private $logger;
 
     public function __construct(PsrLoggerInterface $logger)
@@ -20,7 +20,7 @@ final class DevLogger implements LoggerInterface
         $this->logger = $logger;
     }
 
-    public function __invoke(ResourceObject $ro) : void
+    public function __invoke(ResourceObject $ro): void
     {
         $unsafeMethod = ['post', 'put', 'patch', 'delete'];
         $level = in_array($ro->uri->method, $unsafeMethod, true) ? LogLevel::INFO : LogLevel::DEBUG;

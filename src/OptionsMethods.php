@@ -18,12 +18,17 @@ use Ray\WebContextParam\Annotation\QueryParam;
 use Ray\WebContextParam\Annotation\ServerParam;
 use ReflectionMethod;
 
+use function assert;
+use function class_exists;
+use function file_exists;
+use function file_get_contents;
+use function get_class;
+use function json_decode;
+
 final class OptionsMethods
 {
     /**
      * Constants for annotation name and "in" name
-     *
-     * @var array<string, string>
      */
     private const WEB_CONTEXT_NAME = [
         CookieParam::class => 'cookie',
@@ -31,17 +36,13 @@ final class OptionsMethods
         FormParam::class => 'formData',
         QueryParam::class => 'query',
         ServerParam::class => 'server',
-        FilesParam::class => 'files'
+        FilesParam::class => 'files',
     ];
 
-    /**
-     * @var Reader
-     */
+    /** @var Reader */
     private $reader;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $schemaDir;
 
     /**
@@ -58,11 +59,11 @@ final class OptionsMethods
      *
      * @return array<int|string, array|string>
      */
-    public function __invoke(ResourceObject $ro, string $requestMethod) : array
+    public function __invoke(ResourceObject $ro, string $requestMethod): array
     {
         $method = new ReflectionMethod(get_class($ro), 'on' . $requestMethod);
         $ins = $this->getInMap($method);
-        [$doc, $paramDoc] = (new OptionsMethodDocBolck)($method);
+        [$doc, $paramDoc] = (new OptionsMethodDocBolck())($method);
         $methodOption = $doc;
         $paramMetas = (new OptionsMethodRequest($this->reader))($method, $paramDoc, $ins);
         $schema = $this->getJsonSchema($method);
@@ -71,6 +72,7 @@ final class OptionsMethods
         if (! empty($schema)) {
             $methodOption += ['schema' => $schema];
         }
+
         $extras = $this->getMethodExtras($method);
         if (! empty($extras)) {
             $methodOption += $extras;
@@ -85,7 +87,7 @@ final class OptionsMethods
      * @phpstan-return (Embed|Link)[][]
      * @psalm-return array{links?: non-empty-list<Link>, embed?: non-empty-list<Embed>}
      */
-    private function getMethodExtras(ReflectionMethod $method) : array
+    private function getMethodExtras(ReflectionMethod $method): array
     {
         $extras = [];
         $annotations = $this->reader->getMethodAnnotations($method);
@@ -93,6 +95,7 @@ final class OptionsMethods
             if ($annotation instanceof Link) {
                 $extras['links'][] = $annotation;
             }
+
             if ($annotation instanceof Embed) {
                 $extras['embed'][] = $annotation;
             }
@@ -104,7 +107,7 @@ final class OptionsMethods
     /**
      * @return array<string, string>
      */
-    private function getInMap(ReflectionMethod $method) : array
+    private function getInMap(ReflectionMethod $method): array
     {
         $ins = [];
         $annotations = $this->reader->getMethodAnnotations($method);
@@ -122,12 +125,13 @@ final class OptionsMethods
     /**
      * @return array<string, mixed>
      */
-    private function getJsonSchema(ReflectionMethod $method) : array
+    private function getJsonSchema(ReflectionMethod $method): array
     {
         $schema = $this->reader->getMethodAnnotation($method, JsonSchema::class);
         if (! $schema instanceof JsonSchema) {
             return [];
         }
+
         $schemaFile = $this->schemaDir . '/' . $schema->schema;
         if (! file_exists($schemaFile)) {
             return [];

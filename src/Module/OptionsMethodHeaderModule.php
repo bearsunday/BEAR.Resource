@@ -15,7 +15,7 @@ class OptionsMethodHeaderModule extends AbstractModule
     /**
      * {@inheritdoc}
      */
-    protected function configure() : void
+    protected function configure(): void
     {
         $this->bind(OptionsMethods::class);
         $this->bind()->annotatedWith(OptionsBody::class)->toInstance(false);

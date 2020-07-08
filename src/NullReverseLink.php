@@ -6,7 +6,7 @@ namespace BEAR\Resource;
 
 final class NullReverseLink implements ReverseLinkInterface
 {
-    public function __invoke(string $uri) : string
+    public function __invoke(string $uri): string
     {
         return $uri;
     }

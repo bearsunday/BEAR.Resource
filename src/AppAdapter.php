@@ -9,11 +9,15 @@ use Exception;
 use Ray\Di\Exception\Unbound;
 use Ray\Di\InjectorInterface;
 
+use function assert;
+use function sprintf;
+use function str_replace;
+use function substr;
+use function ucwords;
+
 final class AppAdapter implements AdapterInterface
 {
-    /**
-     * @var InjectorInterface
-     */
+    /** @var InjectorInterface */
     private $injector;
 
     /**
@@ -27,7 +31,6 @@ final class AppAdapter implements AdapterInterface
      * Resource adapter path
      *
      * @var string
-     *
      * @psalm-suppress PropertyNotSetInConstructor
      */
     private $path;
@@ -46,13 +49,14 @@ final class AppAdapter implements AdapterInterface
      * {@inheritdoc}
      *
      * @throws ResourceNotFoundException
-     * @throws \Ray\Di\Exception\Unbound
+     * @throws Unbound
      */
-    public function get(AbstractUri $uri) : ResourceObject
+    public function get(AbstractUri $uri): ResourceObject
     {
         if (substr($uri->path, -1) === '/') {
             $uri->path .= 'index';
         }
+
         $path = str_replace('-', '', ucwords($uri->path, '/-'));
         $class = sprintf('%s%s\Resource\%s', $this->namespace, $this->path, str_replace('/', '\\', ucwords($uri->scheme) . $path));
         try {
@@ -68,7 +72,7 @@ final class AppAdapter implements AdapterInterface
     /**
      * @return ResourceNotFoundException|Unbound
      */
-    private function getNotFound(AbstractUri $uri, Unbound $e, string $class) : Exception
+    private function getNotFound(AbstractUri $uri, Unbound $e, string $class): Exception
     {
         $unboundClass = $e->getMessage();
         if ($unboundClass === "{$class}-") {

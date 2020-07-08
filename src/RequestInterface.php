@@ -15,36 +15,36 @@ interface RequestInterface
      *
      * @param array<string, mixed> $query
      */
-    public function __invoke(array $query = null) : ResourceObject;
+    public function __invoke(?array $query = null): ResourceObject;
 
     /**
      * Set query
      *
      * @param array<string, mixed> $query
      */
-    public function withQuery(array $query) : self;
+    public function withQuery(array $query): self;
 
     /**
      * Merge query
      *
      * @param array<string, mixed> $query
      */
-    public function addQuery(array $query) : self;
+    public function addQuery(array $query): self;
 
     /**
      * To Request URI string
      */
-    public function toUri() : string;
+    public function toUri(): string;
 
     /**
      * To Request URI string with request method
      */
-    public function toUriWithMethod() : string;
+    public function toUriWithMethod(): string;
 
     /**
      * Return request hash
      */
-    public function hash() : string;
+    public function hash(): string;
 
     /**
      * @return AbstractRequest|ResourceObject
@@ -54,15 +54,15 @@ interface RequestInterface
     /**
      * Replace linked resource
      */
-    public function linkSelf(string $linkKey) : self;
+    public function linkSelf(string $linkKey): self;
 
     /**
      * Add linked resource
      */
-    public function linkNew(string $linkKey) : self;
+    public function linkNew(string $linkKey): self;
 
     /**
      * Crawl resource with link key
      */
-    public function linkCrawl(string $linkKey) : self;
+    public function linkCrawl(string $linkKey): self;
 }
