@@ -197,12 +197,12 @@ final class Linker implements LinkerInterface
             $request = new Request($this->invoker, $rel, Request::GET, $query, [$link], $this);
             $hash = $request->hash();
             if (array_key_exists($hash, $this->cache)) {
-                /** @var array */
+                /** @var array<mixed> */
                 $body[$annotation->rel] = $this->cache[$hash];
 
                 continue;
             }
-            /** @var array $body */
+            /** @var array<mixed> $body */
             $body = $this->invoke($request)->body;
             $this->cache[$hash] = $body[$annotation->rel] = $body;
         }
@@ -217,7 +217,7 @@ final class Linker implements LinkerInterface
             return false;
         }
         $list = $value;
-        /** @var array */
+        /** @var array<mixed> */
         $firstRow = array_pop($list);
         $keys = array_keys((array) $firstRow);
         /** @var array<array> $list */
