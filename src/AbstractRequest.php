@@ -8,10 +8,10 @@ use ArrayAccess;
 use ArrayIterator;
 use BEAR\Resource\Exception\MethodException;
 use BEAR\Resource\Exception\OutOfBoundsException;
-use Exception;
 use IteratorAggregate;
 use LogicException;
 use Serializable;
+use Throwable;
 
 use function array_merge;
 use function assert;
@@ -127,7 +127,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
             $this->invoke();
 
             return (string) $this->result;
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             trigger_error($e->getMessage() . PHP_EOL . $e->getTraceAsString(), E_USER_ERROR);
 
             return '';

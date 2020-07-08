@@ -8,10 +8,10 @@ use ArrayAccess;
 use ArrayIterator;
 use BEAR\Resource\Exception\IlligalAccessException;
 use Countable;
-use Exception;
 use IteratorAggregate;
 use JsonSerializable;
 use Ray\Di\Di\Inject;
+use Throwable;
 
 use function asort;
 use function assert;
@@ -90,7 +90,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
 
         try {
             $view = $this->toString();
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             $msg = sprintf("%s(%s)\n%s", get_class($e), $e->getMessage(), $e->getTraceAsString());
             trigger_error($msg, E_USER_WARNING);
 

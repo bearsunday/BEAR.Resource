@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\ResourceNotFoundException;
-use Exception;
 use Ray\Di\Exception\Unbound;
 use Ray\Di\InjectorInterface;
+use Throwable;
 
 use function assert;
 use function sprintf;
@@ -72,7 +72,7 @@ final class AppAdapter implements AdapterInterface
     /**
      * @return ResourceNotFoundException|Unbound
      */
-    private function getNotFound(AbstractUri $uri, Unbound $e, string $class): Exception
+    private function getNotFound(AbstractUri $uri, Unbound $e, string $class): Throwable
     {
         $unboundClass = $e->getMessage();
         if ($unboundClass === "{$class}-") {
