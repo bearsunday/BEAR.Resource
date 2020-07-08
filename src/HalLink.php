@@ -35,6 +35,7 @@ final class HalLink
             $hal = $this->linkAnnotation($body, $methodAnnotations, $hal);
         }
         if (isset($body['_links'])) {
+            /** @var array{_links: array<string, array{href: string}>} $body */
             $hal = $this->bodyLink($body, $hal);
         }
 
@@ -64,7 +65,7 @@ final class HalLink
     }
 
     /**
-     * @param array{_links: array<int|string, array{href?: string}>} $body
+     * @param array{_links: array<array{href?: string}>} $body
      *
      * User can set `_links` array as a `Links` annotation
      */
