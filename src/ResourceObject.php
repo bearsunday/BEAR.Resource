@@ -9,15 +9,26 @@ use ArrayIterator;
 use BEAR\Resource\Exception\IlligalAccessException;
 use Countable;
 use Exception;
-use function is_array;
-use function is_string;
 use IteratorAggregate;
 use JsonSerializable;
 use Ray\Di\Di\Inject;
 
+use function asort;
+use function assert;
+use function count;
+use function get_class;
+use function is_array;
+use function is_iterable;
+use function is_string;
+use function ksort;
+use function sprintf;
+use function trigger_error;
+
+use const E_USER_WARNING;
+
 /**
- * @phpstan-implements \ArrayAccess<string, mixed>
- * @phpstan-implements \IteratorAggregate<int|string, mixed>
+ * @phpstan-implements ArrayAccess<string, mixed>
+ * @phpstan-implements IteratorAggregate<(int|string), mixed>
  */
 abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, Countable, IteratorAggregate, JsonSerializable, ToStringInterface
 {
@@ -76,6 +87,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         if (is_string($this->view)) {
             return $this->view;
         }
+
         try {
             $view = $this->toString();
         } catch (Exception $e) {
@@ -153,7 +165,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      *
      * @param int|string $offset offset
      */
-    public function offsetUnset($offset) : void
+    public function offsetUnset($offset): void
     {
         if (is_array($this->body)) {
             unset($this->body[$offset]);
@@ -177,22 +189,24 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * Sort the entries by key
      */
-    public function ksort() : void
+    public function ksort(): void
     {
         if (! is_array($this->body)) {
             return;
         }
+
         ksort($this->body);
     }
 
     /**
      * Sort the entries by key
      */
-    public function asort() : void
+    public function asort(): void
     {
         if (! is_array($this->body)) {
             return;
         }
+
         asort($this->body);
     }
 
@@ -202,7 +216,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      * @phpstan-return ArrayIterator<int|string, mixed>
      * @psalm-return ArrayIterator<empty, empty>|ArrayIterator<int|string, mixed>
      */
-    public function getIterator() : ArrayIterator
+    public function getIterator(): ArrayIterator
     {
         return is_array($this->body) ? new ArrayIterator((array) $this->body) : new ArrayIterator([]);
     }
@@ -227,8 +241,9 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         if (is_string($this->view)) {
             return $this->view;
         }
+
         if (! $this->renderer instanceof RenderInterface) {
-            $this->renderer = new JsonRenderer;
+            $this->renderer = new JsonRenderer();
         }
 
         return $this->renderer->render($this);
@@ -237,12 +252,13 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * @return array<int|string, mixed>
      */
-    public function jsonSerialize() : array
+    public function jsonSerialize(): array
     {
         /** @psalm-suppress MixedAssignment */
         if (! is_iterable($this->body)) {
             return ['value' => $this->body];
         }
+
         $body = $this->evaluate($this->body);
         assert(is_array($body));
 

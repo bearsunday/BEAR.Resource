@@ -9,5 +9,5 @@ interface AdapterInterface
     /**
      * Return new resource object
      */
-    public function get(AbstractUri $uri) : ResourceObject;
+    public function get(AbstractUri $uri): ResourceObject;
 }

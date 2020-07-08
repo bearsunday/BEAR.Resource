@@ -9,9 +9,7 @@ use Ray\Di\AbstractModule;
 
 class ResourceModule extends AbstractModule
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $appName;
 
     /**
@@ -23,14 +21,11 @@ class ResourceModule extends AbstractModule
         parent::__construct();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function configure() : void
+    protected function configure(): void
     {
         $this->bind()->annotatedWith(AppName::class)->toInstance($this->appName);
-        $this->install(new ResourceClientModule);
-        $this->install(new EmbedResourceModule);
-        $this->install(new HttpClientModule);
+        $this->install(new ResourceClientModule());
+        $this->install(new EmbedResourceModule());
+        $this->install(new HttpClientModule());
     }
 }

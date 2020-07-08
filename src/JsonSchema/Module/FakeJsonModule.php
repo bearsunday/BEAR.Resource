@@ -10,10 +10,7 @@ use Ray\Di\AbstractModule;
 
 class FakeJsonModule extends AbstractModule
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected function configure() : void
+    protected function configure(): void
     {
         $this->bind(JsonSchemaExceptionHandlerInterface::class)->to(JsonSchemaExceptionFakeHandler::class);
     }

@@ -10,10 +10,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class HttpClientProvider implements ProviderInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function get() : HttpClientInterface
+    public function get(): HttpClientInterface
     {
         return HttpClient::create();
     }

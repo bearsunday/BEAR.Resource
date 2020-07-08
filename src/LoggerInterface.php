@@ -6,5 +6,5 @@ namespace BEAR\Resource;
 
 interface LoggerInterface
 {
-    public function __invoke(ResourceObject $ro) : void;
+    public function __invoke(ResourceObject $ro): void;
 }

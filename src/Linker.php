@@ -7,28 +7,33 @@ namespace BEAR\Resource;
 use BEAR\Resource\Annotation\Link;
 use BEAR\Resource\Exception\LinkQueryException;
 use BEAR\Resource\Exception\LinkRelException;
+use BEAR\Resource\Exception\MethodException;
+use BEAR\Resource\Exception\UriException;
 use Doctrine\Common\Annotations\Reader;
-use function get_class;
 use ReflectionMethod;
+
+use function array_filter;
+use function array_key_exists;
+use function array_keys;
+use function array_pop;
+use function assert;
+use function count;
+use function get_class;
+use function is_array;
+use function ucfirst;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 final class Linker implements LinkerInterface
 {
-    /**
-     * @var Reader
-     */
+    /** @var Reader */
     private $reader;
 
-    /**
-     * @var InvokerInterface
-     */
+    /** @var InvokerInterface */
     private $invoker;
 
-    /**
-     * @var FactoryInterface
-     */
+    /** @var FactoryInterface */
     private $factory;
 
     /**
@@ -52,7 +57,7 @@ final class Linker implements LinkerInterface
      * {@inheritdoc}
      *
      * @throws LinkQueryException
-     * @throws \BEAR\Resource\Exception\LinkRelException
+     * @throws LinkRelException
      */
     public function invoke(AbstractRequest $request)
     {
@@ -76,7 +81,7 @@ final class Linker implements LinkerInterface
      *
      * @param mixed|ResourceObject $nextResource
      */
-    private function nextLink(LinkType $link, ResourceObject $ro, $nextResource) : ResourceObject
+    private function nextLink(LinkType $link, ResourceObject $ro, $nextResource): ResourceObject
     {
         /** @var array<mixed> $nextBody */
         $nextBody = $nextResource instanceof ResourceObject ? $nextResource->body : $nextResource;
@@ -101,15 +106,16 @@ final class Linker implements LinkerInterface
     /**
      * Annotation link
      *
-     * @throws \BEAR\Resource\Exception\MethodException
-     * @throws \BEAR\Resource\Exception\LinkRelException
+     * @throws MethodException
+     * @throws LinkRelException
      * @throws Exception\LinkQueryException
      */
-    private function annotationLink(LinkType $link, ResourceObject $current, AbstractRequest $request) : ResourceObject
+    private function annotationLink(LinkType $link, ResourceObject $current, AbstractRequest $request): ResourceObject
     {
         if (! is_array($current->body)) {
             throw new Exception\LinkQueryException('Only array is allowed for link in ' . get_class($current), 500);
         }
+
         $classMethod = 'on' . ucfirst($request->method);
         /** @var list<Link> $annotations */
         $annotations = $this->reader->getMethodAnnotations(new ReflectionMethod(get_class($current), $classMethod));
@@ -124,20 +130,21 @@ final class Linker implements LinkerInterface
     /**
      * Annotation link (new, self)
      *
-     * @param \BEAR\Resource\Annotation\Link[] $annotations
+     * @param Link[] $annotations
      *
-     * @throws \BEAR\Resource\Exception\UriException
-     * @throws \BEAR\Resource\Exception\MethodException
+     * @throws UriException
+     * @throws MethodException
      * @throws Exception\LinkQueryException
      * @throws Exception\LinkRelException
      */
-    private function annotationRel(array $annotations, LinkType $link, ResourceObject $current) : ResourceObject
+    private function annotationRel(array $annotations, LinkType $link, ResourceObject $current): ResourceObject
     {
         /* @noinspection LoopWhichDoesNotLoopInspection */
         foreach ($annotations as $annotation) {
             if ($annotation->rel !== $link->key) {
                 continue;
             }
+
             $uri = uri_template($annotation->href, (array) $current->body);
             $rel = $this->factory->newInstance($uri);
             /* @noinspection UnnecessaryParenthesesInspection */
@@ -155,9 +162,9 @@ final class Linker implements LinkerInterface
      *
      * @param array<object> $annotations
      *
-     * @throws \BEAR\Resource\Exception\MethodException
+     * @throws MethodException
      */
-    private function annotationCrawl(array $annotations, LinkType $link, ResourceObject $current) : ResourceObject
+    private function annotationCrawl(array $annotations, LinkType $link, ResourceObject $current): ResourceObject
     {
         $isList = $this->isList($current->body);
         /** @var array<array<string, mixed>> $bodyList */
@@ -166,6 +173,7 @@ final class Linker implements LinkerInterface
         foreach ($bodyList as &$body) {
             $this->crawl($annotations, $link, $body);
         }
+
         unset($body);
         $current->body = $isList ? $bodyList : $bodyList[0];
 
@@ -178,18 +186,19 @@ final class Linker implements LinkerInterface
      *
      * @param-out array $body
      *
-     * @throws \BEAR\Resource\Exception\LinkQueryException
-     * @throws \BEAR\Resource\Exception\MethodException
-     * @throws \BEAR\Resource\Exception\LinkRelException
-     * @throws \BEAR\Resource\Exception\UriException
+     * @throws LinkQueryException
+     * @throws MethodException
+     * @throws LinkRelException
+     * @throws UriException
      */
-    private function crawl(array $annotations, LinkType $link, array &$body) : void
+    private function crawl(array $annotations, LinkType $link, array &$body): void
     {
         foreach ($annotations as $annotation) {
-            /* @var $annotation Link */
+            /** @var Link $annotation */
             if (! $annotation instanceof Link || $annotation->crawl !== $link->key) {
                 continue;
             }
+
             $uri = uri_template($annotation->href, $body);
             $rel = $this->factory->newInstance($uri);
             /* @noinspection UnnecessaryParenthesesInspection */
@@ -202,6 +211,7 @@ final class Linker implements LinkerInterface
 
                 continue;
             }
+
             $this->cache[$hash] = $body[$annotation->rel] = $this->getResponseBody($request);
         }
     }
@@ -209,7 +219,7 @@ final class Linker implements LinkerInterface
     /**
      * @return array<mixed>
      */
-    private function getResponseBody(Request $request) : ?array
+    private function getResponseBody(Request $request): ?array
     {
         $body = $this->invoke($request)->body;
         assert(is_array($body) || $body === null);
@@ -220,11 +230,12 @@ final class Linker implements LinkerInterface
     /**
      * @param mixed $value
      */
-    private function isList($value) : bool
+    private function isList($value): bool
     {
         if (! is_array($value)) {
             return false;
         }
+
         $list = $value;
         /** @var array<mixed> */
         $firstRow = array_pop($list);
@@ -241,11 +252,12 @@ final class Linker implements LinkerInterface
      * @param array<int, int|string> $keys
      * @param array<array>           $list
      */
-    private function isMultiColumnMultiRowList(array $keys, array $list) : bool
+    private function isMultiColumnMultiRowList(array $keys, array $list): bool
     {
         if ($keys === [0 => 0]) {
             return false;
         }
+
         foreach ($list as $item) {
             if ($keys !== array_keys((array) $item)) {
                 return false;
@@ -259,7 +271,7 @@ final class Linker implements LinkerInterface
      * @param array<int|string, mixed> $value
      * @param mixed                    $firstRow
      */
-    private function isMultiColumnList(array $value, $firstRow) : bool
+    private function isMultiColumnList(array $value, $firstRow): bool
     {
         return is_array($firstRow) && array_filter(array_keys($value), 'is_numeric') === array_keys($value);
     }
@@ -269,7 +281,7 @@ final class Linker implements LinkerInterface
      * @param list<array-key>          $keys
      * @param array<mixed, mixed>      $list
      */
-    private function isSingleColumnList(array $value, array $keys, array $list) : bool
+    private function isSingleColumnList(array $value, array $keys, array $list): bool
     {
         return (count($value) === 1) && $keys === array_keys($list);
     }

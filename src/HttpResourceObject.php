@@ -6,10 +6,11 @@ namespace BEAR\Resource;
 
 use BadFunctionCallException;
 use InvalidArgumentException;
-use function is_array;
-use function strtoupper;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
+
+use function is_array;
+use function strtoupper;
 
 /**
  * @method HttpResourceObject get(AbstractUri|string $uri, array<string, mixed> $params = [])
@@ -18,7 +19,6 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  * @method HttpResourceObject post(AbstractUri|string $uri, array<string, mixed> $params = [])
  * @method HttpResourceObject patch(AbstractUri|string $uri, array<string, mixed> $params = [])
  * @method HttpResourceObject delete(AbstractUri|string $uri, array<string, mixed> $params = [])
- *
  * @property-read string        $code
  * @property-read array<string, string> $headers
  * @property-read array<string, string> $body
@@ -26,19 +26,14 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  */
 final class HttpResourceObject extends ResourceObject
 {
-    /**
-     * @psalm-suppress PropertyNotSetInConstructor
-     */
+    /** @psalm-suppress PropertyNotSetInConstructor */
     public $body;
 
-    /**
-     * @var HttpClientInterface
-     */
+    /** @var HttpClientInterface */
     private $client;
 
     /**
      * @var ResponseInterface
-     *
      * @psalm-suppress PropertyNotSetInConstructor
      */
     private $response;
@@ -59,12 +54,15 @@ final class HttpResourceObject extends ResourceObject
         if ($name === 'code') {
             return $this->response->getStatusCode();
         }
+
         if ($name === 'headers') {
             return $this->response->getHeaders();
         }
+
         if ($name === 'body') {
             return $this->response->toArray();
         }
+
         if ($name === 'view') {
             return $this->response->getContent();
         }
@@ -75,28 +73,28 @@ final class HttpResourceObject extends ResourceObject
     /**
      * @param mixed $value
      */
-    public function __set(string $name, $value) : void
+    public function __set(string $name, $value): void
     {
         unset($value);
 
         throw new BadFunctionCallException($name);
     }
 
-    public function __isset(string $name) : bool
+    public function __isset(string $name): bool
     {
         return isset($this->{$name});
     }
 
-    public function __toString() : string
+    public function __toString(): string
     {
         return $this->response->getContent();
     }
 
-    public function request(AbstractRequest $request) : self
+    public function request(AbstractRequest $request): self
     {
         $uri = $request->resourceObject->uri;
         $method = strtoupper($uri->method);
-        $options = ($method === 'GET') ? ['query' => $uri->query] : ['body' => $uri->query];
+        $options = $method === 'GET' ? ['query' => $uri->query] : ['body' => $uri->query];
         $clientOptions = isset($uri->query['_options']) && is_array($uri->query['_options']) ? $uri->query['_options'] : [];
         $options += $clientOptions;
         $this->response = $this->client->request($method, (string) $uri, $options);

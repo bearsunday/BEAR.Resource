@@ -10,10 +10,7 @@ use Ray\Di\AbstractModule;
 
 class VoidOptionsMethodModule extends AbstractModule
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected function configure() : void
+    protected function configure(): void
     {
         $this->bind(RenderInterface::class)->annotatedWith('options')->to(NullOptionsRenderer::class);
     }

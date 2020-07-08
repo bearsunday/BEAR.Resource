@@ -6,10 +6,12 @@ namespace BEAR\Resource;
 
 use OutOfRangeException;
 
+use function array_merge;
+use function in_array;
+
 /**
  * @property $this $lazy
  * @property $this $eager
- *
  * @psalm-suppress PropertyNotSetInConstructor for DSL
  */
 final class Request extends AbstractRequest
@@ -40,6 +42,7 @@ final class Request extends AbstractRequest
 
             return $this;
         }
+
         if (in_array($name, ['code', 'headers', 'body'], true)) {
             return parent::__get($name);
         }
@@ -52,7 +55,7 @@ final class Request extends AbstractRequest
      *
      * @param array<string, mixed> $query
      */
-    public function withQuery(array $query) : RequestInterface
+    public function withQuery(array $query): RequestInterface
     {
         $this->query = $query;
 
@@ -62,57 +65,42 @@ final class Request extends AbstractRequest
     /**
      * {@inheritdoc}
      */
-    public function addQuery(array $query) : RequestInterface
+    public function addQuery(array $query): RequestInterface
     {
         $this->query = array_merge($this->query, $query);
 
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function toUriWithMethod() : string
+    public function toUriWithMethod(): string
     {
         $uri = $this->toUri();
 
         return "{$this->method} {$uri}";
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function toUri() : string
+    public function toUri(): string
     {
         $this->resourceObject->uri->query = $this->query;
 
         return (string) $this->resourceObject->uri;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function linkSelf(string $linkKey) : RequestInterface
+    public function linkSelf(string $linkKey): RequestInterface
     {
         $this->links[] = new LinkType($linkKey, LinkType::SELF_LINK);
 
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function linkNew(string $linkKey) : RequestInterface
+    public function linkNew(string $linkKey): RequestInterface
     {
         $this->links[] = new LinkType($linkKey, LinkType::NEW_LINK);
 
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function linkCrawl(string $linkKey) : RequestInterface
+    public function linkCrawl(string $linkKey): RequestInterface
     {
         $this->links[] = new LinkType($linkKey, LinkType::CRAWL_LINK);
 

@@ -12,10 +12,7 @@ use Ray\Di\AbstractModule;
 
 class EmbedResourceModule extends AbstractModule
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected function configure() : void
+    protected function configure(): void
     {
         $this->bind(Reader::class)->to(AnnotationReader::class);
         $this->bindInterceptor(

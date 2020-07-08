@@ -10,7 +10,7 @@ use Exception;
 
 class ServerErrorException extends ErrorException implements ExceptionInterface
 {
-    public function __construct(string $message = '', int $code = Code::ERROR, Exception $previous = null)
+    public function __construct(string $message = '', int $code = Code::ERROR, ?Exception $previous = null)
     {
         parent::__construct($message, $code, 1, '', 0, $previous);
     }

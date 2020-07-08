@@ -6,14 +6,10 @@ namespace BEAR\Resource;
 
 final class Options
 {
-    /**
-     * @var list<string>
-     */
+    /** @var list<string> */
     public $allow = [];
 
-    /**
-     * @var array<Params>
-     */
+    /** @var array<Params> */
     public $params = [];
 
     /**

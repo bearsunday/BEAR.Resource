@@ -11,16 +11,14 @@ use Doctrine\Common\Annotations\Reader;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
 
+use function array_shift;
+
 final class EmbedInterceptor implements MethodInterceptor
 {
-    /**
-     * @var \BEAR\Resource\ResourceInterface
-     */
+    /** @var ResourceInterface */
     private $resource;
 
-    /**
-     * @var Reader
-     */
+    /** @var Reader */
     private $reader;
 
     public function __construct(ResourceInterface $resource, Reader $reader)
@@ -32,7 +30,7 @@ final class EmbedInterceptor implements MethodInterceptor
     /**
      * {@inheritdoc}
      *
-     * @throws \BEAR\Resource\Exception\EmbedException
+     * @throws EmbedException
      */
     public function invoke(MethodInvocation $invocation)
     {
@@ -56,12 +54,13 @@ final class EmbedInterceptor implements MethodInterceptor
      * @psalm-suppress NoInterfaceProperties
      * @psalm-suppress MixedMethodCall
      */
-    private function embedResource(array $embeds, ResourceObject $ro, array $query) : void
+    private function embedResource(array $embeds, ResourceObject $ro, array $query): void
     {
         foreach ($embeds as $embed) {
             if (! $embed instanceof Embed) {
                 continue;
             }
+
             try {
                 $templateUri = $this->getFullUri($embed->src, $ro);
                 $uri = uri_template($templateUri, $query);
@@ -76,7 +75,7 @@ final class EmbedInterceptor implements MethodInterceptor
         }
     }
 
-    private function getFullUri(string $uri, ResourceObject $ro) : string
+    private function getFullUri(string $uri, ResourceObject $ro): string
     {
         if ($uri[0] === '/') {
             $uri = "{$ro->uri->scheme}://{$ro->uri->host}" . $uri;
@@ -88,7 +87,7 @@ final class EmbedInterceptor implements MethodInterceptor
     /**
      * @return array<string, mixed>
      */
-    private function getArgsByInvocation(MethodInvocation $invocation) : array
+    private function getArgsByInvocation(MethodInvocation $invocation): array
     {
         /** @var list<scalar> $args */
         $args = $invocation->getArguments()->getArrayCopy();

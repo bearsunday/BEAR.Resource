@@ -7,11 +7,14 @@ namespace BEAR\Resource;
 use BEAR\Resource\Annotation\ResourceParam;
 use Ray\Di\InjectorInterface;
 
+use function assert;
+use function parse_url;
+
+use const PHP_URL_FRAGMENT;
+
 final class AssistedResourceParam implements ParamInterface
 {
-    /**
-     * @var ResourceParam
-     */
+    /** @var ResourceParam */
     private $resourceParam;
 
     public function __construct(ResourceParam $resourceParam)

@@ -7,7 +7,6 @@ namespace BEAR\Resource;
 use BEAR\Resource\Annotation\ResourceParam;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Cache\Cache;
-use function is_object;
 use LogicException;
 use Ray\Di\Di\Assisted;
 use Ray\WebContextParam\Annotation\AbstractWebContextParam;
@@ -15,16 +14,16 @@ use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
 
+use function get_class;
+use function is_array;
+use function is_object;
+
 final class NamedParamMetas implements NamedParamMetasInterface
 {
-    /**
-     * @var Cache
-     */
+    /** @var Cache */
     private $cache;
 
-    /**
-     * @var Reader
-     */
+    /** @var Reader */
     private $reader;
 
     public function __construct(Cache $cache, Reader $reader)
@@ -36,17 +35,19 @@ final class NamedParamMetas implements NamedParamMetasInterface
     /**
      * {@inheritdoc}
      */
-    public function __invoke(callable $callable) : array
+    public function __invoke(callable $callable): array
     {
         if (! is_array($callable) || ! is_object($callable[0])) {
             throw new LogicException('callable should be an array'); // @codeCoverageIgnore
         }
-        $cacheId = __CLASS__ . get_class($callable[0]) . $callable[1];
+
+        $cacheId = self::class . get_class($callable[0]) . $callable[1];
         /** @var array<string, ParamInterface>|false $names */
         $names = $this->cache->fetch($cacheId);
         if ($names) {
             return $names;
         }
+
         $method = new ReflectionMethod($callable[0], $callable[1]);
         $parameters = $method->getParameters();
         /** @var array<object> $annotations */
@@ -64,13 +65,14 @@ final class NamedParamMetas implements NamedParamMetasInterface
      *
      * @return array<string, ParamInterface>
      */
-    private function getAssistedNames(array $annotations) : array
+    private function getAssistedNames(array $annotations): array
     {
         $names = [];
         foreach ($annotations as $annotation) {
             if ($annotation instanceof ResourceParam) {
                 $names[$annotation->param] = new AssistedResourceParam($annotation);
             }
+
             if ($annotation instanceof Assisted) {
                 $names = $this->setAssistedAnnotation($names, $annotation);
             }
@@ -84,7 +86,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
      *
      * @return array<string, AbstractWebContextParam>
      */
-    private function getWebContext(array $annotations) : array
+    private function getWebContext(array $annotations): array
     {
         $webcontext = [];
         foreach ($annotations as $annotation) {
@@ -101,10 +103,10 @@ final class NamedParamMetas implements NamedParamMetasInterface
      *
      * @return array<string, ParamInterface>
      */
-    private function setAssistedAnnotation(array $names, Assisted $assisted) : array
+    private function setAssistedAnnotation(array $names, Assisted $assisted): array
     {
         foreach ($assisted->values as $assistedParam) {
-            $names[(string) $assistedParam] = new AssistedParam;
+            $names[(string) $assistedParam] = new AssistedParam();
         }
 
         return $names;
@@ -119,7 +121,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
      *
      * @psalm-return array<string, AssistedWebContextParam|ParamInterface>
      */
-    private function addNamedParams(array $parameters, array $assistedNames, array $webcontext) : array
+    private function addNamedParams(array $parameters, array $assistedNames, array $webcontext): array
     {
         $names = [];
         foreach ($parameters as $parameter) {
@@ -129,12 +131,14 @@ final class NamedParamMetas implements NamedParamMetasInterface
 
                 continue;
             }
+
             if (isset($webcontext[$name])) {
                 $default = $this->getDefault($parameter);
                 $names[$name] = new AssistedWebContextParam($webcontext[$name], $default);
 
                 continue;
             }
+
             $names[$name] = $this->getParam($parameter);
         }
 
@@ -165,6 +169,6 @@ final class NamedParamMetas implements NamedParamMetasInterface
             return new ClassParam($class, $parameter);
         }
 
-        return $parameter->isDefaultValueAvailable() === true ? new OptionalParam($parameter->getDefaultValue()) : new RequiredParam;
+        return $parameter->isDefaultValueAvailable() === true ? new OptionalParam($parameter->getDefaultValue()) : new RequiredParam();
     }
 }
