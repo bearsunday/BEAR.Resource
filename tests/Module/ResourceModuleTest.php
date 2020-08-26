@@ -11,12 +11,12 @@ use Ray\Di\Injector;
 
 class ResourceModuleTest extends TestCase
 {
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
     }
 
-    public function testConfigure() : void
+    public function testConfigure(): void
     {
         $resource = (new Injector(new ResourceModule('FakeVendor/Sandbox')))->getInstance(ResourceInterface::class);
         $this->assertInstanceOf(Resource::class, $resource);

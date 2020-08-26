@@ -16,10 +16,10 @@ use Ray\Di\Injector;
 
 class LoggerModuleTest extends TestCase
 {
-    public function testProdLoggerModule() : void
+    public function testProdLoggerModule(): void
     {
         $psrLoggerModule = new class extends AbstractModule {
-            protected function configure() : void
+            protected function configure(): void
             {
                 $this->bind(\Psr\Log\LoggerInterface::class)->to(NullLogger::class);
             }
@@ -28,16 +28,16 @@ class LoggerModuleTest extends TestCase
         $this->assertInstanceOf(ProdLogger::class, $logger);
         $roClass = new class extends ResourceObject {
         };
-        $ro = new $roClass;
+        $ro = new $roClass();
         $ro->uri = new Uri('app://self/');
         ($logger)($ro);
         $ro->uri->method = 'post';
         ($logger)($ro);
     }
 
-    public function testDevLoggerModule() : void
+    public function testDevLoggerModule(): void
     {
-        $logger = (new Injector(new ErrorLogLoggerModule))->getInstance(LoggerInterface::class);
+        $logger = (new Injector(new ErrorLogLoggerModule()))->getInstance(LoggerInterface::class);
         $this->assertInstanceOf(ErrorLogLogger::class, $logger);
     }
 }

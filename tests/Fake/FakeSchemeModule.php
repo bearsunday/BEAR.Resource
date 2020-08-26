@@ -8,7 +8,7 @@ use Ray\Di\AbstractModule;
 
 class FakeSchemeModule extends AbstractModule
 {
-    protected function configure() : void
+    protected function configure(): void
     {
         $this->bind(SchemeCollectionInterface::class)->toProvider(FakeSchemeCollectionProvider::class);
     }

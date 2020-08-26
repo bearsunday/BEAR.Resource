@@ -22,76 +22,72 @@ use Ray\Aop\Compiler;
 
 class InvokerTest extends TestCase
 {
-    /**
-     * @var Invoker
-     */
+    /** @var Invoker */
     protected $invoker;
 
-    /**
-     * @var Request
-     */
+    /** @var Request */
     protected $request;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
-        $this->invoker = (new InvokerFactory)();
+        $this->invoker = (new InvokerFactory())();
     }
 
-    public function testInvoke() : void
+    public function testInvoke(): void
     {
-        $request = new Request($this->invoker, (new FakeRo)(new User), Request::GET, ['id' => 1]);
+        $request = new Request($this->invoker, (new FakeRo())(new User()), Request::GET, ['id' => 1]);
         $actual = $this->invoker->invoke($request)->body;
         $expected = ['id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12];
         $this->assertSame($actual, $expected);
     }
 
-    public function testInvokerInterfaceDefaultParam() : void
+    public function testInvokerInterfaceDefaultParam(): void
     {
-        $request = new Request($this->invoker, (new FakeRo)(new User), Request::POST, ['id' => 1]);
+        $request = new Request($this->invoker, (new FakeRo())(new User()), Request::POST, ['id' => 1]);
         $actual = $this->invoker->invoke($request)->body;
         $expected = 'post user[1 default_name 99]';
         $this->assertSame($actual, $expected);
     }
 
-    public function testInvokerInterfaceDefaultParamWithNoProvider() : void
+    public function testInvokerInterfaceDefaultParamWithNoProvider(): void
     {
         $this->expectException(ParameterException::class);
-        $request = new Request($this->invoker, (new FakeRo)(new User), Request::PUT);
+        $request = new Request($this->invoker, (new FakeRo())(new User()), Request::PUT);
         $this->invoker->invoke($request);
     }
 
-    public function testInvokerInterfaceWithNoProvider() : void
+    public function testInvokerInterfaceWithNoProvider(): void
     {
         $this->expectException(ParameterException::class);
-        $request = new Request($this->invoker, (new FakeRo)(new Blog), Request::GET, []);
+        $request = new Request($this->invoker, (new FakeRo())(new Blog()), Request::GET, []);
         $this->invoker->invoke($request);
     }
 
-    public function testInvokerInterfaceWithUnspecificProviderButNoResult() : void
+    public function testInvokerInterfaceWithUnspecificProviderButNoResult(): void
     {
         $this->expectException(ParameterException::class);
-        $request = new Request($this->invoker, (new FakeRo)(new Comment));
+        $request = new Request($this->invoker, (new FakeRo())(new Comment()));
         $actual = $this->invoker->invoke($request);
         $this->assertSame('entry1', $actual);
     }
 
-    public function testInvokeWeave() : void
+    public function testInvokeWeave(): void
     {
         $compiler = new Compiler(__DIR__ . '/tmp');
-        $book = $compiler->newInstance(Book::class, [], (new Bind)->bindInterceptors('onGet', [new FakeLogInterceptor]));
+        $book = $compiler->newInstance(Book::class, [], (new Bind())->bindInterceptors('onGet', [new FakeLogInterceptor()]));
         if (! $book instanceof Book) {
-            throw new LogicException;
+            throw new LogicException();
         }
 
-        $request = new Request($this->invoker, (new FakeRo)($book), Request::GET, ['id' => 1]);
+        $request = new Request($this->invoker, (new FakeRo())($book), Request::GET, ['id' => 1]);
         $actual = $this->invoker->invoke($request)->body;
         $expected = "book id[1][Log] target = FakeVendor\\Sandbox\\Resource\\App\\Weave\\Book, input = Array\n(\n    [0] => 1\n)\n, result = book id[1]";
         $this->assertSame($expected, $actual);
     }
 
-    public function testOptionsMethod() : string
+    public function testOptionsMethod(): string
     {
-        $ro = new Doc;
+        $ro = new Doc();
         $request = new Request($this->invoker, $ro, Request::OPTIONS);
         $response = $this->invoker->invoke($request);
         $actual = $ro->headers['Allow'];
@@ -104,7 +100,7 @@ class InvokerTest extends TestCase
     /**
      * @depends testOptionsMethod
      */
-    public function testOptionsMethodBody(string $view) : void
+    public function testOptionsMethodBody(string $view): void
     {
         $expected = '{
     "GET": {
@@ -170,9 +166,9 @@ class InvokerTest extends TestCase
         $this->assertSame($expected, $view);
     }
 
-    public function testOptionsMethod2() : void
+    public function testOptionsMethod2(): void
     {
-        $ro = new Order;
+        $ro = new Order();
         $request = new Request($this->invoker, $ro, Request::OPTIONS);
         $this->invoker->invoke($request);
         $actual = $ro->headers['Allow'];
@@ -180,12 +176,13 @@ class InvokerTest extends TestCase
         $this->assertSame($actual, $expected);
     }
 
-    public function testOptionsWeaver() : void
+    public function testOptionsWeaver(): void
     {
-        $ro = (new Compiler(__DIR__ . '/tmp'))->newInstance(Order::class, [], new Bind);
+        $ro = (new Compiler(__DIR__ . '/tmp'))->newInstance(Order::class, [], new Bind());
         if (! $ro instanceof Order) {
-            throw new LogicException;
+            throw new LogicException();
         }
+
         $request = new Request($this->invoker, $ro, Request::OPTIONS);
         $this->invoker->invoke($request);
         $actual = $ro->headers['Allow'];
@@ -193,50 +190,50 @@ class InvokerTest extends TestCase
         $this->assertSame($actual, $expected);
     }
 
-    public function testInvokeExceptionHandle() : void
+    public function testInvokeExceptionHandle(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $outOfRangeId = 4;
-        $request = new Request($this->invoker, new User, Request::GET, ['id' => $outOfRangeId]);
+        $request = new Request($this->invoker, new User(), Request::GET, ['id' => $outOfRangeId]);
         $this->invoker->invoke($request);
     }
 
-    public function testInvalidMethod() : void
+    public function testInvalidMethod(): void
     {
         $this->expectException(MethodNotAllowedException::class);
-        $request = new Request($this->invoker, new Order, Request::DELETE);
+        $request = new Request($this->invoker, new Order(), Request::DELETE);
         $this->invoker->invoke($request);
     }
 
-    public function testOptionsNotAllowed() : void
+    public function testOptionsNotAllowed(): void
     {
         $this->expectException(MethodNotAllowedException::class);
-        $request = new Request($this->invoker, new Order, Request::DELETE);
+        $request = new Request($this->invoker, new Order(), Request::DELETE);
         $this->invoker->invoke($request);
     }
 
-    public function testInvokeClassTyped() : void
+    public function testInvokeClassTyped(): void
     {
         $person = ['age' => 28, 'name' => 'monsley'];
-        $request = new Request($this->invoker, (new FakeRo)(new Json), Request::GET, ['specialPerson' => $person]);
+        $request = new Request($this->invoker, (new FakeRo())(new Json()), Request::GET, ['specialPerson' => $person]);
         $actual = $this->invoker->invoke($request)->body;
         $this->assertSame($actual->name, 'monsley');
         $this->assertSame($actual->age, 28);
     }
 
-    public function testInvokeClassTypedSnakeCase() : void
+    public function testInvokeClassTypedSnakeCase(): void
     {
         $person = ['age' => 28, 'name' => 'monsley'];
-        $request = new Request($this->invoker, (new FakeRo)(new Json), Request::GET, ['special_person' => $person]);
+        $request = new Request($this->invoker, (new FakeRo())(new Json()), Request::GET, ['special_person' => $person]);
         $actual = $this->invoker->invoke($request)->body;
         $this->assertSame($actual->name, 'monsley');
         $this->assertSame($actual->age, 28);
     }
 
-    public function testInvokeClassTypedSnakeParamException() : void
+    public function testInvokeClassTypedSnakeParamException(): void
     {
         $this->expectException(ParameterException::class);
-        $request = new Request($this->invoker, new Json, Request::GET, []);
+        $request = new Request($this->invoker, new Json(), Request::GET, []);
         $this->invoker->invoke($request);
     }
 }

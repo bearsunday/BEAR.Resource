@@ -6,19 +6,13 @@ namespace BEAR\Resource;
 
 final class NullUri extends AbstractUri
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $scheme = 'app';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $host = 'self';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $path = '/index';
 
     /**
@@ -28,8 +22,6 @@ final class NullUri extends AbstractUri
      */
     public $query = [];
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $method = 'get';
 }

@@ -6,26 +6,28 @@ namespace BEAR\Resource\Renderer;
 
 use BEAR\Resource\FakeRoot;
 use BEAR\Resource\JsonRenderer;
-use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Uri;
-use function file_get_contents;
 use PHPUnit\Framework\TestCase;
+
+use function dirname;
+use function file_get_contents;
+use function ini_get;
+use function ini_set;
+use function log;
 
 class JsonRendererTest extends TestCase
 {
-    /**
-     * @var FakeRoot
-     */
+    /** @var FakeRoot */
     private $ro;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
-        $this->ro = new FakeRoot;
+        $this->ro = new FakeRoot();
         $this->ro->uri = new Uri('app://self/dummy');
-        $this->ro->setRenderer(new JsonRenderer);
+        $this->ro->setRenderer(new JsonRenderer());
     }
 
-    public function testRender() : void
+    public function testRender(): void
     {
         $ro = $this->ro->onGet();
         $data = (string) $ro;
@@ -33,7 +35,7 @@ class JsonRendererTest extends TestCase
         $this->assertSame($expected, $data);
     }
 
-    public function testRenderScalar() : void
+    public function testRenderScalar(): void
     {
         $this->ro->body = 1;
         $data = (string) $this->ro;
@@ -41,7 +43,7 @@ class JsonRendererTest extends TestCase
         $this->assertSame($expected, $data);
     }
 
-    public function testError() : void
+    public function testError(): void
     {
         $log = ini_get('error_log');
         $logFile = dirname(__DIR__) . '/log/error.log';
@@ -53,9 +55,8 @@ class JsonRendererTest extends TestCase
         $this->assertStringContainsString('json_encode error', (string) file_get_contents($logFile));
     }
 
-    public function testHeader() : void
+    public function testHeader(): void
     {
-        /* @var $ro ResourceObject */
         $ro = $this->ro->onGet();
         (string) $ro; // @phpstan-ignore-line
         $expected = 'application/json';

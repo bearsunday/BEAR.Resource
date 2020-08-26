@@ -6,7 +6,6 @@ namespace BEAR\Resource;
 
 use phpDocumentor\Reflection\DocBlock\Tags\Param;
 use phpDocumentor\Reflection\DocBlockFactory;
-use phpDocumentor\Reflection\Type;
 use ReflectionMethod;
 
 final class OptionsMethodDocBolck
@@ -16,7 +15,7 @@ final class OptionsMethodDocBolck
      *
      * @return array{0: array{summary?: string, description?: string}, 1: array<string, array{type: string, description?: string}>}
      */
-    public function __invoke(ReflectionMethod $method) : array
+    public function __invoke(ReflectionMethod $method): array
     {
         $docComment = $method->getDocComment();
         $doc = $paramDoc = [];
@@ -32,7 +31,7 @@ final class OptionsMethodDocBolck
      *
      * @psalm-return array{0: array{summary?: string, description?: string}, 1: array<string, array{type: string, description?: string}>}
      */
-    private function docBlock(string $docComment) : array
+    private function docBlock(string $docComment): array
     {
         $factory = DocBlockFactory::createInstance();
         $docblock = $factory->create($docComment);
@@ -41,10 +40,12 @@ final class OptionsMethodDocBolck
         if ($summary) {
             $docs['summary'] = $summary;
         }
+
         $description = (string) $docblock->getDescription();
         if ($description) {
             $docs['description'] = $description;
         }
+
         /** @var Param[] $tags */
         $tags = $docblock->getTagsByName('param');
         $params = $this->docBlogTags($tags, $params);
@@ -58,19 +59,19 @@ final class OptionsMethodDocBolck
      *
      * @return array<string, array{type: string, description?: string}>
      */
-    private function docBlogTags(array $tags, array $params) : array
+    private function docBlogTags(array $tags, array $params): array
     {
         foreach ($tags as $tag) {
             $varName = (string) $tag->getVariableName();
             $tagType = (string) $tag->getType();
             $type = $tagType === 'int' ? 'integer' : $tagType;
-            $params[$varName] = [
-                'type' => $type
-            ];
+            $params[$varName] = ['type' => $type];
             $description = (string) $tag->getDescription();
-            if ($description) {
-                $params[$varName]['description'] = $description;
+            if (! $description) {
+                continue;
             }
+
+            $params[$varName]['description'] = $description;
         }
 
         return $params;

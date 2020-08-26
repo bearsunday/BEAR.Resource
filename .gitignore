@@ -8,3 +8,4 @@ composer.phar
 .php_cs.cache
 .phpunit.result.cache
 tests/tmp
+.phpcs-cache

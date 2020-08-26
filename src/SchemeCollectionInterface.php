@@ -9,20 +9,20 @@ interface SchemeCollectionInterface
     /**
      * Set scheme
      */
-    public function scheme(string $scheme) : self;
+    public function scheme(string $scheme): self;
 
     /**
      * Set host
      */
-    public function host(string $host) : self;
+    public function host(string $host): self;
 
     /**
      * Set resource adapter
      */
-    public function toAdapter(AdapterInterface $adapter) : self;
+    public function toAdapter(AdapterInterface $adapter): self;
 
     /**
      * Return resource adapter
      */
-    public function getAdapter(AbstractUri $uri) : AdapterInterface;
+    public function getAdapter(AbstractUri $uri): AdapterInterface;
 }

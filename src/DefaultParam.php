@@ -11,9 +11,7 @@ use Ray\Di\InjectorInterface;
  */
 final class DefaultParam implements ParamInterface
 {
-    /**
-     * @var T
-     */
+    /** @var T */
     private $defaultValue;
 
     /**

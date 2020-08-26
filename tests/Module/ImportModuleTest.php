@@ -10,11 +10,18 @@ use FakeVendor\Sandbox\Module\AppModule;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
+use function dirname;
+use function file_put_contents;
+use function glob;
+use function is_dir;
+use function rmdir;
+use function unlink;
+
 class ImportModuleTest extends TestCase
 {
-    protected function setUp() : void
+    protected function setUp(): void
     {
-        $rm = function ($dir) use (&$rm) {
+        $rm = static function ($dir) use (&$rm) {
             foreach ((array) glob($dir . '/*') as $f) {
                 $file = (string) $f;
                 is_dir($file) ? $rm($file) : unlink($file);
@@ -27,12 +34,10 @@ class ImportModuleTest extends TestCase
         parent::setUp();
     }
 
-    public function testConfigure() : void
+    public function testConfigure(): void
     {
-        $module = new AppModule;
-        $importConfig = [
-            new ImportApp('blog', 'FakeVendor\Blog', 'app')
-        ];
+        $module = new AppModule();
+        $importConfig = [new ImportApp('blog', 'FakeVendor\Blog', 'app')];
         $module->override(new ImportAppModule($importConfig));
         $resource = (new Injector($module, __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
         // request

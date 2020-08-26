@@ -1,17 +1,15 @@
-<?php declare(strict_types=1);
-/**
- * This file is part of the BEAR.Resource package.
- *
- * @license http://opensource.org/licenses/MIT MIT
- */
+<?php
+
+declare(strict_types=1);
+
 namespace BEAR\Resource;
 
 class FakeNop implements AdapterInterface
 {
-    public function get(AbstractUri $uri) : ResourceObject
+    public function get(AbstractUri $uri): ResourceObject
     {
         unset($uri);
 
-        return new FakeNopResource;
+        return new FakeNopResource();
     }
 }

@@ -12,7 +12,7 @@ class HttpClientModule extends AbstractModule
     /**
      * {@inheritdoc}
      */
-    protected function configure() : void
+    protected function configure(): void
     {
         $this->bind(HttpClientInterface::class)->toProvider(HttpClientProvider::class);
     }

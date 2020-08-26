@@ -13,14 +13,10 @@ use Ray\Di\AbstractModule;
 
 class JsonSchemaModule extends AbstractModule
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $jsonSchemaDir;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $jsonValidateDir;
 
     /**
@@ -30,7 +26,7 @@ class JsonSchemaModule extends AbstractModule
     public function __construct(
         string $jsonSchemaDir = '',
         string $jsonValidateDir = '',
-        AbstractModule $module = null
+        ?AbstractModule $module = null
     ) {
         $this->jsonSchemaDir = $jsonSchemaDir;
         $this->jsonValidateDir = $jsonValidateDir;
@@ -40,7 +36,7 @@ class JsonSchemaModule extends AbstractModule
     /**
      * {@inheritdoc}
      */
-    protected function configure() : void
+    protected function configure(): void
     {
         $this->bind()->annotatedWith('json_schema_dir')->toInstance($this->jsonSchemaDir);
         $this->bind()->annotatedWith('json_validate_dir')->toInstance($this->jsonValidateDir);

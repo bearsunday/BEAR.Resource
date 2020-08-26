@@ -13,5 +13,5 @@ interface NamedParameterInterface
      *
      * @return list<mixed>
      */
-    public function getParameters(callable $callable, array $query) : array;
+    public function getParameters(callable $callable, array $query): array;
 }

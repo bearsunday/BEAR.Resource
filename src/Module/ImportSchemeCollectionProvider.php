@@ -8,31 +8,26 @@ use BEAR\Resource\Annotation\AppName;
 use BEAR\Resource\Annotation\ImportAppConfig;
 use BEAR\Resource\AppAdapter;
 use BEAR\Resource\ImportApp;
+use BEAR\Resource\SchemeCollection;
 use Ray\Di\InjectorInterface;
 use Ray\Di\ProviderInterface;
 
 class ImportSchemeCollectionProvider implements ProviderInterface
 {
-    /**
-     * @var ImportApp[]
-     */
+    /** @var ImportApp[] */
     private $importAppConfig;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $appName;
 
-    /**
-     * @var InjectorInterface
-     */
+    /** @var InjectorInterface */
     private $injector;
 
     /**
+     * @param ImportApp[] $importAppConfig
+     *
      * @AppName("appName")
      * @ImportAppConfig("importAppConfig")
-     *
-     * @param ImportApp[] $importAppConfig
      */
     public function __construct(string $appName, array $importAppConfig, InjectorInterface $injector)
     {
@@ -44,7 +39,7 @@ class ImportSchemeCollectionProvider implements ProviderInterface
     /**
      * {@inheritdoc}
      *
-     * @return \BEAR\Resource\SchemeCollection
+     * @return SchemeCollection
      */
     public function get()
     {

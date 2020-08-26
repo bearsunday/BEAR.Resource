@@ -13,20 +13,21 @@ use ReflectionClass;
 
 class AssistedWebContextParamTest extends TestCase
 {
-    public function testAssistedWebContextParam() : void
+    public function testAssistedWebContextParam(): void
     {
-        $cookieParam = new CookieParam;
+        $cookieParam = new CookieParam();
         $cookieParam->key = 'cookie_key';
         $cookieParam->param = 'param_name';
         $fakeGlobals = [
-            '_COOKIE' => ['cookie_key' => '__COOKIE_VAL__']
+            '_COOKIE' => ['cookie_key' => '__COOKIE_VAL__'],
         ];
-        $assistedWebContextParam = new AssistedWebContextParam($cookieParam, new NoDefaultParam);
+        $assistedWebContextParam = new AssistedWebContextParam($cookieParam, new NoDefaultParam());
         AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose($fakeGlobals);
         $injector = (new ReflectionClass(Injector::class))->newInstanceWithoutConstructor();
         if (! $injector instanceof InjectorInterface) {
-            throw new LogicException;
+            throw new LogicException();
         }
+
         $param = ($assistedWebContextParam)('a', [], $injector);
         $this->assertSame('__COOKIE_VAL__', $param);
     }

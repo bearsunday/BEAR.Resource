@@ -10,18 +10,12 @@ namespace BEAR\Resource\Annotation;
  */
 final class ResourceParam
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $param;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $uri;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $templated = false;
 }

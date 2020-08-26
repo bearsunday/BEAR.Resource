@@ -15,41 +15,35 @@ use Ray\Di\Injector;
 
 class LinkerTest extends TestCase
 {
-    /**
-     * @var Request
-     */
+    /** @var Request */
     protected $request;
 
-    /**
-     * @var Linker
-     */
+    /** @var Linker */
     private $linker;
 
-    /**
-     * @var Invoker
-     */
+    /** @var Invoker */
     private $invoker;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
-        $this->invoker = (new InvokerFactory)();
-        $schemeCollection = (new SchemeCollection)
+        $this->invoker = (new InvokerFactory())();
+        $schemeCollection = (new SchemeCollection())
             ->scheme('app')
             ->host('self')
-            ->toAdapter(new AppAdapter(new Injector, 'FakeVendor\Sandbox'));
+            ->toAdapter(new AppAdapter(new Injector(), 'FakeVendor\Sandbox'));
         $this->linker = new Linker(
-            new AnnotationReader,
+            new AnnotationReader(),
             $this->invoker,
-            new Factory($schemeCollection, new UriFactory)
+            new Factory($schemeCollection, new UriFactory())
         );
     }
 
-    public function testLinkAnnotationSelf() : void
+    public function testLinkAnnotationSelf(): void
     {
         $request = new Request(
             $this->invoker,
-            (new FakeRo)(new Author),
+            (new FakeRo())(new Author()),
             Request::GET,
             ['id' => 1],
             [new LinkType('blog', LinkType::SELF_LINK)]
@@ -57,16 +51,16 @@ class LinkerTest extends TestCase
         $result = $this->linker->invoke($request);
         $expected = [
             'id' => 12,
-            'name' => 'Aramis blog'
+            'name' => 'Aramis blog',
         ];
         $this->assertSame($expected, $result->body);
     }
 
-    public function testAnnotationNew() : void
+    public function testAnnotationNew(): void
     {
         $request = new Request(
             $this->invoker,
-            (new FakeRo)(new Author),
+            (new FakeRo())(new Author()),
             Request::GET,
             ['id' => 1],
             [new LinkType('blog', LinkType::NEW_LINK)]
@@ -78,17 +72,17 @@ class LinkerTest extends TestCase
             'blog_id' => 12,
             'blog' => [
                 'id' => 12,
-                'name' => 'Aramis blog'
-            ]
+                'name' => 'Aramis blog',
+            ],
         ];
         $this->assertSame($expected, $result->body);
     }
 
-    public function testAnnotationCrawl() : void
+    public function testAnnotationCrawl(): void
     {
         $request = new Request(
             $this->invoker,
-            (new FakeRo)(new Blog),
+            (new FakeRo())(new Blog()),
             Request::GET,
             ['id' => 11],
             [new LinkType('tree', LinkType::CRAWL_LINK)]
@@ -105,7 +99,7 @@ class LinkerTest extends TestCase
                     0 => [
                         'id' => '1',
                         'post_id' => '1',
-                        'data' => 'meta 1'
+                        'data' => 'meta 1',
                     ],
                 ],
                 'tag' => [
@@ -116,12 +110,10 @@ class LinkerTest extends TestCase
                         'tag_name' => [
                             0 => [
                                 'id' => '1',
-                                'name' => 'zim'
+                                'name' => 'zim',
                             ],
                         ],
-                        'tag_type' => [
-                            0 => 'type1'
-                        ],
+                        'tag_type' => [0 => 'type1'],
                     ],
                     1 => [
                         'id' => '2',
@@ -130,24 +122,22 @@ class LinkerTest extends TestCase
                         'tag_name' => [
                             0 => [
                                 'id' => '2',
-                                'name' => 'dib'
+                                'name' => 'dib',
                             ],
                         ],
-                        'tag_type' => [
-                            0 => 'type1'
-                        ],
+                        'tag_type' => [0 => 'type1'],
                     ],
-                ]
+                ],
             ],
         ];
         $this->assertSame($expected, $result->body);
     }
 
-    public function testAnnotationCrawl2() : void
+    public function testAnnotationCrawl2(): void
     {
         $request = new Request(
             $this->invoker,
-            (new FakeRo)(new Blog),
+            (new FakeRo())(new Blog()),
             Request::GET,
             ['id' => 16],
             [new LinkType('tree', LinkType::CRAWL_LINK)]
@@ -179,9 +169,7 @@ class LinkerTest extends TestCase
                                     'name' => 'zim',
                                 ],
                             ],
-                            'tag_type' => [
-                                'type1',
-                            ],
+                            'tag_type' => ['type1'],
                         ],
                     ],
                 ],
@@ -207,9 +195,7 @@ class LinkerTest extends TestCase
                                     'name' => 'dib',
                                 ],
                             ],
-                            'tag_type' => [
-                                'type1',
-                            ],
+                            'tag_type' => ['type1'],
                         ],
                     ],
                 ],
@@ -235,9 +221,7 @@ class LinkerTest extends TestCase
                                     'name' => 'gir',
                                 ],
                             ],
-                            'tag_type' => [
-                                'type1',
-                            ],
+                            'tag_type' => ['type1'],
                         ],
                     ],
                 ],
@@ -246,11 +230,11 @@ class LinkerTest extends TestCase
         $this->assertSame($expected, $result->body);
     }
 
-    public function testAnnotationCrawl3() : void
+    public function testAnnotationCrawl3(): void
     {
         $request = new Request(
             $this->invoker,
-            (new FakeRo)(new Blog),
+            (new FakeRo())(new Blog()),
             Request::GET,
             ['id' => 17],
             [new LinkType('tree', LinkType::CRAWL_LINK)]
@@ -261,11 +245,11 @@ class LinkerTest extends TestCase
             'name' => 'My blog',
             'label' => [
                 'a',
-                'b'
+                'b',
             ],
             'keyword' => [
                 'c',
-                'd'
+                'd',
             ],
             'post' => [
                 'id' => '9',
@@ -278,12 +262,12 @@ class LinkerTest extends TestCase
         $this->assertSame($expected, $result->body);
     }
 
-    public function testScalarValueLinkThrowException() : void
+    public function testScalarValueLinkThrowException(): void
     {
         $this->expectException(LinkQueryException::class);
         $request = new Request(
             $this->invoker,
-            (new FakeRo)(new Name),
+            (new FakeRo())(new Name()),
             Request::GET,
             ['name' => 'bear'],
             [new LinkType('blog', LinkType::SELF_LINK)]
@@ -291,12 +275,12 @@ class LinkerTest extends TestCase
         $this->linker->invoke($request);
     }
 
-    public function testInvalidRel() : void
+    public function testInvalidRel(): void
     {
         $this->expectException(LinkRelException::class);
         $request = new Request(
             $this->invoker,
-            (new FakeRo)(new Author),
+            (new FakeRo())(new Author()),
             Request::GET,
             ['id' => '1'],
             [new LinkType('invalid-link', LinkType::SELF_LINK)]
@@ -304,11 +288,11 @@ class LinkerTest extends TestCase
         $this->linker->invoke($request);
     }
 
-    public function testNotFoundResourceHasBody() : void
+    public function testNotFoundResourceHasBody(): void
     {
         $request = new Request(
             $this->invoker,
-            (new FakeRo)(new Blog\NotFound),
+            (new FakeRo())(new Blog\NotFound()),
             Request::GET,
             [],
             [new LinkType('meta', LinkType::CRAWL_LINK)]
@@ -318,7 +302,7 @@ class LinkerTest extends TestCase
 
         $request = new Request(
             $this->invoker,
-            (new FakeRo)(new Blog\NotFound),
+            (new FakeRo())(new Blog\NotFound()),
             Request::GET,
             [],
             [new LinkType('user', LinkType::SELF_LINK)]
@@ -328,7 +312,7 @@ class LinkerTest extends TestCase
 
         $request = new Request(
             $this->invoker,
-            (new FakeRo)(new Blog\NotFound),
+            (new FakeRo())(new Blog\NotFound()),
             Request::GET,
             [],
             [new LinkType('user', LinkType::NEW_LINK)]

@@ -11,14 +11,14 @@ use Ray\Di\Injector;
 
 class HalModuleTest extends TestCase
 {
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
     }
 
-    public function testConfigure() : void
+    public function testConfigure(): void
     {
-        $resource = (new Injector(new AppModule, __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
+        $resource = (new Injector(new AppModule(), __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
         // request
         $news = $resource
             ->uri('app://self/news')

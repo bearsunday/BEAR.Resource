@@ -5,9 +5,18 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\OptionsBody;
-use const PHP_EOL;
 use ReflectionClass;
 use ReflectionMethod;
+
+use function implode;
+use function in_array;
+use function json_encode;
+use function strtoupper;
+use function substr;
+
+use const JSON_PRETTY_PRINT;
+use const JSON_UNESCAPED_SLASHES;
+use const PHP_EOL;
 
 /**
  * RFC2616 OPTIONS method renderer
@@ -19,14 +28,10 @@ use ReflectionMethod;
  */
 final class OptionsRenderer implements RenderInterface
 {
-    /**
-     * @var OptionsMethods
-     */
+    /** @var OptionsMethods */
     private $optionsMethod;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $optionsBody;
 
     /**
@@ -60,13 +65,15 @@ final class OptionsRenderer implements RenderInterface
      *
      * @psalm-return list<string>
      */
-    private function getAllows(array $methods) : array
+    private function getAllows(array $methods): array
     {
         $allows = [];
         foreach ($methods as $method) {
-            if (in_array($method->name, ['onGet', 'onPost', 'onPut', 'onPatch', 'onDelete', 'onHead'], true)) {
-                $allows[] = strtoupper(substr($method->name, 2));
+            if (! in_array($method->name, ['onGet', 'onPost', 'onPut', 'onPatch', 'onDelete', 'onHead'], true)) {
+                continue;
             }
+
+            $allows[] = strtoupper(substr($method->name, 2));
         }
 
         return $allows;
@@ -79,7 +86,7 @@ final class OptionsRenderer implements RenderInterface
      *
      * @return array<string, array<int|string, array|string>>
      */
-    private function getEntityBody(ResourceObject $ro, array $allows) : array
+    private function getEntityBody(ResourceObject $ro, array $allows): array
     {
         $mehtodList = [];
         foreach ($allows as $method) {

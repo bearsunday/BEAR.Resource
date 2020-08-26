@@ -9,7 +9,7 @@ use function sprintf;
 
 final class ErrorLogLogger implements LoggerInterface
 {
-    public function __invoke(ResourceObject $ro) : void
+    public function __invoke(ResourceObject $ro): void
     {
         $requestLog = sprintf('request: %s %s', $ro->uri->method, (string) $ro->uri);
         $responseLog = sprintf('response %s %s', $ro->code, (string) $ro->view);

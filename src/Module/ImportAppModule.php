@@ -8,6 +8,7 @@ use BEAR\Resource\Annotation\ImportAppConfig;
 use BEAR\Resource\ImportApp;
 use BEAR\Resource\SchemeCollectionInterface;
 use Ray\Di\AbstractModule;
+use Ray\Di\Exception\NotFound;
 
 class ImportAppModule extends AbstractModule
 {
@@ -19,13 +20,6 @@ class ImportAppModule extends AbstractModule
     private $importAppConfig = [];
 
     /**
-     * Default context namespace
-     *
-     * @var string
-     */
-    private $defaultContextName;
-
-    /**
      * @param array<ImportApp> $importApps
      */
     public function __construct(array $importApps, string $defaultContextName = '')
@@ -34,16 +28,17 @@ class ImportAppModule extends AbstractModule
             // create import config
             $this->importAppConfig[] = $importApp;
         }
-        $this->defaultContextName = $defaultContextName;
+
+        unset($defaultContextName);
         parent::__construct();
     }
 
     /**
      * {@inheritdoc}
      *
-     * @throws \Ray\Di\Exception\NotFound
+     * @throws NotFound
      */
-    protected function configure() : void
+    protected function configure(): void
     {
         $this->bind()->annotatedWith(ImportAppConfig::class)->toInstance($this->importAppConfig);
         $this->bind(SchemeCollectionInterface::class)->toProvider(ImportSchemeCollectionProvider::class);

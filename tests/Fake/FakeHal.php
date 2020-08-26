@@ -14,10 +14,10 @@ class FakeHal extends ResourceObject
      */
     public function onGet(bool $change = false)
     {
-        $fakeChild = (new FakeRo)(new FakeChild);
+        $fakeChild = (new FakeRo())(new FakeChild());
         $this->body = [
             'one' => 1,
-            'two' => new Request((new InvokerFactory)(), $fakeChild)
+            'two' => new Request((new InvokerFactory())(), $fakeChild)
         ];
         if ($change) {
             $this->body += [
