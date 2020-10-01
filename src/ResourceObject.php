@@ -219,9 +219,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
 
     /**
      * @return ArrayIterator<int|string, mixed>
-     *
-     * @phpstan-return ArrayIterator<int|string, mixed>
      * @psalm-return ArrayIterator<empty, empty>|ArrayIterator<int|string, mixed>
+     * @phpstan-return ArrayIterator<int|string, mixed>
      */
     public function getIterator(): ArrayIterator
     {

@@ -98,7 +98,6 @@ class HalRenderer implements RenderInterface
 
     /**
      * @param array<array-key, mixed> $body
-     *
      * @psalm-param list<object>       $annotations
      * @phpstan-param array<object>    $annotations
      */

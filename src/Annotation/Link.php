@@ -50,7 +50,6 @@ final class Link implements JsonSerializable
 
     /**
      * @return string[]
-     *
      * @psalm-return array{rel: string, href: string, method: string, title?: string}
      */
     public function jsonSerialize(): array

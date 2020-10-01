@@ -83,9 +83,8 @@ final class OptionsMethods
 
     /**
      * @return (Embed|Link)[][]
-     *
-     * @phpstan-return (Embed|Link)[][]
      * @psalm-return array{links?: non-empty-list<Link>, embed?: non-empty-list<Embed>}
+     * @phpstan-return (Embed|Link)[][]
      */
     private function getMethodExtras(ReflectionMethod $method): array
     {

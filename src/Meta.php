@@ -75,7 +75,6 @@ final class Meta
      * @param ReflectionMethod[] $methods
      *
      * @return string[]
-     *
      * @psalm-return list<string>
      */
     private function getAllows(array $methods): array

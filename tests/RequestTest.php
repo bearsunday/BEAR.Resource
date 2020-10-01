@@ -23,6 +23,7 @@ class RequestTest extends TestCase
 {
     /** @var Request */
     protected $request;
+
     /** @var Invoker */
     private $invoker;
 
