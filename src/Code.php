@@ -57,7 +57,6 @@ final class Code
      * </pre>
      *
      * @see http://www.iana.org/assignments/http-status-codes
-     *
      * @var array<int, string>
      */
     public $statusText = [

@@ -28,7 +28,6 @@ final class OptionsMethodDocBolck
 
     /**
      * @return (string|string[])[][]
-     *
      * @psalm-return array{0: array{summary?: string, description?: string}, 1: array<string, array{type: string, description?: string}>}
      */
     private function docBlock(string $docComment): array

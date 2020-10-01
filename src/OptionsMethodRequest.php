@@ -97,7 +97,6 @@ final class OptionsMethodRequest
      * @param array<ReflectionParameter> $parameters
      *
      * @return string[]
-     *
      * @psalm-return list<string>
      */
     private function getRequired(array $parameters): array
@@ -193,7 +192,6 @@ final class OptionsMethodRequest
      * @param array{parameters?: array<string, array{type?: string, description?: string}>, required?: array<int, string>} $paramMetas
      *
      * @return (string|string[])[][]
-     *
      * @psalm-return array{parameters?: array<string, array{type?: string, description?: string}>, required?: array<int, string>}
      */
     private function ignorreAssisted(array $paramMetas, Assisted $annotation): array
