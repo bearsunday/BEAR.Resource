@@ -231,10 +231,7 @@ final class Linker implements LinkerInterface
      */
     private function isList($value): bool
     {
-        if (! is_array($value)) {
-            return false;
-        }
-
+        assert(is_array($value));
         /** @var array<array> $list */
         $list = $value;
         /** @var array<mixed> $firstRow */
