@@ -16,9 +16,7 @@ class HalLinkTest extends TestCase
     {
         $halLink = new HalLink(new NullReverseLink());
         $body = [
-            '_links' => [
-                'rel1' => 'not-href',
-            ],
+            '_links' => ['rel1' => 'not-href'],
         ];
         $hal = $halLink->addHalLink($body, [], new Hal());
         $this->assertInstanceOf(Hal::class, $hal);
