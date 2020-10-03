@@ -47,4 +47,14 @@ class NullRequestTest extends TestCase
     {
         $this->assertSame('get app://self/index', (new NullRequest())->toUriWithMethod());
     }
+
+    public function testHash(): void
+    {
+        $this->assertSame('', (new NullRequest())->hash());
+    }
+
+    public function testRequest(): void
+    {
+        $this->assertInstanceOf(NullResourceObject::class, (new NullRequest())->request());
+    }
 }
