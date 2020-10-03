@@ -6,7 +6,7 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\ParameterException;
 use Ray\Di\InjectorInterface;
-use ReflectionClass;
+use ReflectionNamedType;
 use ReflectionParameter;
 
 use function assert;
@@ -18,7 +18,7 @@ use function strtolower;
 final class ClassParam implements ParamInterface
 {
     /** @var string */
-    private $class;
+    private $type;
 
     /** @var bool */
     private $isDefaultAvailable;
@@ -26,12 +26,9 @@ final class ClassParam implements ParamInterface
     /** @var mixed */
     private $defaultValue;
 
-    /**
-     * @param ReflectionClass<ResourceObject> $class
-     */
-    public function __construct(ReflectionClass $class, ReflectionParameter $parameter)
+    public function __construct(ReflectionNamedType $type, ReflectionParameter $parameter)
     {
-        $this->class = $class->name;
+        $this->type = $type->getName();
         $this->isDefaultAvailable = $parameter->isDefaultValueAvailable();
         if (! $this->isDefaultAvailable) {
             return;
@@ -55,9 +52,9 @@ final class ClassParam implements ParamInterface
             throw $e;
         }
 
-        assert(class_exists($this->class));
+        assert(class_exists($this->type));
         /** @psalm-suppress MixedMethodCall */
-        $obj = new $this->class();
+        $obj = new $this->type();
         /** @psalm-suppress MixedAssignment */
         foreach ($props as $propName => $propValue) {
             $obj->{$propName} = $propValue;
