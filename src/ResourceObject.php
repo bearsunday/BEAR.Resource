@@ -84,10 +84,6 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      */
     public function __toString()
     {
-        if (is_string($this->view)) {
-            return $this->view;
-        }
-
         try {
             $view = $this->toString();
         } catch (Throwable $e) {
