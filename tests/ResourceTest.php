@@ -317,4 +317,14 @@ class ResourceTest extends TestCase
 ';
         $this->assertSame($expected, $view);
     }
+
+    /**
+     * @covers \BEAR\Resource\Resource::options()
+     */
+    public function testOptions(): void
+    {
+        $ro = $this->resource->options('page://self/index');
+        $this->assertInstanceOf(ResourceObject::class, $ro);
+        $this->assertSame('GET, POST, PUT, PATCH, DELETE', $ro->headers['Allow']);
+    }
 }
