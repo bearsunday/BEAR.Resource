@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BEAR\Resource\Module;
 
 use BEAR\Resource\ErrorLogLogger;
+use BEAR\Resource\FakeResource;
 use BEAR\Resource\LoggerInterface;
 use BEAR\Resource\ProdLogger;
 use BEAR\Resource\ResourceObject;
@@ -13,6 +14,8 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Ray\Di\AbstractModule;
 use Ray\Di\Injector;
+
+use function assert;
 
 class LoggerModuleTest extends TestCase
 {
@@ -39,5 +42,7 @@ class LoggerModuleTest extends TestCase
     {
         $logger = (new Injector(new ErrorLogLoggerModule()))->getInstance(LoggerInterface::class);
         $this->assertInstanceOf(ErrorLogLogger::class, $logger);
+        assert($logger instanceof LoggerInterface);
+        $logger->__invoke(new FakeResource());
     }
 }
