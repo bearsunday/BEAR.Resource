@@ -168,10 +168,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      */
     public function offsetUnset($offset): void
     {
-        if (! is_array($this->body)) {
-            return;
-        }
-
+        /** @psalm-suppress MixedArrayAccess */
         unset($this->body[$offset]);
     }
 
