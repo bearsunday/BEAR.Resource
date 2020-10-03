@@ -64,4 +64,23 @@ class FakeUser extends ResourceObject
     {
         return $this;
     }
+
+    /**
+     * @JsonSchema(key="key1", schema="user.json")
+     */
+    public function bodyKey()
+    {
+        $name = [
+            'firstName' => 'mucha',
+            'lastName' => 'alfons'
+        ];
+        $this->body = [
+            'key1' => [
+                'name' => $name,
+                'age' => 20
+            ]
+        ];
+
+        return $this;
+    }
 }
