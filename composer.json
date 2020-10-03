@@ -61,7 +61,7 @@
         "pcov": ["php -d pcov.enabled=1 ./vendor/bin/phpunit --coverage-text --coverage-html=build/coverage"],
         "cs": ["phpcs"],
         "cs-fix": ["phpcbf"],
-        "sa": ["phpstan analyse -c phpstan.neon", "psalm --show-info=true", "psalm -c psalm.compiler.xml --show-info=true"],
+        "sa": ["phpstan analyse -c phpstan.neon", "psalm --show-info=true"],
         "metrics": ["phpmetrics --report-html=build/metrics/ --extensions=php src,composer.json,composer.lock"]
     }
 }
