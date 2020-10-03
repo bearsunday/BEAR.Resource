@@ -10,8 +10,8 @@ use Doctrine\Common\Cache\Cache;
 use LogicException;
 use Ray\Di\Di\Assisted;
 use Ray\WebContextParam\Annotation\AbstractWebContextParam;
-use ReflectionClass;
 use ReflectionMethod;
+use ReflectionNamedType;
 use ReflectionParameter;
 
 use function get_class;
@@ -163,10 +163,9 @@ final class NamedParamMetas implements NamedParamMetasInterface
      */
     private function getParam(ReflectionParameter $parameter)
     {
-        $class = $parameter->getClass();
-        if ($class instanceof ReflectionClass) {
-            /** @var ReflectionClass<ResourceObject> $class */
-            return new ClassParam($class, $parameter);
+        $type = $parameter->getType();
+        if ($type instanceof ReflectionNamedType && ! $type->isBuiltin()) {
+            return new ClassParam($type, $parameter);
         }
 
         return $parameter->isDefaultValueAvailable() === true ? new OptionalParam($parameter->getDefaultValue()) : new RequiredParam();
