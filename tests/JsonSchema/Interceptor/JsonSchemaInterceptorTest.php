@@ -41,16 +41,6 @@ class JsonSchemaInterceptorTest extends TestCase
         $this->jsonSchemaIntercetor->invoke($invocation);
     }
 
-    public function testBodyEmptyString(): void
-    {
-        $object = new FakeUser();
-        $object->body = '';
-        /** @var array<MethodInterceptor> $interceptrs */
-        $interceptrs = [JsonSchemaInterceptor::class];
-        $invocation = new ReflectiveMethodInvocation($object, 'invalidKey', [], $interceptrs);
-        $this->jsonSchemaIntercetor->invoke($invocation);
-    }
-
     /**
      * covers \BEAR\Resource\Interceptor\JsonSchemaInterceptor::getTarget()
      */

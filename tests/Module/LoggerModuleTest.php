@@ -16,6 +16,9 @@ use Ray\Di\AbstractModule;
 use Ray\Di\Injector;
 
 use function assert;
+use function file_get_contents;
+use function ini_get;
+use function ini_set;
 
 class LoggerModuleTest extends TestCase
 {
@@ -42,7 +45,12 @@ class LoggerModuleTest extends TestCase
     {
         $logger = (new Injector(new ErrorLogLoggerModule()))->getInstance(LoggerInterface::class);
         $this->assertInstanceOf(ErrorLogLogger::class, $logger);
-        assert($logger instanceof LoggerInterface);
-        $logger->__invoke(new FakeResource());
+        assert($logger instanceof ErrorLogLogger);
+        $errorLog = (string) ini_get('error_log');
+        $errorLogText = __DIR__ . '/tmp/error_log.txt';
+        ini_set('error_log', $errorLogText);
+        ($logger)(new FakeResource());
+        ini_set('error_log', $errorLog);
+        $this->assertStringContainsString('get app://self/index', (string) file_get_contents($errorLogText));
     }
 }
