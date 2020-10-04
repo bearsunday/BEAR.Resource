@@ -84,10 +84,6 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      */
     public function __toString()
     {
-        if (is_string($this->view)) {
-            return $this->view;
-        }
-
         try {
             $view = $this->toString();
         } catch (Throwable $e) {
@@ -172,10 +168,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      */
     public function offsetUnset($offset): void
     {
-        if (! is_array($this->body)) {
-            return;
-        }
-
+        /** @psalm-suppress MixedArrayAccess */
         unset($this->body[$offset]);
     }
 

@@ -104,10 +104,6 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     {
         /** @var array<stdClass>|false|stdClass $json */
         $json = json_decode((string) $ro);
-        if (! $json) {
-            return;
-        }
-
         /** @var array<stdClass>|stdClass $target */
         $target = is_object($json) ? $this->getTarget($json, $jsonSchema) : $json;
         $this->validate($target, $schemaFile);

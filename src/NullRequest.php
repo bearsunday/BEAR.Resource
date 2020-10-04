@@ -4,18 +4,27 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-/**
- * @property int    $code
- * @property array  $headers
- * @property mixed  $body
- * @property string $view
- * @psalm-suppress PropertyNotSetInConstructor
- */
-class NullRequest extends AbstractRequest
+final class NullRequest implements RequestInterface
 {
-    public function __construct()
+    /**
+     * @param array<string, mixed> $query
+     */
+    public function __invoke(?array $query = null): ResourceObject
     {
-        $this->resourceObject = new NullResourceObject();
+        return new NullResourceObject();
+    }
+
+    public function hash(): string
+    {
+        return '';
+    }
+
+    /**
+     * @return ResourceObject
+     */
+    public function request()
+    {
+        return new NullResourceObject();
     }
 
     /**

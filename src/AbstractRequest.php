@@ -212,13 +212,11 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     {
         $this->invoke();
         assert($this->result instanceof ResourceObject);
-        if (! isset($this->result->body[$offset])) {
+        if (! is_array($this->result->body) || ! isset($this->result->body[$offset])) {
             throw new OutOfBoundsException("[{$offset}] for object[" . get_class($this->result) . ']', 400);
         }
 
-        if (is_array($this->result->body)) {
-            return $this->result->body[$offset];
-        }
+        return $this->result->body[$offset];
     }
 
     /**
@@ -266,10 +264,11 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      * {@inheritdoc}
      *
      * @param string $serialized
+     *
+     * @codeCoverageIgnore
      */
     public function unserialize($serialized): void
     {
-        throw new LogicException(__METHOD__ . ' not supported');
     }
 
     private function invoke(): ResourceObject
