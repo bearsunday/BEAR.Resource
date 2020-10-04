@@ -55,11 +55,19 @@ final class Linker implements LinkerInterface
 
     /**
      * {@inheritdoc}
-     *
+     */
+    public function invoke(AbstractRequest $request)
+    {
+        $this->cache = [];
+
+        return $this->invokeRecursive($request);
+    }
+
+    /**
      * @throws LinkQueryException
      * @throws LinkRelException
      */
-    public function invoke(AbstractRequest $request)
+    private function invokeRecursive(AbstractRequest $request): ResourceObject
     {
         $this->invoker->invoke($request);
         $current = clone $request->resourceObject;
@@ -169,7 +177,6 @@ final class Linker implements LinkerInterface
         $isList = $this->isList($current->body);
         /** @var array<array<string, mixed>> $bodyList */
         $bodyList = $isList ? (array) $current->body : [$current->body];
-        $this->cache = [];
         foreach ($bodyList as &$body) {
             $this->crawl($annotations, $link, $body);
         }
@@ -220,7 +227,7 @@ final class Linker implements LinkerInterface
      */
     private function getResponseBody(Request $request): ?array
     {
-        $body = $this->invoke($request)->body;
+        $body = $this->invokeRecursive($request)->body;
         assert(is_array($body) || $body === null);
 
         return $body;
