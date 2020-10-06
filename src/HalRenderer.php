@@ -117,6 +117,10 @@ class HalRenderer implements RenderInterface
             $ro->body = ['value' => $ro->body];
         }
 
+        if ($ro->body === null) {
+            $ro->body = [];
+        }
+
         // evaluate all request in body.
         $this->valuateElements($ro);
         assert(is_array($ro->body));

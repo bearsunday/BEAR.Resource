@@ -144,4 +144,24 @@ EOT;
 EOT;
         $this->assertSame($expected, $actual);
     }
+
+    public function testRenderNullBody(): void
+    {
+        $this->ro->body = null;
+        $actual = (string) $this->ro;
+        $expected = <<<'EOT'
+{
+    "_links": {
+        "self": {
+            "href": "/dummy"
+        },
+        "profile": {
+            "href": "/profile"
+        }
+    }
+}
+
+EOT;
+        $this->assertSame($expected, $actual);
+    }
 }
