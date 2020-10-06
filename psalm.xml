@@ -13,6 +13,7 @@
             <file name="src/OptionsMethods.php"/>
             <file name="src/OptionsMethodRequest.php"/>
             <directory name="vendor" />
+            <directory name="tests" />
         </ignoreFiles>
     </projectFiles>
     <issueHandlers>
