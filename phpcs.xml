@@ -65,7 +65,7 @@
         </properties>
     </rule>
     <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes.DeclareStrictTypesMissing">
-        <exclude-pattern>*/ClassParam.php</exclude-pattern>
+        <exclude-pattern>src/ClassParam.php</exclude-pattern>
     </rule>
     <exclude-pattern>*/Fake/*</exclude-pattern>
     <exclude-pattern>*/tmp/*</exclude-pattern>
