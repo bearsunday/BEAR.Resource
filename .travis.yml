@@ -10,7 +10,7 @@ php:
 cache:
   directories:
     - ./vendor
-    - $HOME/.composer/cache
+    - $HOME/.config/composer/cache
 
 before_install:
   - phpenv config-rm xdebug.ini || true
@@ -52,16 +52,16 @@ jobs:
       php: 7.4
       install: composer global require --dev phpstan/phpstan ^0.12 vimeo/psalm ^3.11 phpmetrics/phpmetrics ^2.6
       script:
-        - ~/.composer/vendor/bin/phpstan analyse -c phpstan.neon --no-progress --no-interaction
-        - ~/.composer/vendor/bin/psalm --show-info=true --shepherd
-        - ~/.composer/vendor/bin/phpmetrics --exclude=Exception src
+        - ~/.config/composer/vendor/bin/phpstan analyse -c phpstan.neon --no-progress --no-interaction
+        - ~/.config/composer/vendor/bin/psalm --show-info=true --shepherd
+        - ~/.config/composer/vendor/bin/phpmetrics --exclude=Exception src
 
     - stage: Code Quality
       name: Coding standards
       php: 7.4
       install: composer global require --dev doctrine/coding-standard ^8.1 maglnet/composer-require-checker ^2.0
       script:
-        - ~/.composer/vendor/bin/phpcs --standard=./phpcs.xml src tests
-        - ~/.composer/vendor/bin/composer-require-checker check ./composer.json
+        - ~/.config/composer/vendor/bin/phpcs --standard=./phpcs.xml src tests
+        - ~/.config/composer/vendor/bin/composer-require-checker check ./composer.json
   allow_failures:
     - php: nightly
