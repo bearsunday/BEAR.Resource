@@ -67,7 +67,7 @@ final class OptionsMethods
         $methodOption = $doc;
         $paramMetas = (new OptionsMethodRequest($this->reader))($method, $paramDoc, $ins);
         $schema = $this->getJsonSchema($method);
-        $request = $paramMetas ? ['request' => $paramMetas] : []; // @phpstan-ignore-line
+        $request = $paramMetas ? ['request' => $paramMetas] : [];
         $methodOption += $request;
         if (! empty($schema)) {
             $methodOption += ['schema' => $schema];
