@@ -217,7 +217,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      */
     public function getIterator(): ArrayIterator
     {
-        return is_array($this->body) ? new ArrayIterator((array) $this->body) : new ArrayIterator([]);
+        return is_array($this->body) ? new ArrayIterator($this->body) : new ArrayIterator([]);
     }
 
     /**

@@ -19,9 +19,9 @@
         "php": "^7.2 || ^8.0",
         "ext-filter": "*",
         "ext-json": "*",
-        "doctrine/annotations": "^1.10",
+        "doctrine/annotations": "^1.11",
         "doctrine/cache": "^1.10",
-        "justinrainbow/json-schema": "^5.2",
+        "justinrainbow/json-schema": "^5.2.10",
         "koriym/http-constants": "^1.1",
         "koriym/json-schema-faker": "^0.1.2",
         "fzaninotto/faker": "1.9.x-dev",
@@ -29,11 +29,12 @@
         "phpdocumentor/reflection-docblock": "^5.2",
         "psr/log": "^1.1",
         "ray/aop": "^2.9",
-        "ray/di": "^2.10.2",
+        "ray/di": "^2.10.5",
         "ray/web-param-module": "^2.0.3",
         "rize/uri-template": "^0.3",
-        "symfony/http-client": "^5.0",
-        "symfony/http-client-contracts": "^2.2"
+        "symfony/http-client": "^5.2",
+        "symfony/http-client-contracts": "^2.3",
+        "nikic/php-parser": "^4.10"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.5"

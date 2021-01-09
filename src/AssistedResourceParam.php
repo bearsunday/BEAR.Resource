@@ -9,6 +9,7 @@ use Ray\Di\InjectorInterface;
 
 use function assert;
 use function parse_url;
+use function uri_template;
 
 use const PHP_URL_FRAGMENT;
 

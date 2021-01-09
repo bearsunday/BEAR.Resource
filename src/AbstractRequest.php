@@ -204,6 +204,8 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     /**
      * {@inheritdoc}
      *
+     * @param string $offset
+     *
      * @return mixed
      *
      * @throws OutOfBoundsException
