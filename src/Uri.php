@@ -12,6 +12,7 @@ use function filter_var;
 use function parse_str;
 use function parse_url;
 use function sprintf;
+use function uri_template;
 
 use const FILTER_FLAG_PATH_REQUIRED;
 use const FILTER_VALIDATE_URL;

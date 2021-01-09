@@ -13,6 +13,7 @@ use Ray\Aop\MethodInvocation;
 
 use function array_shift;
 use function assert;
+use function uri_template;
 
 final class EmbedInterceptor implements MethodInterceptor
 {

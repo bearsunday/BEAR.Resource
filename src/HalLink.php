@@ -8,6 +8,7 @@ use BEAR\Resource\Annotation\Link;
 use Nocarrier\Hal;
 
 use function is_string;
+use function uri_template;
 
 final class HalLink
 {
