@@ -74,7 +74,7 @@ final class HalLink
      */
     private function bodyLink(array $body, Hal $hal): Hal
     {
-        foreach ((array) $body['_links'] as $rel => $link) {
+        foreach ($body['_links'] as $rel => $link) {
             if (! is_string($rel) || ! isset($link['href'])) {
                 continue;
             }

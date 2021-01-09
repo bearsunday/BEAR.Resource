@@ -19,7 +19,6 @@ use function assert;
 use function class_exists;
 use function file_exists;
 use function get_declared_classes;
-use function is_string;
 use function strpos;
 
 /**
@@ -135,10 +134,8 @@ final class AppIterator implements Iterator
         assert(file_exists($pathName));
         include_once $pathName;
         $newClasses = array_values(array_diff_key(get_declared_classes(), $declaredClasses));
-        $name = $this->getName($newClasses);
-        assert(is_string($name));
 
-        return $name;
+        return $this->getName($newClasses);
     }
 
     /**

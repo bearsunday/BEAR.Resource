@@ -177,7 +177,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
             // for BC only
             new ReflectionClass($ro);
             $roFileName = $this->getParentClassName($ro);
-            $bcFile = str_replace('.php', '.json', (string) $roFileName);
+            $bcFile = str_replace('.php', '.json', $roFileName);
             if (file_exists($bcFile)) {
                 return $bcFile;
             }
@@ -213,7 +213,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         $arguments = [];
         foreach ($parameters as $index => $parameter) {
             /** @psalm-suppress MixedAssignment */
-            $arguments[(string) $parameter->name] = $values[$index] ?? $parameter->getDefaultValue();
+            $arguments[$parameter->name] = $values[$index] ?? $parameter->getDefaultValue();
         }
 
         return $arguments;

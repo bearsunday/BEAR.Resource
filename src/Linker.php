@@ -240,10 +240,11 @@ final class Linker implements LinkerInterface
     private function isList($value): bool
     {
         assert(is_array($value));
-        /** @var array<array> $list */
+        /** @var array<array|string> $list */
         $list = $value;
         /** @var array<mixed> $firstRow */
         $firstRow = array_pop($list);
+        /** @var array<string, mixed>|string $firstRow */
         $keys = array_keys((array) $firstRow);
         $isMultiColumnMultiRowList = $this->isMultiColumnMultiRowList($keys, $list);
         $isMultiColumnList = $this->isMultiColumnList($value, $firstRow);
@@ -253,8 +254,8 @@ final class Linker implements LinkerInterface
     }
 
     /**
-     * @param array<int, int|string> $keys
-     * @param array<array<mixed>>    $list
+     * @param array<int, int|string>     $keys
+     * @param array<array<mixed>|string> $list
      */
     private function isMultiColumnMultiRowList(array $keys, array $list): bool
     {

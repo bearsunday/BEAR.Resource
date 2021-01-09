@@ -96,7 +96,7 @@ final class EmbedInterceptor implements MethodInterceptor
         $params = $invocation->getMethod()->getParameters();
         $namedParameters = [];
         foreach ($params as $param) {
-            $namedParameters[(string) $param->name] = array_shift($args);
+            $namedParameters[$param->name] = array_shift($args);
         }
 
         return $namedParameters;
