@@ -21,7 +21,7 @@
         "ext-json": "*",
         "doctrine/annotations": "^1.10",
         "doctrine/cache": "^1.10",
-        "justinrainbow/json-schema": "^5.2",
+        "justinrainbow/json-schema": "^5.2.10",
         "koriym/http-constants": "^1.1",
         "koriym/json-schema-faker": "^0.1.2",
         "fzaninotto/faker": "1.9.x-dev",
