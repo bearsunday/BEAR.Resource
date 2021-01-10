@@ -7,4 +7,3 @@ namespace BEAR\Resource\Annotation;
 interface RequestParamInterface
 {
 }
-

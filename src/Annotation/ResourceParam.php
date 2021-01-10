@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace BEAR\Resource\Annotation;
 
 use Attribute;
-use function putenv;
 
 /**
  * @Annotation
@@ -31,4 +30,3 @@ final class ResourceParam implements RequestParamInterface
         $this->templated = $values['templated'] ?? $templated;
     }
 }
-
