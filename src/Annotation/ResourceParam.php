@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BEAR\Resource\Annotation;
 
+// phpcs:disable SlevomatCodingStandard.Namespaces.UnusedUses.UnusedUse
 use Attribute;
 
 /**
