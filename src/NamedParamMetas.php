@@ -8,7 +8,6 @@ use BEAR\Resource\Annotation\RequestParamInterface;
 use BEAR\Resource\Annotation\ResourceParam;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Cache\Cache;
-use LogicException;
 use Ray\Di\Di\Assisted;
 use Ray\WebContextParam\Annotation\AbstractWebContextParam;
 use ReflectionAttribute;
@@ -17,8 +16,6 @@ use ReflectionNamedType;
 use ReflectionParameter;
 
 use function get_class;
-use function is_array;
-use function is_object;
 
 use const PHP_VERSION_ID;
 
@@ -41,11 +38,8 @@ final class NamedParamMetas implements NamedParamMetasInterface
      */
     public function __invoke(callable $callable): array
     {
-        if (! is_array($callable) || ! is_object($callable[0])) {
-            throw new LogicException('callable should be an array'); // @codeCoverageIgnore
-        }
-
-        $cacheId = self::class . get_class($callable[0]) . $callable[1];
+        /** @var array{0:object, 1:string} $callable */
+        $cacheId = self::class . get_class($callable[0]) . $callable[1]; // @phpstan-ignore-line
         /** @var array<string, ParamInterface>|false $names */
         $names = $this->cache->fetch($cacheId);
         if ($names) {
@@ -53,24 +47,24 @@ final class NamedParamMetas implements NamedParamMetasInterface
         }
 
         $method = new ReflectionMethod($callable[0], $callable[1]);
-        $namedParamMetas = false;
+        $paramMetas = false;
         if (PHP_VERSION_ID >= 80000) {
-            $namedParamMetas = $this->getNamedParamMetasByAttribute($method);
+            $paramMetas = $this->getAttributeParamMetas($method);
         }
 
-        if (! $namedParamMetas) {
-            $namedParamMetas = $this->getNamedParamMetasByAnnotation($method);
+        if (! $paramMetas) {
+            $paramMetas = $this->getAnnotationParamMetas($method);
         }
 
-        $this->cache->save($cacheId, $namedParamMetas);
+        $this->cache->save($cacheId, $paramMetas);
 
-        return $namedParamMetas;
+        return $paramMetas;
     }
 
     /**
      * @return array<string, AssistedWebContextParam|ParamInterface>
      */
-    private function getNamedParamMetasByAnnotation(ReflectionMethod $method)
+    private function getAnnotationParamMetas(ReflectionMethod $method)
     {
         $parameters = $method->getParameters();
         /** @var array<object> $annotations */
@@ -84,7 +78,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
     /**
      * @return array<string, ParamInterface>
      */
-    private function getNamedParamMetasByAttribute(ReflectionMethod $method): array
+    private function getAttributeParamMetas(ReflectionMethod $method): array
     {
         $parameters = $method->getParameters();
         $names = [];
