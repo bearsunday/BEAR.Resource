@@ -22,14 +22,15 @@
         "doctrine/annotations": "^1.11",
         "doctrine/cache": "^1.10",
         "justinrainbow/json-schema": "^5.2.10",
+        "koriym/attributes": "^0.2.1",
         "koriym/http-constants": "^1.1",
         "koriym/json-schema-faker": "^0.1.2",
         "fzaninotto/faker": "1.9.x-dev",
         "nocarrier/hal": "^0.9.12",
         "phpdocumentor/reflection-docblock": "^5.2",
         "psr/log": "^1.1",
-        "ray/aop": "^2.9",
-        "ray/di": "^2.10.5",
+        "ray/aop": "2.x-dev",
+        "ray/di": "^2.x-dev",
         "ray/web-param-module": "^2.0.3",
         "rize/uri-template": "^0.3",
         "symfony/http-client": "^5.2",
@@ -55,7 +56,8 @@
                 "tests/Fake/"
             ],
             "FakeVendor\\Sandbox\\": "tests/Fake/FakeVendor/Sandbox/",
-            "FakeVendor\\Blog\\": "tests/Fake/FakeVendor/Blog/src"
+            "FakeVendor\\Blog\\": "tests/Fake/FakeVendor/Blog/src",
+            "FakeVendor\\News\\": "tests-php8/Fake/News/src"
         },
         "files": ["tests/Fake/AppInjector.php"]
     },
