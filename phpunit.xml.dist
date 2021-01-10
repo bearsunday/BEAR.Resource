@@ -1,18 +1,17 @@
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
-         bootstrap="tests/bootstrap.php">
-<testsuites>
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" bootstrap="tests/bootstrap.php">
+  <coverage processUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">src</directory>
+    </include>
+  </coverage>
+  <testsuites>
     <testsuite name="all">
-        <directory>tests</directory>
-        <directory phpVersion="8.0.0" phpVersionOperator=">=">tests-php8</directory>
+      <directory>tests</directory>
+      <directory phpVersion="8.0.0" phpVersionOperator="&gt;=">tests-php8</directory>
     </testsuite>
-</testsuites>
-<php>
-    <ini name="error_reporting" value="-1" />
-</php>
-<filter>
-    <whitelist processUncoveredFilesFromWhitelist="true">
-        <directory suffix=".php">src</directory>
-    </whitelist>
-</filter>
+  </testsuites>
+  <php>
+    <ini name="error_reporting" value="-1"/>
+  </php>
 </phpunit>
