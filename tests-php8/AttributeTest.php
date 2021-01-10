@@ -10,6 +10,7 @@ use BEAR\Resource\Module\ResourceModule;
 use Doctrine\Common\Annotations\AnnotationReader;
 use FakeVendor\News\Resource\App\Event;
 use FakeVendor\News\Resource\App\News;
+use FakeVendor\News\Resource\App\WebParam;
 use FakeVendor\Sandbox\Resource\App\Blog;
 use FakeVendor\Sandbox\Resource\App\Href\Hasembed;
 use FakeVendor\Sandbox\Resource\App\Href\Origin;
@@ -39,6 +40,7 @@ class AttributeTest extends TestCase
     {
         $instance = $this->resource->newInstance('app://self/news');
         $this->assertInstanceOf(News::class, $instance);
+        assert($instance instanceof News);
 
         return $instance;
     }
@@ -79,5 +81,24 @@ class AttributeTest extends TestCase
     {
         $ro = $this->resource->post->uri('app://self/greeting')->withQuery(['name' => 'BEAR'])->eager->request();
         $this->assertSame('login:BEAR', $ro->body['id']);
+    }
+
+    public function testWebParam(): void
+    {
+        $fakeGlobals = [
+            '_COOKIE' => ['c' => 'cookie_val'],
+            '_ENV' => ['e' => 'env_val'],
+            '_POST' => ['f' => 'post_val'],
+            '_GET' => ['q' => 'get_val'],
+            '_SERVER' => ['s' => 'server_val'],
+        ];
+        AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose($fakeGlobals);
+        $ro = $this->resource->get('app://self/web-param');
+        assert($ro instanceof WebParam);
+        $this->assertSame('cookie_val', $ro->cookie);
+        $this->assertSame('env_val', $ro->env);
+        $this->assertSame('post_val', $ro->form);
+        $this->assertSame('get_val', $ro->query);
+        $this->assertSame('server_val', $ro->server);
     }
 }
