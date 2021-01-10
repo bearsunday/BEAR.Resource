@@ -14,23 +14,25 @@ use Ray\WebContextParam\Annotation\ServerParam;
 
 class WebParam extends ResourceObject
 {
-    public $cookie;
-    public $env;
-    public $form;
-    public $query;
-    public $server;
+    public string $cookie;
+    public string $env;
+    public string $form;
+    public string $query;
+    public string $server;
 
     public function onGet(
-        #[CookieParam(key: 'c')] string $cookie,
-        #[EnvParam(key: 'e')] string $env,
-        #[FormParam(key: 'f')] string $form,
-        #[QueryParam(key: 'q')] string $query,
-        #[ServerParam(key: 's')] string $server)
+        #[CookieParam('c')] string $cookie,
+        #[EnvParam('e')] string $env,
+        #[FormParam('f')] string $form,
+        #[QueryParam('q')] string $query,
+        #[ServerParam('s')] string $server): static
     {
         $this->cookie = $cookie;
         $this->env = $env;
         $this->form = $form;
         $this->query = $query;
         $this->server = $server;
+
+        return $this;
     }
 }
