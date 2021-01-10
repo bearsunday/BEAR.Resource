@@ -6,9 +6,9 @@
     </include>
   </coverage>
   <testsuites>
-    <testsuite name="all">
+    <testsuite name="BEAR.Resource Test Suite">
       <directory>tests</directory>
-      <directory phpVersion="8.0.0" phpVersionOperator="&gt;=">tests-php8</directory>
+      <directory phpVersion="8.0.0" phpVersionOperator=">=">tests-php8</directory>
     </testsuite>
   </testsuites>
   <php>
