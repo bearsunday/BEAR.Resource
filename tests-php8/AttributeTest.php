@@ -23,7 +23,7 @@ use function assert;
 use function var_dump;
 use function var_export;
 
-class ResourceTest extends TestCase
+class AttributeTest extends TestCase
 {
     /** @var ResourceInterface */
     private $resource;
