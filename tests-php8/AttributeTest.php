@@ -71,13 +71,13 @@ class AttributeTest extends TestCase
 
     public function testResourceParam(): void
     {
-        $instance = $this->resource->get->uri('app://self/greeting')->eager->request();
-        $this->assertSame('kuma1', $instance['name']);
+        $ro = $this->resource->get->uri('app://self/greeting')->eager->request();
+        $this->assertSame('kumakun', $ro->body['nickname']);
     }
 
     public function testResourceParamInUriTemplate(): void
     {
-        $instance = $this->resource->post->uri('app://self/greeting')->withQuery(['name' => 'BEAR'])->eager->request();
-        $this->assertSame('login:kumakun', $instance['id']);
+        $ro = $this->resource->post->uri('app://self/greeting')->withQuery(['name' => 'BEAR'])->eager->request();
+        $this->assertSame('login:BEAR', $ro->body['id']);
     }
 }
