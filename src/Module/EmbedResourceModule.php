@@ -19,12 +19,6 @@ class EmbedResourceModule extends AbstractModule
      */
     protected function configure(): void
     {
-        $this->bind(Reader::class)->toConstructor(DualReader::class, [
-            'annotationReader' => 'annotation',
-            'attributeReader' => 'attribute',
-        ]);
-        $this->bind(Reader::class)->annotatedWith('annotation')->to(AnnotationReader::class);
-        $this->bind(Reader::class)->annotatedWith('attribute')->to(AttributeReader::class);
         $this->bindInterceptor(
             $this->matcher->any(),
             $this->matcher->annotatedWith(Embed::class),
