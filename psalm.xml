@@ -14,6 +14,7 @@
             <file name="src/OptionsMethodRequest.php"/>
             <directory name="vendor" />
             <directory name="tests" />
+            <directory name="tests-php8" />
         </ignoreFiles>
     </projectFiles>
     <issueHandlers>

@@ -18,7 +18,6 @@ use Ray\Di\Injector;
 use Ray\Di\NullModule;
 
 use function assert;
-use function var_export;
 
 class ResourceTest extends TestCase
 {
@@ -119,7 +118,6 @@ class ResourceTest extends TestCase
         $this->assertSame('blog', $request->links[0]->key);
         $this->assertSame(LinkType::SELF_LINK, $request->links[0]->type);
         $ro = $request();
-        $v = var_export($ro->body, true);
         $this->assertSame(200, $ro->code);
         $this->assertSame(['id' => 12, 'name' => 'Aramis blog'], $ro->body);
     }

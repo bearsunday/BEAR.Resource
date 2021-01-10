@@ -4,19 +4,20 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+use BEAR\Resource\Annotation\RequestParamInterface;
 use BEAR\Resource\Annotation\ResourceParam;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Cache\Cache;
-use LogicException;
 use Ray\Di\Di\Assisted;
 use Ray\WebContextParam\Annotation\AbstractWebContextParam;
+use ReflectionAttribute;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
 
 use function get_class;
-use function is_array;
-use function is_object;
+
+use const PHP_VERSION_ID;
 
 final class NamedParamMetas implements NamedParamMetasInterface
 {
@@ -37,11 +38,8 @@ final class NamedParamMetas implements NamedParamMetasInterface
      */
     public function __invoke(callable $callable): array
     {
-        if (! is_array($callable) || ! is_object($callable[0])) {
-            throw new LogicException('callable should be an array'); // @codeCoverageIgnore
-        }
-
-        $cacheId = self::class . get_class($callable[0]) . $callable[1];
+        /** @var array{0:object, 1:string} $callable */
+        $cacheId = self::class . get_class($callable[0]) . $callable[1]; // @phpstan-ignore-line
         /** @var array<string, ParamInterface>|false $names */
         $names = $this->cache->fetch($cacheId);
         if ($names) {
@@ -49,15 +47,76 @@ final class NamedParamMetas implements NamedParamMetasInterface
         }
 
         $method = new ReflectionMethod($callable[0], $callable[1]);
+        $paramMetas = false;
+        if (PHP_VERSION_ID >= 80000) {
+            $paramMetas = $this->getAttributeParamMetas($method);
+        }
+
+        if (! $paramMetas) {
+            $paramMetas = $this->getAnnotationParamMetas($method);
+        }
+
+        $this->cache->save($cacheId, $paramMetas);
+
+        return $paramMetas;
+    }
+
+    /**
+     * @return array<string, AssistedWebContextParam|ParamInterface>
+     */
+    private function getAnnotationParamMetas(ReflectionMethod $method)
+    {
         $parameters = $method->getParameters();
         /** @var array<object> $annotations */
         $annotations = $this->reader->getMethodAnnotations($method);
         $assistedNames = $this->getAssistedNames($annotations);
         $webContext = $this->getWebContext($annotations);
-        $namedParamMetas = $this->addNamedParams($parameters, $assistedNames, $webContext);
-        $this->cache->save($cacheId, $namedParamMetas);
 
-        return $namedParamMetas;
+        return $this->addNamedParams($parameters, $assistedNames, $webContext);
+    }
+
+    /**
+     * @return array<string, ParamInterface>
+     */
+    private function getAttributeParamMetas(ReflectionMethod $method): array
+    {
+        $parameters = $method->getParameters();
+        $names = $valueParams = [];
+        foreach ($parameters as $parameter) {
+            /** @var array<ReflectionAttribute> $refAttribute */
+            $refAttribute = $parameter->getAttributes(RequestParamInterface::class, ReflectionAttribute::IS_INSTANCEOF);
+            if ($refAttribute) {
+                /** @var RequestParamInterface $resourceParam */
+                $resourceParam = $refAttribute[0]->newInstance();
+                if ($resourceParam instanceof ResourceParam) {
+                    $names[$parameter->name] = new AssistedResourceParam($resourceParam);
+                    continue;
+                }
+            }
+
+            /** @var array<ReflectionAttribute> $refWebContext */
+            $refWebContext = $parameter->getAttributes(AbstractWebContextParam::class, ReflectionAttribute::IS_INSTANCEOF);
+            if ($refWebContext) {
+                /** @var AbstractWebContextParam $webParam */
+                $webParam = $refWebContext[0]->newInstance();
+                /** @psalm-var scalar $defaultValue */
+                $defaultValue = $parameter->isDefaultValueAvailable() ? $parameter->getDefaultValue() : null;
+                $param = new AssistedWebContextParam($webParam, new DefaultParam($defaultValue));
+                $names[$parameter->name] = $param;
+                continue;
+            }
+
+            $valueParams[$parameter->name] = $parameter;
+        }
+
+        // if there is more than single attributes
+        if ($names) {
+            foreach ($valueParams as $paramName => $valueParam) {
+                $names[$paramName] = $this->getParam($valueParam);
+            }
+        }
+
+        return $names;
     }
 
     /**
@@ -161,7 +220,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
      * @return ClassParam|OptionalParam|RequiredParam
      * @psalm-return ClassParam|OptionalParam<mixed>|RequiredParam
      */
-    private function getParam(ReflectionParameter $parameter)
+    private function getParam(ReflectionParameter $parameter): ParamInterface
     {
         $type = $parameter->getType();
         if ($type instanceof ReflectionNamedType && ! $type->isBuiltin()) {

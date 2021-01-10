@@ -5,14 +5,12 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/bearsunday/BEAR.Resource/badges/quality-score.png?b=1.x)](https://scrutinizer-ci.com/g/bearsunday/BEAR.Resource/?branch=1.x)
 [![codecov](https://codecov.io/gh/bearsunday/BEAR.Resource/branch/1.x/graph/badge.svg?token=eh3c9AF4Mr)](https://codecov.io/gh/koriym/BEAR.Resource)
 [![Type Coverage](https://shepherd.dev/github/bearsunday/BEAR.Resource/coverage.svg)](https://shepherd.dev/github/bearsunday/BEAR.Resource)
-![Continuous Integration](https://github.com/bearsunday/BEAR.Resource/workflows/Continuous%20Integration/badge.svg)
-
+[![Build Status](https://travis-ci.org/bearsunday/BEAR.Resource.svg?branch=1.x)](https://travis-ci.org/bearsunday/BEAR.Resource)
+[![Build Status](https://scrutinizer-ci.com/g/bearsunday/BEAR.Resource/badges/build.png?b=1.x)](https://scrutinizer-ci.com/g/bearsunday/BEAR.Resource/build-status/1.x)
 
 **BEAR.Resource** Is a Hypermedia framework that allows resources to behave as objects. It allows objects to have RESTful web service benefits such as client-server, uniform interface, statelessness, resource expression with mutual connectivity and layered components.
 
 In order to introduce flexibility and longevity to your existing domain model or application data you can introduce an API as the driving force in your develpment by making your application REST-Centric in it's approach.
-
-Note: For PHP 7 users, please see [README.php7.md](README.php7.md). PHP8 users can use both PHP8 attributes and PHP7 annotations at same time.
 
 ## Resource Object
 
@@ -43,26 +41,26 @@ class Author extends ResourceObject
     /**
      * @Link(rel="blog", href="app://self/blog/post?author_id={id}")
      */
-    public function onGet(int $id): static
+    public function onGet(int $id) : ResourceObject
     {
         return $this;
     }
 
-    public function onPost(string $name): static
+    public function onPost(string $name) : ResourceObject
     {
         $this->code = 201; // created
         // ...
         return $this;
     }
 
-    public function onPut(int $id, string $name): static
+    public function onPut(int $id, string $name) : ResourceObject
     {
         $this->code = 203; // no content
         //...
         return $this;
     }
 
-    public function onDelete($id): static
+    public function onDelete($id) : ResourceObject
     {
         $this->code = 203; // no content
         //...
@@ -151,19 +149,12 @@ $user2 = $user(['id' => 2);
 ## Hypermedia
 
 A resource can contain [hyperlinks](http://en.wikipedia.org/wiki/Hyperlink) to other related resources.
-Hyperlinks are shown by methods marked with **#[Link]** attribute. (PHP8.x)
+Hyperlinks are shown by methods annotated with **@Link**.
 
 ```php
+
 use BEAR\Resource\Annotation\Link;
-```
 
-```php
-#[Link(rel: 'blog', href: 'app://self/blog?author_id={id}')]
-```
-
-or annotated with `@Link` annotation. (PHP 7.x)
-
-```php
 /**
  * @Link(rel="blog", href="app://self/blog?author_id={id}")
  */
@@ -216,16 +207,19 @@ Let's think of author, post, meta, tag, tag/name and they are all connected toge
 Each resource has a hyperlink. In ths resource graph add the name **post-tree**, on each resource add the hyper-reference *href* in the @link annotation.
 
 In the author resource there is a hyperlink to the post resource. This is a 1:n relationship.
-
 ```php
-#[Link(rel: 'post-tree', href: 'app://self/post?author_id={id}')]
+/**
+ * @Link(crawl="post-tree", rel="post", href="app://self/post?author_id={id}")
+ */
 public function onGet($id = null)
 ```
 In the post resource there is a hyperlink to meta and tag resources. This is also a 1:n relationship.
 
 ```php
-#[Link(crawl='post-tree', rel: 'meta', href: 'app://self/meta?post_id={id}')]
-#[Link(crawl='post-tree', rel: 'tag', href: 'app://self/tag?post_id={id}')]
+/**
+ * @Link(crawl="post-tree", rel="meta", href="app://self/meta?post_id={id}")
+ * @Link(crawl="post-tree", rel="tag",  href="app://self/tag?post_id={id}")
+ */
 public function onGet($author_id)
 {
 ```
@@ -233,7 +227,9 @@ public function onGet($author_id)
 There is a hyperlink in the tag resource with only an ID for the tag/name resource that corresponds to that ID. It is a 1:1 relationship.
 
 ```php
-#[Link(crawl='post-tree', rel: 'tag_name', href: 'app://self/tag/name?tag_id={tag_id}')]
+/**
+ * @Link(crawl="post-tree", rel="tag_name",  href="app://self/tag/name?tag_id={tag_id}")
+ */
 public function onGet($post_id)
 ```
 
@@ -299,7 +295,6 @@ public function onPost($drink)
 ```
 
 Client code
-
 ```php
     $order = $resource
         ->post
@@ -324,83 +319,6 @@ Client code
 The payment method is provided by the order resource with the hyperlink.
 There is no change in client code even though the relationship between the order and payment is changed,
 You can checkout more on HATEOAS at [How to GET a Cup of Coffee](http://www.infoq.com/articles/webber-rest-workflow).
-
-Bind parameters
-You can bind method parameters to an “external value”. The external value might be a web context or any other resource state.
-
-## Bind parameters
-
-You can bind method parameters to an "external value". The external value might be a web context or any other resource state.
-
-### Web context parameter
-
-For instance, Instead you "pull" `$_GET` or any global the web context values, You can bind PHP super global values to method parameters.
-
-```php?start_inline
-use Ray\WebContextParam\Annotation\QueryParam;
-
-class News extends ResourceObject
-{
-    public function foo(#[QueryParam] string $id) : ResourceObject
-    {
-      // $id = $_GET['id'];
-```
-
-The above example is a case where a key name and the parameter name are the same.
-You can specify `key` and `param` values when they don't match.
-
-```php?start_inline
-use Ray\WebContextParam\Annotation\CookieParam;
-
-class News extends ResourceObject
-{
-    #[CookieParam(key: 'id'] 
-    public function foo(string $tokenId) : ResourceObject
-    {
-      // $tokenId = $_COOKIE['id'];
-```
-
-Full List
-
-```php
-
-use Ray\WebContextParam\Annotation\QueryParam;
-use Ray\WebContextParam\Annotation\CookieParam;
-use Ray\WebContextParam\Annotation\EnvParam;
-use Ray\WebContextParam\Annotation\FormParam;
-use Ray\WebContextParam\Annotation\ServerParam;
-
-class News extends ResourceObject
-{
-    public function onGet(
-        #[QueryParam('use_id')] string $userId,        // $_GET['use_id'];
-        #[CookieParam('id')] string $tokenId,          // $_COOKIE['id'] or "0000" when unset;
-        #[EnvParam('app_mode')] string $app_mode,      // $_ENV['app_mode'];
-        #[FormParam('token')] string $token,           // $_POST['token'];
-        #[ServerParam('SERVER_NAME') #server           // $_SERVER['SERVER_NAME'];
-    ) : ResourceObject {
-```
-
-This `bind parameter` is also very useful for testing.
-
-### Resource Parameter
-
-We can bind the status of another resource to a parameter with the `@ResourceParam` annotation.
-
-```php?start_inline
-use BEAR\Resource\Annotation\ResourceParam;
-
-class News extends ResourceObject
-{
-    /**
-     * @ResourceParam(param=“name”, uri="app://self//login#nickname")
-     */
-    public function onGet(string $name) : ResourceObject
-    {
-```
-
-In this example, the `nickname` property of `app://self//login` is bound to `$name`.
-
 
 ### Resource Representation
 
@@ -465,8 +383,10 @@ When this is assigned to the template engine at the timing of the output of a re
 ```php
 class News extends ResourceObject
 {
-    #[Embed(rel: 'weather', src: 'app://self/weather/today')]
-    public function onGet(): static
+    /**
+     * @Embed(rel="weather",src="app://self/weather/today")
+     */
+    public function onGet()
     {
         $this->body = [
             'headline' => "...",

@@ -1,8 +1,10 @@
 name: Static Analysis
+
 on:
   push:
   pull_request:
   workflow_dispatch:
+
 jobs:
   static-analysis-phpstan:
     name: Static Analysis with PHPStan
@@ -109,4 +111,4 @@ jobs:
           composer require --dev maglnet/composer-require-checker ^2.0
 
       - name: Run composer-require-checker
-        run: ./vendor/bin/composer-require-checker check ./composer.json
+        run: ./vendor/bin/composer-require-checker check --config-file=./php-require-checker.config.json ./composer.json

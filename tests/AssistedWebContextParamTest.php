@@ -15,9 +15,7 @@ class AssistedWebContextParamTest extends TestCase
 {
     public function testAssistedWebContextParam(): void
     {
-        $cookieParam = new CookieParam();
-        $cookieParam->key = 'cookie_key';
-        $cookieParam->param = 'param_name';
+        $cookieParam = new CookieParam(['key' => 'cookie_key', 'param' => 'param_name']);
         $fakeGlobals = [
             '_COOKIE' => ['cookie_key' => '__COOKIE_VAL__'],
         ];

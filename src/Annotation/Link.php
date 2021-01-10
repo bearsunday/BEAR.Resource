@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace BEAR\Resource\Annotation;
 
+use Attribute;
 use JsonSerializable;
 
 /**
  * @Annotation
  * @Target("METHOD")
  */
+#[Attribute(Attribute::TARGET_METHOD)]
 final class Link implements JsonSerializable
 {
     /**
@@ -32,21 +34,21 @@ final class Link implements JsonSerializable
      * @var string
      * @Enum({"get", "post", "put", "patch", "delete"})
      */
-    public $method = 'get';
+    public $method;
 
     /**
      * A title for the link
      *
      * @var string
      */
-    public $title = '';
+    public $title;
 
     /**
      * Crawl tag ID for crawl request
      *
      * @var string
      */
-    public $crawl = '';
+    public $crawl;
 
     /**
      * @return string[]
@@ -64,5 +66,23 @@ final class Link implements JsonSerializable
         }
 
         return $json;
+    }
+
+    /**
+     * @param array{rel?: string, href?: string, method?: string, title?: string, crawl?:string} $values
+     */
+    public function __construct(
+        array $values = [],
+        string $rel = '',
+        string $href = '',
+        string $method = 'get',
+        string $title = '',
+        string $crawl = ''
+    ) {
+        $this->rel = $values['rel'] ?? $rel;
+        $this->href = $values['href'] ?? $href;
+        $this->method = $values['method'] ?? $method;
+        $this->title = $values['title'] ?? $title;
+        $this->crawl = $values['crawl'] ?? $crawl;
     }
 }
