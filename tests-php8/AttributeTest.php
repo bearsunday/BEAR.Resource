@@ -68,4 +68,16 @@ class AttributeTest extends TestCase
         $this->assertArrayHasKey('event', $ro->body);
         $this->assertSame('2021/7/23', $ro->body['event']);
     }
+
+    public function testResourceParam(): void
+    {
+        $instance = $this->resource->get->uri('app://self/greeting')->eager->request();
+        $this->assertSame('kuma1', $instance['name']);
+    }
+
+    public function testResourceParamInUriTemplate(): void
+    {
+        $instance = $this->resource->post->uri('app://self/greeting')->withQuery(['name' => 'BEAR'])->eager->request();
+        $this->assertSame('login:kumakun', $instance['id']);
+    }
 }
