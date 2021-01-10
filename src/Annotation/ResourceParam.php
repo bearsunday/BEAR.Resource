@@ -6,6 +6,7 @@ namespace BEAR\Resource\Annotation;
 
 // phpcs:disable SlevomatCodingStandard.Namespaces.UnusedUses.UnusedUse
 use Attribute;
+// phpcs:enable
 
 /**
  * @Annotation
