@@ -39,6 +39,9 @@
         <!-- /Base -->
         <!-- Option -->
         <exclude name="SlevomatCodingStandard.ControlStructures.EarlyExit.EarlyExitNotUsed"/>
+        <!-- PHP8 Attribute -->
+        <exclude name="PSR12.Files.FileHeader.IncorrectOrder"/>
+        <exclude name="PSR12.Files.FileHeader.SpacingAfterBlock"/>
         <!-- /Option -->
         <!-- Exclude Fake files form Doctrine CS -->
         <exclude-pattern>*/tests/Fake/*</exclude-pattern>
