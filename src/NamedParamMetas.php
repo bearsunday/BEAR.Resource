@@ -81,7 +81,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
     private function getAttributeParamMetas(ReflectionMethod $method): array
     {
         $parameters = $method->getParameters();
-        $names = [];
+        $names = $valueParams = [];
         foreach ($parameters as $parameter) {
             /** @var array<ReflectionAttribute> $refAttribute */
             $refAttribute = $parameter->getAttributes(RequestParamInterface::class, ReflectionAttribute::IS_INSTANCEOF);
@@ -90,7 +90,29 @@ final class NamedParamMetas implements NamedParamMetasInterface
                 $resourceParam = $refAttribute[0]->newInstance();
                 if ($resourceParam instanceof ResourceParam) {
                     $names[$parameter->name] = new AssistedResourceParam($resourceParam);
+                    continue;
                 }
+            }
+
+            /** @var array<ReflectionAttribute> $refWebContext */
+            $refWebContext = $parameter->getAttributes(AbstractWebContextParam::class, ReflectionAttribute::IS_INSTANCEOF);
+            if ($refWebContext) {
+                /** @var AbstractWebContextParam $webParam */
+                $webParam = $refWebContext[0]->newInstance();
+                /** @psalm-var scalar $defaultValue */
+                $defaultValue = $parameter->isDefaultValueAvailable() ? $parameter->getDefaultValue() : null;
+                $param = new AssistedWebContextParam($webParam, new DefaultParam($defaultValue));
+                $names[$parameter->name] = $param;
+                continue;
+            }
+
+            $valueParams[$parameter->name] = $parameter;
+        }
+
+        // if there is more than single attributes
+        if ($names) {
+            foreach ($valueParams as $paramName => $valueParam) {
+                $names[$paramName] = $this->getParam($valueParam);
             }
         }
 
@@ -198,7 +220,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
      * @return ClassParam|OptionalParam|RequiredParam
      * @psalm-return ClassParam|OptionalParam<mixed>|RequiredParam
      */
-    private function getParam(ReflectionParameter $parameter)
+    private function getParam(ReflectionParameter $parameter): ParamInterface
     {
         $type = $parameter->getType();
         if ($type instanceof ReflectionNamedType && ! $type->isBuiltin()) {
