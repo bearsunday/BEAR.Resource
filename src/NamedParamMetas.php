@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+use BEAR\Resource\Annotation\RequestParamInterface;
 use BEAR\Resource\Annotation\ResourceParam;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Cache\Cache;
 use LogicException;
 use Ray\Di\Di\Assisted;
 use Ray\WebContextParam\Annotation\AbstractWebContextParam;
+use ReflectionAttribute;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
@@ -17,6 +19,8 @@ use ReflectionParameter;
 use function get_class;
 use function is_array;
 use function is_object;
+
+use const PHP_VERSION_ID;
 
 final class NamedParamMetas implements NamedParamMetasInterface
 {
@@ -49,15 +53,54 @@ final class NamedParamMetas implements NamedParamMetasInterface
         }
 
         $method = new ReflectionMethod($callable[0], $callable[1]);
+        $namedParamMetas = false;
+        if (PHP_VERSION_ID >= 80000) {
+            $namedParamMetas = $this->getNamedParamMetasByAttribute($method);
+        }
+
+        if (! $namedParamMetas) {
+            $namedParamMetas = $this->getNamedParamMetasByAnnotation($method);
+        }
+
+        $this->cache->save($cacheId, $namedParamMetas);
+
+        return $namedParamMetas;
+    }
+
+    /**
+     * @return array<string, AssistedWebContextParam|ParamInterface>
+     */
+    private function getNamedParamMetasByAnnotation(ReflectionMethod $method)
+    {
         $parameters = $method->getParameters();
         /** @var array<object> $annotations */
         $annotations = $this->reader->getMethodAnnotations($method);
         $assistedNames = $this->getAssistedNames($annotations);
         $webContext = $this->getWebContext($annotations);
-        $namedParamMetas = $this->addNamedParams($parameters, $assistedNames, $webContext);
-        $this->cache->save($cacheId, $namedParamMetas);
 
-        return $namedParamMetas;
+        return $this->addNamedParams($parameters, $assistedNames, $webContext);
+    }
+
+    /**
+     * @return array<string, ParamInterface>
+     */
+    private function getNamedParamMetasByAttribute(ReflectionMethod $method): array
+    {
+        $parameters = $method->getParameters();
+        $names = [];
+        foreach ($parameters as $parameter) {
+            /** @var array<ReflectionAttribute> $refAttribute */
+            $refAttribute = $parameter->getAttributes(RequestParamInterface::class, ReflectionAttribute::IS_INSTANCEOF);
+            if ($refAttribute) {
+                /** @var RequestParamInterface $resourceParam */
+                $resourceParam = $refAttribute[0]->newInstance();
+                if ($resourceParam instanceof ResourceParam) {
+                    $names[$parameter->name] = new AssistedResourceParam($resourceParam);
+                }
+            }
+        }
+
+        return $names;
     }
 
     /**
