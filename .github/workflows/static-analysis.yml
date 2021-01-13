@@ -88,7 +88,7 @@ jobs:
         run: composer install --no-interaction --no-progress --prefer-dist
 
       - name: Run PHP Mess Detector
-        run: ./vendor/bin/phpmd src text --exclude src/Annotation./phpmd.xml
+        run: ./vendor/bin/phpmd src text --exclude src/Annotation ./phpmd.xml
 
   static-analysis-php-metrics:
     name: Static Analysis with PhpMetrics
