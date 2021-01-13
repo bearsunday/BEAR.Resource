@@ -1,13 +1,7 @@
 {
     "name": "bear/resource",
     "description": "Hypermedia framework for object as a service",
-    "keywords": [
-        "Hypermedia",
-        "REST",
-        "HATEOAS",
-        "Object as a service",
-        "Protocol"
-    ],
+    "keywords": ["Hypermedia", "REST", "Object as a service"],
     "license": "MIT",
     "authors": [
         {
@@ -66,7 +60,7 @@
         "post-update-cmd": ["@composer bin all update --ansi"],
         "test": ["./vendor/bin/phpunit"],
         "tests": ["@cs", "@test", "@sa"],
-        "coverage": ["php -dzend_extension=xdebug.so ./vendor/bin/phpunit --coverage-text --coverage-html=build/coverage"],
+        "coverage": ["php -dzend_extension=xdebug.so -dxdebug.mode=coverage ./vendor/bin/phpunit --coverage-text --coverage-html=build/coverage"],
         "pcov": ["php -dextension=pcov.so -d pcov.enabled=1 ./vendor/bin/phpunit --coverage-text --coverage-html=build/coverage  --coverage-clover=coverage.xml"],
         "cs": ["phpcs --standard=./phpcs.xml src tests"],
         "cs-fix": ["./vendor/bin/phpcbf src tests"],
