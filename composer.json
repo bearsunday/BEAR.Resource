@@ -71,6 +71,7 @@
         "cs": ["phpcs"],
         "cs-fix": ["phpcbf"],
         "sa": ["phpstan analyse -c phpstan.neon", "psalm --show-info=true"],
+        "phpmd": ["./vendor/bin/phpmd --exclude src/Annotation src text ./phpmd.xml"],
         "metrics": ["phpmetrics --report-html=build/metrics/ --extensions=php src,composer.json,composer.lock"]
     }
 }
