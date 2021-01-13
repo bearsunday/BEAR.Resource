@@ -12,8 +12,6 @@
 
 In order to introduce flexibility and longevity to your existing domain model or application data you can introduce an API as the driving force in your develpment by making your application REST-Centric in it's approach.
 
-Note: For PHP 7 users, please see [README.php7.md](README.php7.md). PHP8 users can use both PHP8 attributes and PHP7 annotations at same time.
-
 ## Resource Object
 
 The resource object is an object that has resource behavior.
@@ -596,10 +594,15 @@ $resource = unserialize($cachedResource);
 $news = $resource->get('app://self/news');
 ```
 
+## Annotation / Attribute
+
+BEAR.Resource can be used either with [doctrine/annotation](https://github.com/doctrine/annotations) in PHP 7/8 or with an [Attributes](https://www.php.net/manual/en/language.attributes.overview.php) in PHP8.
+See the annotation code examples in the older [README(v1.4)](https://github.com/bearsunday/BEAR.Resource/tree/1.14.9/README.md).
+
 ## Installation
 
 ```javascript
-composer require bear/resource ^1.10
+composer require bear/resource
 ```
 
 ## A Resource Oriented Framework

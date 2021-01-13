@@ -7,4 +7,5 @@
 /.phpcs-cache
 /coverage.xml
 /tests/log/error.log
-.php_cs.cache
+/.php_cs.cache
+/vendor-bin/**/vendor

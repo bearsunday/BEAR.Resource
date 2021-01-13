@@ -36,6 +36,7 @@ final class OptionsRenderer implements RenderInterface
 
     /**
      * @OptionsBody("optionsBody")
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     public function __construct(OptionsMethods $optionsMethods, bool $optionsBody = true)
     {
