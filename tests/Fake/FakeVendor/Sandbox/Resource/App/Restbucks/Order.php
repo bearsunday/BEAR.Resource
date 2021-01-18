@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace FakeVendor\Sandbox\Resource\App\Restbucks;
 
+use BEAR\Resource\Annotation\Link;
 use BEAR\Resource\ResourceObject;
 use Ray\Di\Di\Scope;
 
@@ -26,8 +27,9 @@ class Order extends ResourceObject
     }
 
     /**
-     * @link(link="payment" rel="app://self/restbucks/payment/?order_id={orderId}" method="put")
+     * @link(rel="payment", href="app://self/restbucks/payment/?order_id={orderId}", method="put")
      */
+    #[Link(rel: "payment", href: "app://self/restbucks/payment/?order_id={orderId}", method: "put")]
     public function onPost(string $drink)
     {
         // data store here

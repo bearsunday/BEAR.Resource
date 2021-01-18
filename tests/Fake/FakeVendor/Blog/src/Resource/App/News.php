@@ -20,6 +20,7 @@ class News extends ResourceObject
     /**
      * @Embed(rel="weather",src="app://self/weather{?date}")
      */
+    #[Embed(rel: "weather",src: "app://self/weather{?date}")]
     public function onGet(string $date)
     {
         unset($date);

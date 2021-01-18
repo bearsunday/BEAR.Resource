@@ -18,6 +18,7 @@ class DocUser extends ResourceObject
      *
      * @JsonSchema(schema="user.json")
      */
+    #[JsonSchema("user.json")]
     public function onGet(string $id)
     {
         return $this;

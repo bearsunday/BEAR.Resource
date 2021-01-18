@@ -128,12 +128,11 @@ class InvokerTest extends TestCase
                 "rel": "task",
                 "href": "/task{?id}",
                 "method": "get"
-            }
-        ],
-        "embed": [
+            },
             {
                 "rel": "profile",
-                "src": "/profile{?id}"
+                "href": "/profile{?id}",
+                "method": "get"
             }
         ]
     },

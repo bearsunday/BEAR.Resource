@@ -23,6 +23,10 @@ class Doc extends ResourceObject
      * @Embed(rel="profile", src="/profile{?id}")
      * @JsonSchema(schema="user.json")
      */
+    #[Link(rel: "friend", href: "/fiend{?id}", method: "get", title: "Friend profile")]
+    #[Link(rel: "task", href: "/task{?id}")]
+    #[Link(rel: "profile", href: "/profile{?id}")]
+    #[JsonSchema("user.json")]
     public function onGet(string $id)
     {
         return $this;

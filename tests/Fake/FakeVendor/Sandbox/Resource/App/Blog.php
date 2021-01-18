@@ -31,6 +31,7 @@ class Blog extends ResourceObject
     /**
      * @Link(rel="post", href="app://self/marshal/post?blog_id={id}", crawl="tree")
      */
+    #[Link(rel: "post", href: "app://self/marshal/post?blog_id={id}", crawl: "tree")]
     public function onGet(int $id)
     {
         $this->body = $this->repo[$id];

@@ -12,6 +12,7 @@ class Book extends ResourceObject
     /**
      * @FakeLog
      */
+    #[FakeLog]
     public function onGet(int $id)
     {
         return "book id[{$id}]";

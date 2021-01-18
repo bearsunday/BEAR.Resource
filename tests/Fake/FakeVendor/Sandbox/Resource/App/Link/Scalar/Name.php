@@ -13,6 +13,8 @@ class Name extends ResourceObject
      * @Link(rel="greeting", href="app://self/link/scalar/hello?name={value}")
      * @Link(rel="no_query", href="app://self/link/scalar/hello")
      */
+    #[Link(rel: "greeting", href: "app://self/link/scalar/hello?name={value}")]
+    #[Link(rel: "no_query", href: "app://self/link/scalar/hello")]
     public function onGet(string $name)
     {
         return $name;

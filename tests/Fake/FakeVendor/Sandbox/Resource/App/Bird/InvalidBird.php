@@ -11,9 +11,9 @@ use Ray\Di\Di\Named;
 class InvalidBird extends ResourceObject
 {
     /**
-     * @Named
      * @Embed(rel="bird1", src="invalid_uri")
      */
+    #[Embed(rel: "bird1", src: "invalid_uri")]
     public function onGet(int $id)
     {
         unset($id);
