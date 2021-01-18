@@ -11,5 +11,5 @@ array_map('unlink', (array) glob(__DIR__ . '/Module/tmp/{*.txt,*.php}', GLOB_BRA
 
 // no annotation in PHP 8
 if (PHP_MAJOR_VERSION >= 8) {
-    ServiceLocator::setReaedr(new AttributeReader());
+    ServiceLocator::setReader(new AttributeReader());
 }
