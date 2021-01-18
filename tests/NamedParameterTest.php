@@ -9,7 +9,6 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
-use Ray\ServiceLocator\ServiceLocator;
 
 use function call_user_func_array;
 
