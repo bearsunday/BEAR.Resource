@@ -9,7 +9,7 @@ use Koriym\Attributes\AttributeReader;
 use Ray\Di\AbstractModule;
 
 /**
- * @codeCoverageIgnore 
+ * @codeCoverageIgnore
  */
 class AttributeModule extends AbstractModule
 {
