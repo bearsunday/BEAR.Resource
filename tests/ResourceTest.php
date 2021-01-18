@@ -7,7 +7,6 @@ namespace BEAR\Resource;
 use BEAR\Resource\Exception\MethodNotAllowedException;
 use BEAR\Resource\Module\HalModule;
 use BEAR\Resource\Module\ResourceModule;
-use Doctrine\Common\Annotations\AnnotationReader;
 use FakeVendor\Sandbox\Resource\App\Blog;
 use FakeVendor\Sandbox\Resource\App\Href\Hasembed;
 use FakeVendor\Sandbox\Resource\App\Href\Origin;
@@ -16,6 +15,7 @@ use FakeVendor\Sandbox\Resource\Page\Index;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 use Ray\Di\NullModule;
+use Ray\ServiceLocator\ServiceLocator;
 
 use function assert;
 
@@ -34,7 +34,7 @@ class ResourceTest extends TestCase
     public function testManualConstruction(): void
     {
         $injector = new Injector(new NullModule(), __DIR__ . '/tmp');
-        $reader = new AnnotationReader();
+        $reader = ServiceLocator::getReader();
         $scheme = (new SchemeCollection())
             ->scheme('app')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox'))
             ->scheme('page')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox'))

@@ -6,12 +6,12 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\LinkQueryException;
 use BEAR\Resource\Exception\LinkRelException;
-use Doctrine\Common\Annotations\AnnotationReader;
 use FakeVendor\Sandbox\Resource\App\Author;
 use FakeVendor\Sandbox\Resource\App\Blog;
 use FakeVendor\Sandbox\Resource\App\Link\Scalar\Name;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
+use Ray\ServiceLocator\ServiceLocator;
 
 class LinkerTest extends TestCase
 {
@@ -33,7 +33,7 @@ class LinkerTest extends TestCase
             ->host('self')
             ->toAdapter(new AppAdapter(new Injector(), 'FakeVendor\Sandbox'));
         $this->linker = new Linker(
-            new AnnotationReader(),
+            ServiceLocator::getReader(),
             $this->invoker,
             new Factory($schemeCollection, new UriFactory())
         );

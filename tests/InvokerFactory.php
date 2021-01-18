@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
 use Ray\Di\Injector;
+use Ray\ServiceLocator\ServiceLocator;
 
 final class InvokerFactory
 {
     public function __invoke(string $schemaDir = ''): Invoker
     {
-        $reader = new AnnotationReader();
+        $reader = ServiceLocator::getReader();
 
         return new Invoker(
             new NamedParameter(

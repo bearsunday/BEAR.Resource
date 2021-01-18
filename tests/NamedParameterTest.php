@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\ParameterException;
-use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
+use Ray\ServiceLocator\ServiceLocator;
 
 use function call_user_func_array;
 
@@ -20,7 +20,7 @@ class NamedParameterTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->params = new NamedParameter(new NamedParamMetas(new ArrayCache(), new AnnotationReader()), new Injector());
+        $this->params = new NamedParameter(new NamedParamMetas(new ArrayCache(), ServiceLocator::getReader()), new Injector());
     }
 
     public function testGetParameters(): void
@@ -74,7 +74,7 @@ class NamedParameterTest extends TestCase
         $this->expectException(ParameterException::class);
         AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose([]);
         $object = new FakeParamResource();
-        $args = $this->params->getParameters([$object, 'onPut'], ['cookie' => 1]); // should be ignored
+        $this->params->getParameters([$object, 'onPut'], ['cookie' => 1]); // should be ignored
     }
 
     public function testParameterWebContextDefault(): void
