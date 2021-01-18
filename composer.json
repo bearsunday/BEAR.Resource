@@ -24,7 +24,7 @@
         "psr/log": "^1.1",
         "ray/aop": "^2.10",
         "ray/di": "^2.11.2",
-        "ray/web-param-module": "^2.1",
+        "ray/web-param-module": "^2.1.1",
         "rize/uri-template": "^0.3",
         "symfony/http-client": "^5.2",
         "symfony/http-client-contracts": "^2.3",
