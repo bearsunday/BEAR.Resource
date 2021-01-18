@@ -39,7 +39,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
     public function __invoke(callable $callable): array
     {
         /** @var array{0:object, 1:string} $callable */
-        $cacheId = self::class . get_class($callable[0]) . $callable[1]; // @phpstan-ignore-line
+        $cacheId = self::class . get_class($callable[0]) . $callable[1];
         /** @var array<string, ParamInterface>|false $names */
         $names = $this->cache->fetch($cacheId);
         if ($names) {

@@ -19,8 +19,7 @@ final class ImportAppConfig implements NamedArgumentConstructorAnnotation
     /** @var string */
     public $value;
 
-    /** @var string $value */
-    public function __construct($value)
+    public function __construct(string $value)
     {
         $this->value = $value;
     }

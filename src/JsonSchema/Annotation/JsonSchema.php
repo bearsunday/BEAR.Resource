@@ -31,7 +31,7 @@ final class JsonSchema implements NamedArgumentConstructorAnnotation
      */
     public $params;
 
-    public function __construct(string $schema = '', string $key = '', $params = '')
+    public function __construct(string $schema = '', string $key = '', string $params = '')
     {
         $this->key = $key;
         $this->schema = $schema;
