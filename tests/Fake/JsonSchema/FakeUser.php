@@ -15,6 +15,7 @@ class FakeUser extends ResourceObject
      * @JsonSchema(schema="user.json", params="user.get.json")
      * {@SuppressWarnings("unused")}
      */
+    #[JsonSchema(schema: "user.json", params: "user.get.json")]
     public function onGet(int $age, string $gender = 'male')
     {
         // in practical codes, an argument $gender may be consumed internally.
@@ -33,6 +34,7 @@ class FakeUser extends ResourceObject
     /**
      * @JsonSchema(schema="__invalid.json")
      */
+    #[JsonSchema(schema: "__invalid.json")]
     public function onPost()
     {
         return $this;
@@ -41,6 +43,7 @@ class FakeUser extends ResourceObject
     /**
      * @JsonSchema(schema="definitions/user.json")
      */
+    #[JsonSchema(schema: "definitions/user.json")]
     public function onPut()
     {
         $this->code = Code::NO_CONTENT;
@@ -52,6 +55,7 @@ class FakeUser extends ResourceObject
     /**
      * @JsonSchema(params="__invalid.json")
      */
+    #[JsonSchema(params: "__invalid.json")]
     public function onPatch()
     {
         return $this;
@@ -60,6 +64,7 @@ class FakeUser extends ResourceObject
     /**
      * @JsonSchema(key="__invalid__", schema="user.json")
      */
+    #[JsonSchema(key: "__invalid__", schema: "user.json")]
     public function invalidKey()
     {
         return $this;
@@ -68,6 +73,7 @@ class FakeUser extends ResourceObject
     /**
      * @JsonSchema(key="key1", schema="user.json")
      */
+    #[JsonSchema(key: "key1", schema: "user.json")]
     public function bodyKey()
     {
         $name = [

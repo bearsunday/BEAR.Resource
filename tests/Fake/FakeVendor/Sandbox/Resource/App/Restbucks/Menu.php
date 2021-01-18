@@ -19,6 +19,7 @@ class Menu extends ResourceObject
     /**
      * @Link(rel="order", href="app://self/restbucks/order?drink={drink}", method="")
      */
+    #[Link(rel: "order", href: "app://self/restbucks/order?drink={drink}", method: "")]
     public function onGet(string $drink = null)
     {
         if ($drink === null) {

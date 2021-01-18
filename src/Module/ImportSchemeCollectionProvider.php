@@ -29,6 +29,7 @@ class ImportSchemeCollectionProvider implements ProviderInterface
      * @AppName("appName")
      * @ImportAppConfig("importAppConfig")
      */
+    #[AppName('appName'), ImportAppConfig('importAppConfig')]
     public function __construct(string $appName, array $importAppConfig, InjectorInterface $injector)
     {
         $this->appName = $appName;

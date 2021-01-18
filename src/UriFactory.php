@@ -17,6 +17,7 @@ final class UriFactory
     /**
      * @ContextScheme
      */
+    #[ContextScheme]
     public function __construct(string $schemaHost = 'page://self')
     {
         $this->schemaHost = $schemaHost;

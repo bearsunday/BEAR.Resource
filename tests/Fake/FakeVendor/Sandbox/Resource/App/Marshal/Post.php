@@ -63,6 +63,8 @@ class Post extends ResourceObject
      * @Link(rel="meta", href="app://self/marshal/meta?post_id={id}", crawl="tree")
      * @Link(rel="tag",  href="app://self/marshal/tag?post_id={id}", crawl="tree")
      */
+    #[Link(rel: "meta", href: "app://self/marshal/meta?post_id={id}", crawl: "tree")]
+    #[Link(rel: "tag",  href: "app://self/marshal/tag?post_id={id}", crawl: "tree")]
     public function onGet(int $blog_id)
     {
         $this->body = $this->repo['blog' . $blog_id];

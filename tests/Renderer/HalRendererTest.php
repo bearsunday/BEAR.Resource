@@ -9,8 +9,8 @@ use BEAR\Resource\HalLink;
 use BEAR\Resource\HalRenderer;
 use BEAR\Resource\NullReverseLink;
 use BEAR\Resource\Uri;
-use Doctrine\Common\Annotations\AnnotationReader;
 use PHPUnit\Framework\TestCase;
+use Ray\ServiceLocator\ServiceLocator;
 
 class HalRendererTest extends TestCase
 {
@@ -21,7 +21,7 @@ class HalRendererTest extends TestCase
     {
         $this->ro = new FakeHal();
         $this->ro->uri = new Uri('app://self/dummy');
-        $this->ro->setRenderer(new HalRenderer(new AnnotationReader(), new HalLink(new NullReverseLink())));
+        $this->ro->setRenderer(new HalRenderer(ServiceLocator::getReader(), new HalLink(new NullReverseLink())));
     }
 
     public function testRender(): void

@@ -12,6 +12,7 @@ class FakeHal extends ResourceObject
      * @Link(rel="profile", href="/profile")
      * @FakeNull
      */
+    #[Link(rel: "profile", href: "/profile"), FakeNull]
     public function onGet(bool $change = false)
     {
         $fakeChild = (new FakeRo())(new FakeChild());

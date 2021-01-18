@@ -18,6 +18,7 @@ class Author extends ResourceObject
     /**
      * @Link(rel="blog", href="app://self/blog?id={blog_id}")
      */
+    #[Link(rel: "blog", href: "app://self/blog?id={blog_id}")]
     public function onGet(int $id)
     {
         $this->body = $this->users[$id];

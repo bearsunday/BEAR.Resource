@@ -23,6 +23,8 @@ class DocPhp7 extends ResourceObject
      * @ResourceParam(param="login_id", uri="app://self/login#id")
      * @Assisted({"time"})
      */
+    #[ResourceParam(param: "login_id", uri: "app://self/login#id")]
+    #[Assisted(["time"])]
     public function onGet(int $id, string $name, bool $sw, string $login_id, array $arr, string $time, $defaultNull = null)
     {
         return $this;
@@ -31,6 +33,7 @@ class DocPhp7 extends ResourceObject
     /**
      * @ServerParam(param="id", key="id_key")
      */
+    #[ServerParam(param: "id", key: "id_key")]
     public function onPost(int $id)
     {
         return $this;

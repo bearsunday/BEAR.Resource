@@ -12,6 +12,7 @@ class FakePerson extends ResourceObject
     /**
      * @JsonSchema
      */
+    #[JsonSchema]
     public function onGet()
     {
         $this->body = [

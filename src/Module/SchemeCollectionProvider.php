@@ -24,6 +24,7 @@ class SchemeCollectionProvider implements ProviderInterface
      *
      * @AppName("appName")
      */
+    #[AppName('appName')]
     public function __construct($appName, InjectorInterface $injector)
     {
         $this->appName = $appName;

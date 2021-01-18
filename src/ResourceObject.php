@@ -225,6 +225,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      *
      * @Inject(optional=true)
      */
+    #[Inject(optional: true)]
     public function setRenderer(RenderInterface $renderer)
     {
         $this->renderer = $renderer;

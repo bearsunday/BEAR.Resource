@@ -6,13 +6,15 @@ namespace BEAR\Resource;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
+use Koriym\Attributes\AttributeReader;
+use Koriym\Attributes\DualReader;
 use Ray\Di\Injector;
 
 final class InvokerFactory
 {
     public function __invoke(string $schemaDir = ''): Invoker
     {
-        $reader = new AnnotationReader();
+        $reader = new DualReader(new AnnotationReader(), new AttributeReader());
 
         return new Invoker(
             new NamedParameter(

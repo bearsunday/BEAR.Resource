@@ -48,6 +48,7 @@ final class OptionsMethods
     /**
      * @Named("schemaDir=json_schema_dir")
      */
+    #[Named('schemaDir=json_schema_dir')]
     public function __construct(Reader $reader, string $schemaDir = '')
     {
         $this->reader = $reader;

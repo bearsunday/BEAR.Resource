@@ -14,6 +14,7 @@ class FakeVoidUser extends ResourceObject
      * @JsonSchema(schema="user.json", params="user.get.json")
      * {@SuppressWarnings("unused")}
      */
+    #[JsonSchema(schema: "user.json", params: "user.get.json")]
     public function onGet(int $age, string $gender = 'male')
     {
         unset($age);
@@ -25,6 +26,7 @@ class FakeVoidUser extends ResourceObject
     /**
      * @JsonSchema(schema="__invalid.json")
      */
+    #[JsonSchema(schema: "user.json", params: "user.get.json")]
     public function onPost()
     {
         return $this;
@@ -33,6 +35,7 @@ class FakeVoidUser extends ResourceObject
     /**
      * @JsonSchema(schema="definitions/user.json")
      */
+    #[JsonSchema(schema: "definitions/user.json")]
     public function onPut()
     {
         $this->code = Code::NO_CONTENT;
@@ -44,6 +47,7 @@ class FakeVoidUser extends ResourceObject
     /**
      * @JsonSchema(params="__invalid.json")
      */
+    #[JsonSchema(params: "__invalid.json")]
     public function onPatch()
     {
         return $this;

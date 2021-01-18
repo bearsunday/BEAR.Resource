@@ -5,46 +5,49 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\ParameterException;
-use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
+use FakeVendor\News\Resource\App\AttrWebContext;
+use Koriym\Attributes\AttributeReader;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
+use Ray\ServiceLocator\ServiceLocator;
 
 use function call_user_func_array;
 
-class NamedParameterTest extends TestCase
+class AttrNamedParameterTest extends TestCase
 {
     /** @var NamedParameter */
     private $params;
 
+    /** @var FakeAttrContext */
+    private $ro;
+
     protected function setUp(): void
     {
         parent::setUp();
-        $this->params = new NamedParameter(new NamedParamMetas(new ArrayCache(), new AnnotationReader()), new Injector());
+        $this->params = new NamedParameter(new NamedParamMetas(new ArrayCache(), new AttributeReader()), new Injector());
+        $this->ro = new AttrWebContext();
     }
 
     public function testGetParameters(): void
     {
-        $object = new FakeParamResource();
         $namedArgs = ['id' => 1, 'name' => 'koriym'];
-        $args = $this->params->getParameters([$object, 'onGet'], $namedArgs);
+        $args = $this->params->getParameters([$this->ro, 'onGet'], $namedArgs);
         $this->assertSame([1, 'koriym'], $args);
     }
 
     public function testDefaultValue(): void
     {
-        $object = new FakeParamResource();
         $namedArgs = ['id' => 1];
-        $args = $this->params->getParameters([$object, 'onGet'], $namedArgs);
+        $args = $this->params->getParameters([$this->ro, 'onGet'], $namedArgs);
         $this->assertSame([1, 'koriym'], $args);
     }
 
     public function testParameterException(): void
     {
         $this->expectException(ParameterException::class);
-        $object = new FakeParamResource();
         $namedArgs = [];
-        $this->params->getParameters([$object, 'onGet'], $namedArgs);
+        $this->params->getParameters([$this->ro, 'onGet'], $namedArgs);
     }
 
     public function testParameterWebContext(): void
@@ -57,7 +60,6 @@ class NamedParameterTest extends TestCase
             '_SERVER' => ['s' => 'server_val'],
         ];
         AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose($fakeGlobals);
-        $object = new FakeParamResource();
         $expected = [
             'cookie_val',
             'env_val',
@@ -65,7 +67,7 @@ class NamedParameterTest extends TestCase
             'get_val',
             'server_val',
         ];
-        $args = $this->params->getParameters([$object, 'onPost'], []);
+        $args = $this->params->getParameters([$this->ro, 'onPost'], []);
         $this->assertSame($expected, $args);
     }
 
@@ -73,19 +75,17 @@ class NamedParameterTest extends TestCase
     {
         $this->expectException(ParameterException::class);
         AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose([]);
-        $object = new FakeParamResource();
-        $this->params->getParameters([$object, 'onPut'], ['cookie' => 1]); // should be ignored
+        $this->params->getParameters([$this->ro, 'onPut'], ['cookie' => 1]); // should be ignored
     }
 
     public function testParameterWebContextDefault(): void
     {
         AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose([]);
-        $object = new FakeParamResource();
         $expected = [
             1,
             'default',
         ];
-        $args = $this->params->getParameters([$object, 'onDelete'], ['a' => 1]);
+        $args = $this->params->getParameters([$this->ro, 'onDelete'], ['a' => 1]);
         $this->assertSame($expected, $args);
     }
 
@@ -93,17 +93,8 @@ class NamedParameterTest extends TestCase
     {
         $this->expectException(ParameterException::class);
         AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose([]);
-        $object = new FakeParamResource();
-        $args = $this->params->getParameters([$object, 'onDelete'], []);
+        $this->ro = new FakeParamResource();
+        $this->params->getParameters([$this->ro, 'onDelete'], []);
     }
 
-    public function testCameCaseParam(): void
-    {
-        $object = new FakeCamelCaseParamResource();
-        $namedArgs = ['user_id' => 'koriym', 'user_role' => 'lead'];
-        $args = $this->params->getParameters([$object, 'onGet'], $namedArgs);
-        $this->assertSame(['koriym', 'lead'], $args);
-        $ro = call_user_func_array([$object, 'onGet'], $args);
-        $this->assertSame(['userId' => 'koriym', 'userRole' => 'lead'], (array) $ro->body);
-    }
 }
