@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace BEAR\Resource\Annotation;
 
 use Attribute;
+use Doctrine\Common\Annotations\NamedArgumentConstructorAnnotation;
 use JsonSerializable;
 
 /**
  * @Annotation
  * @Target("METHOD")
  */
-#[Attribute(Attribute::TARGET_METHOD)]
-final class Link implements JsonSerializable
+#[Attribute(Attribute::TARGET_METHOD|Attribute::IS_REPEATABLE)]
+final class Link implements JsonSerializable, NamedArgumentConstructorAnnotation
 {
     /**
      * Relation to the target resource of the link
