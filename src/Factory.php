@@ -32,9 +32,10 @@ final class Factory implements FactoryInterface
      *
      * @return void
      *
-     * @Inject(optional = true)
+     * @Inject(optional=true)
      * @codeCoverageIgnore
      */
+    #[Inject(optional: true)]
     public function setSchemeCollection(SchemeCollectionInterface $scheme)
     {
         $this->scheme = $scheme;
