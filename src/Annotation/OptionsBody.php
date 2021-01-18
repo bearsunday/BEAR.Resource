@@ -7,14 +7,13 @@ namespace BEAR\Resource\Annotation;
 use Attribute;
 use Doctrine\Common\Annotations\NamedArgumentConstructorAnnotation;
 use Ray\Di\Di\Qualifier;
-use function is_string;
 
 /**
  * @Annotation
  * @Target("METHOD")
  * @Qualifier
  */
-#[Attribute(Attribute::TARGET_METHOD|Attribute::TARGET_PARAMETER), Qualifier]
+#[Attribute(Attribute::TARGET_METHOD | Attribute::TARGET_PARAMETER), Qualifier]
 final class OptionsBody implements NamedArgumentConstructorAnnotation
 {
     /** @var string */

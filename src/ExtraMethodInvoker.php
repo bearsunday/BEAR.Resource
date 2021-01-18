@@ -17,7 +17,7 @@ final class ExtraMethodInvoker
     /**
      * @Named("optionsRenderer=options")
      */
-    #[Named("optionsRenderer=options")]
+    #[Named('optionsRenderer=options')]
     public function __construct(RenderInterface $optionsRenderer)
     {
         $this->optionsRenderer = $optionsRenderer;

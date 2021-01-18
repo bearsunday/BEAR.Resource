@@ -28,7 +28,8 @@ class ResourceModule extends AbstractModule
     {
         $this->bind()->annotatedWith(AppName::class)->toInstance($this->appName);
         $this->install(new ResourceClientModule());
-        $this->install(new AnnotationModule());
+//        $this->install(new AnnotationModule());
+        $this->install(new AttributeModule());
         $this->install(new EmbedResourceModule());
         $this->install(new HttpClientModule());
     }
