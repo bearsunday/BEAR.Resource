@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
+use Koriym\Attributes\AttributeReader;
+use Koriym\Attributes\DualReader;
 use Ray\Di\Injector;
-use Ray\ServiceLocator\ServiceLocator;
 
 final class InvokerFactory
 {
     public function __invoke(string $schemaDir = ''): Invoker
     {
-        $reader = ServiceLocator::getReader();
+        $reader = new DualReader(new AnnotationReader(), new AttributeReader());
 
         return new Invoker(
             new NamedParameter(
