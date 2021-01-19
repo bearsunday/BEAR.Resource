@@ -150,9 +150,11 @@ class RequestTest extends TestCase
             ['a' => 'koriym', 'b' => 25]
         );
         $no = $str = '';
-        set_error_handler(static function (int $errno, string $errstr) use (&$no, &$str) {
+        set_error_handler(static function (int $errno, string $errstr) use (&$no, &$str): bool {
             $no = $errno;
             $str = $errstr;
+
+            return true;
         });
         (string) $request; // @phpstan-ignore-line
         $this->assertSame(E_USER_WARNING, $no);
@@ -262,9 +264,11 @@ class RequestTest extends TestCase
             ['key' => 'animal', 'value' => 'kuma']
         );
         $no = $str = '';
-        set_error_handler(static function (int $errno, string $errstr) use (&$no, &$str) {
+        set_error_handler(static function (int $errno, string $errstr) use (&$no, &$str): bool {
             $no = $errno;
             $str = $errstr;
+
+            return true;
         });
         (string) $request; // @phpstan-ignore-line
         $this->assertSame(256, $no);
