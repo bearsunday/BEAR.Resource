@@ -98,4 +98,15 @@ class ResourceObjectTest extends TestCase
         $ro->body = '1';
         $ro['key']; // @phpstan-ignore-line
     }
+
+    public function testClone(): void
+    {
+        $ro = new FakeResource();
+        $ro->uri = new Uri('app://self/?modified=0');
+        $this->assertSame(['modified' => '0'], $ro->uri->query);
+        $clonedRo = clone $ro;
+        // change cloned uri
+        $clonedRo->uri->query = ['modified' => '1'];
+        $this->assertSame(['modified' => '0'], $ro->uri->query);
+    }
 }
