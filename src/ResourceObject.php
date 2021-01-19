@@ -293,4 +293,9 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
 
         return $body;
     }
+
+    public function __clone()
+    {
+        $this->uri = clone $this->uri;
+    }
 }
