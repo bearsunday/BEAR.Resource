@@ -158,7 +158,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
             return isset($this->body[$offset]);
         }
 
-        throw new IlligalAccessException((string) $offset);
+        return false;
     }
 
     /**
