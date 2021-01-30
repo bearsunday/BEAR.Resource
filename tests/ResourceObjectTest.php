@@ -82,10 +82,9 @@ class ResourceObjectTest extends TestCase
      */
     public function testIlligalAccessExceptionInOffsetExists(): void
     {
-        $this->expectException(IlligalAccessException::class);
         $ro = new FakeResource();
         $ro->body = '1';
-        isset($ro['key']); // @phpstan-ignore-line
+        $this->assertFalse(isset($ro['key']));
     }
 
     /**
