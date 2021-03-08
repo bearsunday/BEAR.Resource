@@ -171,7 +171,7 @@ final class OptionsMethodRequest
         foreach ($annotations as $annotation) {
             if ($annotation instanceof ResourceParam) {
                 /* @psalm-suppress UndefinedClass */
-                unset($paramMetas['parameters'][$annotation->param]); // @phpstan-ignore-line
+                unset($paramMetas['parameters'][$annotation->param]);
                 assert(isset($paramMetas['required']));
                 $paramMetas['required'] = array_values(array_diff($paramMetas['required'], [$annotation->param]));
             }
@@ -201,7 +201,7 @@ final class OptionsMethodRequest
         }
 
         foreach ($annotation->values as $varName) {
-            unset($paramMetas['parameters'][$varName]); // @phpstan-ignore-lineJsonSchemaInterceptor.php
+            unset($paramMetas['parameters'][$varName]);
         }
 
         return $paramMetas;

@@ -6,7 +6,7 @@ namespace BEAR\Resource\Annotation;
 
 // phpcs:disable SlevomatCodingStandard.Namespaces.UnusedUses.UnusedUse
 use Attribute;
-use Doctrine\Common\Annotations\NamedArgumentConstructorAnnotation;
+use Doctrine\Common\Annotations\Annotation\NamedArgumentConstructor;
 use Ray\Di\Di\Qualifier;
 
 // phpcs:enable
@@ -14,9 +14,10 @@ use Ray\Di\Di\Qualifier;
 /**
  * @Annotation
  * @Target("METHOD")
+ * @NamedArgumentConstructor
  */
 #[Attribute(Attribute::TARGET_METHOD | Attribute::TARGET_PARAMETER), Qualifier]
-final class ResourceParam implements RequestParamInterface, NamedArgumentConstructorAnnotation
+final class ResourceParam implements RequestParamInterface
 {
     /** @var string */
     public $param;
