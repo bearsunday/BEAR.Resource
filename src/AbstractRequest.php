@@ -9,6 +9,7 @@ use ArrayIterator;
 use BEAR\Resource\Exception\MethodException;
 use BEAR\Resource\Exception\OutOfBoundsException;
 use IteratorAggregate;
+use JsonSerializable;
 use LogicException;
 use Serializable;
 use Throwable;
@@ -35,7 +36,7 @@ use const PHP_EOL;
  * @phpstan-implements ArrayAccess<string, mixed>
  * @psalm-suppress PropertyNotSetInConstructor
  */
-abstract class AbstractRequest implements RequestInterface, ArrayAccess, IteratorAggregate, Serializable
+abstract class AbstractRequest implements RequestInterface, ArrayAccess, IteratorAggregate, Serializable, JsonSerializable
 {
     /**
      * URI
@@ -281,5 +282,10 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
         }
 
         return $this->result;
+    }
+
+    public function jsonSerialize(): ResourceObject
+    {
+        return $this->invoke();
     }
 }
