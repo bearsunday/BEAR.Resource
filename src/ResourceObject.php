@@ -258,11 +258,9 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         if (! is_iterable($this->body)) {
             return ['value' => $this->body];
         }
+        assert(is_array($this->body));
 
-        $body = $this->evaluate($this->body);
-        assert(is_array($body));
-
-        return $body;
+        return $this->body;
     }
 
     /**
@@ -273,26 +271,6 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         $responder($this, $server);
     }
 
-    /**
-     * @param mixed $body
-     *
-     * @return mixed
-     */
-    private function evaluate($body)
-    {
-        /* @noinspection ForeachSourceInspection */
-        /** @psalm-suppress MixedAssignment */
-        foreach ($body as &$value) {
-            if (! ($value instanceof RequestInterface)) {
-                continue;
-            }
-
-            $result = $value();
-            $value = $result->body;
-        }
-
-        return $body;
-    }
 
     public function __clone()
     {
