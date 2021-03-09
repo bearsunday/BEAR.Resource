@@ -258,6 +258,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         if (! is_iterable($this->body)) {
             return ['value' => $this->body];
         }
+
         assert(is_array($this->body));
 
         return $this->body;
@@ -270,7 +271,6 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     {
         $responder($this, $server);
     }
-
 
     public function __clone()
     {
