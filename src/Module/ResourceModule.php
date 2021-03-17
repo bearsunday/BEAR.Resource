@@ -15,7 +15,7 @@ class ResourceModule extends AbstractModule
     /**
      * @param string $appName Application name ex) 'Vendor\Project'
      */
-    public function __construct(string $appName)
+    public function __construct(string $appName = '')
     {
         $this->appName = $appName;
         parent::__construct();
@@ -26,10 +26,12 @@ class ResourceModule extends AbstractModule
      */
     protected function configure(): void
     {
-        $this->bind()->annotatedWith(AppName::class)->toInstance($this->appName);
         $this->install(new ResourceClientModule());
         $this->install(new AnnotationModule());
         $this->install(new EmbedResourceModule());
         $this->install(new HttpClientModule());
+        if ($this->appName) {
+            $this->bind()->annotatedWith(AppName::class)->toInstance($this->appName);
+        }
     }
 }
