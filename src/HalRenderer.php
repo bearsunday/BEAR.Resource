@@ -70,7 +70,7 @@ class HalRenderer implements RenderInterface
                 continue;
             }
 
-            if (! is_array($ro->body['_embedded'])) {
+            if (! isset($ro->body['_embedded'])) {
                 $ro->body['_embedded'] = [];
             }
 
