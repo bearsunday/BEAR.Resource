@@ -57,6 +57,7 @@ class ResourceClientModule extends AbstractModule
         $this->bind(AnchorInterface::class)->to(Anchor::class);
         $this->bind(NamedParameterInterface::class)->to(NamedParameter::class);
         $this->bind(RenderInterface::class)->to(PrettyJsonRenderer::class)->in(Scope::SINGLETON);
+        /** @psalm-suppress DeprecatedClass */
         $this->bind(Cache::class)->to(ArrayCache::class);
         $this->bind(RenderInterface::class)->annotatedWith('options')->to(OptionsRenderer::class);
         $this->bind(OptionsMethods::class);

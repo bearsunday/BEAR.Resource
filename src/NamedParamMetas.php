@@ -67,7 +67,6 @@ final class NamedParamMetas implements NamedParamMetasInterface
     private function getAnnotationParamMetas(ReflectionMethod $method)
     {
         $parameters = $method->getParameters();
-        /** @var array<object> $annotations */
         $annotations = $this->reader->getMethodAnnotations($method);
         $assistedNames = $this->getAssistedNames($annotations);
         $webContext = $this->getWebContext($annotations);
@@ -86,7 +85,6 @@ final class NamedParamMetas implements NamedParamMetasInterface
             /** @var array<ReflectionAttribute> $refAttribute */
             $refAttribute = $parameter->getAttributes(RequestParamInterface::class, ReflectionAttribute::IS_INSTANCEOF);
             if ($refAttribute) {
-                /** @var RequestParamInterface $resourceParam */
                 $resourceParam = $refAttribute[0]->newInstance();
                 if ($resourceParam instanceof ResourceParam) {
                     $names[$parameter->name] = new AssistedResourceParam($resourceParam);
