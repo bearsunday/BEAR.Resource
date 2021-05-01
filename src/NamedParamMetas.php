@@ -85,6 +85,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
             /** @var array<ReflectionAttribute> $refAttribute */
             $refAttribute = $parameter->getAttributes(RequestParamInterface::class, ReflectionAttribute::IS_INSTANCEOF);
             if ($refAttribute) {
+                /** @var ?ResourceParam $resourceParam */
                 $resourceParam = $refAttribute[0]->newInstance();
                 if ($resourceParam instanceof ResourceParam) {
                     $names[$parameter->name] = new AssistedResourceParam($resourceParam);
