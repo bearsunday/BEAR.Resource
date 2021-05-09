@@ -9,9 +9,10 @@ use InvalidArgumentException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
+use function count;
 use function is_array;
-use function lcfirst;
 use function strtoupper;
+use function ucwords;
 
 /**
  * @method HttpResourceObject get(AbstractUri|string $uri, array<string, mixed> $params = [])
@@ -58,9 +59,8 @@ final class HttpResourceObject extends ResourceObject
 
         if ($name === 'headers') {
             $headers = $this->response->getHeaders();
-            $formatedHeaders = $this->formatHeaeder($headers);
 
-            return $formatedHeaders;
+            return $this->formatHeaeder($headers);
         }
 
         if ($name === 'body') {

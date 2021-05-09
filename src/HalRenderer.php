@@ -67,6 +67,7 @@ class HalRenderer implements RenderInterface
         if (is_object($ro->body)) {
             $ro->body = (array) $ro->body;
         }
+
         assert(is_array($ro->body));
         /** @var mixed $embeded */
         foreach ($ro->body as $key => &$embeded) {
