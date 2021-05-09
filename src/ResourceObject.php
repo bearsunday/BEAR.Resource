@@ -64,7 +64,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * Body
      *
-     * @var array<int|string, mixed>|mixed
+     * @var mixed
      */
     public $body;
 

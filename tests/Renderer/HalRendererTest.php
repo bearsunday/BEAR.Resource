@@ -164,4 +164,15 @@ EOT;
 EOT;
         $this->assertSame($expected, $actual);
     }
+
+    public function testBodyObject(): void
+    {
+        $this->ro->body = new class {
+            /** @var int */
+            public $a = 1;
+        };
+        $actual = (string) $this->ro;
+
+        $this->assertStringContainsString('"a": 1,', $actual);
+    }
 }
