@@ -58,6 +58,7 @@ final class HttpResourceObject extends ResourceObject
         }
 
         if ($name === 'headers') {
+            /** @var array<string, array<string>> $headers */
             $headers = $this->response->getHeaders();
 
             return $this->formatHeaeder($headers);
@@ -75,7 +76,7 @@ final class HttpResourceObject extends ResourceObject
     }
 
     /**
-     * @param array<string, array<int, string>> $headers
+     * @param array<string, array<string>> $headers
      *
      * @return array<string, string|array<string>>
      */
