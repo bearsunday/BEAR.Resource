@@ -12,6 +12,7 @@ use RuntimeException;
 use function assert;
 use function http_build_query;
 use function is_array;
+use function is_object;
 use function is_scalar;
 use function json_decode;
 use function method_exists;
@@ -63,6 +64,9 @@ class HalRenderer implements RenderInterface
 
     private function valuateElements(ResourceObject $ro): void
     {
+        if (is_object($ro->body)) {
+            $ro->body = (array) $ro->body;
+        }
         assert(is_array($ro->body));
         /** @var mixed $embeded */
         foreach ($ro->body as $key => &$embeded) {
