@@ -27,7 +27,7 @@ class HttpResourceObjectTest extends TestCase
     {
         $response = $this->resource->get('http://httpbin.org/get', ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
-        $this->assertArrayHasKey('access-control-allow-credentials', $response->headers);
+        $this->assertArrayHasKey('Access-control-allow-credentials', $response->headers);
         $this->assertArrayHasKey('args', $response->body);
         $this->assertStringContainsString('"args": {', (string) $response->view);
         assert($response instanceof HttpResourceObject);
@@ -39,7 +39,7 @@ class HttpResourceObjectTest extends TestCase
     {
         $response = $this->resource->post('http://httpbin.org/post', ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
-        $this->assertArrayHasKey('access-control-allow-credentials', $response->headers);
+        $this->assertArrayHasKey('Access-control-allow-credentials', $response->headers);
         $body = $response->body;
         $this->assertSame('bar', $body['form']['foo']);
         $this->assertStringContainsString('"form": {', (string) $response->view);
@@ -49,7 +49,7 @@ class HttpResourceObjectTest extends TestCase
     {
         $response = $this->resource->put('http://httpbin.org/put', ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
-        $this->assertArrayHasKey('access-control-allow-credentials', $response->headers);
+        $this->assertArrayHasKey('Access-control-allow-credentials', $response->headers);
         $body = $response->body;
         $this->assertSame('bar', $body['form']['foo']);
         $this->assertStringContainsString('"form": {', (string) $response->view);
@@ -59,7 +59,7 @@ class HttpResourceObjectTest extends TestCase
     {
         $response = $this->resource->patch('http://httpbin.org/patch', ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
-        $this->assertArrayHasKey('access-control-allow-credentials', $response->headers);
+        $this->assertArrayHasKey('Access-control-allow-credentials', $response->headers);
         $body = $response->body;
         $this->assertSame('bar', $body['form']['foo']);
         $this->assertStringContainsString('"form": {', (string) $response->view);
@@ -69,7 +69,7 @@ class HttpResourceObjectTest extends TestCase
     {
         $response = $this->resource->delete('http://httpbin.org/delete', ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
-        $this->assertArrayHasKey('access-control-allow-credentials', $response->headers);
+        $this->assertArrayHasKey('Access-control-allow-credentials', $response->headers);
         $body = $response->body;
         $this->assertSame('bar', $body['form']['foo']);
         $this->assertStringContainsString('"form": {', (string) $response->view);
