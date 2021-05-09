@@ -25,7 +25,6 @@ final class NamedParameter implements NamedParameterInterface
      */
     public function getParameters(callable $callable, array $query): array
     {
-        /** @var array<string, ParamInterface> $metas */
         $metas = ($this->paramMetas)($callable);
         $parameters = [];
         /** @var array<string, array<string, mixed>> $query */

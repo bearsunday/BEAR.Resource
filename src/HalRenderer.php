@@ -75,6 +75,10 @@ class HalRenderer implements RenderInterface
                 continue;
             }
 
+            if (! isset($ro->body['_embedded']) || ! is_array($ro->body['_embedded'])) {
+                $ro->body['_embedded'] = [];
+            }
+
             // @codeCoverageIgnoreStart
             if ($this->isDifferentSchema($ro, $embeded->resourceObject)) {
                 $ro->body['_embedded'][$key] = $embeded()->body;

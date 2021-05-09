@@ -40,7 +40,6 @@ final class EmbedInterceptor implements MethodInterceptor
         assert($ro instanceof ResourceObject);
         $method = $invocation->getMethod();
         $query = $this->getArgsByInvocation($invocation);
-        /** @var array<object> $embeds */
         $embeds = $this->reader->getMethodAnnotations($method);
         $this->embedResource($embeds, $ro, $query);
 
