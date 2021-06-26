@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Cache\ArrayCache;
 use Koriym\Attributes\AttributeReader;
 use Koriym\Attributes\DualReader;
 use Ray\Di\Injector;
@@ -19,7 +18,6 @@ final class InvokerFactory
         return new Invoker(
             new NamedParameter(
                 new NamedParamMetas(
-                    new ArrayCache(),
                     $reader
                 ),
                 new Injector()

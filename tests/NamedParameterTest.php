@@ -6,7 +6,6 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\ParameterException;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Cache\ArrayCache;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
@@ -20,7 +19,7 @@ class NamedParameterTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->params = new NamedParameter(new NamedParamMetas(new ArrayCache(), new AnnotationReader()), new Injector());
+        $this->params = new NamedParameter(new NamedParamMetas(new AnnotationReader()), new Injector());
     }
 
     public function testGetParameters(): void
