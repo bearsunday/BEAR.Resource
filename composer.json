@@ -14,7 +14,6 @@
         "ext-filter": "*",
         "ext-json": "*",
         "doctrine/annotations": "^1.12",
-        "doctrine/cache": "^1.10",
         "justinrainbow/json-schema": "^5.2.10",
         "koriym/attributes": "^1.0",
         "koriym/http-constants": "^1.1",
