@@ -91,7 +91,7 @@ class FactoryTest extends TestCase
     public function testUnbound(): void
     {
         $this->expectException(Unbound::class);
-        $instance = $this->factory->newInstance('page://self/unbound');
+        $this->factory->newInstance('page://self/unbound');
     }
 
     public function testIndexSuffix(): void
