@@ -7,7 +7,6 @@ namespace BEAR\Resource;
 use BEAR\Resource\Annotation\RequestParamInterface;
 use BEAR\Resource\Annotation\ResourceParam;
 use Doctrine\Common\Annotations\Reader;
-use Doctrine\Common\Cache\Cache;
 use Ray\Di\Di\Assisted;
 use Ray\WebContextParam\Annotation\AbstractWebContextParam;
 use ReflectionAttribute;
@@ -15,21 +14,15 @@ use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
 
-use function get_class;
-
 use const PHP_VERSION_ID;
 
 final class NamedParamMetas implements NamedParamMetasInterface
 {
-    /** @var Cache */
-    private $cache;
-
     /** @var Reader */
     private $reader;
 
-    public function __construct(Cache $cache, Reader $reader)
+    public function __construct(Reader $reader)
     {
-        $this->cache = $cache;
         $this->reader = $reader;
     }
 
@@ -39,13 +32,6 @@ final class NamedParamMetas implements NamedParamMetasInterface
     public function __invoke(callable $callable): array
     {
         /** @var array{0:object, 1:string} $callable */
-        $cacheId = self::class . get_class($callable[0]) . $callable[1];
-        /** @var array<string, ParamInterface>|false $names */
-        $names = $this->cache->fetch($cacheId);
-        if ($names) {
-            return $names;
-        }
-
         $method = new ReflectionMethod($callable[0], $callable[1]);
         $paramMetas = false;
         if (PHP_VERSION_ID >= 80000) {
@@ -55,8 +41,6 @@ final class NamedParamMetas implements NamedParamMetasInterface
         if (! $paramMetas) {
             $paramMetas = $this->getAnnotationParamMetas($method);
         }
-
-        $this->cache->save($cacheId, $paramMetas);
 
         return $paramMetas;
     }

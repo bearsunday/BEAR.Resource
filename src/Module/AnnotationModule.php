@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace BEAR\Resource\Module;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\CachedReader;
 use Doctrine\Common\Annotations\Reader;
 use Koriym\Attributes\AttributeReader;
 use Koriym\Attributes\DualReader;
@@ -18,8 +17,7 @@ class AnnotationModule extends AbstractModule
      */
     protected function configure(): void
     {
-        $this->bind(Reader::class)->toConstructor(CachedReader::class, ['reader' => 'base_reader']);
-        $this->bind(Reader::class)->annotatedWith('base_reader')->toConstructor(DualReader::class, [
+        $this->bind(Reader::class)->toConstructor(DualReader::class, [
             'annotationReader' => 'annotation',
             'attributeReader' => 'attribute',
         ]);

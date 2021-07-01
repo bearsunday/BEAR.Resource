@@ -30,8 +30,6 @@ use BEAR\Resource\ResourceInterface;
 use BEAR\Resource\ReverseLinkInterface;
 use BEAR\Resource\SchemeCollectionInterface;
 use BEAR\Resource\UriFactory;
-use Doctrine\Common\Cache\ArrayCache;
-use Doctrine\Common\Cache\Cache;
 use Ray\Di\AbstractModule;
 use Ray\Di\Exception\NotFound;
 use Ray\Di\Scope;
@@ -58,7 +56,6 @@ class ResourceClientModule extends AbstractModule
         $this->bind(NamedParameterInterface::class)->to(NamedParameter::class);
         $this->bind(RenderInterface::class)->to(PrettyJsonRenderer::class)->in(Scope::SINGLETON);
         /** @psalm-suppress DeprecatedClass */
-        $this->bind(Cache::class)->to(ArrayCache::class);
         $this->bind(RenderInterface::class)->annotatedWith('options')->to(OptionsRenderer::class);
         $this->bind(OptionsMethods::class);
         $this->bind(NamedParamMetasInterface::class)->to(NamedParamMetas::class);
