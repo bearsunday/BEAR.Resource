@@ -94,12 +94,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
             $valueParams[$parameter->name] = $parameter;
         }
 
-        // if there is more than single attributes
-        if ($names) {
-            foreach ($valueParams as $paramName => $valueParam) {
-                $names[$paramName] = $this->getParam($valueParam);
-            }
-        }
+        $names = $this->getNames($names, $valueParams);
 
         return $names;
     }
@@ -199,6 +194,24 @@ final class NamedParamMetas implements NamedParamMetasInterface
     private function getDefault(ReflectionParameter $parameter)
     {
         return $parameter->isDefaultValueAvailable() === true ? new DefaultParam($parameter->getDefaultValue()) : new NoDefaultParam();
+    }
+
+    /**
+     * @param array<string, AssistedResourceParam|AssistedWebContextParam> $names
+     * @param array<string, ReflectionParameter>                           $valueParams
+     *
+     * @return array<string, ParamInterface>
+     */
+    private function getNames(array $names, array $valueParams): array
+    {
+        // if there is more than single attributes
+        if ($names) {
+            foreach ($valueParams as $paramName => $valueParam) {
+                $names[$paramName] = $this->getParam($valueParam);
+            }
+        }
+
+        return $names;
     }
 
     /**

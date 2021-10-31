@@ -67,10 +67,6 @@ final class HalRenderer implements RenderInterface
 
     private function valuateElements(ResourceObject $ro): void
     {
-        if (is_object($ro->body)) {
-            $ro->body = (array) $ro->body;
-        }
-
         assert(is_array($ro->body));
         /** @var mixed $embeded */
         foreach ($ro->body as $key => &$embeded) {
@@ -78,10 +74,12 @@ final class HalRenderer implements RenderInterface
                 continue;
             }
 
-            if (! isset($ro->body['_embedded']) || ! is_array($ro->body['_embedded'])) {
+            $isNotArray = ! isset($ro->body['_embedded']) || ! is_array($ro->body['_embedded']);
+            if ($isNotArray) {
                 $ro->body['_embedded'] = [];
             }
 
+            assert(is_array($ro->body['_embedded']));
             // @codeCoverageIgnoreStart
             if ($this->isDifferentSchema($ro, $embeded->resourceObject)) {
                 $ro->body['_embedded'][$key] = $embeded()->body;
@@ -131,6 +129,10 @@ final class HalRenderer implements RenderInterface
 
         if ($ro->body === null) {
             $ro->body = [];
+        }
+
+        if (is_object($ro->body)) {
+            $ro->body = (array) $ro->body;
         }
 
         // evaluate all request in body.
