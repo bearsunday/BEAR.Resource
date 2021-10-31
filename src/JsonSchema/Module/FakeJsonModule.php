@@ -8,7 +8,7 @@ use BEAR\Resource\JsonSchemaExceptionFakeHandler;
 use BEAR\Resource\JsonSchemaExceptionHandlerInterface;
 use Ray\Di\AbstractModule;
 
-class FakeJsonModule extends AbstractModule
+final class FakeJsonModule extends AbstractModule
 {
     /**
      * {@inheritdoc}

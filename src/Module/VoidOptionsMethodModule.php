@@ -8,7 +8,7 @@ use BEAR\Resource\NullOptionsRenderer;
 use BEAR\Resource\RenderInterface;
 use Ray\Di\AbstractModule;
 
-class VoidOptionsMethodModule extends AbstractModule
+final class VoidOptionsMethodModule extends AbstractModule
 {
     /**
      * {@inheritdoc}

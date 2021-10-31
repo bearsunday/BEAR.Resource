@@ -14,13 +14,14 @@ use function http_build_query;
 use function is_array;
 use function is_object;
 use function is_scalar;
+use function is_string;
 use function json_decode;
 use function method_exists;
 use function ucfirst;
 
 use const PHP_EOL;
 
-class HalRenderer implements RenderInterface
+final class HalRenderer implements RenderInterface
 {
     /** @var Reader */
     private $reader;
@@ -58,7 +59,9 @@ class HalRenderer implements RenderInterface
         /** @var list<object> $annotations */
         $annotations = $hasMethod ? $this->reader->getMethodAnnotations(new ReflectionMethod($ro, $method)) : [];
         $hal = $this->getHal($ro->uri, $body, $annotations);
-        $ro->view = $hal->asJson(true) . PHP_EOL;
+        $json = $hal->asJson(true);
+        assert(is_string($json));
+        $ro->view = $json . PHP_EOL;
         $ro->headers['Content-Type'] = 'application/hal+json';
     }
 
