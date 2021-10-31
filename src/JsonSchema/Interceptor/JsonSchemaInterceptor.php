@@ -13,7 +13,6 @@ use BEAR\Resource\JsonSchemaExceptionHandlerInterface;
 use BEAR\Resource\ResourceObject;
 use JsonSchema\Constraints\Constraint;
 use JsonSchema\Validator;
-use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
 use Ray\Di\Di\Named;
 use ReflectionClass;
@@ -30,7 +29,7 @@ use function property_exists;
 use function sprintf;
 use function str_replace;
 
-final class JsonSchemaInterceptor implements MethodInterceptor
+final class JsonSchemaInterceptor implements JsonSchemaInterceptorInterface
 {
     /** @var string */
     private $schemaDir;
@@ -59,7 +58,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     /**
      * {@inheritdoc}
      */
-    public function invoke(MethodInvocation $invocation)
+    public function invoke(MethodInvocation $invocation): ResourceObject
     {
         $method = $invocation->getMethod();
         $jsonSchema = $method->getAnnotation(JsonSchema::class);
