@@ -37,7 +37,7 @@ use Ray\Di\Scope;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ResourceClientModule extends AbstractModule
+final class ResourceClientModule extends AbstractModule
 {
     /**
      * {@inheritdoc}

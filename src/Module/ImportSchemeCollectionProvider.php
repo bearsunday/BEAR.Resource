@@ -12,7 +12,7 @@ use BEAR\Resource\SchemeCollection;
 use Ray\Di\InjectorInterface;
 use Ray\Di\ProviderInterface;
 
-class ImportSchemeCollectionProvider implements ProviderInterface
+final class ImportSchemeCollectionProvider implements ProviderInterface
 {
     /** @var ImportApp[] */
     private $importAppConfig;

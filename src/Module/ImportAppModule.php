@@ -10,7 +10,7 @@ use BEAR\Resource\SchemeCollectionInterface;
 use Ray\Di\AbstractModule;
 use Ray\Di\Exception\NotFound;
 
-class ImportAppModule extends AbstractModule
+final class ImportAppModule extends AbstractModule
 {
     /**
      * Import scheme config

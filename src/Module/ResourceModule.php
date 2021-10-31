@@ -7,7 +7,7 @@ namespace BEAR\Resource\Module;
 use BEAR\Resource\Annotation\AppName;
 use Ray\Di\AbstractModule;
 
-class ResourceModule extends AbstractModule
+final class ResourceModule extends AbstractModule
 {
     /** @var string */
     private $appName;

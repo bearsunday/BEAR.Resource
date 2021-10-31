@@ -11,7 +11,7 @@ use Ray\Di\AbstractModule;
 /**
  * @codeCoverageIgnore
  */
-class AttributeModule extends AbstractModule
+final class AttributeModule extends AbstractModule
 {
     /**
      * {@inheritdoc}

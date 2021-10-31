@@ -7,7 +7,7 @@ namespace BEAR\Resource\Module;
 use Ray\Di\AbstractModule;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class HttpClientModule extends AbstractModule
+final class HttpClientModule extends AbstractModule
 {
     /**
      * {@inheritdoc}

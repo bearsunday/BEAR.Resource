@@ -10,7 +10,7 @@ use BEAR\Resource\OptionsRenderer;
 use BEAR\Resource\RenderInterface;
 use Ray\Di\AbstractModule;
 
-class OptionsMethodHeaderModule extends AbstractModule
+final class OptionsMethodHeaderModule extends AbstractModule
 {
     /**
      * {@inheritdoc}
