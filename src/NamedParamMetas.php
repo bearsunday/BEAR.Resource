@@ -60,13 +60,15 @@ final class NamedParamMetas implements NamedParamMetasInterface
 
     /**
      * @return array<string, ParamInterface>
+     *
+     * @psalm-suppress TooManyTemplateParams $refAttribute
      */
     private function getAttributeParamMetas(ReflectionMethod $method): array
     {
         $parameters = $method->getParameters();
         $names = $valueParams = [];
         foreach ($parameters as $parameter) {
-            /** @var array<ReflectionAttribute> $refAttribute */
+            /** @var array<ReflectionAttribute<RequestParamInterface>> $refAttribute */
             $refAttribute = $parameter->getAttributes(RequestParamInterface::class, ReflectionAttribute::IS_INSTANCEOF);
             if ($refAttribute) {
                 /** @var ?ResourceParam $resourceParam */
@@ -77,7 +79,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
                 }
             }
 
-            /** @var array<ReflectionAttribute> $refWebContext */
+            /** @var array<ReflectionAttribute<AbstractWebContextParam>> $refWebContext */
             $refWebContext = $parameter->getAttributes(AbstractWebContextParam::class, ReflectionAttribute::IS_INSTANCEOF);
             if ($refWebContext) {
                 /** @var AbstractWebContextParam $webParam */
