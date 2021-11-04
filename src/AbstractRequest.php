@@ -11,6 +11,7 @@ use BEAR\Resource\Exception\OutOfBoundsException;
 use IteratorAggregate;
 use JsonSerializable;
 use LogicException;
+use ReturnTypeWillChange;
 use Serializable;
 use Throwable;
 
@@ -171,6 +172,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      *
      * @throws OutOfBoundsException
      */
+    #[ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         throw new OutOfBoundsException(__METHOD__ . ' is unavailable.', 400);
@@ -181,6 +183,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      *
      * @throws OutOfBoundsException
      */
+    #[ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         unset($offset);
@@ -211,6 +214,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      *
      * @throws OutOfBoundsException
      */
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         $this->invoke();
@@ -225,6 +229,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     /**
      * {@inheritdoc}
      */
+    #[ReturnTypeWillChange]
     public function offsetExists($offset): bool
     {
         $this->invoke();
@@ -257,21 +262,12 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
 
     /**
      * {@inheritdoc}
+     *
+     * @return never
      */
-    public function serialize()
+    public function __serialize()
     {
         throw new LogicException(__METHOD__ . ' not supported');
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @param string $serialized
-     *
-     * @codeCoverageIgnore
-     */
-    public function unserialize($serialized): void
-    {
     }
 
     private function invoke(): ResourceObject
@@ -287,5 +283,18 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     public function jsonSerialize(): ResourceObject
     {
         return $this->invoke();
+    }
+
+    public function serialize()
+    {
+        $this->__serialize();
+    }
+
+    /**
+     * @param string $data
+     */
+    public function unserialize($data)
+    {
+        unset($data);
     }
 }
