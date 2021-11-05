@@ -13,6 +13,7 @@ use JsonSerializable;
 use LogicException;
 use ReturnTypeWillChange;
 use Serializable;
+use Stringable;
 use Throwable;
 
 use function array_merge;
@@ -37,7 +38,7 @@ use const PHP_EOL;
  * @phpstan-implements ArrayAccess<string, mixed>
  * @psalm-suppress PropertyNotSetInConstructor
  */
-abstract class AbstractRequest implements RequestInterface, ArrayAccess, IteratorAggregate, Serializable, JsonSerializable
+abstract class AbstractRequest implements RequestInterface, ArrayAccess, IteratorAggregate, Serializable, JsonSerializable, Stringable
 {
     /**
      * URI
@@ -159,6 +160,8 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      * {@inheritdoc}
      *
      * @return mixed
+     *
+     * @noinspection MagicMethodsValidityInspection
      */
     public function __get(string $name)
     {
@@ -298,6 +301,9 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     }
 
     /**
+     * @return never
+     * @psalm-return never-returns
+     *
      * @codeCoverageIgnore
      */
     public function serialize()
