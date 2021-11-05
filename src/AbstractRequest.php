@@ -277,6 +277,8 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
 
     /**
      * @param array<mixed> $data
+     *
+     * @codeCoverageIgnore
      */
     public function __unserialize(array $data): void
     {
