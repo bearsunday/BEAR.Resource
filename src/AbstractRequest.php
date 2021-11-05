@@ -285,6 +285,9 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
         return $this->invoke();
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function serialize()
     {
         $this->__serialize();
@@ -292,6 +295,8 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
 
     /**
      * @param string $data
+     *
+     * @codeCoverageIgnore
      */
     public function unserialize($data)
     {
