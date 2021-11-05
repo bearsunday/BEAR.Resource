@@ -264,10 +264,19 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      * {@inheritdoc}
      *
      * @return never
+     *
+     * @noinspection MagicMethodsValidityInspection
      */
     public function __serialize()
     {
         throw new LogicException(__METHOD__ . ' not supported');
+    }
+
+    /**
+     * @param array<mixed> $data
+     */
+    public function __unserialize(array $data): void
+    {
     }
 
     private function invoke(): ResourceObject
