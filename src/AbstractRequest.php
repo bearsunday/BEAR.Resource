@@ -280,6 +280,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      */
     public function __unserialize(array $data): void
     {
+        unset($data);
     }
 
     private function invoke(): ResourceObject
