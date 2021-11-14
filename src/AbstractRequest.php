@@ -124,6 +124,9 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
         $this->linker = $linker;
     }
 
+    /**
+     * @psalm-suppress UnevaluatedCode
+     */
     public function __toString(): string
     {
         try {
@@ -133,6 +136,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
         } catch (Throwable $e) {
             trigger_error($e->getMessage() . PHP_EOL . $e->getTraceAsString(), E_USER_ERROR);
 
+            /** @noinspection PhpUnreachableStatementInspection */
             return '';
         }
     }
