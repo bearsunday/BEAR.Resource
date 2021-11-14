@@ -53,4 +53,15 @@ class JsonSchemaInterceptorTest extends TestCase
         $ro = $this->jsonSchemaIntercetor->invoke($invocation);
         $this->assertInstanceOf(ResourceObject::class, $object);
     }
+
+    public function testNotJsonView(): void
+    {
+        $object = new FakeUser();
+        $object->view = 'string';
+        /** @var array<MethodInterceptor> $interceptrs */
+        $interceptrs = [JsonSchemaInterceptor::class];
+        $invocation = new ReflectiveMethodInvocation($object, 'bodyKey', [], $interceptrs);
+        $ro = $this->jsonSchemaIntercetor->invoke($invocation);
+        $this->assertInstanceOf(ResourceObject::class, $object);
+    }
 }
