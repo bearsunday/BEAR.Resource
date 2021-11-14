@@ -104,7 +104,7 @@ final class JsonSchemaInterceptor implements JsonSchemaInterceptorInterface
     private function validateRo(ResourceObject $ro, string $schemaFile, JsonSchema $jsonSchema): void
     {
         /** @var array<stdClass>|false|stdClass $json */
-        $json = json_decode(json_encode($ro));
+        $json = json_decode((string) json_encode($ro));
         /** @var array<stdClass>|stdClass $target */
         $target = is_object($json) ? $this->getTarget($json, $jsonSchema) : $json;
         $this->validate($target, $schemaFile);
