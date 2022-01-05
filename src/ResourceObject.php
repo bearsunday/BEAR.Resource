@@ -11,6 +11,8 @@ use Countable;
 use IteratorAggregate;
 use JsonSerializable;
 use Ray\Di\Di\Inject;
+use ReturnTypeWillChange;
+use Stringable;
 use Throwable;
 
 use function asort;
@@ -30,7 +32,7 @@ use const E_USER_WARNING;
  * @phpstan-implements ArrayAccess<string, mixed>
  * @phpstan-implements IteratorAggregate<(int|string), mixed>
  */
-abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, Countable, IteratorAggregate, JsonSerializable, ToStringInterface
+abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, Countable, IteratorAggregate, JsonSerializable, Stringable
 {
     /**
      * Uri
@@ -122,6 +124,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      *
      * @return mixed
      */
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         if (is_array($this->body)) {
@@ -139,6 +142,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      *
      * @return void
      */
+    #[ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         /** @psalm-suppress MixedArrayAssignment */
@@ -152,6 +156,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      *
      * @return bool
      */
+    #[ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         if (is_array($this->body)) {
@@ -166,6 +171,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      *
      * @param int|string $offset offset
      */
+    #[ReturnTypeWillChange]
     public function offsetUnset($offset): void
     {
         /** @psalm-suppress MixedArrayAccess */
@@ -174,10 +180,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
 
     /**
      * Get the number of public properties in the ArrayObject
-     *
-     * @return int
      */
-    public function count()
+    public function count(): int
     {
         if ($this->body instanceof Countable || is_array($this->body)) {
             return count($this->body);
@@ -236,7 +240,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * {@inheritdoc}
      */
-    public function toString()
+    public function toString(): string
     {
         if (is_string($this->view)) {
             return $this->view;

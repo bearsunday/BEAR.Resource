@@ -10,7 +10,7 @@ use Koriym\Attributes\AttributeReader;
 use Koriym\Attributes\DualReader;
 use Ray\Di\AbstractModule;
 
-class AnnotationModule extends AbstractModule
+final class AnnotationModule extends AbstractModule
 {
     /**
      * {@inheritdoc}

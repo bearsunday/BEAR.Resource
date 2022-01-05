@@ -58,6 +58,7 @@ final class AppAdapter implements AdapterInterface
         }
 
         $path = str_replace('-', '', ucwords($uri->path, '/-'));
+        /** @var ''|class-string $class */
         $class = sprintf('%s%s\Resource\%s', $this->namespace, $this->path, str_replace('/', '\\', ucwords($uri->scheme) . $path));
         try {
             $instance = $this->injector->getInstance($class);

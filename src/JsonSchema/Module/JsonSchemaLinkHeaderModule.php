@@ -11,7 +11,7 @@ use function filter_var;
 
 use const FILTER_VALIDATE_URL;
 
-class JsonSchemaLinkHeaderModule extends AbstractModule
+final class JsonSchemaLinkHeaderModule extends AbstractModule
 {
     /** @var string */
     private $jsonSchemaHost;

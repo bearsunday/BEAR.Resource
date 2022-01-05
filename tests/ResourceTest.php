@@ -18,6 +18,8 @@ use Ray\Di\NullModule;
 use Ray\ServiceLocator\ServiceLocator;
 
 use function assert;
+use function serialize;
+use function unserialize;
 
 class ResourceTest extends TestCase
 {
@@ -324,5 +326,10 @@ class ResourceTest extends TestCase
         $ro = $this->resource->options('page://self/index');
         $this->assertInstanceOf(ResourceObject::class, $ro);
         $this->assertSame('GET, POST, PUT, PATCH, DELETE', $ro->headers['Allow']);
+    }
+
+    public function testSerialize(): void
+    {
+        $this->assertInstanceOf(ResourceInterface::class, unserialize(serialize($this->resource)));
     }
 }

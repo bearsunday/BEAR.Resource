@@ -11,7 +11,9 @@ use BEAR\Resource\Exception\OutOfBoundsException;
 use IteratorAggregate;
 use JsonSerializable;
 use LogicException;
+use ReturnTypeWillChange;
 use Serializable;
+use Stringable;
 use Throwable;
 
 use function array_merge;
@@ -36,7 +38,7 @@ use const PHP_EOL;
  * @phpstan-implements ArrayAccess<string, mixed>
  * @psalm-suppress PropertyNotSetInConstructor
  */
-abstract class AbstractRequest implements RequestInterface, ArrayAccess, IteratorAggregate, Serializable, JsonSerializable
+abstract class AbstractRequest implements RequestInterface, ArrayAccess, IteratorAggregate, Serializable, JsonSerializable, Stringable
 {
     /**
      * URI
@@ -122,6 +124,9 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
         $this->linker = $linker;
     }
 
+    /**
+     * @psalm-suppress UnevaluatedCode
+     */
     public function __toString(): string
     {
         try {
@@ -131,6 +136,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
         } catch (Throwable $e) {
             trigger_error($e->getMessage() . PHP_EOL . $e->getTraceAsString(), E_USER_ERROR);
 
+            /** @noinspection PhpUnreachableStatementInspection */
             return '';
         }
     }
@@ -158,6 +164,8 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      * {@inheritdoc}
      *
      * @return mixed
+     *
+     * @noinspection MagicMethodsValidityInspection
      */
     public function __get(string $name)
     {
@@ -171,6 +179,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      *
      * @throws OutOfBoundsException
      */
+    #[ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         throw new OutOfBoundsException(__METHOD__ . ' is unavailable.', 400);
@@ -181,6 +190,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      *
      * @throws OutOfBoundsException
      */
+    #[ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         unset($offset);
@@ -211,6 +221,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      *
      * @throws OutOfBoundsException
      */
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         $this->invoke();
@@ -225,6 +236,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     /**
      * {@inheritdoc}
      */
+    #[ReturnTypeWillChange]
     public function offsetExists($offset): bool
     {
         $this->invoke();
@@ -257,21 +269,24 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
 
     /**
      * {@inheritdoc}
+     *
+     * @return never
+     *
+     * @noinspection MagicMethodsValidityInspection
      */
-    public function serialize()
+    public function __serialize()
     {
         throw new LogicException(__METHOD__ . ' not supported');
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @param string $serialized
+     * @param array<mixed> $data
      *
      * @codeCoverageIgnore
      */
-    public function unserialize($serialized): void
+    public function __unserialize(array $data): void
     {
+        unset($data);
     }
 
     private function invoke(): ResourceObject
@@ -287,5 +302,26 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     public function jsonSerialize(): ResourceObject
     {
         return $this->invoke();
+    }
+
+    /**
+     * @return never
+     * @psalm-return never-returns
+     *
+     * @codeCoverageIgnore
+     */
+    public function serialize()
+    {
+        $this->__serialize();
+    }
+
+    /**
+     * @param string $data
+     *
+     * @codeCoverageIgnore
+     */
+    public function unserialize($data)
+    {
+        unset($data);
     }
 }

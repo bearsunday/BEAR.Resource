@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+use Stringable;
+
 use function http_build_query;
 
-abstract class AbstractUri
+abstract class AbstractUri implements Stringable
 {
     /** @var string */
     public $scheme;

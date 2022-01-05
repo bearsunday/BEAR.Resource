@@ -22,15 +22,16 @@
         "phpdocumentor/reflection-docblock": "^5.2",
         "psr/log": "^1.1",
         "ray/aop": "^2.10.1",
-        "ray/di": "^2.11.2",
+        "ray/di": "^2.13",
         "ray/web-param-module": "^2.1.1",
         "rize/uri-template": "^0.3",
         "symfony/http-client": "^5.2",
         "symfony/http-client-contracts": "^2.3",
-        "nikic/php-parser": "^4.10"
+        "nikic/php-parser": "^4.10",
+        "symfony/polyfill-php81": "^1.23"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.5",
+        "phpunit/phpunit": "^9.5.10",
         "bamarni/composer-bin-plugin": "^1.4"
     },
     "autoload": {
@@ -64,7 +65,7 @@
         "cs": ["phpcs --standard=./phpcs.xml src tests"],
         "cs-fix": ["./vendor/bin/phpcbf src tests"],
         "clean": ["./vendor/bin/phpstan clear-result-cache", "./vendor/bin/psalm --clear-cache", "rm -rf tests/tmp/*.php"],
-        "sa": ["./vendor/bin/phpstan analyse -c phpstan.neon", "psalm --show-info=true"],
+        "sa": ["psalm --show-info=true", "./vendor/bin/phpstan analyse -c phpstan.neon"],
         "metrics": ["./vendor/bin/phpmetrics --report-html=build/metrics --exclude=Exception --log-junit=build/junit.xml --junit=build/junit.xml src"],
         "phpmd": ["./vendor/bin/phpmd --exclude src/Annotation src text ./phpmd.xml"],
         "build": ["@cs", "@sa", "@pcov", "@metrics"]

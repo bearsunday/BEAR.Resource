@@ -8,7 +8,7 @@ use BEAR\Resource\Annotation\Embed;
 use BEAR\Resource\EmbedInterceptor;
 use Ray\Di\AbstractModule;
 
-class EmbedResourceModule extends AbstractModule
+final class EmbedResourceModule extends AbstractModule
 {
     /**
      * {@inheritdoc}

@@ -8,7 +8,7 @@ use BEAR\Resource\HalRenderer;
 use BEAR\Resource\RenderInterface;
 use Ray\Di\AbstractModule;
 
-class HalModule extends AbstractModule
+final class HalModule extends AbstractModule
 {
     /**
      * {@inheritdoc}

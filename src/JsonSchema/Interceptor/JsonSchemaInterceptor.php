@@ -13,7 +13,6 @@ use BEAR\Resource\JsonSchemaExceptionHandlerInterface;
 use BEAR\Resource\ResourceObject;
 use JsonSchema\Constraints\Constraint;
 use JsonSchema\Validator;
-use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
 use Ray\Di\Di\Named;
 use ReflectionClass;
@@ -26,11 +25,12 @@ use function is_dir;
 use function is_object;
 use function is_string;
 use function json_decode;
+use function json_encode;
 use function property_exists;
 use function sprintf;
 use function str_replace;
 
-final class JsonSchemaInterceptor implements MethodInterceptor
+final class JsonSchemaInterceptor implements JsonSchemaInterceptorInterface
 {
     /** @var string */
     private $schemaDir;
@@ -59,7 +59,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     /**
      * {@inheritdoc}
      */
-    public function invoke(MethodInvocation $invocation)
+    public function invoke(MethodInvocation $invocation): ResourceObject
     {
         $method = $invocation->getMethod();
         $jsonSchema = $method->getAnnotation(JsonSchema::class);
@@ -104,7 +104,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     private function validateRo(ResourceObject $ro, string $schemaFile, JsonSchema $jsonSchema): void
     {
         /** @var array<stdClass>|false|stdClass $json */
-        $json = json_decode((string) $ro);
+        $json = json_decode((string) json_encode($ro));
         /** @var array<stdClass>|stdClass $target */
         $target = is_object($json) ? $this->getTarget($json, $jsonSchema) : $json;
         $this->validate($target, $schemaFile);

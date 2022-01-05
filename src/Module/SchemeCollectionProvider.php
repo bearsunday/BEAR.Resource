@@ -11,7 +11,7 @@ use BEAR\Resource\SchemeCollection;
 use Ray\Di\InjectorInterface;
 use Ray\Di\ProviderInterface;
 
-class SchemeCollectionProvider implements ProviderInterface
+final class SchemeCollectionProvider implements ProviderInterface
 {
     /** @var string */
     private $appName;
@@ -20,12 +20,10 @@ class SchemeCollectionProvider implements ProviderInterface
     private $injector;
 
     /**
-     * @param string $appName
-     *
      * @AppName("appName")
      */
     #[AppName('appName')]
-    public function __construct($appName, InjectorInterface $injector)
+    public function __construct(string $appName, InjectorInterface $injector)
     {
         $this->appName = $appName;
         $this->injector = $injector;
@@ -33,10 +31,8 @@ class SchemeCollectionProvider implements ProviderInterface
 
     /**
      * Return instance
-     *
-     * @return SchemeCollection
      */
-    public function get()
+    public function get(): SchemeCollection
     {
         $schemeCollection = new SchemeCollection();
         $pageAdapter = new AppAdapter($this->injector, $this->appName);

@@ -14,13 +14,14 @@ use function http_build_query;
 use function is_array;
 use function is_object;
 use function is_scalar;
+use function is_string;
 use function json_decode;
 use function method_exists;
 use function ucfirst;
 
 use const PHP_EOL;
 
-class HalRenderer implements RenderInterface
+final class HalRenderer implements RenderInterface
 {
     /** @var Reader */
     private $reader;
@@ -58,16 +59,14 @@ class HalRenderer implements RenderInterface
         /** @var list<object> $annotations */
         $annotations = $hasMethod ? $this->reader->getMethodAnnotations(new ReflectionMethod($ro, $method)) : [];
         $hal = $this->getHal($ro->uri, $body, $annotations);
-        $ro->view = $hal->asJson(true) . PHP_EOL;
+        $json = $hal->asJson(true);
+        assert(is_string($json));
+        $ro->view = $json . PHP_EOL;
         $ro->headers['Content-Type'] = 'application/hal+json';
     }
 
     private function valuateElements(ResourceObject $ro): void
     {
-        if (is_object($ro->body)) {
-            $ro->body = (array) $ro->body;
-        }
-
         assert(is_array($ro->body));
         /** @var mixed $embeded */
         foreach ($ro->body as $key => &$embeded) {
@@ -75,10 +74,12 @@ class HalRenderer implements RenderInterface
                 continue;
             }
 
-            if (! isset($ro->body['_embedded']) || ! is_array($ro->body['_embedded'])) {
+            $isNotArray = ! isset($ro->body['_embedded']) || ! is_array($ro->body['_embedded']);
+            if ($isNotArray) {
                 $ro->body['_embedded'] = [];
             }
 
+            assert(is_array($ro->body['_embedded']));
             // @codeCoverageIgnoreStart
             if ($this->isDifferentSchema($ro, $embeded->resourceObject)) {
                 $ro->body['_embedded'][$key] = $embeded()->body;
@@ -128,6 +129,10 @@ class HalRenderer implements RenderInterface
 
         if ($ro->body === null) {
             $ro->body = [];
+        }
+
+        if (is_object($ro->body)) {
+            $ro->body = (array) $ro->body;
         }
 
         // evaluate all request in body.
