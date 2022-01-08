@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-use _PHPStan_e04cc8dfb\Symfony\Component\String\Exception\RuntimeException;
 use ArrayAccess;
 use ArrayIterator;
 use BEAR\Resource\Exception\IlligalAccessException;
@@ -151,7 +150,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         }
 
         if (! is_array($this->body)) {
-            throw new RuntimeException();
+            throw new IlligalAccessException((string) $offset);
         }
 
         $this->body[$offset] = $value;

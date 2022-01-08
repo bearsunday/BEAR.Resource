@@ -74,7 +74,7 @@ final class EmbedInterceptor implements MethodInterceptor
                 }
 
                 if (! is_array($ro->body)) {
-                    throw new LinkException($embed->rel);
+                    throw new LinkException($embed->rel); // @codeCoverageIgnore
                 }
 
                 $ro->body[$embed->rel] = clone $request;

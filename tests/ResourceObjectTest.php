@@ -112,4 +112,12 @@ class ResourceObjectTest extends TestCase
         $clonedRo->uri->query = ['modified' => '1'];
         $this->assertSame(['modified' => '0'], $ro->uri->query);
     }
+
+    public function testSetOffset(): void
+    {
+        $ro = new FakeResource();
+        $ro->body = 1;
+        $this->expectException(IlligalAccessException::class);
+        $ro['a'] = 'a';
+    }
 }
