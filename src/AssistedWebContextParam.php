@@ -15,7 +15,7 @@ final class AssistedWebContextParam implements ParamInterface
     /**
      * $GLOBALS for testing
      *
-     * @var array<string, array<string, array|string>>
+     * @var array<string, array<string, mixed>>
      */
     private static $globals = [];
 
@@ -50,7 +50,7 @@ final class AssistedWebContextParam implements ParamInterface
     }
 
     /**
-     * @param array<string, array<string, array|string>> $globals
+     * @param array<string, array<string, mixed>> $globals
      */
     public static function setSuperGlobalsOnlyForTestingPurpose(array $globals): void
     {

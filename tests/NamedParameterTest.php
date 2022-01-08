@@ -9,6 +9,7 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
+use function assert;
 use function call_user_func_array;
 
 class NamedParameterTest extends TestCase
@@ -103,6 +104,7 @@ class NamedParameterTest extends TestCase
         $args = $this->params->getParameters([$object, 'onGet'], $namedArgs);
         $this->assertSame(['koriym', 'lead'], $args);
         $ro = call_user_func_array([$object, 'onGet'], $args);
+        assert($ro instanceof ResourceObject);
         $this->assertSame(['userId' => 'koriym', 'userRole' => 'lead'], (array) $ro->body);
     }
 }

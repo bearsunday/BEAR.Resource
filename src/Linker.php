@@ -213,7 +213,7 @@ final class Linker implements LinkerInterface
             $request = new Request($this->invoker, $rel, Request::GET, $query, [$link], $this);
             $hash = $request->hash();
             if (array_key_exists($hash, $this->cache)) {
-                /** @var array<array<string, scalar|array>>  $cachedResponse */
+                /** @var array<array<string, scalar|array<mixed>>>  $cachedResponse */
                 $cachedResponse = $this->cache[$hash];
                 $body[$annotation->rel] = $cachedResponse;
                 continue;
@@ -240,7 +240,7 @@ final class Linker implements LinkerInterface
     private function isList($value): bool
     {
         assert(is_array($value));
-        /** @var array<array|string> $list */
+        /** @var array<array<mixed>|string> $list */
         $list = $value;
         /** @var array<mixed> $firstRow */
         $firstRow = array_pop($list);

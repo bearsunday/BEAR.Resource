@@ -28,14 +28,6 @@ final class AppAdapter implements AdapterInterface
     private $namespace;
 
     /**
-     * Resource adapter path
-     *
-     * @var string
-     * @psalm-suppress PropertyNotSetInConstructor
-     */
-    private $path;
-
-    /**
      * @param InjectorInterface $injector  Application dependency injector
      * @param string            $namespace Resource adapter namespace
      */
@@ -59,7 +51,7 @@ final class AppAdapter implements AdapterInterface
 
         $path = str_replace('-', '', ucwords($uri->path, '/-'));
         /** @var ''|class-string $class */
-        $class = sprintf('%s%s\Resource\%s', $this->namespace, $this->path, str_replace('/', '\\', ucwords($uri->scheme) . $path));
+        $class = sprintf('%s\Resource\%s', $this->namespace, str_replace('/', '\\', ucwords($uri->scheme) . $path));
         try {
             $instance = $this->injector->getInstance($class);
             assert($instance instanceof ResourceObject);

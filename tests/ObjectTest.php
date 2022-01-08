@@ -7,6 +7,9 @@ namespace BEAR\Resource;
 use BEAR\Resource\Renderer\FakeTestRenderer;
 use PHPUnit\Framework\TestCase;
 
+use function assert;
+use function is_array;
+
 class ObjectTest extends TestCase
 {
     /** @var ResourceObject */
@@ -90,6 +93,7 @@ class ObjectTest extends TestCase
     {
         // @phpstan-ignore-next-line
         $this->ro[] = 'entry_append'; // same as $this->ro->boddy[] ='entry_append'
+        assert(is_array($this->ro->body));
         $this->assertCount(4, $this->ro->body);
     }
 

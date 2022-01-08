@@ -12,6 +12,8 @@ use Psr\Log\NullLogger;
 use Ray\Di\AbstractModule;
 use Ray\Di\Injector;
 
+use function assert;
+
 class DevLoggerModuleTest extends TestCase
 {
     /**
@@ -29,6 +31,7 @@ class DevLoggerModuleTest extends TestCase
         $module = new DevLoggerModule();
         $module->install($psrLoggerModule);
         $logger = (new Injector($module))->getInstance(LoggerInterface::class);
+        assert($logger instanceof LoggerInterface);
         $this->assertInstanceOf(DevLogger::class, $logger);
         $logger(new FakeResource());
     }

@@ -23,7 +23,7 @@ class EmbedInterceptorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->resource = (new Injector(new EmbedResourceModule(new ResourceModule('FakeVendor\Sandbox')), __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
+        $this->resource = (new Injector(new EmbedResourceModule(new ResourceModule('FakeVendor\Sandbox')), __DIR__ . '/tmp'))->getInstance(ResourceInterface::class); // @phpstan-ignore-line
     }
 
     public function testInvoke(): Birds
@@ -85,8 +85,10 @@ class EmbedInterceptorTest extends TestCase
         assert($bird2 instanceof Request);
         $this->assertSame('app://self/bird/canary', $bird1->toUri());
         $this->assertSame('app://self/bird/sparrow?id=1', $bird2->toUri());
+        $bird2 = $ro['bird2'];
+        assert($bird2 instanceof Request);
 
-        return $ro['bird2'];
+        return $bird2;
     }
 
     /**
@@ -127,6 +129,7 @@ class EmbedInterceptorTest extends TestCase
         $birdRequest = $ro['birdRequest'];
         assert($birdRequest instanceof Request);
         $birdObject = $ro['birdObject'];
+        assert($birdObject instanceof ResourceObject);
         $this->assertInstanceOf(Request::class, $birdRequest);
         $this->assertSame('get app://self/bird/sparrow?id=3', $birdRequest->toUriWithMethod());
         $this->assertInstanceOf(Sparrow::class, $birdObject);

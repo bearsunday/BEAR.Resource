@@ -11,6 +11,7 @@ use BEAR\Resource\ProdLogger;
 use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Uri;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Psr\Log\NullLogger;
 use Ray\Di\AbstractModule;
 use Ray\Di\Injector;
@@ -27,10 +28,11 @@ class LoggerModuleTest extends TestCase
         $psrLoggerModule = new class extends AbstractModule {
             protected function configure(): void
             {
-                $this->bind(\Psr\Log\LoggerInterface::class)->to(NullLogger::class);
+                $this->bind(PsrLoggerInterface::class)->to(NullLogger::class);
             }
         };
         $logger = (new Injector(new ProdLoggerModule($psrLoggerModule)))->getInstance(LoggerInterface::class);
+        assert($logger instanceof LoggerInterface);
         $this->assertInstanceOf(ProdLogger::class, $logger);
         $roClass = new class extends ResourceObject {
         };

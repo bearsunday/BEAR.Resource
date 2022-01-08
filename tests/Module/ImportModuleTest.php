@@ -10,6 +10,7 @@ use FakeVendor\Sandbox\Module\AppModule;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
+use function assert;
 use function dirname;
 use function file_put_contents;
 use function glob;
@@ -40,6 +41,7 @@ class ImportModuleTest extends TestCase
         $importConfig = [new ImportApp('blog', 'FakeVendor\Blog', 'app')];
         $module->override(new ImportAppModule($importConfig));
         $resource = (new Injector($module, __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
+        assert($resource instanceof ResourceInterface);
         // request
         $news = $resource
             ->get

@@ -145,7 +145,14 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     #[ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
-        /** @psalm-suppress MixedArrayAssignment */
+        if ($this->body === null) {
+            $this->body = [];
+        }
+
+        if (! is_array($this->body)) {
+            throw new IlligalAccessException((string) $offset);
+        }
+
         $this->body[$offset] = $value;
     }
 
@@ -174,7 +181,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     #[ReturnTypeWillChange]
     public function offsetUnset($offset): void
     {
-        /** @psalm-suppress MixedArrayAccess */
+        assert(is_array($this->body));
         unset($this->body[$offset]);
     }
 

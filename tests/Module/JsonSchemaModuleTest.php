@@ -25,7 +25,7 @@ class JsonSchemaModuleTest extends TestCase
         $ro = $this->getRo(FakeUser::class);
         assert($ro instanceof FakeUser);
         $ro->onGet(20);
-        $this->assertSame($ro->body['name']['firstName'], 'mucha');
+        $this->assertSame($ro->body['name']['firstName'], 'mucha'); // @phpstan-ignore-line
     }
 
     public function testValidArrayRef(): void
@@ -33,7 +33,7 @@ class JsonSchemaModuleTest extends TestCase
         $ro = $this->getRo(FakeUsers::class);
         assert($ro instanceof FakeUsers);
         $ro->onGet(20);
-        $this->assertSame($ro->body[0]['name']['firstName'], 'mucha');
+        $this->assertSame($ro->body[0]['name']['firstName'], 'mucha'); // @phpstan-ignore-line
     }
 
     public function testValidateException(): JsonSchemaException

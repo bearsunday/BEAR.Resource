@@ -9,6 +9,8 @@ use FakeVendor\Sandbox\Module\AppModule;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
+use function assert;
+
 class HalModuleTest extends TestCase
 {
     protected function setUp(): void
@@ -19,6 +21,7 @@ class HalModuleTest extends TestCase
     public function testConfigure(): void
     {
         $resource = (new Injector(new AppModule(), __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
+        assert($resource instanceof ResourceInterface);
         // request
         $news = $resource
             ->uri('app://self/news')

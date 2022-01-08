@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
 use function assert;
+use function is_array;
 
 class HttpResourceObjectTest extends TestCase
 {
@@ -20,7 +21,7 @@ class HttpResourceObjectTest extends TestCase
     protected function setUp(): void
     {
         $injector = new Injector(new ResourceModule('FakeVendor\Sandbox'), __DIR__ . '/tmp');
-        $this->resource = $injector->getInstance(ResourceInterface::class);
+        $this->resource = $injector->getInstance(ResourceInterface::class); // @phpstan-ignore-linel
     }
 
     public function testGet(): HttpResourceObject
@@ -28,6 +29,7 @@ class HttpResourceObjectTest extends TestCase
         $response = $this->resource->get('http://httpbin.org/get', ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
         $this->assertArrayHasKey('Access-control-allow-credentials', $response->headers);
+        assert(is_array($response->body));
         $this->assertArrayHasKey('args', $response->body);
         $this->assertStringContainsString('"args": {', (string) $response->view);
         assert($response instanceof HttpResourceObject);
@@ -41,7 +43,7 @@ class HttpResourceObjectTest extends TestCase
         $this->assertSame(200, $response->code);
         $this->assertArrayHasKey('Access-control-allow-credentials', $response->headers);
         $body = $response->body;
-        $this->assertSame('bar', $body['form']['foo']);
+        $this->assertSame('bar', $body['form']['foo']); // @phpstan-ignore-line
         $this->assertStringContainsString('"form": {', (string) $response->view);
     }
 
@@ -51,7 +53,7 @@ class HttpResourceObjectTest extends TestCase
         $this->assertSame(200, $response->code);
         $this->assertArrayHasKey('Access-control-allow-credentials', $response->headers);
         $body = $response->body;
-        $this->assertSame('bar', $body['form']['foo']);
+        $this->assertSame('bar', $body['form']['foo']);  // @phpstan-ignore-line
         $this->assertStringContainsString('"form": {', (string) $response->view);
     }
 
@@ -61,7 +63,7 @@ class HttpResourceObjectTest extends TestCase
         $this->assertSame(200, $response->code);
         $this->assertArrayHasKey('Access-control-allow-credentials', $response->headers);
         $body = $response->body;
-        $this->assertSame('bar', $body['form']['foo']);
+        $this->assertSame('bar', $body['form']['foo']);  // @phpstan-ignore-line
         $this->assertStringContainsString('"form": {', (string) $response->view);
     }
 
@@ -71,7 +73,7 @@ class HttpResourceObjectTest extends TestCase
         $this->assertSame(200, $response->code);
         $this->assertArrayHasKey('Access-control-allow-credentials', $response->headers);
         $body = $response->body;
-        $this->assertSame('bar', $body['form']['foo']);
+        $this->assertSame('bar', $body['form']['foo']);  // @phpstan-ignore-line
         $this->assertStringContainsString('"form": {', (string) $response->view);
     }
 

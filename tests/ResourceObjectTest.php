@@ -8,7 +8,9 @@ use BEAR\Resource\Exception\IlligalAccessException;
 use FakeVendor\Sandbox\Resource\App\Author;
 use PHPUnit\Framework\TestCase;
 
+use function assert;
 use function count;
+use function is_array;
 use function json_encode;
 use function serialize;
 use function unserialize;
@@ -31,6 +33,7 @@ class ResourceObjectTest extends TestCase
         $serialized = serialize($ro);
         $this->assertIsString($serialized);
         $ro = unserialize($serialized);
+        assert($ro instanceof ResourceObject);
         $this->assertInstanceOf(Author::class, $ro['user']);
         $expected = 'app://self/freeze';
         $this->assertSame($expected, (string) $ro->uri);
@@ -72,9 +75,10 @@ class ResourceObjectTest extends TestCase
     public function testEvaluationInSleep(): void
     {
         $ro = new FakeResource();
+        assert(is_array($ro->body));
         $ro->body['req'] = new NullRequest();
         $wakeup = unserialize(serialize($ro));
-        $this->assertSame(null, $wakeup->body['req']->body);
+        $this->assertSame(null, $wakeup->body['req']->body); // @phpstan-ignore-line
     }
 
     /**
@@ -107,5 +111,13 @@ class ResourceObjectTest extends TestCase
         // change cloned uri
         $clonedRo->uri->query = ['modified' => '1'];
         $this->assertSame(['modified' => '0'], $ro->uri->query);
+    }
+
+    public function testSetOffset(): void
+    {
+        $ro = new FakeResource();
+        $ro->body = 1;
+        $this->expectException(IlligalAccessException::class);
+        $ro['a'] = 'a';
     }
 }
