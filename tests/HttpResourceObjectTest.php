@@ -15,7 +15,7 @@ use function is_array;
 
 class HttpResourceObjectTest extends TestCase
 {
-    private \BEAR\Resource\ResourceInterface $resource;
+    private ResourceInterface $resource;
 
     protected function setUp(): void
     {

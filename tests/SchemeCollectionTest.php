@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class SchemeCollectionTest extends TestCase
 {
-    private \BEAR\Resource\SchemeCollection $scheme;
+    private SchemeCollection $scheme;
 
     protected function setUp(): void
     {

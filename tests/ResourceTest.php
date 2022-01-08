@@ -23,7 +23,7 @@ use function unserialize;
 
 class ResourceTest extends TestCase
 {
-    private \BEAR\Resource\ResourceInterface $resource;
+    private ResourceInterface $resource;
 
     protected function setUp(): void
     {
@@ -207,7 +207,7 @@ class ResourceTest extends TestCase
     public function testHal(): void
     {
         $resource = (new Injector(new HalModule(new ResourceModule('FakeVendor\Sandbox')), __DIR__ . '/tmp'))->getInstance(
-            \BEAR\Resource\ResourceInterface::class
+            ResourceInterface::class
         );
         $user = $resource->get->uri('app://self/author')->withQuery(['id' => 1])->eager->request(); // @phpstan-ignore-line
         $expected = '{

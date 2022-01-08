@@ -17,7 +17,7 @@ use function dirname;
 
 class JsonSchemaInterceptorTest extends TestCase
 {
-    private \BEAR\Resource\Interceptor\JsonSchemaInterceptor $jsonSchemaIntercetor;
+    private JsonSchemaInterceptor $jsonSchemaIntercetor;
 
     protected function setup(): void
     {

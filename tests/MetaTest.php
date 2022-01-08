@@ -11,7 +11,7 @@ use function assert;
 
 class MetaTest extends TestCase
 {
-    private \BEAR\Resource\Meta $meta;
+    private Meta $meta;
 
     protected function setUp(): void
     {

@@ -13,7 +13,7 @@ use function assert;
 
 class ShortSyntaxTest extends TestCase
 {
-    private \BEAR\Resource\ResourceInterface $resource;
+    private ResourceInterface $resource;
 
     protected function setUp(): void
     {

@@ -14,7 +14,7 @@ use function call_user_func_array;
 
 class NamedParameterTest extends TestCase
 {
-    private \BEAR\Resource\NamedParameter $params;
+    private NamedParameter $params;
 
     protected function setUp(): void
     {

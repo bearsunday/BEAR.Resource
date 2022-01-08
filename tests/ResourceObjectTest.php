@@ -15,6 +15,8 @@ use function json_encode;
 use function serialize;
 use function unserialize;
 
+use const JSON_THROW_ON_ERROR;
+
 class ResourceObjectTest extends TestCase
 {
     public function testTransfer(): void

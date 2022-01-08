@@ -17,10 +17,8 @@ class LinkerTest extends TestCase
 {
     /** @var Request */
     protected $request;
-
-    private \BEAR\Resource\Linker $linker;
-
-    private \BEAR\Resource\Invoker $invoker;
+    private Linker $linker;
+    private Invoker $invoker;
 
     protected function setUp(): void
     {
