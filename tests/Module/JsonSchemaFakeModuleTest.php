@@ -34,7 +34,7 @@ class JsonSchemaFakeModuleTest extends TestCase
         assert($ro instanceof FakeVoidUsers);
         $ro->onGet(20);
         $this->assertStringContainsString('users.json', $ro->headers[JsonSchemaExceptionFakeHandler::X_FAKE_JSON]);
-        $this->assertIsString($ro->body[0]['name']['firstName']);
+        $this->assertIsString($ro->body[0]['name']['firstName']); // @phpstan-ignore-line
     }
 
     public function testException(): void
@@ -89,6 +89,7 @@ class JsonSchemaFakeModuleTest extends TestCase
     {
         $module = $this->getJsonSchemaModule();
         $ro = (new Injector($module, __DIR__ . '/tmp'))->getInstance($class);
+        assert($ro instanceof ResourceObject);
         $ro->uri = new Uri('app://self/user?id=1');
 
         return $ro;

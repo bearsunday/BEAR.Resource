@@ -7,7 +7,6 @@ namespace BEAR\Resource;
 use BEAR\Resource\Annotation\ResourceParam;
 use Ray\Di\InjectorInterface;
 
-use function assert;
 use function parse_url;
 use function uri_template;
 
@@ -30,9 +29,8 @@ final class AssistedResourceParam implements ParamInterface
     {
         unset($varName);
         $resource = $injector->getInstance(ResourceInterface::class);
-        assert($resource instanceof ResourceInterface);
         $uri = $this->resourceParam->templated === true ? uri_template($this->resourceParam->uri, $query) : $this->resourceParam->uri;
-        $resourceResult = $resource->uri($uri)();
+        $resourceResult = $resource->uri($uri)();  // @phpstan-ignore-line
         $fragment = parse_url($uri, PHP_URL_FRAGMENT);
 
         return $resourceResult[$fragment];

@@ -16,6 +16,7 @@ use Serializable;
 use Stringable;
 use Throwable;
 
+use function array_key_exists;
 use function array_merge;
 use function assert;
 use function get_class;
@@ -137,7 +138,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
             trigger_error($e->getMessage() . PHP_EOL . $e->getTraceAsString(), E_USER_ERROR);
 
             /** @noinspection PhpUnreachableStatementInspection */
-            return '';
+            return ''; // @phpstan-ignore-line
         }
     }
 
@@ -242,7 +243,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
         $this->invoke();
         assert($this->result instanceof ResourceObject);
 
-        return isset($this->result->body[$offset]);
+        return is_array($this->result->body) && array_key_exists($offset, $this->result->body);
     }
 
     /**

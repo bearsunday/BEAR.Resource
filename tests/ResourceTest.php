@@ -30,7 +30,7 @@ class ResourceTest extends TestCase
     {
         parent::setUp();
         $injector = new Injector(new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox')), __DIR__ . '/tmp');
-        $this->resource = $injector->getInstance(ResourceInterface::class);
+        $this->resource = $injector->getInstance(ResourceInterface::class); // @phpstan-ignore-line
     }
 
     public function testManualConstruction(): void
@@ -98,18 +98,22 @@ class ResourceTest extends TestCase
     public function testHrefInResourceObject(): void
     {
         $origin = $this->resource->get->uri('app://self/href/origin')->withQuery(['id' => 1])->eager->request();
+        assert($origin instanceof ResourceObject);
         $this->assertInstanceOf(Origin::class, $origin);
         $this->assertInstanceOf(Target::class, $origin['next']);
         $next = $origin['next'];
+        assert($next instanceof ResourceObject);
         $this->assertSame($next['id'], 1);
     }
 
     public function testHrefInResourceObjectHasEmbed(): void
     {
         $origin = $this->resource->get->uri('app://self/href/hasembed')->withQuery(['id' => 1])->eager->request();
+        assert($origin instanceof ResourceObject);
         $this->assertInstanceOf(Hasembed::class, $origin);
         $this->assertInstanceOf(Target::class, $origin['next']);
         $next = $origin['next'];
+        assert($next instanceof ResourceObject);
         $this->assertSame($next['id'], 1);
     }
 
@@ -144,7 +148,7 @@ class ResourceTest extends TestCase
     }
 
     /**
-     * @return array<string, array|int|string>
+     * @return array<string, array<mixed>|int|string>
      */
     public function testLinkCrawl(): array
     {
@@ -206,7 +210,7 @@ class ResourceTest extends TestCase
         $resource = (new Injector(new HalModule(new ResourceModule('FakeVendor\Sandbox')), __DIR__ . '/tmp'))->getInstance(
             'BEAR\Resource\ResourceInterface'
         );
-        $user = $resource->get->uri('app://self/author')->withQuery(['id' => 1])->eager->request();
+        $user = $resource->get->uri('app://self/author')->withQuery(['id' => 1])->eager->request(); // @phpstan-ignore-line
         $expected = '{
     "name": "Aramis",
     "age": 16,
@@ -233,8 +237,8 @@ class ResourceTest extends TestCase
     public function testAssistedParameter(): ResourceInterface
     {
         $injector = new Injector(new FakeAssistedModule(new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox'))), __DIR__ . '/tmp');
-        $this->resource = $injector->getInstance(ResourceInterface::class);
-        $ro = $this->resource->get->uri('page://self/assist')->eager->request();
+        $this->resource = $injector->getInstance(ResourceInterface::class); // @phpstan-ignore-line
+        $ro = $this->resource->get->uri('page://self/assist')->eager->request(); // @phpstan-ignore-line
         /** @var ResourceObject $ro */
         $this->assertSame('login_id:assisted01', $ro->body);
 

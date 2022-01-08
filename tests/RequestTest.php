@@ -134,7 +134,7 @@ class RequestTest extends TestCase
             Request::GET,
             ['a' => 'koriym', 'b' => 25]
         );
-        $this->assertSame(['koriym', 30], $request(['b' => 30])->body['posts']);
+        $this->assertSame(['koriym', 30], $request(['b' => 30])->body['posts']);  // @phpstan-ignore-line
         $this->assertSame('{"posts":["koriym",30]}', (string) $request);
     }
 

@@ -10,6 +10,7 @@ use BEAR\Resource\Interceptor\FakeLogInterceptor;
 use BEAR\Resource\Mock\Blog;
 use BEAR\Resource\Mock\Comment;
 use BEAR\Resource\Mock\Json;
+use BEAR\Resource\Mock\Person;
 use FakeVendor\Sandbox\Resource\App\Doc;
 use FakeVendor\Sandbox\Resource\App\Restbucks\Order;
 use FakeVendor\Sandbox\Resource\App\User;
@@ -19,6 +20,8 @@ use LogicException;
 use PHPUnit\Framework\TestCase;
 use Ray\Aop\Bind;
 use Ray\Aop\Compiler;
+
+use function assert;
 
 class InvokerTest extends TestCase
 {
@@ -217,6 +220,7 @@ class InvokerTest extends TestCase
         $person = ['age' => 28, 'name' => 'monsley'];
         $request = new Request($this->invoker, (new FakeRo())(new Json()), Request::GET, ['specialPerson' => $person]);
         $actual = $this->invoker->invoke($request)->body;
+        assert($actual instanceof Person);
         $this->assertSame($actual->name, 'monsley');
         $this->assertSame($actual->age, 28);
     }
@@ -226,6 +230,7 @@ class InvokerTest extends TestCase
         $person = ['age' => 28, 'name' => 'monsley'];
         $request = new Request($this->invoker, (new FakeRo())(new Json()), Request::GET, ['special_person' => $person]);
         $actual = $this->invoker->invoke($request)->body;
+        assert($actual instanceof Person);
         $this->assertSame($actual->name, 'monsley');
         $this->assertSame($actual->age, 28);
     }

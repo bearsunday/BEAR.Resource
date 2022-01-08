@@ -85,7 +85,7 @@ final class OptionsRenderer implements RenderInterface
      *
      * @param list<string> $allows
      *
-     * @return array<string, array<int|string, array|string>>
+     * @return array<string, array<array<mixed>|string>>
      */
     private function getEntityBody(ResourceObject $ro, array $allows): array
     {

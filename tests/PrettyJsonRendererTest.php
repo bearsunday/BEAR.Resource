@@ -9,6 +9,8 @@ use BEAR\Resource\Module\ResourceModule;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
+use function assert;
+
 class PrettyJsonRendererTest extends TestCase
 {
     /** @var PrettyJsonRenderer */
@@ -34,6 +36,7 @@ class PrettyJsonRendererTest extends TestCase
     public function testRenderWithEmbeded(): void
     {
         $resource = (new Injector(new EmbedResourceModule(new ResourceModule('FakeVendor\Sandbox')), __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
+        assert($resource instanceof ResourceInterface);
         $ro = $resource->get('app://self/bird/embed-birds', ['id' => '1']);
         $this->assertSame('{
     "birds": {

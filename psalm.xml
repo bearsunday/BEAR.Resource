@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 <psalm
-    phpVersion="7.2"
+    phpVersion="7.4"
     errorLevel="1"
-    resolveFromConfigFile="true"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config https://psalm.dev/schema/config"

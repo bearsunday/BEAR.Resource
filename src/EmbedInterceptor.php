@@ -7,12 +7,14 @@ namespace BEAR\Resource;
 use BEAR\Resource\Annotation\Embed;
 use BEAR\Resource\Exception\BadRequestException;
 use BEAR\Resource\Exception\EmbedException;
+use BEAR\Resource\Exception\LinkException;
 use Doctrine\Common\Annotations\Reader;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
 
 use function array_shift;
 use function assert;
+use function is_array;
 use function uri_template;
 
 final class EmbedInterceptor implements MethodInterceptor
@@ -67,7 +69,14 @@ final class EmbedInterceptor implements MethodInterceptor
                 $uri = uri_template($templateUri, $query);
                 /** @var Request $request */ // phpcs:ignore SlevomatCodingStandard.PHP.RequireExplicitAssertion.RequiredExplicitAssertion
                 $request = $this->resource->get->uri($uri);
-                /** @psalm-suppress MixedArrayAssignment */
+                if ($ro->body === null) {
+                    $ro->body = [];
+                }
+
+                if (! is_array($ro->body)) {
+                    throw new LinkException($embed->rel);
+                }
+
                 $ro->body[$embed->rel] = clone $request;
             } catch (BadRequestException $e) {
                 // wrap ResourceNotFound or Uri exception

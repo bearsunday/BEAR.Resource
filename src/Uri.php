@@ -32,7 +32,7 @@ final class Uri extends AbstractUri
         }
 
         $parts = (array) parse_url($uri);
-        $host = isset($parts['port']) ? sprintf('%s:%s', $parts['host'] ?? '', $parts['port'] ?? '') : $parts['host'] ?? '';
+        $host = isset($parts['port']) ? sprintf('%s:%s', $parts['host'] ?? '', $parts['port'] ?? '') : $parts['host'] ?? ''; // @phpstan-ignore-line
         [$this->scheme, $this->host, $this->path] = [$parts['scheme'] ?? '', $host, $parts['path'] ?? ''];
         $parseQuery = $this->query;
         if (array_key_exists('query', $parts)) {

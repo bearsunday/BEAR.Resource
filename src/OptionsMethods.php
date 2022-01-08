@@ -58,7 +58,7 @@ final class OptionsMethods
     /**
      * return array{summary?: string, description?: string, request: array, links: array, embed: array}
      *
-     * @return array<int|string, array|string>
+     * @return array<int|string, array<mixed>|string>
      */
     public function __invoke(ResourceObject $ro, string $requestMethod): array
     {
