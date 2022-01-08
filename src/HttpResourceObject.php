@@ -30,13 +30,10 @@ final class HttpResourceObject extends ResourceObject
 {
     /** {@inheritdoc} */
     public $body;
+    private HttpClientInterface $client;
 
-    private \Symfony\Contracts\HttpClient\HttpClientInterface $client;
-
-    /**
-     * @psalm-suppress PropertyNotSetInConstructor
-     */
-    private \Symfony\Contracts\HttpClient\ResponseInterface $response;
+    /** @psalm-suppress PropertyNotSetInConstructor */
+    private ResponseInterface $response;
 
     public function __construct(HttpClientInterface $client)
     {

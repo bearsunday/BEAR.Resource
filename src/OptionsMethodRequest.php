@@ -21,7 +21,7 @@ use function method_exists;
 
 final class OptionsMethodRequest
 {
-    private \Doctrine\Common\Annotations\Reader $reader;
+    private Reader $reader;
 
     public function __construct(Reader $reader)
     {

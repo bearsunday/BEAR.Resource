@@ -17,7 +17,7 @@ use function ucwords;
 
 final class AppAdapter implements AdapterInterface
 {
-    private \Ray\Di\InjectorInterface $injector;
+    private InjectorInterface $injector;
 
     /**
      * Resource adapter namespace

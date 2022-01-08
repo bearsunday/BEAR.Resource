@@ -11,7 +11,7 @@ use function get_class;
 
 final class ExtraMethodInvoker
 {
-    private \BEAR\Resource\RenderInterface $optionsRenderer;
+    private RenderInterface $optionsRenderer;
 
     /**
      * @Named("optionsRenderer=options")

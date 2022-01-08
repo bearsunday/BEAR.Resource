@@ -19,9 +19,8 @@ use function uri_template;
 
 final class EmbedInterceptor implements MethodInterceptor
 {
-    private \BEAR\Resource\ResourceInterface $resource;
-
-    private \Doctrine\Common\Annotations\Reader $reader;
+    private ResourceInterface $resource;
+    private Reader $reader;
 
     public function __construct(ResourceInterface $resource, Reader $reader)
     {

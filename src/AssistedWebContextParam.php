@@ -18,10 +18,8 @@ final class AssistedWebContextParam implements ParamInterface
      * @var array<string, array<string, mixed>>
      */
     private static array $globals = [];
-
-    private \Ray\WebContextParam\Annotation\AbstractWebContextParam $webContextParam;
-
-    private \BEAR\Resource\ParamInterface $defaultParam;
+    private AbstractWebContextParam $webContextParam;
+    private ParamInterface $defaultParam;
 
     public function __construct(AbstractWebContextParam $webContextParam, ParamInterface $defaultParam)
     {

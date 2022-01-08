@@ -18,7 +18,7 @@ use const PHP_VERSION_ID;
 
 final class NamedParamMetas implements NamedParamMetasInterface
 {
-    private \Doctrine\Common\Annotations\Reader $reader;
+    private Reader $reader;
 
     public function __construct(Reader $reader)
     {

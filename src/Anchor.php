@@ -18,7 +18,7 @@ use function uri_template;
 
 final class Anchor implements AnchorInterface
 {
-    private \Doctrine\Common\Annotations\Reader $reader;
+    private Reader $reader;
 
     public function __construct(Reader $reader)
     {

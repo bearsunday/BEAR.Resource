@@ -25,6 +25,8 @@ use function file_get_contents;
 use function get_class;
 use function json_decode;
 
+use const JSON_THROW_ON_ERROR;
+
 final class OptionsMethods
 {
     /**
@@ -39,8 +41,7 @@ final class OptionsMethods
         FilesParam::class => 'files',
     ];
 
-    private \Doctrine\Common\Annotations\Reader $reader;
-
+    private Reader $reader;
     private string $schemaDir;
 
     /**

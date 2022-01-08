@@ -8,7 +8,7 @@ use Ray\Di\InjectorInterface;
 
 final class HttpAdapter implements AdapterInterface
 {
-    private \Ray\Di\InjectorInterface $injector;
+    private InjectorInterface $injector;
 
     /**
      * @param InjectorInterface $injector Application dependency injector

@@ -23,33 +23,31 @@ final class Resource implements ResourceInterface
     /**
      * Resource factory
      */
-    private \BEAR\Resource\FactoryInterface $factory;
-
-    private \BEAR\Resource\InvokerInterface $invoker;
+    private FactoryInterface $factory;
+    private InvokerInterface $invoker;
 
     /**
      * Anchor
      */
-    private \BEAR\Resource\AnchorInterface $anchor;
+    private AnchorInterface $anchor;
 
     /**
      * Linker
      */
-    private \BEAR\Resource\LinkerInterface $linker;
+    private LinkerInterface $linker;
 
     /**
      * Request
      *
      * @psalm-suppress PropertyNotSetInConstructor
      */
-    private \BEAR\Resource\Request $request;
+    private Request $request;
 
     /**
      * Request method
      */
     private string $method = 'get';
-
-    private \BEAR\Resource\UriFactory $uri;
+    private UriFactory $uri;
 
     /** @noinspection MoreThanThreeArgumentsInspection */
 

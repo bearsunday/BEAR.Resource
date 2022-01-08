@@ -16,10 +16,8 @@ final class ImportSchemeCollectionProvider implements ProviderInterface
 {
     /** @var ImportApp[] */
     private array $importAppConfig;
-
     private string $appName;
-
-    private \Ray\Di\InjectorInterface $injector;
+    private InjectorInterface $injector;
 
     /**
      * @param ImportApp[] $importAppConfig

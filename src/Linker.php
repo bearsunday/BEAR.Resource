@@ -28,11 +28,9 @@ use function uri_template;
  */
 final class Linker implements LinkerInterface
 {
-    private \Doctrine\Common\Annotations\Reader $reader;
-
-    private \BEAR\Resource\InvokerInterface $invoker;
-
-    private \BEAR\Resource\FactoryInterface $factory;
+    private Reader $reader;
+    private InvokerInterface $invoker;
+    private FactoryInterface $factory;
 
     /**
      * memory cache for linker

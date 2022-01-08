@@ -19,13 +19,13 @@ use function json_decode;
 use function method_exists;
 use function ucfirst;
 
+use const JSON_THROW_ON_ERROR;
 use const PHP_EOL;
 
 final class HalRenderer implements RenderInterface
 {
-    private \Doctrine\Common\Annotations\Reader $reader;
-
-    private \BEAR\Resource\HalLink $link;
+    private Reader $reader;
+    private HalLink $link;
 
     public function __construct(Reader $reader, HalLink $link)
     {

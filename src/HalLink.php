@@ -12,7 +12,7 @@ use function uri_template;
 
 final class HalLink
 {
-    private \BEAR\Resource\ReverseLinkInterface $link;
+    private ReverseLinkInterface $link;
 
     public function __construct(ReverseLinkInterface $link)
     {

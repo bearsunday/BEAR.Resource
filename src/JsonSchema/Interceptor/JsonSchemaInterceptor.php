@@ -30,15 +30,14 @@ use function property_exists;
 use function sprintf;
 use function str_replace;
 
+use const JSON_THROW_ON_ERROR;
+
 final class JsonSchemaInterceptor implements JsonSchemaInterceptorInterface
 {
     private string $schemaDir;
-
     private string $validateDir;
-
     private ?string $schemaHost;
-
-    private \BEAR\Resource\JsonSchemaExceptionHandlerInterface $handler;
+    private JsonSchemaExceptionHandlerInterface $handler;
 
     /**
      * @Named("schemaDir=json_schema_dir,validateDir=json_validate_dir,schemaHost=json_schema_host")
