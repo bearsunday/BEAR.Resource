@@ -11,6 +11,6 @@ class FakeTestRenderer implements RenderInterface
 {
     public function render(ResourceObject $ro)
     {
-        return json_encode($ro->body);
+        return json_encode($ro->body, JSON_THROW_ON_ERROR);
     }
 }

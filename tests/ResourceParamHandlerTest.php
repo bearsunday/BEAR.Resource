@@ -11,8 +11,7 @@ use Ray\Di\Injector;
 
 class ResourceParamHandlerTest extends TestCase
 {
-    /** @var ResourceInterface */
-    private $resource;
+    private \BEAR\Resource\ResourceInterface $resource;
 
     protected function setUp(): void
     {

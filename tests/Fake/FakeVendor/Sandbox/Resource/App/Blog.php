@@ -9,7 +9,7 @@ use BEAR\Resource\ResourceObject;
 
 class Blog extends ResourceObject
 {
-    private $repo = [
+    private array $repo = [
         11 => ['id' => 11, 'name' => 'Athos blog'],
         12 => ['id' => 12, 'name' => 'Aramis blog'],
         16 => ['id' => 16, 'name' => 'Porthos blog'],

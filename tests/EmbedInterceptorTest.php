@@ -18,8 +18,7 @@ use function serialize;
 
 class EmbedInterceptorTest extends TestCase
 {
-    /** @var ResourceInterface */
-    private $resource;
+    private \BEAR\Resource\ResourceInterface $resource;
 
     protected function setUp(): void
     {
@@ -32,7 +31,7 @@ class EmbedInterceptorTest extends TestCase
         assert($result instanceof Birds);
         $profile = $result['bird1'];
         /** @var Request $profile */
-        $this->assertInstanceOf('BEAR\Resource\Request', $profile);
+        $this->assertInstanceOf(\BEAR\Resource\Request::class, $profile);
         $this->assertSame('get app://self/bird/canary', $profile->toUriWithMethod());
 
         return $result;
@@ -44,7 +43,7 @@ class EmbedInterceptorTest extends TestCase
         assert($result instanceof BirdsRel);
         $profile = $result['bird1'];
         /** @var Request $profile */
-        $this->assertInstanceOf('BEAR\Resource\Request', $profile);
+        $this->assertInstanceOf(\BEAR\Resource\Request::class, $profile);
         $this->assertSame('get app://self/bird/canary', $profile->toUriWithMethod());
 
         return $result;
@@ -57,7 +56,7 @@ class EmbedInterceptorTest extends TestCase
     {
         $profile = $result['bird2'];
         assert($profile instanceof Request);
-        $this->assertInstanceOf('BEAR\Resource\Request', $profile);
+        $this->assertInstanceOf(\BEAR\Resource\Request::class, $profile);
         $this->assertSame('get app://self/bird/sparrow?id=1', $profile->toUriWithMethod());
 
         return $result;

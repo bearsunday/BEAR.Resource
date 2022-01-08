@@ -17,8 +17,7 @@ use function log;
 
 class JsonRendererTest extends TestCase
 {
-    /** @var FakeRoot */
-    private $ro;
+    private \BEAR\Resource\FakeRoot $ro;
 
     protected function setUp(): void
     {

@@ -14,8 +14,7 @@ use Ray\ServiceLocator\ServiceLocator;
 
 class HalRendererTest extends TestCase
 {
-    /** @var FakeHal */
-    private $ro;
+    private \BEAR\Resource\FakeHal $ro;
 
     protected function setUp(): void
     {

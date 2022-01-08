@@ -9,7 +9,7 @@ use BEAR\Resource\ResourceObject;
 
 class Post extends ResourceObject
 {
-    private $repo = [
+    private array $repo = [
         'blog11' => [
             'id' => '1',
             'author_id' => '1',
