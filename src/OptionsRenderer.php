@@ -28,11 +28,9 @@ use const PHP_EOL;
  */
 final class OptionsRenderer implements RenderInterface
 {
-    /** @var OptionsMethods */
-    private $optionsMethod;
+    private \BEAR\Resource\OptionsMethods $optionsMethod;
 
-    /** @var bool */
-    private $optionsBody;
+    private bool $optionsBody;
 
     /**
      * @OptionsBody("optionsBody")

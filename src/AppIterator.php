@@ -26,14 +26,13 @@ use function strpos;
  */
 final class AppIterator implements Iterator
 {
-    /** @var int */
-    private $i = 0;
+    private int $i = 0;
 
     /** @var array<string, Meta> */
-    private $metaCollection = [];
+    private array $metaCollection = [];
 
     /** @var list<string> */
-    private $keys = [];
+    private array $keys = [];
 
     /**
      * @throws ResourceDirException

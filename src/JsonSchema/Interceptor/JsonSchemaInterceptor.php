@@ -32,17 +32,13 @@ use function str_replace;
 
 final class JsonSchemaInterceptor implements JsonSchemaInterceptorInterface
 {
-    /** @var string */
-    private $schemaDir;
+    private string $schemaDir;
 
-    /** @var string */
-    private $validateDir;
+    private string $validateDir;
 
-    /** @var ?string */
-    private $schemaHost;
+    private ?string $schemaHost;
 
-    /** @var JsonSchemaExceptionHandlerInterface */
-    private $handler;
+    private \BEAR\Resource\JsonSchemaExceptionHandlerInterface $handler;
 
     /**
      * @Named("schemaDir=json_schema_dir,validateDir=json_validate_dir,schemaHost=json_schema_host")
@@ -104,7 +100,7 @@ final class JsonSchemaInterceptor implements JsonSchemaInterceptorInterface
     private function validateRo(ResourceObject $ro, string $schemaFile, JsonSchema $jsonSchema): void
     {
         /** @var array<stdClass>|false|stdClass $json */
-        $json = json_decode((string) json_encode($ro));
+        $json = json_decode((string) json_encode($ro, JSON_THROW_ON_ERROR), null, 512, JSON_THROW_ON_ERROR);
         /** @var array<stdClass>|stdClass $target */
         $target = is_object($json) ? $this->getTarget($json, $jsonSchema) : $json;
         $this->validate($target, $schemaFile);

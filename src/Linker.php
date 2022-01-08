@@ -28,21 +28,18 @@ use function uri_template;
  */
 final class Linker implements LinkerInterface
 {
-    /** @var Reader */
-    private $reader;
+    private \Doctrine\Common\Annotations\Reader $reader;
 
-    /** @var InvokerInterface */
-    private $invoker;
+    private \BEAR\Resource\InvokerInterface $invoker;
 
-    /** @var FactoryInterface */
-    private $factory;
+    private \BEAR\Resource\FactoryInterface $factory;
 
     /**
      * memory cache for linker
      *
      * @var array<string, mixed>
      */
-    private $cache = [];
+    private array $cache = [];
 
     public function __construct(
         Reader $reader,

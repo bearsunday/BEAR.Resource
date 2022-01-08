@@ -13,13 +13,10 @@ final class Factory implements FactoryInterface
 {
     /**
      * Resource adapter biding config
-     *
-     * @var SchemeCollectionInterface
      */
-    private $scheme;
+    private \BEAR\Resource\SchemeCollectionInterface $scheme;
 
-    /** @var UriFactory */
-    private $uri;
+    private \BEAR\Resource\UriFactory $uri;
 
     public function __construct(SchemeCollectionInterface $scheme, UriFactory $uri)
     {

@@ -9,8 +9,7 @@ use Ray\Di\AbstractModule;
 
 final class ResourceModule extends AbstractModule
 {
-    /** @var string */
-    private $appName;
+    private string $appName;
 
     /**
      * @param string $appName Application name ex) 'Vendor\Project'

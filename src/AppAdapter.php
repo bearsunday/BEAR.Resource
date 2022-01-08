@@ -17,15 +17,12 @@ use function ucwords;
 
 final class AppAdapter implements AdapterInterface
 {
-    /** @var InjectorInterface */
-    private $injector;
+    private \Ray\Di\InjectorInterface $injector;
 
     /**
      * Resource adapter namespace
-     *
-     * @var string
      */
-    private $namespace;
+    private string $namespace;
 
     /**
      * @param InjectorInterface $injector  Application dependency injector

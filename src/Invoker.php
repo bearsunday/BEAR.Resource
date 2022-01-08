@@ -9,14 +9,11 @@ use function ucfirst;
 
 final class Invoker implements InvokerInterface
 {
-    /** @var NamedParameterInterface */
-    private $params;
+    private \BEAR\Resource\NamedParameterInterface $params;
 
-    /** @var ExtraMethodInvoker */
-    private $extraMethod;
+    private \BEAR\Resource\ExtraMethodInvoker $extraMethod;
 
-    /** @var LoggerInterface */
-    private $logger;
+    private \BEAR\Resource\LoggerInterface $logger;
 
     public function __construct(NamedParameterInterface $params, ExtraMethodInvoker $extraMethod, LoggerInterface $logger)
     {
