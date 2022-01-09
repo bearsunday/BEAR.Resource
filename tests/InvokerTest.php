@@ -25,11 +25,8 @@ use function assert;
 
 class InvokerTest extends TestCase
 {
-    /** @var Invoker */
-    protected $invoker;
-
-    /** @var Request */
-    protected $request;
+    protected Invoker $invoker;
+    protected Request $request;
 
     protected function setUp(): void
     {

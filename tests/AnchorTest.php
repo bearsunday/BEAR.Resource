@@ -11,11 +11,8 @@ use Ray\ServiceLocator\ServiceLocator;
 
 class AnchorTest extends TestCase
 {
-    /** @var Anchor */
-    private $anchor;
-
-    /** @var Request */
-    private $request;
+    private Anchor $anchor;
+    private Request $request;
 
     protected function setUp(): void
     {

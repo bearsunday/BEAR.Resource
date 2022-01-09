@@ -21,20 +21,11 @@ use const E_USER_WARNING;
 
 class RequestTest extends TestCase
 {
-    /** @var Request */
-    protected $request;
-
-    /** @var Invoker */
-    private $invoker;
-
-    /** @var FakeResource */
-    private $fake;
-
-    /** @var Entry */
-    private $entry;
-
-    /** @var FakeNopResource */
-    private $nop;
+    protected Request $request;
+    private Invoker $invoker;
+    private FakeResource $fake;
+    private Entry $entry;
+    private FakeNopResource $nop;
 
     protected function setUp(): void
     {

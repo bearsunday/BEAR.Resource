@@ -167,8 +167,7 @@ EOT;
     public function testBodyObject(): void
     {
         $this->ro->body = new class {
-            /** @var int */
-            public $a = 1;
+            public int $a = 1;
         };
         $actual = (string) $this->ro;
 
