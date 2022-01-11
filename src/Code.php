@@ -11,38 +11,26 @@ final class Code
 {
     // 20X Success
     public const OK = 200;
-
     public const CREATED = 201;
-
     public const ACCEPTED = 202;
-
     public const NO_CONTENT = 204;
 
     // 30X Redirection
     public const MOVED_PERMANENTLY = 301;
-
     public const FOUND = 302;
-
     public const SEE_OTHER = 303;
-
     public const NOT_MODIFIED = 304;
-
     public const TEMPORARY_REDIRECT = 307;
-
     public const PERMANENT_REDIRECT = 308;
 
     // 40X Client Error
     public const BAD_REQUEST = 400;
-
     public const UNAUTHORIZED = 401;
-
     public const FORBIDDEN = 403;
-
     public const NOT_FOUND = 404;
 
     // 50X Service Error
     public const ERROR = 500;
-
     public const SERVICE_UNAVAILABLE = 503;
 
     /**

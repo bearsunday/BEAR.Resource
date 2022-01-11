@@ -11,8 +11,7 @@ use function assert;
 
 class MetaTest extends TestCase
 {
-    /** @var Meta */
-    private $meta;
+    private Meta $meta;
 
     protected function setUp(): void
     {

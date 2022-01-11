@@ -8,7 +8,7 @@ use BEAR\Resource\ResourceObject;
 
 class User extends ResourceObject
 {
-    const PARAMETER_IN_SERVICE_EXCEPTION = 0;
+    public const PARAMETER_IN_SERVICE_EXCEPTION = 0;
 
     public function onGet($author_id)
     {

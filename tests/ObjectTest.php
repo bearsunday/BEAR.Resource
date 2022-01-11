@@ -12,8 +12,7 @@ use function is_array;
 
 class ObjectTest extends TestCase
 {
-    /** @var ResourceObject */
-    protected $ro;
+    protected ResourceObject $ro;
 
     protected function setUp(): void
     {

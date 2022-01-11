@@ -13,13 +13,9 @@ final class Factory implements FactoryInterface
 {
     /**
      * Resource adapter biding config
-     *
-     * @var SchemeCollectionInterface
      */
-    private $scheme;
-
-    /** @var UriFactory */
-    private $uri;
+    private SchemeCollectionInterface $scheme;
+    private UriFactory $uri;
 
     public function __construct(SchemeCollectionInterface $scheme, UriFactory $uri)
     {

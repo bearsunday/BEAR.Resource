@@ -10,7 +10,7 @@ use BEAR\Resource\ResourceObject;
 /** @noinspection PhpUndefinedClassInspection */
 class User extends ResourceObject
 {
-    private $users = [
+    private array $users = [
         0 => ['name' => 'Athos', 'age' => 15, 'blog_id' => 11],
         1 => ['name' => 'Aramis', 'age' => 16, 'blog_id' => 12],
         2 => ['name' => 'Porthos', 'age' => 17, 'blog_id' => 0]

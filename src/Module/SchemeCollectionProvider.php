@@ -13,11 +13,8 @@ use Ray\Di\ProviderInterface;
 
 final class SchemeCollectionProvider implements ProviderInterface
 {
-    /** @var string */
-    private $appName;
-
-    /** @var InjectorInterface */
-    private $injector;
+    private string $appName;
+    private InjectorInterface $injector;
 
     /**
      * @AppName("appName")

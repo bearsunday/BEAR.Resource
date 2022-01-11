@@ -17,7 +17,7 @@ final class ImportAppModule extends AbstractModule
      *
      * @var array<ImportApp>
      */
-    private $importAppConfig = [];
+    private array $importAppConfig = [];
 
     /**
      * @param array<ImportApp> $importApps

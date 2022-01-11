@@ -8,5 +8,5 @@ use BEAR\Resource\ResourceObject;
 
 class Index extends ResourceObject
 {
-    public $class = __CLASS__;
+    public $class = self::class;
 }

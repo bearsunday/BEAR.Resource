@@ -15,11 +15,8 @@ use function strtolower;
 
 final class ClassParam implements ParamInterface
 {
-    /** @var string */
-    private $type;
-
-    /** @var bool */
-    private $isDefaultAvailable;
+    private string $type;
+    private bool $isDefaultAvailable;
 
     /** @var mixed */
     private $defaultValue;

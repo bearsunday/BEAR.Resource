@@ -11,14 +11,11 @@ use PHPUnit\Framework\TestCase;
 
 class OptionsTest extends TestCase
 {
-    /** @var Invoker */
-    protected $invoker;
+    protected Invoker $invoker;
 
     /** @var array<string, mixed> */
-    protected $query = [];
-
-    /** @var Request */
-    protected $request;
+    protected array $query = [];
+    protected Request $request;
 
     protected function setUp(): void
     {

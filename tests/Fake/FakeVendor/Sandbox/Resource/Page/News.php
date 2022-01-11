@@ -10,6 +10,6 @@ class News extends ResourceObject
 {
     public function onGet(string $id)
     {
-        return __CLASS__ . $id;
+        return self::class . $id;
     }
 }

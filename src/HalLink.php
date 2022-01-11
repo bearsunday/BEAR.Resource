@@ -12,8 +12,7 @@ use function uri_template;
 
 final class HalLink
 {
-    /** @var ReverseLinkInterface */
-    private $link;
+    private ReverseLinkInterface $link;
 
     public function __construct(ReverseLinkInterface $link)
     {

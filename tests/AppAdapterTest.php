@@ -14,8 +14,7 @@ use Ray\Di\Injector;
 
 class AppAdapterTest extends TestCase
 {
-    /** @var AppAdapter */
-    private $appAdapter;
+    private AppAdapter $appAdapter;
 
     protected function setUp(): void
     {

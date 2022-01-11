@@ -10,10 +10,7 @@ use BEAR\Resource\ResourceObject;
 
 class Origin extends ResourceObject
 {
-    /**
-     * @var ResourceInterface
-     */
-    private $resource;
+    private \BEAR\Resource\ResourceInterface $resource;
 
     public function __construct(ResourceInterface $resource)
     {

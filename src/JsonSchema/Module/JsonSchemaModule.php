@@ -14,11 +14,8 @@ use Ray\Di\AbstractModule;
 
 final class JsonSchemaModule extends AbstractModule
 {
-    /** @var string */
-    private $jsonSchemaDir;
-
-    /** @var string */
-    private $jsonValidateDir;
+    private string $jsonSchemaDir;
+    private string $jsonValidateDir;
 
     /**
      * @param string $jsonSchemaDir   Json-schema json file directory

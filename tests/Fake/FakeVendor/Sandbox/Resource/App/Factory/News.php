@@ -10,6 +10,6 @@ class News extends Ro
 {
     public function onGet(int $id)
     {
-        return __CLASS__ . $id;
+        return self::class . $id;
     }
 }

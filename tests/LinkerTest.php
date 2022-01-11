@@ -15,14 +15,9 @@ use Ray\ServiceLocator\ServiceLocator;
 
 class LinkerTest extends TestCase
 {
-    /** @var Request */
-    protected $request;
-
-    /** @var Linker */
-    private $linker;
-
-    /** @var Invoker */
-    private $invoker;
+    protected Request $request;
+    private Linker $linker;
+    private Invoker $invoker;
 
     protected function setUp(): void
     {

@@ -22,45 +22,32 @@ final class Resource implements ResourceInterface
 {
     /**
      * Resource factory
-     *
-     * @var FactoryInterface
      */
-    private $factory;
-
-    /** @var InvokerInterface */
-    private $invoker;
+    private FactoryInterface $factory;
+    private InvokerInterface $invoker;
 
     /**
      * Anchor
-     *
-     * @var AnchorInterface
      */
-    private $anchor;
+    private AnchorInterface $anchor;
 
     /**
      * Linker
-     *
-     * @var LinkerInterface
      */
-    private $linker;
+    private LinkerInterface $linker;
 
     /**
      * Request
      *
-     * @var Request
      * @psalm-suppress PropertyNotSetInConstructor
      */
-    private $request;
+    private Request $request;
 
     /**
      * Request method
-     *
-     * @var string
      */
-    private $method = 'get';
-
-    /** @var UriFactory */
-    private $uri;
+    private string $method = 'get';
+    private UriFactory $uri;
 
     /** @noinspection MoreThanThreeArgumentsInspection */
 

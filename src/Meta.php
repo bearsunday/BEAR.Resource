@@ -19,7 +19,6 @@ use function substr;
 final class Meta
 {
     private const EXTRAS_VENDOR = 'vendor';
-
     private const EXTRAS_PACKAGE = 'package';
 
     /** @var string */

@@ -13,8 +13,7 @@ use const FILTER_VALIDATE_URL;
 
 final class JsonSchemaLinkHeaderModule extends AbstractModule
 {
-    /** @var string */
-    private $jsonSchemaHost;
+    private string $jsonSchemaHost;
 
     /**
      * @param string $jsonSchemaHost Json-schema host name ex) https://example.com/schema/

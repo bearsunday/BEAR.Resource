@@ -17,13 +17,9 @@ final class AssistedWebContextParam implements ParamInterface
      *
      * @var array<string, array<string, mixed>>
      */
-    private static $globals = [];
-
-    /** @var AbstractWebContextParam */
-    private $webContextParam;
-
-    /** @var ParamInterface */
-    private $defaultParam;
+    private static array $globals = [];
+    private AbstractWebContextParam $webContextParam;
+    private ParamInterface $defaultParam;
 
     public function __construct(AbstractWebContextParam $webContextParam, ParamInterface $defaultParam)
     {
@@ -36,7 +32,7 @@ final class AssistedWebContextParam implements ParamInterface
      */
     public function __invoke(string $varName, array $query, InjectorInterface $injector)
     {
-        $superGlobals = static::$globals ? static::$globals : $GLOBALS;
+        $superGlobals = static::$globals ?: $GLOBALS;
         /** @var array<string, array<string, string>> $superGlobals */
         $webContextParam = $this->webContextParam;
         assert(is_string($webContextParam::GLOBAL_KEY));

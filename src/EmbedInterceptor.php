@@ -19,11 +19,8 @@ use function uri_template;
 
 final class EmbedInterceptor implements MethodInterceptor
 {
-    /** @var ResourceInterface */
-    private $resource;
-
-    /** @var Reader */
-    private $reader;
+    private ResourceInterface $resource;
+    private Reader $reader;
 
     public function __construct(ResourceInterface $resource, Reader $reader)
     {

@@ -13,8 +13,7 @@ use function assert;
 
 class PrettyJsonRendererTest extends TestCase
 {
-    /** @var PrettyJsonRenderer */
-    private $renderer;
+    private PrettyJsonRenderer $renderer;
 
     public function setUp(): void
     {

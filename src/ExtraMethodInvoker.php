@@ -11,8 +11,7 @@ use function get_class;
 
 final class ExtraMethodInvoker
 {
-    /** @var RenderInterface */
-    private $optionsRenderer;
+    private RenderInterface $optionsRenderer;
 
     /**
      * @Named("optionsRenderer=options")

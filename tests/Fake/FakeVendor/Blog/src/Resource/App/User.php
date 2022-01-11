@@ -12,7 +12,7 @@ class User extends ResourceObject
         'x-header-test' => '123'
     ];
 
-    private $users = [
+    private array $users = [
         ['id' => 1, 'name' => 'Athos', 'age' => 15, 'blog_id' => 11],
         ['id' => 2, 'name' => 'Aramis', 'age' => 16, 'blog_id' => 12],
         ['id' => 3, 'name' => 'Porthos', 'age' => 17, 'blog_id' => 0]

@@ -25,6 +25,8 @@ use function file_get_contents;
 use function get_class;
 use function json_decode;
 
+use const JSON_THROW_ON_ERROR;
+
 final class OptionsMethods
 {
     /**
@@ -39,11 +41,8 @@ final class OptionsMethods
         FilesParam::class => 'files',
     ];
 
-    /** @var Reader */
-    private $reader;
-
-    /** @var string */
-    private $schemaDir;
+    private Reader $reader;
+    private string $schemaDir;
 
     /**
      * @Named("schemaDir=json_schema_dir")
@@ -141,6 +140,6 @@ final class OptionsMethods
             return [];
         }
 
-        return (array) json_decode((string) file_get_contents($schemaFile));
+        return (array) json_decode((string) file_get_contents($schemaFile), null, 512, JSON_THROW_ON_ERROR);
     }
 }

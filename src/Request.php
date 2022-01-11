@@ -17,17 +17,11 @@ use function in_array;
 final class Request extends AbstractRequest
 {
     public const GET = 'get';
-
     public const POST = 'post';
-
     public const PUT = 'put';
-
     public const PATCH = 'patch';
-
     public const DELETE = 'delete';
-
     public const HEAD = 'head';
-
     public const OPTIONS = 'options';
 
     /**

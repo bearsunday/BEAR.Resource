@@ -15,7 +15,7 @@ use Ray\Di\Di\Scope;
  */
 class Order extends ResourceObject
 {
-    private $orders = [];
+    private array $orders = [];
 
     public function __construct()
     {

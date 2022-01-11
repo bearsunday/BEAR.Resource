@@ -9,7 +9,7 @@ use BEAR\Resource\ResourceObject;
 
 class Menu extends ResourceObject
 {
-    private $menu = [];
+    private array $menu = [];
 
     public function __construct()
     {

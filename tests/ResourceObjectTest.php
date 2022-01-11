@@ -15,6 +15,8 @@ use function json_encode;
 use function serialize;
 use function unserialize;
 
+use const JSON_THROW_ON_ERROR;
+
 class ResourceObjectTest extends TestCase
 {
     public function testTransfer(): void
@@ -43,7 +45,7 @@ class ResourceObjectTest extends TestCase
     {
         $ro = new FakeFreeze();
         $ro->uri = new Uri('app://self/freeze');
-        $json = json_encode($ro);
+        $json = json_encode($ro, JSON_THROW_ON_ERROR);
         $this->assertIsString($json);
         $expected = '{"php":"7","user":{"name":"Aramis","age":16,"blog_id":12}}';
         $this->assertSame($expected, $json);

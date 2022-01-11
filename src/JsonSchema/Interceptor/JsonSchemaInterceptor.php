@@ -30,19 +30,14 @@ use function property_exists;
 use function sprintf;
 use function str_replace;
 
+use const JSON_THROW_ON_ERROR;
+
 final class JsonSchemaInterceptor implements JsonSchemaInterceptorInterface
 {
-    /** @var string */
-    private $schemaDir;
-
-    /** @var string */
-    private $validateDir;
-
-    /** @var ?string */
-    private $schemaHost;
-
-    /** @var JsonSchemaExceptionHandlerInterface */
-    private $handler;
+    private string $schemaDir;
+    private string $validateDir;
+    private ?string $schemaHost;
+    private JsonSchemaExceptionHandlerInterface $handler;
 
     /**
      * @Named("schemaDir=json_schema_dir,validateDir=json_validate_dir,schemaHost=json_schema_host")
@@ -104,7 +99,7 @@ final class JsonSchemaInterceptor implements JsonSchemaInterceptorInterface
     private function validateRo(ResourceObject $ro, string $schemaFile, JsonSchema $jsonSchema): void
     {
         /** @var array<stdClass>|false|stdClass $json */
-        $json = json_decode((string) json_encode($ro));
+        $json = json_decode(json_encode($ro, JSON_THROW_ON_ERROR), null, 512, JSON_THROW_ON_ERROR);
         /** @var array<stdClass>|stdClass $target */
         $target = is_object($json) ? $this->getTarget($json, $jsonSchema) : $json;
         $this->validate($target, $schemaFile);

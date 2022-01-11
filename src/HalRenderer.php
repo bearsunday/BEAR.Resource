@@ -19,15 +19,13 @@ use function json_decode;
 use function method_exists;
 use function ucfirst;
 
+use const JSON_THROW_ON_ERROR;
 use const PHP_EOL;
 
 final class HalRenderer implements RenderInterface
 {
-    /** @var Reader */
-    private $reader;
-
-    /** @var HalLink */
-    private $link;
+    private Reader $reader;
+    private HalLink $link;
 
     public function __construct(Reader $reader, HalLink $link)
     {
@@ -91,7 +89,7 @@ final class HalRenderer implements RenderInterface
             // @codeCoverageIgnoreEnd
             unset($ro->body[$key]); // @phpstan-ignore-line
             $view = $this->render($embeded());
-            $ro->body['_embedded'][$key] = json_decode($view); // @phpstan-ignore-line
+            $ro->body['_embedded'][$key] = json_decode($view, null, 512, JSON_THROW_ON_ERROR); // @phpstan-ignore-line
         }
     }
 

@@ -6,14 +6,13 @@ namespace BEAR\Resource;
 
 final class Params
 {
-    /** @var string */
-    public $method;
+    public string $method;
 
     /** @var string[] */
-    public $required = [];
+    public array $required = [];
 
     /** @var string[] */
-    public $optional = [];
+    public array $optional = [];
 
     /**
      * @param list<string> $required

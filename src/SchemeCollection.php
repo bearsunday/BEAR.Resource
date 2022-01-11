@@ -12,20 +12,16 @@ final class SchemeCollection implements SchemeCollectionInterface
 {
     /**
      * Scheme
-     *
-     * @var string
      */
-    private $scheme = '';
+    private string $scheme = '';
 
     /**
      * Application name
-     *
-     * @var string
      */
-    private $app = '';
+    private string $app = '';
 
     /** @var AdapterInterface[] */
-    private $collection = [];
+    private array $collection = [];
 
     /**
      * {@inheritdoc}

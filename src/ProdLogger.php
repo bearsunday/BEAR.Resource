@@ -11,8 +11,7 @@ use function sprintf;
 
 final class ProdLogger implements LoggerInterface
 {
-    /** @var PsrLoggerInterface */
-    private $logger;
+    private PsrLoggerInterface $logger;
 
     public function __construct(PsrLoggerInterface $logger)
     {

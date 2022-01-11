@@ -11,8 +11,7 @@ use function parse_url;
 
 final class UriFactory
 {
-    /** @var string */
-    private $schemaHost;
+    private string $schemaHost;
 
     /**
      * @ContextScheme

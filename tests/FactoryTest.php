@@ -19,8 +19,7 @@ use function get_class;
 
 class FactoryTest extends TestCase
 {
-    /** @var Factory */
-    protected $factory;
+    protected Factory $factory;
 
     protected function setUp(): void
     {

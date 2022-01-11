@@ -13,8 +13,7 @@ use const FILTER_VALIDATE_URL;
 
 class AppIteratorTest extends TestCase
 {
-    /** @var AppIterator */
-    private $appIterator;
+    private AppIterator $appIterator;
 
     protected function setUp(): void
     {
