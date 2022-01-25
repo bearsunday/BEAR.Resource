@@ -342,5 +342,4 @@ class ResourceTest extends TestCase
         $this->expectException(BadRequestException::class);
         $this->resource->uri('app://self/stone')(['id' => '']);
     }
-
 }

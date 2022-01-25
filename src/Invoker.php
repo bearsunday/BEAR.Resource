@@ -3,6 +3,8 @@
 
 namespace BEAR\Resource;
 
+use BEAR\Resource\Exception\BadRequestException;
+use Throwable;
 use function call_user_func_array;
 use function is_callable;
 use function ucfirst;
@@ -37,7 +39,14 @@ final class Invoker implements InvokerInterface
 
         $params = $this->params->getParameters($callable, $request->query);
         /** @psalm-suppress MixedAssignment */
-        $response = call_user_func_array($callable, $params);
+        try {
+            $response = call_user_func_array($callable, $params);
+        } catch (Throwable $e) {
+            if (get_class($e) === 'TypeError') {
+                throw new BadRequestException('Invalid parameter type', 0, $e);
+            }
+            throw $e;
+        }
         if (! $response instanceof ResourceObject) {
             $request->resourceObject->body = $response;
             $response = $request->resourceObject;
