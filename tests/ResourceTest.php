@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+use BEAR\Resource\Exception\BadRequestException;
 use BEAR\Resource\Exception\MethodNotAllowedException;
 use BEAR\Resource\Module\HalModule;
 use BEAR\Resource\Module\ResourceModule;
@@ -334,5 +335,11 @@ class ResourceTest extends TestCase
     public function testSerialize(): void
     {
         $this->assertInstanceOf(ResourceInterface::class, unserialize(serialize($this->resource)));
+    }
+
+    public function testInvokeWrongType(): void
+    {
+        $this->expectException(BadRequestException::class);
+        $this->resource->uri('app://self/stone')(['id' => '']);
     }
 }
