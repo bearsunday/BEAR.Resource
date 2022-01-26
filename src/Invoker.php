@@ -43,7 +43,7 @@ final class Invoker implements InvokerInterface
             $response = call_user_func_array($callable, $params);
         } catch (Throwable $e) {
             if (get_class($e) === 'TypeError') {
-                throw new BadRequestException('Invalid parameter type', 0, $e);
+                throw new BadRequestException('Invalid parameter type', Code::BAD_REQUEST, $e);
             }
             throw $e;
         }
