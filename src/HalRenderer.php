@@ -72,24 +72,24 @@ final class HalRenderer implements RenderInterface
                 continue;
             }
 
-            $isNotArray = ! isset($ro->body['_embedded']) || ! is_array($ro->body['_embedded']); // @phpstan-ignore-line
+            $isNotArray = ! isset($ro->body['_embedded']) || ! is_array($ro->body['_embedded']);
             if ($isNotArray) {
-                $ro->body['_embedded'] = []; // @phpstan-ignore-line
+                $ro->body['_embedded'] = [];
             }
 
-            assert(is_array($ro->body['_embedded'])); // @phpstan-ignore-line
+            assert(is_array($ro->body['_embedded']));
             // @codeCoverageIgnoreStart
             if ($this->isDifferentSchema($ro, $embeded->resourceObject)) {
                 $ro->body['_embedded'][$key] = $embeded()->body;
-                unset($ro->body[$key]); // @phpstan-ignore-line
+                unset($ro->body[$key]);
 
                 continue;
             }
 
             // @codeCoverageIgnoreEnd
-            unset($ro->body[$key]); // @phpstan-ignore-line
+            unset($ro->body[$key]);
             $view = $this->render($embeded());
-            $ro->body['_embedded'][$key] = json_decode($view, null, 512, JSON_THROW_ON_ERROR); // @phpstan-ignore-line
+            $ro->body['_embedded'][$key] = json_decode($view, null, 512, JSON_THROW_ON_ERROR);
         }
     }
 
