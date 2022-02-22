@@ -16,6 +16,7 @@ class FakeResource extends ResourceObject
     public function onGet($a, $b)
     {
         $this['posts'] = [$a, $b];
+        $this['nullValue'] = null;
 
         return $this;
     }
