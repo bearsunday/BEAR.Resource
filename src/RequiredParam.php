@@ -7,6 +7,7 @@ namespace BEAR\Resource;
 use BEAR\Resource\Exception\ParameterException;
 use Ray\Di\InjectorInterface;
 
+use function array_key_exists;
 use function ltrim;
 use function preg_replace;
 use function strtolower;
@@ -18,13 +19,13 @@ final class RequiredParam implements ParamInterface
      */
     public function __invoke(string $varName, array $query, InjectorInterface $injector)
     {
-        if (isset($query[$varName])) {
+        if (array_key_exists($varName, $query)) {
             return $query[$varName];
         }
 
         // try camelCase variable name
         $snakeName = ltrim(strtolower((string) preg_replace('/[A-Z]/', '_\0', $varName)), '_');
-        if (isset($query[$snakeName])) {
+        if (array_key_exists($snakeName, $query)) {
             return $query[$snakeName];
         }
 
