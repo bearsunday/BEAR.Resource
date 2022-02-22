@@ -112,6 +112,18 @@ class RequestTest extends TestCase
         $this->assertSame(['koriym', 30], $request(['b' => 30])->body);
     }
 
+    public function testOffsetGetNullValue(): void
+    {
+        $request = new Request(
+            $this->invoker,
+            $this->fake,
+            Request::GET,
+            ['a' => 'koriym', 'b' => 25]
+        );
+
+        $this->assertNull($request['nullValue']);
+    }
+
     public function testToStringWithRenderableResourceObject(): void
     {
         $ro = new FakeResource();
@@ -124,7 +136,7 @@ class RequestTest extends TestCase
             ['a' => 'koriym', 'b' => 25]
         );
         $this->assertSame(['koriym', 30], $request(['b' => 30])->body['posts']);  // @phpstan-ignore-line
-        $this->assertSame('{"posts":["koriym",30]}', (string) $request);
+        $this->assertSame('{"posts":["koriym",30],"nullValue":null}', (string) $request);
     }
 
     public function testToStringWithErrorRenderer(): void
@@ -158,7 +170,7 @@ class RequestTest extends TestCase
             ['a' => 'koriym', 'b' => 25]
         );
         $result = (string) $request;
-        $this->assertSame('{"posts":["koriym",25]}', $result);
+        $this->assertSame('{"posts":["koriym",25],"nullValue":null}', $result);
     }
 
     public function testIterator(): void
@@ -298,7 +310,7 @@ class RequestTest extends TestCase
     public function testBody(Request $request): void
     {
         $body = $request->body;
-        $expected = ['posts' => ['koriym', 25]];
+        $expected = ['posts' => ['koriym', 25], 'nullValue' => null];
         $this->assertSame($expected, $body);
     }
 

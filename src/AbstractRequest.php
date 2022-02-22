@@ -225,7 +225,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     {
         $this->invoke();
         assert($this->result instanceof ResourceObject);
-        if (! is_array($this->result->body) || ! isset($this->result->body[$offset])) {
+        if (! is_array($this->result->body) || ! array_key_exists($offset, $this->result->body)) {
             throw new OutOfBoundsException("[{$offset}] for object[" . get_class($this->result) . ']', 400);
         }
 
