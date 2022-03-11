@@ -32,10 +32,17 @@ final class JsonSchema
      */
     public $params;
 
-    public function __construct(string $schema = '', string $key = '', string $params = '')
+    /**
+     * @Enum({"view", "body"})
+     * @var string
+     */
+    public $target;
+
+    public function __construct(string $schema = '', string $key = '', string $params = '', string $target = 'body')
     {
         $this->key = $key;
         $this->schema = $schema;
         $this->params = $params;
+        $this->target = $target;
     }
 }

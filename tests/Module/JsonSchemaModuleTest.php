@@ -6,6 +6,7 @@ namespace BEAR\Resource\Module;
 
 use BEAR\Resource\Exception\JsonSchemaException;
 use BEAR\Resource\Exception\JsonSchemaNotFoundException;
+use BEAR\Resource\Interceptor\JsonSchemaInterceptorInterface;
 use BEAR\Resource\JsonSchema\FakePerson;
 use BEAR\Resource\JsonSchema\FakeUser;
 use BEAR\Resource\JsonSchema\FakeUsers;
@@ -13,6 +14,7 @@ use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Uri;
 use LogicException;
 use PHPUnit\Framework\TestCase;
+use Ray\Aop\NullInterceptor;
 use Ray\Di\Injector;
 
 use function assert;
@@ -156,5 +158,11 @@ class JsonSchemaModuleTest extends TestCase
         $jsonValidate = dirname(__DIR__) . '/Fake/json_validate';
 
         return new JsonSchemaModule($jsonSchema, $jsonValidate);
+    }
+
+    public function testNullJsonSchemaModule(): void
+    {
+        $interceptor = (new Injector(new NullJsonSchemaModule()))->getInstance(JsonSchemaInterceptorInterface::class);
+        $this->assertInstanceOf(NullInterceptor::class, $interceptor);
     }
 }

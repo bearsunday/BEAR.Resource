@@ -12,6 +12,9 @@ use BEAR\Resource\SchemeCollection;
 use Ray\Di\InjectorInterface;
 use Ray\Di\ProviderInterface;
 
+/**
+ * @implements ProviderInterface<SchemeCollection>
+ */
 final class ImportSchemeCollectionProvider implements ProviderInterface
 {
     /** @var ImportApp[] */
@@ -38,7 +41,7 @@ final class ImportSchemeCollectionProvider implements ProviderInterface
      *
      * @return SchemeCollection
      */
-    public function get()
+    public function get(): SchemeCollection
     {
         $schemeCollection = (new SchemeCollectionProvider($this->appName, $this->injector))->get();
         foreach ($this->importAppConfig as $importApp) {
