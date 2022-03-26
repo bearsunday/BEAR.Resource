@@ -4,6 +4,7 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\ParameterException;
 use Ray\Di\InjectorInterface;
+use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionParameter;
 
@@ -48,6 +49,11 @@ final class ClassParam implements ParamInterface
         }
 
         assert(class_exists($this->type));
+        $hasConstructor = (bool) (new ReflectionClass($this->type))->getConstructor();
+        if ($hasConstructor) {
+            return new $this->type(...$props);
+        }
+
         /** @psalm-suppress MixedMethodCall */
         $obj = new $this->type();
         /** @psalm-suppress MixedAssignment */
