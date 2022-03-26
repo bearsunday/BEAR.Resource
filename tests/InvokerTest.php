@@ -10,7 +10,9 @@ use BEAR\Resource\Interceptor\FakeLogInterceptor;
 use BEAR\Resource\Mock\Blog;
 use BEAR\Resource\Mock\Comment;
 use BEAR\Resource\Mock\Json;
+use BEAR\Resource\Mock\JsonConstructor;
 use BEAR\Resource\Mock\Person;
+use BEAR\Resource\Mock\PersonConstructor;
 use FakeVendor\Sandbox\Resource\App\Doc;
 use FakeVendor\Sandbox\Resource\App\Restbucks\Order;
 use FakeVendor\Sandbox\Resource\App\User;
@@ -220,6 +222,16 @@ class InvokerTest extends TestCase
         assert($actual instanceof Person);
         $this->assertSame($actual->name, 'monsley');
         $this->assertSame($actual->age, 28);
+    }
+
+    public function testInvokeClassHavingConstructorTyped(): void
+    {
+        $person = ['age' => 28, 'name' => 'monsley'];
+        $request = new Request($this->invoker, (new FakeRo())(new JsonConstructor()), Request::GET, ['specialPerson' => $person]);
+        $actual = $this->invoker->invoke($request)->body;
+        assert($actual instanceof PersonConstructor);
+        $this->assertSame($actual->getName(), 'monsley');
+        $this->assertSame($actual->getAge(), 28);
     }
 
     public function testInvokeClassTypedSnakeCase(): void
