@@ -58,6 +58,7 @@ final class ClassParam implements ParamInterface
                 $props = array_values($props);
             }
 
+            /** @psalm-suppress MixedMethodCall */
             return new $this->type(...$props);
         }
 
