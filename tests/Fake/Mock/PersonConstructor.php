@@ -19,7 +19,7 @@ class PersonConstructor
         return $this->age;
     }
 
-    public function __construct(string $name, int $age)
+    public function __construct(int $age, string $name)
     {
         $this->name = $name;
         $this->age = $age;
