@@ -8,6 +8,9 @@ use BEAR\Resource\DevLogger;
 use BEAR\Resource\LoggerInterface;
 use Ray\Di\AbstractModule;
 
+/**
+ * Provides LoggerInterface bindings
+ */
 final class DevLoggerModule extends AbstractModule
 {
     protected function configure(): void

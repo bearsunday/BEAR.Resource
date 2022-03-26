@@ -7,6 +7,20 @@ namespace BEAR\Resource\Module;
 use BEAR\Resource\Annotation\AppName;
 use Ray\Di\AbstractModule;
 
+/**
+ * Provides ResourceInterface and derived bindings
+ *
+ * The following module is installed:
+ *
+ * AppName
+ *
+ * The following module is installed:
+ *
+ * ResourceClientModule
+ * AnnotationModule
+ * EmbedResourceModule
+ * HttpClientModule
+ */
 final class ResourceModule extends AbstractModule
 {
     private string $appName;

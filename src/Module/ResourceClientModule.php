@@ -35,6 +35,27 @@ use Ray\Di\Exception\NotFound;
 use Ray\Di\Scope;
 
 /**
+ * Provides ResourceInterface and derived bindings
+ *
+ * The following module is installed:
+ *
+ * UriFactory
+ * ResourceInterface
+ * InvokerInterface
+ * LinkerInterface
+ * FactoryInterface
+ * SchemeCollectionInterface
+ * AnchorInterface
+ * NamedParameterInterface
+ * RenderInterface
+ * RenderInterface-options
+ * OptionsMethods
+ * NamedParamMetasInterface
+ * ExtraMethodInvoker
+ * HalLink
+ * ReverseLinkInterface
+ * LoggerInterface
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 final class ResourceClientModule extends AbstractModule
