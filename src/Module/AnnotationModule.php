@@ -10,6 +10,14 @@ use Koriym\Attributes\AttributeReader;
 use Koriym\Attributes\DualReader;
 use Ray\Di\AbstractModule;
 
+/**
+ * Provides DualReader and derived bindings
+ *
+ * The following module is installed:
+ *
+ * Reader-annotation
+ * Reader-attribute
+ */
 final class AnnotationModule extends AbstractModule
 {
     /**

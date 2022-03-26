@@ -8,6 +8,9 @@ use BEAR\Resource\OptionsRenderer;
 use BEAR\Resource\RenderInterface;
 use Ray\Di\AbstractModule;
 
+/**
+ * Provides RenderInterface-options bindings
+ */
 final class OptionsMethodModule extends AbstractModule
 {
     /**

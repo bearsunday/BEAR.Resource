@@ -8,6 +8,9 @@ use BEAR\Resource\Annotation\Embed;
 use BEAR\Resource\EmbedInterceptor;
 use Ray\Di\AbstractModule;
 
+/**
+ * Provides EmbedInterceptor interceptor bindings
+ */
 final class EmbedResourceModule extends AbstractModule
 {
     /**
