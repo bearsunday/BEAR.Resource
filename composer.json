@@ -20,7 +20,7 @@
         "koriym/json-schema-faker": "^0.2",
         "nocarrier/hal": "^0.9.12",
         "phpdocumentor/reflection-docblock": "^5.2",
-        "psr/log": "^1.1",
+        "psr/log": "^1.1 || ^2.0 || ^3.0",
         "ray/aop": "^2.10.1",
         "ray/di": "^2.13",
         "ray/web-param-module": "^2.1.1",
