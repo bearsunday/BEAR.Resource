@@ -57,6 +57,7 @@
     },
     "scripts" :{
         "post-install-cmd": ["@composer bin all install --ansi"],
+        "post-update-cmd": ["@composer bin all install --ansi"],
         "test": ["./vendor/bin/phpunit"],
         "tests": ["@cs", "@test", "@sa"],
         "coverage": ["php -dzend_extension=xdebug.so -dxdebug.mode=coverage ./vendor/bin/phpunit --coverage-text --coverage-html=build/coverage"],
