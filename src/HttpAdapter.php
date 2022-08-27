@@ -23,6 +23,6 @@ final class HttpAdapter implements AdapterInterface
      */
     public function get(AbstractUri $uri): ResourceObject
     {
-        return $this->injector->getInstance(HttpResourceObject::class); // @phpstan-ignore-line
+        return $this->injector->getInstance(HttpResourceObject::class);
     }
 }
