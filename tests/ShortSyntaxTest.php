@@ -18,7 +18,7 @@ class ShortSyntaxTest extends TestCase
     protected function setUp(): void
     {
         $injector = new Injector(new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox')));
-        $this->resource = $injector->getInstance(ResourceInterface::class); // @phpstan-ignore-line
+        $this->resource = $injector->getInstance(ResourceInterface::class);
     }
 
     /**

@@ -17,7 +17,7 @@ class ResourceParamHandlerTest extends TestCase
     {
         parent::setUp();
         $module = new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox'));
-        $this->resource = (new Injector($module, __DIR__ . '/tmp'))->getInstance(ResourceInterface::class); // @phpstan-ignore-line
+        $this->resource = (new Injector($module, __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
     }
 
     public function testResourceParam(): void

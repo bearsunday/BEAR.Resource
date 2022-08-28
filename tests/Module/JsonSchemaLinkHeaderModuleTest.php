@@ -14,7 +14,7 @@ class JsonSchemaLinkHeaderModuleTest extends TestCase
     {
         $jsonSchemaHost = 'http://example.com/schema/';
         $injector = new Injector(new JsonSchemaLinkHeaderModule($jsonSchemaHost));
-        $instance = $injector->getInstance('', 'json_schema_host');
+        $instance = $injector->getInstance('', 'json_schema_host'); // @phpstan-ignore-line
         $this->assertSame($jsonSchemaHost, $instance);
     }
 
