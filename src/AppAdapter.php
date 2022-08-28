@@ -50,7 +50,7 @@ final class AppAdapter implements AdapterInterface
         /** @var ''|class-string $class */
         $class = sprintf('%s\Resource\%s', $this->namespace, str_replace('/', '\\', ucwords($uri->scheme) . $path));
         try {
-            $instance = $this->injector->getInstance($class);
+            $instance = $this->injector->getInstance($class); // @phpstan-ignore-line
             assert($instance instanceof ResourceObject);
         } catch (Unbound $e) {
             throw $this->getNotFound($uri, $e, $class);
