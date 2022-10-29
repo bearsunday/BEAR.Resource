@@ -20,7 +20,7 @@ final class ImportAppConfig
     /** @var string */
     public $value;
 
-    public function __construct(string $value)
+    public function __construct(string $value = '')
     {
         $this->value = $value;
     }
