@@ -8,14 +8,11 @@ use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionParameter;
 
-use function array_values;
 use function assert;
 use function class_exists;
 use function ltrim;
 use function preg_replace;
 use function strtolower;
-
-use const PHP_MAJOR_VERSION;
 
 final class ClassParam implements ParamInterface
 {
@@ -54,10 +51,6 @@ final class ClassParam implements ParamInterface
         assert(class_exists($this->type));
         $hasConstructor = (bool) (new ReflectionClass($this->type))->getConstructor();
         if ($hasConstructor) {
-            if (PHP_MAJOR_VERSION < 8) {
-                $props = array_values($props);
-            }
-
             /** @psalm-suppress MixedMethodCall */
             return new $this->type(...$props);
         }
