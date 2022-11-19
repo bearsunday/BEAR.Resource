@@ -93,8 +93,7 @@ final class JsonSchemaInterceptor implements JsonSchemaInterceptorInterface
         $this->validate($target, $schemaFile);
     }
 
-    /** @return mixed */
-    private function getTarget(object $json, JsonSchema $jsonSchema)
+    private function getTarget(object $json, JsonSchema $jsonSchema): mixed
     {
         if ($jsonSchema->key === '') {
             return $json;
@@ -108,7 +107,7 @@ final class JsonSchemaInterceptor implements JsonSchemaInterceptorInterface
     }
 
     /** @param array<stdClass>|array<string, mixed>|stdClass $target */
-    private function validate($target, string $schemaFile): void
+    private function validate(array|stdClass $target, string $schemaFile): void
     {
         $validator = new Validator();
         $schema = (object) ['$ref' => 'file://' . $schemaFile];
@@ -182,7 +181,7 @@ final class JsonSchemaInterceptor implements JsonSchemaInterceptorInterface
     }
 
     /** @return array<string, mixed> */
-    private function getNamedArguments(MethodInvocation $invocation)
+    private function getNamedArguments(MethodInvocation $invocation): array
     {
         $parameters = $invocation->getMethod()->getParameters();
         $values = $invocation->getArguments();

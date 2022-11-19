@@ -44,7 +44,7 @@ final class HttpResourceObject extends ResourceObject
      *
      * @return array<int|string, mixed>|int|string
      */
-    public function __get(string $name)
+    public function __get(string $name): array|int|string
     {
         if ($name === 'code') {
             return $this->response->getStatusCode();
@@ -84,8 +84,7 @@ final class HttpResourceObject extends ResourceObject
         return $formated;
     }
 
-    /** @param mixed $value */
-    public function __set(string $name, $value): void
+    public function __set(string $name, mixed $value): void
     {
         unset($value);
 

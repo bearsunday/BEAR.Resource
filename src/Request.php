@@ -24,12 +24,8 @@ final class Request extends AbstractRequest
     public const HEAD = 'head';
     public const OPTIONS = 'options';
 
-    /**
-     * @return array<string, string>|int|mixed|self
-     *
-     * @psalm-suppress ImplementedReturnTypeMismatch
-     */
-    public function __get(string $name)
+    /** @psalm-suppress ImplementedReturnTypeMismatch */
+    public function __get(string $name): mixed
     {
         if ($name === 'eager' || $name === 'lazy') {
             $this->in = $name;

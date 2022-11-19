@@ -42,7 +42,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
     }
 
     /** @return array<string, AssistedWebContextParam|ParamInterface> */
-    private function getAnnotationParamMetas(ReflectionMethod $method)
+    private function getAnnotationParamMetas(ReflectionMethod $method): array
     {
         $parameters = $method->getParameters();
         $annotations = $this->reader->getMethodAnnotations($method);
@@ -178,11 +178,8 @@ final class NamedParamMetas implements NamedParamMetasInterface
         return $names;
     }
 
-    /**
-     * @return DefaultParam|NoDefaultParam
-     * @psalm-return DefaultParam<mixed>|NoDefaultParam
-     */
-    private function getDefault(ReflectionParameter $parameter)
+    /** @psalm-return DefaultParam<mixed>|NoDefaultParam */
+    private function getDefault(ReflectionParameter $parameter): DefaultParam|NoDefaultParam
     {
         return $parameter->isDefaultValueAvailable() === true ? new DefaultParam($parameter->getDefaultValue()) : new NoDefaultParam();
     }

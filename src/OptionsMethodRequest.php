@@ -43,11 +43,9 @@ final class OptionsMethodRequest
     /**
      * @param array<string, array{type?: string, description?: string}> $paramDoc
      *
-     * @return ?string
-     *
      * @psalm-suppress RedundantCondition for BC
      */
-    private function getParameterType(ReflectionParameter $parameter, array $paramDoc, string $name)
+    private function getParameterType(ReflectionParameter $parameter, array $paramDoc, string $name): string|null
     {
         $hasType = method_exists($parameter, 'getType') && $parameter->getType();
         if ($hasType) {

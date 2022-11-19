@@ -72,10 +72,8 @@ final class Linker implements LinkerInterface
 
     /**
      * How next linked resource treated (add ? replace ?)
-     *
-     * @param mixed|ResourceObject $nextResource
      */
-    private function nextLink(LinkType $link, ResourceObject $ro, $nextResource): ResourceObject
+    private function nextLink(LinkType $link, ResourceObject $ro, mixed $nextResource): ResourceObject
     {
         /** @var array<mixed> $nextBody */
         $nextBody = $nextResource instanceof ResourceObject ? $nextResource->body : $nextResource;
@@ -217,8 +215,7 @@ final class Linker implements LinkerInterface
         return $body;
     }
 
-    /** @param mixed $value */
-    private function isList($value): bool
+    private function isList(mixed $value): bool
     {
         assert(is_array($value));
         /** @var array<array<mixed>|string> $list */
@@ -253,11 +250,8 @@ final class Linker implements LinkerInterface
         return true;
     }
 
-    /**
-     * @param array<int|string, mixed> $value
-     * @param mixed                    $firstRow
-     */
-    private function isMultiColumnList(array $value, $firstRow): bool
+    /** @param array<int|string, mixed> $value */
+    private function isMultiColumnList(array $value, mixed $firstRow): bool
     {
         return is_array($firstRow) && array_filter(array_keys($value), 'is_numeric') === array_keys($value);
     }

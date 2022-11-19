@@ -17,8 +17,7 @@ final class NullRequest implements RequestInterface
         return '';
     }
 
-    /** @return ResourceObject */
-    public function request()
+    public function request(): ResourceObject
     {
         return new NullResourceObject();
     }

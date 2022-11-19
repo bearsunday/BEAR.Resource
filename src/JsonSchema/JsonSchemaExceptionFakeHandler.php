@@ -7,6 +7,7 @@ namespace BEAR\Resource;
 use BEAR\Resource\Exception\JsonSchemaException;
 use JSONSchemaFaker\Faker;
 use SplFileInfo;
+use stdClass;
 
 use function is_object;
 
@@ -39,9 +40,9 @@ class JsonSchemaExceptionFakeHandler implements JsonSchemaExceptionHandlerInterf
     /**
      * @param array<int|string, mixed> $values
      *
-     * @return array<int|string, mixed>
+     * @return array<int|string, mixed>|stdClass
      */
-    private function deepArray($values): array
+    private function deepArray(array|stdClass $values): array
     {
         $result = [];
         /** @psalm-suppress MixedAssignment */

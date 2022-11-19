@@ -24,13 +24,11 @@ final class Factory implements FactoryInterface
     /**
      * Set scheme collection
      *
-     * @return void
-     *
      * @Inject(optional=true)
      * @codeCoverageIgnore
      */
     #[Inject(optional: true)]
-    public function setSchemeCollection(SchemeCollectionInterface $scheme)
+    public function setSchemeCollection(SchemeCollectionInterface $scheme): void
     {
         $this->scheme = $scheme;
     }
