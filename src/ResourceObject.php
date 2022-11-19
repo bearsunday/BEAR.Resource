@@ -18,7 +18,6 @@ use Throwable;
 use function asort;
 use function assert;
 use function count;
-use function get_class;
 use function is_array;
 use function is_iterable;
 use function is_string;
@@ -89,7 +88,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         try {
             $view = $this->toString();
         } catch (Throwable $e) {
-            $msg = sprintf("%s(%s)\n%s", get_class($e), $e->getMessage(), $e->getTraceAsString());
+            $msg = sprintf("%s(%s)\n%s", $e::class, $e->getMessage(), $e->getTraceAsString());
             trigger_error($msg, E_USER_WARNING);
 
             return '';
@@ -98,9 +97,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         return $view;
     }
 
-    /**
-     * @return list<string>
-     */
+    /** @return list<string> */
     public function __sleep()
     {
         if (is_array($this->body)) {
@@ -260,9 +257,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         return $this->renderer->render($this);
     }
 
-    /**
-     * @return array<int|string, mixed>
-     */
+    /** @return array<int|string, mixed> */
     public function jsonSerialize(): array
     {
         /** @psalm-suppress MixedAssignment */

@@ -54,9 +54,7 @@ class JsonSchemaModuleTest extends TestCase
         return $e;
     }
 
-    /**
-     * @depends testValidateException
-     */
+    /** @depends testValidateException */
     public function testBCValidateErrorException(JsonSchemaException $e): void
     {
         $expected = '[age] Must have a minimum value of 20';
@@ -108,9 +106,7 @@ class JsonSchemaModuleTest extends TestCase
         $this->assertSame('<http://example.com/schema/user.json>; rel="describedby"', $ro->headers['Link']);
     }
 
-    /**
-     * @param class-string $class
-     */
+    /** @param class-string $class */
     private function createJsonSchemaException(string $class): JsonSchemaException
     {
         $ro = $this->getRo($class);
@@ -124,9 +120,7 @@ class JsonSchemaModuleTest extends TestCase
         throw new LogicException();
     }
 
-    /**
-     * @param class-string $class
-     */
+    /** @param class-string $class */
     private function getRo(string $class): ResourceObject
     {
         $module = $this->getJsonSchemaModule();
@@ -137,9 +131,7 @@ class JsonSchemaModuleTest extends TestCase
         return $ro;
     }
 
-    /**
-     * @param class-string $class
-     */
+    /** @param class-string $class */
     private function getLinkHeaderRo(string $class): ResourceObject
     {
         $jsonSchemaHost = 'http://example.com/schema/';

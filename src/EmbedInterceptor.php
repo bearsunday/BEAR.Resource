@@ -20,12 +20,10 @@ use function uri_template;
 final class EmbedInterceptor implements MethodInterceptor
 {
     private ResourceInterface $resource;
-    private Reader $reader;
 
-    public function __construct(ResourceInterface $resource, Reader $reader)
+    public function __construct(ResourceInterface $resource, private Reader $reader)
     {
         $this->resource = clone $resource;
-        $this->reader = $reader;
     }
 
     /**
@@ -91,9 +89,7 @@ final class EmbedInterceptor implements MethodInterceptor
         return $uri;
     }
 
-    /**
-     * @return array<string, mixed>
-     */
+    /** @return array<string, mixed> */
     private function getArgsByInvocation(MethodInvocation $invocation): array
     {
         /** @var list<scalar> $args */

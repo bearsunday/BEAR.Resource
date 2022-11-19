@@ -27,9 +27,7 @@ class JsonSchemaExceptionFakeHandler implements JsonSchemaExceptionHandlerInterf
         $ro->view = null;
     }
 
-    /**
-     * @return array<int|string, mixed>
-     */
+    /** @return array<int|string, mixed> */
     private function fakeResponse(string $schemaFile): array
     {
         /** @var array<int|string, mixed> $fakeObject */

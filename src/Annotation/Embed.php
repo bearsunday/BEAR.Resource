@@ -29,9 +29,7 @@ final class Embed
      */
     public $src;
 
-    /**
-     * @param array{rel?: string, src?: string} $values
-     */
+    /** @param array{rel?: string, src?: string} $values */
     public function __construct(array $values = [], string $rel = '', string $src = '')
     {
         $this->rel = $values['rel'] ?? $rel;

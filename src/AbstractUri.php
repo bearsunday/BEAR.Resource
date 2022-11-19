@@ -29,9 +29,7 @@ abstract class AbstractUri implements Stringable
     /** @var string */
     public $method = 'get';
 
-    /**
-     * @return string
-     */
+    /** @return string */
     public function __toString()
     {
         return "{$this->scheme}://{$this->host}{$this->path}" . ($this->query ? '?' . http_build_query($this->query) : '');

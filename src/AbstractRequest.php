@@ -95,7 +95,6 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
 
     /** @var InvokerInterface */
     protected $invoker;
-    private ?LinkerInterface $linker;
 
     /**
      * @param array<string, mixed> $query
@@ -109,7 +108,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
         string $method = Request::GET,
         array $query = [],
         array $links = [],
-        ?LinkerInterface $linker = null
+        private LinkerInterface|null $linker = null,
     ) {
         $this->invoker = $invoker;
         $this->resourceObject = $ro;
@@ -120,12 +119,9 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
         $this->method = $method;
         $this->query = $query;
         $this->links = $links;
-        $this->linker = $linker;
     }
 
-    /**
-     * @psalm-suppress UnevaluatedCode
-     */
+    /** @psalm-suppress UnevaluatedCode */
     public function __toString(): string
     {
         try {
@@ -145,7 +141,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      *
      * @param array<string, mixed> $query
      */
-    public function __invoke(?array $query = null): ResourceObject
+    public function __invoke(array|null $query = null): ResourceObject
     {
         if (is_array($query)) {
             $this->query = array_merge($this->query, $query);

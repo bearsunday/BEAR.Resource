@@ -6,8 +6,6 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\MethodNotAllowedException;
 
-use function get_class;
-
 final class NullOptionsRenderer implements RenderInterface
 {
     /**
@@ -15,6 +13,6 @@ final class NullOptionsRenderer implements RenderInterface
      */
     public function render(ResourceObject $ro)
     {
-        throw new MethodNotAllowedException(get_class($ro) . '::options', 405);
+        throw new MethodNotAllowedException($ro::class . '::options', 405);
     }
 }

@@ -11,15 +11,10 @@ use function get_class;
 
 final class ExtraMethodInvoker
 {
-    private RenderInterface $optionsRenderer;
-
-    /**
-     * @Named("optionsRenderer=options")
-     */
+    /** @Named("optionsRenderer=options") */
     #[Named('optionsRenderer=options')]
-    public function __construct(RenderInterface $optionsRenderer)
+    public function __construct(private RenderInterface $optionsRenderer)
     {
-        $this->optionsRenderer = $optionsRenderer;
     }
 
     public function __invoke(AbstractRequest $request, InvokerInterface $invoker): ResourceObject

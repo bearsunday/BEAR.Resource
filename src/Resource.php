@@ -24,7 +24,6 @@ final class Resource implements ResourceInterface
      * Resource factory
      */
     private FactoryInterface $factory;
-    private InvokerInterface $invoker;
 
     /**
      * Anchor
@@ -47,8 +46,6 @@ final class Resource implements ResourceInterface
      * Request method
      */
     private string $method = 'get';
-    private UriFactory $uri;
-
     /** @noinspection MoreThanThreeArgumentsInspection */
 
     /**
@@ -60,16 +57,14 @@ final class Resource implements ResourceInterface
      */
     public function __construct(
         FactoryInterface $factory,
-        InvokerInterface $invoker,
+        private InvokerInterface $invoker,
         AnchorInterface $anchor,
         LinkerInterface $linker,
-        UriFactory $uri
+        private UriFactory $uri,
     ) {
         $this->factory = $factory;
-        $this->invoker = $invoker;
         $this->anchor = $anchor;
         $this->linker = $linker;
-        $this->uri = $uri;
     }
 
     public function __get(string $name): self

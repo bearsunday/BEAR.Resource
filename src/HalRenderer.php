@@ -24,13 +24,8 @@ use const PHP_EOL;
 
 final class HalRenderer implements RenderInterface
 {
-    private Reader $reader;
-    private HalLink $link;
-
-    public function __construct(Reader $reader, HalLink $link)
+    public function __construct(private Reader $reader, private HalLink $link)
     {
-        $this->reader = $reader;
-        $this->link = $link;
     }
 
     /**
@@ -93,9 +88,7 @@ final class HalRenderer implements RenderInterface
         }
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
+    /** @codeCoverageIgnore */
     private function isDifferentSchema(ResourceObject $parentRo, ResourceObject $childRo): bool
     {
         return $parentRo->uri->scheme . $parentRo->uri->host !== $childRo->uri->scheme . $childRo->uri->host;
@@ -116,9 +109,7 @@ final class HalRenderer implements RenderInterface
         return $this->link->addHalLink($body, $annotations, $hal);
     }
 
-    /**
-     * @return array{0: ResourceObject, 1: array<array-key, mixed>}
-     */
+    /** @return array{0: ResourceObject, 1: array<array-key, mixed>} */
     private function valuate(ResourceObject $ro): array
     {
         if (is_scalar($ro->body)) {

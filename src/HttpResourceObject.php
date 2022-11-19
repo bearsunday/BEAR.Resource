@@ -30,14 +30,12 @@ final class HttpResourceObject extends ResourceObject
 {
     /** {@inheritdoc} */
     public $body;
-    private HttpClientInterface $client;
 
     /** @psalm-suppress PropertyNotSetInConstructor */
     private ResponseInterface $response;
 
-    public function __construct(HttpClientInterface $client)
+    public function __construct(private HttpClientInterface $client)
     {
-        $this->client = $client;
         unset($this->code, $this->headers, $this->body, $this->view);
     }
 
@@ -86,9 +84,7 @@ final class HttpResourceObject extends ResourceObject
         return $formated;
     }
 
-    /**
-     * @param mixed $value
-     */
+    /** @param mixed $value */
     public function __set(string $name, $value): void
     {
         unset($value);

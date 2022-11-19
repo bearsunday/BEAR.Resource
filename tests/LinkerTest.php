@@ -30,7 +30,7 @@ class LinkerTest extends TestCase
         $this->linker = new Linker(
             ServiceLocator::getReader(),
             $this->invoker,
-            new Factory($schemeCollection, new UriFactory())
+            new Factory($schemeCollection, new UriFactory()),
         );
     }
 
@@ -41,7 +41,7 @@ class LinkerTest extends TestCase
             (new FakeRo())(new Author()),
             Request::GET,
             ['id' => 1],
-            [new LinkType('blog', LinkType::SELF_LINK)]
+            [new LinkType('blog', LinkType::SELF_LINK)],
         );
         $result = $this->linker->invoke($request);
         $expected = [
@@ -58,7 +58,7 @@ class LinkerTest extends TestCase
             (new FakeRo())(new Author()),
             Request::GET,
             ['id' => 1],
-            [new LinkType('blog', LinkType::NEW_LINK)]
+            [new LinkType('blog', LinkType::NEW_LINK)],
         );
         $result = $this->linker->invoke($request);
         $expected = [
@@ -80,7 +80,7 @@ class LinkerTest extends TestCase
             (new FakeRo())(new Blog()),
             Request::GET,
             ['id' => 11],
-            [new LinkType('tree', LinkType::CRAWL_LINK)]
+            [new LinkType('tree', LinkType::CRAWL_LINK)],
         );
         $result = $this->linker->invoke($request);
         $expected = [
@@ -135,7 +135,7 @@ class LinkerTest extends TestCase
             (new FakeRo())(new Blog()),
             Request::GET,
             ['id' => 16],
-            [new LinkType('tree', LinkType::CRAWL_LINK)]
+            [new LinkType('tree', LinkType::CRAWL_LINK)],
         );
         $result = $this->linker->invoke($request);
         $expected = [
@@ -232,7 +232,7 @@ class LinkerTest extends TestCase
             (new FakeRo())(new Blog()),
             Request::GET,
             ['id' => 17],
-            [new LinkType('tree', LinkType::CRAWL_LINK)]
+            [new LinkType('tree', LinkType::CRAWL_LINK)],
         );
         $result = $this->linker->invoke($request);
         $expected = [
@@ -265,7 +265,7 @@ class LinkerTest extends TestCase
             (new FakeRo())(new Name()),
             Request::GET,
             ['name' => 'bear'],
-            [new LinkType('blog', LinkType::SELF_LINK)]
+            [new LinkType('blog', LinkType::SELF_LINK)],
         );
         $this->linker->invoke($request);
     }
@@ -278,7 +278,7 @@ class LinkerTest extends TestCase
             (new FakeRo())(new Author()),
             Request::GET,
             ['id' => '1'],
-            [new LinkType('invalid-link', LinkType::SELF_LINK)]
+            [new LinkType('invalid-link', LinkType::SELF_LINK)],
         );
         $this->linker->invoke($request);
     }
@@ -290,7 +290,7 @@ class LinkerTest extends TestCase
             (new FakeRo())(new Blog\NotFound()),
             Request::GET,
             [],
-            [new LinkType('meta', LinkType::CRAWL_LINK)]
+            [new LinkType('meta', LinkType::CRAWL_LINK)],
         );
         $this->linker->invoke($request);
         $this->assertSame(['message' => 'blog not found'], $request->body);
@@ -300,7 +300,7 @@ class LinkerTest extends TestCase
             (new FakeRo())(new Blog\NotFound()),
             Request::GET,
             [],
-            [new LinkType('user', LinkType::SELF_LINK)]
+            [new LinkType('user', LinkType::SELF_LINK)],
         );
         $this->linker->invoke($request);
         $this->assertSame(['message' => 'blog not found'], $request->body);
@@ -310,7 +310,7 @@ class LinkerTest extends TestCase
             (new FakeRo())(new Blog\NotFound()),
             Request::GET,
             [],
-            [new LinkType('user', LinkType::NEW_LINK)]
+            [new LinkType('user', LinkType::NEW_LINK)],
         );
         $this->linker->invoke($request);
         $this->assertSame(['message' => 'blog not found'], $request->body);

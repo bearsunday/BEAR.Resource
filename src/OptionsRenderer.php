@@ -29,17 +29,15 @@ use const PHP_EOL;
 final class OptionsRenderer implements RenderInterface
 {
     private OptionsMethods $optionsMethod;
-    private bool $optionsBody;
 
     /**
      * @OptionsBody("optionsBody")
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     #[OptionsBody('optionsBody')]
-    public function __construct(OptionsMethods $optionsMethods, bool $optionsBody = true)
+    public function __construct(OptionsMethods $optionsMethods, private bool $optionsBody = true)
     {
         $this->optionsMethod = $optionsMethods;
-        $this->optionsBody = $optionsBody;
     }
 
     /**

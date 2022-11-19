@@ -18,11 +18,8 @@ use const PHP_VERSION_ID;
 
 final class NamedParamMetas implements NamedParamMetasInterface
 {
-    private Reader $reader;
-
-    public function __construct(Reader $reader)
+    public function __construct(private Reader $reader)
     {
-        $this->reader = $reader;
     }
 
     /**
@@ -44,9 +41,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
         return $paramMetas;
     }
 
-    /**
-     * @return array<string, AssistedWebContextParam|ParamInterface>
-     */
+    /** @return array<string, AssistedWebContextParam|ParamInterface> */
     private function getAnnotationParamMetas(ReflectionMethod $method)
     {
         $parameters = $method->getParameters();

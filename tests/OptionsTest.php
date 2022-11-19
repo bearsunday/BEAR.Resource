@@ -35,9 +35,7 @@ class OptionsTest extends TestCase
         return $ro;
     }
 
-    /**
-     * @depends testOptionsMethod
-     */
+    /** @depends testOptionsMethod */
     public function testOptionsMethodBody(ResourceObject $ro): void
     {
         $actual = $ro->view;

@@ -34,21 +34,10 @@ use const JSON_THROW_ON_ERROR;
 
 final class JsonSchemaInterceptor implements JsonSchemaInterceptorInterface
 {
-    private string $schemaDir;
-    private string $validateDir;
-    private ?string $schemaHost;
-    private JsonSchemaExceptionHandlerInterface $handler;
-
-    /**
-     * @Named("schemaDir=json_schema_dir,validateDir=json_validate_dir,schemaHost=json_schema_host")
-     */
+    /** @Named("schemaDir=json_schema_dir,validateDir=json_validate_dir,schemaHost=json_schema_host") */
     #[Named('schemaDir=json_schema_dir,validateDir=json_validate_dir,schemaHost=json_schema_host')]
-    public function __construct(string $schemaDir, string $validateDir, JsonSchemaExceptionHandlerInterface $handler, ?string $schemaHost = null)
+    public function __construct(private string $schemaDir, private string $validateDir, private JsonSchemaExceptionHandlerInterface $handler, private string|null $schemaHost = null)
     {
-        $this->schemaDir = $schemaDir;
-        $this->validateDir = $validateDir;
-        $this->schemaHost = $schemaHost;
-        $this->handler = $handler;
     }
 
     /**
@@ -73,9 +62,7 @@ final class JsonSchemaInterceptor implements JsonSchemaInterceptorInterface
         return $ro;
     }
 
-    /**
-     * @param array<string, mixed> $arguments
-     */
+    /** @param array<string, mixed> $arguments */
     private function validateRequest(JsonSchema $jsonSchema, array $arguments): void
     {
         $schemaFile = $this->validateDir . '/' . $jsonSchema->params;
@@ -106,9 +93,7 @@ final class JsonSchemaInterceptor implements JsonSchemaInterceptorInterface
         $this->validate($target, $schemaFile);
     }
 
-    /**
-     * @return mixed
-     */
+    /** @return mixed */
     private function getTarget(object $json, JsonSchema $jsonSchema)
     {
         if ($jsonSchema->key === '') {
@@ -122,9 +107,7 @@ final class JsonSchemaInterceptor implements JsonSchemaInterceptorInterface
         return $json->{$jsonSchema->key};
     }
 
-    /**
-     * @param array<stdClass>|array<string, mixed>|stdClass $target
-     */
+    /** @param array<stdClass>|array<string, mixed>|stdClass $target */
     private function validate($target, string $schemaFile): void
     {
         $validator = new Validator();
@@ -139,9 +122,7 @@ final class JsonSchemaInterceptor implements JsonSchemaInterceptorInterface
         throw $this->throwJsonSchemaException($validator, $schemaFile);
     }
 
-    /**
-     * @return array<int|string, mixed>
-     */
+    /** @return array<int|string, mixed> */
     private function deepArray(object $values): array
     {
         $result = [];
@@ -200,9 +181,7 @@ final class JsonSchemaInterceptor implements JsonSchemaInterceptorInterface
         }
     }
 
-    /**
-     * @return array<string, mixed>
-     */
+    /** @return array<string, mixed> */
     private function getNamedArguments(MethodInvocation $invocation)
     {
         $parameters = $invocation->getMethod()->getParameters();

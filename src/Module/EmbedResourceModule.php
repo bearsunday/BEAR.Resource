@@ -21,7 +21,7 @@ final class EmbedResourceModule extends AbstractModule
         $this->bindInterceptor(
             $this->matcher->any(),
             $this->matcher->annotatedWith(Embed::class),
-            [EmbedInterceptor::class]
+            [EmbedInterceptor::class],
         );
     }
 }

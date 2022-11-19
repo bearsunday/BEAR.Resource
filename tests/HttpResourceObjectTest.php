@@ -76,36 +76,28 @@ class HttpResourceObjectTest extends TestCase
         $this->assertStringContainsString('"form": {', (string) $response->view);
     }
 
-    /**
-     * @depends testGet
-     */
+    /** @depends testGet */
     public function testToString(HttpResourceObject $response): void
     {
         $actual = (string) $response;
         $this->assertStringContainsString('"args": {', $actual);
     }
 
-    /**
-     * @depends testGet
-     */
+    /** @depends testGet */
     public function testIsSet(HttpResourceObject $response): void
     {
         $isSet = isset($response->invalid);
         $this->assertFalse($isSet);
     }
 
-    /**
-     * @depends testGet
-     */
+    /** @depends testGet */
     public function testSet(HttpResourceObject $response): void
     {
         $this->expectException(BadFunctionCallException::class);
         $response->foo = '1'; // @phpstan-ignore-line
     }
 
-    /**
-     * @depends testGet
-     */
+    /** @depends testGet */
     public function testInvalidGet(HttpResourceObject $response): void
     {
         $this->expectException(InvalidArgumentException::class);

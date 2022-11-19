@@ -99,9 +99,7 @@ class InvokerTest extends TestCase
         return (string) $response->view;
     }
 
-    /**
-     * @depends testOptionsMethod
-     */
+    /** @depends testOptionsMethod */
     public function testOptionsMethodBody(string $view): void
     {
         $expected = '{

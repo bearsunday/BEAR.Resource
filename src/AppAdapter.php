@@ -17,8 +17,6 @@ use function ucwords;
 
 final class AppAdapter implements AdapterInterface
 {
-    private InjectorInterface $injector;
-
     /**
      * Resource adapter namespace
      */
@@ -28,9 +26,8 @@ final class AppAdapter implements AdapterInterface
      * @param InjectorInterface $injector  Application dependency injector
      * @param string            $namespace Resource adapter namespace
      */
-    public function __construct(InjectorInterface $injector, string $namespace)
+    public function __construct(private InjectorInterface $injector, string $namespace)
     {
-        $this->injector = $injector;
         $this->namespace = $namespace;
     }
 
@@ -59,9 +56,7 @@ final class AppAdapter implements AdapterInterface
         return $instance;
     }
 
-    /**
-     * @return ResourceNotFoundException|Unbound
-     */
+    /** @return ResourceNotFoundException|Unbound */
     private function getNotFound(AbstractUri $uri, Unbound $e, string $class): Throwable
     {
         $unboundClass = $e->getMessage();

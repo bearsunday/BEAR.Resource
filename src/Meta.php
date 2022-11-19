@@ -30,9 +30,7 @@ final class Meta
     /** @var array{vendor?: string, package?: string} */
     public $extras = [];
 
-    /**
-     * @param class-string $class
-     */
+    /** @param class-string $class */
     public function __construct(string $class)
     {
         $this->uri = $this->getUri($class);
@@ -91,9 +89,7 @@ final class Meta
         return $allows;
     }
 
-    /**
-     * @param class-string $class
-     */
+    /** @param class-string $class */
     private function getParams(string $class, string $method): Params
     {
         $refMethod = new ReflectionMethod($class, 'on' . $method);

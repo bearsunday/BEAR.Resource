@@ -12,16 +12,9 @@ use BEAR\Resource\SchemeCollection;
 use Ray\Di\InjectorInterface;
 use Ray\Di\ProviderInterface;
 
-/**
- * @implements ProviderInterface<SchemeCollection>
- */
+/** @implements ProviderInterface<SchemeCollection> */
 final class ImportSchemeCollectionProvider implements ProviderInterface
 {
-    /** @var ImportApp[] */
-    private array $importAppConfig;
-    private string $appName;
-    private InjectorInterface $injector;
-
     /**
      * @param ImportApp[] $importAppConfig
      *
@@ -29,11 +22,8 @@ final class ImportSchemeCollectionProvider implements ProviderInterface
      * @ImportAppConfig("importAppConfig")
      */
     #[AppName('appName'), ImportAppConfig('importAppConfig')]
-    public function __construct(string $appName, array $importAppConfig, InjectorInterface $injector)
+    public function __construct(private string $appName, private array $importAppConfig, private InjectorInterface $injector)
     {
-        $this->appName = $appName;
-        $this->importAppConfig = $importAppConfig;
-        $this->injector = $injector;
     }
 
     /**

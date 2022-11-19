@@ -23,14 +23,9 @@ use Ray\Di\AbstractModule;
  */
 final class ResourceModule extends AbstractModule
 {
-    private string $appName;
-
-    /**
-     * @param string $appName Application name ex) 'Vendor\Project'
-     */
-    public function __construct(string $appName = '')
+    /** @param string $appName Application name ex) 'Vendor\Project' */
+    public function __construct(private string $appName = '')
     {
-        $this->appName = $appName;
         parent::__construct();
     }
 

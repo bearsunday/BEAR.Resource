@@ -21,9 +21,7 @@ use function file_exists;
 use function get_declared_classes;
 use function strpos;
 
-/**
- * @implements Iterator<string, Meta>
- */
+/** @implements Iterator<string, Meta> */
 final class AppIterator implements Iterator
 {
     private int $i = 0;
@@ -34,9 +32,7 @@ final class AppIterator implements Iterator
     /** @var list<string> */
     private array $keys = [];
 
-    /**
-     * @throws ResourceDirException
-     */
+    /** @throws ResourceDirException */
     public function __construct(string $resourceDir)
     {
         if (! file_exists($resourceDir)) {
@@ -45,7 +41,7 @@ final class AppIterator implements Iterator
 
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($resourceDir),
-            RecursiveIteratorIterator::SELF_FIRST
+            RecursiveIteratorIterator::SELF_FIRST,
         );
         $this->metaCollection = $this->getMetaCollection($iterator);
         $this->keys = array_keys($this->metaCollection);

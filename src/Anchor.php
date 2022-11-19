@@ -18,11 +18,8 @@ use function uri_template;
 
 final class Anchor implements AnchorInterface
 {
-    private Reader $reader;
-
-    public function __construct(Reader $reader)
+    public function __construct(private Reader $reader)
     {
-        $this->reader = $reader;
     }
 
     /**

@@ -18,20 +18,13 @@ use function array_keys;
 use function array_pop;
 use function assert;
 use function count;
-use function get_class;
 use function is_array;
 use function ucfirst;
 use function uri_template;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
+/** @SuppressWarnings(PHPMD.CouplingBetweenObjects) */
 final class Linker implements LinkerInterface
 {
-    private Reader $reader;
-    private InvokerInterface $invoker;
-    private FactoryInterface $factory;
-
     /**
      * memory cache for linker
      *
@@ -40,13 +33,10 @@ final class Linker implements LinkerInterface
     private array $cache = [];
 
     public function __construct(
-        Reader $reader,
-        InvokerInterface $invoker,
-        FactoryInterface $factory
+        private Reader $reader,
+        private InvokerInterface $invoker,
+        private FactoryInterface $factory,
     ) {
-        $this->reader = $reader;
-        $this->invoker = $invoker;
-        $this->factory = $factory;
     }
 
     /**
@@ -117,12 +107,12 @@ final class Linker implements LinkerInterface
     private function annotationLink(LinkType $link, ResourceObject $current, AbstractRequest $request): ResourceObject
     {
         if (! is_array($current->body)) {
-            throw new Exception\LinkQueryException('Only array is allowed for link in ' . get_class($current), 500);
+            throw new Exception\LinkQueryException('Only array is allowed for link in ' . $current::class, 500);
         }
 
         $classMethod = 'on' . ucfirst($request->method);
         /** @var list<Link> $annotations */
-        $annotations = $this->reader->getMethodAnnotations(new ReflectionMethod(get_class($current), $classMethod));
+        $annotations = $this->reader->getMethodAnnotations(new ReflectionMethod($current::class, $classMethod));
         if ($link->type === LinkType::CRAWL_LINK) {
             return $this->annotationCrawl($annotations, $link, $current);
         }
@@ -158,7 +148,7 @@ final class Linker implements LinkerInterface
             return $this->invoker->invoke($request);
         }
 
-        throw new LinkRelException("rel:{$link->key} class:" . get_class($current), 500);
+        throw new LinkRelException("rel:{$link->key} class:" . $current::class, 500);
     }
 
     /**
@@ -218,10 +208,8 @@ final class Linker implements LinkerInterface
         }
     }
 
-    /**
-     * @return array<mixed>
-     */
-    private function getResponseBody(Request $request): ?array
+    /** @return array<mixed> */
+    private function getResponseBody(Request $request): array|null
     {
         $body = $this->invokeRecursive($request)->body;
         assert(is_array($body) || $body === null);
@@ -229,9 +217,7 @@ final class Linker implements LinkerInterface
         return $body;
     }
 
-    /**
-     * @param mixed $value
-     */
+    /** @param mixed $value */
     private function isList($value): bool
     {
         assert(is_array($value));

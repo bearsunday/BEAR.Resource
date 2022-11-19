@@ -70,16 +70,14 @@ final class Link implements JsonSerializable
         return $json;
     }
 
-    /**
-     * @param array{rel?: string, href?: string, method?: string, title?: string, crawl?:string} $values
-     */
+    /** @param array{rel?: string, href?: string, method?: string, title?: string, crawl?:string} $values */
     public function __construct(
         array $values = [],
         string $rel = '',
         string $href = '',
         string $method = 'get',
         string $title = '',
-        string $crawl = ''
+        string $crawl = '',
     ) {
         $this->rel = $values['rel'] ?? $rel;
         $this->href = $values['href'] ?? $href;

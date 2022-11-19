@@ -22,7 +22,6 @@ use function assert;
 use function class_exists;
 use function file_exists;
 use function file_get_contents;
-use function get_class;
 use function json_decode;
 
 use const JSON_THROW_ON_ERROR;
@@ -41,17 +40,10 @@ final class OptionsMethods
         FilesParam::class => 'files',
     ];
 
-    private Reader $reader;
-    private string $schemaDir;
-
-    /**
-     * @Named("schemaDir=json_schema_dir")
-     */
+    /** @Named("schemaDir=json_schema_dir") */
     #[Named('schemaDir=json_schema_dir')]
-    public function __construct(Reader $reader, string $schemaDir = '')
+    public function __construct(private Reader $reader, private string $schemaDir = '')
     {
-        $this->reader = $reader;
-        $this->schemaDir = $schemaDir;
     }
 
     /**
@@ -61,7 +53,7 @@ final class OptionsMethods
      */
     public function __invoke(ResourceObject $ro, string $requestMethod): array
     {
-        $method = new ReflectionMethod(get_class($ro), 'on' . $requestMethod);
+        $method = new ReflectionMethod($ro::class, 'on' . $requestMethod);
         $ins = $this->getInMap($method);
         [$doc, $paramDoc] = (new OptionsMethodDocBolck())($method);
         $methodOption = $doc;
@@ -105,9 +97,7 @@ final class OptionsMethods
         return $extras;
     }
 
-    /**
-     * @return array<string, string>
-     */
+    /** @return array<string, string> */
     private function getInMap(ReflectionMethod $method): array
     {
         $ins = [];
@@ -117,7 +107,7 @@ final class OptionsMethods
                 continue;
             }
 
-            $class = get_class($annotation);
+            $class = $annotation::class;
             assert(class_exists($class));
             $ins[$annotation->param] = self::WEB_CONTEXT_NAME[$class];
         }
@@ -125,9 +115,7 @@ final class OptionsMethods
         return $ins;
     }
 
-    /**
-     * @return array<string, mixed>
-     */
+    /** @return array<string, mixed> */
     private function getJsonSchema(ReflectionMethod $method): array
     {
         $schema = $this->reader->getMethodAnnotation($method, JsonSchema::class);

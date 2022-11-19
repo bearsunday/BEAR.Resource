@@ -15,12 +15,10 @@ final class Factory implements FactoryInterface
      * Resource adapter biding config
      */
     private SchemeCollectionInterface $scheme;
-    private UriFactory $uri;
 
-    public function __construct(SchemeCollectionInterface $scheme, UriFactory $uri)
+    public function __construct(SchemeCollectionInterface $scheme, private UriFactory $uri)
     {
         $this->scheme = $scheme;
-        $this->uri = $uri;
     }
 
     /**
