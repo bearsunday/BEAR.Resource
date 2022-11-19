@@ -55,19 +55,28 @@ class OptionsTest extends TestCase
                     "type": "bool",
                     "description": "Swithc"
                 },
+                "login_id": {
+                    "type": "string",
+                    "description": "Login ID"
+                },
                 "defaultNull": {
                     "type": "string",
                     "description": "DefaultNull"
                 },
                 "arr": {
                     "type": "array"
+                },
+                "time": {
+                    "type": "string"
                 }
             },
             "required": [
                 "id",
                 "name",
                 "sw",
-                "arr"
+                "login_id",
+                "arr",
+                "time"
             ]
         }
     },
@@ -89,7 +98,20 @@ class OptionsTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function testAssistedResource(): void
+    /**
+     * @return ResourceObject[][]
+     */
+    public function roProvider(): array
+    {
+        return [
+          [new FakeParamResource]
+        ];
+    }
+
+    /**
+     * @depends roProvider
+     */
+    public function testAssistedResource(ResourceObject $ro): void
     {
         $ro = new FakeParamResource();
         $request = new Request($this->invoker, $ro, Request::OPTIONS);
