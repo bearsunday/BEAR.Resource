@@ -11,7 +11,6 @@ use ReflectionMethod;
 
 use function array_merge;
 use function assert;
-use function get_class;
 use function is_array;
 use function ucfirst;
 use function uri_template;

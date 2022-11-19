@@ -17,19 +17,12 @@ final class JsonSchema
 {
     public function __construct(
         public string $schema = '',
-        /**
-         * Json schema body key name
-         */
+        /** Json schema body key name */
         public string $key = '',
-        /**
-         * Input parameter validation schema
-         */
+        /** Input parameter validation schema */
         public string $params = '',
-        /**
-         * @Enum({"view", "body"})
-         */
-        public string $target = 'body'
-    )
-    {
+        /** @Enum({"view", "body"}) */
+        public string $target = 'body',
+    ) {
     }
 }

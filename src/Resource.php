@@ -20,16 +20,8 @@ use function is_string;
  */
 final class Resource implements ResourceInterface
 {
-    /**
-     * Request
-     *
-     * @psalm-suppress PropertyNotSetInConstructor
-     */
+    /** @psalm-suppress PropertyNotSetInConstructor */
     private Request $request;
-
-    /**
-     * Request method
-     */
     private string $method = 'get';
     /** @noinspection MoreThanThreeArgumentsInspection */
 
@@ -41,22 +33,12 @@ final class Resource implements ResourceInterface
      * @param UriFactory       $uri     URI factory
      */
     public function __construct(
-        /**
-         * Resource factory
-         */
         private FactoryInterface $factory,
         private InvokerInterface $invoker,
-        /**
-         * Anchor
-         */
         private AnchorInterface $anchor,
-        /**
-         * Linker
-         */
         private LinkerInterface $linker,
-        private UriFactory $uri
-    )
-    {
+        private UriFactory $uri,
+    ) {
     }
 
     public function __get(string $name): self

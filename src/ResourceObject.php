@@ -19,6 +19,7 @@ use function asort;
 use function assert;
 use function count;
 use function is_array;
+use function is_countable;
 use function is_iterable;
 use function is_string;
 use function ksort;
@@ -34,25 +35,15 @@ use const E_USER_WARNING;
 abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, Countable, IteratorAggregate, JsonSerializable, Stringable
 {
     /**
-     * Uri
-     *
      * @var AbstractUri
      * @psalm-suppress PropertyNotSetInConstructor
      */
     public $uri;
 
-    /**
-     * Status code
-     *
-     * @var int
-     */
+    /** @var int */
     public $code = 200;
 
-    /**
-     * Resource header
-     *
-     * @var array<string, string>
-     */
+    /** @var array<string, string> */
     public $headers = [];
 
     /**
@@ -62,18 +53,10 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      */
     public $view;
 
-    /**
-     * Body
-     *
-     * @var mixed
-     */
+    /** @var mixed */
     public $body;
 
-    /**
-     * Renderer
-     *
-     * @var ?RenderInterface
-     */
+    /** @var ?RenderInterface */
     protected $renderer;
 
     /**

@@ -11,8 +11,8 @@ use Throwable;
 
 use function assert;
 use function sprintf;
+use function str_ends_with;
 use function str_replace;
-use function substr;
 use function ucwords;
 
 final class AppAdapter implements AdapterInterface
@@ -23,12 +23,9 @@ final class AppAdapter implements AdapterInterface
      */
     public function __construct(
         private InjectorInterface $injector,
-        /**
-         * Resource adapter namespace
-         */
-        private string $namespace
-    )
-    {
+        /** Resource adapter namespace */
+        private string $namespace,
+    ) {
     }
 
     /**

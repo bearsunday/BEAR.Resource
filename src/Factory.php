@@ -12,13 +12,9 @@ use function is_string;
 final class Factory implements FactoryInterface
 {
     public function __construct(
-        /**
-         * Resource adapter biding config
-         */
         private SchemeCollectionInterface $scheme,
-        private UriFactory $uri
-    )
-    {
+        private UriFactory $uri,
+    ) {
     }
 
     /**

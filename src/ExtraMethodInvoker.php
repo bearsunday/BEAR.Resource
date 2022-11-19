@@ -7,8 +7,6 @@ namespace BEAR\Resource;
 use BEAR\Resource\Exception\MethodNotAllowedException;
 use Ray\Di\Di\Named;
 
-use function get_class;
-
 final class ExtraMethodInvoker
 {
     /** @Named("optionsRenderer=options") */
