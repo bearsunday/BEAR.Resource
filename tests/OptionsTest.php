@@ -55,12 +55,12 @@ class OptionsTest extends TestCase
                     "type": "bool",
                     "description": "Swithc"
                 },
-                "arr": {
-                    "type": "array"
-                },
                 "defaultNull": {
                     "type": "string",
                     "description": "DefaultNull"
+                },
+                "arr": {
+                    "type": "array"
                 }
             },
             "required": [
