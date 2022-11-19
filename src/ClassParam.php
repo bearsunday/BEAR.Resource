@@ -21,9 +21,7 @@ final class ClassParam implements ParamInterface
 {
     private string $type;
     private bool $isDefaultAvailable;
-
-    /** @var mixed */
-    private $defaultValue;
+    private mixed $defaultValue;
 
     public function __construct(
         ReflectionNamedType $type,

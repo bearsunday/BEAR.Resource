@@ -28,14 +28,10 @@ use const PHP_EOL;
  */
 final class OptionsRenderer implements RenderInterface
 {
-    /**
-     * @OptionsBody("optionsBody")
-     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
-     */
-    #[OptionsBody('optionsBody')]
+    /** @SuppressWarnings(PHPMD.BooleanArgumentFlag) */
     public function __construct(
         private OptionsMethods $optionsMethod,
-        private bool $optionsBody = true,
+        #[OptionsBody] private bool $optionsBody = true,
     ) {
     }
 

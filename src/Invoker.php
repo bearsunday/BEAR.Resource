@@ -14,8 +14,8 @@ final class Invoker implements InvokerInterface
     public function __construct(
         private NamedParameterInterface $params,
         private ExtraMethodInvoker $extraMethod,
-        private LoggerInterface $logger)
-    {
+        private LoggerInterface $logger,
+    ) {
     }
 
     /**

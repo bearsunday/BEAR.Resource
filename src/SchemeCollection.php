@@ -10,15 +10,8 @@ use function array_key_exists;
 
 final class SchemeCollection implements SchemeCollectionInterface
 {
-    /**
-     * Scheme
-     */
     private string $scheme = '';
-
-    /**
-     * Application name
-     */
-    private string $app = '';
+    private string $appName = '';
 
     /** @var AdapterInterface[] */
     private array $collection = [];
@@ -38,7 +31,7 @@ final class SchemeCollection implements SchemeCollectionInterface
      */
     public function host(string $host): SchemeCollectionInterface
     {
-        $this->app = $host;
+        $this->appName = $host;
 
         return $this;
     }
@@ -48,7 +41,7 @@ final class SchemeCollection implements SchemeCollectionInterface
      */
     public function toAdapter(AdapterInterface $adapter): SchemeCollectionInterface
     {
-        $this->collection[$this->scheme . '://' . $this->app] = $adapter;
+        $this->collection[$this->scheme . '://' . $this->appName] = $adapter;
 
         return $this;
     }
