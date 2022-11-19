@@ -17,6 +17,7 @@ class Doc extends ResourceObject
      * Returns a variety of information about the user specified by the required $id parameter
      *
      * @param string $id User ID
+     * @param int    $a
      *
      * @Link(rel="friend", href="/fiend{?id}", method="get", title="Friend profile")
      * @Link(rel="task", href="/task{?id}")
@@ -27,7 +28,7 @@ class Doc extends ResourceObject
     #[Link(rel: "task", href: "/task{?id}")]
     #[Embed(rel: "profile", src: "/profile{?id}")]
     #[JsonSchema("user.json")]
-    public function onGet(string $id)
+    public function onGet(string $id, int $a)
     {
         return $this;
     }

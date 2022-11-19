@@ -111,10 +111,14 @@ class InvokerTest extends TestCase
                 "id": {
                     "type": "string",
                     "description": "User ID"
+                },
+                "a": {
+                    "type": "integer"
                 }
             },
             "required": [
-                "id"
+                "id",
+                "a"
             ]
         },
         "links": [
