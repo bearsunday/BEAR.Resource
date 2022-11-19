@@ -18,11 +18,6 @@ class Doc extends ResourceObject
      *
      * @param string $id User ID
      * @param int    $a
-     *
-     * @Link(rel="friend", href="/fiend{?id}", method="get", title="Friend profile")
-     * @Link(rel="task", href="/task{?id}")
-     * @Embed(rel="profile", src="/profile{?id}")
-     * @JsonSchema(schema="user.json")
      */
     #[Link(rel: "friend", href: "/fiend{?id}", method: "get", title: "Friend profile")]
     #[Link(rel: "task", href: "/task{?id}")]
