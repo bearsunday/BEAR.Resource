@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use Rector\BearSunday\RayDiNamedAnnotation\Rector\ClassMethod\RayDiNamedAnnotationRector;
 use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
 use Rector\Config\RectorConfig;
+use Rector\Ray\AnnotationBinding\Rector\ClassMethod\AnnotationBindingRector;
 use Rector\Set\ValueObject\LevelSetList;
 
 return static function (RectorConfig $rectorConfig): void {
@@ -17,8 +17,8 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     // register a single rule
-    $rectorConfig->rule(RayDiNamedAnnotationRector::class);
-
+    $rectorConfig->rule(InlineConstructorDefaultToPropertyRector::class);
+    $rectorConfig->rule(AnnotationBindingRector::class);
     // define sets of rules
         $rectorConfig->sets([
             LevelSetList::UP_TO_PHP_80,

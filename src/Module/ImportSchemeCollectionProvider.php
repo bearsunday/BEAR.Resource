@@ -15,16 +15,10 @@ use Ray\Di\ProviderInterface;
 /** @implements ProviderInterface<SchemeCollection> */
 final class ImportSchemeCollectionProvider implements ProviderInterface
 {
-    /**
-     * @param ImportApp[] $importAppConfig
-     *
-     * @AppName("appName")
-     * @ImportAppConfig("importAppConfig")
-     */
-    #[AppName('appName'), ImportAppConfig('importAppConfig')]
+    /** @param ImportApp[] $importAppConfig */
     public function __construct(
-        private string $appName,
-        private array $importAppConfig,
+        #[AppName] private string $appName,
+        #[ImportAppConfig] private array $importAppConfig,
         private InjectorInterface $injector,
     ) {
     }
