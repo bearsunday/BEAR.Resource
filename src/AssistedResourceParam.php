@@ -14,8 +14,9 @@ use const PHP_URL_FRAGMENT;
 
 final class AssistedResourceParam implements ParamInterface
 {
-    public function __construct(private ResourceParam $resourceParam)
-    {
+    public function __construct(
+        private ResourceParam $resourceParam,
+    ) {
     }
 
     /**

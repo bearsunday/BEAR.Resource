@@ -14,8 +14,9 @@ use function strtolower;
 final class OptionalParam implements ParamInterface
 {
     /** @param T $defaultValue */
-    public function __construct(private $defaultValue)
-    {
+    public function __construct(
+        private $defaultValue,
+    ) {
     }
 
     /**

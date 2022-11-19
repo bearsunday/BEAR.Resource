@@ -9,8 +9,9 @@ use Ray\Di\Di\Named;
 
 final class ExtraMethodInvoker
 {
-    public function __construct(#[Named('options')] private RenderInterface $optionsRenderer)
-    {
+    public function __construct(
+        #[Named('options')] private RenderInterface $optionsRenderer,
+    ) {
     }
 
     public function __invoke(AbstractRequest $request, InvokerInterface $invoker): ResourceObject

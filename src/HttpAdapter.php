@@ -9,8 +9,9 @@ use Ray\Di\InjectorInterface;
 final class HttpAdapter implements AdapterInterface
 {
     /** @param InjectorInterface $injector Application dependency injector */
-    public function __construct(private InjectorInterface $injector)
-    {
+    public function __construct(
+        private InjectorInterface $injector,
+    ) {
     }
 
     /**

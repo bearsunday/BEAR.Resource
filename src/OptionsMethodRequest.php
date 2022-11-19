@@ -21,8 +21,9 @@ use function method_exists;
 
 final class OptionsMethodRequest
 {
-    public function __construct(private Reader $reader)
-    {
+    public function __construct(
+        private Reader $reader,
+    ) {
     }
 
     /**
