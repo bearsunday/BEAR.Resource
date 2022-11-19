@@ -14,7 +14,6 @@ use function is_object;
 class JsonSchemaExceptionFakeHandler implements JsonSchemaExceptionHandlerInterface
 {
     public const X_FAKE_JSON = 'X-Fake-JSON';
-
     public const X_JSON_SCHEMA_EXCEPTION = 'X-JSON-Schema-Exception';
 
     /**

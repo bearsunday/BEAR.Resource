@@ -6,7 +6,10 @@ namespace BEAR\Resource;
 
 final class ImportApp
 {
-    public function __construct(public string $host, public string $appName, public string $context)
-    {
+    public function __construct(
+        public string $host,
+        public string $appName,
+        public string $context,
+    ) {
     }
 }

@@ -25,8 +25,10 @@ final class ClassParam implements ParamInterface
     /** @var mixed */
     private $defaultValue;
 
-    public function __construct(ReflectionNamedType $type, ReflectionParameter $parameter)
-    {
+    public function __construct(
+        ReflectionNamedType $type,
+        ReflectionParameter $parameter,
+    ) {
         $this->type = $type->getName();
         $this->isDefaultAvailable = $parameter->isDefaultValueAvailable();
         if (! $this->isDefaultAvailable) {

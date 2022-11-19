@@ -24,8 +24,10 @@ use const PHP_EOL;
 
 final class HalRenderer implements RenderInterface
 {
-    public function __construct(private Reader $reader, private HalLink $link)
-    {
+    public function __construct(
+        private Reader $reader,
+        private HalLink $link,
+    ) {
     }
 
     /**

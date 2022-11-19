@@ -19,8 +19,10 @@ final class AssistedWebContextParam implements ParamInterface
      */
     private static array $globals = [];
 
-    public function __construct(private AbstractWebContextParam $webContextParam, private ParamInterface $defaultParam)
-    {
+    public function __construct(
+        private AbstractWebContextParam $webContextParam,
+        private ParamInterface $defaultParam,
+    ) {
     }
 
     /**
