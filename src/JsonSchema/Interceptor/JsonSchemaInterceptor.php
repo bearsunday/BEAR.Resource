@@ -108,6 +108,7 @@ final class JsonSchemaInterceptor implements JsonSchemaInterceptorInterface
         return $json->{$jsonSchema->key};
     }
 
+    /** @param array<mixed>|stdClass $target */
     private function validate(array|stdClass $target, string $schemaFile): void
     {
         $validator = new Validator();
