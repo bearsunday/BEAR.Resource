@@ -67,7 +67,6 @@ final class NamedParamMetas implements NamedParamMetasInterface
         $parameters = $method->getParameters();
         $names = $valueParams = [];
         foreach ($parameters as $parameter) {
-            /** @var array<ReflectionAttribute<RequestParamInterface>> $refAttribute */
             $refAttribute = $parameter->getAttributes(RequestParamInterface::class, ReflectionAttribute::IS_INSTANCEOF);
             if ($refAttribute) {
                 /** @var ?ResourceParam $resourceParam */
@@ -78,12 +77,10 @@ final class NamedParamMetas implements NamedParamMetasInterface
                 }
             }
 
-            /** @var array<ReflectionAttribute<AbstractWebContextParam>> $refWebContext */
             $refWebContext = $parameter->getAttributes(AbstractWebContextParam::class, ReflectionAttribute::IS_INSTANCEOF);
             if ($refWebContext) {
-                /** @var AbstractWebContextParam $webParam */
                 $webParam = $refWebContext[0]->newInstance();
-                /** @psalm-var scalar $defaultValue */
+                /** @psalm-suppress MixedAssignment */
                 $defaultValue = $parameter->isDefaultValueAvailable() ? $parameter->getDefaultValue() : null;
                 $param = new AssistedWebContextParam($webParam, new DefaultParam($defaultValue));
                 $names[$parameter->name] = $param;
