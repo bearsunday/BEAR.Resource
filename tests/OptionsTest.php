@@ -98,22 +98,18 @@ class OptionsTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 
-    /**
-     * @return ResourceObject[][]
-     */
+    /** @return ResourceObject[][] */
     public function roProvider(): array
     {
         return [
-          [new FakeParamResource]
+            [new FakeParamResource()],
+            [new FakeParamResourceParam()],
         ];
     }
 
-    /**
-     * @depends roProvider
-     */
+    /** @dataProvider roProvider */
     public function testAssistedResource(ResourceObject $ro): void
     {
-        $ro = new FakeParamResource();
         $request = new Request($this->invoker, $ro, Request::OPTIONS);
         $this->invoker->invoke($request);
         $this->assertSame('GET, POST, PUT, DELETE', $ro->headers['Allow']);
