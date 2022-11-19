@@ -40,10 +40,10 @@ final class OptionsMethods
         FilesParam::class => 'files',
     ];
 
-    /** @Named("schemaDir=json_schema_dir") */
-    #[Named('schemaDir=json_schema_dir')]
-    public function __construct(private Reader $reader, private string $schemaDir = '')
-    {
+    public function __construct(
+        private Reader $reader,
+        #[Named('json_schema_dir')] private string $schemaDir = '',
+    ) {
     }
 
     /**

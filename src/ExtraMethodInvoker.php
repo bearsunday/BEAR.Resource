@@ -9,9 +9,7 @@ use Ray\Di\Di\Named;
 
 final class ExtraMethodInvoker
 {
-    /** @Named("optionsRenderer=options") */
-    #[Named('optionsRenderer=options')]
-    public function __construct(private RenderInterface $optionsRenderer)
+    public function __construct(#[Named('options')] private RenderInterface $optionsRenderer)
     {
     }
 

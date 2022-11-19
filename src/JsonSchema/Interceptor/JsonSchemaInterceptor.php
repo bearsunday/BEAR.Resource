@@ -34,10 +34,12 @@ use const JSON_THROW_ON_ERROR;
 
 final class JsonSchemaInterceptor implements JsonSchemaInterceptorInterface
 {
-    /** @Named("schemaDir=json_schema_dir,validateDir=json_validate_dir,schemaHost=json_schema_host") */
-    #[Named('schemaDir=json_schema_dir,validateDir=json_validate_dir,schemaHost=json_schema_host')]
-    public function __construct(private string $schemaDir, private string $validateDir, private JsonSchemaExceptionHandlerInterface $handler, private string|null $schemaHost = null)
-    {
+    public function __construct(
+        #[Named('json_schema_dir')] private string $schemaDir,
+        #[Named('json_validate_dir')] private string $validateDir,
+        private JsonSchemaExceptionHandlerInterface $handler,
+        #[Named('json_schema_host')] private string|null $schemaHost = null,
+    ) {
     }
 
     /**
@@ -106,7 +108,6 @@ final class JsonSchemaInterceptor implements JsonSchemaInterceptorInterface
         return $json->{$jsonSchema->key};
     }
 
-    /** @param array<stdClass>|array<string, mixed>|stdClass $target */
     private function validate(array|stdClass $target, string $schemaFile): void
     {
         $validator = new Validator();

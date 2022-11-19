@@ -20,7 +20,6 @@ final class Factory implements FactoryInterface
     /**
      * Set scheme collection
      *
-     * @Inject(optional=true)
      * @codeCoverageIgnore
      */
     #[Inject(optional: true)]
