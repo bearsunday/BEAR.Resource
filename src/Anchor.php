@@ -31,7 +31,7 @@ final class Anchor implements AnchorInterface
     {
         $classMethod = 'on' . ucfirst($request->method);
         /** @var list<object> $annotations */
-        $annotations = $this->reader->getMethodAnnotations(new ReflectionMethod(get_class($request->resourceObject), $classMethod));
+        $annotations = $this->reader->getMethodAnnotations(new ReflectionMethod($request->resourceObject::class, $classMethod));
         foreach ($annotations as $annotation) {
             if ($this->isValidLinkAnnotation($annotation, $rel)) {
                 assert($annotation instanceof LinkAnnotation);
@@ -40,7 +40,7 @@ final class Anchor implements AnchorInterface
             }
         }
 
-        throw new LinkException("rel:{$rel} class:" . get_class($request->resourceObject), 500);
+        throw new LinkException("rel:{$rel} class:" . $request->resourceObject::class, 500);
     }
 
     private function isValidLinkAnnotation(object $annotation, string $rel): bool

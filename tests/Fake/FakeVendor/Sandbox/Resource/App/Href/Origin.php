@@ -10,11 +10,8 @@ use BEAR\Resource\ResourceObject;
 
 class Origin extends ResourceObject
 {
-    private \BEAR\Resource\ResourceInterface $resource;
-
-    public function __construct(ResourceInterface $resource)
+    public function __construct(private ResourceInterface $resource)
     {
-        $this->resource = $resource;
     }
 
     /**

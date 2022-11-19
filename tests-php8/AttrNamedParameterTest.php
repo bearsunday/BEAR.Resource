@@ -16,8 +16,7 @@ use function call_user_func_array;
 
 class AttrNamedParameterTest extends TestCase
 {
-    /** @var NamedParameter */
-    private $params;
+    private \BEAR\Resource\NamedParameter $params;
 
     /** @var FakeAttrContext */
     private $ro;

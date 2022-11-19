@@ -9,17 +9,14 @@ use BEAR\Resource\ResourceObject;
 
 class Entry extends ResourceObject
 {
-    private $resource;
-
     private array $entries = [
         100 => ['id' => 100, 'title' => 'Entry1'],
         101 => ['id' => 101, 'title' => 'Entry2'],
         102 => ['id' => 102, 'title' => 'Entry3'],
     ];
 
-    public function __construct(ResourceInterface $resource = null)
+    public function __construct(private ?\BEAR\Resource\ResourceInterface $resource = null)
     {
-        $this->resource = $resource;
     }
 
     /**

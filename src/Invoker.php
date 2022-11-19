@@ -11,15 +11,8 @@ use function ucfirst;
 
 final class Invoker implements InvokerInterface
 {
-    private NamedParameterInterface $params;
-    private ExtraMethodInvoker $extraMethod;
-    private LoggerInterface $logger;
-
-    public function __construct(NamedParameterInterface $params, ExtraMethodInvoker $extraMethod, LoggerInterface $logger)
+    public function __construct(private NamedParameterInterface $params, private ExtraMethodInvoker $extraMethod, private LoggerInterface $logger)
     {
-        $this->params = $params;
-        $this->extraMethod = $extraMethod;
-        $this->logger = $logger;
     }
 
     /**
@@ -42,7 +35,7 @@ final class Invoker implements InvokerInterface
         try {
             $response = call_user_func_array($callable, $params);
         } catch (Throwable $e) {
-            if (get_class($e) === 'TypeError') {
+            if ($e::class === 'TypeError') {
                 throw new BadRequestException('Invalid parameter type', Code::BAD_REQUEST, $e);
             }
             throw $e;

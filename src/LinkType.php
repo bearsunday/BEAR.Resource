@@ -21,23 +21,16 @@ final class LinkType
      */
     public const CRAWL_LINK = 'crawl';
 
-    /**
-     * Link key
-     *
-     * @var string
-     */
-    public $key;
-
-    /**
-     * Link type
-     *
-     * @var string
-     */
-    public $type;
-
-    public function __construct(string $key, string $type)
+    public function __construct(
+        /**
+         * Link key
+         */
+        public string $key,
+        /**
+         * Link type
+         */
+        public string $type
+    )
     {
-        $this->key = $key;
-        $this->type = $type;
     }
 }

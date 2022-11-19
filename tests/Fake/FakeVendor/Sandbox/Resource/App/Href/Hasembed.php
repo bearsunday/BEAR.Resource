@@ -11,11 +11,8 @@ use BEAR\Resource\ResourceObject;
 
 class Hasembed extends ResourceObject
 {
-    private $resource;
-
-    public function __construct(ResourceInterface $resource)
+    public function __construct(private ResourceInterface $resource)
     {
-        $this->resource = $resource;
     }
 
     /**

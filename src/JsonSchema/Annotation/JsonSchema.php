@@ -15,34 +15,21 @@ use Doctrine\Common\Annotations\Annotation\NamedArgumentConstructor;
 #[Attribute(Attribute::TARGET_METHOD)]
 final class JsonSchema
 {
-    /**
-     * Json schema body key name
-     *
-     * @var string
-     */
-    public $key = '';
-
-    /** @var string */
-    public $schema;
-
-    /**
-     * Input parameter validation schema
-     *
-     * @var string
-     */
-    public $params;
-
-    /**
-     * @Enum({"view", "body"})
-     * @var string
-     */
-    public $target;
-
-    public function __construct(string $schema = '', string $key = '', string $params = '', string $target = 'body')
+    public function __construct(
+        public string $schema = '',
+        /**
+         * Json schema body key name
+         */
+        public string $key = '',
+        /**
+         * Input parameter validation schema
+         */
+        public string $params = '',
+        /**
+         * @Enum({"view", "body"})
+         */
+        public string $target = 'body'
+    )
     {
-        $this->key = $key;
-        $this->schema = $schema;
-        $this->params = $params;
-        $this->target = $target;
     }
 }

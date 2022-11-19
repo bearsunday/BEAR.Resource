@@ -7,11 +7,8 @@ use BEAR\Resource\ResourceObject;
 
 class FakeLoop extends ResourceObject
 {
-    private \BEAR\Resource\ResourceInterface $resource;
-
-    public function __construct(ResourceInterface $resource)
+    public function __construct(private ResourceInterface $resource)
     {
-        $this->resource = $resource;
     }
 
     public function onGet(): ResourceObject

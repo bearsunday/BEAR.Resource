@@ -6,9 +6,6 @@ namespace BEAR\Resource\Mock;
 
 class PersonConstructor
 {
-    private $name;
-    private $age;
-
     public function getName(): string
     {
         return $this->name;
@@ -19,9 +16,7 @@ class PersonConstructor
         return $this->age;
     }
 
-    public function __construct(int $age, string $name)
+    public function __construct(private int $age, private string $name)
     {
-        $this->name = $name;
-        $this->age = $age;
     }
 }

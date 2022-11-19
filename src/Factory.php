@@ -11,14 +11,14 @@ use function is_string;
 
 final class Factory implements FactoryInterface
 {
-    /**
-     * Resource adapter biding config
-     */
-    private SchemeCollectionInterface $scheme;
-
-    public function __construct(SchemeCollectionInterface $scheme, private UriFactory $uri)
+    public function __construct(
+        /**
+         * Resource adapter biding config
+         */
+        private SchemeCollectionInterface $scheme,
+        private UriFactory $uri
+    )
     {
-        $this->scheme = $scheme;
     }
 
     /**

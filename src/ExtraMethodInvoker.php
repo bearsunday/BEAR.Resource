@@ -35,6 +35,6 @@ final class ExtraMethodInvoker
             return $ro;
         }
 
-        throw new MethodNotAllowedException(get_class($request->resourceObject) . "::{({$request->method}}()", 405);
+        throw new MethodNotAllowedException($request->resourceObject::class . "::{({$request->method}}()", 405);
     }
 }

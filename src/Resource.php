@@ -21,21 +21,6 @@ use function is_string;
 final class Resource implements ResourceInterface
 {
     /**
-     * Resource factory
-     */
-    private FactoryInterface $factory;
-
-    /**
-     * Anchor
-     */
-    private AnchorInterface $anchor;
-
-    /**
-     * Linker
-     */
-    private LinkerInterface $linker;
-
-    /**
      * Request
      *
      * @psalm-suppress PropertyNotSetInConstructor
@@ -56,15 +41,22 @@ final class Resource implements ResourceInterface
      * @param UriFactory       $uri     URI factory
      */
     public function __construct(
-        FactoryInterface $factory,
+        /**
+         * Resource factory
+         */
+        private FactoryInterface $factory,
         private InvokerInterface $invoker,
-        AnchorInterface $anchor,
-        LinkerInterface $linker,
-        private UriFactory $uri,
-    ) {
-        $this->factory = $factory;
-        $this->anchor = $anchor;
-        $this->linker = $linker;
+        /**
+         * Anchor
+         */
+        private AnchorInterface $anchor,
+        /**
+         * Linker
+         */
+        private LinkerInterface $linker,
+        private UriFactory $uri
+    )
+    {
     }
 
     public function __get(string $name): self

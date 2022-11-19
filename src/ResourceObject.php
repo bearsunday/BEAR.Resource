@@ -140,7 +140,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      * @return void
      */
     #[ReturnTypeWillChange]
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, mixed $value)
     {
         if ($this->body === null) {
             $this->body = [];
@@ -187,7 +187,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      */
     public function count(): int
     {
-        if ($this->body instanceof Countable || is_array($this->body)) {
+        if (is_countable($this->body)) {
             return count($this->body);
         }
 

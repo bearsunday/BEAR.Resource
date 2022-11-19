@@ -9,11 +9,10 @@ use BEAR\Resource\ResourceObject;
 
 class Menu extends ResourceObject
 {
-    private array $menu = [];
+    private array $menu = ['coffee' => 300, 'latte' => 400];
 
     public function __construct()
     {
-        $this->menu = ['coffee' => 300, 'latte' => 400];
     }
 
     /**

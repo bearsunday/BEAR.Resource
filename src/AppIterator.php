@@ -117,7 +117,7 @@ final class AppIterator implements Iterator
     {
         $isPhp = $item->isFile()
             && $item->getExtension() === 'php'
-            && (strpos($item->getBasename('.php'), '.') === false);
+            && (!str_contains($item->getBasename('.php'), '.'));
 
         return ! $isPhp;
     }
