@@ -11,9 +11,7 @@ use function parse_url;
 
 final class UriFactory
 {
-    /** @ContextScheme */
-    #[ContextScheme]
-    public function __construct(private string $schemaHost = 'page://self')
+    public function __construct(#[ContextScheme] private string $schemaHost = 'page://self')
     {
     }
 
