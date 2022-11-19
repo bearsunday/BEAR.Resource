@@ -28,7 +28,6 @@ class JsonSchemaExceptionFakeHandler implements JsonSchemaExceptionHandlerInterf
         $ro->view = null;
     }
 
-    /** @return array<int|string, mixed> */
     private function fakeResponse(string $schemaFile): array
     {
         /** @var array<int|string, mixed> $fakeObject */
@@ -39,8 +38,6 @@ class JsonSchemaExceptionFakeHandler implements JsonSchemaExceptionHandlerInterf
 
     /**
      * @param array<int|string, mixed> $values
-     *
-     * @return array<int|string, mixed>|stdClass
      */
     private function deepArray(array|stdClass $values): array
     {
