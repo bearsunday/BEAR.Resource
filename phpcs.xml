@@ -22,6 +22,17 @@
     <!-- PSR12 Coding Standard -->
     <rule ref="PSR12"/>
 
+    <!-- Exclude NativeTypeHintrule from interface and abstract class -->
+    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint">
+        <exclude-pattern>*/src/*Interface.php</exclude-pattern>
+        <exclude-pattern>*/src/Abstract*.php</exclude-pattern>
+        <exclude-pattern>*/src/ResourceObject.php</exclude-pattern>
+    </rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint">
+        <exclude-pattern>*/src/*Interface.php</exclude-pattern>
+        <exclude-pattern>*/src/Abstract*.php</exclude-pattern>
+        <exclude-pattern>*/src/ResourceObject.php</exclude-pattern>
+    </rule>
     <!-- Doctrine Coding Standard -->
     <rule ref="Doctrine">
     <!-- Inapplicable for this project -->
@@ -33,8 +44,6 @@
         <exclude name="SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming.SuperfluousSuffix"/>
         <exclude name="SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration.MissingVariable"/>
         <exclude name="SlevomatCodingStandard.Commenting.UselessInheritDocComment.UselessInheritDocComment"/>
-        <exclude name="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint"/>
-        <exclude name="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint"/>
         <exclude name="Squiz.Commenting.FunctionComment.InvalidNoReturn"/>
         <!-- /Base -->
         <!-- Option -->
