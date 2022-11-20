@@ -7,5 +7,6 @@
 /.phpcs-cache
 /coverage.xml
 /tests/log/error.log
-/vendor-bin/**/vendor
 /tests-php8/*
+/.phpunit-cache
+
