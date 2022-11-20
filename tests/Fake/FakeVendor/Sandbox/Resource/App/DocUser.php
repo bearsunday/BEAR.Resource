@@ -15,8 +15,6 @@ class DocUser extends ResourceObject
      * Returns a variety of information about the user specified by the required $id parameter
      *
      * @param string $id User ID
-     *
-     * @JsonSchema(schema="user.json")
      */
     #[JsonSchema("user.json")]
     public function onGet(string $id)

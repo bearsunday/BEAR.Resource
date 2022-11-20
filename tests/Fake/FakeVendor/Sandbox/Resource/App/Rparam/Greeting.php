@@ -9,11 +9,7 @@ use BEAR\Resource\ResourceObject;
 
 class Greeting extends ResourceObject
 {
-    /**
-     * @ResourceParam(param="name", uri="app://self/rparam/login#login_id")
-     */
-    #[ResourceParam(param: "name", uri: "app://self/rparam/login#login_id")]
-    public function onGet(string $name = null)
+    public function onGet(#[ResourceParam(uri: "app://self/rparam/login#login_id")] string $name = null)
     {
         $this['name'] = $name;
 
@@ -24,11 +20,7 @@ class Greeting extends ResourceObject
     {
     }
 
-    /**
-     * @ResourceParam(param="id", uri="app://self/rparam/login{?name}#nickname", templated=true)
-     */
-    #[ResourceParam(param: "id", uri: "app://self/rparam/login{?name}#nickname", templated: true)]
-    public function onPost(string $id, string $name)
+    public function onPost(#[ResourceParam(uri: "app://self/rparam/login{?name}#nickname", templated: true)] string $id, string $name)
     {
         $this['id'] = $id;
 

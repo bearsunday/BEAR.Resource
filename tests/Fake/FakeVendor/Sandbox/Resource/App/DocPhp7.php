@@ -23,11 +23,7 @@ class DocPhp7 extends ResourceObject
         return $this;
     }
 
-    /**
-     * @ServerParam(param="id", key="id_key")
-     */
-    #[ServerParam(param: "id", key: "id_key")]
-    public function onPost(int $id)
+    public function onPost(#[ServerParam(key: "id_key")] int $id)
     {
         return $this;
     }

@@ -103,7 +103,7 @@ class OptionsTest extends TestCase
     {
         return [
             [new FakeParamResource()],
-            [new FakeParamResourceParam()],
+            [new FakeParamResourceAttr()],
         ];
     }
 

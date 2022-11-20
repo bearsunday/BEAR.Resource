@@ -15,10 +15,6 @@ class Hasembed extends ResourceObject
     {
     }
 
-    /**
-     * @Embed(rel="bird1", src="app://self/bird/canary")
-     * @Link(rel="next", href="app://self/href/target?id={id}")
-     */
     #[Embed(rel: "bird1", src: "app://self/bird/canary")]
     #[Link(rel: "next", href: "app://self/href/target?id={id}")]
     public function onGet(int $id)

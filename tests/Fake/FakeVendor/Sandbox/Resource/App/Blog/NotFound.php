@@ -10,9 +10,7 @@ use BEAR\Resource\ResourceObject;
 
 class NotFound extends ResourceObject
 {
-    /**
-     * @Link(href="app://self/user{?id}", rel="user", crawl="meta")
-     */
+    #[Link (href: 'app://self/user{?id}',rel: 'user',crawl: 'meta')]
     public function onGet()
     {
         $this->body = ['message' => 'blog not found'];
