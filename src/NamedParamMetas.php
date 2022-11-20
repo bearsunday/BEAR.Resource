@@ -14,8 +14,6 @@ use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
 
-use const PHP_VERSION_ID;
-
 final class NamedParamMetas implements NamedParamMetasInterface
 {
     public function __construct(
@@ -30,10 +28,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
     {
         /** @var array{0:object, 1:string} $callable */
         $method = new ReflectionMethod($callable[0], $callable[1]);
-        $paramMetas = false;
-        if (PHP_VERSION_ID >= 80000) {
-            $paramMetas = $this->getAttributeParamMetas($method);
-        }
+        $paramMetas = $this->getAttributeParamMetas($method);
 
         if (! $paramMetas) {
             $paramMetas = $this->getAnnotationParamMetas($method);
