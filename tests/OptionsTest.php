@@ -86,10 +86,14 @@ class OptionsTest extends TestCase
                 "id": {
                     "in": "server",
                     "type": "integer"
+                },
+                "a": {
+                    "type": "string"
                 }
             },
             "required": [
-                "id"
+                "id",
+                "a"
             ]
         }
     }

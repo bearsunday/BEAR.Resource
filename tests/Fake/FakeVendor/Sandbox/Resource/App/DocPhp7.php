@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace FakeVendor\Sandbox\Resource\App;
 
+use BEAR\Resource\Annotation\FakeAttr;
+use BEAR\Resource\Annotation\FakeLog;
 use BEAR\Resource\Annotation\ResourceParam;
+use BEAR\Resource\LoggerInterface;
 use BEAR\Resource\ResourceObject;
 use Ray\Di\Di\Assisted;
 use Ray\WebContextParam\Annotation\ServerParam;
@@ -28,7 +31,7 @@ class DocPhp7 extends ResourceObject
         return $this;
     }
 
-    public function onPost(#[ServerParam(key: "id_key")] int $id)
+    public function onPost(#[ServerParam(key: "id_key")] int $id, #[FakeAttr] string $a)
     {
         return $this;
     }
