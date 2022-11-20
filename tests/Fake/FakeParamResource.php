@@ -27,17 +27,11 @@ class FakeParamResource extends ResourceObject
     {
     }
 
-    /**
-     * @CookieParam(param="cookie", key="c")
-     */
-    public function onPut(string $cookie)
+    public function onPut(#[CookieParam('c')] string $cookie)
     {
     }
 
-    /**
-     * @CookieParam(param="cookie", key="c")
-     */
-    public function onDelete(string $a, string $cookie = 'default')
+    public function onDelete(string $a, #[CookieParam('c')] string $cookie = 'default')
     {
     }
 }
