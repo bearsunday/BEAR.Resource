@@ -90,10 +90,10 @@ final class NamedParamMetas implements NamedParamMetasInterface
                 continue;
             }
 
-            $valueParams[$parameter->name] = $parameter;
+            $names[$parameter->name] = $parameter;
         }
 
-        $names = $this->getNames($names, $valueParams);
+        $names = $this->convertParam($names);
 
         return $names;
     }
@@ -201,12 +201,16 @@ final class NamedParamMetas implements NamedParamMetasInterface
      *
      * @return array<string, ParamInterface>
      */
-    private function getNames(array $names, array $valueParams): array
+    private function convertParam(array $names): array
     {
         // if there is more than single attributes
         if ($names) {
-            foreach ($valueParams as $paramName => $valueParam) {
-                $names[$paramName] = $this->getParam($valueParam);
+            foreach ($names as $paramName => $maybeParam) {
+                if (! ($maybeParam instanceof ReflectionParameter)) {
+                    continue;
+                }
+
+                $names[$paramName] = $this->getParam($maybeParam);
             }
         }
 
