@@ -11,24 +11,21 @@ use Throwable;
 
 use function assert;
 use function sprintf;
+use function str_ends_with;
 use function str_replace;
-use function substr;
 use function ucwords;
 
 final class AppAdapter implements AdapterInterface
 {
     /**
-     * Resource adapter namespace
-     */
-    private string $namespace;
-
-    /**
      * @param InjectorInterface $injector  Application dependency injector
      * @param string            $namespace Resource adapter namespace
      */
-    public function __construct(private InjectorInterface $injector, string $namespace)
-    {
-        $this->namespace = $namespace;
+    public function __construct(
+        private InjectorInterface $injector,
+        /** Resource adapter namespace */
+        private string $namespace,
+    ) {
     }
 
     /**
@@ -39,7 +36,7 @@ final class AppAdapter implements AdapterInterface
      */
     public function get(AbstractUri $uri): ResourceObject
     {
-        if (substr($uri->path, -1) === '/') {
+        if (str_ends_with($uri->path, '/')) {
             $uri->path .= 'index';
         }
 

@@ -14,10 +14,10 @@ use Ray\Di\ProviderInterface;
 /** @implements ProviderInterface<SchemeCollection> */
 final class SchemeCollectionProvider implements ProviderInterface
 {
-    /** @AppName("appName") */
-    #[AppName('appName')]
-    public function __construct(private string $appName, private InjectorInterface $injector)
-    {
+    public function __construct(
+        #[AppName] private string $appName,
+        private InjectorInterface $injector,
+    ) {
     }
 
     /**

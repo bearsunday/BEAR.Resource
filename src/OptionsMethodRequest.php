@@ -4,16 +4,11 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Annotation\ResourceParam;
-use Doctrine\Common\Annotations\Reader;
-use Ray\Di\Di\Assisted;
 use ReflectionException;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
 
-use function array_diff;
-use function array_values;
 use function assert;
 use function is_array;
 use function is_string;
@@ -21,10 +16,6 @@ use function method_exists;
 
 final class OptionsMethodRequest
 {
-    public function __construct(private Reader $reader)
-    {
-    }
-
     /**
      * Parameter #2 $paramMetas of method BEAR\Resource\OptionsMethodRequest::ignoreAnnotatedPrameter() expects array('parameters' => array<string, array('type' =>
      *
@@ -35,9 +26,7 @@ final class OptionsMethodRequest
      */
     public function __invoke(ReflectionMethod $method, array $paramDoc, array $ins): array
     {
-        $paramMetas = $this->getParamMetas($method->getParameters(), $paramDoc, $ins);
-
-        return $this->ignoreAnnotatedPrameter($method, $paramMetas);
+        return $this->getParamMetas($method->getParameters(), $paramDoc, $ins);
     }
 
     /**
@@ -150,55 +139,6 @@ final class OptionsMethodRequest
         }
 
         return $type;
-    }
-
-    /**
-     * Ignore @ Assisted @ ResourceParam parameter
-     *
-     * @param array{parameters?: array<string, array{type?: string}>, required?: array<int, string>} $paramMetas
-     *
-     * @return array{parameters?: array<string, array{type?: string, description?: string}>, required?: array<int, string>}
-     */
-    private function ignoreAnnotatedPrameter(ReflectionMethod $method, array $paramMetas): array
-    {
-        $annotations = $this->reader->getMethodAnnotations($method);
-        foreach ($annotations as $annotation) {
-            if ($annotation instanceof ResourceParam) {
-                /* @psalm-suppress UndefinedClass */
-                unset($paramMetas['parameters'][$annotation->param]);
-                assert(isset($paramMetas['required']));
-                $paramMetas['required'] = array_values(array_diff($paramMetas['required'], [$annotation->param]));
-            }
-
-            if (! ($annotation instanceof Assisted)) {
-                continue;
-            }
-
-            $paramMetas = $this->ignorreAssisted($paramMetas, $annotation);
-        }
-
-        return $paramMetas;
-    }
-
-    /**
-     * Ignore @ Assisted parameter
-     *
-     * @param array{parameters?: array<string, array{type?: string, description?: string}>, required?: array<int, string>} $paramMetas
-     *
-     * @return (string|string[])[][]
-     * @psalm-return array{parameters?: array<string, array{type?: string, description?: string}>, required?: array<int, string>}
-     */
-    private function ignorreAssisted(array $paramMetas, Assisted $annotation): array
-    {
-        if (isset($paramMetas['required'])) {
-            $paramMetas['required'] = array_values(array_diff($paramMetas['required'], $annotation->values));
-        }
-
-        foreach ($annotation->values as $varName) {
-            unset($paramMetas['parameters'][$varName]);
-        }
-
-        return $paramMetas;
     }
 
     /**

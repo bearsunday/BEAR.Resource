@@ -15,9 +15,6 @@ class Author extends ResourceObject
         2 => ['name' => 'Porthos', 'age' => 17, 'blog_id' => 0]
     ];
 
-    /**
-     * @Link(rel="blog", href="app://self/blog?id={blog_id}")
-     */
     #[Link(rel: "blog", href: "app://self/blog?id={blog_id}")]
     public function onGet(int $id)
     {

@@ -8,8 +8,10 @@ use Ray\Di\InjectorInterface;
 
 final class NamedParameter implements NamedParameterInterface
 {
-    public function __construct(private NamedParamMetasInterface $paramMetas, private InjectorInterface $injector)
-    {
+    public function __construct(
+        private NamedParamMetasInterface $paramMetas,
+        private InjectorInterface $injector,
+    ) {
     }
 
     /**

@@ -12,7 +12,7 @@ use function array_shift;
 use function class_exists;
 use function explode;
 use function implode;
-use function strpos;
+use function str_starts_with;
 use function strtolower;
 use function substr;
 
@@ -78,7 +78,7 @@ final class Meta
     {
         $allows = [];
         foreach ($methods as $method) {
-            $isRequestMethod = strpos($method->name, 'on') === 0 && strpos($method->name, 'onLink') !== 0;
+            $isRequestMethod = str_starts_with($method->name, 'on') && ! str_starts_with($method->name, 'onLink');
             if (! $isRequestMethod) {
                 continue;
             }

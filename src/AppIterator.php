@@ -19,7 +19,7 @@ use function assert;
 use function class_exists;
 use function file_exists;
 use function get_declared_classes;
-use function strpos;
+use function str_contains;
 
 /** @implements Iterator<string, Meta> */
 final class AppIterator implements Iterator
@@ -117,7 +117,7 @@ final class AppIterator implements Iterator
     {
         $isPhp = $item->isFile()
             && $item->getExtension() === 'php'
-            && (strpos($item->getBasename('.php'), '.') === false);
+            && (! str_contains($item->getBasename('.php'), '.'));
 
         return ! $isPhp;
     }

@@ -34,8 +34,9 @@ final class HttpResourceObject extends ResourceObject
     /** @psalm-suppress PropertyNotSetInConstructor */
     private ResponseInterface $response;
 
-    public function __construct(private HttpClientInterface $client)
-    {
+    public function __construct(
+        private HttpClientInterface $client,
+    ) {
         unset($this->code, $this->headers, $this->body, $this->view);
     }
 

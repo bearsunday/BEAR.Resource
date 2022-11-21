@@ -40,10 +40,10 @@ final class OptionsMethods
         FilesParam::class => 'files',
     ];
 
-    /** @Named("schemaDir=json_schema_dir") */
-    #[Named('schemaDir=json_schema_dir')]
-    public function __construct(private Reader $reader, private string $schemaDir = '')
-    {
+    public function __construct(
+        private Reader $reader,
+        #[Named('json_schema_dir')] private string $schemaDir = '',
+    ) {
     }
 
     /**
@@ -57,7 +57,7 @@ final class OptionsMethods
         $ins = $this->getInMap($method);
         [$doc, $paramDoc] = (new OptionsMethodDocBolck())($method);
         $methodOption = $doc;
-        $paramMetas = (new OptionsMethodRequest($this->reader))($method, $paramDoc, $ins);
+        $paramMetas = (new OptionsMethodRequest())($method, $paramDoc, $ins);
         $schema = $this->getJsonSchema($method);
         $request = $paramMetas ? ['request' => $paramMetas] : [];
         $methodOption += $request;
@@ -102,17 +102,15 @@ final class OptionsMethods
     {
         $ins = [];
         $annotations = $this->reader->getMethodAnnotations($method);
-        foreach ($annotations as $annotation) {
-            if (! ($annotation instanceof AbstractWebContextParam)) {
-                continue;
-            }
-
-            $class = $annotation::class;
-            assert(class_exists($class));
-            $ins[$annotation->param] = self::WEB_CONTEXT_NAME[$class];
+        $ins = $this->getInsFromMethodAnnotations($annotations, $ins);
+        if ($ins) {
+            return $ins;
         }
 
-        return $ins;
+        /** @var array<string, string> $insParam */
+        $insParam = $this->getInsFromParameterAttributes($method, $ins);
+
+        return $insParam;
     }
 
     /** @return array<string, mixed> */
@@ -129,5 +127,51 @@ final class OptionsMethods
         }
 
         return (array) json_decode((string) file_get_contents($schemaFile), null, 512, JSON_THROW_ON_ERROR);
+    }
+
+    /**
+     * @param array<object>         $annotations
+     * @param array<string, string> $ins
+     *
+     * @return array<string, string>
+     */
+    public function getInsFromMethodAnnotations(array $annotations, array $ins): array
+    {
+        foreach ($annotations as $annotation) {
+            if (! ($annotation instanceof AbstractWebContextParam)) {
+                continue;
+            }
+
+            $class = $annotation::class;
+            assert(class_exists($class));
+            $ins[$annotation->param] = self::WEB_CONTEXT_NAME[$class];
+        }
+
+        return $ins;
+    }
+
+    /**
+     * @param array<string, string> $ins
+     *
+     * @return array<string, string>
+     */
+    public function getInsFromParameterAttributes(ReflectionMethod $method, array $ins): array|null
+    {
+        $parameters = $method->getParameters();
+        foreach ($parameters as $parameter) {
+            $attributes = $parameter->getAttributes();
+            foreach ($attributes as $attribute) {
+                $instance = $attribute->newInstance();
+                if (! ($instance instanceof AbstractWebContextParam)) {
+                    continue;
+                }
+
+                $class = $instance::class;
+                assert(class_exists($class));
+                $ins[$parameter->name] = self::WEB_CONTEXT_NAME[$class];
+            }
+        }
+
+        return $ins;
     }
 }

@@ -19,7 +19,6 @@ use Throwable;
 use function array_key_exists;
 use function array_merge;
 use function assert;
-use function get_class;
 use function in_array;
 use function is_array;
 use function md5;
@@ -56,13 +55,6 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     public $method = '';
 
     /**
-     * Query
-     *
-     * @var array<string, mixed>
-     */
-    public $query = [];
-
-    /**
      * Options
      *
      * @var array<mixed>
@@ -74,17 +66,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      *
      * @var 'eager'|'lazy'
      */
-    public $in = 'lazy'; // phpcs:ignore SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
-
-    /**
-     * Links
-     *
-     * @var LinkType[]
-     */
-    public $links = [];
-
-    /** @var ResourceObject */
-    public $resourceObject;
+    public $in = 'lazy';
 
     /**
      * Request Result
@@ -93,9 +75,6 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      */
     protected $result;
 
-    /** @var InvokerInterface */
-    protected $invoker;
-
     /**
      * @param array<string, mixed> $query
      * @param list<LinkType>       $links
@@ -103,22 +82,25 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      * @throws MethodException
      */
     public function __construct(
-        InvokerInterface $invoker,
-        ResourceObject $ro,
+        protected InvokerInterface $invoker,
+        public ResourceObject $resourceObject,
         string $method = Request::GET,
-        array $query = [],
-        array $links = [],
+        /**
+         * Query
+         */
+        public array $query = [],
+        // phpcs:ignore SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
+        /**
+         * Links
+         */
+        public array $links = [],
         private LinkerInterface|null $linker = null,
     ) {
-        $this->invoker = $invoker;
-        $this->resourceObject = $ro;
         if (! in_array(strtolower($method), ['get', 'post', 'put', 'patch', 'delete', 'head', 'options'], true)) {
             throw new MethodException($method, 400);
         }
 
         $this->method = $method;
-        $this->query = $query;
-        $this->links = $links;
     }
 
     /** @psalm-suppress UnevaluatedCode */
@@ -222,7 +204,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
         $this->invoke();
         assert($this->result instanceof ResourceObject);
         if (! is_array($this->result->body) || ! array_key_exists($offset, $this->result->body)) {
-            throw new OutOfBoundsException("[{$offset}] for object[" . get_class($this->result) . ']', 400);
+            throw new OutOfBoundsException("[{$offset}] for object[" . $this->result::class . ']', 400);
         }
 
         return $this->result->body[$offset];
@@ -259,7 +241,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      */
     public function hash(): string
     {
-        return md5(get_class($this->resourceObject) . $this->method . serialize($this->query) . serialize($this->links));
+        return md5($this->resourceObject::class . $this->method . serialize($this->query) . serialize($this->links));
     }
 
     /**

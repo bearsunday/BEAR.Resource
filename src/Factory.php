@@ -11,20 +11,15 @@ use function is_string;
 
 final class Factory implements FactoryInterface
 {
-    /**
-     * Resource adapter biding config
-     */
-    private SchemeCollectionInterface $scheme;
-
-    public function __construct(SchemeCollectionInterface $scheme, private UriFactory $uri)
-    {
-        $this->scheme = $scheme;
+    public function __construct(
+        private SchemeCollectionInterface $scheme,
+        private UriFactory $uri,
+    ) {
     }
 
     /**
      * Set scheme collection
      *
-     * @Inject(optional=true)
      * @codeCoverageIgnore
      */
     #[Inject(optional: true)]

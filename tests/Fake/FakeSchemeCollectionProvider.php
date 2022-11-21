@@ -9,11 +9,8 @@ use Ray\Di\ProviderInterface;
 
 class FakeSchemeCollectionProvider implements ProviderInterface
 {
-    private \Ray\Di\InjectorInterface $injector;
-
-    public function __construct(InjectorInterface $injector)
+    public function __construct(private InjectorInterface $injector)
     {
-        $this->injector = $injector;
     }
 
     /**

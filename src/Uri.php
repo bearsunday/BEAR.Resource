@@ -24,8 +24,10 @@ final class Uri extends AbstractUri
      *
      * @throws UriException
      */
-    public function __construct(string $uri, array $query = [])
-    {
+    public function __construct(
+        string $uri,
+        array $query = [],
+    ) {
         $this->validate($uri);
         if (count($query) !== 0) {
             $uri = uri_template($uri, $query);

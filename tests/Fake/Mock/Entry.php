@@ -13,9 +13,6 @@ class Entry extends ResourceObject
         return "entry {$id}";
     }
 
-    /**
-     * @Provides
-     */
     public function provideId()
     {
         return ['id' => 1];

@@ -19,6 +19,7 @@ use function asort;
 use function assert;
 use function count;
 use function is_array;
+use function is_countable;
 use function is_iterable;
 use function is_string;
 use function ksort;
@@ -34,25 +35,15 @@ use const E_USER_WARNING;
 abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, Countable, IteratorAggregate, JsonSerializable, Stringable
 {
     /**
-     * Uri
-     *
      * @var AbstractUri
      * @psalm-suppress PropertyNotSetInConstructor
      */
     public $uri;
 
-    /**
-     * Status code
-     *
-     * @var int
-     */
+    /** @var int */
     public $code = 200;
 
-    /**
-     * Resource header
-     *
-     * @var array<string, string>
-     */
+    /** @var array<string, string> */
     public $headers = [];
 
     /**
@@ -62,18 +53,10 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      */
     public $view;
 
-    /**
-     * Body
-     *
-     * @var mixed
-     */
+    /** @var mixed */
     public $body;
 
-    /**
-     * Renderer
-     *
-     * @var ?RenderInterface
-     */
+    /** @var ?RenderInterface */
     protected $renderer;
 
     /**
@@ -140,7 +123,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      * @return void
      */
     #[ReturnTypeWillChange]
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, mixed $value)
     {
         if ($this->body === null) {
             $this->body = [];
@@ -187,7 +170,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      */
     public function count(): int
     {
-        if ($this->body instanceof Countable || is_array($this->body)) {
+        if (is_countable($this->body)) {
             return count($this->body);
         }
 
@@ -228,11 +211,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         return is_array($this->body) ? new ArrayIterator($this->body) : new ArrayIterator([]);
     }
 
-    /**
-     * @return self
-     *
-     * @Inject(optional=true)
-     */
+    /** @return self */
     #[Inject(optional: true)]
     public function setRenderer(RenderInterface $renderer)
     {

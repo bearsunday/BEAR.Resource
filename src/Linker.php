@@ -250,8 +250,11 @@ final class Linker implements LinkerInterface
         return true;
     }
 
-    /** @param array<int|string, mixed> $value */
-    private function isMultiColumnList(array $value, mixed $firstRow): bool
+    /**
+     * @param array<int|string, mixed> $value
+     * @psalm-param array<string, mixed>|string $firstRow
+     */
+    private function isMultiColumnList(array $value, array|string|null $firstRow): bool
     {
         return is_array($firstRow) && array_filter(array_keys($value), 'is_numeric') === array_keys($value);
     }

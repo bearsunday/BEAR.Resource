@@ -14,7 +14,6 @@ use function is_object;
 class JsonSchemaExceptionFakeHandler implements JsonSchemaExceptionHandlerInterface
 {
     public const X_FAKE_JSON = 'X-Fake-JSON';
-
     public const X_JSON_SCHEMA_EXCEPTION = 'X-JSON-Schema-Exception';
 
     /**
@@ -40,13 +39,13 @@ class JsonSchemaExceptionFakeHandler implements JsonSchemaExceptionHandlerInterf
     /**
      * @param array<int|string, mixed> $values
      *
-     * @return array<int|string, mixed>|stdClass
+     * @return array<int|string, mixed>
      */
     private function deepArray(array|stdClass $values): array
     {
         $result = [];
         /** @psalm-suppress MixedAssignment */
-        foreach ($values as $key => $value) {
+        foreach ($values as $key => $value) { //@phpstan-ignore-line
             $result[$key] = is_object($value) ? $this->deepArray((array) $value) : $result[$key] = $value;
         }
 

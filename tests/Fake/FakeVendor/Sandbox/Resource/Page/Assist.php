@@ -10,13 +10,9 @@ use Ray\Di\Di\Named;
 
 class Assist extends ResourceObject
 {
-    /**
-     * @Assisted({"login_id"})
-     * @Named("login_id=login_id")
-     */
-    #[Assisted(["login_id"]), Named("login_id=login_id")]
-    public function onGet(string $login_id = null)
-    {
+    public function onGet(
+        #[Assisted(["login_id"]), Named('login_id')] string $login_id = null
+    ) {
         return 'login_id:' . $login_id;
     }
 }

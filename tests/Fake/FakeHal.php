@@ -8,10 +8,6 @@ use BEAR\Resource\Annotation\Link;
 
 class FakeHal extends ResourceObject
 {
-    /**
-     * @Link(rel="profile", href="/profile")
-     * @FakeNull
-     */
     #[Link(rel: "profile", href: "/profile"), FakeNull]
     public function onGet(bool $change = false)
     {

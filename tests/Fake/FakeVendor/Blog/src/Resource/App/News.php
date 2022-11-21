@@ -10,16 +10,10 @@ use BEAR\Resource\ResourceObject;
 
 class News extends ResourceObject
 {
-    private $resource;
-
-    public function __construct(ResourceInterface $resource)
+    public function __construct(private ResourceInterface $resource)
     {
-        $this->resource = $resource;
     }
 
-    /**
-     * @Embed(rel="weather",src="app://self/weather{?date}")
-     */
     #[Embed(rel: "weather",src: "app://self/weather{?date}")]
     public function onGet(string $date)
     {
