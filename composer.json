@@ -54,6 +54,7 @@
         "psr-4": {
             "BEAR\\Resource\\": [
                 "tests/",
+                "tests-php8/",
                 "tests/Fake/"
             ],
             "FakeVendor\\Sandbox\\": "tests/Fake/FakeVendor/Sandbox/",

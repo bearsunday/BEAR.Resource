@@ -9,18 +9,20 @@ use Rector\Set\ValueObject\LevelSetList;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
-        __DIR__ . '/demo',
         __DIR__ . '/src',
         __DIR__ . '/src-files',
-        __DIR__ . '/tests',
-        __DIR__ . '/tests-php8',
+        __DIR__ . '/tests/*Test.php',
+        __DIR__ . '/tests-php8/*Test.php',
+    ]);
+    $rectorConfig->skip([
+       __DIR__ . '/src/*Interface.php'
     ]);
 
     // register a single rule
     $rectorConfig->rule(InlineConstructorDefaultToPropertyRector::class);
     $rectorConfig->rule(AnnotationBindingRector::class);
     // define sets of rules
-        $rectorConfig->sets([
-            LevelSetList::UP_TO_PHP_80,
+    $rectorConfig->sets([
+        LevelSetList::UP_TO_PHP_80,
     ]);
 };
