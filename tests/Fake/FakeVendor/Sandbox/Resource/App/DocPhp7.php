@@ -23,8 +23,8 @@ class DocPhp7 extends ResourceObject
      * @param string $login_id    Login ID
      * @param string $defaultNull DefaultNull
      *
-     * @ResourceParam(uri="app://self/login#id")
-     * @Assisted({"titme"})
+     * @ResourceParam(param="login_id", uri="app://self/login#id")
+     * @Assisted({"time"})
      */
     public function onGet(int $id, string $name, bool $sw, string $login_id, array $arr, string $time, $defaultNull = null)
     {
