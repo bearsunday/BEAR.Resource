@@ -152,6 +152,7 @@ final class OptionsMethods
 
     /**
      * @param array<string, string> $ins
+     *
      * @return array<string, string>
      */
     public function getInsFromParameterAttributes(ReflectionMethod $method, array $ins): array|null
