@@ -27,7 +27,7 @@ class OptionsTest extends TestCase
     {
         $ro = new DocPhp7();
         $request = new Request($this->invoker, $ro, Request::OPTIONS);
-        $response = $this->invoker->invoke($request);
+        $this->invoker->invoke($request);
         $actual = $ro->headers['Allow'];
         $expected = 'GET, POST';
         $this->assertSame($actual, $expected);
