@@ -10,16 +10,10 @@ use BEAR\Resource\ResourceObject;
 
 class Origin extends ResourceObject
 {
-    private \BEAR\Resource\ResourceInterface $resource;
-
-    public function __construct(ResourceInterface $resource)
+    public function __construct(private ResourceInterface $resource)
     {
-        $this->resource = $resource;
     }
 
-    /**
-     * @Link(rel="next", href="app://self/href/target?id={id}")
-     */
     #[Link(rel: "next", href: "app://self/href/target?id={id}")]
     public function onGet(int $id)
     {

@@ -79,11 +79,6 @@ class Tag extends ResourceObject
         ],
     ];
 
-    /**
-     * @Link(crawl="tree", rel="tag_name",  href="app://self/marshal/tag/name?tag_id={tag_id}",  method="get")
-     * @Link(crawl="tree", rel="tag_type", href="app://self/marshal/tag/type?tag_type=1")
-     * @Link(crawl="another_tree", rel="xxx",  href="app://path/to/another/resource",  method="get")
-     */
     #[Link(crawl: "tree", rel: "tag_name",  href: "app://self/marshal/tag/name?tag_id={tag_id}",  method: "get")]
     #[Link(crawl: "tree", rel: "tag_type", href: "app://self/marshal/tag/type?tag_type=1")]
     #[Link(crawl: "another_tree", rel: "xxx",  href: "app://path/to/another/resource",  method: "get")]

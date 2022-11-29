@@ -9,9 +9,6 @@ use BEAR\Resource\ResourceObject;
 
 class FakePerson extends ResourceObject
 {
-    /**
-     * @JsonSchema
-     */
     #[JsonSchema]
     public function onGet()
     {

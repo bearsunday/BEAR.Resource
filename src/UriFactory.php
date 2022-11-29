@@ -11,20 +11,12 @@ use function parse_url;
 
 final class UriFactory
 {
-    private string $schemaHost;
-
-    /**
-     * @ContextScheme
-     */
-    #[ContextScheme]
-    public function __construct(string $schemaHost = 'page://self')
-    {
-        $this->schemaHost = $schemaHost;
+    public function __construct(
+        #[ContextScheme] private string $schemaHost = 'page://self',
+    ) {
     }
 
-    /**
-     * @param array<string, mixed> $query
-     */
+    /** @param array<string, mixed> $query */
     public function __invoke(string $uri, array $query = []): Uri
     {
         $parsedUrl = (array) parse_url($uri);

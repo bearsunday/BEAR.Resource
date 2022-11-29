@@ -51,9 +51,7 @@ class ResourceObjectTest extends TestCase
         $this->assertSame($expected, $json);
     }
 
-    /**
-     * @covers \BEAR\Resource\ResourceObject::toString()
-     */
+    /** @covers \BEAR\Resource\ResourceObject::toString() */
     public function testViewCached(): void
     {
         $ro = new FakeResource();
@@ -63,9 +61,7 @@ class ResourceObjectTest extends TestCase
         $this->assertSame($view, $ro->toString());
     }
 
-    /**
-     * @covers \BEAR\Resource\ResourceObject::count()
-     */
+    /** @covers \BEAR\Resource\ResourceObject::count() */
     public function testIlligalAccessExceptionInCount(): void
     {
         $this->expectException(IlligalAccessException::class);
@@ -83,9 +79,7 @@ class ResourceObjectTest extends TestCase
         $this->assertSame(null, $wakeup->body['req']->body); // @phpstan-ignore-line
     }
 
-    /**
-     * @covers \BEAR\Resource\ResourceObject::offsetExists()
-     */
+    /** @covers \BEAR\Resource\ResourceObject::offsetExists() */
     public function testIlligalAccessExceptionInOffsetExists(): void
     {
         $ro = new FakeResource();
@@ -93,9 +87,7 @@ class ResourceObjectTest extends TestCase
         $this->assertFalse(isset($ro['key']));
     }
 
-    /**
-     * @covers \BEAR\Resource\ResourceObject::offsetGet()
-     */
+    /** @covers \BEAR\Resource\ResourceObject::offsetGet() */
     public function testIlligalAccessExceptionInOffsetGet(): void
     {
         $this->expectException(IlligalAccessException::class);

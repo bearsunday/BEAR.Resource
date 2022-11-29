@@ -16,10 +16,6 @@ class User extends ResourceObject
         2 => ['name' => 'Porthos', 'age' => 17, 'blog_id' => 0]
     ];
 
-    /**
-     * @Link(rel="prof", href="app://path/to/prof")
-     * @Link(rel="blog", href="app://self/link/blog?id={id}")
-     */
     #[Link(rel: "prof", href: "app://path/to/prof")]
     #[Link(rel: "blog", href: "app://self/link/blog?id={id}")]
     public function onGet(int $id)

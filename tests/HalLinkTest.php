@@ -9,9 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class HalLinkTest extends TestCase
 {
-    /**
-     * @covers \BEAR\Resource\HalLink::bodyLink()
-     */
+    /** @covers \BEAR\Resource\HalLink::bodyLink() */
     public function testBodyLinkInvalidLink(): void
     {
         $halLink = new HalLink(new NullReverseLink());

@@ -31,7 +31,7 @@ class Blog extends ResourceObject
 
 class User extends ResourceObject
 {
-    private $users = [
+    private array $users = [
         ['name' => 'Athos', 'age' => 15, 'blog_id' => 0],
         ['name' => 'Aramis', 'age' => 16, 'blog_id' => 1],
         ['name' => 'Porthos', 'age' => 17, 'blog_id' => 2]

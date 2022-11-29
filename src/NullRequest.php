@@ -6,10 +6,8 @@ namespace BEAR\Resource;
 
 final class NullRequest implements RequestInterface
 {
-    /**
-     * @param array<string, mixed> $query
-     */
-    public function __invoke(?array $query = null): ResourceObject
+    /** @param array<string, mixed> $query */
+    public function __invoke(array|null $query = null): ResourceObject
     {
         return new NullResourceObject();
     }
@@ -19,10 +17,7 @@ final class NullRequest implements RequestInterface
         return '';
     }
 
-    /**
-     * @return ResourceObject
-     */
-    public function request()
+    public function request(): ResourceObject
     {
         return new NullResourceObject();
     }
@@ -57,9 +52,7 @@ final class NullRequest implements RequestInterface
         return 'get ' . (string) new NullUri();
     }
 
-    /**
-     * @return self
-     */
+    /** @return self */
     public function linkSelf(string $linkKey): RequestInterface
     {
         unset($linkKey);
@@ -67,9 +60,7 @@ final class NullRequest implements RequestInterface
         return $this;
     }
 
-    /**
-     * @return self
-     */
+    /** @return self */
     public function linkNew(string $linkKey): RequestInterface
     {
         unset($linkKey);
@@ -77,9 +68,7 @@ final class NullRequest implements RequestInterface
         return $this;
     }
 
-    /**
-     * @return self
-     */
+    /** @return self */
     public function linkCrawl(string $linkKey): RequestInterface
     {
         unset($linkKey);

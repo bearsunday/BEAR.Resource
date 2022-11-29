@@ -9,9 +9,6 @@ use BEAR\Resource\ResourceObject;
 
 class EmbedBirds extends ResourceObject
 {
-    /**
-     * @Embed(rel="birds", src="app://self/bird/birds{?id}")
-     */
     #[Embed(rel: "birds", src: "app://self/bird/birds{?id}")]
     public function onGet(string $id)
     {

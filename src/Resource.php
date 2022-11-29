@@ -20,35 +20,9 @@ use function is_string;
  */
 final class Resource implements ResourceInterface
 {
-    /**
-     * Resource factory
-     */
-    private FactoryInterface $factory;
-    private InvokerInterface $invoker;
-
-    /**
-     * Anchor
-     */
-    private AnchorInterface $anchor;
-
-    /**
-     * Linker
-     */
-    private LinkerInterface $linker;
-
-    /**
-     * Request
-     *
-     * @psalm-suppress PropertyNotSetInConstructor
-     */
+    /** @psalm-suppress PropertyNotSetInConstructor */
     private Request $request;
-
-    /**
-     * Request method
-     */
     private string $method = 'get';
-    private UriFactory $uri;
-
     /** @noinspection MoreThanThreeArgumentsInspection */
 
     /**
@@ -59,17 +33,12 @@ final class Resource implements ResourceInterface
      * @param UriFactory       $uri     URI factory
      */
     public function __construct(
-        FactoryInterface $factory,
-        InvokerInterface $invoker,
-        AnchorInterface $anchor,
-        LinkerInterface $linker,
-        UriFactory $uri
+        private FactoryInterface $factory,
+        private InvokerInterface $invoker,
+        private AnchorInterface $anchor,
+        private LinkerInterface $linker,
+        private UriFactory $uri,
     ) {
-        $this->factory = $factory;
-        $this->invoker = $invoker;
-        $this->anchor = $anchor;
-        $this->linker = $linker;
-        $this->uri = $uri;
     }
 
     public function __get(string $name): self

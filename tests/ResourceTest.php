@@ -75,7 +75,7 @@ class ResourceTest extends TestCase
     public function testWithAddRequestOverrideQuery(): void
     {
         $instance = $this->resource->get->uri('page://self/index')->withQuery(['id' => 1])->addQuery(
-            ['id' => 2]
+            ['id' => 2],
         )->eager->request();
         $this->assertSame(2, $instance->body);
     }
@@ -143,13 +143,11 @@ class ResourceTest extends TestCase
                 'blog_id' => 12,
                 'blog' => ['id' => 12, 'name' => 'Aramis blog'],
             ],
-            $ro->body
+            $ro->body,
         );
     }
 
-    /**
-     * @return array<string, array<mixed>|int|string>
-     */
+    /** @return array<string, array<mixed>|int|string> */
     public function testLinkCrawl(): array
     {
         $request = $this->resource->get->uri('app://self/blog')->withQuery(['id' => 11])->linkCrawl('tree')->request();
@@ -208,7 +206,7 @@ class ResourceTest extends TestCase
     public function testHal(): void
     {
         $resource = (new Injector(new HalModule(new ResourceModule('FakeVendor\Sandbox')), __DIR__ . '/tmp'))->getInstance(
-            ResourceInterface::class
+            ResourceInterface::class,
         );
         $user = $resource->get->uri('app://self/author')->withQuery(['id' => 1])->eager->request();
         $expected = '{
@@ -245,9 +243,7 @@ class ResourceTest extends TestCase
         return $this->resource;
     }
 
-    /**
-     * @depends testAssistedParameter
-     */
+    /** @depends testAssistedParameter */
     public function testPreventAssistedParameterOverride(ResourceInterface $resource): void
     {
         $ro = $resource->get->uri('page://self/assist')->withQuery(['login_id' => '_WILL_BE_IGNORED_'])->eager->request();
@@ -322,9 +318,7 @@ class ResourceTest extends TestCase
         $this->assertSame($expected, $view);
     }
 
-    /**
-     * @covers \BEAR\Resource\Resource::options()
-     */
+    /** @covers \BEAR\Resource\Resource::options() */
     public function testOptions(): void
     {
         $ro = $this->resource->options('page://self/index');

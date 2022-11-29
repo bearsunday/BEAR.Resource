@@ -49,9 +49,7 @@ class EmbedInterceptorTest extends TestCase
         return $result;
     }
 
-    /**
-     * @depends testInvoke
-     */
+    /** @depends testInvoke */
     public function testInvokeAnotherLink(ResourceObject $result): ResourceObject
     {
         $profile = $result['bird2'];
@@ -62,9 +60,7 @@ class EmbedInterceptorTest extends TestCase
         return $result;
     }
 
-    /**
-     * @depends testInvoke
-     */
+    /** @depends testInvoke */
     public function testInvokeString(ResourceObject $result): void
     {
         $result->setRenderer(new JsonRenderer());
@@ -90,9 +86,7 @@ class EmbedInterceptorTest extends TestCase
         return $bird2;
     }
 
-    /**
-     * @depends testEmbedAnnotation
-     */
+    /** @depends testEmbedAnnotation */
     public function testEmbedChangeQuery(AbstractRequest $request): void
     {
         $request->withQuery(['id' => 100]);

@@ -27,7 +27,7 @@ class JsonSchemaInterceptorTest extends TestCase
             $fakeDir . '/Fake/json_schema',
             $fakeDir . '/Fake/json_validate',
             new JsonSchemaExceptionNullHandler(),
-            'http://example.com/schema/'
+            'http://example.com/schema/',
         );
     }
 

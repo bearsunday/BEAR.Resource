@@ -14,9 +14,6 @@ class Comment extends ResourceObject
         return "entry {$id}";
     }
 
-    /**
-     * @Provides
-     */
     public function provideId()
     {
         return ['aaa' => 1];

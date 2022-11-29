@@ -22,6 +22,8 @@ class FakeParamResource extends ResourceObject
      * @FormParam(param="form", key="f")
      * @QueryParam(param="query", key="q")
      * @ServerParam(param="server", key="s")
+     *
+     * @see attribute version at FakeParamResourceParam
      */
     public function onPost(string $cookie, string $env, string $form, string $query, string $server)
     {

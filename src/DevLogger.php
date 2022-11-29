@@ -12,11 +12,9 @@ use function sprintf;
 
 final class DevLogger implements LoggerInterface
 {
-    private PsrLoggerInterface $logger;
-
-    public function __construct(PsrLoggerInterface $logger)
-    {
-        $this->logger = $logger;
+    public function __construct(
+        private PsrLoggerInterface $logger,
+    ) {
     }
 
     public function __invoke(ResourceObject $ro): void

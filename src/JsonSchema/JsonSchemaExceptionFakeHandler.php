@@ -7,13 +7,13 @@ namespace BEAR\Resource;
 use BEAR\Resource\Exception\JsonSchemaException;
 use JSONSchemaFaker\Faker;
 use SplFileInfo;
+use stdClass;
 
 use function is_object;
 
 class JsonSchemaExceptionFakeHandler implements JsonSchemaExceptionHandlerInterface
 {
     public const X_FAKE_JSON = 'X-Fake-JSON';
-
     public const X_JSON_SCHEMA_EXCEPTION = 'X-JSON-Schema-Exception';
 
     /**
@@ -27,9 +27,7 @@ class JsonSchemaExceptionFakeHandler implements JsonSchemaExceptionHandlerInterf
         $ro->view = null;
     }
 
-    /**
-     * @return array<int|string, mixed>
-     */
+    /** @return array<int|string, mixed> */
     private function fakeResponse(string $schemaFile): array
     {
         /** @var array<int|string, mixed> $fakeObject */
@@ -43,11 +41,11 @@ class JsonSchemaExceptionFakeHandler implements JsonSchemaExceptionHandlerInterf
      *
      * @return array<int|string, mixed>
      */
-    private function deepArray($values): array
+    private function deepArray(array|stdClass $values): array
     {
         $result = [];
         /** @psalm-suppress MixedAssignment */
-        foreach ($values as $key => $value) {
+        foreach ($values as $key => $value) { //@phpstan-ignore-line
             $result[$key] = is_object($value) ? $this->deepArray((array) $value) : $result[$key] = $value;
         }
 

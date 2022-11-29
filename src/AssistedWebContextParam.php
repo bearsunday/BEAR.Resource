@@ -18,13 +18,11 @@ final class AssistedWebContextParam implements ParamInterface
      * @var array<string, array<string, mixed>>
      */
     private static array $globals = [];
-    private AbstractWebContextParam $webContextParam;
-    private ParamInterface $defaultParam;
 
-    public function __construct(AbstractWebContextParam $webContextParam, ParamInterface $defaultParam)
-    {
-        $this->webContextParam = $webContextParam;
-        $this->defaultParam = $defaultParam;
+    public function __construct(
+        private AbstractWebContextParam $webContextParam,
+        private ParamInterface $defaultParam,
+    ) {
     }
 
     /**
@@ -45,9 +43,7 @@ final class AssistedWebContextParam implements ParamInterface
         return ($this->defaultParam)($varName, $query, $injector);
     }
 
-    /**
-     * @param array<string, array<string, mixed>> $globals
-     */
+    /** @param array<string, array<string, mixed>> $globals */
     public static function setSuperGlobalsOnlyForTestingPurpose(array $globals): void
     {
         self::$globals = $globals;

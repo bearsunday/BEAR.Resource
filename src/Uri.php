@@ -24,8 +24,10 @@ final class Uri extends AbstractUri
      *
      * @throws UriException
      */
-    public function __construct(string $uri, array $query = [])
-    {
+    public function __construct(
+        string $uri,
+        array $query = [],
+    ) {
         $this->validate($uri);
         if (count($query) !== 0) {
             $uri = uri_template($uri, $query);
@@ -48,9 +50,7 @@ final class Uri extends AbstractUri
         $this->query = $query + $parseQuery;
     }
 
-    /**
-     * @throws UriException
-     */
+    /** @throws UriException */
     private function validate(string $uri): void
     {
         if (filter_var($uri, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED)) {

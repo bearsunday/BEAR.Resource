@@ -9,9 +9,6 @@ use BEAR\Resource\ResourceObject;
 
 class FakeUsers extends ResourceObject
 {
-    /**
-     * @JsonSchema(schema="users.json")
-     */
     #[JsonSchema(schema: "users.json")]
     public function onGet(int $age)
     {

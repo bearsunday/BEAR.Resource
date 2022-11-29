@@ -11,28 +11,19 @@ use function is_string;
 
 final class Factory implements FactoryInterface
 {
-    /**
-     * Resource adapter biding config
-     */
-    private SchemeCollectionInterface $scheme;
-    private UriFactory $uri;
-
-    public function __construct(SchemeCollectionInterface $scheme, UriFactory $uri)
-    {
-        $this->scheme = $scheme;
-        $this->uri = $uri;
+    public function __construct(
+        private SchemeCollectionInterface $scheme,
+        private UriFactory $uri,
+    ) {
     }
 
     /**
      * Set scheme collection
      *
-     * @return void
-     *
-     * @Inject(optional=true)
      * @codeCoverageIgnore
      */
     #[Inject(optional: true)]
-    public function setSchemeCollection(SchemeCollectionInterface $scheme)
+    public function setSchemeCollection(SchemeCollectionInterface $scheme): void
     {
         $this->scheme = $scheme;
     }

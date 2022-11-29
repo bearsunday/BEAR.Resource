@@ -10,7 +10,6 @@ use BEAR\Resource\ResourceObject;
 class FakeView extends ResourceObject
 {
     /**
-     * @JsonSchema(schema="user.json", target="view")
      * {@SuppressWarnings("unused")}
      */
     #[JsonSchema(schema: 'user.json', target: 'view')]

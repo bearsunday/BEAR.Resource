@@ -19,11 +19,9 @@ use function assert;
 use function class_exists;
 use function file_exists;
 use function get_declared_classes;
-use function strpos;
+use function str_contains;
 
-/**
- * @implements Iterator<string, Meta>
- */
+/** @implements Iterator<string, Meta> */
 final class AppIterator implements Iterator
 {
     private int $i = 0;
@@ -34,9 +32,7 @@ final class AppIterator implements Iterator
     /** @var list<string> */
     private array $keys = [];
 
-    /**
-     * @throws ResourceDirException
-     */
+    /** @throws ResourceDirException */
     public function __construct(string $resourceDir)
     {
         if (! file_exists($resourceDir)) {
@@ -45,7 +41,7 @@ final class AppIterator implements Iterator
 
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($resourceDir),
-            RecursiveIteratorIterator::SELF_FIRST
+            RecursiveIteratorIterator::SELF_FIRST,
         );
         $this->metaCollection = $this->getMetaCollection($iterator);
         $this->keys = array_keys($this->metaCollection);
@@ -121,7 +117,7 @@ final class AppIterator implements Iterator
     {
         $isPhp = $item->isFile()
             && $item->getExtension() === 'php'
-            && (strpos($item->getBasename('.php'), '.') === false);
+            && (! str_contains($item->getBasename('.php'), '.'));
 
         return ! $isPhp;
     }
@@ -142,7 +138,7 @@ final class AppIterator implements Iterator
      *
      * @return class-string|string
      */
-    private function getName(array $newClasses)
+    private function getName(array $newClasses): string
     {
         foreach ($newClasses as $newClass) {
             $parent = (new ReflectionClass($newClass))->getParentClass();

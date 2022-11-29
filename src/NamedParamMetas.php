@@ -14,15 +14,11 @@ use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
 
-use const PHP_VERSION_ID;
-
 final class NamedParamMetas implements NamedParamMetasInterface
 {
-    private Reader $reader;
-
-    public function __construct(Reader $reader)
-    {
-        $this->reader = $reader;
+    public function __construct(
+        private Reader $reader,
+    ) {
     }
 
     /**
@@ -32,10 +28,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
     {
         /** @var array{0:object, 1:string} $callable */
         $method = new ReflectionMethod($callable[0], $callable[1]);
-        $paramMetas = false;
-        if (PHP_VERSION_ID >= 80000) {
-            $paramMetas = $this->getAttributeParamMetas($method);
-        }
+        $paramMetas = $this->getAttributeParamMetas($method);
 
         if (! $paramMetas) {
             $paramMetas = $this->getAnnotationParamMetas($method);
@@ -44,10 +37,8 @@ final class NamedParamMetas implements NamedParamMetasInterface
         return $paramMetas;
     }
 
-    /**
-     * @return array<string, AssistedWebContextParam|ParamInterface>
-     */
-    private function getAnnotationParamMetas(ReflectionMethod $method)
+    /** @return array<string, AssistedWebContextParam|ParamInterface> */
+    private function getAnnotationParamMetas(ReflectionMethod $method): array
     {
         $parameters = $method->getParameters();
         $annotations = $this->reader->getMethodAnnotations($method);
@@ -67,7 +58,6 @@ final class NamedParamMetas implements NamedParamMetasInterface
         $parameters = $method->getParameters();
         $names = $valueParams = [];
         foreach ($parameters as $parameter) {
-            /** @var array<ReflectionAttribute<RequestParamInterface>> $refAttribute */
             $refAttribute = $parameter->getAttributes(RequestParamInterface::class, ReflectionAttribute::IS_INSTANCEOF);
             if ($refAttribute) {
                 /** @var ?ResourceParam $resourceParam */
@@ -78,12 +68,10 @@ final class NamedParamMetas implements NamedParamMetasInterface
                 }
             }
 
-            /** @var array<ReflectionAttribute<AbstractWebContextParam>> $refWebContext */
             $refWebContext = $parameter->getAttributes(AbstractWebContextParam::class, ReflectionAttribute::IS_INSTANCEOF);
             if ($refWebContext) {
-                /** @var AbstractWebContextParam $webParam */
                 $webParam = $refWebContext[0]->newInstance();
-                /** @psalm-var scalar $defaultValue */
+                /** @psalm-suppress MixedAssignment */
                 $defaultValue = $parameter->isDefaultValueAvailable() ? $parameter->getDefaultValue() : null;
                 $param = new AssistedWebContextParam($webParam, new DefaultParam($defaultValue));
                 $names[$parameter->name] = $param;
@@ -186,11 +174,8 @@ final class NamedParamMetas implements NamedParamMetasInterface
         return $names;
     }
 
-    /**
-     * @return DefaultParam|NoDefaultParam
-     * @psalm-return DefaultParam<mixed>|NoDefaultParam
-     */
-    private function getDefault(ReflectionParameter $parameter)
+    /** @psalm-return DefaultParam<mixed>|NoDefaultParam */
+    private function getDefault(ReflectionParameter $parameter): DefaultParam|NoDefaultParam
     {
         return $parameter->isDefaultValueAvailable() === true ? new DefaultParam($parameter->getDefaultValue()) : new NoDefaultParam();
     }

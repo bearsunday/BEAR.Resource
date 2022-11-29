@@ -10,11 +10,6 @@ use BEAR\Resource\ResourceObject;
 
 class BirdsRel extends ResourceObject
 {
-    /**
-     * @Embed(rel="bird1", src="/bird/canary")
-     * @Embed(rel="bird2", src="/bird/sparrow{?id}")
-     * @Link(rel="bird3", href="/bird/suzume")
-     */
     #[Embed(rel: "bird1", src: "/bird/canary")]
     #[Embed(rel: "bird2", src: "/bird/sparrow{?id}")]
     #[Link(rel: "bird3", href: "/bird/suzume")]
