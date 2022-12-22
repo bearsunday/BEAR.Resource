@@ -12,13 +12,19 @@ use Generator;
 use PHPUnit\Framework\TestCase;
 use Ray\Compiler\CompileInjector;
 
+use function array_map;
+use function glob;
+use function iterator_to_array;
+
+use const GLOB_BRACE;
+
 final class ResrouceObjectModuleTest extends TestCase
 {
     protected function setUp(): void
     {
         parent::setUp();
 
-        array_map('unlink', (array) glob(__DIR__ . '/tmp/{*.php}', GLOB_BRACE));
+        array_map('unlink', (array) glob(__DIR__ . '/tmp/{*.php}', GLOB_BRACE)); // @phpstan-ignore-line
     }
 
     public function testConfigureWithGenerator(): void
