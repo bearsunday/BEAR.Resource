@@ -7,3 +7,5 @@ parameters:
     - '%currentWorkingDirectory%/tests/tmp/*'
     - '%currentWorkingDirectory%/tests/Module/tmp/*'
     - '%currentWorkingDirectory%/tests/Fake/*'
+  ignoreErrors:
+  		- '#Access to an undefined property#'
