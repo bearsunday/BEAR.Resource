@@ -14,7 +14,8 @@ use Ray\Di\Di\Qualifier;
  * @Qualifier
  * @NamedArgumentConstructor
  */
-#[Attribute(Attribute::TARGET_METHOD | Attribute::TARGET_PARAMETER), Qualifier]
+#[Attribute(Attribute::TARGET_METHOD | Attribute::TARGET_PARAMETER)]
+#[Qualifier]
 final class OptionsBody
 {
     public function __construct(

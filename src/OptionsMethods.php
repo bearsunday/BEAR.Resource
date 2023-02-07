@@ -42,7 +42,8 @@ final class OptionsMethods
 
     public function __construct(
         private Reader $reader,
-        #[Named('json_schema_dir')] private string $schemaDir = '',
+        #[Named('json_schema_dir')]
+        private string $schemaDir = '',
     ) {
     }
 

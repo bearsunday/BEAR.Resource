@@ -31,7 +31,7 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5.10",
-        "doctrine/coding-standard": "^10.0",
+        "doctrine/coding-standard": "^11.0",
         "phpmd/phpmd": "^2.9",
         "phpmetrics/phpmetrics": "^2.7",
         "phpstan/phpstan": "^1.3",

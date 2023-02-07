@@ -28,6 +28,7 @@ final class ImportAppModule extends AbstractModule
         }
 
         unset($defaultContextName);
+
         parent::__construct();
     }
 

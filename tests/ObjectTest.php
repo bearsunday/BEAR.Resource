@@ -17,6 +17,7 @@ class ObjectTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
         $this->ro = new Mock\Entry();
         $this->ro[0] = 'entry1';
         $this->ro[1] = 'entry2';
