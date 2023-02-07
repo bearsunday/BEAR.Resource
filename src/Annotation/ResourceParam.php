@@ -16,7 +16,8 @@ use Ray\Di\Di\Qualifier;
  * @Target("METHOD")
  * @NamedArgumentConstructor
  */
-#[Attribute(Attribute::TARGET_METHOD | Attribute::TARGET_PARAMETER), Qualifier]
+#[Attribute(Attribute::TARGET_METHOD | Attribute::TARGET_PARAMETER)]
+#[Qualifier]
 final class ResourceParam implements RequestParamInterface
 {
     /** @var string */

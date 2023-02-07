@@ -32,6 +32,7 @@ class ImportModuleTest extends TestCase
         $tmpDir = dirname(__DIR__, 2) . '/tests/Fake/FakeVendor/Blog/var/tmp';
         $rm($tmpDir);
         file_put_contents($tmpDir . '/tmp.text', '1');
+
         parent::setUp();
     }
 

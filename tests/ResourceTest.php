@@ -29,6 +29,7 @@ class ResourceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
         $injector = new Injector(new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox')), __DIR__ . '/tmp');
         $this->resource = $injector->getInstance(ResourceInterface::class);
     }

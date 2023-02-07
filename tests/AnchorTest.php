@@ -17,6 +17,7 @@ class AnchorTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
         $invoker = (new InvokerFactory())();
         $author = new Author();
         $author->onGet(1);
