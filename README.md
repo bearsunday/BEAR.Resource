@@ -55,14 +55,14 @@ class Author extends ResourceObject
 
     public function onPut(int $id, string $name): static
     {
-        $this->code = 203; // no content
+        $this->code = 204; // no content
         //...
         return $this;
     }
 
     public function onDelete($id): static
     {
-        $this->code = 203; // no content
+        $this->code = 204; // no content
         //...
         return $this;
     }
