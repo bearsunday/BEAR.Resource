@@ -14,7 +14,7 @@ use Ray\Di\AbstractModule;
 final class OptionsMethodModule extends AbstractModule
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function configure(): void
     {

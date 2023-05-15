@@ -17,7 +17,7 @@ class JsonSchemaExceptionFakeHandler implements JsonSchemaExceptionHandlerInterf
     public const X_JSON_SCHEMA_EXCEPTION = 'X-JSON-Schema-Exception';
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function handle(ResourceObject $ro, JsonSchemaException $e, string $schemaFile)
     {

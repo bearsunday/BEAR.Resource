@@ -26,7 +26,7 @@ final class ImportSchemeCollectionProvider implements ProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function get(): SchemeCollection
     {

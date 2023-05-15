@@ -41,7 +41,7 @@ final class Request extends AbstractRequest
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @param array<string, mixed> $query
      */
@@ -53,7 +53,7 @@ final class Request extends AbstractRequest
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function addQuery(array $query): RequestInterface
     {
@@ -63,7 +63,7 @@ final class Request extends AbstractRequest
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function toUriWithMethod(): string
     {
@@ -73,7 +73,7 @@ final class Request extends AbstractRequest
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function toUri(): string
     {
@@ -83,7 +83,7 @@ final class Request extends AbstractRequest
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function linkSelf(string $linkKey): RequestInterface
     {
@@ -93,7 +93,7 @@ final class Request extends AbstractRequest
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function linkNew(string $linkKey): RequestInterface
     {
@@ -103,7 +103,7 @@ final class Request extends AbstractRequest
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function linkCrawl(string $linkKey): RequestInterface
     {

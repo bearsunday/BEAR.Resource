@@ -28,7 +28,7 @@ use function ucwords;
  */
 final class HttpResourceObject extends ResourceObject
 {
-    /** {@inheritdoc} */
+    /** {@inheritDoc} */
     public $body;
 
     /** @psalm-suppress PropertyNotSetInConstructor */

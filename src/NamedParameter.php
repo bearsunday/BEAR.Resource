@@ -15,7 +15,7 @@ final class NamedParameter implements NamedParameterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getParameters(callable $callable, array $query): array
     {

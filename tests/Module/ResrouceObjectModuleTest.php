@@ -15,8 +15,8 @@ use Ray\Compiler\CompileInjector;
 use function array_map;
 use function glob;
 use function iterator_to_array;
-
 use function unlink;
+
 use const GLOB_BRACE;
 
 final class ResrouceObjectModuleTest extends TestCase

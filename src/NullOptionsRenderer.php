@@ -9,7 +9,7 @@ use BEAR\Resource\Exception\MethodNotAllowedException;
 final class NullOptionsRenderer implements RenderInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function render(ResourceObject $ro)
     {

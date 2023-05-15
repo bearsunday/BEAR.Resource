@@ -29,7 +29,7 @@ final class Factory implements FactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @throws UriException
      */

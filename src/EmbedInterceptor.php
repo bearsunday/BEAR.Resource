@@ -29,7 +29,7 @@ final class EmbedInterceptor implements MethodInterceptor
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @throws EmbedException
      */

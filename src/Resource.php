@@ -49,7 +49,7 @@ final class Resource implements ResourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function newInstance($uri): ResourceObject
     {
@@ -61,7 +61,7 @@ final class Resource implements ResourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @throws MethodException
      */
@@ -71,7 +71,7 @@ final class Resource implements ResourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function uri($uri): RequestInterface
     {
@@ -85,7 +85,7 @@ final class Resource implements ResourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @psalm-suppress MixedPropertyFetch
      */

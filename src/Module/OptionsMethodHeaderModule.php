@@ -22,7 +22,7 @@ use Ray\Di\AbstractModule;
 final class OptionsMethodHeaderModule extends AbstractModule
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function configure(): void
     {
