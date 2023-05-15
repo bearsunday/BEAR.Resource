@@ -17,6 +17,7 @@ final class HalLinker
     ) {
     }
 
+    /** @param array<string, mixed> $query */
     public function getReverseLink(string $uri, array $query): string
     {
         return ($this->link)($uri, $query);
@@ -42,7 +43,7 @@ final class HalLinker
 
     /**
      * @param array<int|string, mixed>|array{_links: string} $body
-     * @param Link                                           $methodAnnotations
+     * @param non-empty-list<object>                         $methodAnnotations
      */
     private function linkAnnotation(array $body, array $methodAnnotations, Hal $hal): Hal
     {

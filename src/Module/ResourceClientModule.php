@@ -86,10 +86,16 @@ final class ResourceClientModule extends AbstractModule
         $this->bind(OptionsMethods::class);
         $this->bind(NamedParamMetasInterface::class)->to(NamedParamMetas::class);
         $this->bind(ExtraMethodInvoker::class);
-        $this->bind(HalLink::class);
-        $this->bind(ReverseLinkInterface::class)->to(NullReverseLink::class);
         $this->bind(HalLinker::class);
         $this->bind(ReverseLinkerInterface::class)->to(NullReverseLinker::class);
         $this->bind(LoggerInterface::class)->to(NullLogger::class);
+        $this->configureDeprecatedBindings();
+    }
+
+    /** @psalm-suppress DeprecatedClass */
+    private function configureDeprecatedBindings(): void
+    {
+        $this->bind(HalLink::class); // @phpstan-ignore
+        $this->bind(ReverseLinkInterface::class)->to(NullReverseLink::class); // @phpstan-ignore
     }
 }
