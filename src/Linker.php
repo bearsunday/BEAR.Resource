@@ -40,7 +40,7 @@ final class Linker implements LinkerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function invoke(AbstractRequest $request)
     {

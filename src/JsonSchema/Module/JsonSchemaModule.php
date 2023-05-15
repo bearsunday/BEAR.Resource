@@ -27,7 +27,7 @@ final class JsonSchemaModule extends AbstractModule
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function configure(): void
     {

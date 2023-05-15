@@ -221,7 +221,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function toString(): string
     {
@@ -250,7 +250,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function transfer(TransferInterface $responder, array $server)
     {

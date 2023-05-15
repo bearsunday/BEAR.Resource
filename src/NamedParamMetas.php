@@ -22,7 +22,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function __invoke(callable $callable): array
     {

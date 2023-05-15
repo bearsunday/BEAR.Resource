@@ -31,7 +31,7 @@ final class HalRenderer implements RenderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function render(ResourceObject $ro)
     {
@@ -42,7 +42,7 @@ final class HalRenderer implements RenderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @throws RuntimeException
      */

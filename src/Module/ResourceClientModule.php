@@ -61,7 +61,7 @@ use Ray\Di\Scope;
 final class ResourceClientModule extends AbstractModule
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @throws NotFound
      */

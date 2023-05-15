@@ -9,7 +9,7 @@ use BEAR\Resource\Exception\JsonSchemaException;
 class JsonSchemaExceptionNullHandler implements JsonSchemaExceptionHandlerInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function handle(ResourceObject $ro, JsonSchemaException $e, string $schemaFile)
     {

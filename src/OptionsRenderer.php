@@ -37,7 +37,7 @@ final class OptionsRenderer implements RenderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function render(ResourceObject $ro)
     {

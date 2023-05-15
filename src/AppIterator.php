@@ -48,7 +48,7 @@ final class AppIterator implements Iterator
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function current(): Meta
     {
@@ -56,7 +56,7 @@ final class AppIterator implements Iterator
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function next(): void
     {
@@ -64,7 +64,7 @@ final class AppIterator implements Iterator
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function key(): string
     {
@@ -72,7 +72,7 @@ final class AppIterator implements Iterator
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function valid(): bool
     {
@@ -80,7 +80,7 @@ final class AppIterator implements Iterator
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function rewind(): void
     {

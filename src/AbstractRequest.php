@@ -119,7 +119,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @param array<string, mixed> $query
      */
@@ -138,7 +138,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @return mixed
      *
@@ -152,7 +152,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @throws OutOfBoundsException
      */
@@ -163,7 +163,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @throws OutOfBoundsException
      */
@@ -176,7 +176,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function request()
     {
@@ -190,7 +190,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @param string $offset
      *
@@ -211,7 +211,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     #[ReturnTypeWillChange]
     public function offsetExists($offset): bool
@@ -237,7 +237,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function hash(): string
     {
@@ -245,7 +245,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @return never
      *

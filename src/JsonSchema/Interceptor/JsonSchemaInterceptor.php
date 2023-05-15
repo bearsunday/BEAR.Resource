@@ -46,7 +46,7 @@ final class JsonSchemaInterceptor implements JsonSchemaInterceptorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function invoke(MethodInvocation $invocation): ResourceObject
     {

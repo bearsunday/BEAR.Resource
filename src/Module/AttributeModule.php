@@ -12,7 +12,7 @@ use Ray\Di\AbstractModule;
 final class AttributeModule extends AbstractModule
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function configure(): void
     {

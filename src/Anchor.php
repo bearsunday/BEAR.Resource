@@ -23,7 +23,7 @@ final class Anchor implements AnchorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @throws LinkException
      */

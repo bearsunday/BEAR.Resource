@@ -15,6 +15,7 @@ use Ray\Compiler\CompileInjector;
 use function array_map;
 use function glob;
 use function iterator_to_array;
+use function unlink;
 
 use const GLOB_BRACE;
 
@@ -24,6 +25,7 @@ final class ResrouceObjectModuleTest extends TestCase
     {
         parent::setUp();
 
+        @unlink(__DIR__ . '/tmp/compiled');
         array_map('unlink', (array) glob(__DIR__ . '/tmp/{*.php}', GLOB_BRACE)); // @phpstan-ignore-line
     }
 

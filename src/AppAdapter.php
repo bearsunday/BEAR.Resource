@@ -29,7 +29,7 @@ final class AppAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @throws ResourceNotFoundException
      * @throws Unbound
