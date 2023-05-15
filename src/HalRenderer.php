@@ -26,7 +26,7 @@ final class HalRenderer implements RenderInterface
 {
     public function __construct(
         private Reader $reader,
-        private HalLink $link,
+        private HalLinker $linker,
     ) {
     }
 
@@ -105,10 +105,10 @@ final class HalRenderer implements RenderInterface
     {
         $query = $uri->query ? '?' . http_build_query($uri->query) : '';
         $path = $uri->path . $query;
-        $selfLink = $this->link->getReverseLink($path);
+        $selfLink = $this->linker->getReverseLink($path, $uri->query);
         $hal = new Hal($selfLink, $body);
 
-        return $this->link->addHalLink($body, $annotations, $hal);
+        return $this->linker->addHalLink($body, $annotations, $hal);
     }
 
     /** @return array{0: ResourceObject, 1: array<array-key, mixed>} */
@@ -140,6 +140,6 @@ final class HalRenderer implements RenderInterface
             return;
         }
 
-        $ro->headers['Location'] = $this->link->getReverseLink($ro->headers['Location']);
+        $ro->headers['Location'] = $this->linker->getReverseLink($ro->headers['Location'], $ro->uri->query);
     }
 }

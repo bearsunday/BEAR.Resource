@@ -8,12 +8,12 @@ use Nocarrier\Hal;
 use PHPUnit\Framework\TestCase;
 
 /** @deprecated */
-class HalLinkTest extends TestCase
+class HalLinkerTest extends TestCase
 {
     /** @covers \BEAR\Resource\HalLink::bodyLink() */
     public function testBodyLinkInvalidLink(): void
     {
-        $halLink = new HalLink(new NullReverseLink());
+        $halLink = new HalLinker(new NullReverseLinker());
         $body = [
             '_links' => ['rel1' => 'not-href'],
         ];
