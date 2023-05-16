@@ -15,8 +15,6 @@ final class HttpAdapter implements AdapterInterface
 
     /**
      * {@inheritDoc}
-     *
-     * @codeCoverageIgnore
      */
     public function get(AbstractUri $uri): ResourceObject
     {

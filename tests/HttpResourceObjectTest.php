@@ -25,7 +25,6 @@ class HttpResourceObjectTest extends TestCase
 
     public function testGet(): HttpResourceObject
     {
-        $this->markTestSkipped();
         $response = $this->resource->get('http://httpbin.org/get', ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
         $this->assertArrayHasKey('Access-control-allow-credentials', $response->headers);
@@ -39,7 +38,6 @@ class HttpResourceObjectTest extends TestCase
 
     public function testPost(): void
     {
-        $this->markTestSkipped();
         $response = $this->resource->post('http://httpbin.org/post', ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
         $this->assertArrayHasKey('Access-control-allow-credentials', $response->headers);
@@ -50,7 +48,6 @@ class HttpResourceObjectTest extends TestCase
 
     public function testPut(): void
     {
-        $this->markTestSkipped();
         $response = $this->resource->put('http://httpbin.org/put', ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
         $this->assertArrayHasKey('Access-control-allow-credentials', $response->headers);
@@ -61,7 +58,6 @@ class HttpResourceObjectTest extends TestCase
 
     public function testPatch(): void
     {
-        $this->markTestSkipped();
         $response = $this->resource->patch('http://httpbin.org/patch', ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
         $this->assertArrayHasKey('Access-control-allow-credentials', $response->headers);
@@ -72,7 +68,6 @@ class HttpResourceObjectTest extends TestCase
 
     public function testDelete(): void
     {
-        $this->markTestSkipped();
         $response = $this->resource->delete('http://httpbin.org/delete', ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
         $this->assertArrayHasKey('Access-control-allow-credentials', $response->headers);
