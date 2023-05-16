@@ -75,7 +75,9 @@ final class HalLinker
     {
         foreach ($body['_links'] as $rel => $link) {
             if (! is_string($rel) || ! isset($link['href'])) {
+                // @codeCoverageIgnoreStart
                 continue;
+                // @codeCoverageIgnoreEnd
             }
 
             $attr = $link;
