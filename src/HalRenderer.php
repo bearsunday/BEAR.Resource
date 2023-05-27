@@ -17,10 +17,13 @@ use function is_scalar;
 use function is_string;
 use function json_decode;
 use function method_exists;
+use function parse_str;
+use function parse_url;
 use function ucfirst;
 
 use const JSON_THROW_ON_ERROR;
 use const PHP_EOL;
+use const PHP_URL_QUERY;
 
 final class HalRenderer implements RenderInterface
 {
@@ -140,6 +143,12 @@ final class HalRenderer implements RenderInterface
             return;
         }
 
-        $ro->headers['Location'] = $this->linker->getReverseLink($ro->headers['Location'], $ro->uri->query);
+        $url = parse_url($ro->headers['Location'], PHP_URL_QUERY);
+        $isRelativePath = $url === null;
+        $path = $isRelativePath ? $ro->headers['Location'] : $url;
+        parse_str((string) $path, $query);
+        /** @var array<string, string> $query */
+
+        $ro->headers['Location'] = $this->linker->getReverseLink($ro->headers['Location'], $query);
     }
 }
