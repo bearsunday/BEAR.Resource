@@ -7,5 +7,6 @@ parameters:
     - '%currentWorkingDirectory%/tests/tmp/*'
     - '%currentWorkingDirectory%/tests/Module/tmp/*'
     - '%currentWorkingDirectory%/tests/Fake/*'
+    - tests/HttpResourceObjectTest.php
   ignoreErrors:
   		- '#Access to an undefined property#'

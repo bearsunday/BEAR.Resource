@@ -3,6 +3,7 @@
     "null", "true", "false",
     "static", "self", "parent",
     "array", "string", "int", "float", "bool", "iterable", "callable", "void", "object",
-    "Attribute", "ReflectionAttribute", "Stringable"
+    "Attribute", "ReflectionAttribute", "Stringable",
+    "BEAR\\Resource\\HalLink", "BEAR\\Resource\\NullReverseLink", "BEAR\\Resource\\ReverseLinkInterface"
   ]
 }

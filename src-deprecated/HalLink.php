@@ -10,6 +10,7 @@ use Nocarrier\Hal;
 use function is_string;
 use function uri_template;
 
+/** @deprecated  Use HalLinker instead */
 final class HalLink
 {
     public function __construct(

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace BEAR\Resource\Renderer;
 
 use BEAR\Resource\FakeHal;
-use BEAR\Resource\HalLink;
+use BEAR\Resource\HalLinker;
 use BEAR\Resource\HalRenderer;
-use BEAR\Resource\NullReverseLink;
+use BEAR\Resource\NullReverseLinker;
 use BEAR\Resource\Uri;
 use PHPUnit\Framework\TestCase;
 use Ray\ServiceLocator\ServiceLocator;
@@ -20,7 +20,7 @@ class HalRendererTest extends TestCase
     {
         $this->ro = new FakeHal();
         $this->ro->uri = new Uri('app://self/dummy');
-        $this->ro->setRenderer(new HalRenderer(ServiceLocator::getReader(), new HalLink(new NullReverseLink())));
+        $this->ro->setRenderer(new HalRenderer(ServiceLocator::getReader(), new HalLinker(new NullReverseLinker())));
     }
 
     public function testRender(): void

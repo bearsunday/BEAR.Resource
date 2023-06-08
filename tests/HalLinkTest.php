@@ -7,6 +7,7 @@ namespace BEAR\Resource;
 use Nocarrier\Hal;
 use PHPUnit\Framework\TestCase;
 
+/** @deprecated */
 class HalLinkTest extends TestCase
 {
     /** @covers \BEAR\Resource\HalLink::bodyLink() */
