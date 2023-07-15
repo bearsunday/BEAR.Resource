@@ -65,12 +65,8 @@ final class ClassParam implements ParamInterface
         return $obj;
     }
 
-    /**
-     * @param array<string, array<string, mixed>> $query
-     *
-     * @return array<string, mixed>
-     */
-    private function getProps(string $varName, array $query, InjectorInterface $injector): array
+    /** @param array<string, mixed> $query */
+    private function getProps(string $varName, array $query, InjectorInterface $injector): mixed
     {
         if (isset($query[$varName])) {
             return $query[$varName];
