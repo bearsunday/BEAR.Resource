@@ -107,4 +107,14 @@ class NamedParameterTest extends TestCase
         assert($ro instanceof ResourceObject);
         $this->assertSame(['userId' => 'koriym', 'userRole' => 'lead'], (array) $ro->body);
     }
+
+    public function testEnumParam(): void
+    {
+        $ro = new FakeVendor\Sandbox\Resource\Page\EnumParam();
+
+        $params = ['stringBacked' => 'foo', 'intBacked' => '1'];
+        $args = $this->params->getParameters([$ro, 'onGet'], $params);
+
+        $this->assertSame([FakeStringBacked::FOO, FakeIntBacked::FOO, null], $args);
+    }
 }
