@@ -117,4 +117,15 @@ class NamedParameterTest extends TestCase
 
         $this->assertSame([FakeStringBacked::FOO, FakeIntBacked::FOO, null], $args);
     }
+
+    public function testNotBackedEnumParam(): void
+    {
+        $this->expectException(NotBackedEnumException::class);
+
+        $ro = new FakeVendor\Sandbox\Resource\Page\EnumParam();
+
+        $params = ['notBacked' => 'foo'];
+
+        $this->params->getParameters([$ro, 'onPut'], $params);
+    }
 }

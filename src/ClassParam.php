@@ -2,14 +2,18 @@
 
 namespace BEAR\Resource;
 
+use BackedEnum;
 use BEAR\Resource\Exception\ParameterException;
 use Ray\Di\InjectorInterface;
 use ReflectionClass;
+use ReflectionEnum;
 use ReflectionNamedType;
 use ReflectionParameter;
 
 use function assert;
 use function class_exists;
+use function enum_exists;
+use function is_a;
 use function ltrim;
 use function preg_replace;
 use function strtolower;
@@ -49,7 +53,12 @@ final class ClassParam implements ParamInterface
         }
 
         assert(class_exists($this->type));
-        $hasConstructor = (bool) (new ReflectionClass($this->type))->getConstructor();
+        $refClass = (new ReflectionClass($this->type));
+        if ($refClass->isEnum()) {
+            return $this->enum($this->type, $props);
+        }
+
+        $hasConstructor = (bool) $refClass->getConstructor();
         if ($hasConstructor) {
             /** @psalm-suppress MixedMethodCall */
             return new $this->type(...$props);
@@ -81,5 +90,19 @@ final class ClassParam implements ParamInterface
         unset($injector);
 
         throw new ParameterException($varName);
+    }
+
+    private function enum(string $type, mixed $props)
+    {
+        $refEnum = new ReflectionEnum($type);
+        assert(enum_exists($type));
+
+        if (! $refEnum->isBacked()) {
+            throw new NotBackedEnumException($type);
+        }
+
+        assert(is_a($type, BackedEnum::class, true));
+
+        return $type::from($props);
     }
 }
