@@ -108,6 +108,7 @@ class NamedParameterTest extends TestCase
         $this->assertSame(['userId' => 'koriym', 'userRole' => 'lead'], (array) $ro->body);
     }
 
+    /** @requires PHP >= 8.1 */
     public function testEnumParam(): void
     {
         $ro = new FakeVendor\Sandbox\Resource\Page\EnumParam();
@@ -118,6 +119,7 @@ class NamedParameterTest extends TestCase
         $this->assertSame([FakeStringBacked::FOO, FakeIntBacked::FOO, null], $args);
     }
 
+    /** @requires PHP >= 8.1 */
     public function testNotBackedEnumParam(): void
     {
         $this->expectException(NotBackedEnumException::class);
