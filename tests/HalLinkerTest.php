@@ -29,7 +29,7 @@ class HalLinkerTest extends TestCase
         $fakeRo->uri = new Uri('app://self/?id=10');
         $fakeRo->setRenderer($halRenderer);
         $fakeRo->headers = ['Location' => 'http://example.com/go?id=10'];
-        (string) $fakeRo;
+        (string) $fakeRo; // @phpstan-ignore-line
         $this->assertSame('/user/10', $fakeRo->headers['Location']);
     }
 }
