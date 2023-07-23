@@ -37,6 +37,7 @@ class HttpResourceObjectTest extends TestCase
     {
         $response = $this->resource->get(self::URL, ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
+        $this->arrayHasKey('Content-Type', $response->headers);
         assert(is_array($response->body));
         $this->assertArrayHasKey('args', $response->body);
         $this->assertStringContainsString('"args": {', (string) $response->view);
