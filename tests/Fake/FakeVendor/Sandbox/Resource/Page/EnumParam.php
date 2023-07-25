@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BEAR\Resource\FakeVendor\Sandbox\Resource\Page;
+namespace FakeVendor\Sandbox\Resource\Page;
 
 use BEAR\Resource\FakeIntBacked;
 use BEAR\Resource\FakeNotBacked;
@@ -16,6 +16,11 @@ final class EnumParam extends ResourceObject
         FakeIntBacked $intBacked,
         FakeStringBacked|null $hasDefault = null,
     ): static {
+        $this->body = [
+            'stringBacked' => $stringBacked->value,
+            'intBacked' => $intBacked->value
+        ];
+
         return $this;
     }
 
