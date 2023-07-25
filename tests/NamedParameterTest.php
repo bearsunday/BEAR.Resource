@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+use BEAR\Resource\Exception\ParameterEnumTypeException;
 use BEAR\Resource\Exception\ParameterException;
+use BEAR\Resource\Exception\ParameterInvalidEnumException;
+use BEAR\Resource\Module\ResourceModule;
+use DateTime;
 use Doctrine\Common\Annotations\AnnotationReader;
+use FakeVendor\Sandbox\Resource\Page\EnumParam;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
@@ -111,7 +116,7 @@ class NamedParameterTest extends TestCase
     /** @requires PHP >= 8.1 */
     public function testEnumParam(): void
     {
-        $ro = new FakeVendor\Sandbox\Resource\Page\EnumParam();
+        $ro = new EnumParam();
 
         $params = ['stringBacked' => 'foo', 'intBacked' => '1'];
         $args = $this->params->getParameters([$ro, 'onGet'], $params);
@@ -120,14 +125,42 @@ class NamedParameterTest extends TestCase
     }
 
     /** @requires PHP >= 8.1 */
-    public function testNotBackedEnumParam(): void
+    public function testEnumInvlidType(): void
+    {
+        $this->expectException(ParameterEnumTypeException::class);
+        $this->expectExceptionMessage('intBacked');
+        $ro = new EnumParam();
+        $params = ['stringBacked' => 'foo', 'intBacked' => new DateTime()];
+        $this->params->getParameters([$ro, 'onGet'], $params);
+    }
+
+    /** @requires PHP >= 8.1 */
+    public function testWithResourceClient(): void
+    {
+        $resource = (new Injector(new ResourceModule('FakeVendor\Sandbox')))->getInstance(ResourceInterface::class);
+        assert($resource instanceof ResourceInterface);
+        $params = ['stringBacked' => 'foo', 'intBacked' => 1];
+        $body = $resource->get('page://self/enum-param', $params)->body;
+        $this->assertSame(['stringBacked' => 'foo', 'intBacked' => 1], $body);
+    }
+
+    /** @requires PHP >= 8.1 */
+    public function testEnumParamWithResourceClient(): void
+    {
+        $this->expectException(ParameterInvalidEnumException::class);
+        $resource = (new Injector(new ResourceModule('FakeVendor\Sandbox')))->getInstance(ResourceInterface::class);
+        assert($resource instanceof ResourceInterface);
+        $params = ['stringBacked' => '__not_enum_value__', 'intBacked' => '1'];
+        $resource->get('page://self/enum-param', $params);
+    }
+
+    /** @requires PHP >= 8.1 */
+    public function testNotBackedEnumParamWithResourceClient(): void
     {
         $this->expectException(NotBackedEnumException::class);
-
-        $ro = new FakeVendor\Sandbox\Resource\Page\EnumParam();
-
+        $resource = (new Injector(new ResourceModule('FakeVendor\Sandbox')))->getInstance(ResourceInterface::class);
+        assert($resource instanceof ResourceInterface);
         $params = ['notBacked' => 'foo'];
-
-        $this->params->getParameters([$ro, 'onPut'], $params);
+        $resource->put('page://self/enum-param', $params);
     }
 }
