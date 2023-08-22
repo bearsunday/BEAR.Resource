@@ -56,7 +56,7 @@ final class HttpResourceObject extends ResourceObject
             /** @var array<string, array<string>> $headers */
             $headers = $this->response->getHeaders();
 
-            return $this->formatHeaeder($headers);
+            return $this->formatHeader($headers);
         }
 
         if ($name === 'body') {
@@ -75,7 +75,7 @@ final class HttpResourceObject extends ResourceObject
      *
      * @return array<string, string|array<string>>
      */
-    private function formatHeaeder(array $headers): array
+    private function formatHeader(array $headers): array
     {
         $formated = [];
         foreach ($headers as $key => $header) {

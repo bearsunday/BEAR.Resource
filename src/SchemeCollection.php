@@ -62,7 +62,7 @@ final class SchemeCollection implements SchemeCollectionInterface
     {
         $schemeIndex = $uri->scheme . '://' . $uri->host;
         if (! array_key_exists($schemeIndex, $this->collection)) {
-            if ($uri->scheme === 'http') {
+            if ($uri->scheme === 'http' || $uri->scheme === 'https') {
                 return $this->collection['http://self'];
             }
 

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 return [
-    'baseUrl' => 'http://httpbin.org/',
+    'baseUrl' => 'https://httpbin.org/',
     'operations' => [
         'GET:bear_resource' => [
             'httpMethod' => 'GET',

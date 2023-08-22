@@ -25,7 +25,7 @@ class HttpResourceObjectTest extends TestCase
 
     public function testGet(): HttpResourceObject
     {
-        $response = $this->resource->get('http://httpbin.org/get', ['foo' => 'bar']);
+        $response = $this->resource->get('https://httpbin.org/get', ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
         $this->assertArrayHasKey('Access-control-allow-credentials', $response->headers);
         assert(is_array($response->body));
@@ -38,7 +38,7 @@ class HttpResourceObjectTest extends TestCase
 
     public function testPost(): void
     {
-        $response = $this->resource->post('http://httpbin.org/post', ['foo' => 'bar']);
+        $response = $this->resource->post('https://httpbin.org/post', ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
         $this->assertArrayHasKey('Access-control-allow-credentials', $response->headers);
         $body = $response->body;
@@ -48,7 +48,7 @@ class HttpResourceObjectTest extends TestCase
 
     public function testPut(): void
     {
-        $response = $this->resource->put('http://httpbin.org/put', ['foo' => 'bar']);
+        $response = $this->resource->put('https://httpbin.org/put', ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
         $this->assertArrayHasKey('Access-control-allow-credentials', $response->headers);
         $body = $response->body;
@@ -58,7 +58,7 @@ class HttpResourceObjectTest extends TestCase
 
     public function testPatch(): void
     {
-        $response = $this->resource->patch('http://httpbin.org/patch', ['foo' => 'bar']);
+        $response = $this->resource->patch('https://httpbin.org/patch', ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
         $this->assertArrayHasKey('Access-control-allow-credentials', $response->headers);
         $body = $response->body;
@@ -68,7 +68,7 @@ class HttpResourceObjectTest extends TestCase
 
     public function testDelete(): void
     {
-        $response = $this->resource->delete('http://httpbin.org/delete', ['foo' => 'bar']);
+        $response = $this->resource->delete('https://httpbin.org/delete', ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
         $this->assertArrayHasKey('Access-control-allow-credentials', $response->headers);
         $body = $response->body;
