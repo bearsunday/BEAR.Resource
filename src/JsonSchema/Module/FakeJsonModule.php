@@ -11,7 +11,7 @@ use Ray\Di\AbstractModule;
 final class FakeJsonModule extends AbstractModule
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function configure(): void
     {

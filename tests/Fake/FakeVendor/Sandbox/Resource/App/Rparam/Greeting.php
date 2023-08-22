@@ -6,14 +6,19 @@ namespace FakeVendor\Sandbox\Resource\App\Rparam;
 
 use BEAR\Resource\Annotation\ResourceParam;
 use BEAR\Resource\ResourceObject;
+use Ray\Di\Di\Assisted;
 
 class Greeting extends ResourceObject
 {
     /**
-     * @ResourceParam(param="name", uri="app://self/rparam/login#login_id")
+     * ResourceParam annotated class
+     *
+     * This is not an intentional attribute to test annotations.
+     *
+     * @ResourceParam(uri="app://self/rparam/login#login_id", param="name")
+     * @Assisted({"assisted"})
      */
-    #[ResourceParam(param: "name", uri: "app://self/rparam/login#login_id")]
-    public function onGet(string $name = null)
+    public function onGet(string $name = null, string $assisted = null)
     {
         $this['name'] = $name;
 
@@ -25,9 +30,8 @@ class Greeting extends ResourceObject
     }
 
     /**
-     * @ResourceParam(param="id", uri="app://self/rparam/login{?name}#nickname", templated=true)
+     * @ResourceParam(uri="app://self/rparam/login{?name}#nickname", templated=true, param="id")
      */
-    #[ResourceParam(param: "id", uri: "app://self/rparam/login{?name}#nickname", templated: true)]
     public function onPost(string $id, string $name)
     {
         $this['id'] = $id;

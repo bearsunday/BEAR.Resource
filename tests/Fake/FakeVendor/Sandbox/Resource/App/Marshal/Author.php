@@ -16,9 +16,6 @@ class Author extends ResourceObject
         ['name' => 'Koriym']
     ];
 
-    /**
-     * @Link(crawl="tree", rel="post", href="app://self/marshal/post?author_id={id}", method="get")
-     */
     #[Link(crawl: "tree", rel: "post", href: "app://self/marshal/post?author_id={id}", method: "get")]
     public function onGet(int $id = null)
     {

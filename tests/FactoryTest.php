@@ -15,8 +15,6 @@ use PHPUnit\Framework\TestCase;
 use Ray\Di\Exception\Unbound;
 use Ray\Di\Injector;
 
-use function get_class;
-
 class FactoryTest extends TestCase
 {
     protected Factory $factory;
@@ -24,6 +22,7 @@ class FactoryTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
         $injector = new Injector();
         $scheme = (new SchemeCollection())
             ->scheme('app')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox'))
@@ -60,7 +59,7 @@ class FactoryTest extends TestCase
     public function testNewInstanceApp(): void
     {
         $instance = $this->factory->newInstance('app://self/factory/news');
-        $this->assertInstanceOf(News::class, $instance, get_class($instance));
+        $this->assertInstanceOf(News::class, $instance, $instance::class);
     }
 
     public function testNewInstancePage(): void

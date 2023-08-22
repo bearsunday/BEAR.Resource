@@ -53,10 +53,7 @@ class AppAdapterTest extends TestCase
         $appAdapter->get(new Uri('page://self/__not_found__'));
     }
 
-    /**
-     * @return ScriptInjector
-     */
-    private function getScriptInjector()
+    private function getScriptInjector(): ScriptInjector
     {
         $scriptDir = __DIR__ . '/tmp';
         $compiler = new DiCompiler(new AppModule(), $scriptDir);

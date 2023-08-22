@@ -12,7 +12,7 @@ class FakeLogInterceptor implements MethodInterceptor
     public function invoke(MethodInvocation $invocation)
     {
         $result = $invocation->proceed();
-        $class = get_class($invocation->getThis());
+        $class = $invocation->getThis()::class;
         $input = (array) $invocation->getArguments();
         $input = print_r($input, true);
         $class = get_parent_class($class);

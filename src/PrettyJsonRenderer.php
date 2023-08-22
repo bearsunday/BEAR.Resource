@@ -17,7 +17,7 @@ use const PHP_EOL;
 final class PrettyJsonRenderer implements RenderInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function render(ResourceObject $ro)
     {

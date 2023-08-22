@@ -6,6 +6,7 @@ namespace BEAR\Resource\Module;
 
 use BEAR\Resource\Exception\JsonSchemaException;
 use BEAR\Resource\Exception\JsonSchemaNotFoundException;
+use BEAR\Resource\Interceptor\JsonSchemaInterceptorInterface;
 use BEAR\Resource\JsonSchema\FakePerson;
 use BEAR\Resource\JsonSchema\FakeUser;
 use BEAR\Resource\JsonSchema\FakeUsers;
@@ -13,6 +14,7 @@ use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Uri;
 use LogicException;
 use PHPUnit\Framework\TestCase;
+use Ray\Aop\NullInterceptor;
 use Ray\Di\Injector;
 
 use function assert;
@@ -52,9 +54,7 @@ class JsonSchemaModuleTest extends TestCase
         return $e;
     }
 
-    /**
-     * @depends testValidateException
-     */
+    /** @depends testValidateException */
     public function testBCValidateErrorException(JsonSchemaException $e): void
     {
         $expected = '[age] Must have a minimum value of 20';
@@ -106,9 +106,7 @@ class JsonSchemaModuleTest extends TestCase
         $this->assertSame('<http://example.com/schema/user.json>; rel="describedby"', $ro->headers['Link']);
     }
 
-    /**
-     * @param class-string $class
-     */
+    /** @param class-string $class */
     private function createJsonSchemaException(string $class): JsonSchemaException
     {
         $ro = $this->getRo($class);
@@ -122,9 +120,7 @@ class JsonSchemaModuleTest extends TestCase
         throw new LogicException();
     }
 
-    /**
-     * @param class-string $class
-     */
+    /** @param class-string $class */
     private function getRo(string $class): ResourceObject
     {
         $module = $this->getJsonSchemaModule();
@@ -135,9 +131,7 @@ class JsonSchemaModuleTest extends TestCase
         return $ro;
     }
 
-    /**
-     * @param class-string $class
-     */
+    /** @param class-string $class */
     private function getLinkHeaderRo(string $class): ResourceObject
     {
         $jsonSchemaHost = 'http://example.com/schema/';
@@ -156,5 +150,11 @@ class JsonSchemaModuleTest extends TestCase
         $jsonValidate = dirname(__DIR__) . '/Fake/json_validate';
 
         return new JsonSchemaModule($jsonSchema, $jsonValidate);
+    }
+
+    public function testNullJsonSchemaModule(): void
+    {
+        $interceptor = (new Injector(new NullJsonSchemaModule()))->getInstance(JsonSchemaInterceptorInterface::class);
+        $this->assertInstanceOf(NullInterceptor::class, $interceptor);
     }
 }

@@ -8,18 +8,13 @@ use Ray\Di\InjectorInterface;
 
 final class HttpAdapter implements AdapterInterface
 {
-    private InjectorInterface $injector;
-
-    /**
-     * @param InjectorInterface $injector Application dependency injector
-     */
-    public function __construct(InjectorInterface $injector)
-    {
-        $this->injector = $injector;
+    public function __construct(
+        private InjectorInterface $injector,
+    ) {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function get(AbstractUri $uri): ResourceObject
     {

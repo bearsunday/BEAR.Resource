@@ -9,11 +9,6 @@ use BEAR\Resource\ResourceObject;
 
 class Sparrows extends ResourceObject
 {
-    /**
-     * @Embed(rel="birdRequest", src="app://self/bird/sparrow")
-     * @Embed(rel="birdObject", src="app://self/bird/sparrow")
-     * @Embed(rel="eagerRequestedBird", src="app://self/bird/sparrow")
-     */
     #[Embed(rel: "birdRequest", src: "app://self/bird/sparrow")]
     #[Embed(rel: "birdObject", src: "app://self/bird/sparrow")]
     #[Embed(rel: "eagerRequestedBird", src: "app://self/bird/sparrow")]

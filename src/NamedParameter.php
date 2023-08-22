@@ -8,17 +8,14 @@ use Ray\Di\InjectorInterface;
 
 final class NamedParameter implements NamedParameterInterface
 {
-    private InjectorInterface $injector;
-    private NamedParamMetasInterface $paramMetas;
-
-    public function __construct(NamedParamMetasInterface $paramMetas, InjectorInterface $injector)
-    {
-        $this->paramMetas = $paramMetas;
-        $this->injector = $injector;
+    public function __construct(
+        private NamedParamMetasInterface $paramMetas,
+        private InjectorInterface $injector,
+    ) {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getParameters(callable $callable, array $query): array
     {
@@ -26,7 +23,7 @@ final class NamedParameter implements NamedParameterInterface
         $parameters = [];
         foreach ($metas as $varName => $param) {
             /** @psalm-suppress all */
-            $parameters[] = $param($varName, $query, $this->injector); // @phpstan-ignore-line
+            $parameters[] = $param($varName, $query, $this->injector);
         }
 
         return $parameters;

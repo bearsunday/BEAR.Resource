@@ -14,25 +14,20 @@ use Ray\Di\AbstractModule;
 
 final class JsonSchemaModule extends AbstractModule
 {
-    private string $jsonSchemaDir;
-    private string $jsonValidateDir;
-
     /**
      * @param string $jsonSchemaDir   Json-schema json file directory
      * @param string $jsonValidateDir Json-schema validator json file directory
      */
     public function __construct(
-        string $jsonSchemaDir = '',
-        string $jsonValidateDir = '',
-        ?AbstractModule $module = null
+        private string $jsonSchemaDir = '',
+        private string $jsonValidateDir = '',
+        AbstractModule|null $module = null,
     ) {
-        $this->jsonSchemaDir = $jsonSchemaDir;
-        $this->jsonValidateDir = $jsonValidateDir;
         parent::__construct($module);
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function configure(): void
     {
@@ -43,7 +38,7 @@ final class JsonSchemaModule extends AbstractModule
         $this->bindInterceptor(
             $this->matcher->subclassesOf(ResourceObject::class),
             $this->matcher->annotatedWith(JsonSchema::class),
-            [JsonSchemaInterceptorInterface::class]
+            [JsonSchemaInterceptorInterface::class],
         );
     }
 }

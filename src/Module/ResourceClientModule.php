@@ -10,6 +10,7 @@ use BEAR\Resource\ExtraMethodInvoker;
 use BEAR\Resource\Factory;
 use BEAR\Resource\FactoryInterface;
 use BEAR\Resource\HalLink;
+use BEAR\Resource\HalLinker;
 use BEAR\Resource\Invoker;
 use BEAR\Resource\InvokerInterface;
 use BEAR\Resource\Linker;
@@ -21,12 +22,14 @@ use BEAR\Resource\NamedParamMetas;
 use BEAR\Resource\NamedParamMetasInterface;
 use BEAR\Resource\NullLogger;
 use BEAR\Resource\NullReverseLink;
+use BEAR\Resource\NullReverseLinker;
 use BEAR\Resource\OptionsMethods;
 use BEAR\Resource\OptionsRenderer;
 use BEAR\Resource\PrettyJsonRenderer;
 use BEAR\Resource\RenderInterface;
 use BEAR\Resource\Resource;
 use BEAR\Resource\ResourceInterface;
+use BEAR\Resource\ReverseLinkerInterface;
 use BEAR\Resource\ReverseLinkInterface;
 use BEAR\Resource\SchemeCollectionInterface;
 use BEAR\Resource\UriFactory;
@@ -35,12 +38,35 @@ use Ray\Di\Exception\NotFound;
 use Ray\Di\Scope;
 
 /**
+ * Provides ResourceInterface and derived bindings
+ *
+ * The following module is installed:
+ *
+ * UriFactory
+ * ResourceInterface
+ * InvokerInterface
+ * LinkerInterface
+ * FactoryInterface
+ * SchemeCollectionInterface
+ * AnchorInterface
+ * NamedParameterInterface
+ * RenderInterface
+ * RenderInterface-options
+ * OptionsMethods
+ * NamedParamMetasInterface
+ * ExtraMethodInvoker
+ * HalLink
+ * ReverseLinkInterface
+ * LoggerInterface
+ * HalLinker
+ * ReverseLinkerInterface
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 final class ResourceClientModule extends AbstractModule
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @throws NotFound
      */
@@ -60,8 +86,16 @@ final class ResourceClientModule extends AbstractModule
         $this->bind(OptionsMethods::class);
         $this->bind(NamedParamMetasInterface::class)->to(NamedParamMetas::class);
         $this->bind(ExtraMethodInvoker::class);
-        $this->bind(HalLink::class);
-        $this->bind(ReverseLinkInterface::class)->to(NullReverseLink::class);
+        $this->bind(HalLinker::class);
+        $this->bind(ReverseLinkerInterface::class)->to(NullReverseLinker::class);
         $this->bind(LoggerInterface::class)->to(NullLogger::class);
+        $this->configureDeprecatedBindings();
+    }
+
+    /** @psalm-suppress DeprecatedClass */
+    private function configureDeprecatedBindings(): void
+    {
+        $this->bind(HalLink::class); // @phpstan-ignore
+        $this->bind(ReverseLinkInterface::class)->to(NullReverseLink::class); // @phpstan-ignore
     }
 }

@@ -22,7 +22,7 @@ class ImportModuleTest extends TestCase
 {
     protected function setUp(): void
     {
-        $rm = static function ($dir) use (&$rm) {
+        $rm = static function ($dir) use (&$rm): void {
             foreach ((array) glob($dir . '/*') as $f) {
                 $file = (string) $f;
                 is_dir($file) ? $rm($file) : unlink($file);
@@ -32,6 +32,7 @@ class ImportModuleTest extends TestCase
         $tmpDir = dirname(__DIR__, 2) . '/tests/Fake/FakeVendor/Blog/var/tmp';
         $rm($tmpDir);
         file_put_contents($tmpDir . '/tmp.text', '1');
+
         parent::setUp();
     }
 

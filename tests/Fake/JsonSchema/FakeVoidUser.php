@@ -11,7 +11,6 @@ use BEAR\Resource\ResourceObject;
 class FakeVoidUser extends ResourceObject
 {
     /**
-     * @JsonSchema(schema="user.json", params="user.get.json")
      * {@SuppressWarnings("unused")}
      */
     #[JsonSchema(schema: "user.json", params: "user.get.json")]
@@ -23,18 +22,12 @@ class FakeVoidUser extends ResourceObject
         return $this;
     }
 
-    /**
-     * @JsonSchema(schema="__invalid.json")
-     */
     #[JsonSchema(schema: "user.json", params: "user.get.json")]
     public function onPost()
     {
         return $this;
     }
 
-    /**
-     * @JsonSchema(schema="definitions/user.json")
-     */
     #[JsonSchema(schema: "definitions/user.json")]
     public function onPut()
     {
@@ -44,9 +37,6 @@ class FakeVoidUser extends ResourceObject
         return $this;
     }
 
-    /**
-     * @JsonSchema(params="__invalid.json")
-     */
     #[JsonSchema(params: "__invalid.json")]
     public function onPatch()
     {

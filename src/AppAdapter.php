@@ -11,38 +11,32 @@ use Throwable;
 
 use function assert;
 use function sprintf;
+use function str_ends_with;
 use function str_replace;
-use function substr;
 use function ucwords;
 
 final class AppAdapter implements AdapterInterface
 {
-    private InjectorInterface $injector;
-
-    /**
-     * Resource adapter namespace
-     */
-    private string $namespace;
-
     /**
      * @param InjectorInterface $injector  Application dependency injector
      * @param string            $namespace Resource adapter namespace
      */
-    public function __construct(InjectorInterface $injector, string $namespace)
-    {
-        $this->injector = $injector;
-        $this->namespace = $namespace;
+    public function __construct(
+        private InjectorInterface $injector,
+        /** Resource adapter namespace */
+        private string $namespace,
+    ) {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @throws ResourceNotFoundException
      * @throws Unbound
      */
     public function get(AbstractUri $uri): ResourceObject
     {
-        if (substr($uri->path, -1) === '/') {
+        if (str_ends_with($uri->path, '/')) {
             $uri->path .= 'index';
         }
 
@@ -59,9 +53,7 @@ final class AppAdapter implements AdapterInterface
         return $instance;
     }
 
-    /**
-     * @return ResourceNotFoundException|Unbound
-     */
+    /** @return ResourceNotFoundException|Unbound */
     private function getNotFound(AbstractUri $uri, Unbound $e, string $class): Throwable
     {
         $unboundClass = $e->getMessage();

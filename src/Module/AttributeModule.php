@@ -8,13 +8,11 @@ use Doctrine\Common\Annotations\Reader;
 use Koriym\Attributes\AttributeReader;
 use Ray\Di\AbstractModule;
 
-/**
- * @codeCoverageIgnore
- */
+/** @codeCoverageIgnore */
 final class AttributeModule extends AbstractModule
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function configure(): void
     {

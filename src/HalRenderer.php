@@ -17,24 +17,24 @@ use function is_scalar;
 use function is_string;
 use function json_decode;
 use function method_exists;
+use function parse_str;
+use function parse_url;
 use function ucfirst;
 
 use const JSON_THROW_ON_ERROR;
 use const PHP_EOL;
+use const PHP_URL_QUERY;
 
 final class HalRenderer implements RenderInterface
 {
-    private Reader $reader;
-    private HalLink $link;
-
-    public function __construct(Reader $reader, HalLink $link)
-    {
-        $this->reader = $reader;
-        $this->link = $link;
+    public function __construct(
+        private Reader $reader,
+        private HalLinker $linker,
+    ) {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function render(ResourceObject $ro)
     {
@@ -45,7 +45,7 @@ final class HalRenderer implements RenderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @throws RuntimeException
      */
@@ -93,9 +93,7 @@ final class HalRenderer implements RenderInterface
         }
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
+    /** @codeCoverageIgnore */
     private function isDifferentSchema(ResourceObject $parentRo, ResourceObject $childRo): bool
     {
         return $parentRo->uri->scheme . $parentRo->uri->host !== $childRo->uri->scheme . $childRo->uri->host;
@@ -110,15 +108,13 @@ final class HalRenderer implements RenderInterface
     {
         $query = $uri->query ? '?' . http_build_query($uri->query) : '';
         $path = $uri->path . $query;
-        $selfLink = $this->link->getReverseLink($path);
+        $selfLink = $this->linker->getReverseLink($path, $uri->query);
         $hal = new Hal($selfLink, $body);
 
-        return $this->link->addHalLink($body, $annotations, $hal);
+        return $this->linker->addHalLink($body, $annotations, $hal);
     }
 
-    /**
-     * @return array{0: ResourceObject, 1: array<array-key, mixed>}
-     */
+    /** @return array{0: ResourceObject, 1: array<array-key, mixed>} */
     private function valuate(ResourceObject $ro): array
     {
         if (is_scalar($ro->body)) {
@@ -147,6 +143,12 @@ final class HalRenderer implements RenderInterface
             return;
         }
 
-        $ro->headers['Location'] = $this->link->getReverseLink($ro->headers['Location']);
+        $url = parse_url($ro->headers['Location'], PHP_URL_QUERY);
+        $isRelativePath = $url === null;
+        $path = $isRelativePath ? $ro->headers['Location'] : $url;
+        parse_str((string) $path, $query);
+        /** @var array<string, string> $query */
+
+        $ro->headers['Location'] = $this->linker->getReverseLink($ro->headers['Location'], $query);
     }
 }

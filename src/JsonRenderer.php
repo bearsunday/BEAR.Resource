@@ -13,7 +13,7 @@ use function json_last_error_msg;
 final class JsonRenderer implements RenderInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function render(ResourceObject $ro)
     {

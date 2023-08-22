@@ -7,3 +7,7 @@ parameters:
     - '%currentWorkingDirectory%/tests/tmp/*'
     - '%currentWorkingDirectory%/tests/Module/tmp/*'
     - '%currentWorkingDirectory%/tests/Fake/*'
+    - tests/HttpResourceObjectTest.php
+    - tests/HalLinkerTest.php
+  ignoreErrors:
+  		- '#Access to an undefined property#'

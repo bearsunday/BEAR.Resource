@@ -7,10 +7,13 @@ namespace BEAR\Resource\Module;
 use Ray\Di\AbstractModule;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+/**
+ * Provides HttpClientInterface bindings
+ */
 final class HttpClientModule extends AbstractModule
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function configure(): void
     {

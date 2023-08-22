@@ -10,24 +10,17 @@ use function ltrim;
 use function preg_replace;
 use function strtolower;
 
-/**
- * @template T
- */
+/** @template T */
 final class OptionalParam implements ParamInterface
 {
-    /** @var T */
-    private $defaultValue;
-
-    /**
-     * @param T $defaultValue
-     */
-    public function __construct($defaultValue)
-    {
-        $this->defaultValue = $defaultValue;
+    /** @param T $defaultValue */
+    public function __construct(
+        private $defaultValue,
+    ) {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function __invoke(string $varName, array $query, InjectorInterface $injector)
     {

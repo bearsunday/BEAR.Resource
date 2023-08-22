@@ -18,8 +18,8 @@ use Throwable;
 use function asort;
 use function assert;
 use function count;
-use function get_class;
 use function is_array;
+use function is_countable;
 use function is_iterable;
 use function is_string;
 use function ksort;
@@ -35,25 +35,15 @@ use const E_USER_WARNING;
 abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, Countable, IteratorAggregate, JsonSerializable, Stringable
 {
     /**
-     * Uri
-     *
      * @var AbstractUri
      * @psalm-suppress PropertyNotSetInConstructor
      */
     public $uri;
 
-    /**
-     * Status code
-     *
-     * @var int
-     */
+    /** @var int */
     public $code = 200;
 
-    /**
-     * Resource header
-     *
-     * @var array<string, string>
-     */
+    /** @var array<string, string> */
     public $headers = [];
 
     /**
@@ -63,18 +53,10 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      */
     public $view;
 
-    /**
-     * Body
-     *
-     * @var mixed
-     */
+    /** @var mixed */
     public $body;
 
-    /**
-     * Renderer
-     *
-     * @var ?RenderInterface
-     */
+    /** @var ?RenderInterface */
     protected $renderer;
 
     /**
@@ -89,7 +71,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         try {
             $view = $this->toString();
         } catch (Throwable $e) {
-            $msg = sprintf("%s(%s)\n%s", get_class($e), $e->getMessage(), $e->getTraceAsString());
+            $msg = sprintf("%s(%s)\n%s", $e::class, $e->getMessage(), $e->getTraceAsString());
             trigger_error($msg, E_USER_WARNING);
 
             return '';
@@ -98,9 +80,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         return $view;
     }
 
-    /**
-     * @return list<string>
-     */
+    /** @return list<string> */
     public function __sleep()
     {
         if (is_array($this->body)) {
@@ -143,7 +123,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      * @return void
      */
     #[ReturnTypeWillChange]
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, mixed $value)
     {
         if ($this->body === null) {
             $this->body = [];
@@ -190,7 +170,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      */
     public function count(): int
     {
-        if ($this->body instanceof Countable || is_array($this->body)) {
+        if (is_countable($this->body)) {
             return count($this->body);
         }
 
@@ -231,11 +211,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         return is_array($this->body) ? new ArrayIterator($this->body) : new ArrayIterator([]);
     }
 
-    /**
-     * @return self
-     *
-     * @Inject(optional=true)
-     */
+    /** @return self */
     #[Inject(optional: true)]
     public function setRenderer(RenderInterface $renderer)
     {
@@ -245,7 +221,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function toString(): string
     {
@@ -260,9 +236,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         return $this->renderer->render($this);
     }
 
-    /**
-     * @return array<int|string, mixed>
-     */
+    /** @return array<int|string, mixed> */
     public function jsonSerialize(): array
     {
         /** @psalm-suppress MixedAssignment */
@@ -276,7 +250,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function transfer(TransferInterface $responder, array $server)
     {

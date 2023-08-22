@@ -8,11 +8,6 @@ use BEAR\Resource\Annotation\Link;
 use BEAR\Resource\ResourceObject;
 use Ray\Di\Di\Scope;
 
-/**
- * Order
- *
- * @Scope("Singleton")
- */
 class Order extends ResourceObject
 {
     private array $orders = [];
@@ -26,9 +21,6 @@ class Order extends ResourceObject
         return $this->orders[$id];
     }
 
-    /**
-     * @link(rel="payment", href="app://self/restbucks/payment/?order_id={orderId}", method="put")
-     */
     #[Link(rel: "payment", href: "app://self/restbucks/payment/?order_id={orderId}", method: "put")]
     public function onPost(string $drink)
     {

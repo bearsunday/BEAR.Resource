@@ -21,11 +21,10 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 
 class Menu extends ResourceObject
 {
-    private $menu = [];
+    private array $menu = ['coffee' => 300, 'latte' => 400];
 
     public function __construct()
     {
-        $this->menu = ['coffee' => 300, 'latte' => 400];
     }
 
     /**
@@ -49,7 +48,7 @@ class Menu extends ResourceObject
 
 class Order extends ResourceObject
 {
-    private $orders = [];
+    private array $orders = [];
 
     public function onGet(int $id) : ResourceObject
     {
@@ -65,7 +64,7 @@ class Order extends ResourceObject
     {
         // data store here
         //   .. and get order id.
-        $orderId = mt_rand();
+        $orderId = random_int(0, mt_getrandmax());
         $this->body = [
             'drink' => $drink,
             'order_id' => $orderId

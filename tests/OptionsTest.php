@@ -27,7 +27,7 @@ class OptionsTest extends TestCase
     {
         $ro = new DocPhp7();
         $request = new Request($this->invoker, $ro, Request::OPTIONS);
-        $response = $this->invoker->invoke($request);
+        $this->invoker->invoke($request);
         $actual = $ro->headers['Allow'];
         $expected = 'GET, POST';
         $this->assertSame($actual, $expected);
@@ -35,9 +35,7 @@ class OptionsTest extends TestCase
         return $ro;
     }
 
-    /**
-     * @depends testOptionsMethod
-     */
+    /** @depends testOptionsMethod */
     public function testOptionsMethodBody(ResourceObject $ro): void
     {
         $actual = $ro->view;
@@ -57,19 +55,28 @@ class OptionsTest extends TestCase
                     "type": "bool",
                     "description": "Swithc"
                 },
-                "arr": {
-                    "type": "array"
+                "login_id": {
+                    "type": "string",
+                    "description": "Login ID"
                 },
                 "defaultNull": {
                     "type": "string",
                     "description": "DefaultNull"
+                },
+                "arr": {
+                    "type": "array"
+                },
+                "time": {
+                    "type": "string"
                 }
             },
             "required": [
                 "id",
                 "name",
                 "sw",
-                "arr"
+                "login_id",
+                "arr",
+                "time"
             ]
         }
     },
@@ -79,10 +86,14 @@ class OptionsTest extends TestCase
                 "id": {
                     "in": "server",
                     "type": "integer"
+                },
+                "a": {
+                    "type": "string"
                 }
             },
             "required": [
-                "id"
+                "id",
+                "a"
             ]
         }
     }
@@ -91,9 +102,18 @@ class OptionsTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function testAssistedResource(): void
+    /** @return ResourceObject[][] */
+    public function roProvider(): array
     {
-        $ro = new FakeParamResource();
+        return [
+            [new FakeParamResource()],
+            [new FakeParamResourceAttr()],
+        ];
+    }
+
+    /** @dataProvider roProvider */
+    public function testAssistedResource(ResourceObject $ro): void
+    {
         $request = new Request($this->invoker, $ro, Request::OPTIONS);
         $this->invoker->invoke($request);
         $this->assertSame('GET, POST, PUT, DELETE', $ro->headers['Allow']);

@@ -82,9 +82,7 @@ class JsonSchemaFakeModuleTest extends TestCase
         $this->assertSame('<http://example.com/schema/user.json>; rel="describedby"', $ro->headers['Link']);
     }
 
-    /**
-     * @param class-string $class
-     */
+    /** @param class-string $class */
     private function getRo(string $class): ResourceObject
     {
         $module = $this->getJsonSchemaModule();
@@ -95,9 +93,7 @@ class JsonSchemaFakeModuleTest extends TestCase
         return $ro;
     }
 
-    /**
-     * @param class-string $class
-     */
+    /** @param class-string $class */
     private function getLinkHeaderRo(string $class): FakeUser
     {
         $jsonSchemaHost = 'http://example.com/schema/';

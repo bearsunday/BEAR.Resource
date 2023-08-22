@@ -13,16 +13,11 @@ use const FILTER_VALIDATE_URL;
 
 final class JsonSchemaLinkHeaderModule extends AbstractModule
 {
-    private string $jsonSchemaHost;
-
-    /**
-     * @param string $jsonSchemaHost Json-schema host name ex) https://example.com/schema/
-     */
+    /** @param string $jsonSchemaHost Json-schema host name ex) https://example.com/schema/ */
     public function __construct(
-        string $jsonSchemaHost,
-        ?AbstractModule $module = null
+        private string $jsonSchemaHost,
+        AbstractModule|null $module = null,
     ) {
-        $this->jsonSchemaHost = $jsonSchemaHost;
         if (! filter_var($jsonSchemaHost, FILTER_VALIDATE_URL)) {
             throw new InvalidSchemaUriException($jsonSchemaHost);
         }
@@ -31,7 +26,7 @@ final class JsonSchemaLinkHeaderModule extends AbstractModule
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function configure(): void
     {

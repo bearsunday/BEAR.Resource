@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <ruleset
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="vendor-bin/tools/vendor/squizlabs/php_codesniffer/phpcs.xsd">
+    xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd">
 
     <arg name="basepath" value="."/>
     <arg name="extensions" value="php"/>
     <arg name="parallel" value="80"/>
     <arg name="cache" value=".phpcs-cache"/>
 
-    <!-- Compatibility with PHP 7.4.0 -->
-    <config name="php_version" value="70400"/>
+    <!-- Compatibility with PHP 8.0 -->
+    <config name="php_version" value="80000"/>
 
     <!-- Ignore warnings, show progress of the run and show sniff names -->
     <arg value="nps"/>
@@ -22,6 +22,17 @@
     <!-- PSR12 Coding Standard -->
     <rule ref="PSR12"/>
 
+    <!-- Exclude NativeTypeHintrule from interface and abstract class -->
+    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint">
+        <exclude-pattern>*/src/*Interface.php</exclude-pattern>
+        <exclude-pattern>*/src/Abstract*.php</exclude-pattern>
+        <exclude-pattern>*/src/ResourceObject.php</exclude-pattern>
+    </rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint">
+        <exclude-pattern>*/src/*Interface.php</exclude-pattern>
+        <exclude-pattern>*/src/Abstract*.php</exclude-pattern>
+        <exclude-pattern>*/src/ResourceObject.php</exclude-pattern>
+    </rule>
     <!-- Doctrine Coding Standard -->
     <rule ref="Doctrine">
     <!-- Inapplicable for this project -->
@@ -33,8 +44,6 @@
         <exclude name="SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming.SuperfluousSuffix"/>
         <exclude name="SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration.MissingVariable"/>
         <exclude name="SlevomatCodingStandard.Commenting.UselessInheritDocComment.UselessInheritDocComment"/>
-        <exclude name="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint"/>
-        <exclude name="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint"/>
         <exclude name="Squiz.Commenting.FunctionComment.InvalidNoReturn"/>
         <!-- /Base -->
         <!-- Option -->

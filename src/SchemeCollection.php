@@ -10,21 +10,14 @@ use function array_key_exists;
 
 final class SchemeCollection implements SchemeCollectionInterface
 {
-    /**
-     * Scheme
-     */
     private string $scheme = '';
-
-    /**
-     * Application name
-     */
-    private string $app = '';
+    private string $appName = '';
 
     /** @var AdapterInterface[] */
     private array $collection = [];
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function scheme(string $scheme): SchemeCollectionInterface
     {
@@ -34,27 +27,27 @@ final class SchemeCollection implements SchemeCollectionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function host(string $host): SchemeCollectionInterface
     {
-        $this->app = $host;
+        $this->appName = $host;
 
         return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function toAdapter(AdapterInterface $adapter): SchemeCollectionInterface
     {
-        $this->collection[$this->scheme . '://' . $this->app] = $adapter;
+        $this->collection[$this->scheme . '://' . $this->appName] = $adapter;
 
         return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @throws SchemeException
      */

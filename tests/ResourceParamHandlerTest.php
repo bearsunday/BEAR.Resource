@@ -16,6 +16,7 @@ class ResourceParamHandlerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
         $module = new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox'));
         $this->resource = (new Injector($module, __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
     }

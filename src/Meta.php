@@ -12,7 +12,7 @@ use function array_shift;
 use function class_exists;
 use function explode;
 use function implode;
-use function strpos;
+use function str_starts_with;
 use function strtolower;
 use function substr;
 
@@ -30,9 +30,7 @@ final class Meta
     /** @var array{vendor?: string, package?: string} */
     public $extras = [];
 
-    /**
-     * @param class-string $class
-     */
+    /** @param class-string $class */
     public function __construct(string $class)
     {
         $this->uri = $this->getUri($class);
@@ -80,7 +78,7 @@ final class Meta
     {
         $allows = [];
         foreach ($methods as $method) {
-            $isRequestMethod = strpos($method->name, 'on') === 0 && strpos($method->name, 'onLink') !== 0;
+            $isRequestMethod = str_starts_with($method->name, 'on') && ! str_starts_with($method->name, 'onLink');
             if (! $isRequestMethod) {
                 continue;
             }
@@ -91,9 +89,7 @@ final class Meta
         return $allows;
     }
 
-    /**
-     * @param class-string $class
-     */
+    /** @param class-string $class */
     private function getParams(string $class, string $method): Params
     {
         $refMethod = new ReflectionMethod($class, 'on' . $method);

@@ -9,9 +9,6 @@ use BEAR\Resource\ResourceObject;
 
 class Book extends ResourceObject
 {
-    /**
-     * @FakeLog
-     */
     #[FakeLog]
     public function onGet(int $id)
     {

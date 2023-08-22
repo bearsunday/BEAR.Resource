@@ -17,9 +17,7 @@ class Canary extends ResourceObject
         'name' => 'chill kun'
     ];
 
-    /**
-     * @Link(rel="friend", href="app://self/bird/friend")
-     */
+    #[Link(rel: 'friend', href: 'app://self/bird/friend')]
     public function onGet()
     {
         return $this;

@@ -8,13 +8,11 @@ use Ray\Di\ProviderInterface;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-/**
- * @implements ProviderInterface<HttpClientInterface>
- */
+/** @implements ProviderInterface<HttpClientInterface> */
 final class HttpClientProvider implements ProviderInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function get(): HttpClientInterface
     {

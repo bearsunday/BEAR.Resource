@@ -11,7 +11,7 @@
   <testsuites>
     <testsuite name="BEAR.Resource Test Suite">
       <directory>tests</directory>
-      <directory phpVersion="8.0.0" phpVersionOperator=">=">tests-php8</directory>
+      <directory>tests-php8</directory>
     </testsuite>
   </testsuites>
   <php>

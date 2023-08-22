@@ -19,9 +19,7 @@ final class ImportAppModule extends AbstractModule
      */
     private array $importAppConfig = [];
 
-    /**
-     * @param array<ImportApp> $importApps
-     */
+    /** @param array<ImportApp> $importApps */
     public function __construct(array $importApps, string $defaultContextName = '')
     {
         foreach ($importApps as $importApp) {
@@ -30,11 +28,12 @@ final class ImportAppModule extends AbstractModule
         }
 
         unset($defaultContextName);
+
         parent::__construct();
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @throws NotFound
      */

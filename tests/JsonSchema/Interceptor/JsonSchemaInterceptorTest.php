@@ -7,6 +7,7 @@ namespace BEAR\Resource\JsonSchema\Interceptor;
 use BEAR\Resource\Exception\JsonSchemaKeytNotFoundException;
 use BEAR\Resource\Interceptor\JsonSchemaInterceptor;
 use BEAR\Resource\JsonSchema\FakeUser;
+use BEAR\Resource\JsonSchema\FakeView;
 use BEAR\Resource\JsonSchemaExceptionNullHandler;
 use BEAR\Resource\ResourceObject;
 use PHPUnit\Framework\TestCase;
@@ -26,7 +27,7 @@ class JsonSchemaInterceptorTest extends TestCase
             $fakeDir . '/Fake/json_schema',
             $fakeDir . '/Fake/json_validate',
             new JsonSchemaExceptionNullHandler(),
-            'http://example.com/schema/'
+            'http://example.com/schema/',
         );
     }
 
@@ -60,7 +61,17 @@ class JsonSchemaInterceptorTest extends TestCase
         /** @var array<MethodInterceptor> $interceptrs */
         $interceptrs = [JsonSchemaInterceptor::class];
         $invocation = new ReflectiveMethodInvocation($object, 'bodyKey', [], $interceptrs);
-        $ro = $this->jsonSchemaIntercetor->invoke($invocation);
+        $this->jsonSchemaIntercetor->invoke($invocation);
         $this->assertInstanceOf(ResourceObject::class, $object);
+    }
+
+    public function testTargetView(): void
+    {
+        $object = new FakeView();
+        /** @var array<MethodInterceptor> $interceptrs */
+        $interceptrs = [JsonSchemaInterceptor::class];
+        $invocation = new ReflectiveMethodInvocation($object, 'onGet', [20], $interceptrs);
+        $ro = $this->jsonSchemaIntercetor->invoke($invocation);
+        $this->assertInstanceOf(ResourceObject::class, $ro);
     }
 }

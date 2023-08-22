@@ -18,19 +18,19 @@ final class InvokerFactory
         return new Invoker(
             new NamedParameter(
                 new NamedParamMetas(
-                    $reader
+                    $reader,
                 ),
-                new Injector()
+                new Injector(),
             ),
             new ExtraMethodInvoker(
                 new OptionsRenderer(
                     new OptionsMethods(
                         $reader,
-                        $schemaDir
-                    )
-                )
+                        $schemaDir,
+                    ),
+                ),
             ),
-            new NullLogger()
+            new NullLogger(),
         );
     }
 }

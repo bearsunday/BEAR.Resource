@@ -24,12 +24,8 @@ final class Request extends AbstractRequest
     public const HEAD = 'head';
     public const OPTIONS = 'options';
 
-    /**
-     * @return array<string, string>|int|mixed|self
-     *
-     * @psalm-suppress ImplementedReturnTypeMismatch
-     */
-    public function __get(string $name)
+    /** @psalm-suppress ImplementedReturnTypeMismatch */
+    public function __get(string $name): mixed
     {
         if ($name === 'eager' || $name === 'lazy') {
             $this->in = $name;
@@ -45,7 +41,7 @@ final class Request extends AbstractRequest
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @param array<string, mixed> $query
      */
@@ -57,7 +53,7 @@ final class Request extends AbstractRequest
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function addQuery(array $query): RequestInterface
     {
@@ -67,7 +63,7 @@ final class Request extends AbstractRequest
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function toUriWithMethod(): string
     {
@@ -77,7 +73,7 @@ final class Request extends AbstractRequest
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function toUri(): string
     {
@@ -87,7 +83,7 @@ final class Request extends AbstractRequest
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function linkSelf(string $linkKey): RequestInterface
     {
@@ -97,7 +93,7 @@ final class Request extends AbstractRequest
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function linkNew(string $linkKey): RequestInterface
     {
@@ -107,7 +103,7 @@ final class Request extends AbstractRequest
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function linkCrawl(string $linkKey): RequestInterface
     {

@@ -12,36 +12,23 @@ use BEAR\Resource\SchemeCollection;
 use Ray\Di\InjectorInterface;
 use Ray\Di\ProviderInterface;
 
-/**
- * @implements ProviderInterface<SchemeCollection>
- */
+/** @implements ProviderInterface<SchemeCollection> */
 final class ImportSchemeCollectionProvider implements ProviderInterface
 {
-    /** @var ImportApp[] */
-    private array $importAppConfig;
-    private string $appName;
-    private InjectorInterface $injector;
-
-    /**
-     * @param ImportApp[] $importAppConfig
-     *
-     * @AppName("appName")
-     * @ImportAppConfig("importAppConfig")
-     */
-    #[AppName('appName'), ImportAppConfig('importAppConfig')]
-    public function __construct(string $appName, array $importAppConfig, InjectorInterface $injector)
-    {
-        $this->appName = $appName;
-        $this->importAppConfig = $importAppConfig;
-        $this->injector = $injector;
+    /** @param ImportApp[] $importAppConfig */
+    public function __construct(
+        #[AppName]
+        private string $appName,
+        #[ImportAppConfig]
+        private array $importAppConfig,
+        private InjectorInterface $injector,
+    ) {
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @return SchemeCollection
+     * {@inheritDoc}
      */
-    public function get()
+    public function get(): SchemeCollection
     {
         $schemeCollection = (new SchemeCollectionProvider($this->appName, $this->injector))->get();
         foreach ($this->importAppConfig as $importApp) {

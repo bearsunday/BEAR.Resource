@@ -6,24 +6,17 @@ namespace BEAR\Resource;
 
 use Ray\Di\InjectorInterface;
 
-/**
- * @template T
- */
+/** @template T */
 final class DefaultParam implements ParamInterface
 {
-    /** @var T */
-    private $defaultValue;
-
-    /**
-     * @param T $defaultValue
-     */
-    public function __construct($defaultValue)
-    {
-        $this->defaultValue = $defaultValue;
+    /** @param T $defaultValue */
+    public function __construct(
+        private mixed $defaultValue,
+    ) {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function __invoke(string $varName, array $query, InjectorInterface $injector)
     {

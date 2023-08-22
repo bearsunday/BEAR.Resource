@@ -14,15 +14,13 @@ use const PHP_URL_FRAGMENT;
 
 final class AssistedResourceParam implements ParamInterface
 {
-    private ResourceParam $resourceParam;
-
-    public function __construct(ResourceParam $resourceParam)
-    {
-        $this->resourceParam = $resourceParam;
+    public function __construct(
+        private ResourceParam $resourceParam,
+    ) {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function __invoke(string $varName, array $query, InjectorInterface $injector)
     {
