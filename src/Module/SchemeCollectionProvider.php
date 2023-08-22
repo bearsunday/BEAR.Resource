@@ -11,6 +11,9 @@ use BEAR\Resource\SchemeCollection;
 use Ray\Di\InjectorInterface;
 use Ray\Di\ProviderInterface;
 
+/**
+ * @implements ProviderInterface<SchemeCollection>
+ */
 final class SchemeCollectionProvider implements ProviderInterface
 {
     private string $appName;

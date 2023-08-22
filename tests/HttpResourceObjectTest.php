@@ -20,7 +20,7 @@ class HttpResourceObjectTest extends TestCase
     protected function setUp(): void
     {
         $injector = new Injector(new ResourceModule('FakeVendor\Sandbox'), __DIR__ . '/tmp');
-        $this->resource = $injector->getInstance(ResourceInterface::class); // @phpstan-ignore-linel
+        $this->resource = $injector->getInstance(ResourceInterface::class);
     }
 
     public function testGet(): HttpResourceObject
