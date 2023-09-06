@@ -9,8 +9,7 @@ use BEAR\Resource\Exception\LinkQueryException;
 use BEAR\Resource\Exception\LinkRelException;
 use BEAR\Resource\Exception\MethodException;
 use BEAR\Resource\Exception\UriException;
-use Doctrine\Common\Annotations\Reader;
-use ReflectionMethod;
+use Ray\Aop\ReflectionMethod;
 
 use function array_filter;
 use function array_key_exists;
@@ -33,7 +32,6 @@ final class Linker implements LinkerInterface
     private array $cache = [];
 
     public function __construct(
-        private Reader $reader,
         private InvokerInterface $invoker,
         private FactoryInterface $factory,
     ) {
@@ -110,7 +108,7 @@ final class Linker implements LinkerInterface
 
         $classMethod = 'on' . ucfirst($request->method);
         /** @var list<Link> $annotations */
-        $annotations = $this->reader->getMethodAnnotations(new ReflectionMethod($current::class, $classMethod));
+        $annotations = (new ReflectionMethod($current::class, $classMethod))->getAnnotations();
         if ($link->type === LinkType::CRAWL_LINK) {
             return $this->annotationCrawl($annotations, $link, $current);
         }

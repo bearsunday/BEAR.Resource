@@ -6,8 +6,7 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\Link as LinkAnnotation;
 use BEAR\Resource\Exception\LinkException;
-use Doctrine\Common\Annotations\Reader;
-use ReflectionMethod;
+use Ray\Aop\ReflectionMethod;
 
 use function array_merge;
 use function assert;
@@ -17,11 +16,6 @@ use function uri_template;
 
 final class Anchor implements AnchorInterface
 {
-    public function __construct(
-        private Reader $reader,
-    ) {
-    }
-
     /**
      * {@inheritDoc}
      *
@@ -31,7 +25,7 @@ final class Anchor implements AnchorInterface
     {
         $classMethod = 'on' . ucfirst($request->method);
         /** @var list<object> $annotations */
-        $annotations = $this->reader->getMethodAnnotations(new ReflectionMethod($request->resourceObject::class, $classMethod));
+        $annotations = (new ReflectionMethod($request->resourceObject::class, $classMethod))->getAnnotations();
         foreach ($annotations as $annotation) {
             if ($this->isValidLinkAnnotation($annotation, $rel)) {
                 assert($annotation instanceof LinkAnnotation);

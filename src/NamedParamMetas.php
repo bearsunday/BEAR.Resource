@@ -6,21 +6,15 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\RequestParamInterface;
 use BEAR\Resource\Annotation\ResourceParam;
-use Doctrine\Common\Annotations\Reader;
+use Ray\Aop\ReflectionMethod;
 use Ray\Di\Di\Assisted;
 use Ray\WebContextParam\Annotation\AbstractWebContextParam;
 use ReflectionAttribute;
-use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
 
 final class NamedParamMetas implements NamedParamMetasInterface
 {
-    public function __construct(
-        private Reader $reader,
-    ) {
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -41,7 +35,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
     private function getAnnotationParamMetas(ReflectionMethod $method): array
     {
         $parameters = $method->getParameters();
-        $annotations = $this->reader->getMethodAnnotations($method);
+        $annotations = $method->getAnnotations();
         $assistedNames = $this->getAssistedNames($annotations);
         $webContext = $this->getWebContext($annotations);
 

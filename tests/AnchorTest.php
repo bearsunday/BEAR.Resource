@@ -7,7 +7,6 @@ namespace BEAR\Resource;
 use BEAR\Resource\Exception\LinkException;
 use FakeVendor\Sandbox\Resource\App\Author;
 use PHPUnit\Framework\TestCase;
-use Ray\ServiceLocator\ServiceLocator;
 
 class AnchorTest extends TestCase
 {
@@ -22,7 +21,7 @@ class AnchorTest extends TestCase
         $author = new Author();
         $author->onGet(1);
         $this->request = new Request($invoker, $author, Request::GET, ['id' => 1]);
-        $this->anchor = new Anchor(ServiceLocator::getReader());
+        $this->anchor = new Anchor();
     }
 
     public function testHref(): void

@@ -8,7 +8,6 @@ use BEAR\Resource\Annotation\Embed;
 use BEAR\Resource\Exception\BadRequestException;
 use BEAR\Resource\Exception\EmbedException;
 use BEAR\Resource\Exception\LinkException;
-use Doctrine\Common\Annotations\Reader;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
 
@@ -23,7 +22,6 @@ final class EmbedInterceptor implements MethodInterceptor
 
     public function __construct(
         ResourceInterface $resource,
-        private Reader $reader,
     ) {
         $this->resource = clone $resource;
     }
@@ -37,9 +35,8 @@ final class EmbedInterceptor implements MethodInterceptor
     {
         $ro = $invocation->getThis();
         assert($ro instanceof ResourceObject);
-        $method = $invocation->getMethod();
         $query = $this->getArgsByInvocation($invocation);
-        $embeds = $this->reader->getMethodAnnotations($method);
+        $embeds = $invocation->getMethod()->getAnnotations();
         $this->embedResource($embeds, $ro, $query);
 
         return $invocation->proceed();

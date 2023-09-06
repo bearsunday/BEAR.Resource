@@ -12,7 +12,6 @@
     "require": {
         "php": "^8.0",
         "ext-filter": "*",
-        "doctrine/annotations": "^1.12",
         "justinrainbow/json-schema": "^5.2.10",
         "koriym/attributes": "^1.0",
         "koriym/http-constants": "^1.1",

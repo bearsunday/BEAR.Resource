@@ -17,6 +17,7 @@ class Greeting extends ResourceObject
      *
      * @ResourceParam(uri="app://self/rparam/login#login_id", param="name")
      */
+    #[ResourceParam(uri: 'app://self/rparam/login#login_id', param: 'name')]
     public function onGet(string $name = null)
     {
         $this['name'] = $name;
@@ -31,6 +32,7 @@ class Greeting extends ResourceObject
     /**
      * @ResourceParam(uri="app://self/rparam/login{?name}#nickname", templated=true, param="id")
      */
+    #[ResourceParam(uri: 'app://self/rparam/login{?name}#nickname', templated: true, param: 'id')]
     public function onPost(string $id, string $name)
     {
         $this['id'] = $id;

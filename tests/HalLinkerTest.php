@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-use Doctrine\Common\Annotations\AnnotationReader;
 use Nocarrier\Hal;
 use PHPUnit\Framework\TestCase;
 
@@ -24,7 +23,7 @@ class HalLinkerTest extends TestCase
 
     public function testHalLinker(): void
     {
-        $halRenderer = new HalRenderer(new AnnotationReader(), new HalLinker(new FakeReverseLinker()));
+        $halRenderer = new HalRenderer(new HalLinker(new FakeReverseLinker()));
         $fakeRo = new FakeNullRo();
         $fakeRo->uri = new Uri('app://self/?id=10');
         $fakeRo->setRenderer($halRenderer);
