@@ -23,7 +23,7 @@ final class NamedParameter implements NamedParameterInterface
         $parameters = [];
         foreach ($metas as $varName => $param) {
             /** @psalm-suppress all */
-            $parameters[] = $param($varName, $query, $this->injector);
+            $parameters[$varName] = $param($varName, $query, $this->injector);
         }
 
         return $parameters;
