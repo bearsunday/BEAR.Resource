@@ -24,7 +24,6 @@ final class Anchor implements AnchorInterface
     public function href(string $rel, AbstractRequest $request, array $query): array
     {
         $classMethod = 'on' . ucfirst($request->method);
-        /** @var list<object> $annotations */
         $annotations = (new ReflectionMethod($request->resourceObject::class, $classMethod))->getAnnotations();
         foreach ($annotations as $annotation) {
             if ($this->isValidLinkAnnotation($annotation, $rel)) {

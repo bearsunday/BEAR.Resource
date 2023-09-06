@@ -52,7 +52,6 @@ final class HalRenderer implements RenderInterface
         [$ro, $body] = $this->valuate($ro);
         $method = 'on' . ucfirst($ro->uri->method);
         $hasMethod = method_exists($ro, $method);
-        /** @var list<object> $annotations */
         $annotations = $hasMethod ? (new ReflectionMethod($ro, $method))->getAnnotations() : [];
         $hal = $this->getHal($ro->uri, $body, $annotations);
         $json = $hal->asJson(true);
