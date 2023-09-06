@@ -16,9 +16,8 @@ class Greeting extends ResourceObject
      * This is not an intentional attribute to test annotations.
      *
      * @ResourceParam(uri="app://self/rparam/login#login_id", param="name")
-     * @Assisted({"assisted"})
      */
-    public function onGet(string $name = null, string $assisted = null)
+    public function onGet(string $name = null)
     {
         $this['name'] = $name;
 
