@@ -71,9 +71,8 @@ final class NamedParamMetas implements NamedParamMetasInterface
             $refWebContext = $parameter->getAttributes(AbstractWebContextParam::class, ReflectionAttribute::IS_INSTANCEOF);
             if ($refWebContext) {
                 $webParam = $refWebContext[0]->newInstance();
-                /** @psalm-suppress MixedAssignment */
-                $defaultValue = $parameter->isDefaultValueAvailable() ? $parameter->getDefaultValue() : null;
-                $param = new AssistedWebContextParam($webParam, new DefaultParam($defaultValue));
+                $default = $this->getDefault($parameter);
+                $param = new AssistedWebContextParam($webParam, $default);
                 $names[$parameter->name] = $param;
                 continue;
             }
