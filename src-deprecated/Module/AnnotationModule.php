@@ -17,6 +17,8 @@ use Ray\Di\AbstractModule;
  *
  * Reader-annotation
  * Reader-attribute
+ *
+ * @deprecated See https://github.com/bearsunday/BEAR.Resource/wiki/Doctrine-annotation-deprecation-notice
  */
 final class AnnotationModule extends AbstractModule
 {

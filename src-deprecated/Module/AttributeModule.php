@@ -9,6 +9,10 @@ use Koriym\Attributes\AttributeReader;
 use Ray\Di\AbstractModule;
 
 /** @codeCoverageIgnore */
+
+/**
+ * @deprecated See https://github.com/bearsunday/BEAR.Resource/wiki/Doctrine-annotation-deprecation-notice
+ */
 final class AttributeModule extends AbstractModule
 {
     /**

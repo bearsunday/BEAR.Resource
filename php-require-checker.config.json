@@ -4,6 +4,7 @@
     "static", "self", "parent",
     "array", "string", "int", "float", "bool", "iterable", "callable", "void", "object",
     "Attribute", "ReflectionAttribute", "Stringable",
-    "BEAR\\Resource\\HalLink", "BEAR\\Resource\\NullReverseLink", "BEAR\\Resource\\ReverseLinkInterface"
+    "BEAR\\Resource\\HalLink", "BEAR\\Resource\\NullReverseLink", "BEAR\\Resource\\ReverseLinkInterface",
+    "Doctrine\\Common\\Annotations\\Reader", "Doctrine\\Common\\Annotations\\AnnotationReader"
   ]
 }
