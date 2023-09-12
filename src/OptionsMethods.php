@@ -100,10 +100,14 @@ final class OptionsMethods
     private function getInMap(ReflectionMethod $method): array
     {
         $ins = [];
-        $annotations = $method->getAnnotations();
-        $ins = $this->getInsFromMethodAnnotations($annotations, $ins);
+        bc_for_annotation: {
+            // @codeCoverageIgnoreStart
+            $annotations = $method->getAnnotations();
+            $ins = $this->getInsFromMethodAnnotations($annotations, $ins);
         if ($ins) {
             return $ins;
+        }
+            // @codeCoverageIgnoreEnd
         }
 
         /** @var array<string, string> $insParam */
@@ -133,6 +137,8 @@ final class OptionsMethods
      * @param array<string, string> $ins
      *
      * @return array<string, string>
+     *
+     * @codeCoverageIgnore BC for annotation
      */
     public function getInsFromMethodAnnotations(array $annotations, array $ins): array
     {

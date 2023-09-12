@@ -96,7 +96,9 @@ final class NamedParamMetas implements NamedParamMetasInterface
                 continue;
             }
 
-            $names = $this->setAssistedAnnotation($names, $annotation);
+            // @codeCoverageIgnoreStart
+            $names = $this->setAssistedAnnotation($names, $annotation); // BC for annotation
+            // @codeCoverageIgnoreEnd
         }
 
         return $names;
@@ -125,6 +127,8 @@ final class NamedParamMetas implements NamedParamMetasInterface
      * @param array<string, ParamInterface> $names
      *
      * @return array<string, ParamInterface>
+     *
+     * @codeCoverageIgnore BC for annotation
      */
     private function setAssistedAnnotation(array $names, Assisted $assisted): array
     {

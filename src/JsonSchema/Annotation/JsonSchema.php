@@ -11,6 +11,7 @@ use Doctrine\Common\Annotations\Annotation\NamedArgumentConstructor;
  * @Annotation
  * @Target("METHOD")
  * @NamedArgumentConstructor
+ * @codeCoverageIgnore
  */
 #[Attribute(Attribute::TARGET_METHOD)]
 final class JsonSchema
