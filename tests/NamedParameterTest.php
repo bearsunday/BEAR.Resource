@@ -9,7 +9,6 @@ use BEAR\Resource\Exception\ParameterException;
 use BEAR\Resource\Exception\ParameterInvalidEnumException;
 use BEAR\Resource\Module\ResourceModule;
 use DateTime;
-use Doctrine\Common\Annotations\AnnotationReader;
 use FakeVendor\Sandbox\Resource\Page\EnumParam;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
@@ -25,7 +24,7 @@ class NamedParameterTest extends TestCase
     {
         parent::setUp();
 
-        $this->params = new NamedParameter(new NamedParamMetas(new AnnotationReader()), new Injector());
+        $this->params = new NamedParameter(new NamedParamMetas(), new Injector());
     }
 
     public function testGetParameters(): void
@@ -33,7 +32,7 @@ class NamedParameterTest extends TestCase
         $object = new FakeParamResource();
         $namedArgs = ['id' => 1, 'name' => 'koriym'];
         $args = $this->params->getParameters([$object, 'onGet'], $namedArgs);
-        $this->assertSame([1, 'koriym'], $args);
+        $this->assertSame(['id' => 1, 'name' => 'koriym'], $args);
     }
 
     public function testDefaultValue(): void
@@ -41,7 +40,7 @@ class NamedParameterTest extends TestCase
         $object = new FakeParamResource();
         $namedArgs = ['id' => 1];
         $args = $this->params->getParameters([$object, 'onGet'], $namedArgs);
-        $this->assertSame([1, 'koriym'], $args);
+        $this->assertSame(['id' => 1, 'name' => 'koriym'], $args);
     }
 
     public function testParameterException(): void
@@ -64,11 +63,11 @@ class NamedParameterTest extends TestCase
         AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose($fakeGlobals);
         $object = new FakeParamResource();
         $expected = [
-            'cookie_val',
-            'env_val',
-            'post_val',
-            'get_val',
-            'server_val',
+            'cookie' => 'cookie_val',
+            'env' => 'env_val',
+            'form' => 'post_val',
+            'query' => 'get_val',
+            'server' => 'server_val',
         ];
         $args = $this->params->getParameters([$object, 'onPost'], []);
         $this->assertSame($expected, $args);
@@ -87,8 +86,8 @@ class NamedParameterTest extends TestCase
         AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose([]);
         $object = new FakeParamResource();
         $expected = [
-            1,
-            'default',
+            'cookie' => 'default',
+            'a' => 1,
         ];
         $args = $this->params->getParameters([$object, 'onDelete'], ['a' => 1]);
         $this->assertSame($expected, $args);
@@ -107,7 +106,7 @@ class NamedParameterTest extends TestCase
         $object = new FakeCamelCaseParamResource();
         $namedArgs = ['user_id' => 'koriym', 'user_role' => 'lead'];
         $args = $this->params->getParameters([$object, 'onGet'], $namedArgs);
-        $this->assertSame(['koriym', 'lead'], $args);
+        $this->assertSame(['userId' => 'koriym', 'userRole' => 'lead'], $args);
         $ro = call_user_func_array([$object, 'onGet'], $args);
         assert($ro instanceof ResourceObject);
         $this->assertSame(['userId' => 'koriym', 'userRole' => 'lead'], (array) $ro->body);
@@ -121,7 +120,14 @@ class NamedParameterTest extends TestCase
         $params = ['stringBacked' => 'foo', 'intBacked' => '1'];
         $args = $this->params->getParameters([$ro, 'onGet'], $params);
 
-        $this->assertSame([FakeStringBacked::FOO, FakeIntBacked::FOO, null], $args);
+        $this->assertSame(
+            [
+                'stringBacked' => FakeStringBacked::FOO,
+                'intBacked' => FakeIntBacked::FOO,
+                'hasDefault' => null,
+            ],
+            $args,
+        );
     }
 
     /** @requires PHP >= 8.1 */

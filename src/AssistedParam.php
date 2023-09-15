@@ -10,6 +10,8 @@ final class AssistedParam implements ParamInterface
 {
     /**
      * {@inheritDoc}
+     *
+     * @codeCoverageIgnore
      */
     public function __invoke(string $varName, array $query, InjectorInterface $injector): void
     {

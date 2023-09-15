@@ -11,7 +11,6 @@ use FakeVendor\Sandbox\Resource\App\Blog;
 use FakeVendor\Sandbox\Resource\App\Link\Scalar\Name;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
-use Ray\ServiceLocator\ServiceLocator;
 
 class LinkerTest extends TestCase
 {
@@ -29,7 +28,6 @@ class LinkerTest extends TestCase
             ->host('self')
             ->toAdapter(new AppAdapter(new Injector(), 'FakeVendor\Sandbox'));
         $this->linker = new Linker(
-            ServiceLocator::getReader(),
             $this->invoker,
             new Factory($schemeCollection, new UriFactory()),
         );

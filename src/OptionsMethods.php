@@ -7,7 +7,7 @@ namespace BEAR\Resource;
 use BEAR\Resource\Annotation\Embed;
 use BEAR\Resource\Annotation\JsonSchema;
 use BEAR\Resource\Annotation\Link;
-use Doctrine\Common\Annotations\Reader;
+use Ray\Aop\ReflectionMethod;
 use Ray\Di\Di\Named;
 use Ray\WebContextParam\Annotation\AbstractWebContextParam;
 use Ray\WebContextParam\Annotation\CookieParam;
@@ -16,7 +16,6 @@ use Ray\WebContextParam\Annotation\FilesParam;
 use Ray\WebContextParam\Annotation\FormParam;
 use Ray\WebContextParam\Annotation\QueryParam;
 use Ray\WebContextParam\Annotation\ServerParam;
-use ReflectionMethod;
 
 use function assert;
 use function class_exists;
@@ -41,7 +40,6 @@ final class OptionsMethods
     ];
 
     public function __construct(
-        private Reader $reader,
         #[Named('json_schema_dir')]
         private string $schemaDir = '',
     ) {
@@ -82,7 +80,7 @@ final class OptionsMethods
     private function getMethodExtras(ReflectionMethod $method): array
     {
         $extras = [];
-        $annotations = $this->reader->getMethodAnnotations($method);
+        $annotations = $method->getAnnotations();
         foreach ($annotations as $annotation) {
             if ($annotation instanceof Link) {
                 $extras['links'][] = $annotation;
@@ -102,10 +100,14 @@ final class OptionsMethods
     private function getInMap(ReflectionMethod $method): array
     {
         $ins = [];
-        $annotations = $this->reader->getMethodAnnotations($method);
-        $ins = $this->getInsFromMethodAnnotations($annotations, $ins);
+        bc_for_annotation: {
+            // @codeCoverageIgnoreStart
+            $annotations = $method->getAnnotations();
+            $ins = $this->getInsFromMethodAnnotations($annotations, $ins);
         if ($ins) {
             return $ins;
+        }
+            // @codeCoverageIgnoreEnd
         }
 
         /** @var array<string, string> $insParam */
@@ -117,7 +119,7 @@ final class OptionsMethods
     /** @return array<string, mixed> */
     private function getJsonSchema(ReflectionMethod $method): array
     {
-        $schema = $this->reader->getMethodAnnotation($method, JsonSchema::class);
+        $schema = $method->getAnnotation(JsonSchema::class);
         if (! $schema instanceof JsonSchema) {
             return [];
         }
@@ -135,6 +137,8 @@ final class OptionsMethods
      * @param array<string, string> $ins
      *
      * @return array<string, string>
+     *
+     * @codeCoverageIgnore BC for annotation
      */
     public function getInsFromMethodAnnotations(array $annotations, array $ins): array
     {

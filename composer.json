@@ -12,7 +12,6 @@
     "require": {
         "php": "^8.0",
         "ext-filter": "*",
-        "doctrine/annotations": "^1.12",
         "justinrainbow/json-schema": "^5.2.10",
         "koriym/attributes": "^1.0",
         "koriym/http-constants": "^1.1",
@@ -66,16 +65,16 @@
         "files": ["tests/Fake/AppInjector.php"]
     },
     "scripts" :{
-        "test": ["./vendor/bin/phpunit"],
+        "test": ["phpunit"],
         "tests": ["@cs", "@test", "@sa"],
         "coverage": ["php -dzend_extension=xdebug.so -dxdebug.mode=coverage ./vendor/bin/phpunit --coverage-text --coverage-html=build/coverage"],
         "pcov": ["php -dextension=pcov.so -d pcov.enabled=1 ./vendor/bin/phpunit --coverage-text --coverage-html=build/coverage  --coverage-clover=coverage.xml"],
-        "cs": ["./vendor/bin/phpcs --standard=./phpcs.xml src tests"],
-        "cs-fix": ["./vendor/bin/phpcbf src tests"],
-        "clean": ["./vendor/bin/phpstan clear-result-cache", "./vendor/bin/psalm --clear-cache", "rm -rf tests/tmp/*.php"],
-        "sa": ["./vendor/bin/psalm --monochrome --show-info=true", "./vendor/bin/phpstan --memory-limit=-1 analyse -c phpstan.neon"],
-        "metrics": ["./vendor/bin/phpmetrics --report-html=build/metrics --exclude=Exception --log-junit=build/junit.xml --junit=build/junit.xml src"],
-        "phpmd": ["./vendor/bin/phpmd --exclude src/Annotation src text ./phpmd.xml"],
+        "cs": ["phpcs --standard=phpcs.xml src tests"],
+        "cs-fix": ["phpcbf src tests"],
+        "clean": ["phpstan clear-result-cache", "psalm --clear-cache", "rm -rf tests/tmp/*.php"],
+        "sa": ["psalm --monochrome --show-info=true", "phpstan --memory-limit=-1 analyse -c phpstan.neon"],
+        "metrics": ["phpmetrics --report-html=build/metrics --exclude=Exception --log-junit=build/junit.xml --junit=build/junit.xml src"],
+        "phpmd": ["phpmd --exclude src/Annotation src text ./phpmd.xml"],
         "build": ["@cs", "@sa", "@pcov", "@metrics"]
     },
     "config": {

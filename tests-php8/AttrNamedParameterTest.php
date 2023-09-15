@@ -32,14 +32,14 @@ class AttrNamedParameterTest extends TestCase
     {
         $namedArgs = ['id' => 1, 'name' => 'koriym'];
         $args = $this->params->getParameters([$this->ro, 'onGet'], $namedArgs);
-        $this->assertSame([1, 'koriym'], $args);
+        $this->assertSame(['id' => 1, 'name' => 'koriym'], $args);
     }
 
     public function testDefaultValue(): void
     {
         $namedArgs = ['id' => 1];
         $args = $this->params->getParameters([$this->ro, 'onGet'], $namedArgs);
-        $this->assertSame([1, 'koriym'], $args);
+        $this->assertSame(['id' => 1, 'name' => 'koriym'], $args);
     }
 
     public function testParameterException(): void
@@ -60,11 +60,11 @@ class AttrNamedParameterTest extends TestCase
         ];
         AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose($fakeGlobals);
         $expected = [
-            'cookie_val',
-            'env_val',
-            'post_val',
-            'get_val',
-            'server_val',
+            'cookie' => 'cookie_val',
+            'env' => 'env_val',
+            'form' => 'post_val',
+            'query' => 'get_val',
+            'server' => 'server_val'
         ];
         $args = $this->params->getParameters([$this->ro, 'onPost'], []);
         $this->assertSame($expected, $args);
@@ -81,8 +81,8 @@ class AttrNamedParameterTest extends TestCase
     {
         AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose([]);
         $expected = [
-            1,
-            'default',
+            'a' => 1,
+            'cookie' => 'default'
         ];
         $args = $this->params->getParameters([$this->ro, 'onDelete'], ['a' => 1]);
         $this->assertSame($expected, $args);

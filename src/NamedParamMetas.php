@@ -6,21 +6,15 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\RequestParamInterface;
 use BEAR\Resource\Annotation\ResourceParam;
-use Doctrine\Common\Annotations\Reader;
+use Ray\Aop\ReflectionMethod;
 use Ray\Di\Di\Assisted;
 use Ray\WebContextParam\Annotation\AbstractWebContextParam;
 use ReflectionAttribute;
-use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
 
 final class NamedParamMetas implements NamedParamMetasInterface
 {
-    public function __construct(
-        private Reader $reader,
-    ) {
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -41,7 +35,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
     private function getAnnotationParamMetas(ReflectionMethod $method): array
     {
         $parameters = $method->getParameters();
-        $annotations = $this->reader->getMethodAnnotations($method);
+        $annotations = $method->getAnnotations();
         $assistedNames = $this->getAssistedNames($annotations);
         $webContext = $this->getWebContext($annotations);
 
@@ -71,9 +65,8 @@ final class NamedParamMetas implements NamedParamMetasInterface
             $refWebContext = $parameter->getAttributes(AbstractWebContextParam::class, ReflectionAttribute::IS_INSTANCEOF);
             if ($refWebContext) {
                 $webParam = $refWebContext[0]->newInstance();
-                /** @psalm-suppress MixedAssignment */
-                $defaultValue = $parameter->isDefaultValueAvailable() ? $parameter->getDefaultValue() : null;
-                $param = new AssistedWebContextParam($webParam, new DefaultParam($defaultValue));
+                $default = $this->getDefault($parameter);
+                $param = new AssistedWebContextParam($webParam, $default);
                 $names[$parameter->name] = $param;
                 continue;
             }
@@ -103,7 +96,9 @@ final class NamedParamMetas implements NamedParamMetasInterface
                 continue;
             }
 
-            $names = $this->setAssistedAnnotation($names, $annotation);
+            // @codeCoverageIgnoreStart
+            $names = $this->setAssistedAnnotation($names, $annotation); // BC for annotation
+            // @codeCoverageIgnoreEnd
         }
 
         return $names;
@@ -132,6 +127,8 @@ final class NamedParamMetas implements NamedParamMetasInterface
      * @param array<string, ParamInterface> $names
      *
      * @return array<string, ParamInterface>
+     *
+     * @codeCoverageIgnore BC for annotation
      */
     private function setAssistedAnnotation(array $names, Assisted $assisted): array
     {

@@ -36,9 +36,12 @@ final class ResourceModule extends AbstractModule
     protected function configure(): void
     {
         $this->install(new ResourceClientModule());
-        $this->install(new AnnotationModule());
         $this->install(new EmbedResourceModule());
         $this->install(new HttpClientModule());
         $this->bind()->annotatedWith(AppName::class)->toInstance($this->appName);
+
+        // Backward compatibility
+        /** @psalm-suppress DeprecatedClass */
+        $this->install(new AnnotationModule());
     }
 }

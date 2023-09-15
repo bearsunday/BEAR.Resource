@@ -16,7 +16,6 @@ use FakeVendor\Sandbox\Resource\Page\Index;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 use Ray\Di\NullModule;
-use Ray\ServiceLocator\ServiceLocator;
 
 use function assert;
 use function serialize;
@@ -37,7 +36,6 @@ class ResourceTest extends TestCase
     public function testManualConstruction(): void
     {
         $injector = new Injector(new NullModule(), __DIR__ . '/tmp');
-        $reader = ServiceLocator::getReader();
         $scheme = (new SchemeCollection())
             ->scheme('app')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox'))
             ->scheme('page')->host('self')->toAdapter(new AppAdapter($injector, 'FakeVendor\Sandbox'))
@@ -45,7 +43,7 @@ class ResourceTest extends TestCase
         $invoker = (new InvokerFactory())();
         $factory = new Factory($scheme, new UriFactory());
         $uri = new UriFactory('app://self');
-        $resource = new Resource($factory, $invoker, new Anchor($reader), new Linker($reader, $invoker, $factory), $uri);
+        $resource = new Resource($factory, $invoker, new Anchor(), new Linker($invoker, $factory), $uri);
         $this->assertInstanceOf(ResourceInterface::class, $resource);
     }
 

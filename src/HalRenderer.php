@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-use Doctrine\Common\Annotations\Reader;
 use Nocarrier\Hal;
-use ReflectionMethod;
+use Ray\Aop\ReflectionMethod;
 use RuntimeException;
 
 use function assert;
@@ -28,7 +27,6 @@ use const PHP_URL_QUERY;
 final class HalRenderer implements RenderInterface
 {
     public function __construct(
-        private Reader $reader,
         private HalLinker $linker,
     ) {
     }
@@ -54,8 +52,7 @@ final class HalRenderer implements RenderInterface
         [$ro, $body] = $this->valuate($ro);
         $method = 'on' . ucfirst($ro->uri->method);
         $hasMethod = method_exists($ro, $method);
-        /** @var list<object> $annotations */
-        $annotations = $hasMethod ? $this->reader->getMethodAnnotations(new ReflectionMethod($ro, $method)) : [];
+        $annotations = $hasMethod ? (new ReflectionMethod($ro, $method))->getAnnotations() : [];
         $hal = $this->getHal($ro->uri, $body, $annotations);
         $json = $hal->asJson(true);
         assert(is_string($json));
