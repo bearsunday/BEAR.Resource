@@ -17,6 +17,7 @@ use Stringable;
 use Throwable;
 
 use function array_key_exists;
+use function array_merge;
 use function assert;
 use function in_array;
 use function is_array;
@@ -86,6 +87,8 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
         string $method = Request::GET,
         /**
          * Query
+         *
+         * @var array<string, mixed>
          */
         public array $query = [],
         // phpcs:ignore SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
@@ -125,7 +128,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     public function __invoke(array|null $query = null): ResourceObject
     {
         if (is_array($query)) {
-            $this->query = [...$this->query, ...$query];
+            $this->query = array_merge($this->query, $query);
         }
 
         $this->resourceObject->uri->query = $this->query;

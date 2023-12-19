@@ -6,6 +6,7 @@ namespace BEAR\Resource;
 
 use OutOfRangeException;
 
+use function array_merge;
 use function in_array;
 
 /**
@@ -56,7 +57,7 @@ final class Request extends AbstractRequest
      */
     public function addQuery(array $query): RequestInterface
     {
-        $this->query = [...$this->query, ...$query];
+        $this->query = array_merge($this->query, $query);
 
         return $this;
     }
