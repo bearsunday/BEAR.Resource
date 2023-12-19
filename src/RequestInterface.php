@@ -46,7 +46,7 @@ interface RequestInterface
      */
     public function hash(): string;
 
-    /** @inheritDoc */
+    /** @return ResourceObject|static */
     public function request();
 
     /**
