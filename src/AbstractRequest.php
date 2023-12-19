@@ -17,7 +17,6 @@ use Stringable;
 use Throwable;
 
 use function array_key_exists;
-use function array_merge;
 use function assert;
 use function in_array;
 use function is_array;

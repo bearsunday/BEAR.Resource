@@ -10,7 +10,8 @@ use Ray\Di\Di\Named;
 final class ExtraMethodInvoker
 {
     public function __construct(
-        #[Named('options')]private readonly RenderInterface $optionsRenderer,
+        #[Named('options')]
+        private readonly RenderInterface $optionsRenderer,
     ) {
     }
 

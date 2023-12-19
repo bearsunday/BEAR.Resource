@@ -6,7 +6,6 @@ namespace BEAR\Resource;
 
 use OutOfRangeException;
 
-use function array_merge;
 use function in_array;
 
 /**

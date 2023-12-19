@@ -15,7 +15,8 @@ use Ray\Di\ProviderInterface;
 final class SchemeCollectionProvider implements ProviderInterface
 {
     public function __construct(
-        #[AppName]private readonly string $appName,
+        #[AppName]
+        private readonly string $appName,
         private readonly InjectorInterface $injector,
     ) {
     }

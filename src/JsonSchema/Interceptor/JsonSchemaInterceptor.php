@@ -35,10 +35,13 @@ use const JSON_THROW_ON_ERROR;
 final class JsonSchemaInterceptor implements JsonSchemaInterceptorInterface
 {
     public function __construct(
-        #[Named('json_schema_dir')]private readonly string $schemaDir,
-        #[Named('json_validate_dir')]private readonly string $validateDir,
+        #[Named('json_schema_dir')]
+        private readonly string $schemaDir,
+        #[Named('json_validate_dir')]
+        private readonly string $validateDir,
         private readonly JsonSchemaExceptionHandlerInterface $handler,
-        #[Named('json_schema_host')]private readonly string|null $schemaHost = null,
+        #[Named('json_schema_host')]
+        private readonly string|null $schemaHost = null,
     ) {
     }
 

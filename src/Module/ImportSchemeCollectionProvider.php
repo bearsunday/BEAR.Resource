@@ -17,8 +17,10 @@ final class ImportSchemeCollectionProvider implements ProviderInterface
 {
     /** @param ImportApp[] $importAppConfig */
     public function __construct(
-        #[AppName]private readonly string $appName,
-        #[ImportAppConfig]private readonly array $importAppConfig,
+        #[AppName]
+        private readonly string $appName,
+        #[ImportAppConfig]
+        private readonly array $importAppConfig,
         private readonly InjectorInterface $injector,
     ) {
     }

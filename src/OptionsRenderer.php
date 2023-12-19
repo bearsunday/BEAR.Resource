@@ -31,7 +31,8 @@ final class OptionsRenderer implements RenderInterface
     /** @SuppressWarnings(PHPMD.BooleanArgumentFlag) */
     public function __construct(
         private readonly OptionsMethods $optionsMethod,
-        #[OptionsBody]private readonly bool $optionsBody = true,
+        #[OptionsBody]
+        private readonly bool $optionsBody = true,
     ) {
     }
 
