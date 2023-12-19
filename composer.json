@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "php": "^8.0",
+        "php": "^8.1",
         "ext-filter": "*",
         "justinrainbow/json-schema": "^5.2.10",
         "koriym/attributes": "^1.0",
