@@ -46,7 +46,8 @@ interface RequestInterface
      */
     public function hash(): string;
 
-    public function request(): AbstractRequest|ResourceObject;
+    /** @inheritDoc */
+    public function request();
 
     /**
      * Replace linked resource
