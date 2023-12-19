@@ -40,8 +40,7 @@ final class OptionsMethods
     ];
 
     public function __construct(
-        #[Named('json_schema_dir')]
-        private string $schemaDir = '',
+        #[Named('json_schema_dir')]private readonly string $schemaDir = '',
     ) {
     }
 

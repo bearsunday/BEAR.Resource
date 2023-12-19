@@ -13,7 +13,7 @@ final class Factory implements FactoryInterface
 {
     public function __construct(
         private SchemeCollectionInterface $scheme,
-        private UriFactory $uri,
+        private readonly UriFactory $uri,
     ) {
     }
 

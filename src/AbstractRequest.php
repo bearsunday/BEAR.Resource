@@ -94,7 +94,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
          * Links
          */
         public array $links = [],
-        private LinkerInterface|null $linker = null,
+        private readonly LinkerInterface|null $linker = null,
     ) {
         if (! in_array(strtolower($method), ['get', 'post', 'put', 'patch', 'delete', 'head', 'options'], true)) {
             throw new MethodException($method, 400);
@@ -126,7 +126,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     public function __invoke(array|null $query = null): ResourceObject
     {
         if (is_array($query)) {
-            $this->query = array_merge($this->query, $query);
+            $this->query = [...$this->query, ...$query];
         }
 
         $this->resourceObject->uri->query = $this->query;

@@ -32,8 +32,8 @@ final class Linker implements LinkerInterface
     private array $cache = [];
 
     public function __construct(
-        private InvokerInterface $invoker,
-        private FactoryInterface $factory,
+        private readonly InvokerInterface $invoker,
+        private readonly FactoryInterface $factory,
     ) {
     }
 

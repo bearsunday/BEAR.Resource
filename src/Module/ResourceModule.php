@@ -25,7 +25,7 @@ final class ResourceModule extends AbstractModule
 {
     /** @param string $appName Application name ex) 'Vendor\Project' */
     public function __construct(
-        private string $appName = '',
+        private readonly string $appName = '',
     ) {
         parent::__construct();
     }

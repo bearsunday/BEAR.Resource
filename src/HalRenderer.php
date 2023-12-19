@@ -27,7 +27,7 @@ use const PHP_URL_QUERY;
 final class HalRenderer implements RenderInterface
 {
     public function __construct(
-        private HalLinker $linker,
+        private readonly HalLinker $linker,
     ) {
     }
 

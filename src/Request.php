@@ -57,7 +57,7 @@ final class Request extends AbstractRequest
      */
     public function addQuery(array $query): RequestInterface
     {
-        $this->query = array_merge($this->query, $query);
+        $this->query = [...$this->query, ...$query];
 
         return $this;
     }

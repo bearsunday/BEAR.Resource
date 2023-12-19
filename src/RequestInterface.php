@@ -46,8 +46,7 @@ interface RequestInterface
      */
     public function hash(): string;
 
-    /** @return AbstractRequest|ResourceObject */
-    public function request();
+    public function request(): \BEAR\Resource\AbstractRequest|\BEAR\Resource\ResourceObject;
 
     /**
      * Replace linked resource

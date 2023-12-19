@@ -12,8 +12,7 @@ use function parse_url;
 final class UriFactory
 {
     public function __construct(
-        #[ContextScheme]
-        private string $schemaHost = 'page://self',
+        #[ContextScheme]private readonly string $schemaHost = 'page://self',
     ) {
     }
 

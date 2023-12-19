@@ -27,9 +27,9 @@ use const PHP_VERSION_ID;
 
 final class ClassParam implements ParamInterface
 {
-    private string $type;
-    private bool $isDefaultAvailable;
-    private mixed $defaultValue;
+    private readonly string $type;
+    private readonly bool $isDefaultAvailable;
+    private readonly mixed $defaultValue;
 
     public function __construct(
         ReflectionNamedType $type,

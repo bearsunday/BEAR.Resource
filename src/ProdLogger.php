@@ -12,7 +12,7 @@ use function sprintf;
 final class ProdLogger implements LoggerInterface
 {
     public function __construct(
-        private PsrLoggerInterface $logger,
+        private readonly PsrLoggerInterface $logger,
     ) {
     }
 
