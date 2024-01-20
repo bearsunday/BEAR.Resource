@@ -60,7 +60,7 @@ final class JsonSchemaInterceptor implements JsonSchemaInterceptorInterface
 
         $ro = $invocation->proceed();
         assert($ro instanceof ResourceObject);
-        if ($ro->body && $ro->code === 200 || $ro->code === 201) {
+        if ($ro->body !== [] &&  $ro->code === 200 || $ro->code === 201) {
             $this->validateResponse($ro, $jsonSchema);
         }
 
