@@ -19,8 +19,8 @@ final class JsonSchemaModule extends AbstractModule
      * @param string $jsonValidateDir Json-schema validator json file directory
      */
     public function __construct(
-        private string $jsonSchemaDir = '',
-        private string $jsonValidateDir = '',
+        private readonly string $jsonSchemaDir = '',
+        private readonly string $jsonValidateDir = '',
         AbstractModule|null $module = null,
     ) {
         parent::__construct($module);

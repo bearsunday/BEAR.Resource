@@ -11,7 +11,7 @@ final class NullOptionsRenderer implements RenderInterface
     /**
      * {@inheritDoc}
      */
-    public function render(ResourceObject $ro)
+    public function render(ResourceObject $ro): never
     {
         throw new MethodNotAllowedException($ro::class . '::options', 405);
     }

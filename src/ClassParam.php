@@ -27,9 +27,9 @@ use const PHP_VERSION_ID;
 
 final class ClassParam implements ParamInterface
 {
-    private string $type;
-    private bool $isDefaultAvailable;
-    private mixed $defaultValue;
+    private readonly string $type;
+    private readonly bool $isDefaultAvailable;
+    private readonly mixed $defaultValue; // @phpstan-ignore-line
 
     public function __construct(
         ReflectionNamedType $type,
@@ -103,10 +103,10 @@ final class ClassParam implements ParamInterface
         throw new ParameterException($varName);
     }
 
-    /** @psalm-suppress MixedArgument */
+    /** @param class-string $type */
     private function enum(string $type, mixed $props, string $varName): mixed
     {
-        $refEnum = new ReflectionEnum($type);
+        $refEnum = new ReflectionEnum($type); // @phpstan-ignore-line
         assert(enum_exists($type));
 
         if (! $refEnum->isBacked()) {

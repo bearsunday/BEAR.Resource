@@ -16,8 +16,8 @@ final class SchemeCollectionProvider implements ProviderInterface
 {
     public function __construct(
         #[AppName]
-        private string $appName,
-        private InjectorInterface $injector,
+        private readonly string $appName,
+        private readonly InjectorInterface $injector,
     ) {
     }
 

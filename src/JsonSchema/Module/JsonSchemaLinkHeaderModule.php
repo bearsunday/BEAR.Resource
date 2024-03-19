@@ -15,7 +15,7 @@ final class JsonSchemaLinkHeaderModule extends AbstractModule
 {
     /** @param string $jsonSchemaHost Json-schema host name ex) https://example.com/schema/ */
     public function __construct(
-        private string $jsonSchemaHost,
+        private readonly string $jsonSchemaHost,
         AbstractModule|null $module = null,
     ) {
         if (! filter_var($jsonSchemaHost, FILTER_VALIDATE_URL)) {

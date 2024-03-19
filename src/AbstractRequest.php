@@ -87,6 +87,8 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
         string $method = Request::GET,
         /**
          * Query
+         *
+         * @var array<string, mixed>
          */
         public array $query = [],
         // phpcs:ignore SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
@@ -94,7 +96,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
          * Links
          */
         public array $links = [],
-        private LinkerInterface|null $linker = null,
+        private readonly LinkerInterface|null $linker = null,
     ) {
         if (! in_array(strtolower($method), ['get', 'post', 'put', 'patch', 'delete', 'head', 'options'], true)) {
             throw new MethodException($method, 400);

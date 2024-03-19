@@ -46,7 +46,7 @@ interface RequestInterface
      */
     public function hash(): string;
 
-    /** @return AbstractRequest|ResourceObject */
+    /** @return ResourceObject|static */
     public function request();
 
     /**
