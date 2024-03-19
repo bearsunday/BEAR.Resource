@@ -11,6 +11,7 @@ use ReflectionClass;
 use ReflectionEnum;
 use ReflectionNamedType;
 use ReflectionParameter;
+use UnitEnum;
 
 use function assert;
 use function class_exists;
@@ -103,9 +104,14 @@ final class ClassParam implements ParamInterface
         throw new ParameterException($varName);
     }
 
-    /** @psalm-suppress MixedArgument */
+    /**
+     * @param class-string $type
+     *
+     * @psalm-suppress MixedArgument
+     */
     private function enum(string $type, mixed $props, string $varName): mixed
     {
+        /** @var class-string<UnitEnum> $type */
         $refEnum = new ReflectionEnum($type);
         assert(enum_exists($type));
 

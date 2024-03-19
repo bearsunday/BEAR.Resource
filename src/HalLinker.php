@@ -55,7 +55,7 @@ final class HalLinker
             $uri = uri_template($annotation->href, $body);
             $reverseUri = $this->getReverseLink($uri, []);
 
-            if (isset($body['_links'][$annotation->rel])) { // @phpstan-ignore-line
+            if (isset($body['_links'][$annotation->rel])) {
                 // skip if already difined links in ResourceObject
                 continue;
             }
