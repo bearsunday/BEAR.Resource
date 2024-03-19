@@ -11,7 +11,7 @@ final class DefaultParam implements ParamInterface
 {
     /** @param T $defaultValue */
     public function __construct(
-        private mixed $defaultValue,
+        private readonly mixed $defaultValue,
     ) {
     }
 

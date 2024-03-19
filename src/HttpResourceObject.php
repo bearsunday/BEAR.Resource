@@ -35,7 +35,7 @@ final class HttpResourceObject extends ResourceObject implements InvokeRequestIn
     private ResponseInterface $response;
 
     public function __construct(
-        private HttpClientInterface $client,
+        private readonly HttpClientInterface $client,
     ) {
         unset($this->code, $this->headers, $this->body, $this->view);
     }

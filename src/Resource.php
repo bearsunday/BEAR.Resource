@@ -33,11 +33,11 @@ final class Resource implements ResourceInterface
      * @param UriFactory       $uri     URI factory
      */
     public function __construct(
-        private FactoryInterface $factory,
-        private InvokerInterface $invoker,
-        private AnchorInterface $anchor,
-        private LinkerInterface $linker,
-        private UriFactory $uri,
+        private readonly FactoryInterface $factory,
+        private readonly InvokerInterface $invoker,
+        private readonly AnchorInterface $anchor,
+        private readonly LinkerInterface $linker,
+        private readonly UriFactory $uri,
     ) {
     }
 

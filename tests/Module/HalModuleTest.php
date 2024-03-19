@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BEAR\Resource\Module;
 
+use BEAR\Resource\Request;
 use BEAR\Resource\ResourceInterface;
 use FakeVendor\Sandbox\Module\AppModule;
 use PHPUnit\Framework\TestCase;
@@ -41,6 +42,7 @@ class HalModuleTest extends TestCase
     }
 }
 ';
+        assert($news instanceof Request);
         $this->assertSame($expect, (string) $news);
     }
 }

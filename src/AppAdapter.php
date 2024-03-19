@@ -22,9 +22,9 @@ final class AppAdapter implements AdapterInterface
      * @param string            $namespace Resource adapter namespace
      */
     public function __construct(
-        private InjectorInterface $injector,
+        private readonly InjectorInterface $injector,
         /** Resource adapter namespace */
-        private string $namespace,
+        private readonly string $namespace,
     ) {
     }
 

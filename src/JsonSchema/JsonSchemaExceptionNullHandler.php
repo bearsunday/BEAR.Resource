@@ -11,7 +11,7 @@ class JsonSchemaExceptionNullHandler implements JsonSchemaExceptionHandlerInterf
     /**
      * {@inheritDoc}
      */
-    public function handle(ResourceObject $ro, JsonSchemaException $e, string $schemaFile)
+    public function handle(ResourceObject $ro, JsonSchemaException $e, string $schemaFile): never
     {
         throw $e;
     }

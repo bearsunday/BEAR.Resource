@@ -36,12 +36,12 @@ final class JsonSchemaInterceptor implements JsonSchemaInterceptorInterface
 {
     public function __construct(
         #[Named('json_schema_dir')]
-        private string $schemaDir,
+        private readonly string $schemaDir,
         #[Named('json_validate_dir')]
-        private string $validateDir,
-        private JsonSchemaExceptionHandlerInterface $handler,
+        private readonly string $validateDir,
+        private readonly JsonSchemaExceptionHandlerInterface $handler,
         #[Named('json_schema_host')]
-        private string|null $schemaHost = null,
+        private readonly string|null $schemaHost = null,
     ) {
     }
 

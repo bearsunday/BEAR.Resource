@@ -13,7 +13,7 @@ use function sprintf;
 final class DevLogger implements LoggerInterface
 {
     public function __construct(
-        private PsrLoggerInterface $logger,
+        private readonly PsrLoggerInterface $logger,
     ) {
     }
 

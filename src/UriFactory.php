@@ -13,7 +13,7 @@ final class UriFactory
 {
     public function __construct(
         #[ContextScheme]
-        private string $schemaHost = 'page://self',
+        private readonly string $schemaHost = 'page://self',
     ) {
     }
 

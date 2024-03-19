@@ -13,7 +13,7 @@ use function uri_template;
 final class HalLinker
 {
     public function __construct(
-        private ReverseLinkerInterface $link,
+        private readonly ReverseLinkerInterface $link,
     ) {
     }
 

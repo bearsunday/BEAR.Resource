@@ -14,7 +14,7 @@ class ResourceObjectModule extends AbstractModule
 {
     /** @param iterable<class-string<ResourceObject>> $resourceObjects */
     public function __construct(
-        private iterable $resourceObjects,
+        private readonly iterable $resourceObjects,
     ) {
         parent::__construct();
     }
