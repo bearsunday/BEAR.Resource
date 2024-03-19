@@ -25,6 +25,7 @@ use BEAR\Resource\NullReverseLink;
 use BEAR\Resource\NullReverseLinker;
 use BEAR\Resource\OptionsMethods;
 use BEAR\Resource\OptionsRenderer;
+use BEAR\Resource\PhpClassInvoker;
 use BEAR\Resource\PrettyJsonRenderer;
 use BEAR\Resource\RenderInterface;
 use BEAR\Resource\Resource;
@@ -90,6 +91,7 @@ final class ResourceClientModule extends AbstractModule
         $this->bind(ReverseLinkerInterface::class)->to(NullReverseLinker::class);
         $this->bind(LoggerInterface::class)->to(NullLogger::class);
         $this->configureDeprecatedBindings();
+        $this->bind(PhpClassInvoker::class);
     }
 
     /** @psalm-suppress DeprecatedClass */
