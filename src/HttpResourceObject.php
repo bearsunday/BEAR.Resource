@@ -26,7 +26,7 @@ use function ucwords;
  * @property-read array<string, string> $body
  * @property-read string                $view
  */
-final class HttpResourceObject extends ResourceObject
+final class HttpResourceObject extends ResourceObject implements InvokeRequestInterface
 {
     /** {@inheritDoc} */
     public $body;
@@ -102,8 +102,9 @@ final class HttpResourceObject extends ResourceObject
         return $this->response->getContent();
     }
 
-    public function request(AbstractRequest $request): self
+    public function _invokeRequest(InvokerInterface $invoker, AbstractRequest $request): ResourceObject
     {
+        unset($invoker);
         $uri = $request->resourceObject->uri;
         $method = strtoupper($uri->method);
         $options = $method === 'GET' ? ['query' => $uri->query] : ['body' => $uri->query];

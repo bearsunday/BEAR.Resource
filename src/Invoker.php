@@ -15,9 +15,6 @@ final class Invoker implements InvokerInterface
      */
     public function invoke(AbstractRequest $request): ResourceObject
     {
-        if ($request->resourceObject instanceof HttpResourceObject) {
-            return $request->resourceObject->request($request);
-        }
-        return $this->classInvoker->invoke($request);
+        return $request->resourceObject->_invokeRequest($this->classInvoker, $request);
     }
 }

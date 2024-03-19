@@ -32,7 +32,7 @@ use const E_USER_WARNING;
  * @phpstan-implements ArrayAccess<string, mixed>
  * @phpstan-implements IteratorAggregate<(int|string), mixed>
  */
-abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, Countable, IteratorAggregate, JsonSerializable, Stringable
+abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, Countable, IteratorAggregate, JsonSerializable, Stringable, InvokeRequestInterface
 {
     /**
      * @var AbstractUri
@@ -260,5 +260,21 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     public function __clone()
     {
         $this->uri = clone $this->uri;
+    }
+
+    /**
+     * Invokes a request using the specified invoker and request object.
+     *
+     * Requests from resource clients are called and executed by this method. Unconventionally,
+     * underscores are added to method names to avoid conflicts with method names in classes that inherit from existing ResouceObjects.
+     *
+     * @param InvokerInterface $invoker The invoker to use for invoking the request.
+     * @param AbstractRequest  $request The request object to be invoked.
+     *
+     * @return ResourceObject The result of invoking the request.
+     */
+    public function _invokeRequest(InvokerInterface $invoker, AbstractRequest $request): ResourceObject
+    {
+        return $invoker->invoke($request);
     }
 }
