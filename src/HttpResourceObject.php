@@ -105,6 +105,12 @@ final class HttpResourceObject extends ResourceObject implements InvokeRequestIn
     public function _invokeRequest(InvokerInterface $invoker, AbstractRequest $request): ResourceObject
     {
         unset($invoker);
+
+        return $this->request($request);
+    }
+
+    public function request(AbstractRequest $request): self
+    {
         $uri = $request->resourceObject->uri;
         $method = strtoupper($uri->method);
         $options = $method === 'GET' ? ['query' => $uri->query] : ['body' => $uri->query];
