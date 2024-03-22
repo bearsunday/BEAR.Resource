@@ -11,18 +11,20 @@ final class InvokerFactory
     public function __invoke(string $schemaDir = ''): Invoker
     {
         return new Invoker(
-            new NamedParameter(
-                new NamedParamMetas(),
-                new Injector(),
-            ),
-            new ExtraMethodInvoker(
-                new OptionsRenderer(
-                    new OptionsMethods(
-                        $schemaDir,
+            new PhpClassInvoker(
+                new NamedParameter(
+                    new NamedParamMetas(),
+                    new Injector(),
+                ),
+                new ExtraMethodInvoker(
+                    new OptionsRenderer(
+                        new OptionsMethods(
+                            $schemaDir,
+                        ),
                     ),
                 ),
+                new NullLogger(),
             ),
-            new NullLogger(),
         );
     }
 }
