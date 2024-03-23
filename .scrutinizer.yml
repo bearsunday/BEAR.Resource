@@ -4,5 +4,9 @@ build:
             tests:
                 override:
                     - php-scrutinizer-run
+            environment:
+                php:
+                    version: 8.2
+
 filter:
     paths: ["src/*"]
