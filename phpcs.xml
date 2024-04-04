@@ -45,6 +45,7 @@
         <exclude name="SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration.MissingVariable"/>
         <exclude name="SlevomatCodingStandard.Commenting.UselessInheritDocComment.UselessInheritDocComment"/>
         <exclude name="Squiz.Commenting.FunctionComment.InvalidNoReturn"/>
+        <exclude name="PSR2.Methods.MethodDeclaration.Underscore"/>
         <!-- /Base -->
         <!-- Option -->
 <!--        <exclude name="SlevomatCodingStandard.ControlStructures.EarlyExit.EarlyExitNotUsed"/>-->
