@@ -14,6 +14,7 @@ use Ray\Aop\MethodInvocation;
 use function array_shift;
 use function assert;
 use function is_array;
+use function is_string;
 use function uri_template;
 
 final class EmbedInterceptor implements MethodInterceptor
@@ -113,8 +114,14 @@ final class EmbedInterceptor implements MethodInterceptor
     public function linkSelf(Request $request, ResourceObject $ro): void
     {
         $result = $request();
-        foreach ($result as $key => $value) {
-            $ro->body[$key] = $value;
+        assert(is_array($result->body));
+        /** @var mixed $value */
+        foreach ($result->body as $key => $value) {
+            assert(is_string($key));
+            /** @psalm-suppress MixedArrayAssignment */
+            $ro->body[$key] = $value; // @phpstan-ignore-line
         }
+
+        $ro->code = $result->code;
     }
 }

@@ -8,6 +8,8 @@ use BEAR\Resource\ResourceObject;
 
 class Child extends ResourceObject
 {
+    public $code = 100;
+
     public function onGet(string $id)
     {
         $this->body = [

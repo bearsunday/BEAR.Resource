@@ -42,6 +42,7 @@ class EmbedInterceptorTest extends TestCase
         $embeded = $this->resource->uri('app://self/bird/child')(['id' => 1]);
         $result = $this->resource->uri('app://self/bird/self-link')(['id' => 1]);
         $this->assertSame($result->body, $embeded->body);
+        $this->assertSame($result->code, $embeded->code);
     }
 
     public function testInvokeRelativePath(): BirdsRel
