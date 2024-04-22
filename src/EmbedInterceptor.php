@@ -14,10 +14,13 @@ use Ray\Aop\MethodInvocation;
 use function array_shift;
 use function assert;
 use function is_array;
+use function is_string;
 use function uri_template;
 
 final class EmbedInterceptor implements MethodInterceptor
 {
+    private const SELF_LINK = '_self';
+
     private readonly ResourceInterface $resource;
 
     public function __construct(
@@ -71,6 +74,12 @@ final class EmbedInterceptor implements MethodInterceptor
                     throw new LinkException($embed->rel); // @codeCoverageIgnore
                 }
 
+                if ($embed->rel === self::SELF_LINK) {
+                    $this->linkSelf($request, $ro);
+
+                    continue;
+                }
+
                 $ro->body[$embed->rel] = clone $request;
             } catch (BadRequestException $e) {
                 // wrap ResourceNotFound or Uri exception
@@ -100,5 +109,19 @@ final class EmbedInterceptor implements MethodInterceptor
         }
 
         return $namedParameters;
+    }
+
+    public function linkSelf(Request $request, ResourceObject $ro): void
+    {
+        $result = $request();
+        assert(is_array($result->body));
+        /** @var mixed $value */
+        foreach ($result->body as $key => $value) {
+            assert(is_string($key));
+            /** @psalm-suppress MixedArrayAssignment */
+            $ro->body[$key] = $value; // @phpstan-ignore-line
+        }
+
+        $ro->code = $result->code;
     }
 }
