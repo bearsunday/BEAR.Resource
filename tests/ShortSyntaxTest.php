@@ -21,7 +21,6 @@ class ShortSyntaxTest extends TestCase
         $this->resource = $injector->getInstance(ResourceInterface::class);
     }
 
-    /** @requires PHP 7.0.0 */
     public function testShortSyntax(): void
     {
         $ro = $this->resource->get('page://self/index', ['id' => 'koriym']);
@@ -29,7 +28,6 @@ class ShortSyntaxTest extends TestCase
         $this->assertSame('koriym', $ro->body);
     }
 
-    /** @requires PHP 7.0.0 */
     public function testShortSyntaxWithQuery(): void
     {
         $ro = $this->resource->get->uri('page://self/index?id=koriym')();
@@ -63,7 +61,6 @@ class ShortSyntaxTest extends TestCase
         $this->assertSame('bear', $ro->body);
     }
 
-    /** @requires PHP 7.0.0 */
     public function testShortSyntaxFunctionWithDefaultGetMethod(): void
     {
         $ro = $this->resource->uri('page://self/index')();

@@ -5,48 +5,43 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\ParameterException;
-use Doctrine\Common\Cache\ArrayCache;
 use FakeVendor\News\Resource\App\AttrWebContext;
-use Koriym\Attributes\AttributeReader;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
-use Ray\ServiceLocator\ServiceLocator;
-
-use function call_user_func_array;
 
 class AttrNamedParameterTest extends TestCase
 {
     private NamedParameter $params;
 
-    /** @var FakeAttrContext */
-    private $ro;
-
     protected function setUp(): void
     {
         parent::setUp();
-        $this->params = new NamedParameter(new NamedParamMetas(new AttributeReader()), new Injector());
-        $this->ro = new AttrWebContext();
+
+        $this->params = new NamedParameter(new NamedParamMetas(), new Injector());
     }
 
     public function testGetParameters(): void
     {
+        $object = new AttrWebContext();
         $namedArgs = ['id' => 1, 'name' => 'koriym'];
-        $args = $this->params->getParameters([$this->ro, 'onGet'], $namedArgs);
+        $args = $this->params->getParameters([$object, 'onGet'], $namedArgs);
         $this->assertSame(['id' => 1, 'name' => 'koriym'], $args);
     }
 
     public function testDefaultValue(): void
     {
+        $object = new AttrWebContext();
         $namedArgs = ['id' => 1];
-        $args = $this->params->getParameters([$this->ro, 'onGet'], $namedArgs);
+        $args = $this->params->getParameters([$object, 'onGet'], $namedArgs);
         $this->assertSame(['id' => 1, 'name' => 'koriym'], $args);
     }
 
     public function testParameterException(): void
     {
+        $object = new AttrWebContext();
         $this->expectException(ParameterException::class);
         $namedArgs = [];
-        $this->params->getParameters([$this->ro, 'onGet'], $namedArgs);
+        $this->params->getParameters([$object, 'onGet'], $namedArgs);
     }
 
     public function testParameterWebContext(): void
@@ -64,9 +59,10 @@ class AttrNamedParameterTest extends TestCase
             'env' => 'env_val',
             'form' => 'post_val',
             'query' => 'get_val',
-            'server' => 'server_val'
+            'server' => 'server_val',
         ];
-        $args = $this->params->getParameters([$this->ro, 'onPost'], []);
+        $object = new AttrWebContext();
+        $args = $this->params->getParameters([$object, 'onPost'], []);
         $this->assertSame($expected, $args);
     }
 
@@ -74,7 +70,8 @@ class AttrNamedParameterTest extends TestCase
     {
         $this->expectException(ParameterException::class);
         AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose([]);
-        $this->params->getParameters([$this->ro, 'onPut'], ['cookie' => 1]); // should be ignored
+        $object = new AttrWebContext();
+        $this->params->getParameters([$object, 'onPut'], ['cookie' => 1]); // should be ignored
     }
 
     public function testParameterWebContextDefault(): void
@@ -82,9 +79,10 @@ class AttrNamedParameterTest extends TestCase
         AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose([]);
         $expected = [
             'a' => 1,
-            'cookie' => 'default'
+            'cookie' => 'default',
         ];
-        $args = $this->params->getParameters([$this->ro, 'onDelete'], ['a' => 1]);
+        $object = new AttrWebContext();
+        $args = $this->params->getParameters([$object, 'onDelete'], ['a' => 1]);
         $this->assertSame($expected, $args);
     }
 
@@ -92,8 +90,7 @@ class AttrNamedParameterTest extends TestCase
     {
         $this->expectException(ParameterException::class);
         AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose([]);
-        $this->ro = new FakeParamResource();
-        $this->params->getParameters([$this->ro, 'onDelete'], []);
+        $object = new FakeParamResource();
+        $this->params->getParameters([$object, 'onDelete'], []);
     }
-
 }

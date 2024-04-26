@@ -55,7 +55,7 @@ class JsonSchemalModuleTest extends TestCase
     public function testBCValidateErrorException(JsonSchemaException $e)
     {
         $expected = '[age] Must have a minimum value of 20';
-        $this->assertContains($expected, $e->getMessage());
+        $this->assertStringContainsString($expected, $e->getMessage());
     }
 
     public function testException()
@@ -114,9 +114,9 @@ class JsonSchemalModuleTest extends TestCase
 
     private function getRo(string $class)
     {
-        $jsonSchema = dirname(__DIR__) . '/Fake/json_schema';
-        $jsonValidate = dirname(__DIR__) . '/Fake/json_validate';
-        $ro = (new Injector(new JsonSchemalModule($jsonSchema, $jsonValidate), $_ENV['TMP_DIR']))->getInstance($class);
+        $jsonSchema = dirname(__DIR__) . '/../tests/Fake/json_schema';
+        $jsonValidate = dirname(__DIR__) . '/../tests/Fake/json_validate';
+        $ro = (new Injector(new JsonSchemalModule($jsonSchema, $jsonValidate)))->getInstance($class);
         /* @var $ro FakeUser */
         $ro->uri = new Uri('app://self/user?id=1');
 

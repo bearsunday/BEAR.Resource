@@ -12,7 +12,7 @@ use BEAR\Resource\JsonSchemaExceptionNullHandler;
 use BEAR\Resource\ResourceObject;
 use Ray\Di\AbstractModule;
 
-final class JsonSchemaModule extends AbstractModule
+class JsonSchemaModule extends AbstractModule
 {
     /**
      * @param string $jsonSchemaDir   Json-schema json file directory
