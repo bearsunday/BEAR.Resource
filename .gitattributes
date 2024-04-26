@@ -1,15 +1,17 @@
 /tests              export-ignore
-/tests-php8         export-ignore
+/tests-deprecated   export-ignore
 /demo               export-ignore
-/vendor-bin         export-ignore
 /.gitattributes     export-ignore
 /.gitignore         export-ignore
 /.scrutinizer.yml   export-ignore
+/codecov.yml        export-ignore
+/composer-require-checker.json export-ignore
 /phpcs.xml          export-ignore
 /phpmd.xml          export-ignore
 /phpstan.neon       export-ignore
 /phpunit.xml.dist   export-ignore
 /psalm.xml          export-ignore
+/rector.php         export-ignore
 å
 # Configure diff output for .php and .phar files.
 *.php diff=php
