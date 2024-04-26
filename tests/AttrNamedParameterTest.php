@@ -5,25 +5,20 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\ParameterException;
-use Doctrine\Common\Cache\ArrayCache;
 use FakeVendor\News\Resource\App\AttrWebContext;
 use Koriym\Attributes\AttributeReader;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
-use Ray\ServiceLocator\ServiceLocator;
-
-use function call_user_func_array;
 
 class AttrNamedParameterTest extends TestCase
 {
     private NamedParameter $params;
-
-    /** @var FakeAttrContext */
-    private $ro;
+    private ResourceObject $ro;
 
     protected function setUp(): void
     {
         parent::setUp();
+
         $this->params = new NamedParameter(new NamedParamMetas(new AttributeReader()), new Injector());
         $this->ro = new AttrWebContext();
     }
@@ -64,7 +59,7 @@ class AttrNamedParameterTest extends TestCase
             'env' => 'env_val',
             'form' => 'post_val',
             'query' => 'get_val',
-            'server' => 'server_val'
+            'server' => 'server_val',
         ];
         $args = $this->params->getParameters([$this->ro, 'onPost'], []);
         $this->assertSame($expected, $args);
@@ -82,7 +77,7 @@ class AttrNamedParameterTest extends TestCase
         AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose([]);
         $expected = [
             'a' => 1,
-            'cookie' => 'default'
+            'cookie' => 'default',
         ];
         $args = $this->params->getParameters([$this->ro, 'onDelete'], ['a' => 1]);
         $this->assertSame($expected, $args);
@@ -95,5 +90,4 @@ class AttrNamedParameterTest extends TestCase
         $this->ro = new FakeParamResource();
         $this->params->getParameters([$this->ro, 'onDelete'], []);
     }
-
 }
