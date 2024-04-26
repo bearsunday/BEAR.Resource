@@ -56,7 +56,8 @@
             "BEAR\\Resource\\": [
                 "tests/",
                 "tests-php8/",
-                "tests/Fake/"
+                "tests/Fake/",
+                "tests-deprecated"
             ],
             "FakeVendor\\Sandbox\\": "tests/Fake/FakeVendor/Sandbox/",
             "FakeVendor\\Blog\\": "tests/Fake/FakeVendor/Blog/src",
