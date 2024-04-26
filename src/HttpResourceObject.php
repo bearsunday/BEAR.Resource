@@ -102,6 +102,7 @@ final class HttpResourceObject extends ResourceObject implements InvokeRequestIn
         return $this->response->getContent();
     }
 
+    /** @SuppressWarnings(PHPMD.CamelCaseMethodName) */
     public function _invokeRequest(InvokerInterface $invoker, AbstractRequest $request): ResourceObject
     {
         unset($invoker);
