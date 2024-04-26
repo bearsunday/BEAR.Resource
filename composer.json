@@ -23,8 +23,8 @@
         "ray/di": "^2.13",
         "ray/web-param-module": "^2.1.1",
         "rize/uri-template": "^0.3",
-        "symfony/http-client": "^5.2",
-        "symfony/http-client-contracts": "^2.3",
+        "symfony/http-client": "^5.2 || ^6.0 || ^7.0",
+        "symfony/http-client-contracts": "^2.3 || ^3.0",
         "nikic/php-parser": "^4.10",
         "symfony/polyfill-php81": "^1.23"
     },
