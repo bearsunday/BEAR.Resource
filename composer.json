@@ -55,13 +55,12 @@
         "psr-4": {
             "BEAR\\Resource\\": [
                 "tests/",
-                "tests-php8/",
                 "tests/Fake/",
                 "tests-deprecated"
             ],
             "FakeVendor\\Sandbox\\": "tests/Fake/FakeVendor/Sandbox/",
             "FakeVendor\\Blog\\": "tests/Fake/FakeVendor/Blog/src",
-            "FakeVendor\\News\\": "tests-php8/Fake/News/src"
+            "FakeVendor\\News\\": "tests/Fake/FakeVendor/News/src"
         },
         "files": ["tests/Fake/AppInjector.php"]
     },
