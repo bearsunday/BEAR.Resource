@@ -112,7 +112,6 @@ class NamedParameterTest extends TestCase
         $this->assertSame(['userId' => 'koriym', 'userRole' => 'lead'], (array) $ro->body);
     }
 
-    /** @requires PHP >= 8.1 */
     public function testEnumParam(): void
     {
         $ro = new EnumParam();
@@ -130,7 +129,6 @@ class NamedParameterTest extends TestCase
         );
     }
 
-    /** @requires PHP >= 8.1 */
     public function testEnumInvlidType(): void
     {
         $this->expectException(ParameterEnumTypeException::class);
@@ -140,7 +138,6 @@ class NamedParameterTest extends TestCase
         $this->params->getParameters([$ro, 'onGet'], $params);
     }
 
-    /** @requires PHP >= 8.1 */
     public function testWithResourceClient(): void
     {
         $resource = (new Injector(new ResourceModule('FakeVendor\Sandbox')))->getInstance(ResourceInterface::class);
@@ -150,7 +147,6 @@ class NamedParameterTest extends TestCase
         $this->assertSame(['stringBacked' => 'foo', 'intBacked' => 1], $body);
     }
 
-    /** @requires PHP >= 8.1 */
     public function testEnumParamWithResourceClient(): void
     {
         $this->expectException(ParameterInvalidEnumException::class);
@@ -160,7 +156,6 @@ class NamedParameterTest extends TestCase
         $resource->get('page://self/enum-param', $params);
     }
 
-    /** @requires PHP >= 8.1 */
     public function testNotBackedEnumParamWithResourceClient(): void
     {
         $this->expectException(NotBackedEnumException::class);
