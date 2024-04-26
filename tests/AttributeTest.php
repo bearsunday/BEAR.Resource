@@ -52,6 +52,7 @@ class AttributeTest extends TestCase
         $this->assertSame(LinkType::SELF_LINK, $request->links[0]->type);
         $ro = $request();
         $this->assertSame(200, $ro->code);
+        $this->assertIsArray($ro->body);
         $this->assertArrayHasKey('event', $ro->body);
         $this->assertSame('2021/7/23', $ro->body['event']);
     }
