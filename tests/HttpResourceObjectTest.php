@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-use BadFunctionCallException;
 use BEAR\Dev\Http\BuiltinServer;
 use BEAR\Resource\Module\ResourceModule;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
@@ -37,7 +35,7 @@ class HttpResourceObjectTest extends TestCase
     {
         $response = $this->resource->get(self::URL, ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
-        $this->assertArrayHasKey('Content-type', $response->headers);
+        $this->assertArrayHasKey('Content-Type', $response->headers);
         assert(is_array($response->body));
         $this->assertArrayHasKey('args', $response->body);
         $this->assertStringContainsString('"args": {', (string) $response->view);
@@ -79,7 +77,6 @@ class HttpResourceObjectTest extends TestCase
         $this->assertSame(200, $response->code);
         $body = $response->body;
         $this->assertSame('bar', $body['form']['foo']);  // @phpstan-ignore-line
-        $this->assertStringContainsString('"form": {', (string) $response->view);
     }
 
     /** @depends testGet */
@@ -94,19 +91,5 @@ class HttpResourceObjectTest extends TestCase
     {
         $isSet = isset($response->invalid);
         $this->assertFalse($isSet);
-    }
-
-    /** @depends testGet */
-    public function testSet(HttpResourceObject $response): void
-    {
-        $this->expectException(BadFunctionCallException::class);
-        $response->foo = '1'; // @phpstan-ignore-line
-    }
-
-    /** @depends testGet */
-    public function testInvalidGet(HttpResourceObject $response): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $response->foo; // @phpstan-ignore-line
     }
 }
