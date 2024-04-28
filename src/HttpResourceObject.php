@@ -67,7 +67,7 @@ final class HttpResourceObject extends ResourceObject implements InvokeRequestIn
         $clientOptions = isset($uri->query['_options']) && is_array($uri->query['_options']) ? $uri->query['_options'] : [];
         $options += $clientOptions;
         /** @var array<string, string> $options */
-        $this->setProps($this, $method, (string) $uri, $options);
+        $this->httpRequest($this, $method, (string) $uri, $options);
 
         return $this;
     }
@@ -87,7 +87,7 @@ final class HttpResourceObject extends ResourceObject implements InvokeRequestIn
      *
      * @return void
      */
-    private function setProps(ResourceObject $ro, string $method, string $uri, array $options = []): void //@phpstan-ignore-line
+    private function httpRequest(ResourceObject $ro, string $method, string $uri, array $options = []): void //@phpstan-ignore-line
     {
         $curl = curl_init();
         // Set Request Method
