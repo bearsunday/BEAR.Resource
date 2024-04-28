@@ -1,10 +1,41 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BEAR\Resource;
 
 use CURLFile;
 
-final class HttpAccessCurl
+use function array_keys;
+use function array_map;
+use function count;
+use function curl_close;
+use function curl_exec;
+use function curl_getinfo;
+use function curl_init;
+use function curl_setopt;
+use function explode;
+use function http_build_query;
+use function is_array;
+use function json_decode;
+use function json_encode;
+use function parse_str;
+use function strpos;
+use function strtolower;
+use function substr;
+use function trim;
+
+use const CURLINFO_CONTENT_TYPE;
+use const CURLINFO_HEADER_SIZE;
+use const CURLINFO_HTTP_CODE;
+use const CURLOPT_CUSTOMREQUEST;
+use const CURLOPT_HEADER;
+use const CURLOPT_HTTPHEADER;
+use const CURLOPT_POSTFIELDS;
+use const CURLOPT_RETURNTRANSFER;
+use const CURLOPT_URL;
+
+final class HttpRequestCurl
 {
     /**
      * Set the properties of a ResourceObject.
@@ -16,7 +47,24 @@ final class HttpAccessCurl
      *
      * @return void
      */
-    public function httpRequest(ResourceObject $ro, string $method, string $uri, array $options = []): void //@phpstan-ignore-line
+
+    /**
+     * Sends a HTTP request using cURL
+     *
+     * @param string                                                      $method  The HTTP method (GET, POST, PUT, DELETE, etc.).
+     * @param string                                                      $uri     The URL of the request.
+     * @param array<null>|array{"body": string, "headers": array<string>} $options Additional options for the request.
+     *                       - headers: An array of headers to be sent with the request.
+     *                       - body: The request body.
+     *
+     * @return array{body: array<array-key, mixed>, code: int, headers: array<string, string>, view: string}
+     *      An associative array containing the response information.
+     *     - code: The HTTP response code.
+     *     - headers: An array of response headers.
+     *     - body: The parsed response body.
+     *     - view: The raw response body.
+     */
+    public function request(string $method, string $uri, array $options = []): array //@phpstan-ignore-line
     {
         $curl = curl_init();
         // Set Request Method
@@ -26,7 +74,6 @@ final class HttpAccessCurl
         $requestHeaders = [];
         if (isset($options['headers']) && is_array($options['headers'])) {
             foreach ($options['headers'] as $header) {
-                assert(is_string($header));
                 $parts = explode(':', $header, 2);
                 if (count($parts) !== 2) {
                     continue;
@@ -36,20 +83,21 @@ final class HttpAccessCurl
             }
         }
 
-        if (!empty($requestHeaders)) {
+        if (! empty($requestHeaders)) {
             curl_setopt($curl, CURLOPT_HTTPHEADER, array_map(static function ($key, $value) {
                 return "$key: $value";
             }, array_keys($requestHeaders), $requestHeaders));
         }
 
         if (isset($options['body'])) {
+            /** @var string $optionBody */
             $optionBody = $options['body'];
             $contentType = $requestHeaders['Content-Type'] ?? 'application/x-www-form-urlencoded';
             $strippedContentType = strtolower($contentType);
             $isJson = strpos($strippedContentType, 'application/json') !== false;
-            $isUrlEncoded = !$isJson && strpos($strippedContentType, 'application/x-www-form-urlencoded') !== false;
-            $isMultipart = !$isJson && !$isUrlEncoded && strpos($strippedContentType, 'multipart/form-data') !== false;
-            $isNotDetermined = !$isJson && !$isUrlEncoded && !$isMultipart;
+            $isUrlEncoded = ! $isJson && strpos($strippedContentType, 'application/x-www-form-urlencoded') !== false;
+            $isMultipart = ! $isJson && ! $isUrlEncoded && strpos($strippedContentType, 'multipart/form-data') !== false;
+            $isNotDetermined = ! $isJson && ! $isUrlEncoded && ! $isMultipart;
             if ($isJson || $isNotDetermined) {
                 curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($optionBody));
             }
@@ -62,10 +110,9 @@ final class HttpAccessCurl
             if ($isMultipart) {
                 $multipartBody = [];
                 $body = $options['body'];
-                assert(is_array($body));
                 /** @psalm-suppress MixedAssignment */
                 foreach ($body as $key => $value) {
-                    $multipartBody[$key] = $value instanceof CURLFile ? $value : (string)$value;
+                    $multipartBody[$key] = $value instanceof CURLFile ? $value : $value;
                 }
 
                 curl_setopt($curl, CURLOPT_POSTFIELDS, $multipartBody);
@@ -74,9 +121,9 @@ final class HttpAccessCurl
 
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_HEADER, true);
-        $response = (string)curl_exec($curl);
-        $responseCode = (int)curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        $headerSize = (int)curl_getinfo($curl, CURLINFO_HEADER_SIZE);
+        $response = (string) curl_exec($curl);
+        $responseCode = (int) curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        $headerSize = (int) curl_getinfo($curl, CURLINFO_HEADER_SIZE);
         $responseHeaders = substr($response, 0, $headerSize);
         $view = substr($response, $headerSize);
         $responseHeadersArray = [];
@@ -91,7 +138,7 @@ final class HttpAccessCurl
         }
 
         $responseBody = [];
-        $contentType = (string)curl_getinfo($curl, CURLINFO_CONTENT_TYPE);
+        $contentType = (string) curl_getinfo($curl, CURLINFO_CONTENT_TYPE);
         if (strpos(strtolower($contentType), 'application/json') !== false) {
             /** @var array<string, mixed> $responseBody */
             $responseBody = json_decode($view, true);
@@ -100,9 +147,12 @@ final class HttpAccessCurl
         }
 
         curl_close($curl);
-        $ro->code = $responseCode;
-        $ro->headers = $responseHeadersArray;
-        $ro->body = $responseBody;
-        $ro->view = $view;
+
+        return [
+            'code' => $responseCode,
+            'headers' => $responseHeadersArray,
+            'body' => $responseBody,
+            'view' => $view,
+        ];
     }
 }

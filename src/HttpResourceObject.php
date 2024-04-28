@@ -4,39 +4,8 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-use CURLFile;
-
-use function array_keys;
-use function array_map;
-use function assert;
-use function count;
-use function curl_close;
-use function curl_exec;
-use function curl_getinfo;
-use function curl_init;
-use function curl_setopt;
-use function explode;
-use function http_build_query;
 use function is_array;
-use function is_string;
-use function json_decode;
-use function json_encode;
-use function parse_str;
-use function strpos;
-use function strtolower;
 use function strtoupper;
-use function substr;
-use function trim;
-
-use const CURLINFO_CONTENT_TYPE;
-use const CURLINFO_HEADER_SIZE;
-use const CURLINFO_HTTP_CODE;
-use const CURLOPT_CUSTOMREQUEST;
-use const CURLOPT_HEADER;
-use const CURLOPT_HTTPHEADER;
-use const CURLOPT_POSTFIELDS;
-use const CURLOPT_RETURNTRANSFER;
-use const CURLOPT_URL;
 
 /**
  * @method HttpResourceObject get(AbstractUri|string $uri, array $params = [])
@@ -52,11 +21,9 @@ use const CURLOPT_URL;
  */
 final class HttpResourceObject extends ResourceObject implements InvokeRequestInterface
 {
-    private HttpAccessCurl $httpAccessCurl;
-
-    public function __construct()
-    {
-        $this->httpAccessCurl = new HttpAccessCurl($this);
+    public function __construct(
+        private HttpRequestCurl $httpRequest,
+    ) {
     }
 
     public function _invokeRequest(InvokerInterface $invoker, AbstractRequest $request): ResourceObject
@@ -74,7 +41,12 @@ final class HttpResourceObject extends ResourceObject implements InvokeRequestIn
         $clientOptions = isset($uri->query['_options']) && is_array($uri->query['_options']) ? $uri->query['_options'] : [];
         $options += $clientOptions;
         /** @var array<string, string> $options */
-        $this->httpRequest($this, $method, (string) $uri, $options);
+        [
+            'code' => $this->code,
+            'headers' => $this->headers,
+            'body' => $this->body,
+            'view' => $this->view,
+        ] =  $this->httpRequest->request($method, (string) $uri, $options);
 
         return $this;
     }
@@ -82,20 +54,5 @@ final class HttpResourceObject extends ResourceObject implements InvokeRequestIn
     public function __toString(): string
     {
         return $this->view;
-    }
-
-    /**
-     * Set the properties of a ResourceObject.
-     *
-     * @param ResourceObject              $ro      The ResourceObject to set the properties for.
-     * @param string                      $method  The HTTP method to use for the request.
-     * @param string                      $uri     The URL to send the request to.
-     * @param array<string, string|array> $options Additional options for the request (optional).
-     *
-     * @return void
-     */
-    private function httpRequest(ResourceObject $ro, string $method, string $uri, array $options = []): void //@phpstan-ignore-line
-    {
-        $this->httpAccessCurl->httpRequest($ro, $method, $uri, $options);
     }
 }
