@@ -23,8 +23,7 @@
         "ray/aop": "^2.12.3",
         "ray/di": "^2.13",
         "ray/web-param-module": "^2.1.1",
-        "rize/uri-template": "^0.3",
-        "nikic/php-parser": "^4.10"
+        "rize/uri-template": "^0.3"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5.10",
