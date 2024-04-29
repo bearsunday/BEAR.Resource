@@ -15,6 +15,7 @@ use function curl_init;
 use function curl_setopt;
 use function explode;
 use function http_build_query;
+use function is_array;
 use function json_decode;
 use function json_encode;
 use function parse_str;
@@ -63,13 +64,11 @@ final class HttpRequestCurl
     public function request(string $method, string $uri, array $options = []): array
     {
         $curl = $this->initializeCurl($method, $uri, $options);
-        assert($curl instanceof CurlHandle);
         $response = (string) curl_exec($curl);
         $code = (int) curl_getinfo($curl, CURLINFO_HTTP_CODE);
         $headerSize = (int) curl_getinfo($curl, CURLINFO_HEADER_SIZE);
         $headerString = substr($response, 0, $headerSize);
         $view = substr($response, $headerSize);
-        /** @var array<string, string> $headers */
         $headers = $this->parseResponseHeaders($headerString);
         curl_close($curl);
 
@@ -84,17 +83,16 @@ final class HttpRequestCurl
     }
 
     /** @param RequestOptions $options $ */
-    private function initializeCurl(string $method, string $uri, array $options): CurlHandle|bool
+    private function initializeCurl(string $method, string $uri, array $options): CurlHandle
     {
         $curl = curl_init();
-        assert($curl instanceof CurlHandle);
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
         curl_setopt($curl, CURLOPT_URL, $uri);
 
         $requestHeaders = [];
         if (isset($options['headers'])) {
             $optionsHeaders = $options['headers'];
-            /** @psalm-trace  $optionsHeaders */
+            assert(is_array($optionsHeaders));
             $requestHeaders = $this->headersFromOptions($optionsHeaders);
             if (! empty($requestHeaders)) {
                 curl_setopt($curl, CURLOPT_HTTPHEADER, $requestHeaders);
@@ -135,6 +133,7 @@ final class HttpRequestCurl
         return $requestHeaders;
     }
 
+    /** @return array<string, string> */
     private function parseResponseHeaders(string $responseHeaders): array
     {
         $responseHeadersArray = [];
@@ -153,6 +152,7 @@ final class HttpRequestCurl
         return $responseHeadersArray;
     }
 
+    /** @return array<mixed> */
     private function parseBody(CurlHandle $curl, string $view): array
     {
         $responseBody = [];
@@ -166,6 +166,7 @@ final class HttpRequestCurl
         return $responseBody;
     }
 
+    /** @param array<string, mixed>|string $optionBody */
     private function setCurlRequestPayload(string $contentType, CurlHandle $curl, string|array $optionBody): void
     {
         $strippedContentType = strtolower($contentType);
