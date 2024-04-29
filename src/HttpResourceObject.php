@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-use function is_array;
 use function strtoupper;
 
 /**
@@ -22,10 +21,11 @@ use function strtoupper;
 final class HttpResourceObject extends ResourceObject implements InvokeRequestInterface
 {
     public function __construct(
-        private HttpRequestCurl $httpRequest,
+        private HttpRequestInterface $httpRequest,
     ) {
     }
 
+    /** @SuppressWarnings(PHPMD.CamelCaseMethodName) */
     public function _invokeRequest(InvokerInterface $invoker, AbstractRequest $request): ResourceObject
     {
         unset($invoker);
@@ -37,17 +37,12 @@ final class HttpResourceObject extends ResourceObject implements InvokeRequestIn
     {
         $uri = $request->resourceObject->uri;
         $method = strtoupper($uri->method);
-        $options = $method === 'GET' ? ['query' => $uri->query] : ['body' => $uri->query];
-        $clientOptions = isset($uri->query['_options']) && is_array($uri->query['_options']) ? $uri->query['_options'] : [];
-        $options += $clientOptions;
-
-        /** @var array<string, string> $options */
         [
             'code' => $this->code,
             'headers' => $this->headers,
             'body' => $this->body,
             'view' => $this->view,
-        ] =  $this->httpRequest->request($method, (string) $uri, $uri->query, $options);
+        ] =  $this->httpRequest->request($method, (string) $uri, $uri->query);
 
         return $this;
     }

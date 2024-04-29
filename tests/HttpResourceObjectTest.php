@@ -7,6 +7,7 @@ namespace BEAR\Resource;
 use BEAR\Dev\Http\BuiltinServer;
 use BEAR\Resource\Module\ResourceModule;
 use PHPUnit\Framework\TestCase;
+use Ray\Di\AbstractModule;
 use Ray\Di\Injector;
 
 use function assert;
@@ -91,5 +92,26 @@ class HttpResourceObjectTest extends TestCase
     {
         $isSet = isset($response->invalid);
         $this->assertFalse($isSet);
+    }
+
+    /** @notest */
+    public function testHtmlResponse(): void
+    {
+        $module = new ResourceModule('FakeVendor\Sandbox');
+        $module->override(new class extends AbstractModule {
+            protected function configure(): void
+            {
+                $this->bind(HttpRequestHeaders::class)->toInstance(new HttpRequestHeaders(['x-request-header1: 1', 'Content-Type: text/html']));
+            }
+        });
+        $injector = new Injector($module, __DIR__ . '/tmp');
+
+        $this->resource = $injector->getInstance(ResourceInterface::class);
+        self::$server = new BuiltinServer(self::HOST, __DIR__ . '/Server/index.php?media=html');
+        self::$server->start();
+        $response = $this->resource->get(self::URL);
+        $this->assertSame(200, $response->code);
+        $this->assertSame('<html></html>', (string) $response->view);
+        $this->assertSame([], $response->body);
     }
 }
