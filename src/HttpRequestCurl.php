@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+use CurlHandle;
+
 use function array_keys;
 use function array_map;
 use function count;
@@ -91,18 +93,7 @@ final class HttpRequestCurl
             /** @var string $optionBody */
             $optionBody = $options['body'];
             $contentType = $requestHeaders['Content-Type'] ?? 'application/x-www-form-urlencoded';
-            $strippedContentType = strtolower($contentType);
-            $isJson = strpos($strippedContentType, 'application/json') !== false;
-            $isUrlEncoded = ! $isJson && strpos($strippedContentType, 'application/x-www-form-urlencoded') !== false;
-            $isNotDetermined = ! $isJson && ! $isUrlEncoded;
-            if ($isJson || $isNotDetermined) {
-                curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($optionBody));
-            }
-
-            if ($isUrlEncoded) {
-                /** @var array<string, string> $optionBody */
-                curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($optionBody));
-            }
+            $this->setCurlRequestPayload($contentType, $curl, $optionBody);
         }
 
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -140,5 +131,23 @@ final class HttpRequestCurl
             'body' => $responseBody,
             'view' => $view,
         ];
+    }
+
+    private function setCurlRequestPayload(mixed $contentType, CurlHandle|bool $curl, string $optionBody): void
+    {
+        $strippedContentType = strtolower($contentType);
+        $isJson = strpos($strippedContentType, 'application/json') !== false;
+        $isUrlEncoded = ! $isJson && strpos($strippedContentType, 'application/x-www-form-urlencoded') !== false;
+        $isNotDetermined = ! $isJson && ! $isUrlEncoded;
+        if ($isJson || $isNotDetermined) {
+            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($optionBody));
+        }
+
+        if (! $isUrlEncoded) {
+            return;
+        }
+
+        /** @var array<string, string> $optionBody */
+        curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($optionBody));
     }
 }
