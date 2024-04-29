@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-use CURLFile;
-
 use function array_keys;
 use function array_map;
 use function count;
@@ -64,7 +62,7 @@ final class HttpRequestCurl
      *     - body: The parsed response body.
      *     - view: The raw response body.
      */
-    public function request(string $method, string $uri, array $options = []): array //@phpstan-ignore-line
+    public function request(string $method, string $uri, array $options = []): array
     {
         $curl = curl_init();
         // Set Request Method
@@ -96,8 +94,7 @@ final class HttpRequestCurl
             $strippedContentType = strtolower($contentType);
             $isJson = strpos($strippedContentType, 'application/json') !== false;
             $isUrlEncoded = ! $isJson && strpos($strippedContentType, 'application/x-www-form-urlencoded') !== false;
-            $isMultipart = ! $isJson && ! $isUrlEncoded && strpos($strippedContentType, 'multipart/form-data') !== false;
-            $isNotDetermined = ! $isJson && ! $isUrlEncoded && ! $isMultipart;
+            $isNotDetermined = ! $isJson && ! $isUrlEncoded;
             if ($isJson || $isNotDetermined) {
                 curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($optionBody));
             }
@@ -105,17 +102,6 @@ final class HttpRequestCurl
             if ($isUrlEncoded) {
                 /** @var array<string, string> $optionBody */
                 curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($optionBody));
-            }
-
-            if ($isMultipart) {
-                $multipartBody = [];
-                $body = $options['body'];
-                /** @psalm-suppress MixedAssignment */
-                foreach ($body as $key => $value) {
-                    $multipartBody[$key] = $value instanceof CURLFile ? $value : $value;
-                }
-
-                curl_setopt($curl, CURLOPT_POSTFIELDS, $multipartBody);
             }
         }
 
