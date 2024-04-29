@@ -40,13 +40,14 @@ final class HttpResourceObject extends ResourceObject implements InvokeRequestIn
         $options = $method === 'GET' ? ['query' => $uri->query] : ['body' => $uri->query];
         $clientOptions = isset($uri->query['_options']) && is_array($uri->query['_options']) ? $uri->query['_options'] : [];
         $options += $clientOptions;
+
         /** @var array<string, string> $options */
         [
             'code' => $this->code,
             'headers' => $this->headers,
             'body' => $this->body,
             'view' => $this->view,
-        ] =  $this->httpRequest->request($method, (string) $uri, $options);
+        ] =  $this->httpRequest->request($method, (string) $uri, $uri->query, $options);
 
         return $this;
     }

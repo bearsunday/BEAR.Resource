@@ -17,7 +17,6 @@ use function explode;
 use function http_build_query;
 use function is_array;
 use function json_decode;
-use function json_encode;
 use function parse_str;
 use function strpos;
 use function strtolower;
@@ -45,6 +44,10 @@ use const CURLOPT_URL;
  */
 final class HttpRequestCurl
 {
+    public function __construct()
+    {
+    }
+
     /**
      * Sends a HTTP request using cURL
      *
@@ -61,9 +64,10 @@ final class HttpRequestCurl
      *     - body: The parsed response body.
      *     - view: The raw response body.
      */
-    public function request(string $method, string $uri, array $options = []): array
+    public function request(string $method, string $uri, array $query, array $options = []): array
     {
-        $curl = $this->initializeCurl($method, $uri, $options);
+        $body = http_build_query($query);
+        $curl = $this->initializeCurl($method, $uri, $body, $options);
         $response = (string) curl_exec($curl);
         $code = (int) curl_getinfo($curl, CURLINFO_HTTP_CODE);
         $headerSize = (int) curl_getinfo($curl, CURLINFO_HEADER_SIZE);
@@ -83,7 +87,7 @@ final class HttpRequestCurl
     }
 
     /** @param RequestOptions $options $ */
-    private function initializeCurl(string $method, string $uri, array $options): CurlHandle
+    private function initializeCurl(string $method, string $uri, string $body, array $options): CurlHandle
     {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
@@ -99,10 +103,9 @@ final class HttpRequestCurl
             }
         }
 
-        if (isset($options['body'])) {
-            $optionBody = $options['body'];
-            $contentType = $requestHeaders['content-type'] ?? $requestHeaders['Content-Type'] ?? 'application/x-www-form-urlencoded';
-            $this->setCurlRequestPayload($contentType, $curl, $optionBody);
+        if ($body !== '') {
+            // Set the request body
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $body);
         }
 
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -166,24 +169,5 @@ final class HttpRequestCurl
         }
 
         return $responseBody;
-    }
-
-    /** @param array<string, mixed>|string $optionBody */
-    private function setCurlRequestPayload(string $contentType, CurlHandle $curl, string|array $optionBody): void
-    {
-        $strippedContentType = strtolower($contentType);
-        $isJson = strpos($strippedContentType, 'application/json') !== false;
-        $isUrlEncoded = ! $isJson && strpos($strippedContentType, 'application/x-www-form-urlencoded') !== false;
-        $isNotDetermined = ! $isJson && ! $isUrlEncoded;
-        if ($isJson || $isNotDetermined) {
-            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($optionBody));
-        }
-
-        if (! $isUrlEncoded) {
-            return;
-        }
-
-        /** @var array<string, string> $optionBody */
-        curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($optionBody));
     }
 }
