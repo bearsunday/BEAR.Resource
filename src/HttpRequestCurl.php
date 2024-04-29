@@ -40,7 +40,7 @@ use const CURLOPT_URL;
  * Sends a HTTP request using cURL
  *
  * @psalm-type RequestOptions = array<null>|array{"body?": string, "headers?": array<string, string>}
- * @psalm-type Headers = array<string, string>
+ * @psalm-type RequestHeaders = array<string, string>
  * @psalm-type Body = array<mixed>
  */
 final class HttpRequestCurl
@@ -158,8 +158,10 @@ final class HttpRequestCurl
         $responseBody = [];
         $contentType = (string) curl_getinfo($curl, CURLINFO_CONTENT_TYPE);
         if (strpos(strtolower($contentType), 'application/json') !== false) {
-            $responseBody = (array) json_decode($view, true);
-        } elseif (strpos(strtolower($contentType), 'application/x-www-form-urlencoded') !== false) {
+            return (array) json_decode($view, true);
+        }
+
+        if (strpos(strtolower($contentType), 'application/x-www-form-urlencoded') !== false) {
             parse_str($view, $responseBody);
         }
 
