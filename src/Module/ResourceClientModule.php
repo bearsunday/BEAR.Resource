@@ -97,7 +97,7 @@ final class ResourceClientModule extends AbstractModule
     /** @psalm-suppress DeprecatedClass */
     private function configureDeprecatedBindings(): void
     {
-        $this->bind(HalLink::class); // @phpstan-ignore
-        $this->bind(ReverseLinkInterface::class)->to(NullReverseLink::class); // @phpstan-ignore
+        $this->bind(HalLink::class);
+        $this->bind(ReverseLinkInterface::class)->to(NullReverseLink::class);
     }
 }
