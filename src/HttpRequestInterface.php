@@ -10,7 +10,7 @@ namespace BEAR\Resource;
 interface HttpRequestInterface
 {
     /**
-     * Sends a HTTP request using cURL
+     * Sends a HTTP request
      *
      * @param string               $method The HTTP method (GET, POST, PUT, DELETE, etc.).
      * @param string               $uri    The URL of the request.
