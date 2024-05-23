@@ -30,7 +30,6 @@ use const CURLOPT_POSTFIELDS;
 use const CURLOPT_RETURNTRANSFER;
 use const CURLOPT_URL;
 
-// ... Other code is omitted for brevity
 
 /**
  * Sends a HTTP request using cURL
