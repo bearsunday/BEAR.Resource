@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 /**
- * Sends a HTTP request using cURL
+ * Sends a HTTP request
  */
 interface HttpRequestInterface
 {
