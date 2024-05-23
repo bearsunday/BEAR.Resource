@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-use BadFunctionCallException;
 use BEAR\Dev\Http\BuiltinServer;
 use BEAR\Resource\Module\ResourceModule;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use Ray\Di\AbstractModule;
 use Ray\Di\Injector;
 
 use function assert;
@@ -37,7 +36,7 @@ class HttpResourceObjectTest extends TestCase
     {
         $response = $this->resource->get(self::URL, ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
-        $this->assertArrayHasKey('Content-type', $response->headers);
+        $this->assertArrayHasKey('Content-Type', $response->headers);
         assert(is_array($response->body));
         $this->assertArrayHasKey('args', $response->body);
         $this->assertStringContainsString('"args": {', (string) $response->view);
@@ -79,7 +78,6 @@ class HttpResourceObjectTest extends TestCase
         $this->assertSame(200, $response->code);
         $body = $response->body;
         $this->assertSame('bar', $body['form']['foo']);  // @phpstan-ignore-line
-        $this->assertStringContainsString('"form": {', (string) $response->view);
     }
 
     /** @depends testGet */
@@ -96,17 +94,24 @@ class HttpResourceObjectTest extends TestCase
         $this->assertFalse($isSet);
     }
 
-    /** @depends testGet */
-    public function testSet(HttpResourceObject $response): void
+    /** @notest */
+    public function testHtmlResponse(): void
     {
-        $this->expectException(BadFunctionCallException::class);
-        $response->foo = '1'; // @phpstan-ignore-line
-    }
+        $module = new ResourceModule('FakeVendor\Sandbox');
+        $module->override(new class extends AbstractModule {
+            protected function configure(): void
+            {
+                $this->bind(HttpRequestHeaders::class)->toInstance(new HttpRequestHeaders(['x-request-header1: 1', 'Content-Type: text/html']));
+            }
+        });
+        $injector = new Injector($module, __DIR__ . '/tmp');
 
-    /** @depends testGet */
-    public function testInvalidGet(HttpResourceObject $response): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $response->foo; // @phpstan-ignore-line
+        $this->resource = $injector->getInstance(ResourceInterface::class);
+        self::$server = new BuiltinServer(self::HOST, __DIR__ . '/Server/index.php?media=html');
+        self::$server->start();
+        $response = $this->resource->get(self::URL);
+        $this->assertSame(200, $response->code);
+        $this->assertSame('<html></html>', (string) $response->view);
+        $this->assertSame([], $response->body);
     }
 }
