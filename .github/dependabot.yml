@@ -1,4 +1,4 @@
-# Alerts only major updates for Composer
+# Alerts only major updates for Packagist (Composer)
 #
 # Please see the documentation for all configuration options:
 # https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
@@ -10,4 +10,5 @@ updates:
     schedule:
       interval: "weekly"
     ignore:
-      - update-types: ["patch", "minor"]
+      - dependency-name: "*" # Ignore all dependencies for specific update types
+        update-types: ["version-update:semver-minor", "version-update:semver-patch"]
