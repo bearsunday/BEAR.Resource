@@ -16,7 +16,7 @@
         "justinrainbow/json-schema": "^5.2.10",
         "koriym/attributes": "^1.0",
         "koriym/http-constants": "^1.1",
-        "koriym/json-schema-faker": "^0.2",
+        "koriym/json-schema-faker": "^0.3",
         "nocarrier/hal": "^0.9.12",
         "phpdocumentor/reflection-docblock": "^5.2",
         "psr/log": "^1.1 || ^2.0 || ^3.0",
