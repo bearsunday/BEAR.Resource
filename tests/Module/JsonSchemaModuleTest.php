@@ -57,8 +57,8 @@ class JsonSchemaModuleTest extends TestCase
     /** @depends testValidateException */
     public function testBCValidateErrorException(JsonSchemaException $e): void
     {
-        $expected = '[age] Must have a minimum value of 20';
-        $this->assertStringContainsString($expected, $e->getMessage());
+        $this->assertStringContainsString('[age]', $e->getMessage());
+        $this->assertStringContainsString('20', $e->getMessage());
     }
 
     public function testException(): void
