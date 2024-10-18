@@ -11,6 +11,7 @@ use Throwable;
 
 use function assert;
 use function sprintf;
+use function str_contains;
 use function str_ends_with;
 use function str_replace;
 use function ucwords;
@@ -57,7 +58,7 @@ final class AppAdapter implements AdapterInterface
     private function getNotFound(AbstractUri $uri, Unbound $e, string $class): Throwable
     {
         $unboundClass = $e->getMessage();
-        if ($unboundClass === "{$class}-") {
+        if (str_contains($unboundClass, "{$class}-")) {
             return new ResourceNotFoundException((string) $uri, 404, $e);
         }
 
