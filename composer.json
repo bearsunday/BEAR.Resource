@@ -13,7 +13,7 @@
         "php": "^8.1",
         "ext-filter": "*",
         "ext-curl": "*",
-        "justinrainbow/json-schema": "^6.0.0",
+        "justinrainbow/json-schema": "^5.3 || ^6.0",
         "koriym/attributes": "^1.0",
         "koriym/http-constants": "^1.1",
         "koriym/json-schema-faker": "^0.3",
