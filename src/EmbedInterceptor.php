@@ -66,19 +66,15 @@ final class EmbedInterceptor implements MethodInterceptor
                 $uri = uri_template($templateUri, $query);
                 /** @var Request $request */ // phpcs:ignore SlevomatCodingStandard.PHP.RequireExplicitAssertion.RequiredExplicitAssertion
                 $request = $this->resource->get->uri($uri);
-                if ($ro->body === null) {
-                    $ro->body = [];
-                }
-
-                if (! is_array($ro->body)) {
-                    throw new LinkException($embed->rel); // @codeCoverageIgnore
-                }
+                $this->prepareBody($ro, $embed);
 
                 if ($embed->rel === self::SELF_LINK) {
                     $this->linkSelf($request, $ro);
 
                     continue;
                 }
+
+                assert(is_array($ro->body));
 
                 $ro->body[$embed->rel] = clone $request;
             } catch (BadRequestException $e) {
@@ -95,6 +91,17 @@ final class EmbedInterceptor implements MethodInterceptor
         }
 
         return $uri;
+    }
+
+    public function prepareBody(ResourceObject $ro, Embed $embed): void
+    {
+        if ($ro->body === null) {
+            $ro->body = [];
+        }
+
+        if (! is_array($ro->body)) {
+            throw new LinkException($embed->rel); // @codeCoverageIgnore
+        }
     }
 
     /** @return array<string, mixed> */
