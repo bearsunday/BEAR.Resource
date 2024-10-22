@@ -44,7 +44,7 @@ final class HttpRequestCurl implements HttpRequestInterface
     ) {
     }
 
-    /** @inheritdoc */
+    /** @inheritDoc */
     public function request(string $method, string $uri, array $query): array
     {
         $body = http_build_query($query);

@@ -24,8 +24,6 @@ use function ltrim;
 use function preg_replace;
 use function strtolower;
 
-use const PHP_VERSION_ID;
-
 final class ClassParam implements ParamInterface
 {
     private readonly string $type;
@@ -64,7 +62,7 @@ final class ClassParam implements ParamInterface
         assert(class_exists($this->type));
         $refClass = (new ReflectionClass($this->type));
 
-        if (PHP_VERSION_ID >= 80100 && $refClass->isEnum()) {
+        if ($refClass->isEnum()) {
             return $this->enum($this->type, $props, $varName);
         }
 
