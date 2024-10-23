@@ -33,7 +33,7 @@ class JsonSchemaExceptionFakeHandler implements JsonSchemaExceptionHandlerInterf
     private function fakeResponse(string $schemaFile): array
     {
         if (! class_exists(Faker::class)) {
-            throw new LogicException('JSONSchemaFaker\Faker not installed. Please run "composer require koriym/json-schema-faker --dev". See more at https://github.com/bearsunday/BEAR.Resource/wiki/json_schema_faker_required'); // @codeCoverageIgnore
+            throw new LogicException('"koriym/json-schema-faker" not installed. Please run "composer require koriym/json-schema-faker --dev". See more at https://github.com/bearsunday/BEAR.Resource/wiki/json_schema_faker_required'); // @codeCoverageIgnore
         }
 
         /** @var array<int|string, mixed> $fakeObject */
