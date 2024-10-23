@@ -6,9 +6,11 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\JsonSchemaException;
 use JSONSchemaFaker\Faker;
+use LogicException;
 use SplFileInfo;
 use stdClass;
 
+use function class_exists;
 use function is_object;
 
 class JsonSchemaExceptionFakeHandler implements JsonSchemaExceptionHandlerInterface
@@ -30,6 +32,10 @@ class JsonSchemaExceptionFakeHandler implements JsonSchemaExceptionHandlerInterf
     /** @return array<int|string, mixed> */
     private function fakeResponse(string $schemaFile): array
     {
+        if (! class_exists(Faker::class)) {
+            throw new LogicException('"koriym/json-schema-faker" not installed. Please run "composer require koriym/json-schema-faker --dev". See more at https://github.com/bearsunday/BEAR.Resource/wiki/json_schema_faker_required'); // @codeCoverageIgnore
+        }
+
         /** @var array<int|string, mixed> $fakeObject */
         $fakeObject = (new Faker())->generate(new SplFileInfo($schemaFile));
 
