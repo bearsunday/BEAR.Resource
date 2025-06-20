@@ -6,6 +6,7 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\RequestParamInterface;
 use BEAR\Resource\Annotation\ResourceParam;
+use BEAR\Resource\Annotation\Scalar;
 use Ray\Aop\ReflectionMethod;
 use Ray\Di\Di\Assisted;
 use Ray\WebContextParam\Annotation\AbstractWebContextParam;
@@ -202,6 +203,10 @@ final class NamedParamMetas implements NamedParamMetasInterface
     private function getParam(ReflectionParameter $parameter): ParamInterface
     {
         $type = $parameter->getType();
+        if ($parameter->getAttributes(Scalar::class, ReflectionAttribute::IS_INSTANCEOF)) {
+            return new ScalarParam($type, $parameter);
+        }
+
         if ($type instanceof ReflectionNamedType && ! $type->isBuiltin()) {
             return new ClassParam($type, $parameter);
         }
