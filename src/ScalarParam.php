@@ -81,33 +81,4 @@ final class ScalarParam implements ParamInterface
 
         throw new ParameterException($varName);
     }
-
-    /**
-     * @param class-string $type
-     *
-     * @psalm-suppress MixedArgument
-     */
-    private function enum(string $type, mixed $props, string $varName): mixed
-    {
-        /** @var class-string<UnitEnum> $type */
-        $refEnum = new ReflectionEnum($type);
-        assert(enum_exists($type));
-
-        if (! $refEnum->isBacked()) {
-            throw new NotBackedEnumException($type);
-        }
-
-        assert(is_a($type, BackedEnum::class, true));
-        if (! (is_int($props) || is_string($props))) {
-            throw new ParameterEnumTypeException($varName);
-        }
-
-        /**  @psalm-suppress MixedAssignment */
-        $value = $type::tryFrom($props);
-        if ($value === null) {
-            throw new ParameterInvalidEnumException($varName);
-        }
-
-        return $value;
-    }
 }
