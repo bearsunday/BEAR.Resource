@@ -4,27 +4,14 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-use BackedEnum;
-use BEAR\Resource\Exception\ParameterEnumTypeException;
 use BEAR\Resource\Exception\ParameterException;
-use BEAR\Resource\Exception\ParameterInvalidEnumException;
-use Doctrine\Common\Annotations\Reader;
 use Ray\Di\InjectorInterface;
-use ReflectionAttribute;
 use ReflectionClass;
-use ReflectionEnum;
 use ReflectionNamedType;
 use ReflectionParameter;
-use UnitEnum;
 
-use function array_pop;
-use function array_search;
-use function assert;
-use function class_exists;
-use function enum_exists;
-use function is_a;
-use function is_int;
-use function is_string;
+use function array_shift;
+use function array_unshift;
 use function ltrim;
 use function preg_replace;
 use function strtolower;
@@ -72,6 +59,7 @@ final class ScalarParam implements ParamInterface
         if (! $const) {
             return []; // No constructor to resolve
         }
+
         $args = $const->getParameters();
         $params = [];
 
@@ -116,7 +104,6 @@ final class ScalarParam implements ParamInterface
         if (isset($query[$varName])) {
             return $query[$varName];
         }
-
 
         // try camelCase variable name
         $snakeName = ltrim(strtolower((string) preg_replace('/[A-Z]/', '_\0', $varName)), '_');

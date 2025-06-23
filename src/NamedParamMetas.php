@@ -18,9 +18,10 @@ use ReflectionParameter;
 final class NamedParamMetas implements NamedParamMetasInterface
 {
     public function __construct(
-        private readonly \Ray\Di\InjectorInterface $injector,
+        private readonly InjectorInterface $injector,
     ) {
     }
+
     /**
      * {@inheritDoc}
      */

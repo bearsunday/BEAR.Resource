@@ -11,6 +11,7 @@ final class InvokerFactory
     public function __invoke(string $schemaDir = ''): Invoker
     {
         $injector = new Injector();
+
         return new Invoker(
             new PhpClassInvoker(
                 new NamedParameter(
