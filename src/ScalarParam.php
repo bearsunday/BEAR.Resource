@@ -35,17 +35,7 @@ final class ScalarParam implements ParamInterface
      */
     public function __invoke(string $varName, array $query, InjectorInterface $injector)
     {
-        try {
-            /** @psalm-suppress MixedAssignment */
-            $arg1 = $this->getProp($varName, $query, $injector);
-        } catch (ParameterException $e) {
-            if ($this->parameter->isDefaultValueAvailable()) {
-                return $this->parameter->getDefaultValue();
-            }
-
-            throw $e;
-        }
-
+        $arg1 = $this->getProp($varName, $query, $injector);
         $args = [];
         foreach ($this->dependenciesMetas as $meta) {
             [$className, $qualifier] = $meta;
