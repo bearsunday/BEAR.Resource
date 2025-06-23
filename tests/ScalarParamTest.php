@@ -24,7 +24,7 @@ class ScalarParamTest extends TestCase
     {
         // Arrange
         $injector = new Injector(new ScalarModule());
-        $namedParameter = new NamedParameter(new NamedParamMetas($injector), $injector);
+        $namedParameter = new NamedParameter(new NamedParamMetas(), $injector);
         $vo = new ScalarValueObject();
         $params = [
             'int' => 123,
@@ -37,7 +37,7 @@ class ScalarParamTest extends TestCase
 
         // Act
         $args = $namedParameter->getParameters([$vo, 'onGet'], $params);
-        $ro = $vo->onGet(...array_values($args));
+        $ro = $vo->onGet(...array_values($args)); // @phpstan-ignore-line
 
         // Assert
         $this->assertInstanceOf(ResourceObject::class, $ro);
@@ -57,7 +57,7 @@ class ScalarParamTest extends TestCase
     {
         // Arrange
         $injector = new Injector(new ScalarModule());
-        $namedParameter = new NamedParameter(new NamedParamMetas($injector), $injector);
+        $namedParameter = new NamedParameter(new NamedParamMetas(), $injector);
         $vo = new ScalarValueObject();
         $params = [
             'int' => 123,
@@ -92,7 +92,7 @@ class ScalarParamTest extends TestCase
     {
         // Arrange
         $injector = new Injector(new ScalarModule());
-        $namedParameter = new NamedParameter(new NamedParamMetas($injector), $injector);
+        $namedParameter = new NamedParameter(new NamedParamMetas(), $injector);
         $vo = new ScalarValueObject();
         $params = [
             'int' => 123,

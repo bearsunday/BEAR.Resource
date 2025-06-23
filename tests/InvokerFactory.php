@@ -15,7 +15,7 @@ final class InvokerFactory
         return new Invoker(
             new PhpClassInvoker(
                 new NamedParameter(
-                    new NamedParamMetas($injector),
+                    new NamedParamMetas(),
                     $injector,
                 ),
                 new ExtraMethodInvoker(

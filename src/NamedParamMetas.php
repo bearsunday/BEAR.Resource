@@ -9,19 +9,14 @@ use BEAR\Resource\Annotation\ResourceParam;
 use BEAR\Resource\Annotation\Scalar;
 use Ray\Aop\ReflectionMethod;
 use Ray\Di\Di\Assisted;
-use Ray\Di\InjectorInterface;
 use Ray\WebContextParam\Annotation\AbstractWebContextParam;
 use ReflectionAttribute;
 use ReflectionNamedType;
 use ReflectionParameter;
 
+/** @psalm-suppress TooManyTemplateParams */
 final class NamedParamMetas implements NamedParamMetasInterface
 {
-    public function __construct(
-        private readonly InjectorInterface $injector,
-    ) {
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -203,17 +198,25 @@ final class NamedParamMetas implements NamedParamMetasInterface
     }
 
     /**
-     * @return ClassParam|OptionalParam|RequiredParam
-     * @psalm-return ClassParam|OptionalParam<mixed>|RequiredParam
+     * @return ClassParam|OptionalParam|RequiredParam|ScalarParam
+     * @psalm-return ParamInterface
      */
     private function getParam(ReflectionParameter $parameter): ParamInterface
     {
-        $type = $parameter->getType()->getName();
-        if ($parameter->getAttributes(Scalar::class, ReflectionAttribute::IS_INSTANCEOF)) {
-            return new ScalarParam($type, $parameter, $this->injector);
+        $type = $parameter->getType();
+        if (! $type instanceof ReflectionNamedType) {
+            return $parameter->isDefaultValueAvailable() === true ? new OptionalParam($parameter->getDefaultValue()) : new RequiredParam();
         }
 
-        if ($type instanceof ReflectionNamedType && ! $type->isBuiltin()) {
+        $typeName = $type->getName();
+        if ($parameter->getAttributes(Scalar::class, ReflectionAttribute::IS_INSTANCEOF)) {
+            /** @var class-string $className */
+            $className = $typeName;
+
+            return new ScalarParam($className);
+        }
+
+        if (! $type->isBuiltin()) {
             return new ClassParam($type, $parameter);
         }
 
