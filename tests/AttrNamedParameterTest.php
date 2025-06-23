@@ -15,7 +15,8 @@ class AttrNamedParameterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->params = new NamedParameter(new NamedParamMetas(), new Injector());
+        $injector = new Injector();
+        $this->params = new NamedParameter(new NamedParamMetas($injector), $injector);
     }
 
     public function testGetParameters(): void

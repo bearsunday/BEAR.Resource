@@ -14,13 +14,17 @@ class ScalarValueObject extends ResourceObject
         #[Scalar] IntValue $int,
         #[Scalar] StringValue $string,
         #[Scalar] BoolValue $bool,
-        #[Scalar] FooValue $foo
+        #[Scalar] FooValue $foo,
+        #[Scalar] QualifiedIntValue $qualifiedInt
     ){
         $this->body = [
             'int' => $int->value,
             'string' => $string->value,
             'bool' => $bool->value,
             'foo' => $foo->value,
+            'qualifiedInt' => $qualifiedInt->value,
+            'service' => $int->service->serve(),
+            'qualifiedService' => $qualifiedInt->service->serve(),
         ];
 
         return $this;

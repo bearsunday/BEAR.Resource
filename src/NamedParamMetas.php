@@ -9,6 +9,7 @@ use BEAR\Resource\Annotation\ResourceParam;
 use BEAR\Resource\Annotation\Scalar;
 use Ray\Aop\ReflectionMethod;
 use Ray\Di\Di\Assisted;
+use Ray\Di\InjectorInterface;
 use Ray\WebContextParam\Annotation\AbstractWebContextParam;
 use ReflectionAttribute;
 use ReflectionNamedType;
@@ -16,6 +17,10 @@ use ReflectionParameter;
 
 final class NamedParamMetas implements NamedParamMetasInterface
 {
+    public function __construct(
+        private readonly \Ray\Di\InjectorInterface $injector,
+    ) {
+    }
     /**
      * {@inheritDoc}
      */
@@ -204,7 +209,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
     {
         $type = $parameter->getType();
         if ($parameter->getAttributes(Scalar::class, ReflectionAttribute::IS_INSTANCEOF)) {
-            return new ScalarParam($type, $parameter);
+            return new ScalarParam($type, $parameter, $this->injector);
         }
 
         if ($type instanceof ReflectionNamedType && ! $type->isBuiltin()) {
