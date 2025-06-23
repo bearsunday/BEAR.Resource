@@ -208,7 +208,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
      */
     private function getParam(ReflectionParameter $parameter): ParamInterface
     {
-        $type = $parameter->getType();
+        $type = $parameter->getType()->getName();
         if ($parameter->getAttributes(Scalar::class, ReflectionAttribute::IS_INSTANCEOF)) {
             return new ScalarParam($type, $parameter, $this->injector);
         }

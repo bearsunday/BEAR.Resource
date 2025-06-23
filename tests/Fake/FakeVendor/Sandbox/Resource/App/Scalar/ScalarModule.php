@@ -12,5 +12,6 @@ class ScalarModule extends AbstractModule
     {
         $this->bind(ServiceInterface::class)->to(ServiceImplementation::class);
         $this->bind(ServiceInterface::class)->annotatedWith(OtherQualifier::class)->to(OtherServiceImplementation::class);
+        $this->bind(ServiceInterface::class)->annotatedWith('other')->to(OtherServiceImplementation::class);
     }
 }

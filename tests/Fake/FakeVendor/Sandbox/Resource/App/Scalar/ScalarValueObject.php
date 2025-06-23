@@ -15,7 +15,8 @@ class ScalarValueObject extends ResourceObject
         #[Scalar] StringValue $string,
         #[Scalar] BoolValue $bool,
         #[Scalar] FooValue $foo,
-        #[Scalar] QualifiedIntValue $qualifiedInt
+        #[Scalar] QualifiedIntValue $qualifiedInt,
+        #[Scalar] NamedIntValue $namedInt
     ){
         $this->body = [
             'int' => $int->value,

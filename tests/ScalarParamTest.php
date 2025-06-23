@@ -7,6 +7,7 @@ namespace BEAR\Resource;
 use BEAR\Resource\FakeVendor\Sandbox\Resource\App\Scalar\BoolValue;
 use BEAR\Resource\FakeVendor\Sandbox\Resource\App\Scalar\FooValue;
 use BEAR\Resource\FakeVendor\Sandbox\Resource\App\Scalar\IntValue;
+use BEAR\Resource\FakeVendor\Sandbox\Resource\App\Scalar\NamedIntValue;
 use BEAR\Resource\FakeVendor\Sandbox\Resource\App\Scalar\QualifiedIntValue;
 use BEAR\Resource\FakeVendor\Sandbox\Resource\App\Scalar\ScalarModule;
 use BEAR\Resource\FakeVendor\Sandbox\Resource\App\Scalar\ScalarValueObject;
@@ -31,6 +32,7 @@ class ScalarParamTest extends TestCase
             'bool' => true,
             'foo' => ['value' => 'bar'],
             'qualifiedInt' => 456,
+            'namedInt' => 789,
         ];
 
         // Act
@@ -63,6 +65,7 @@ class ScalarParamTest extends TestCase
             'bool' => true,
             'foo' => ['value' => 'bar'],
             'qualifiedInt' => 456,
+            'namedInt' => 789,
         ];
 
         // Act
@@ -97,6 +100,7 @@ class ScalarParamTest extends TestCase
             'bool' => true,
             'foo' => ['value' => 'bar'],
             'qualifiedInt' => 456,
+            'namedInt' => 789,
         ];
 
         // Act
@@ -114,5 +118,8 @@ class ScalarParamTest extends TestCase
         $this->assertSame(456, $args['qualifiedInt']->value);
         $this->assertInstanceOf(ServiceInterface::class, $args['qualifiedInt']->service);
         $this->assertSame('other service implementation', $args['qualifiedInt']->service->serve());
+
+        // Check named dependency injection
+        $this->assertInstanceOf(NamedIntValue::class, $args['namedInt']);
     }
 }

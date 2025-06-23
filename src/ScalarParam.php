@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\ParameterException;
+use Ray\Di\Di\Named;
+use Ray\Di\Di\Qualifier;
 use Ray\Di\InjectorInterface;
 use ReflectionClass;
-use ReflectionNamedType;
 use ReflectionParameter;
 
 use function array_shift;
@@ -19,15 +20,14 @@ use function strtolower;
 final class ScalarParam implements ParamInterface
 {
     /** @var array<int, mixed> */
-    private array $dependencies;
+    private array $dependenciesMetas;
 
     public function __construct(
-        private ReflectionNamedType $type,
+        private string $typeName,
         private ReflectionParameter $parameter,
-        private InjectorInterface $injector,
     ) {
-        // Resolve dependencies at construction time
-        $this->dependencies = $this->resolveDependencies($injector);
+        // Retrieve the dependency metadata to construct the object later
+        $this->dependenciesMetas = $this->getDependenciesMetas();
     }
 
     /**
@@ -46,15 +46,20 @@ final class ScalarParam implements ParamInterface
             throw $e;
         }
 
-        $args = $this->dependencies;
+        $args = [];
+        foreach ($this->dependenciesMetas as $meta) {
+            [$className, $qualifier] = $meta;
+            $args[] = $injector->getInstance($className, $qualifier);
+        }
+
         array_unshift($args, $arg1);
 
-        return new ($this->type->getName())(...$args);
+        return new ($this->typeName)(...$args);
     }
 
-    public function resolveDependencies(InjectorInterface $injector): array
+    public function getDependenciesMetas(): array
     {
-        $class = new ReflectionClass($this->type->getName());
+        $class = new ReflectionClass($this->typeName);
         $const = $class->getConstructor();
         if (! $const) {
             return []; // No constructor to resolve
@@ -68,31 +73,26 @@ final class ScalarParam implements ParamInterface
 
         foreach ($args as $arg) {
             $type = $arg->getType();
-            if ($type instanceof ReflectionNamedType && ! $type->isBuiltin()) {
-                // Check for qualifier attributes
-                $qualifierAttribute = null;
-                $attributes = $arg->getAttributes();
-                foreach ($attributes as $attribute) {
-                    $attributeInstance = $attribute->newInstance();
-                    $attributeReflection = new ReflectionClass($attribute->getName());
-                    // Check if this attribute has the Qualifier attribute
-                    $qualifierAttributes = $attributeReflection->getAttributes('Ray\Di\Di\Qualifier');
-                    if ($qualifierAttributes) {
-                        $qualifierAttribute = $attribute->getName();
-                        break;
-                    }
+            $typeName = $type ? $type->getName() : '';
+            $attributes = $arg->getAttributes();
+            foreach ($attributes as $attribute) {
+                if ($attribute->getName() === Named::class) {
+                    $named = $attribute->newInstance();
+                    $params[] = [$typeName, $named->value];
+                    continue;
                 }
 
-                if ($qualifierAttribute) {
-                    // Get instance with qualifier
-                    $params[] = $injector->getInstance($type->getName(), $qualifierAttribute);
-                } else {
-                    // Get instance without qualifier
-                    $params[] = $injector->getInstance($type->getName());
+                $attributeReflection = new ReflectionClass($attribute->getName());
+                // Check if this attribute has the Qualifier attribute
+                $qualifierAttributes = $attributeReflection->getAttributes(Qualifier::class);
+                if (! $qualifierAttributes) {
+                    continue;
                 }
-            } elseif ($arg->isDefaultValueAvailable()) {
-                $params[] = $arg->getDefaultValue();
+
+                $params[] = [$typeName, $attribute->getName()];
             }
+
+            $params[] = [$typeName, ''];
         }
 
         return $params;
