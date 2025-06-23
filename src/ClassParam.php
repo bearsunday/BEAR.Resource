@@ -20,15 +20,13 @@ use function is_a;
 use function is_int;
 use function is_iterable;
 use function is_string;
-use function ltrim;
-use function preg_replace;
-use function strtolower;
 
 final class ClassParam implements ParamInterface
 {
     private readonly string $type;
     private readonly bool $isDefaultAvailable;
     private readonly mixed $defaultValue; // @phpstan-ignore-line
+    private readonly QueryProp $queryProp;
 
     public function __construct(
         ReflectionNamedType $type,
@@ -36,6 +34,7 @@ final class ClassParam implements ParamInterface
     ) {
         $this->type = $type->getName();
         $this->isDefaultAvailable = $parameter->isDefaultValueAvailable();
+        $this->queryProp = new QueryProp();
         if (! $this->isDefaultAvailable) {
             return;
         }
@@ -50,7 +49,7 @@ final class ClassParam implements ParamInterface
     {
         try {
             /** @psalm-suppress MixedAssignment */
-            $props = $this->getProps($varName, $query, $injector);
+            $props = $this->queryProp->getProp($varName, $query, $injector);
         } catch (ParameterException $e) {
             if ($this->isDefaultAvailable) {
                 return $this->defaultValue;
@@ -82,24 +81,6 @@ final class ClassParam implements ParamInterface
         }
 
         return $obj;
-    }
-
-    /** @param array<string, mixed> $query */
-    private function getProps(string $varName, array $query, InjectorInterface $injector): mixed
-    {
-        if (isset($query[$varName])) {
-            return $query[$varName];
-        }
-
-        // try camelCase variable name
-        $snakeName = ltrim(strtolower((string) preg_replace('/[A-Z]/', '_\0', $varName)), '_');
-        if (isset($query[$snakeName])) {
-            return $query[$snakeName];
-        }
-
-        unset($injector);
-
-        throw new ParameterException($varName);
     }
 
     /**

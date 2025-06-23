@@ -4,20 +4,17 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\ParameterException;
 use Ray\Di\Di\Named;
 use Ray\Di\Di\Qualifier;
 use Ray\Di\InjectorInterface;
 use ReflectionClass;
+use ReflectionMethod;
 use ReflectionNamedType;
 
 use function array_shift;
 use function array_unshift;
 use function assert;
 use function class_exists;
-use function ltrim;
-use function preg_replace;
-use function strtolower;
 
 /**
  * @psalm-type DependencyMeta = array{0:class-string|'', 1:string}
@@ -27,6 +24,7 @@ final class ScalarParam implements ParamInterface
 {
     /** @var DependencyMetas */
     private array $dependenciesMetas;
+    private QueryProp $queryProp;
 
     /** @param class-string $typeName */
     public function __construct(
@@ -34,6 +32,7 @@ final class ScalarParam implements ParamInterface
     ) {
         // Retrieve the dependency metadata to construct the object later
         $this->dependenciesMetas = $this->getDependenciesMetas();
+        $this->queryProp = new QueryProp();
     }
 
     /**
@@ -46,7 +45,7 @@ final class ScalarParam implements ParamInterface
     public function __invoke(string $varName, array $query, InjectorInterface $injector): object
     {
         /** @psalm-suppress MixedAssignment */
-        $arg1 = $this->getProp($varName, $query, $injector);
+        $arg1 = $this->queryProp->getProp($varName, $query, $injector);
         $args = [];
         foreach ($this->dependenciesMetas as $meta) {
             /** @psalm-suppress MixedAssignment */
@@ -70,9 +69,7 @@ final class ScalarParam implements ParamInterface
     {
         $class = new ReflectionClass($this->typeName);
         $const = $class->getConstructor();
-        if (! $const) {
-            return []; // No constructor to resolve
-        }
+        assert($const instanceof ReflectionMethod, 'Expected class has a constructor');
 
         $args = $const->getParameters();
         $params = [];
@@ -114,27 +111,5 @@ final class ScalarParam implements ParamInterface
 
         /** @var DependencyMetas $params */
         return $params;
-    }
-
-    /**
-     * @param array<string, mixed> $query
-     *
-     * @return mixed
-     */
-    private function getProp(string $varName, array $query, InjectorInterface $injector): mixed
-    {
-        if (isset($query[$varName])) {
-            return $query[$varName];
-        }
-
-        // try camelCase variable name
-        $snakeName = ltrim(strtolower((string) preg_replace('/[A-Z]/', '_\0', $varName)), '_');
-        if (isset($query[$snakeName])) {
-            return $query[$snakeName];
-        }
-
-        unset($injector);
-
-        throw new ParameterException($varName);
     }
 }
