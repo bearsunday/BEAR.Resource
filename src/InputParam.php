@@ -55,10 +55,16 @@ final class InputParam implements ParamInterface
     /**
      * {@inheritDoc}
      */
-    public function __invoke(string $varName, array $query, InjectorInterface $injector)
+    /**
+     * @param array<string, mixed> $query
+     */
+    public function __invoke(string $varName, array $query, InjectorInterface $injector): mixed
     {
-        assert(class_exists($this->type) || enum_exists($this->type));
-        $refClass = new ReflectionClass($this->type);
+        /** @var class-string $type */
+        $type = $this->type;
+        /** @psalm-suppress MixedArgument */
+        assert(class_exists($type) || enum_exists($type));
+        $refClass = new ReflectionClass($type);
 
         // Handle enums
         if ($refClass->isEnum()) {
@@ -68,7 +74,7 @@ final class InputParam implements ParamInterface
         $constructor = $refClass->getConstructor();
         if ($constructor === null) {
             // Handle classes without constructor (like ClassParam does)
-            return $this->createWithoutConstructor($refClass, $varName, $query);
+            return $this->createWithoutConstructor($varName, $query);
         }
 
         // Check if this parameter has #[Input] attribute
@@ -85,6 +91,7 @@ final class InputParam implements ParamInterface
         }
 
         try {
+            /** @var list<mixed> $constructorArgs */
             $constructorArgs = [];
 
             foreach ($constructor->getParameters() as $param) {
@@ -96,6 +103,7 @@ final class InputParam implements ParamInterface
                     $paramType = $param->getType();
                     if ($paramType instanceof ReflectionNamedType) {
                         $nestedInputParam = new InputParam($paramType, $param);
+                        /** @psalm-suppress MixedAssignment */
                         $constructorArgs[] = $nestedInputParam($paramName, $query, $injector);
                         continue;
                     }
@@ -104,12 +112,14 @@ final class InputParam implements ParamInterface
                 // Use query parameter if available (with snake_case/kebab-case support)
                 $paramValue = $this->getParamValue($paramName, $query);
                 if ($paramValue !== null) {
+                    /** @psalm-suppress MixedAssignment */
                     $constructorArgs[] = $paramValue;
                     continue;
                 }
 
                 // Use default value if available
                 if ($param->isDefaultValueAvailable()) {
+                    /** @psalm-suppress MixedAssignment */
                     $constructorArgs[] = $param->getDefaultValue();
                     continue;
                 }
@@ -161,6 +171,8 @@ final class InputParam implements ParamInterface
 
     /**
      * Create object from structured data (ClassParam style)
+     *
+     * @param array<string, mixed> $query
      */
     private function createFromStructuredData(
         ReflectionClass $refClass,
@@ -184,6 +196,7 @@ final class InputParam implements ParamInterface
         }
 
         try {
+            /** @var list<mixed> $constructorArgs */
             $constructorArgs = [];
 
             foreach ($constructor->getParameters() as $param) {
@@ -195,19 +208,24 @@ final class InputParam implements ParamInterface
                     $paramType = $param->getType();
                     if ($paramType instanceof ReflectionNamedType) {
                         $nestedInputParam = new InputParam($paramType, $param);
-                        $constructorArgs[] = $nestedInputParam($paramName, $data, $injector);
+                        /** @var array<string, mixed> $dataForNested */
+                        $dataForNested = $data;
+                        /** @psalm-suppress MixedAssignment */
+                        $constructorArgs[] = $nestedInputParam($paramName, $dataForNested, $injector);
                         continue;
                     }
                 }
 
                 // Use data parameter if available
                 if (isset($data[$paramName])) {
+                    /** @psalm-suppress MixedAssignment */
                     $constructorArgs[] = $data[$paramName];
                     continue;
                 }
 
                 // Use default value if available
                 if ($param->isDefaultValueAvailable()) {
+                    /** @psalm-suppress MixedAssignment */
                     $constructorArgs[] = $param->getDefaultValue();
                     continue;
                 }
@@ -255,7 +273,7 @@ final class InputParam implements ParamInterface
 
         // Get the backing type of the enum
         $backingType = $refEnum->getBackingType();
-        if ($backingType && $backingType->getName() === 'int' && is_string($props)) {
+        if ($backingType instanceof ReflectionNamedType && $backingType->getName() === 'int' && is_string($props)) {
             // Convert string to int for int-backed enums
             $props = (int) $props;
         }
@@ -271,8 +289,10 @@ final class InputParam implements ParamInterface
 
     /**
      * Create object without constructor (ClassParam style)
+     *
+     * @param array<string, mixed> $query
      */
-    private function createWithoutConstructor(ReflectionClass $refClass, string $varName, array $query): mixed
+    private function createWithoutConstructor(string $varName, array $query): mixed
     {
         // Get the props using ClassParam behavior
         $props = $this->getPropsForClassParam($varName, $query);
@@ -285,8 +305,10 @@ final class InputParam implements ParamInterface
             throw new ParameterException("Expected array data for {$this->type}");
         }
 
+        /** @var class-string $type */
+        $type = $this->type;
         /** @psalm-suppress MixedMethodCall */
-        $obj = new $this->type();
+        $obj = new $type();
         /** @psalm-suppress MixedAssignment */
         foreach ($props as $propName => $propValue) {
             $obj->{$propName} = $propValue;
