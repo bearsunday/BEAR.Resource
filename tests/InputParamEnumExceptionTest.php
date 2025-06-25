@@ -77,9 +77,7 @@ class InputParamEnumExceptionTest extends TestCase
             }
         };
 
-        $params = [
-            'other_param' => 'foo', // Not matching enumParam or enum_param
-        ];
+        $params = ['other_param' => 'foo']; // Not matching enumParam or enum_param];
 
         $args = $this->namedParameter->getParameters([$testResource, 'onGet'], $params);
         /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */

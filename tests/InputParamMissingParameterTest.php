@@ -36,9 +36,7 @@ class InputParamMissingParameterTest extends TestCase
             }
         };
 
-        $params = [
-            'name' => 'John', // missing 'age' parameter
-        ];
+        $params = ['name' => 'John']; // missing 'age' parameter
 
         $args = $this->namedParameter->getParameters([$testResource, 'onGet'], $params);
         /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
@@ -80,9 +78,7 @@ class InputParamMissingParameterTest extends TestCase
             }
         };
 
-        $params = [
-            'other-param' => 'value', // doesn't match 'name' or 'age'
-        ];
+        $params = ['other-param' => 'value']; // doesn't match 'name' or 'age
 
         $args = $this->namedParameter->getParameters([$testResource, 'onGet'], $params);
         /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */

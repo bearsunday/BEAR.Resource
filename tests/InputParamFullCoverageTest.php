@@ -68,9 +68,7 @@ class InputParamFullCoverageTest extends TestCase
             }
         };
 
-        $params = [
-            'my_enum' => 'foo', // snake_case parameter name
-        ];
+        $params = ['my_enum' => 'foo']; // snake_case parameter name
 
         $args = $this->namedParameter->getParameters([$testResource, 'onGet'], $params);
         /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
@@ -123,9 +121,7 @@ class InputParamFullCoverageTest extends TestCase
             }
         };
 
-        $params = [
-            'my_test_param' => 'bar', // snake_case version of myTestParam
-        ];
+        $params = ['my_test_param' => 'bar']; // snake_case version of myTestParam
 
         $args = $this->namedParameter->getParameters([$testResource, 'onGet'], $params);
         /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
@@ -148,11 +144,7 @@ class InputParamFullCoverageTest extends TestCase
             }
         };
 
-        $params = [
-            'user' => [
-                'name' => 'Charlie', // missing 'age'
-            ],
-        ];
+        $params = ['user' => ['name' => 'Charlie']];  // missing 'age
 
         $args = $this->namedParameter->getParameters([$testResource, 'onGet'], $params);
         /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
