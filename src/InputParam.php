@@ -131,21 +131,11 @@ final class InputParam implements ParamInterface
                     continue;
                 }
 
-                // Check if parameter is nullable
-                if ($param->allowsNull()) {
-                    $constructorArgs[] = null;
-                    continue;
-                }
-
                 throw new ParameterException("Required parameter '{$paramName}' not found for {$this->type}");
             }
 
             return $refClass->newInstanceArgs($constructorArgs);
         } catch (Throwable $e) {
-            if ($this->isDefaultAvailable) {
-                return $this->defaultValue;
-            }
-
             // Re-throw validation exceptions directly
             if ($e instanceof InvalidArgumentException) {
                 throw $e;
@@ -248,21 +238,11 @@ final class InputParam implements ParamInterface
                     continue;
                 }
 
-                // Check if parameter is nullable
-                if ($param->allowsNull()) {
-                    $constructorArgs[] = null;
-                    continue;
-                }
-
                 throw new ParameterException("Required parameter '{$paramName}' not found in key '{$key}' for {$this->type}");
             }
 
             return $refClass->newInstanceArgs($constructorArgs);
         } catch (Throwable $e) {
-            if ($this->isDefaultAvailable) {
-                return $this->defaultValue;
-            }
-
             // Re-throw validation exceptions directly
             if ($e instanceof InvalidArgumentException) {
                 throw $e;
