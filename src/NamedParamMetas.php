@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Annotation\Input;
 use BEAR\Resource\Annotation\RequestParamInterface;
 use BEAR\Resource\Annotation\ResourceParam;
 use Ray\Aop\ReflectionMethod;
@@ -198,7 +197,7 @@ final class NamedParamMetas implements NamedParamMetasInterface
     }
 
     /**
-     * @return ClassParam|OptionalParam|RequiredParam|InputParam
+     * @return InputParam|OptionalParam|RequiredParam
      * @psalm-return ParamInterface
      */
     private function getParam(ReflectionParameter $parameter): ParamInterface
@@ -208,15 +207,9 @@ final class NamedParamMetas implements NamedParamMetasInterface
             return $parameter->isDefaultValueAvailable() === true ? new OptionalParam($parameter->getDefaultValue()) : new RequiredParam();
         }
 
-        $typeName = $type->getName();
-
-        // Check for #[Input] attribute first
-        if ($parameter->getAttributes(Input::class, ReflectionAttribute::IS_INSTANCEOF)) {
-            return new InputParam($type, $parameter);
-        }
-
+        // Use InputParam for all non-builtin types (both with and without #[Input] attribute)
         if (! $type->isBuiltin()) {
-            return new ClassParam($type, $parameter);
+            return new InputParam($type, $parameter);
         }
 
         return $parameter->isDefaultValueAvailable() === true ? new OptionalParam($parameter->getDefaultValue()) : new RequiredParam();
