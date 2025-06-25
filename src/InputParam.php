@@ -4,39 +4,16 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-use BackedEnum;
-use BEAR\Resource\Annotation\Input;
-use BEAR\Resource\Exception\ParameterEnumTypeException;
-use BEAR\Resource\Exception\ParameterException;
-use BEAR\Resource\Exception\ParameterInvalidEnumException;
-use InvalidArgumentException;
 use Ray\Di\InjectorInterface;
-use ReflectionClass;
-use ReflectionEnum;
-use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
-use Throwable;
-use UnitEnum;
-
-use function assert;
-use function class_exists;
-use function count;
-use function enum_exists;
-use function is_a;
-use function is_array;
-use function is_int;
-use function is_iterable;
-use function is_string;
-use function ltrim;
-use function preg_replace;
-use function strtolower;
 
 final class InputParam implements ParamInterface
 {
     private readonly string $type;
     private readonly bool $isDefaultAvailable;
     private readonly mixed $defaultValue;
+    private readonly InputParamFactory $factory;
 
     public function __construct(
         ReflectionNamedType $type,
@@ -45,6 +22,10 @@ final class InputParam implements ParamInterface
         $this->type = $type->getName();
         $this->isDefaultAvailable = $parameter->isDefaultValueAvailable();
         $this->defaultValue = $this->isDefaultAvailable ? $parameter->getDefaultValue() : null;
+        $this->factory = new InputParamFactory(
+            new InputParamEnumHandler(),
+            new InputParamObjectHandler(),
+        );
     }
 
     /**
@@ -54,320 +35,14 @@ final class InputParam implements ParamInterface
     /** @param array<string, mixed> $query */
     public function __invoke(string $varName, array $query, InjectorInterface $injector): mixed
     {
-        /** @var class-string $type */
-        $type = $this->type;
-        /** @psalm-suppress MixedArgument */
-        assert(class_exists($type) || enum_exists($type));
-        $refClass = new ReflectionClass($type);
-
-        // Handle enums
-        if ($refClass->isEnum()) {
-            return $this->createEnum($varName, $query);
-        }
-
-        $constructor = $refClass->getConstructor();
-        if ($constructor === null) {
-            // Handle classes without constructor (like ClassParam does)
-            return $this->createWithoutConstructor($varName, $query);
-        }
-
-        // Check if this parameter has #[Input] attribute
-        $inputAttr = $this->getInputAttribute($this->parameter);
-
-        // If no #[Input] attribute, use ClassParam behavior (structured data with parameter name as key)
-        if ($inputAttr === null) {
-            return $this->createFromStructuredData($refClass, $constructor, $varName, $query, $injector);
-        }
-
-        // If #[Input] has key specified, use structured data approach
-        if ($inputAttr->key !== null) {
-            return $this->createFromStructuredData($refClass, $constructor, $inputAttr->key, $query, $injector);
-        }
-
-        try {
-            $constructorArgs = $this->getConstructorArgs($constructor, $query, $injector);
-
-            /** @psalm-suppress MixedArgumentTypeCoercion */
-            return $refClass->newInstanceArgs($constructorArgs);
-        } catch (Throwable $e) {
-            // Re-throw validation exceptions directly
-            if ($e instanceof InvalidArgumentException) {
-                throw $e;
-            }
-
-            throw new ParameterException("Failed to create {$this->type}: " . $e->getMessage(), 0, $e);
-        }
-    }
-
-    private function getInputAttribute(ReflectionParameter $param): Input|null
-    {
-        $attributes = $param->getAttributes(Input::class);
-        if (count($attributes) === 0) {
-            return null;
-        }
-
-        return $attributes[0]->newInstance();
-    }
-
-    /**
-     * Get parameter value from query with camelCase/kebab-case support
-     *
-     * @param array<string, mixed> $query
-     */
-    private function getParamValue(string $paramName, array $query): mixed
-    {
-        // Try exact match first
-        if (isset($query[$paramName])) {
-            return $query[$paramName];
-        }
-
-        // Try kebab-case version (camelCase -> kebab-case)
-        $kebabName = ltrim(strtolower((string) preg_replace('/[A-Z]/', '-\0', $paramName)), '-');
-        if (isset($query[$kebabName])) {
-            return $query[$kebabName];
-        }
-
-        return null;
-    }
-
-    /**
-     * Create object from structured data (ClassParam style)
-     *
-     * @param ReflectionClass<object> $refClass
-     * @param array<string, mixed>    $query
-     */
-    private function createFromStructuredData(
-        ReflectionClass $refClass,
-        ReflectionMethod $constructor,
-        string $key,
-        array $query,
-        InjectorInterface $injector,
-    ): mixed {
-        // Get structured data from the specified key
-        if (! isset($query[$key])) {
-            if ($this->isDefaultAvailable) {
-                return $this->defaultValue;
-            }
-
-            throw new ParameterException("Required key '{$key}' not found for {$this->type}");
-        }
-
-        $data = $query[$key];
-        if (! is_array($data)) {
-            throw new ParameterException("Data under key '{$key}' must be an array for {$this->type}");
-        }
-
-        /** @var array<string, mixed> $data */
-        return $this->newInstance($constructor, $data, $injector, $key, $refClass);
-    }
-
-    /**
-     * Create enum from query parameter (ClassParam style)
-     *
-     * @param array<string, mixed> $query
-     */
-    private function createEnum(string $varName, array $query): mixed
-    {
-        // Get the value using ClassParam behavior (snake_case conversion)
-        $props = $this->getPropsForClassParam($varName, $query);
-
-        /** @var class-string<UnitEnum> $type */
-        $type = $this->type;
-        $refEnum = new ReflectionEnum($type);
-        assert(enum_exists($type));
-
-        if (! $refEnum->isBacked()) {
-            throw new NotBackedEnumException($type);
-        }
-
-        assert(is_a($type, BackedEnum::class, true));
-        if (! (is_int($props) || is_string($props))) {
-            // If props is not a scalar but we have a default value, return it
-            if ($this->isDefaultAvailable) {
-                return $this->defaultValue;
-            }
-
-            throw new ParameterEnumTypeException($varName);
-        }
-
-        // Get the backing type of the enum
-        $backingType = $refEnum->getBackingType();
-        if ($backingType instanceof ReflectionNamedType && $backingType->getName() === 'int' && is_string($props)) {
-            // Convert string to int for int-backed enums
-            $props = (int) $props;
-        }
-
-        /** @psalm-suppress MixedAssignment */
-        $value = $type::tryFrom($props);
-        if ($value === null) {
-            throw new ParameterInvalidEnumException($varName);
-        }
-
-        return $value;
-    }
-
-    /**
-     * Create object without constructor (ClassParam style)
-     *
-     * @param array<string, mixed> $query
-     */
-    private function createWithoutConstructor(string $varName, array $query): mixed
-    {
-        // Get the props using ClassParam behavior
-        $props = $this->getPropsForClassParam($varName, $query);
-
-        if (! is_iterable($props)) {
-            if ($this->isDefaultAvailable) {
-                return $this->defaultValue;
-            }
-
-            throw new ParameterException("Expected array data for {$this->type}");
-        }
-
-        /** @var class-string $type */
-        $type = $this->type;
-        /** @psalm-suppress MixedMethodCall */
-        $obj = new $type();
-        /** @psalm-suppress MixedAssignment */
-        foreach ($props as $propName => $propValue) {
-            $obj->{$propName} = $propValue;
-        }
-
-        return $obj;
-    }
-
-    /**
-     * Get props using ClassParam behavior (snake_case conversion like QueryProp)
-     *
-     * @param array<string, mixed> $query
-     */
-    private function getPropsForClassParam(string $varName, array $query): mixed
-    {
-        if (isset($query[$varName])) {
-            return $query[$varName];
-        }
-
-        // try snake_case variable name (ClassParam compatible)
-        $snakeName = ltrim(strtolower((string) preg_replace('/[A-Z]/', '_\0', $varName)), '_');
-        if (isset($query[$snakeName])) {
-            return $query[$snakeName];
-        }
-
-        if ($this->isDefaultAvailable) {
-            return $this->defaultValue;
-        }
-
-        throw new ParameterException($varName);
-    }
-
-    /**
-     * @param ReflectionMethod     $constructor
-     * @param array<string, mixed> $query
-     * @param InjectorInterface    $injector
-     *
-     * @return mixed[]
-     */
-    public function getConstructorArgs(ReflectionMethod $constructor, array $query, InjectorInterface $injector): array
-    {
-        /** @var list<mixed> $constructorArgs */
-        $constructorArgs = [];
-
-        foreach ($constructor->getParameters() as $param) {
-            $paramName = $param->getName();
-
-            // Check if parameter has #[Input] attribute for nested input objects
-            $inputAttr = $this->getInputAttribute($param);
-            if ($inputAttr !== null) {
-                $paramType = $param->getType();
-                if ($paramType instanceof ReflectionNamedType) {
-                    $nestedInputParam = new InputParam($paramType, $param);
-                    /** @psalm-suppress MixedAssignment */
-                    /** @psalm-suppress MixedArgumentTypeCoercion, MixedAssignment */
-                    $constructorArgs[] = $nestedInputParam($paramName, $query, $injector);
-                    continue;
-                }
-            }
-
-            // Use query parameter if available (with snake_case/kebab-case support)
-            /** @psalm-suppress MixedArgumentTypeCoercion */
-            $paramValue = $this->getParamValue($paramName, $query);
-            if ($paramValue !== null) {
-                /** @psalm-suppress MixedAssignment */
-                $constructorArgs[] = $paramValue;
-                continue;
-            }
-
-            // Use default value if available
-            if ($param->isDefaultValueAvailable()) {
-                /** @psalm-suppress MixedAssignment */
-                $constructorArgs[] = $param->getDefaultValue();
-                continue;
-            }
-
-            throw new ParameterException("Required parameter '{$paramName}' not found for {$this->type}");
-        }
-
-        return $constructorArgs;
-    }
-
-    /**
-     * Create new instance using constructor with structured data
-     *
-     * @param ReflectionMethod        $constructor
-     * @param array<string, mixed>    $data
-     * @param InjectorInterface       $injector
-     * @param string                  $key
-     * @param ReflectionClass<object> $refClass
-     *
-     * @return object|null
-     */
-    public function newInstance(ReflectionMethod $constructor, array $data, InjectorInterface $injector, string $key, ReflectionClass $refClass): object|null
-    {
-        try {
-            /** @var list<mixed> $constructorArgs */
-            $constructorArgs = [];
-
-            foreach ($constructor->getParameters() as $param) {
-                $paramName = $param->getName();
-
-                // Check if parameter has #[Input] attribute for nested input objects
-                $inputAttr = $this->getInputAttribute($param);
-                if ($inputAttr !== null) {
-                    $paramType = $param->getType();
-                    if ($paramType instanceof ReflectionNamedType) {
-                        $nestedInputParam = new InputParam($paramType, $param);
-                        /** @psalm-suppress MixedArgumentTypeCoercion, MixedAssignment */
-                        $constructorArgs[] = $nestedInputParam($paramName, $data, $injector);
-                        continue;
-                    }
-                }
-
-                // Use data parameter if available
-                if (isset($data[$paramName])) {
-                    /** @psalm-suppress MixedAssignment */
-                    $constructorArgs[] = $data[$paramName];
-                    continue;
-                }
-
-                // Use default value if available
-                if ($param->isDefaultValueAvailable()) {
-                    /** @psalm-suppress MixedAssignment */
-                    $constructorArgs[] = $param->getDefaultValue();
-                    continue;
-                }
-
-                throw new ParameterException("Required parameter '{$paramName}' not found in key '{$key}' for {$this->type}");
-            }
-
-            /** @psalm-suppress MixedArgumentTypeCoercion */
-            return $refClass->newInstanceArgs($constructorArgs);
-        } catch (Throwable $e) {
-            // Re-throw validation exceptions directly
-            if ($e instanceof InvalidArgumentException) {
-                throw $e;
-            }
-
-            throw new ParameterException("Failed to create {$this->type} from key '{$key}': " . $e->getMessage(), 0, $e);
-        }
+        return $this->factory->create(
+            $this->type,
+            $varName,
+            $query,
+            $injector,
+            $this->parameter,
+            $this->isDefaultAvailable,
+            $this->defaultValue,
+        );
     }
 }
