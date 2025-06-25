@@ -32,18 +32,11 @@ use function ltrim;
 use function preg_replace;
 use function strtolower;
 
-/**
- * @psalm-type DependencyMeta = array{0:class-string|'', 1:string}
- * @psalm-type DependencyMetas = array<string, DependencyMeta>
- */
 final class InputParam implements ParamInterface
 {
     private readonly string $type;
     private readonly bool $isDefaultAvailable;
     private readonly mixed $defaultValue;
-
-    /** @var DependencyMetas */
-    private array $dependenciesMetas = [];
 
     public function __construct(
         ReflectionNamedType $type,
@@ -52,12 +45,11 @@ final class InputParam implements ParamInterface
         $this->type = $type->getName();
         $this->isDefaultAvailable = $parameter->isDefaultValueAvailable();
 
-        if ($this->isDefaultAvailable) {
-            $this->defaultValue = $parameter->getDefaultValue();
+        if (! $this->isDefaultAvailable) {
+            return;
         }
 
-        // Initialize dependency metadata for constructor injection
-        $this->dependenciesMetas = (new ConstructoeDependencies())(new ReflectionClass($this->type));
+        $this->defaultValue = $parameter->getDefaultValue();
     }
 
     /**
@@ -105,15 +97,6 @@ final class InputParam implements ParamInterface
                     if ($paramType instanceof ReflectionNamedType) {
                         $nestedInputParam = new InputParam($paramType, $param);
                         $constructorArgs[] = $nestedInputParam($paramName, $query, $injector);
-                        continue;
-                    }
-                }
-
-                // Check if parameter needs DI (skip built-in types)
-                if (isset($this->dependenciesMetas[$paramName])) {
-                    [$className, $qualifier] = $this->dependenciesMetas[$paramName];
-                    if (! empty($className) && class_exists($className)) {
-                        $constructorArgs[] = $injector->getInstance($className, $qualifier);
                         continue;
                     }
                 }
@@ -217,15 +200,6 @@ final class InputParam implements ParamInterface
                     }
                 }
 
-                // Check if parameter needs DI (skip built-in types)
-                if (isset($this->dependenciesMetas[$paramName])) {
-                    [$className, $qualifier] = $this->dependenciesMetas[$paramName];
-                    if (! empty($className) && class_exists($className)) {
-                        $constructorArgs[] = $injector->getInstance($className, $qualifier);
-                        continue;
-                    }
-                }
-
                 // Use data parameter if available
                 if (isset($data[$paramName])) {
                     $constructorArgs[] = $data[$paramName];
@@ -257,17 +231,8 @@ final class InputParam implements ParamInterface
      */
     private function createEnum(string $varName, array $query): mixed
     {
-        try {
-            // Get the value using ClassParam behavior (snake_case conversion)
-            $props = $this->getPropsForClassParam($varName, $query);
-        } catch (ParameterException $e) {
-            // If no value found and default is available, return it
-            if ($this->isDefaultAvailable) {
-                return $this->defaultValue;
-            }
-
-            throw $e;
-        }
+        // Get the value using ClassParam behavior (snake_case conversion)
+        $props = $this->getPropsForClassParam($varName, $query);
 
         /** @var class-string<UnitEnum> $type */
         $type = $this->type;
