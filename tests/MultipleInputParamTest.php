@@ -9,6 +9,8 @@ use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
 use function array_values;
+use function assert;
+use function is_array;
 
 class MultipleInputParamTest extends TestCase
 {
@@ -32,7 +34,9 @@ class MultipleInputParamTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$this->multipleInputTest, 'onGet'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $ro = $this->multipleInputTest->onGet(...array_values($args));
+        assert(is_array($ro->body));
 
         $this->assertSame(200, $ro->code);
         $this->assertSame('laptop', $ro->body['search']['query']);
@@ -47,7 +51,9 @@ class MultipleInputParamTest extends TestCase
         $params = ['query' => 'smartphone'];
 
         $args = $this->namedParameter->getParameters([$this->multipleInputTest, 'onGet'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $ro = $this->multipleInputTest->onGet(...array_values($args));
+        assert(is_array($ro->body));
 
         $this->assertSame(200, $ro->code);
         $this->assertSame('smartphone', $ro->body['search']['query']);

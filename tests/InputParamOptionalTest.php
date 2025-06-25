@@ -9,6 +9,8 @@ use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
 use function array_values;
+use function assert;
+use function is_array;
 
 class InputParamOptionalTest extends TestCase
 {
@@ -35,7 +37,9 @@ class InputParamOptionalTest extends TestCase
         $params = []; // No parameter provided
 
         $args = $this->namedParameter->getParameters([$testResource, 'onGet'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $result = $testResource->onGet(...array_values($args));
+        assert(is_array($result->body));
 
         $this->assertNull($result->body['param']);
     }
@@ -55,7 +59,9 @@ class InputParamOptionalTest extends TestCase
         $params = ['optionalParam' => 'test'];
 
         $args = $this->namedParameter->getParameters([$testResource, 'onGet'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $result = $testResource->onGet(...array_values($args));
+        assert(is_array($result->body));
 
         $this->assertSame('test', $result->body['param']);
     }

@@ -12,6 +12,8 @@ use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
 use function array_values;
+use function assert;
+use function is_array;
 
 class InputParamEdgeCaseTest extends TestCase
 {
@@ -38,6 +40,7 @@ class InputParamEdgeCaseTest extends TestCase
         $params = []; // No parameter provided
 
         $args = $this->namedParameter->getParameters([$testResource, 'onGet'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $testResource->onGet(...array_values($args));
     }
 
@@ -65,7 +68,9 @@ class InputParamEdgeCaseTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$testResource, 'onGet'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $result = $testResource->onGet(...array_values($args));
+        assert(is_array($result->body));
 
         $this->assertSame('Dave', $result->body['name']);
         $this->assertSame(40, $result->body['age']);
@@ -89,7 +94,9 @@ class InputParamEdgeCaseTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$testResource, 'onGet'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $result = $testResource->onGet(...array_values($args));
+        assert(is_array($result->body));
 
         $this->assertSame('Test', $result->body['name']);
     }

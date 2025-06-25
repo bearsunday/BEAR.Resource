@@ -44,20 +44,14 @@ final class InputParam implements ParamInterface
     ) {
         $this->type = $type->getName();
         $this->isDefaultAvailable = $parameter->isDefaultValueAvailable();
-
-        if (! $this->isDefaultAvailable) {
-            return;
-        }
-
-        $this->defaultValue = $parameter->getDefaultValue();
+        $this->defaultValue = $this->isDefaultAvailable ? $parameter->getDefaultValue() : null;
     }
 
     /**
      * {@inheritDoc}
      */
-    /**
-     * @param array<string, mixed> $query
-     */
+
+    /** @param array<string, mixed> $query */
     public function __invoke(string $varName, array $query, InjectorInterface $injector): mixed
     {
         /** @var class-string $type */
@@ -172,7 +166,8 @@ final class InputParam implements ParamInterface
     /**
      * Create object from structured data (ClassParam style)
      *
-     * @param array<string, mixed> $query
+     * @param ReflectionClass<object> $refClass
+     * @param array<string, mixed>    $query
      */
     private function createFromStructuredData(
         ReflectionClass $refClass,
@@ -246,6 +241,8 @@ final class InputParam implements ParamInterface
 
     /**
      * Create enum from query parameter (ClassParam style)
+     *
+     * @param array<string, mixed> $query
      */
     private function createEnum(string $varName, array $query): mixed
     {
@@ -319,6 +316,8 @@ final class InputParam implements ParamInterface
 
     /**
      * Get props using ClassParam behavior (snake_case conversion like QueryProp)
+     *
+     * @param array<string, mixed> $query
      */
     private function getPropsForClassParam(string $varName, array $query): mixed
     {

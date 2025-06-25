@@ -10,6 +10,8 @@ use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
 use function array_values;
+use function assert;
+use function is_array;
 
 class InputParamTest extends TestCase
 {
@@ -33,7 +35,9 @@ class InputParamTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$this->inputTest, 'onPost'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $ro = $this->inputTest->onPost(...array_values($args));
+        assert(is_array($ro->body));
 
         $this->assertSame(200, $ro->code);
         $this->assertSame('田中 太郎', $ro->body['name']);
@@ -54,7 +58,9 @@ class InputParamTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$this->inputTest, 'onPut'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $ro = $this->inputTest->onPut(...array_values($args));
+        assert(is_array($ro->body));
 
         $this->assertSame(200, $ro->code);
         $this->assertSame('佐藤 花子', $ro->body['user']['name']);
@@ -78,6 +84,7 @@ class InputParamTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$this->inputTest, 'onPost'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $this->inputTest->onPost(...array_values($args));
     }
 
@@ -94,6 +101,7 @@ class InputParamTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$this->inputTest, 'onPost'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $this->inputTest->onPost(...array_values($args));
     }
 
@@ -113,6 +121,7 @@ class InputParamTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$this->inputTest, 'onPut'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $this->inputTest->onPut(...array_values($args));
     }
 }

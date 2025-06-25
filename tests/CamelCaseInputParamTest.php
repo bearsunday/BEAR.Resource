@@ -10,6 +10,8 @@ use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
 use function array_values;
+use function assert;
+use function is_array;
 
 class CamelCaseInputParamTest extends TestCase
 {
@@ -37,7 +39,9 @@ class CamelCaseInputParamTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$this->camelCaseTest, 'onPost'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $ro = $this->camelCaseTest->onPost(...array_values($args));
+        assert(is_array($ro->body));
 
         $this->assertSame(200, $ro->code);
         $this->assertSame('John', $ro->body['firstName']);
@@ -60,7 +64,9 @@ class CamelCaseInputParamTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$this->camelCaseTest, 'onPost'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $ro = $this->camelCaseTest->onPost(...array_values($args));
+        assert(is_array($ro->body));
 
         $this->assertSame(200, $ro->code);
         $this->assertSame('Exact', $ro->body['firstName']); // exact match wins
@@ -82,7 +88,9 @@ class CamelCaseInputParamTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$this->nestedCamelCaseTest, 'onPost'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $ro = $this->nestedCamelCaseTest->onPost(...array_values($args));
+        assert(is_array($ro->body));
 
         $this->assertSame(200, $ro->code);
         $this->assertSame('Bob', $ro->body['user']['firstName']);

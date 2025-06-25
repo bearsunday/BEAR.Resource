@@ -10,6 +10,8 @@ use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
 use function array_values;
+use function assert;
+use function is_array;
 
 class StructuredInputParamTest extends TestCase
 {
@@ -35,7 +37,9 @@ class StructuredInputParamTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$this->structuredInputTest, 'onPost'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $ro = $this->structuredInputTest->onPost(...array_values($args));
+        assert(is_array($ro->body));
 
         $this->assertSame(200, $ro->code);
         $this->assertSame('John Doe', $ro->body['name']);
@@ -60,7 +64,9 @@ class StructuredInputParamTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$this->structuredInputTest, 'onPut'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $ro = $this->structuredInputTest->onPut(...array_values($args));
+        assert(is_array($ro->body));
 
         $this->assertSame(200, $ro->code);
         $this->assertSame('Alice', $ro->body['user']['name']);
@@ -85,6 +91,7 @@ class StructuredInputParamTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$this->structuredInputTest, 'onPost'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $this->structuredInputTest->onPost(...array_values($args));
     }
 
@@ -101,6 +108,7 @@ class StructuredInputParamTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$this->structuredInputTest, 'onPost'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $this->structuredInputTest->onPost(...array_values($args));
     }
 }

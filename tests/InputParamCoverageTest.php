@@ -10,6 +10,8 @@ use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
 use function array_values;
+use function assert;
+use function is_array;
 
 class InputParamCoverageTest extends TestCase
 {
@@ -39,7 +41,9 @@ class InputParamCoverageTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$this->testResourceWithoutConstructor, 'onGet'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $result = $this->testResourceWithoutConstructor->onGet(...array_values($args));
+        assert(is_array($result->body));
 
         $this->assertSame('John', $result->body['name']);
         $this->assertSame(30, $result->body['age']);
@@ -50,7 +54,9 @@ class InputParamCoverageTest extends TestCase
         $params = ['status' => 'foo'];
 
         $args = $this->namedParameter->getParameters([$this->testResourceEnum, 'onGet'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $result = $this->testResourceEnum->onGet(...array_values($args));
+        assert(is_array($result->body));
 
         $this->assertSame('foo', $result->body['status']);
     }
@@ -62,6 +68,7 @@ class InputParamCoverageTest extends TestCase
         $params = ['status' => 'invalid'];
 
         $args = $this->namedParameter->getParameters([$this->testResourceEnum, 'onGet'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $this->testResourceEnum->onGet(...array_values($args));
     }
 
@@ -72,7 +79,9 @@ class InputParamCoverageTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$this->testResourceWithDefaults, 'onGet'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $result = $this->testResourceWithDefaults->onGet(...array_values($args));
+        assert(is_array($result->body));
 
         $this->assertSame('John', $result->body['name']);
         $this->assertSame(25, $result->body['age']);
@@ -85,6 +94,7 @@ class InputParamCoverageTest extends TestCase
         $params = [];
 
         $args = $this->namedParameter->getParameters([$this->testResourceUnresolvable, 'onGet'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $this->testResourceUnresolvable->onGet(...array_values($args));
     }
 
@@ -96,6 +106,7 @@ class InputParamCoverageTest extends TestCase
         $params = [];
 
         $args = $this->namedParameter->getParameters([$this->testResourceWithDefaults, 'onPost'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $this->testResourceWithDefaults->onPost(...array_values($args));
     }
 
@@ -107,6 +118,7 @@ class InputParamCoverageTest extends TestCase
         $params = ['user' => 'not an array'];
 
         $args = $this->namedParameter->getParameters([$this->testResourceWithDefaults, 'onPost'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $this->testResourceWithDefaults->onPost(...array_values($args));
     }
 }

@@ -41,6 +41,7 @@ class InputParamMissingParameterTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$testResource, 'onGet'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $testResource->onGet(...array_values($args));
     }
 
@@ -61,6 +62,7 @@ class InputParamMissingParameterTest extends TestCase
         $params = []; // no parameters at all
 
         $args = $this->namedParameter->getParameters([$testResource, 'onGet'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $testResource->onGet(...array_values($args));
     }
 
@@ -83,6 +85,7 @@ class InputParamMissingParameterTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$testResource, 'onGet'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $testResource->onGet(...array_values($args));
     }
 }

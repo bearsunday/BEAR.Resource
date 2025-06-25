@@ -10,6 +10,8 @@ use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
 use function array_values;
+use function assert;
+use function is_array;
 
 class LegacyInputParamTest extends TestCase
 {
@@ -36,7 +38,9 @@ class LegacyInputParamTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$this->legacyTest, 'onPost'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $ro = $this->legacyTest->onPost(...array_values($args));
+        assert(is_array($ro->body));
 
         $this->assertSame(200, $ro->code);
         $this->assertSame('John Doe', $ro->body['name']);
@@ -61,7 +65,9 @@ class LegacyInputParamTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$this->legacyTest, 'onPut'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $ro = $this->legacyTest->onPut(...array_values($args));
+        assert(is_array($ro->body));
 
         $this->assertSame(200, $ro->code);
         $this->assertSame('Alice', $ro->body['user']['name']);
@@ -86,6 +92,7 @@ class LegacyInputParamTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$this->legacyTest, 'onPost'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $this->legacyTest->onPost(...array_values($args));
     }
 }

@@ -12,6 +12,8 @@ use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
 use function array_values;
+use function assert;
+use function is_array;
 
 class InputParamFullCoverageTest extends TestCase
 {
@@ -46,7 +48,9 @@ class InputParamFullCoverageTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$testResource, 'onGet'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $result = $testResource->onGet(...array_values($args));
+        assert(is_array($result->body));
 
         $this->assertSame('Alice', $result->body['name']);
         $this->assertSame(28, $result->body['age']);
@@ -69,7 +73,9 @@ class InputParamFullCoverageTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$testResource, 'onGet'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $result = $testResource->onGet(...array_values($args));
+        assert(is_array($result->body));
 
         $this->assertSame('foo', $result->body['enum_value']);
     }
@@ -97,7 +103,9 @@ class InputParamFullCoverageTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$testResource, 'onGet'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $result = $testResource->onGet(...array_values($args));
+        assert(is_array($result->body));
 
         $this->assertSame('Bob', $result->body['name']);
         $this->assertSame(35, $result->body['age']);
@@ -120,7 +128,9 @@ class InputParamFullCoverageTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$testResource, 'onGet'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $result = $testResource->onGet(...array_values($args));
+        assert(is_array($result->body));
 
         $this->assertSame('bar', $result->body['value']);
     }
@@ -145,6 +155,7 @@ class InputParamFullCoverageTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$testResource, 'onGet'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $testResource->onGet(...array_values($args));
     }
 
@@ -164,6 +175,7 @@ class InputParamFullCoverageTest extends TestCase
         $params = ['obj' => 'invalid_string_data'];
 
         $args = $this->namedParameter->getParameters([$testResource, 'onGet'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $testResource->onGet(...array_values($args));
     }
 }

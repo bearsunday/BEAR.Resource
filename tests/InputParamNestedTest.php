@@ -10,6 +10,8 @@ use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
 use function array_values;
+use function assert;
+use function is_array;
 
 class InputParamNestedTest extends TestCase
 {
@@ -47,7 +49,9 @@ class InputParamNestedTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$testResource, 'onGet'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $result = $testResource->onGet(...array_values($args));
+        assert(is_array($result->body));
 
         $this->assertSame('Main Title', $result->body['title']);
         $this->assertSame('Nested Name', $result->body['nested_name']);
@@ -78,7 +82,9 @@ class InputParamNestedTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$testResource, 'onGet'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $result = $testResource->onGet(...array_values($args));
+        assert(is_array($result->body));
 
         $this->assertSame('Top Level', $result->body['main']);
         $this->assertSame('Inner Name', $result->body['nested_name']);

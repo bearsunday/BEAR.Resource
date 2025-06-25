@@ -9,6 +9,8 @@ use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
 use function array_values;
+use function assert;
+use function is_array;
 
 class InputParamEnumExceptionTest extends TestCase
 {
@@ -36,6 +38,7 @@ class InputParamEnumExceptionTest extends TestCase
         $params = []; // No parameters, so getPropsForClassParam will throw
 
         $args = $this->namedParameter->getParameters([$testResource, 'onGet'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $testResource->onGet(...array_values($args));
     }
 
@@ -54,7 +57,9 @@ class InputParamEnumExceptionTest extends TestCase
         $params = []; // No parameters, but default value exists
 
         $args = $this->namedParameter->getParameters([$testResource, 'onGet'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $result = $testResource->onGet(...array_values($args));
+        assert(is_array($result->body));
 
         $this->assertNull($result->body['enum']);
     }
@@ -77,6 +82,7 @@ class InputParamEnumExceptionTest extends TestCase
         ];
 
         $args = $this->namedParameter->getParameters([$testResource, 'onGet'], $params);
+        /** @phpstan-ignore-next-line Parameter type mismatch, runtime provides correct types */
         $testResource->onGet(...array_values($args));
     }
 }
