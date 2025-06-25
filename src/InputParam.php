@@ -85,42 +85,9 @@ final class InputParam implements ParamInterface
         }
 
         try {
-            /** @var list<mixed> $constructorArgs */
-            $constructorArgs = [];
+            $constructorArgs = $this->getConstructorArgs($constructor, $query, $injector);
 
-            foreach ($constructor->getParameters() as $param) {
-                $paramName = $param->getName();
-
-                // Check if parameter has #[Input] attribute for nested input objects
-                $inputAttr = $this->getInputAttribute($param);
-                if ($inputAttr !== null) {
-                    $paramType = $param->getType();
-                    if ($paramType instanceof ReflectionNamedType) {
-                        $nestedInputParam = new InputParam($paramType, $param);
-                        /** @psalm-suppress MixedAssignment */
-                        $constructorArgs[] = $nestedInputParam($paramName, $query, $injector);
-                        continue;
-                    }
-                }
-
-                // Use query parameter if available (with snake_case/kebab-case support)
-                $paramValue = $this->getParamValue($paramName, $query);
-                if ($paramValue !== null) {
-                    /** @psalm-suppress MixedAssignment */
-                    $constructorArgs[] = $paramValue;
-                    continue;
-                }
-
-                // Use default value if available
-                if ($param->isDefaultValueAvailable()) {
-                    /** @psalm-suppress MixedAssignment */
-                    $constructorArgs[] = $param->getDefaultValue();
-                    continue;
-                }
-
-                throw new ParameterException("Required parameter '{$paramName}' not found for {$this->type}");
-            }
-
+            /** @psalm-suppress MixedArgumentTypeCoercion */
             return $refClass->newInstanceArgs($constructorArgs);
         } catch (Throwable $e) {
             // Re-throw validation exceptions directly
@@ -190,53 +157,8 @@ final class InputParam implements ParamInterface
             throw new ParameterException("Data under key '{$key}' must be an array for {$this->type}");
         }
 
-        try {
-            /** @var list<mixed> $constructorArgs */
-            $constructorArgs = [];
-
-            foreach ($constructor->getParameters() as $param) {
-                $paramName = $param->getName();
-
-                // Check if parameter has #[Input] attribute for nested input objects
-                $inputAttr = $this->getInputAttribute($param);
-                if ($inputAttr !== null) {
-                    $paramType = $param->getType();
-                    if ($paramType instanceof ReflectionNamedType) {
-                        $nestedInputParam = new InputParam($paramType, $param);
-                        /** @var array<string, mixed> $dataForNested */
-                        $dataForNested = $data;
-                        /** @psalm-suppress MixedAssignment */
-                        $constructorArgs[] = $nestedInputParam($paramName, $dataForNested, $injector);
-                        continue;
-                    }
-                }
-
-                // Use data parameter if available
-                if (isset($data[$paramName])) {
-                    /** @psalm-suppress MixedAssignment */
-                    $constructorArgs[] = $data[$paramName];
-                    continue;
-                }
-
-                // Use default value if available
-                if ($param->isDefaultValueAvailable()) {
-                    /** @psalm-suppress MixedAssignment */
-                    $constructorArgs[] = $param->getDefaultValue();
-                    continue;
-                }
-
-                throw new ParameterException("Required parameter '{$paramName}' not found in key '{$key}' for {$this->type}");
-            }
-
-            return $refClass->newInstanceArgs($constructorArgs);
-        } catch (Throwable $e) {
-            // Re-throw validation exceptions directly
-            if ($e instanceof InvalidArgumentException) {
-                throw $e;
-            }
-
-            throw new ParameterException("Failed to create {$this->type} from key '{$key}': " . $e->getMessage(), 0, $e);
-        }
+        /** @var array<string, mixed> $data */
+        return $this->newInstance($constructor, $data, $injector, $key, $refClass);
     }
 
     /**
@@ -336,5 +258,116 @@ final class InputParam implements ParamInterface
         }
 
         throw new ParameterException($varName);
+    }
+
+    /**
+     * @param ReflectionMethod     $constructor
+     * @param array<string, mixed> $query
+     * @param InjectorInterface    $injector
+     *
+     * @return mixed[]
+     */
+    public function getConstructorArgs(ReflectionMethod $constructor, array $query, InjectorInterface $injector): array
+    {
+        /** @var list<mixed> $constructorArgs */
+        $constructorArgs = [];
+
+        foreach ($constructor->getParameters() as $param) {
+            $paramName = $param->getName();
+
+            // Check if parameter has #[Input] attribute for nested input objects
+            $inputAttr = $this->getInputAttribute($param);
+            if ($inputAttr !== null) {
+                $paramType = $param->getType();
+                if ($paramType instanceof ReflectionNamedType) {
+                    $nestedInputParam = new InputParam($paramType, $param);
+                    /** @psalm-suppress MixedAssignment */
+                    /** @psalm-suppress MixedArgumentTypeCoercion, MixedAssignment */
+                    $constructorArgs[] = $nestedInputParam($paramName, $query, $injector);
+                    continue;
+                }
+            }
+
+            // Use query parameter if available (with snake_case/kebab-case support)
+            /** @psalm-suppress MixedArgumentTypeCoercion */
+            $paramValue = $this->getParamValue($paramName, $query);
+            if ($paramValue !== null) {
+                /** @psalm-suppress MixedAssignment */
+                $constructorArgs[] = $paramValue;
+                continue;
+            }
+
+            // Use default value if available
+            if ($param->isDefaultValueAvailable()) {
+                /** @psalm-suppress MixedAssignment */
+                $constructorArgs[] = $param->getDefaultValue();
+                continue;
+            }
+
+            throw new ParameterException("Required parameter '{$paramName}' not found for {$this->type}");
+        }
+
+        return $constructorArgs;
+    }
+
+    /**
+     * Create new instance using constructor with structured data
+     *
+     * @param ReflectionMethod        $constructor
+     * @param array<string, mixed>    $data
+     * @param InjectorInterface       $injector
+     * @param string                  $key
+     * @param ReflectionClass<object> $refClass
+     *
+     * @return object|null
+     */
+    public function newInstance(ReflectionMethod $constructor, array $data, InjectorInterface $injector, string $key, ReflectionClass $refClass): object|null
+    {
+        try {
+            /** @var list<mixed> $constructorArgs */
+            $constructorArgs = [];
+
+            foreach ($constructor->getParameters() as $param) {
+                $paramName = $param->getName();
+
+                // Check if parameter has #[Input] attribute for nested input objects
+                $inputAttr = $this->getInputAttribute($param);
+                if ($inputAttr !== null) {
+                    $paramType = $param->getType();
+                    if ($paramType instanceof ReflectionNamedType) {
+                        $nestedInputParam = new InputParam($paramType, $param);
+                        /** @psalm-suppress MixedArgumentTypeCoercion, MixedAssignment */
+                        $constructorArgs[] = $nestedInputParam($paramName, $data, $injector);
+                        continue;
+                    }
+                }
+
+                // Use data parameter if available
+                if (isset($data[$paramName])) {
+                    /** @psalm-suppress MixedAssignment */
+                    $constructorArgs[] = $data[$paramName];
+                    continue;
+                }
+
+                // Use default value if available
+                if ($param->isDefaultValueAvailable()) {
+                    /** @psalm-suppress MixedAssignment */
+                    $constructorArgs[] = $param->getDefaultValue();
+                    continue;
+                }
+
+                throw new ParameterException("Required parameter '{$paramName}' not found in key '{$key}' for {$this->type}");
+            }
+
+            /** @psalm-suppress MixedArgumentTypeCoercion */
+            return $refClass->newInstanceArgs($constructorArgs);
+        } catch (Throwable $e) {
+            // Re-throw validation exceptions directly
+            if ($e instanceof InvalidArgumentException) {
+                throw $e;
+            }
+
+            throw new ParameterException("Failed to create {$this->type} from key '{$key}': " . $e->getMessage(), 0, $e);
+        }
     }
 }
