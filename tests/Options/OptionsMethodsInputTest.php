@@ -24,6 +24,7 @@ class OptionsMethodsInputTest extends TestCase
         $result = ($this->optionsMethods)($resource, 'Get');
 
         $this->assertArrayHasKey('request', $result);
+        $this->assertTrue(isset($result['request']));
         $this->assertIsArray($result['request']);
         $this->assertArrayHasKey('parameters', $result['request']);
 
@@ -56,6 +57,7 @@ class OptionsMethodsInputTest extends TestCase
         $result = ($this->optionsMethods)($resource, 'Post');
 
         $this->assertArrayHasKey('request', $result);
+        $this->assertTrue(isset($result['request']));
         $this->assertIsArray($result['request']);
         $this->assertArrayHasKey('parameters', $result['request']);
         $parameters = $result['request']['parameters'];
@@ -80,6 +82,7 @@ class OptionsMethodsInputTest extends TestCase
         $result = ($this->optionsMethods)($resource, 'Get');
 
         $this->assertArrayHasKey('request', $result);
+        $this->assertTrue(isset($result['request']));
         $this->assertIsArray($result['request']);
         $this->assertArrayHasKey('required', $result['request']);
 

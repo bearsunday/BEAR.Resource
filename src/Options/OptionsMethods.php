@@ -22,8 +22,6 @@ use Ray\WebContextParam\Annotation\ServerParam;
 use function array_filter;
 use function array_merge;
 use function array_unique;
-use function assert;
-use function class_exists;
 use function file_exists;
 use function file_get_contents;
 use function in_array;
@@ -32,6 +30,10 @@ use function json_decode;
 use const ARRAY_FILTER_USE_KEY;
 use const JSON_THROW_ON_ERROR;
 
+/**
+ * @psalm-type WebContextKey = class-string<AbstractWebContextParam>
+ * @psalm-type WebContextValue = 'cookie'|'env'|'formData'|'query'|'server'|'files'
+ */
 final class OptionsMethods
 {
     /**
@@ -53,11 +55,7 @@ final class OptionsMethods
     ) {
     }
 
-    /**
-     * return array{summary?: string, description?: string, request: array, links: array, embed: array}
-     *
-     * @return array<int|string, array<mixed>|string>
-     */
+    /** @return array{description?: string, embed?: mixed, links?: mixed, request?: mixed, schema?: mixed, summary?: string} */
     public function __invoke(ResourceObject $ro, string $requestMethod): array
     {
         $method = new ReflectionMethod($ro::class, 'on' . $requestMethod);
@@ -79,6 +77,7 @@ final class OptionsMethods
             $methodOption += $extras;
         }
 
+        /** @var array{description?: string, embed?: mixed, links?: mixed, request?: mixed, schema?: mixed, summary?: string} $methodOption */
         return $methodOption;
     }
 
@@ -139,7 +138,10 @@ final class OptionsMethods
             return [];
         }
 
-        return (array) json_decode((string) file_get_contents($schemaFile), null, 512, JSON_THROW_ON_ERROR);
+        /** @var array<string, mixed> $schema */
+        $schema = (array) json_decode((string) file_get_contents($schemaFile), null, 512, JSON_THROW_ON_ERROR);
+
+        return $schema;
     }
 
     /**
@@ -158,7 +160,10 @@ final class OptionsMethods
             }
 
             $class = $annotation::class;
-            assert(class_exists($class));
+            if (! isset(self::WEB_CONTEXT_NAME[$class])) {
+                continue;
+            }
+
             $ins[$annotation->param] = self::WEB_CONTEXT_NAME[$class];
         }
 
@@ -182,8 +187,12 @@ final class OptionsMethods
                 }
 
                 $class = $instance::class;
-                assert(class_exists($class));
-                $ins[$parameter->name] = self::WEB_CONTEXT_NAME[$class];
+                if (! isset(self::WEB_CONTEXT_NAME[$class])) {
+                    continue;
+                }
+
+                $webContextName = self::WEB_CONTEXT_NAME[$class];
+                $ins[$parameter->name] = $webContextName;
             }
         }
 
@@ -256,6 +265,7 @@ final class OptionsMethods
 
         $inputParamNames = [];
         foreach ($inputIterator($method) as $paramName => $param) {
+            unset($param);
             $inputParamNames[] = $paramName;
         }
 

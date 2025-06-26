@@ -54,7 +54,7 @@ final class OptionsMethodRequest
     private function getParamMetas(array $parameters, array $paramDoc, array $ins): array
     {
         foreach ($parameters as $parameter) {
-            $name = (string) $parameter->name;
+            $name = $parameter->name;
             if (isset($ins[$name])) {
                 $paramDoc[$name]['in'] = $ins[$parameter->name];
             }
@@ -103,8 +103,9 @@ final class OptionsMethodRequest
     {
         $hasDefault = $parameter->isDefaultValueAvailable() && $parameter->getDefaultValue() !== null;
         if ($hasDefault) {
+            /** @psalm-suppress MixedAssignment */
             $default = $parameter->getDefaultValue();
-            $paramDoc[(string) $parameter->name]['default'] = is_array($default) ? '[]' : (string) $parameter->getDefaultValue(); // @phpstan-ignore-lines
+            $paramDoc[$parameter->name]['default'] = is_array($default) ? '[]' : (string) $parameter->getDefaultValue(); // @phpstan-ignore-lines
         }
 
         return $paramDoc;
@@ -119,7 +120,7 @@ final class OptionsMethodRequest
     {
         $type = $this->getParameterType($parameter, $paramDoc, $parameter->name);
         if (is_string($type)) {
-            $paramDoc[(string) $parameter->name]['type'] = $type; // override type parameter by reflection over phpdoc param type
+            $paramDoc[$parameter->name]['type'] = $type; // override type parameter by reflection over phpdoc param type
         }
 
         return $paramDoc;
