@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace BEAR\Resource;
+namespace BEAR\Resource\Input;
 
 use BackedEnum;
+use BEAR\Resource\Exception\NotBackedEnumException;
 use BEAR\Resource\Exception\ParameterEnumTypeException;
 use BEAR\Resource\Exception\ParameterException;
 use BEAR\Resource\Exception\ParameterInvalidEnumException;

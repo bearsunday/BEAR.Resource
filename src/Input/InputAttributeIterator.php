@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BEAR\Resource;
+namespace BEAR\Resource\Input;
 
 use BEAR\Resource\Annotation\Input;
 use Generator;

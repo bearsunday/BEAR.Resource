@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BEAR\Resource;
+namespace BEAR\Resource\Exception;
 
 use LogicException;
 

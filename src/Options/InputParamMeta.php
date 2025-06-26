@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BEAR\Resource\Options;
 
-use BEAR\Resource\InputAttributeIterator;
+use BEAR\Resource\Input\InputAttributeIterator;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionNamedType;
