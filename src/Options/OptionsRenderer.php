@@ -27,6 +27,8 @@ use const PHP_EOL;
  *
  * @see https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html
  * @see /docs/options/README.md
+ *
+ * @psalm-import-type OptionParamDoc from OptionsMethods
  */
 final class OptionsRenderer implements RenderInterface
 {
@@ -78,7 +80,7 @@ final class OptionsRenderer implements RenderInterface
      *
      * @param list<string> $allows
      *
-     * @return array<string, array{description?: string, embed?: mixed, links?: mixed, request?: mixed, schema?: mixed, summary?: string}>
+     * @return array<string, OptionParamDoc>
      */
     private function getEntityBody(ResourceObject $ro, array $allows): array
     {

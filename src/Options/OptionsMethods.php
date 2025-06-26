@@ -33,6 +33,7 @@ use const JSON_THROW_ON_ERROR;
 /**
  * @psalm-type WebContextKey = class-string<AbstractWebContextParam>
  * @psalm-type WebContextValue = 'cookie'|'env'|'formData'|'query'|'server'|'files'
+ * @psalm-type OptionParamDoc = array{description?: string, embed?: mixed, links?: mixed, request?: mixed, schema?: mixed, summary?: string}
  */
 final class OptionsMethods
 {
@@ -55,7 +56,7 @@ final class OptionsMethods
     ) {
     }
 
-    /** @return array{description?: string, embed?: mixed, links?: mixed, request?: mixed, schema?: mixed, summary?: string} */
+    /** @return OptionParamDoc */
     public function __invoke(ResourceObject $ro, string $requestMethod): array
     {
         $method = new ReflectionMethod($ro::class, 'on' . $requestMethod);
@@ -77,7 +78,7 @@ final class OptionsMethods
             $methodOption += $extras;
         }
 
-        /** @var array{description?: string, embed?: mixed, links?: mixed, request?: mixed, schema?: mixed, summary?: string} $methodOption */
+        /** @var OptionParamDoc $methodOption */
         return $methodOption;
     }
 
