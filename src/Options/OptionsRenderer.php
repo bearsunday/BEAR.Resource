@@ -27,7 +27,6 @@ use const PHP_EOL;
  *
  * @see https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html
  * @see /docs/options/README.md
- *
  * @psalm-import-type OptionParamDoc from OptionsMethods
  */
 final class OptionsRenderer implements RenderInterface

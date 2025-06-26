@@ -38,7 +38,7 @@ class OptionsTest extends TestCase
     /** @depends testOptionsMethod */
     public function testOptionsMethodBody(ResourceObject $ro): void
     {
-        $actual = $ro->view;
+        $actual = (string) $ro->view;
         $expected = '{
     "GET": {
         "request": {
@@ -117,7 +117,7 @@ class OptionsTest extends TestCase
         $request = new Request($this->invoker, $ro, Request::OPTIONS);
         $this->invoker->invoke($request);
         $this->assertSame('GET, POST, PUT, DELETE', $ro->headers['Allow']);
-        $actual = $ro->view;
+        $actual = (string) $ro->view;
         $expected = '{
     "GET": {
         "request": {
@@ -244,7 +244,7 @@ class OptionsTest extends TestCase
     }
 }
 ';
-        $this->assertJsonStringEqualsJsonString($expected, $actual);
+        $this->assertJsonStringEqualsJsonString($expected, (string) $actual);
     }
 
     public function testOptionsNoSchemaFile(): void
@@ -267,6 +267,6 @@ class OptionsTest extends TestCase
     }
 }
 ';
-        $this->assertJsonStringEqualsJsonString($expected, $ro->view);
+        $this->assertJsonStringEqualsJsonString($expected, (string) $ro->view);
     }
 }

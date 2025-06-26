@@ -104,7 +104,11 @@ final class EmbedInterceptor implements MethodInterceptor
         }
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @param MethodInvocation<object> $invocation
+     *
+     * @return array<string, mixed>
+     */
     private function getArgsByInvocation(MethodInvocation $invocation): array
     {
         /** @var list<scalar> $args */

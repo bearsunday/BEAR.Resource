@@ -194,7 +194,11 @@ final class JsonSchemaInterceptor implements JsonSchemaInterceptorInterface
         }
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @param MethodInvocation<object> $invocation
+     *
+     * @return array<string, mixed>
+     */
     private function getNamedArguments(MethodInvocation $invocation): array
     {
         $parameters = $invocation->getMethod()->getParameters();
