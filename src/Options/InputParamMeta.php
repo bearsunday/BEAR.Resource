@@ -11,6 +11,7 @@ use ReflectionNamedType;
 use ReflectionParameter;
 
 use function array_merge;
+use function assert;
 use function class_exists;
 use function in_array;
 
@@ -46,14 +47,10 @@ final class InputParamMeta implements InputParamMetaInterface
 
         foreach (($this->inputIterator)($method) as $paramName => $param) {
             $type = $param->getType();
-            if (! $type instanceof ReflectionNamedType) {
-                continue;
-            }
+            assert($type instanceof ReflectionNamedType);
 
             $className = $type->getName();
-            if (! class_exists($className)) {
-                continue;
-            }
+            assert(class_exists($className));
 
             $groupDescription = $methodParamDocs[$paramName]['description'] ?? null;
             [$flatParams, $required] = $this->flattenInputClass(
@@ -92,10 +89,7 @@ final class InputParamMeta implements InputParamMetaInterface
     ): array {
         $refClass = new ReflectionClass($className);
         $constructor = $refClass->getConstructor();
-
-        if (! $constructor) {
-            return [[], []];
-        }
+        assert($constructor instanceof ReflectionMethod, 'Input class must have a constructor');
 
         // Use OptionsMethodRequest to handle parameter processing
         [, $constructorParamDocs] = ($this->docBlock)($constructor);

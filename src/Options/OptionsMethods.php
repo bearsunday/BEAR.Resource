@@ -21,6 +21,7 @@ use Ray\WebContextParam\Annotation\ServerParam;
 use function array_merge;
 use function array_unique;
 use function array_values;
+use function assert;
 use function file_exists;
 use function file_get_contents;
 use function json_decode;
@@ -186,9 +187,7 @@ final class OptionsMethods
                 }
 
                 $class = $instance::class;
-                if (! isset(self::WEB_CONTEXT_NAME[$class])) {
-                    continue;
-                }
+                assert(isset(self::WEB_CONTEXT_NAME[$class]), 'WebContextParam annotation must be one of the known types');
 
                 $webContextName = self::WEB_CONTEXT_NAME[$class];
                 $ins[$parameter->name] = $webContextName;
