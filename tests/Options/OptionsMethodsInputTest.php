@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace BEAR\Resource\Options;
 
-use BEAR\Resource\Annotation\Input;
+use BEAR\Resource\Fake\InputParam\Integration\FakeInputResource;
+use BEAR\Resource\Fake\InputParam\Integration\FakeNestedInputResourceIntegration;
+use BEAR\Resource\Fake\InputParam\Integration\FakeRequiredInputResourceIntegration;
 use BEAR\Resource\OptionsMethods;
-use BEAR\Resource\ResourceObject;
 use PHPUnit\Framework\TestCase;
 
 class OptionsMethodsInputTest extends TestCase
@@ -20,13 +21,15 @@ class OptionsMethodsInputTest extends TestCase
 
     public function testOptionsWithInputAttributes(): void
     {
-        $resource = new TestInputResource();
+        $resource = new FakeInputResource();
         $result = ($this->optionsMethods)($resource, 'Get');
 
         $this->assertArrayHasKey('request', $result);
+        $this->assertIsArray($result['request']);
         $this->assertArrayHasKey('parameters', $result['request']);
 
         $parameters = $result['request']['parameters'];
+        $this->assertIsArray($parameters);
 
         // Check that Input attribute parameters are included
         $this->assertArrayHasKey('name', $parameters);
@@ -34,6 +37,9 @@ class OptionsMethodsInputTest extends TestCase
         $this->assertArrayHasKey('format', $parameters); // regular parameter
 
         // Check Input parameter metadata
+        $this->assertIsArray($parameters['name']);
+        $this->assertIsArray($parameters['age']);
+        $this->assertIsArray($parameters['format']);
         $this->assertSame('string', $parameters['name']['type']);
         $this->assertSame('integer', $parameters['age']['type']);
         $this->assertSame('user', $parameters['name']['group']);
@@ -47,120 +53,40 @@ class OptionsMethodsInputTest extends TestCase
 
     public function testOptionsWithNestedInput(): void
     {
-        $resource = new TestNestedInputResourceIntegration();
+        $resource = new FakeNestedInputResourceIntegration();
         $result = ($this->optionsMethods)($resource, 'Post');
 
         $this->assertArrayHasKey('request', $result);
+        $this->assertIsArray($result['request']);
+        $this->assertArrayHasKey('parameters', $result['request']);
         $parameters = $result['request']['parameters'];
+        $this->assertIsArray($parameters);
 
         // Check parent parameters
         $this->assertArrayHasKey('firstName', $parameters);
         $this->assertArrayHasKey('lastName', $parameters);
+        $this->assertIsArray($parameters['firstName']);
         $this->assertSame('user', $parameters['firstName']['group']);
 
         // Check nested parameters
         $this->assertArrayHasKey('city', $parameters);
         $this->assertArrayHasKey('zipCode', $parameters);
+        $this->assertIsArray($parameters['city']);
         $this->assertSame('address', $parameters['city']['group']);
     }
 
     public function testOptionsWithRequiredParameters(): void
     {
-        $resource = new TestRequiredInputResourceIntegration();
+        $resource = new FakeRequiredInputResourceIntegration();
         $result = ($this->optionsMethods)($resource, 'Get');
 
         $this->assertArrayHasKey('request', $result);
+        $this->assertIsArray($result['request']);
         $this->assertArrayHasKey('required', $result['request']);
 
         $required = $result['request']['required'];
+        $this->assertIsArray($required);
         $this->assertContains('query', $required);
         $this->assertNotContains('category', $required); // has default
-    }
-}
-
-// Test resources
-class TestInputResource extends ResourceObject
-{
-    /**
-     * Get user information
-     *
-     * @param TestUserData $user   User data
-     * @param string       $format Response format
-     */
-    public function onGet(
-        #[Input]
-        TestUserData $user,
-        string $format = 'json',
-    ): static {
-        return $this;
-    }
-}
-
-class TestNestedInputResourceIntegration extends ResourceObject
-{
-    public function onPost(#[Input]
-    TestUserWithAddressData $user,): static
-    {
-        return $this;
-    }
-}
-
-class TestRequiredInputResourceIntegration extends ResourceObject
-{
-    public function onGet(#[Input]
-    TestSearchData $criteria,): static
-    {
-        return $this;
-    }
-}
-
-// Test data classes
-final class TestUserData
-{
-    /**
-     * @param string $name User name
-     * @param int    $age  User age
-     */
-    public function __construct(
-        public readonly string $name,
-        public readonly int $age,
-    ) {
-    }
-}
-
-final class TestAddressData
-{
-    /**
-     * @param string $city    City name
-     * @param string $zipCode ZIP code
-     */
-    public function __construct(
-        public readonly string $city,
-        public readonly string $zipCode,
-    ) {
-    }
-}
-
-final class TestUserWithAddressData
-{
-    public function __construct(
-        public readonly string $firstName,
-        public readonly string $lastName,
-        #[Input]
-        public readonly TestAddressData $address,
-    ) {
-    }
-}
-
-final class TestSearchData
-{
-    /**
-     * @param string      $query    Search query
-     * @param string|null $category Category filter
-     */
-    public function __construct(
-        public readonly string $query,
-        public readonly string|null $category = null,
-    ) {
     }
 }

@@ -40,7 +40,7 @@ final class InputParamMeta implements InputParamMetaInterface
             return [];
         }
 
-        [$methodDoc, $methodParamDocs] = ($this->docBlock)($method);
+        [, $methodParamDocs] = ($this->docBlock)($method);
 
         $allParameters = [];
         $allRequired = [];
@@ -100,7 +100,7 @@ final class InputParamMeta implements InputParamMetaInterface
 
         // Get constructor documentation using OptionsMethodDocBolck
         // This already handles type conversion (int -> integer) and description extraction
-        [$constructorDoc, $constructorParamDocs] = ($this->docBlock)($constructor);
+        [, $constructorParamDocs] = ($this->docBlock)($constructor);
 
         $parameters = [];
         $required = [];
@@ -112,7 +112,11 @@ final class InputParamMeta implements InputParamMetaInterface
             if ($this->inputIterator->getInputAttribute($param) !== null) {
                 $type = $param->getType();
                 if ($type instanceof ReflectionNamedType && class_exists($type->getName())) {
-                    $nestedDescription = $constructorParamDocs[$paramName]['description'] ?? null;
+                    $nestedDescription = null;
+                    if (isset($constructorParamDocs[$paramName]['description'])) {
+                        $nestedDescription = $constructorParamDocs[$paramName]['description'];
+                    }
+
                     [$nestedParams, $nestedRequired] = $this->flattenInputClass(
                         $type->getName(),
                         $paramName,
@@ -143,6 +147,7 @@ final class InputParamMeta implements InputParamMetaInterface
 
             // Add default value
             if ($param->isDefaultValueAvailable()) {
+                /** @var mixed $defaultValue */
                 $defaultValue = $param->getDefaultValue();
                 if (is_string($defaultValue)) {
                     $paramMeta['default'] = $defaultValue;

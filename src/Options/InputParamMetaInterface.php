@@ -21,7 +21,7 @@ interface InputParamMetaInterface
      *
      * @param ReflectionMethod $method Resource method
      *
-     * @return array{parameters?: array<string, array{type?: string, description?: string, default?: string, group?: string, group_description?: string}>, required?: array<int, string>}
+     * @return array{parameters?: array<string, array<string, mixed>>, required?: array<int, string>}
      */
     public function get(ReflectionMethod $method): array;
 }
