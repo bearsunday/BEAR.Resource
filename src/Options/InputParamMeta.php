@@ -142,9 +142,7 @@ final class InputParamMeta implements InputParamMetaInterface
         string|null $nestedDescription,
     ): array {
         $type = $param->getType();
-        if (! ($type instanceof ReflectionNamedType) || ! class_exists($type->getName())) {
-            return [[], []];
-        }
+        assert($type instanceof ReflectionNamedType && class_exists($type->getName()));
 
         return $this->flattenInputClass(
             $type->getName(),
