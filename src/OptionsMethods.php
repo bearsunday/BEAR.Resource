@@ -7,6 +7,7 @@ namespace BEAR\Resource;
 use BEAR\Resource\Annotation\Embed;
 use BEAR\Resource\Annotation\JsonSchema;
 use BEAR\Resource\Annotation\Link;
+use BEAR\Resource\Options\InputParamMetaInterface;
 use Ray\Aop\ReflectionMethod;
 use Ray\Di\Di\Named;
 use Ray\WebContextParam\Annotation\AbstractWebContextParam;
@@ -17,12 +18,17 @@ use Ray\WebContextParam\Annotation\FormParam;
 use Ray\WebContextParam\Annotation\QueryParam;
 use Ray\WebContextParam\Annotation\ServerParam;
 
+use function array_filter;
+use function array_merge;
+use function array_unique;
 use function assert;
 use function class_exists;
 use function file_exists;
 use function file_get_contents;
+use function in_array;
 use function json_decode;
 
+use const ARRAY_FILTER_USE_KEY;
 use const JSON_THROW_ON_ERROR;
 
 final class OptionsMethods
@@ -40,6 +46,7 @@ final class OptionsMethods
     ];
 
     public function __construct(
+        private readonly InputParamMetaInterface $inputParamMeta,
         #[Named('json_schema_dir')]
         private readonly string $schemaDir = '',
     ) {
@@ -57,6 +64,8 @@ final class OptionsMethods
         [$doc, $paramDoc] = (new OptionsMethodDocBolck())($method);
         $methodOption = $doc;
         $paramMetas = (new OptionsMethodRequest())($method, $paramDoc, $ins);
+        $inputMetas = $this->inputParamMeta->get($method);
+        $paramMetas = $this->mergeParameterMetas($paramMetas, $inputMetas, $method);
         $schema = $this->getJsonSchema($method);
         $request = $paramMetas ? ['request' => $paramMetas] : [];
         $methodOption += $request;
@@ -178,5 +187,79 @@ final class OptionsMethods
         }
 
         return $ins;
+    }
+
+    /**
+     * Merge parameter metadata from OptionsMethodRequest and InputParamMeta
+     *
+     * @param array{parameters?: array<string, array<string, mixed>>, required?: array<int, string>} $regularParams
+     * @param array{parameters?: array<string, array<string, mixed>>, required?: array<int, string>} $inputParams
+     *
+     * @return array{parameters?: array<string, array<string, mixed>>, required?: array<int, string>}
+     */
+    private function mergeParameterMetas(array $regularParams, array $inputParams, \ReflectionMethod $method): array
+    {
+        if (empty($inputParams)) {
+            return $regularParams;
+        }
+
+        // Filter out Input attribute parameters from regular parameters
+        $filteredParams = $regularParams;
+        if (isset($filteredParams['parameters'])) {
+            $filteredParams['parameters'] = $this->filterInputAttributeParameters($filteredParams['parameters'], $method);
+        }
+
+        $merged = [];
+
+        // Merge parameters
+        $allParameters = [];
+        if (isset($filteredParams['parameters'])) {
+            $allParameters = array_merge($allParameters, $filteredParams['parameters']);
+        }
+
+        if (isset($inputParams['parameters'])) {
+            $allParameters = array_merge($allParameters, $inputParams['parameters']);
+        }
+
+        if (! empty($allParameters)) {
+            $merged['parameters'] = $allParameters;
+        }
+
+        // Merge required parameters
+        $allRequired = [];
+        if (isset($filteredParams['required'])) {
+            $allRequired = array_merge($allRequired, $filteredParams['required']);
+        }
+
+        if (isset($inputParams['required'])) {
+            $allRequired = array_merge($allRequired, $inputParams['required']);
+        }
+
+        if (! empty($allRequired)) {
+            $merged['required'] = array_unique($allRequired);
+        }
+
+        return $merged;
+    }
+
+    /**
+     * Filter out parameters that have Input attributes
+     *
+     * @param array<string, array<string, mixed>> $parameters
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    private function filterInputAttributeParameters(array $parameters, \ReflectionMethod $method): array
+    {
+        $inputIterator = new InputAttributeIterator();
+
+        $inputParamNames = [];
+        foreach ($inputIterator($method) as $paramName => $param) {
+            $inputParamNames[] = $paramName;
+        }
+
+        return array_filter($parameters, static function ($key) use ($inputParamNames) {
+            return ! in_array($key, $inputParamNames, true);
+        }, ARRAY_FILTER_USE_KEY);
     }
 }

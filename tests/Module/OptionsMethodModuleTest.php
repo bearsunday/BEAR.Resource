@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace BEAR\Resource\Module;
 
+use BEAR\Resource\Options\InputParamMeta;
+use BEAR\Resource\Options\InputParamMetaInterface;
 use BEAR\Resource\OptionsMethods;
 use BEAR\Resource\OptionsRenderer;
 use BEAR\Resource\RenderInterface;
@@ -21,6 +23,7 @@ class OptionsMethodModuleTest extends TestCase
             protected function configure(): void
             {
                 $this->bind(OptionsMethods::class);
+                $this->bind(InputParamMetaInterface::class)->to(InputParamMeta::class);
                 $this->bind(Reader::class)->to(AnnotationReader::class);
             }
         }));

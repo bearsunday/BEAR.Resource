@@ -23,6 +23,8 @@ use BEAR\Resource\NamedParamMetasInterface;
 use BEAR\Resource\NullLogger;
 use BEAR\Resource\NullReverseLink;
 use BEAR\Resource\NullReverseLinker;
+use BEAR\Resource\Options\InputParamMeta;
+use BEAR\Resource\Options\InputParamMetaInterface;
 use BEAR\Resource\OptionsMethods;
 use BEAR\Resource\OptionsRenderer;
 use BEAR\Resource\PhpClassInvoker;
@@ -85,6 +87,7 @@ final class ResourceClientModule extends AbstractModule
         /** @psalm-suppress DeprecatedClass */
         $this->bind(RenderInterface::class)->annotatedWith('options')->to(OptionsRenderer::class);
         $this->bind(OptionsMethods::class);
+        $this->bind(InputParamMetaInterface::class)->to(InputParamMeta::class);
         $this->bind(NamedParamMetasInterface::class)->to(NamedParamMetas::class);
         $this->bind(ExtraMethodInvoker::class);
         $this->bind(HalLinker::class);
