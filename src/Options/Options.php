@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace BEAR\Resource;
+namespace BEAR\Resource\Options;
+
+use BEAR\Resource\Params;
 
 final class Options
 {

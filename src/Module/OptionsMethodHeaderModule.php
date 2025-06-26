@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace BEAR\Resource\Module;
 
 use BEAR\Resource\Annotation\OptionsBody;
-use BEAR\Resource\OptionsMethods;
-use BEAR\Resource\OptionsRenderer;
+use BEAR\Resource\Options\OptionsMethods;
+use BEAR\Resource\Options\OptionsRenderer;
 use BEAR\Resource\RenderInterface;
 use Ray\Di\AbstractModule;
 

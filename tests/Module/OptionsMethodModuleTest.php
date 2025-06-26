@@ -6,8 +6,8 @@ namespace BEAR\Resource\Module;
 
 use BEAR\Resource\Options\InputParamMeta;
 use BEAR\Resource\Options\InputParamMetaInterface;
-use BEAR\Resource\OptionsMethods;
-use BEAR\Resource\OptionsRenderer;
+use BEAR\Resource\Options\OptionsMethods;
+use BEAR\Resource\Options\OptionsRenderer;
 use BEAR\Resource\RenderInterface;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\Reader;

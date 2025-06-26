@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace BEAR\Resource;
+namespace BEAR\Resource\Options;
 
 use BEAR\Resource\Annotation\Embed;
 use BEAR\Resource\Annotation\JsonSchema;
 use BEAR\Resource\Annotation\Link;
-use BEAR\Resource\Options\InputParamMetaInterface;
+use BEAR\Resource\InputAttributeIterator;
+use BEAR\Resource\ResourceObject;
 use Ray\Aop\ReflectionMethod;
 use Ray\Di\Di\Named;
 use Ray\WebContextParam\Annotation\AbstractWebContextParam;

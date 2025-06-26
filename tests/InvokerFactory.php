@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use BEAR\Resource\Options\InputParamMeta;
+use BEAR\Resource\Options\OptionsMethods;
+use BEAR\Resource\Options\OptionsRenderer;
 use Ray\Di\Injector;
 
 final class InvokerFactory

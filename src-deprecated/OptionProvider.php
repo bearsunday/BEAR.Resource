@@ -6,6 +6,7 @@
  */
 namespace BEAR\Resource;
 
+use BEAR\Resource\Options\OptionsRenderer;
 use Doctrine\Common\Annotations\AnnotationReader;
 
 /**

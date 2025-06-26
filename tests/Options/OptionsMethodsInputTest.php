@@ -7,7 +7,6 @@ namespace BEAR\Resource\Options;
 use BEAR\Resource\Fake\InputParam\Integration\FakeInputResource;
 use BEAR\Resource\Fake\InputParam\Integration\FakeNestedInputResourceIntegration;
 use BEAR\Resource\Fake\InputParam\Integration\FakeRequiredInputResourceIntegration;
-use BEAR\Resource\OptionsMethods;
 use PHPUnit\Framework\TestCase;
 
 class OptionsMethodsInputTest extends TestCase

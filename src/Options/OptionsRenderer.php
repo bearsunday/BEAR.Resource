@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace BEAR\Resource;
+namespace BEAR\Resource\Options;
 
 use BEAR\Resource\Annotation\OptionsBody;
+use BEAR\Resource\RenderInterface;
+use BEAR\Resource\ResourceObject;
 use ReflectionClass;
 use ReflectionMethod;
 

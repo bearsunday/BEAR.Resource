@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+use BEAR\Resource\Options\Options;
 use LogicException;
 use ReflectionClass;
 use ReflectionMethod;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BEAR\Resource\Module;
 
-use BEAR\Resource\OptionsRenderer;
+use BEAR\Resource\Options\OptionsRenderer;
 use BEAR\Resource\RenderInterface;
 use Ray\Di\AbstractModule;
 
