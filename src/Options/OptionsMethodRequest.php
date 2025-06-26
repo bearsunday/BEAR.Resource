@@ -14,6 +14,7 @@ use function is_array;
 use function is_string;
 use function method_exists;
 
+/** @psalm-import-type OptionMethodMeta from InputParamMetaInterface */
 final class OptionsMethodRequest
 {
     /**
@@ -22,7 +23,7 @@ final class OptionsMethodRequest
      * @param array<string, array{type: string, description?: string}> $paramDoc
      * @param array<string, string>                                    $ins
      *
-     * @return array{parameters?: array<string, array{type?: string, description?: string, default?: string}>, required?: array<int, string>}
+     * @return OptionMethodMeta
      */
     public function __invoke(ReflectionMethod $method, array $paramDoc, array $ins): array
     {
@@ -49,7 +50,7 @@ final class OptionsMethodRequest
      * @param array<string, array{type: string, description?: string}> $paramDoc
      * @param array<string, string>                                    $ins
      *
-     * @return array{parameters?: array<string, array{type?: string}>, required?: array<int, string>}
+     * @return OptionMethodMeta
      */
     private function getParamMetas(array $parameters, array $paramDoc, array $ins): array
     {
@@ -142,7 +143,7 @@ final class OptionsMethodRequest
      * @param array<string, array{type?: string}> $paramDoc
      * @param list<string>                        $required
      *
-     * @return array{parameters?: array<string, array{type?: string}>, required?: array<int, string>}
+     * @return OptionMethodMeta
      */
     private function setParamMetas(array $paramDoc, array $required): array
     {

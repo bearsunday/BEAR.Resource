@@ -7,7 +7,6 @@ namespace BEAR\Resource\Options;
 use BEAR\Resource\Annotation\Embed;
 use BEAR\Resource\Annotation\JsonSchema;
 use BEAR\Resource\Annotation\Link;
-use BEAR\Resource\InputAttributeIterator;
 use BEAR\Resource\ResourceObject;
 use Ray\Aop\ReflectionMethod;
 use Ray\Di\Di\Named;
@@ -19,21 +18,20 @@ use Ray\WebContextParam\Annotation\FormParam;
 use Ray\WebContextParam\Annotation\QueryParam;
 use Ray\WebContextParam\Annotation\ServerParam;
 
-use function array_filter;
 use function array_merge;
 use function array_unique;
+use function array_values;
 use function file_exists;
 use function file_get_contents;
-use function in_array;
 use function json_decode;
 
-use const ARRAY_FILTER_USE_KEY;
 use const JSON_THROW_ON_ERROR;
 
 /**
  * @psalm-type WebContextKey = class-string<AbstractWebContextParam>
  * @psalm-type WebContextValue = 'cookie'|'env'|'formData'|'query'|'server'|'files'
  * @psalm-type OptionParamDoc = array{description?: string, embed?: mixed, links?: mixed, request?: mixed, schema?: mixed, summary?: string}
+ * @psalm-import-type OptionMethodMeta from InputParamMetaInterface
  */
 final class OptionsMethods
 {
@@ -65,7 +63,7 @@ final class OptionsMethods
         $methodOption = $doc;
         $paramMetas = (new OptionsMethodRequest())($method, $paramDoc, $ins);
         $inputMetas = $this->inputParamMeta->get($method);
-        $paramMetas = $this->mergeParameterMetas($paramMetas, $inputMetas, $method);
+        $paramMetas = $this->mergeParameterMetas($paramMetas, $inputMetas);
         $schema = $this->getJsonSchema($method);
         $request = $paramMetas ? ['request' => $paramMetas] : [];
         $methodOption += $request;
@@ -203,75 +201,29 @@ final class OptionsMethods
     /**
      * Merge parameter metadata from OptionsMethodRequest and InputParamMeta
      *
-     * @param array{parameters?: array<string, array<string, mixed>>, required?: array<int, string>} $regularParams
-     * @param array{parameters?: array<string, array<string, mixed>>, required?: array<int, string>} $inputParams
+     * @param OptionMethodMeta $regularParams
+     * @param OptionMethodMeta $inputParams
      *
-     * @return array{parameters?: array<string, array<string, mixed>>, required?: array<int, string>}
+     * @return OptionMethodMeta
      */
-    private function mergeParameterMetas(array $regularParams, array $inputParams, \ReflectionMethod $method): array
+    private function mergeParameterMetas(array $regularParams, array $inputParams): array
     {
-        if (empty($inputParams)) {
-            return $regularParams;
+        $regularParameters = $regularParams['parameters'] ?? [];
+        $inputParameters   = $inputParams['parameters'] ?? [];
+
+        $regularRequired = $regularParams['required'] ?? [];
+        $inputRequired   = $inputParams['required'] ?? [];
+
+        $parameters = array_merge($regularParameters, $inputParameters);
+        $required = array_values(array_unique(array_merge($regularRequired, $inputRequired)));
+
+        if ($parameters === [] && $required === []) {
+            return [];
         }
 
-        // Filter out Input attribute parameters from regular parameters
-        $filteredParams = $regularParams;
-        if (isset($filteredParams['parameters'])) {
-            $filteredParams['parameters'] = $this->filterInputAttributeParameters($filteredParams['parameters'], $method);
-        }
-
-        $merged = [];
-
-        // Merge parameters
-        $allParameters = [];
-        if (isset($filteredParams['parameters'])) {
-            $allParameters = array_merge($allParameters, $filteredParams['parameters']);
-        }
-
-        if (isset($inputParams['parameters'])) {
-            $allParameters = array_merge($allParameters, $inputParams['parameters']);
-        }
-
-        if (! empty($allParameters)) {
-            $merged['parameters'] = $allParameters;
-        }
-
-        // Merge required parameters
-        $allRequired = [];
-        if (isset($filteredParams['required'])) {
-            $allRequired = array_merge($allRequired, $filteredParams['required']);
-        }
-
-        if (isset($inputParams['required'])) {
-            $allRequired = array_merge($allRequired, $inputParams['required']);
-        }
-
-        if (! empty($allRequired)) {
-            $merged['required'] = array_unique($allRequired);
-        }
-
-        return $merged;
-    }
-
-    /**
-     * Filter out parameters that have Input attributes
-     *
-     * @param array<string, array<string, mixed>> $parameters
-     *
-     * @return array<string, array<string, mixed>>
-     */
-    private function filterInputAttributeParameters(array $parameters, \ReflectionMethod $method): array
-    {
-        $inputIterator = new InputAttributeIterator();
-
-        $inputParamNames = [];
-        foreach ($inputIterator($method) as $paramName => $param) {
-            unset($param);
-            $inputParamNames[] = $paramName;
-        }
-
-        return array_filter($parameters, static function ($key) use ($inputParamNames) {
-            return ! in_array($key, $inputParamNames, true);
-        }, ARRAY_FILTER_USE_KEY);
+        return [
+            'parameters' => $parameters,
+            'required'   => $required,
+        ];
     }
 }

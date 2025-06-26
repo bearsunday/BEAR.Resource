@@ -11,6 +11,8 @@ use ReflectionMethod;
  *
  * Extracts metadata from Input attribute parameters and flattens
  * them into query parameter specifications for OPTIONS responses
+ *
+ * @psalm-type OptionMethodMeta = array{parameters?: array<string, array<string, mixed>>, required?: array<int, string>}
  */
 interface InputParamMetaInterface
 {
@@ -21,7 +23,7 @@ interface InputParamMetaInterface
      *
      * @param ReflectionMethod $method Resource method
      *
-     * @return array{parameters?: array<string, array<string, mixed>>, required?: array<int, string>}
+     * @return OptionMethodMeta
      */
     public function get(ReflectionMethod $method): array;
 }
