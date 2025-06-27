@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BEAR\Resource\Input;
 
 use BEAR\Resource\Annotation\Input;
+use BEAR\Resource\Exception\InputClassParameterException;
 use BEAR\Resource\Exception\ParameterException;
 use InvalidArgumentException;
 use Ray\Di\InjectorInterface;
@@ -18,17 +19,18 @@ use function count;
 use function is_iterable;
 use function ltrim;
 use function preg_replace;
+use function sprintf;
 use function strtolower;
 
 final class InputParamObjectHandler
 {
     /**
      * Creates an object instance without calling its constructor
-     * 
+     *
      * This method instantiates an object and directly assigns values to its properties
      * without invoking the constructor. This approach is used to maintain backward
      * compatibility for legacy code that expects objects to be created this way.
-     * 
+     *
      * @param array<string, mixed> $query
      */
     public function createWithoutConstructor(
@@ -97,12 +99,9 @@ final class InputParamObjectHandler
                 continue;
             }
 
-            $message = "Required parameter '{$paramName}' not found";
-            if ($type !== '') {
-                $message .= " for {$type}";
-            }
+            $message = sprintf('paramName:%s: class:%s', $paramName, $type);
 
-            throw new ParameterException($message);
+            throw new InputClassParameterException($message);
         }
 
         return $constructorArgs;

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BEAR\Resource\Input;
 
 use BEAR\Resource\Annotation\Input;
+use BEAR\Resource\Exception\InputClassCreateException;
 use BEAR\Resource\Exception\ParameterException;
 use InvalidArgumentException;
 use Ray\Di\InjectorInterface;
@@ -76,7 +77,7 @@ final class InputParamFactory
                 throw $e;
             }
 
-            throw new ParameterException("Failed to create {$type}: " . $e->getMessage(), 0, $e);
+            throw new InputClassCreateException($type, 0, $e);
         }
     }
 

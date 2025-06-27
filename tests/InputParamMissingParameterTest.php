@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\Input;
+use BEAR\Resource\Exception\InputClassCreateException;
 use BEAR\Resource\Exception\ParameterException;
 use FakeVendor\Sandbox\Resource\App\Class\RequiredTestObject;
 use PHPUnit\Framework\TestCase;
@@ -25,8 +26,8 @@ class InputParamMissingParameterTest extends TestCase
     public function testMissingRequiredParameterFlatMapping(): void
     {
         // Test missing required parameter with #[Input] attribute (flat mapping)
-        $this->expectException(ParameterException::class);
-        $this->expectExceptionMessage("Required parameter 'age' not found for FakeVendor\Sandbox\Resource\App\Class\RequiredTestObject");
+        $this->expectException(InputClassCreateException::class);
+        $this->expectExceptionMessage(RequiredTestObject::class);
 
         $testResource = new class extends ResourceObject {
             public function onGet(#[Input]
@@ -47,7 +48,7 @@ class InputParamMissingParameterTest extends TestCase
     {
         // Test missing all required parameters with #[Input] attribute
         $this->expectException(ParameterException::class);
-        $this->expectExceptionMessage("Required parameter 'name' not found for FakeVendor\Sandbox\Resource\App\Class\RequiredTestObject");
+        $this->expectExceptionMessage(RequiredTestObject::class);
 
         $testResource = new class extends ResourceObject {
             public function onGet(#[Input]
@@ -68,7 +69,7 @@ class InputParamMissingParameterTest extends TestCase
     {
         // Test missing parameter - the first missing param (name) will trigger the exception
         $this->expectException(ParameterException::class);
-        $this->expectExceptionMessage("Required parameter 'name' not found for FakeVendor\Sandbox\Resource\App\Class\RequiredTestObject");
+        $this->expectExceptionMessage(RequiredTestObject::class);
 
         $testResource = new class extends ResourceObject {
             public function onGet(#[Input]
