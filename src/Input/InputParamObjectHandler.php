@@ -111,7 +111,7 @@ final class InputParamObjectHandler
         string $key,
         ReflectionClass $refClass,
         string $type,
-    ): object|null {
+    ): object {
         try {
             /** @var list<mixed> $constructorArgs */
             $constructorArgs = [];
