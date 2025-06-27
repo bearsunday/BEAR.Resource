@@ -22,7 +22,15 @@ use function strtolower;
 
 final class InputParamObjectHandler
 {
-    /** @param array<string, mixed> $query */
+    /**
+     * Creates an object instance without calling its constructor
+     * 
+     * This method instantiates an object and directly assigns values to its properties
+     * without invoking the constructor. This approach is used to maintain backward
+     * compatibility for legacy code that expects objects to be created this way.
+     * 
+     * @param array<string, mixed> $query
+     */
     public function createWithoutConstructor(
         string $type,
         string $varName,
