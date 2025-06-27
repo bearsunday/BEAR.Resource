@@ -14,7 +14,7 @@ class ClassValueObject extends ResourceObject
         PersonWithQualifiedService $qualifiedPerson,
         PersonWithNamedService $namedPerson,
         ServiceInterface $service,
-        $dafaultValue = 'default value'
+        string $defaultValue = 'default value'
     ){
         $this->body = [
             'person' => [
@@ -33,7 +33,7 @@ class ClassValueObject extends ResourceObject
                 'service' => $namedPerson->service->serve(),
             ],
             'service' => $service->serve(),
-            'defaultValue' => $dafaultValue,
+            'defaultValue' => $defaultValue,
         ];
 
         return $this;
