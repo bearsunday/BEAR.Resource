@@ -23,9 +23,11 @@ final class InputParam implements ParamInterface
         $this->type = $type->getName();
         $this->isDefaultAvailable = $parameter->isDefaultValueAvailable();
         $this->defaultValue = $this->isDefaultAvailable ? $parameter->getDefaultValue() : null;
+        $inputIterator = new InputAttributeIterator();
         $this->factory = new InputParamFactory(
             new InputParamEnumHandler(),
-            new InputParamObjectHandler(),
+            new InputParamObjectHandler($inputIterator),
+            $inputIterator,
         );
     }
 

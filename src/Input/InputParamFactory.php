@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace BEAR\Resource\Input;
 
-use BEAR\Resource\Annotation\Input;
 use BEAR\Resource\Exception\InputClassCreateException;
 use BEAR\Resource\Exception\ParameterException;
 use InvalidArgumentException;
@@ -16,7 +15,6 @@ use Throwable;
 
 use function assert;
 use function class_exists;
-use function count;
 use function enum_exists;
 use function is_array;
 
@@ -25,6 +23,7 @@ final class InputParamFactory
     public function __construct(
         private readonly InputParamEnumHandler $enumHandler,
         private readonly InputParamObjectHandler $objectHandler,
+        private readonly InputAttributeIterator $inputIterator,
     ) {
     }
 
@@ -55,7 +54,7 @@ final class InputParamFactory
         }
 
         // Check if this parameter has #[Input] attribute
-        $inputAttr = $this->getInputAttribute($parameter);
+        $inputAttr = $this->inputIterator->getInputAttribute($parameter);
 
         // If no #[Input] attribute, use ClassParam behavior
         if ($inputAttr === null) {
@@ -79,16 +78,6 @@ final class InputParamFactory
 
             throw new InputClassCreateException($type, 0, $e);
         }
-    }
-
-    private function getInputAttribute(ReflectionParameter $param): Input|null
-    {
-        $attributes = $param->getAttributes(Input::class);
-        if (count($attributes) === 0) {
-            return null;
-        }
-
-        return $attributes[0]->newInstance();
     }
 
     /**

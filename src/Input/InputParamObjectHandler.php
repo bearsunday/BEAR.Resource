@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace BEAR\Resource\Input;
 
-use BEAR\Resource\Annotation\Input;
 use BEAR\Resource\Exception\InputClassParameterException;
 use BEAR\Resource\Exception\ParameterException;
 use InvalidArgumentException;
@@ -12,10 +11,8 @@ use Ray\Di\InjectorInterface;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionNamedType;
-use ReflectionParameter;
 use Throwable;
 
-use function count;
 use function is_iterable;
 use function ltrim;
 use function preg_replace;
@@ -24,6 +21,11 @@ use function strtolower;
 
 final class InputParamObjectHandler
 {
+    public function __construct(
+        private readonly InputAttributeIterator $inputIterator,
+    ) {
+    }
+
     /**
      * Creates an object instance without calling its constructor
      *
@@ -74,7 +76,7 @@ final class InputParamObjectHandler
         foreach ($constructor->getParameters() as $param) {
             $paramName = $param->getName();
 
-            $inputAttr = $this->getInputAttribute($param);
+            $inputAttr = $this->inputIterator->getInputAttribute($param);
             if ($inputAttr !== null) {
                 $paramType = $param->getType();
                 if ($paramType instanceof ReflectionNamedType) {
@@ -126,7 +128,7 @@ final class InputParamObjectHandler
             foreach ($constructor->getParameters() as $param) {
                 $paramName = $param->getName();
 
-                $inputAttr = $this->getInputAttribute($param);
+                $inputAttr = $this->inputIterator->getInputAttribute($param);
                 if ($inputAttr !== null) {
                     $paramType = $param->getType();
                     if ($paramType instanceof ReflectionNamedType) {
@@ -161,16 +163,6 @@ final class InputParamObjectHandler
 
             throw new ParameterException("Failed to create {$type} from key '{$key}': " . $e->getMessage(), 0, $e);
         }
-    }
-
-    private function getInputAttribute(ReflectionParameter $param): Input|null
-    {
-        $attributes = $param->getAttributes(Input::class);
-        if (count($attributes) === 0) {
-            return null;
-        }
-
-        return $attributes[0]->newInstance();
     }
 
     /** @param array<string, mixed> $query */
