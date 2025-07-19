@@ -1,0 +1,66 @@
+{
+    "meta": {
+        "execution_id": "exec_123",
+        "started_at": "2024-01-15T10:30:00.000Z",
+        "ended_at": "2024-01-15T10:30:00.050Z"
+    },
+    "stream": [
+        {
+            "open": {
+                "id": "page://self/order",
+                "type": "transition",
+                "request": {
+                    "method": "GET",
+                    "params": {"id": "123"}
+                }
+            }
+        },
+        {
+            "open": {
+                "id": "app://self/order",
+                "type": "transition",
+                "request": {
+                    "method": "GET",
+                    "params": {"id": "123"}
+                }
+            }
+        },
+        {
+            "database": {
+                "id": "order.sql",
+                "query": {
+                    "sql": "SELECT * FROM orders WHERE id = :id",
+                    "bindings": {"id": 123}
+                }
+            }
+        },
+        {
+            "database": {
+                "id": "verify.sql",
+                "query": {
+                    "sql": "SELECT * FROM orders WHERE id = :id AND status = 'completed'",
+                    "bindings": {"id": 123}
+                }
+            }
+        },
+        {
+            "close": {
+                "id": "app://self/order",
+                "response": {
+                    "code": 200,
+                    "body": {"order_id": 123}
+                }
+            }
+        },
+        {
+            "close": {
+                "id": "page://self/order",
+                "response": {
+                    "code": 200,
+                    "body": {"order_id": 123},
+                    "view": "{...}"
+                }
+            }
+        }
+    ]
+}
