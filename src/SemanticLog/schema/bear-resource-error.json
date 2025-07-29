@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "bear-resource-error.json",
+  "title": "BEAR Resource Error",
+  "description": "Schema for BEAR Resource error logging",
+  "type": "object",
+  "properties": {
+    "resourceClass": {
+      "type": "string",
+      "description": "The fully qualified class name of the resource"
+    },
+    "method": {
+      "type": "string",
+      "description": "The resource method (onGet, onPost, etc.)"
+    },
+    "exceptionClass": {
+      "type": "string",
+      "description": "The fully qualified class name of the exception"
+    },
+    "exceptionMessage": {
+      "type": "string",
+      "description": "The error message from the exception"
+    }
+  },
+  "required": ["resourceClass", "method", "exceptionClass", "exceptionMessage"]
+}

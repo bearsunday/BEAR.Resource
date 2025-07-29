@@ -1,0 +1,41 @@
+{
+    "test": "testInvokeBasicFlow",
+    "timestamp": "2025-07-28T16:59:35+00:00",
+    "calls": [
+        {
+            "method": "open",
+            "context": {
+                "session_id": "session_6887ac7744e714.16576898",
+                "start_time": 1753721975.282451,
+                "uri": "app:\/\/self\/test",
+                "method": "get",
+                "query": {
+                    "id": 1
+                },
+                "type": "resource_request"
+            }
+        },
+        {
+            "method": "add",
+            "entry": {
+                "type": "resource_invoke_start"
+            }
+        },
+        {
+            "method": "add",
+            "entry": {
+                "type": "resource_invoke_end"
+            }
+        },
+        {
+            "method": "close",
+            "context": {
+                "session_id": "session_6887ac7744e714.16576898_success",
+                "start_time": 1753721975.283213,
+                "type": "resource_result",
+                "code": 200,
+                "success": true
+            }
+        }
+    ]
+}

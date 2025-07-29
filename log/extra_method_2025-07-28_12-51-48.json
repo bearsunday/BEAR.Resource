@@ -1,0 +1,36 @@
+{
+    "test": "testInvokeWithExtraMethod",
+    "timestamp": "2025-07-28T12:51:48+00:00",
+    "calls": [
+        {
+            "method": "open",
+            "context": {
+                "session_id": "resource_request",
+                "start_time": 1753707108.21391,
+                "uri": "app:\/\/self\/test",
+                "method": "options",
+                "query": [],
+                "type": "resource_request"
+            }
+        },
+        {
+            "method": "add",
+            "entry": {
+                "event_type": "resource_invoke_start",
+                "id": "session_68877264343931.39798559_start",
+                "timestamp": 1753707108.213911
+            }
+        },
+        {
+            "method": "add",
+            "entry": {
+                "event_type": "extra_method_invoked",
+                "id": "session_68877264343931.39798559_extra",
+                "timestamp": 1753707108.214119
+            }
+        },
+        {
+            "method": "close"
+        }
+    ]
+}

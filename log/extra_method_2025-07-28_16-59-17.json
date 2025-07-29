@@ -1,0 +1,32 @@
+{
+    "test": "testInvokeWithExtraMethod",
+    "timestamp": "2025-07-28T16:59:17+00:00",
+    "calls": [
+        {
+            "method": "open",
+            "context": {
+                "session_id": "session_6887ac659cb656.04162050",
+                "start_time": 1753721957.641895,
+                "uri": "app:\/\/self\/test",
+                "method": "options",
+                "query": [],
+                "type": "resource_request"
+            }
+        },
+        {
+            "method": "add",
+            "entry": {
+                "type": "resource_invoke_start"
+            }
+        },
+        {
+            "method": "add",
+            "entry": {
+                "type": "extra_method_invoked"
+            }
+        },
+        {
+            "method": "close"
+        }
+    ]
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "bear-resource-request.json",
+  "title": "BEAR Resource Request",
+  "description": "Schema for BEAR Resource request logging",
+  "type": "object",
+  "properties": {
+    "resourceClass": {
+      "type": "string",
+      "description": "The fully qualified class name of the resource"
+    },
+    "method": {
+      "type": "string",
+      "description": "The resource method (onGet, onPost, etc.)"
+    },
+    "args": {
+      "type": "object",
+      "description": "The arguments passed to the resource method"
+    }
+  },
+  "required": ["resourceClass", "method", "args"]
+}

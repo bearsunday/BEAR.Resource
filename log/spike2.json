@@ -1,0 +1,58 @@
+{
+    "$schema": "https://example.org/schemas/bear.resource-log.schema.json",
+    "title": "BEAR.Resource Structured Logger",
+    "log": {
+        "type": "resource_request",
+        "$schema": "resource_request.json",
+        "open_context": {
+            "method": "get",
+            "path": "page://self/test",
+            "query": {
+                "id": 1
+            }
+        },
+        "events": [
+            {"type": "sql", "context": {"sql": "SELECT * FROM users WHERE id = :id", "parameters": [1], "execution_time": 0.002, "affected_rows": 1, "database": "test_db", "table": "users"}},
+            {"type": "foo", "context": {}},
+            {"type": "bar", "context": {}},
+            {"type": "baz", "context": {}}
+        ],
+        "log:": {
+            "type": "resource_request",
+            "$schema": "resource_request.json",
+            "open_context": {
+                "method": "get",
+                "path": "app://self/test",
+                "query": {
+                    "id": 1
+                }
+            },
+            "events": [
+                {"type": "sql", "context": {"sql": "SELECT * FROM users WHERE id = :id", "parameters": [1], "execution_time": 0.002, "affected_rows": 1, "database": "test_db", "table": "users"}},
+                {"type": "foo", "context": {}},
+                {"type": "bar", "context": {}},
+                {"type": "baz", "context": {}}
+            ],
+            "close_context": {
+                "context": {
+                    "status_code": 200,
+                    "response_time": 0.123
+                }
+            }
+        },
+        "close_context": {
+            "context": {
+                "status_code": 200,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "message": "Resource request successful"
+                },
+                "response_time": 0.123
+            }
+        }
+    ]
+}
+
+

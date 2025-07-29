@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "bear-resource-complete.json",
+  "title": "BEAR Resource Complete",
+  "description": "Schema for BEAR Resource completion logging",
+  "type": "object",
+  "properties": {
+    "resourceClass": {
+      "type": "string",
+      "description": "The fully qualified class name of the resource"
+    },
+    "method": {
+      "type": "string",
+      "description": "The resource method (onGet, onPost, etc.)"
+    },
+    "code": {
+      "type": "integer",
+      "description": "The HTTP status code of the response"
+    },
+    "body": {
+      "type": "object",
+      "description": "The response body from the resource"
+    }
+  },
+  "required": ["resourceClass", "method", "code", "body"]
+}
