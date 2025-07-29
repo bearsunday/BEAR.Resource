@@ -26,7 +26,8 @@
         "rize/uri-template": "^0.4",
         "symfony/polyfill-php83": "^v1.32",
         "ray/input-query": "^1.0",
-        "koriym/file-upload": "^0.2.0"
+        "koriym/file-upload": "^0.2.0",
+        "koriym/semantic-logger": "^0.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.6.29",
@@ -37,7 +38,8 @@
     },
     "autoload": {
         "psr-4": {
-            "BEAR\\Resource\\": ["src/", "src/JsonSchema", "src-deprecated"]
+            "BEAR\\Resource\\": ["src/", "src/JsonSchema", "src-deprecated"],
+            "BEAR\\SchemaLogger\\": "src-logger/bear/"
         },
         "files": [
             "src-files/uri_template.php"
@@ -51,6 +53,8 @@
                 "tests/Fake/",
                 "tests-deprecated"
             ],
+            "BEAR\\SchemaLogger\\": "tests-logger/bear/",
+            "Koriym\\SemanticLogger\\": ["semantic-logger/tests/", "semantic-logger/tests/Fake/"],
             "FakeVendor\\Sandbox\\": "tests/Fake/FakeVendor/Sandbox/",
             "FakeVendor\\Blog\\": "tests/Fake/FakeVendor/Blog/src",
             "FakeVendor\\News\\": "tests/Fake/FakeVendor/News/src"

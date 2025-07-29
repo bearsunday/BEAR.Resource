@@ -20,6 +20,8 @@ use Ray\Di\AbstractModule;
 use Ray\Di\Injector;
 use ReflectionClass;
 
+use function assert;
+use function is_string;
 use function json_encode;
 use function substr_count;
 
@@ -292,20 +294,10 @@ final class SemanticLoggerIntegrationTest extends TestCase
         $jsonString = json_encode($logJson, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
         assert(is_string($jsonString));
 
-        // Debug output - show complete JSON structure
-        echo "\n=== 3-LEVEL NESTING DEBUG OUTPUT ===\n";
-        echo $jsonString;
-        echo "\n=== END DEBUG OUTPUT ===\n";
-
-        // String analysis
+        // String analysis for null fields
         $nullFieldCount = substr_count($jsonString, ': null');
         $openNullCount = substr_count($jsonString, '"open": null');
         $closeNullCount = substr_count($jsonString, '"close": null');
-
-        echo "\nNull field analysis:";
-        echo "\n- Total null fields: {$nullFieldCount}";
-        echo "\n- 'open': null count: {$openNullCount}";
-        echo "\n- 'close': null count: {$closeNullCount}";
 
         // Simple string comparison test - should not contain any null fields
         $this->assertStringNotContainsString(': null', $jsonString);
@@ -363,7 +355,8 @@ final class SemanticLoggerIntegrationTest extends TestCase
         $level2Open = $logJson->open->open;
         $this->assertSame('bear_resource_request', $level2Open->type);
         $level2Context = (array) $level2Open->context;
-        /** @psalm-suppress MixedArgument */
+        $this->assertArrayHasKey('resourceClass', $level2Context);
+        $this->assertIsString($level2Context['resourceClass']);
         $this->assertStringContainsString('Canary', $level2Context['resourceClass']);
 
         // Level 3: Birds resource (main resource)
@@ -371,7 +364,8 @@ final class SemanticLoggerIntegrationTest extends TestCase
         $level3Open = $level2Open->open;
         $this->assertSame('bear_resource_request', $level3Open->type);
         $level3Context = (array) $level3Open->context;
-        /** @psalm-suppress MixedArgument */
+        $this->assertArrayHasKey('resourceClass', $level3Context);
+        $this->assertIsString($level3Context['resourceClass']);
         $this->assertStringContainsString('Birds', $level3Context['resourceClass']);
 
         // Verify that the deepest level has no further nesting

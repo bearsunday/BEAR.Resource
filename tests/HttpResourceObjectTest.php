@@ -15,8 +15,8 @@ use function is_array;
 
 class HttpResourceObjectTest extends TestCase
 {
-    private const HOST = '127.0.0.1:8099';
-    private const URL = 'http://127.0.0.1:8099/';
+    private const HOST = '127.0.0.1:8098';
+    private const URL = 'http://127.0.0.1:8098/';
     private static BuiltinServer $server;
     private ResourceInterface $resource;
 

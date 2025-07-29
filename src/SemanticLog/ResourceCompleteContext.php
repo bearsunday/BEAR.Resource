@@ -14,9 +14,7 @@ final class ResourceCompleteContext extends AbstractContext
     /** @psalm-suppress InvalidClassConstantType */
     public const SCHEMA_URL = 'file://' . __DIR__ . '/schema/bear-resource-complete.json';
 
-    /**
-     * @param array<string, mixed> $body
-     */
+    /** @param array<string, mixed> $body */
     public function __construct(
         public readonly string $resourceClass,
         public readonly string $method,

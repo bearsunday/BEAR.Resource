@@ -55,12 +55,13 @@ final class SemanticResourceInvokerAdapter implements InvokerInterface
         try {
             $result = $this->invoker->invoke($request);
 
+            /** @var array<string, mixed> $body */
+            $body = (array) $result->body;
             $closeContext = new ResourceCompleteContext(
                 $resourceClass,
                 $resourceMethod,
                 $result->code,
-                /** @var array<string, mixed> */
-                (array) $result->body,
+                $body,
             );
 
             $this->semanticLogger->close($closeContext, $openId);
