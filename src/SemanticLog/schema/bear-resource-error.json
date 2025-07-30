@@ -5,13 +5,13 @@
   "description": "Schema for BEAR Resource error logging",
   "type": "object",
   "properties": {
-    "resourceClass": {
+    "uri": {
       "type": "string",
-      "description": "The fully qualified class name of the resource"
+      "description": "The resource URI (e.g., app://self/user/profile)"
     },
     "method": {
       "type": "string",
-      "description": "The resource method (onGet, onPost, etc.)"
+      "description": "The HTTP method (GET, POST, PUT, DELETE, etc.)"
     },
     "exceptionClass": {
       "type": "string",
@@ -19,8 +19,8 @@
     },
     "exceptionMessage": {
       "type": "string",
-      "description": "The error message from the exception"
+      "description": "The exception message"
     }
   },
-  "required": ["resourceClass", "method", "exceptionClass", "exceptionMessage"]
+  "required": ["uri", "method", "exceptionClass", "exceptionMessage"]
 }

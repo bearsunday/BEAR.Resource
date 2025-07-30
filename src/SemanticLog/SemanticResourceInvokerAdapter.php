@@ -12,12 +12,7 @@ use Override;
 use Ray\Di\Di\Named;
 use Throwable;
 
-use function array_merge;
-use function get_class;
-use function is_array;
-use function property_exists;
-use function strtolower;
-use function ucfirst;
+use function strtoupper;
 
 final class SemanticResourceInvokerAdapter implements InvokerInterface
 {
@@ -31,23 +26,16 @@ final class SemanticResourceInvokerAdapter implements InvokerInterface
     #[Override]
     public function invoke(AbstractRequest $request): ResourceObject
     {
-        // Use resource class name for better traceability
-        $resourceClass = get_class($request->resourceObject);
+        // Use URI and method for better user understanding
+        $uri = $request->toUri();
+        $method = strtoupper($request->method);
 
-        // Convert HTTP method to resource method (GET -> onGet)
-        $resourceMethod = 'on' . ucfirst(strtolower($request->method));
+        $query = $request->query;
 
-        // Combine query and body parameters for complete parameter context
-        $parameters = array_merge(
-            $request->query,
-            property_exists($request, 'body') && is_array($request->body) ? $request->body : [],
-        );
-
-        /** @var array<string, mixed> $parameters */
         $context = new ResourceOpenContext(
-            $resourceClass,
-            $resourceMethod,
-            $parameters,
+            $uri,
+            $method,
+            $query,
         );
 
         $openId = $this->semanticLogger->open($context);
@@ -55,13 +43,9 @@ final class SemanticResourceInvokerAdapter implements InvokerInterface
         try {
             $result = $this->invoker->invoke($request);
 
-            /** @var array<string, mixed> $body */
-            $body = (array) $result->body;
             $closeContext = new ResourceCompleteContext(
-                $resourceClass,
-                $resourceMethod,
-                $result->code,
-                $body,
+                $result,
+                $method,
             );
 
             $this->semanticLogger->close($closeContext, $openId);
@@ -69,8 +53,8 @@ final class SemanticResourceInvokerAdapter implements InvokerInterface
             return $result;
         } catch (Throwable $e) {
             $errorContext = new ResourceErrorContext(
-                $resourceClass,
-                $resourceMethod,
+                $uri,
+                $method,
                 $e::class,
                 $e->getMessage(),
             );

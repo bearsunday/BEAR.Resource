@@ -5,18 +5,18 @@
   "description": "Schema for BEAR Resource request logging",
   "type": "object",
   "properties": {
-    "resourceClass": {
+    "uri": {
       "type": "string",
-      "description": "The fully qualified class name of the resource"
+      "description": "The resource URI (e.g., app://self/user/profile)"
     },
     "method": {
-      "type": "string",
-      "description": "The resource method (onGet, onPost, etc.)"
+      "type": "string", 
+      "description": "The HTTP method (GET, POST, PUT, DELETE, etc.)"
     },
-    "args": {
+    "query": {
       "type": "object",
-      "description": "The arguments passed to the resource method"
+      "description": "The query parameters passed to the resource"
     }
   },
-  "required": ["resourceClass", "method", "args"]
+  "required": ["uri", "method", "query"]
 }

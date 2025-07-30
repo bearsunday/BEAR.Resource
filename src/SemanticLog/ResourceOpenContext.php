@@ -12,13 +12,13 @@ final class ResourceOpenContext extends AbstractContext
     public const TYPE = 'bear_resource_request';
 
     /** @psalm-suppress InvalidClassConstantType */
-    public const SCHEMA_URL = 'file://' . __DIR__ . '/schema/bear-resource-request.json';
+    public const SCHEMA_URL = 'https://bearsunday.github.io/BEAR.Resource/schemas/bear-resource-request.json';
 
-    /** @param array<string, mixed> $args */
+    /** @param array<string, mixed> $query */
     public function __construct(
-        public readonly string $resourceClass,
+        public readonly string $uri,
         public readonly string $method,
-        public readonly array $args,
+        public readonly array $query,
     ) {
     }
 }

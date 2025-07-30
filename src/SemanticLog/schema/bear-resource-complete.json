@@ -5,22 +5,29 @@
   "description": "Schema for BEAR Resource completion logging",
   "type": "object",
   "properties": {
-    "resourceClass": {
+    "uri": {
       "type": "string",
-      "description": "The fully qualified class name of the resource"
+      "description": "The resource URI (e.g., app://self/user/profile)"
     },
     "method": {
       "type": "string",
-      "description": "The resource method (onGet, onPost, etc.)"
+      "description": "The HTTP method (GET, POST, PUT, DELETE, etc.)"
     },
     "code": {
       "type": "integer",
       "description": "The HTTP status code of the response"
     },
-    "body": {
+    "headers": {
       "type": "object",
+      "description": "The response headers"
+    },
+    "body": {
       "description": "The response body from the resource"
+    },
+    "view": {
+      "type": ["string", "null"],
+      "description": "The rendered view (may be null for some resources)"
     }
   },
-  "required": ["resourceClass", "method", "code", "body"]
+  "required": ["uri", "method", "code", "headers", "body"]
 }
