@@ -6,6 +6,10 @@ namespace BEAR\Resource\SemanticLog;
 
 use Koriym\SemanticLogger\AbstractContext;
 
+use function crc32;
+use function dechex;
+
+/** @deprecated Use BEAR\Resource\SemanticLog\Profile\Compact\ErrorContext instead */
 final class ResourceErrorContext extends AbstractContext
 {
     /** @psalm-suppress InvalidClassConstantType */
@@ -16,25 +20,17 @@ final class ResourceErrorContext extends AbstractContext
 
     public readonly string $exceptionId;
 
-    public function __construct(
-        public readonly string $exceptionClass,
-        public readonly string $exceptionMessage,
-        string $exceptionId = '',
-    ) {
+    public function __construct(public readonly string $exceptionClass, public readonly string $exceptionMessage, string $exceptionId = '')
+    {
         $this->exceptionId = $exceptionId !== '' ? $exceptionId : $this->createExceptionId();
     }
 
     private function createExceptionId(): string
     {
-        $crc = crc32($this->exceptionClass);
-        $crcHex = dechex($crc & 0xFFFFFFFF); // Ensure positive hex value
-        
-        // Use fixed ID in test environment for reproducible tests
-        if (defined('PHPUNIT_COMPOSER_INSTALL') || (isset($GLOBALS['_composer_autoload_path']) && str_contains($GLOBALS['_composer_autoload_path'], 'phpunit'))) {
-            static $counter = 0;
-            return 'e-bear-resource-test-' . sprintf('%03d', ++$counter) . '-' . $crcHex;
-        }
-        
-        return 'e-bear-resource-' . uniqid() . '-' . $crcHex;
+        $content = $this->exceptionClass . ':' . $this->exceptionMessage;
+        $crc = crc32($content);
+        $crcHex = dechex($crc & 0xFFFFFFFF);
+
+        return 'e-bear-resource-' . $crcHex;
     }
 }

@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+use BEAR\Resource\SemanticLog\ContextFactoryInterface;
 use BEAR\Resource\SemanticLog\Module\SemanticLoggerModule;
 use BEAR\Resource\SemanticLog\ResourceCompleteContext;
 use BEAR\Resource\SemanticLog\ResourceErrorContext;
 use BEAR\Resource\SemanticLog\ResourceOpenContext;
 use FakeVendor\Sandbox\Module\AppModule;
+use JsonSchema\Validator;
 use Koriym\SemanticLogger\Exception\InvalidOperationOrderException;
 use Koriym\SemanticLogger\Exception\NoLogSessionException;
 use Koriym\SemanticLogger\Exception\NoOpenOperationsException;
@@ -19,12 +21,23 @@ use PHPUnit\Framework\TestCase;
 use Ray\Di\AbstractModule;
 use Ray\Di\Injector;
 use ReflectionClass;
+use RuntimeException;
 
+use function array_merge;
 use function assert;
+use function basename;
+use function file_exists;
+use function file_get_contents;
+use function file_put_contents;
+use function is_dir;
 use function is_string;
+use function json_decode;
 use function json_encode;
+use function mkdir;
 use function str_contains;
+use function strtoupper;
 use function substr_count;
+use function unlink;
 
 use const JSON_PRETTY_PRINT;
 use const JSON_UNESCAPED_SLASHES;
@@ -50,6 +63,198 @@ final class SemanticLoggerIntegrationTest extends TestCase
 
         // Get the same logger instance that's used by the adapter
         $this->semanticLogger = $injector->getInstance(SemanticLoggerInterface::class);
+    }
+
+    /** @param array<string, mixed> $query */
+    private function createRequest(string $uri, string $method, array $query = []): AbstractRequest
+    {
+        // Create a simple mock request for testing
+        return new class ($uri, $method, $query) extends AbstractRequest {
+            private string $testUri;
+
+            public function __construct(string $uri, string $method, array $query)
+            {
+                $this->testUri = $uri;
+                $this->method = $method;
+                $this->query = $query;
+                $this->options = [];
+
+                // Create a mock resource object
+                $this->resourceObject = new class extends ResourceObject {
+                    public function __construct()
+                    {
+                        $this->uri = new Uri('app://self/test');
+                        $this->code = 200;
+                        $this->headers = [];
+                        $this->body = [];
+                        $this->view = '';
+                    }
+                };
+
+                // Set the URI on the resource object
+                $this->resourceObject->uri = new Uri($uri);
+            }
+
+            public function withQuery(array $query): RequestInterface
+            {
+                $new = clone $this;
+                $new->query = $query;
+
+                return $new;
+            }
+
+            public function addQuery(array $query): RequestInterface
+            {
+                $new = clone $this;
+                $new->query = array_merge($this->query, $query);
+
+                return $new;
+            }
+
+            public function toUri(): string
+            {
+                return $this->testUri;
+            }
+
+            public function toUriWithMethod(): string
+            {
+                return strtoupper($this->method) . ' ' . $this->testUri;
+            }
+
+            public function toString(): string
+            {
+                return $this->toUriWithMethod();
+            }
+
+            public function __toString(): string
+            {
+                return $this->toString();
+            }
+
+            public function linkSelf(string $rel): RequestInterface
+            {
+                return $this;
+            }
+
+            public function linkNew(string $rel): RequestInterface
+            {
+                return $this;
+            }
+
+            public function linkCrawl(string $rel): RequestInterface
+            {
+                return $this;
+            }
+        };
+    }
+
+    /** @return array<string, array{string}> */
+    public static function profileProvider(): array
+    {
+        return [
+            'Compact' => ['Compact'],
+            'Verbose' => ['Verbose'],
+        ];
+    }
+
+    /** @dataProvider profileProvider */
+    public function testActualLogOutputValidatesAgainstJsonSchema(string $profileNamespace): void
+    {
+        // Setup output directory
+        $outputDir = __DIR__ . '/tmp';
+        if (! is_dir($outputDir)) {
+            mkdir($outputDir, 0777, true);
+        }
+
+        $logFiles = [];
+        $schemas = [
+            'bear_resource_request' => __DIR__ . '/../src/SemanticLog/schema/open-context.json',
+            'bear_resource_complete' => __DIR__ . '/../src/SemanticLog/schema/complete-context.json',
+            'bear_resource_error' => __DIR__ . '/../src/SemanticLog/schema/error-context.json',
+        ];
+
+        // Use ContextFactory for the specified profile
+        $contextFactoryClass = "BEAR\\Resource\\SemanticLog\\Profile\\{$profileNamespace}\\ContextFactory";
+        /** @var ContextFactoryInterface $contextFactory */
+        $contextFactory = new $contextFactoryClass();
+
+        // Test 1: Create and validate OpenContext using ContextFactory
+        $mockRequest = $this->createRequest('app://self/bird/canary', 'GET', ['id' => 123]);
+        $openContext = $contextFactory->createOpenContext($mockRequest);
+        $openContextArray = (array) $openContext;
+
+        $openFile = $outputDir . "/open-context-{$profileNamespace}.json";
+        file_put_contents($openFile, json_encode($openContextArray, JSON_PRETTY_PRINT));
+        $logFiles[] = $openFile;
+
+        // Test 2: Create and validate CompleteContext using ContextFactory
+        $resource = $this->resource->get('app://self/bird/canary', ['id' => 123]);
+        $completeContext = $contextFactory->createCompleteContext($resource, $openContext);
+        $completeContextArray = (array) $completeContext;
+
+        $completeFile = $outputDir . "/complete-context-{$profileNamespace}.json";
+        file_put_contents($completeFile, json_encode($completeContextArray, JSON_PRETTY_PRINT));
+        $logFiles[] = $completeFile;
+
+        // Test 3: Create and validate ErrorContext using ContextFactory
+        $errorContext = $contextFactory->createErrorContext(new RuntimeException('Test error'));
+        $errorContextArray = (array) $errorContext;
+
+        $errorFile = $outputDir . "/error-context-{$profileNamespace}.json";
+        file_put_contents($errorFile, json_encode($errorContextArray, JSON_PRETTY_PRINT));
+        $logFiles[] = $errorFile;
+
+        // Validate each context against its schema
+        foreach ($logFiles as $logFile) {
+            $logContent = file_get_contents($logFile);
+            if ($logContent === false) {
+                $this->fail("Could not read log file: {$logFile}");
+            }
+
+            $logData = json_decode($logContent);
+
+            $this->assertNotNull($logData, "Invalid JSON in log file: {$logFile}");
+
+            // Determine context type from filename
+            $basename = basename($logFile);
+            $contextType = match (true) {
+                str_contains($basename, 'open-context-') => 'bear_resource_request',
+                str_contains($basename, 'complete-context-') => 'bear_resource_complete',
+                str_contains($basename, 'error-context-') => 'bear_resource_error',
+                default => null,
+            };
+
+            if ($contextType === null) {
+                continue; // Skip unknown types
+            }
+
+            // Load corresponding schema
+            $schemaContent = file_get_contents($schemas[$contextType]);
+            if ($schemaContent === false) {
+                $this->fail("Could not read schema file: {$schemas[$contextType]}");
+            }
+
+            $schema = json_decode($schemaContent);
+
+            // Validate against schema
+            $validator = new Validator();
+            $validator->validate($logData, $schema);
+
+            $this->assertTrue(
+                $validator->isValid(),
+                "Log file {$logFile} with type {$contextType} failed schema validation: " .
+                json_encode($validator->getErrors(), JSON_PRETTY_PRINT),
+            );
+        }
+
+        // Cleanup
+        foreach ($logFiles as $logFile) {
+            if (! file_exists($logFile)) {
+                continue;
+            }
+
+            unlink($logFile);
+        }
     }
 
     public function testBearResourceContextTypes(): void
@@ -153,7 +358,7 @@ final class SemanticLoggerIntegrationTest extends TestCase
         $this->semanticLogger->open($openContext);
 
         // Create an event but don't close the operation
-        $eventContext = new ResourceErrorContext('app://self/test', 'GET', 'Exception', 'Error occurred');
+        $eventContext = new ResourceErrorContext('Exception', 'Error occurred');
         $this->semanticLogger->event($eventContext);
 
         $this->expectException(UnclosedLogicException::class);

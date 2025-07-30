@@ -7,6 +7,9 @@ namespace BEAR\Resource\SemanticLog;
 use BEAR\Resource\ResourceObject;
 use Koriym\SemanticLogger\AbstractContext;
 
+use function strtoupper;
+
+/** @deprecated Use BEAR\Resource\SemanticLog\Profile\Compact\CompleteContext instead */
 final class ResourceCompleteContext extends AbstractContext
 {
     /** @psalm-suppress InvalidClassConstantType */
@@ -16,25 +19,26 @@ final class ResourceCompleteContext extends AbstractContext
     public const SCHEMA_URL = 'https://bearsunday.github.io/BEAR.Resource/schemas/bear-resource-complete.json';
 
     public readonly string $uri;
+    public readonly string $method;
     public readonly int $code;
 
-    /** @var array<string, mixed> */
+    /** @var array<string, string> */
     public readonly array $headers;
     public readonly mixed $body;
-    public readonly mixed $view;
+    public readonly string $view;
 
-    public function __construct(
-        ResourceObject $resource,
-        public readonly string $method,
-    ) {
+    public function __construct(ResourceObject $resource, string $method)
+    {
         // Trigger rendering to get view
         $resourceString = (string) $resource;
         unset($resourceString);
 
         $this->uri = (string) $resource->uri;
+        $this->method = strtoupper($method);
         $this->code = $resource->code;
         $this->headers = $resource->headers;
         $this->body = $resource->body;
-        $this->view = $resource->view;
+        /** @psalm-suppress PossiblyNullPropertyAssignmentValue */
+        $this->view = $resource->view ?? '';
     }
 }

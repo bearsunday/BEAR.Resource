@@ -14,10 +14,15 @@ use Override;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\AbstractModule;
 use Ray\Di\Injector;
+use RuntimeException;
 
 use function assert;
+use function basename;
+use function dirname;
+use function file_put_contents;
 use function is_string;
 use function json_encode;
+use function mkdir;
 use function substr_count;
 
 use const JSON_PRETTY_PRINT;
@@ -61,13 +66,13 @@ final class SemanticLoggerTest extends TestCase
         /*
          * ACTUAL semantic log output structure (see console output below):
          * - open.context: {uri, method, query} - request information
-         * - close.context: {uri, code, headers, body, view, method} - response information  
+         * - close.context: {uri, code, headers, body, view, method} - response information
          * - events: [] - error events that occurred during processing
          * - links: [] - HAL links from the resource
-         * 
+         *
          * NOTE: The actual field order in close.context is:
          * uri → code → headers → body → view → method (method comes last)
-         * 
+         *
          * Examples of what might appear in arrays:
          * events: [{"type": "bear_resource_error", "context": {"uri": "...", "exceptionClass": "RuntimeException"}}]
          * links: [{"rel": "self", "href": "app://self/simple?id=test123"}]
@@ -214,7 +219,7 @@ final class SemanticLoggerTest extends TestCase
          *         "type": "bear_resource_request",
          *         "context": {"uri": "app://self/simple", "method": "GET", "query": {"id": "level1"}},
          *         "open": {
-         *             "type": "bear_resource_request", 
+         *             "type": "bear_resource_request",
          *             "context": {"uri": "app://self/nested", "method": "GET", "query": {"type": "level2"}},
          *             "open": {
          *                 "type": "bear_resource_request",
@@ -271,7 +276,7 @@ final class SemanticLoggerTest extends TestCase
         // Simulate an error event manually (since we don't have actual error resources)
         $errorContext = new ResourceErrorContext(
             'RuntimeException',
-            'Simulated error for demonstration'
+            'Simulated error for demonstration',
         );
         $this->semanticLogger->event($errorContext);
 
@@ -292,7 +297,7 @@ final class SemanticLoggerTest extends TestCase
          *         "context": {"uri": "app://self/simple", "method": "GET", "query": {"id": "error_test"}}
          *     },
          *     "close": {
-         *         "type": "bear_resource_complete", 
+         *         "type": "bear_resource_complete",
          *         "context": {"uri": "app://self/simple?id=error_test", "method": "GET", "code": 200, "body": {"id": "error_test", "message": "Hello from Simple"}}
          *     },
          *     "events": [
@@ -337,16 +342,16 @@ final class SemanticLoggerTest extends TestCase
             // This should throw RuntimeException from the resource
             $this->resource->get('app://self/error', ['type' => 'runtime']);
             $this->fail('Expected RuntimeException was not thrown');
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             // Resource threw exception - SemanticResourceInvokerAdapter should handle this
             $this->assertSame('This is a test runtime exception', $e->getMessage());
-            
+
             // Note: In a real scenario with SemanticResourceInvokerAdapter properly bound,
             // the adapter would automatically create an error context and close the log.
             // For this test, we manually close with error context to simulate that behavior.
             $errorContext = new ResourceErrorContext(
-                \RuntimeException::class,
-                $e->getMessage()
+                RuntimeException::class,
+                $e->getMessage(),
             );
             $this->semanticLogger->close($errorContext, $openId);
         }
@@ -367,7 +372,7 @@ final class SemanticLoggerTest extends TestCase
          *         "type": "bear_resource_error",
          *         "context": {
          *             "uri": "app://self/error_resource",
-         *             "method": "GET", 
+         *             "method": "GET",
          *             "exceptionClass": "RuntimeException",
          *             "exceptionMessage": "This is a test runtime exception"
          *         }

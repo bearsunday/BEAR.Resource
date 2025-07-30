@@ -22,6 +22,8 @@ interface RequestInterface
      * Set query
      *
      * @param Query $query
+     *
+     * @psalm-suppress PossiblyUnusedReturnValue
      */
     public function withQuery(array $query): self;
 
@@ -29,6 +31,8 @@ interface RequestInterface
      * Merge query
      *
      * @param Query $query
+     *
+     * @psalm-suppress PossiblyUnusedReturnValue
      */
     public function addQuery(array $query): self;
 

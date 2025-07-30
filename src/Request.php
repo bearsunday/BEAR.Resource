@@ -27,6 +27,8 @@ final class Request extends AbstractRequest
     public const OPTIONS = 'options';
 
     /** @psalm-suppress ImplementedReturnTypeMismatch */
+
+    /** @psalm-suppress PossiblyUnusedReturnValue */
     #[Override]
     public function __get(string $name): mixed
     {
