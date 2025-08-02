@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "/Users/akihito/git/BEAR.Resource/docs/schema/error-context.json",
+  "title": "BEAR Resource Error (Compact)",
+  "description": "Compact schema for BEAR Resource error logging - exception as complete string",
+  "links": [
+    {
+      "rel": "https://bearsunday.github.io/BEAR.Resource/docs/link-relations#ai-docs",
+      "title": "BEAR.Resource Framework Overview for AI",
+      "href": "/Users/akihito/git/BEAR.Resource/docs/llms.txt"
+    },
+    {
+      "rel": "service-doc", 
+      "title": "BEAR.Resource Complete Documentation",
+      "href": "/Users/akihito/git/BEAR.Resource/docs/llms-full.txt"
+    },
+    {
+      "rel": "about",
+      "title": "BEAR.Resource Project", 
+      "href": "https://bearsunday.github.io/BEAR.Resource/"
+    }
+  ],
+  "type": "object",
+  "properties": {
+    "exceptionId": {
+      "type": "string",
+      "description": "Unique identifier for this exception occurrence"
+    },
+    "exceptionAsString": {
+      "type": "string",
+      "description": "Complete exception information as string (class, message, stack trace, file, line)"
+    },
+    "xhprof_file": {
+      "type": ["string", "null"],
+      "description": "Path to XHProf profiling data file (optional)"
+    },
+    "xdebug_trace_file": {
+      "type": ["string", "null"],
+      "description": "Path to Xdebug trace file for detailed execution flow (optional)"
+    }
+  },
+  "required": ["exceptionId", "exceptionAsString"],
+  "additionalProperties": true
+}

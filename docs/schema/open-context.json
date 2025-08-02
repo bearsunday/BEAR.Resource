@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "/Users/akihito/git/BEAR.Resource/docs/schema/open-context.json",
+  "title": "BEAR Resource Request (Compact)",
+  "description": "Compact schema for BEAR Resource request logging - minimal information for production",
+  "links": [
+    {
+      "rel": "https://bearsunday.github.io/BEAR.Resource/docs/link-relations#ai-docs",
+      "title": "BEAR.Resource Framework Overview for AI",
+      "href": "/Users/akihito/git/BEAR.Resource/docs/llms.txt"
+    },
+    {
+      "rel": "service-doc",
+      "title": "BEAR.Resource Complete Documentation", 
+      "href": "/Users/akihito/git/BEAR.Resource/docs/llms-full.txt"
+    },
+    {
+      "rel": "about",
+      "title": "BEAR.Resource Project",
+      "href": "https://bearsunday.github.io/BEAR.Resource/"
+    }
+  ],
+  "type": "object",
+  "properties": {
+    "method": {
+      "type": "string", 
+      "description": "The HTTP method (GET, POST, PUT, DELETE, etc.)"
+    },
+    "uri": {
+      "type": "string",
+      "description": "The resource URI (e.g., app://self/user/profile)"
+    },
+    "xhprof_file": {
+      "type": ["string", "null"],
+      "description": "Path to XHProf profiling data file (optional)"
+    },
+    "xdebug_trace_file": {
+      "type": ["string", "null"],
+      "description": "Path to Xdebug trace file for detailed execution flow (optional)"
+    }
+  },
+  "required": ["method", "uri"],
+  "additionalProperties": true
+}

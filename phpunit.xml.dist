@@ -15,5 +15,7 @@
   </testsuites>
   <php>
     <ini name="error_reporting" value="-1"/>
+    <!-- Note: XDEBUG_MODE must be set before PHP startup, not here -->
+    <!-- Use: XDEBUG_MODE=debug,trace ./vendor/bin/phpunit -->
   </php>
 </phpunit>
