@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+use BEAR\Resource\Exception\ResourceNotFoundException;
 use BEAR\Resource\Fake\SemanticLogger\Module\TestModule;
-use BEAR\Resource\SemanticLog\Module\SemanticLoggerModule;
 use BEAR\Resource\SemanticLog\Profile\Verbose\CompleteContext;
 use BEAR\Resource\SemanticLog\Profile\Verbose\ContextFactory;
 use BEAR\Resource\SemanticLog\Profile\Verbose\ErrorContext;
 use BEAR\Resource\SemanticLog\Profile\Verbose\OpenContext;
+use BEAR\Resource\SemanticLog\SemanticInvoker;
+use DomainException;
 use Koriym\SemanticLogger\SemanticLoggerInterface;
 use Override;
 use PHPUnit\Framework\TestCase;
-use Ray\Di\AbstractModule;
 use Ray\Di\Injector;
 use RuntimeException;
 
@@ -203,11 +204,11 @@ final class SemanticLogVerboseProfileTest extends TestCase
     public function testSemanticInvokerErrorHandling(): void
     {
         // Verify that SemanticInvoker is bound correctly
-        $this->assertInstanceOf(\BEAR\Resource\SemanticLog\SemanticInvoker::class, $this->invoker);
-        
+        $this->assertInstanceOf(SemanticInvoker::class, $this->invoker);
+
         // Test SemanticInvoker's error handling (catch block)
-        $this->expectException(\BEAR\Resource\Exception\ResourceNotFoundException::class);
-        
+        $this->expectException(ResourceNotFoundException::class);
+
         // This should trigger SemanticInvoker's error handling path
         $this->resource->get('app://self/nonexistent', ['id' => 'error-test']);
     }
@@ -217,75 +218,75 @@ final class SemanticLogVerboseProfileTest extends TestCase
         // Test missing methods for 100% coverage
         $resource = $this->resource->newInstance('app://self/simple');
         $request = new Request($this->invoker, $resource, 'GET', ['id' => 'coverage-test']);
-        
+
         // Test Verbose OpenContext methods
         $openContext = new OpenContext($request);
         $this->assertSame('GET', $openContext->method);
         $this->assertSame('app://self/simple?id=coverage-test', $openContext->uri);
-        
+
         // Test static create method
         $openContext2 = OpenContext::create($request);
         $this->assertInstanceOf(OpenContext::class, $openContext2);
-        
+
         // Test getXdebugId method
         $xdebugId = $openContext->getXdebugId();
         $this->assertIsString($xdebugId);
-        
+
         // Test jsonSerialize
         $openSerialized = $openContext->jsonSerialize();
         $this->assertIsArray($openSerialized);
         $this->assertArrayHasKey('method', $openSerialized);
         $this->assertArrayHasKey('uri', $openSerialized);
-        
+
         // Test Verbose CompleteContext
         $resourceObject = $this->resource->get('app://self/simple', ['id' => 'coverage-test']);
         $completeContext = new CompleteContext($resourceObject, $openContext);
-        
+
         // Test static create method
         $completeContext2 = CompleteContext::create($resourceObject, $openContext);
         $this->assertInstanceOf(CompleteContext::class, $completeContext2);
-        
+
         // Test jsonSerialize
         $completeSerialized = $completeContext->jsonSerialize();
         $this->assertIsArray($completeSerialized);
         $this->assertArrayHasKey('uri', $completeSerialized);
         $this->assertArrayHasKey('code', $completeSerialized);
-        
+
         // Test Verbose ErrorContext with auto-generated ID
         $exception = new RuntimeException('Auto ID test');
         $errorContext = new ErrorContext($exception, '', $openContext);
         $this->assertStringStartsWith('e-bear-resource-', $errorContext->exceptionId);
-        
+
         // Test static create method
         $errorContext2 = ErrorContext::create($exception, 'manual-id', $openContext);
         $this->assertInstanceOf(ErrorContext::class, $errorContext2);
         $this->assertSame('manual-id', $errorContext2->exceptionId);
-        
+
         // Test jsonSerialize
         $errorSerialized = $errorContext->jsonSerialize();
         $this->assertIsArray($errorSerialized);
         $this->assertArrayHasKey('exceptionId', $errorSerialized);
         $this->assertArrayHasKey('exceptionAsString', $errorSerialized);
-        
+
         // Test Verbose ContextFactory
         $factory = new ContextFactory();
         $factoryOpen = $factory->createOpenContext($request);
         $this->assertInstanceOf(OpenContext::class, $factoryOpen);
-        
+
         $factoryComplete = $factory->createCompleteContext($resourceObject, $openContext);
         $this->assertInstanceOf(CompleteContext::class, $factoryComplete);
-        
+
         $factoryError = $factory->createErrorContext($exception, 'factory-error', $openContext);
         $this->assertInstanceOf(ErrorContext::class, $factoryError);
-        
+
         // Test ErrorContext createExceptionId method (private method coverage)
         $errorWithAutoId = new ErrorContext($exception, '', null);
         $this->assertStringStartsWith('e-bear-resource-', $errorWithAutoId->exceptionId);
-        
+
         // Test Verbose CompleteContext static create method (missing coverage)
         $staticCompleteContext = CompleteContext::create($resourceObject, $openContext);
         $this->assertInstanceOf(CompleteContext::class, $staticCompleteContext);
-        
+
         // Test Verbose CompleteContext jsonSerialize method (missing coverage)
         $completeJsonData = $staticCompleteContext->jsonSerialize();
         $this->assertIsArray($completeJsonData);
@@ -294,79 +295,79 @@ final class SemanticLogVerboseProfileTest extends TestCase
         $this->assertArrayHasKey('headers', $completeJsonData);
         $this->assertArrayHasKey('body', $completeJsonData);
         $this->assertArrayHasKey('view', $completeJsonData);
-        
+
         // Test Verbose ErrorContext static create method (missing coverage)
         $staticErrorContext = ErrorContext::create($exception, 'static-error-id', $openContext);
         $this->assertInstanceOf(ErrorContext::class, $staticErrorContext);
         $this->assertSame('static-error-id', $staticErrorContext->exceptionId);
-        
+
         // Test Verbose ErrorContext jsonSerialize method (missing coverage)
         $errorJsonData = $staticErrorContext->jsonSerialize();
         $this->assertIsArray($errorJsonData);
         $this->assertArrayHasKey('exceptionId', $errorJsonData);
         $this->assertArrayHasKey('exceptionAsString', $errorJsonData);
-        
+
         // Test Verbose OpenContext static create method (missing coverage)
         $staticOpenContext = OpenContext::create($request);
         $this->assertInstanceOf(OpenContext::class, $staticOpenContext);
-        
+
         // Test Verbose OpenContext jsonSerialize method (missing coverage)
         $openJsonData = $staticOpenContext->jsonSerialize();
         $this->assertIsArray($openJsonData);
         $this->assertArrayHasKey('method', $openJsonData);
         $this->assertArrayHasKey('uri', $openJsonData);
         $this->assertSame('GET', $openJsonData['method']);
+        $this->assertIsString($openJsonData['uri']);
         $this->assertStringContainsString('app://self/simple', $openJsonData['uri']);
     }
-    
+
     public function testSemanticInvokerDirectUsage(): void
     {
         // Direct test of SemanticInvoker to achieve 100% coverage
         $resource = $this->resource->newInstance('app://self/simple');
         $request = new Request($this->invoker, $resource, 'GET', ['id' => 'invoker-test']);
-        
+
         // Get the actual SemanticInvoker instance
         $semanticInvoker = $this->invoker;
-        $this->assertInstanceOf(\BEAR\Resource\SemanticLog\SemanticInvoker::class, $semanticInvoker);
-        
+        $this->assertInstanceOf(SemanticInvoker::class, $semanticInvoker);
+
         // Test invoke method directly
         $result = $semanticInvoker->invoke($request);
-        $this->assertInstanceOf(\BEAR\Resource\ResourceObject::class, $result);
+        $this->assertInstanceOf(ResourceObject::class, $result);
         $this->assertSame(200, $result->code);
     }
-    
-    
+
     public function testSemanticInvokerErrorPath(): void
     {
         // Test SemanticInvoker error handling path for complete coverage
         $semanticInvoker = $this->invoker;
-        $this->assertInstanceOf(\BEAR\Resource\SemanticLog\SemanticInvoker::class, $semanticInvoker);
-        
+        $this->assertInstanceOf(SemanticInvoker::class, $semanticInvoker);
+
         // Use existing Error resource that definitely throws exceptions
         $resource = $this->resource->newInstance('app://self/error');
         $request = new Request($this->invoker, $resource, 'GET', ['type' => 'runtime']);
-        
+
         // Directly call SemanticInvoker.invoke() to test the catch block
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('This is a test runtime exception');
-        
+
         // This should trigger the catch (Throwable $e) block in SemanticInvoker
         $semanticInvoker->invoke($request);
     }
-    
+
     public function testSemanticInvokerCatchBlockCoverage(): void
     {
         // Additional test to ensure catch block coverage with proper error context creation
         $semanticInvoker = $this->invoker;
-        $this->assertInstanceOf(\BEAR\Resource\SemanticLog\SemanticInvoker::class, $semanticInvoker);
-        
+        $this->assertInstanceOf(SemanticInvoker::class, $semanticInvoker);
+
         // Test that SemanticInvoker properly handles exceptions and creates error contexts
         try {
             $resource = $this->resource->newInstance('app://self/error');
             $request = new Request($this->invoker, $resource, 'GET', ['type' => 'domain']);
             $semanticInvoker->invoke($request);
             $this->fail('Expected exception was not thrown');
-        } catch (\DomainException $e) {
+        } catch (DomainException $e) {
             // Verify exception was properly re-thrown after logging
             $this->assertStringContainsString('Domain logic error occurred', $e->getMessage());
         }
