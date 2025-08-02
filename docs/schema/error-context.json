@@ -1,18 +1,18 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "/Users/akihito/git/BEAR.Resource/docs/schema/error-context.json",
+  "$id": "https://bearsunday.github.io/BEAR.Resource/schemas/error-context.json",
   "title": "BEAR Resource Error (Compact)",
   "description": "Compact schema for BEAR Resource error logging - exception as complete string",
   "links": [
     {
       "rel": "https://bearsunday.github.io/BEAR.Resource/docs/link-relations#ai-docs",
       "title": "BEAR.Resource Framework Overview for AI",
-      "href": "/Users/akihito/git/BEAR.Resource/docs/llms.txt"
+      "href": "https://bearsunday.github.io/BEAR.Resource/docs/llms.txt"
     },
     {
       "rel": "service-doc", 
       "title": "BEAR.Resource Complete Documentation",
-      "href": "/Users/akihito/git/BEAR.Resource/docs/llms-full.txt"
+      "href": "https://bearsunday.github.io/BEAR.Resource/docs/llms-full.txt"
     },
     {
       "rel": "about",
