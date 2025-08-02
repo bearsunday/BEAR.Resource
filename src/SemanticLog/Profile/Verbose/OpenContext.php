@@ -49,12 +49,13 @@ final class OpenContext extends AbstractContext implements JsonSerializable
             xhprof_enable(XHPROF_FLAGS_NO_BUILTINS | XHPROF_FLAGS_CPU | XHPROF_FLAGS_MEMORY);
         }
 
+        // Always generate an ID for profiling context, regardless of Xdebug availability
+        $xdebugId = uniqid('profile_', true);
+        self::$xdebugIdMap[spl_object_hash($this)] = $xdebugId;
+
         if (! extension_loaded('xdebug') || ! function_exists('xdebug_start_trace')) {
             return; // @codeCoverageIgnore
         }
-
-        $xdebugId = uniqid('xhprof_', true);
-        self::$xdebugIdMap[spl_object_hash($this)] = $xdebugId;
 
         // Stop any existing trace first to ensure clean start
         @xdebug_stop_trace();
