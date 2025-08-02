@@ -81,6 +81,10 @@
         "build": ["@cs", "@sa", "@pcov", "@metrics"],
         "baseline": ["phpstan analyse -c phpstan.neon --generate-baseline", "psalm --set-baseline=psalm-baseline.xml"]
     },
+    "suggestions": {
+        "ext-xdebug": "For code tracing",
+        "ext-xhprof": "For performance profiling"
+    },
     "config": {
         "sort-packages": true,
         "allow-plugins": {
