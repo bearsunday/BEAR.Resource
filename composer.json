@@ -30,7 +30,6 @@
         "koriym/semantic-logger": "1.x-dev"
     },
     "require-dev": {
-        "ext-xdebug": "*",
         "phpunit/phpunit": "^9.6.29",
         "doctrine/coding-standard": "^12.0",
         "phpmd/phpmd": "^2.9",
@@ -57,7 +56,6 @@
         "psr-4": {
             "BEAR\\Resource\\": [
                 "tests/",
-
                 "tests/Fake/",
                 "tests-deprecated"
             ],
