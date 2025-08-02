@@ -136,7 +136,7 @@ class SemanticLogSchemaTest extends TestCase
         ];
 
         // Load schema
-        $schemaPath = __DIR__ . '/../src/SemanticLog/schema/error-context.json';
+        $schemaPath = __DIR__ . '/../docs/schema/error-context.json';
         $schemaContent = file_get_contents($schemaPath);
         assert($schemaContent !== false);
         $schema = json_decode($schemaContent);
@@ -206,7 +206,7 @@ class SemanticLogSchemaTest extends TestCase
         ];
 
         // Load schema
-        $schemaPath = __DIR__ . '/../src/SemanticLog/schema/complete-context.json';
+        $schemaPath = __DIR__ . '/../docs/schema/complete-context.json';
         $schemaContent = file_get_contents($schemaPath);
         assert($schemaContent !== false);
         $schema = json_decode($schemaContent);
@@ -237,7 +237,7 @@ class SemanticLogSchemaTest extends TestCase
         ];
 
         // Load schema
-        $schemaPath = __DIR__ . '/../src/SemanticLog/schema/error-context.json';
+        $schemaPath = __DIR__ . '/../docs/schema/error-context.json';
         $schemaContent = file_get_contents($schemaPath);
         assert($schemaContent !== false);
         $schema = json_decode($schemaContent);
