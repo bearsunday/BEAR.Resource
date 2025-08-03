@@ -46,6 +46,7 @@ final class OpenContext extends AbstractContext implements JsonSerializable
 
         // if xhprof is enabled, start profiling
         if (function_exists('xhprof_enable')) {
+            /** @psalm-suppress UndefinedConstant, MixedArgument */
             xhprof_enable(XHPROF_FLAGS_NO_BUILTINS | XHPROF_FLAGS_CPU | XHPROF_FLAGS_MEMORY);
         }
 
