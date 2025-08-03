@@ -1,0 +1,71 @@
+# BEAR.Resource
+
+BEAR.Resource is a PHP hypermedia framework that implements REST resource-oriented architecture (ROA).
+
+## Core Concepts
+
+**Resource Objects**: All application resources extend `ResourceObject` and implement HTTP methods:
+- `onGet()` - Handle GET requests
+- `onPost()` - Handle POST requests  
+- `onPut()` - Handle PUT requests
+- `onDelete()` - Handle DELETE requests
+
+**URI-based Resource Access**: Resources are accessed using URI schemes:
+- `app://self/user/123` - Application resource
+- `http://api.example.com/user/123` - HTTP resource
+- `page://self/user` - Page resource
+
+**Method Parameters**: Resource methods use dependency injection for parameters:
+```php
+public function onGet(int $id, UserRepository $repo): ResourceObject
+{
+    $this->body = $repo->findById($id);
+    return $this;
+}
+```
+
+**Hypermedia**: Resources can be linked using `@Link` annotations:
+```php
+#[Link(rel: 'profile', href: 'app://self/user/profile?id={id}')]
+```
+
+## Framework Architecture
+
+- **ResourceInterface**: Main client interface for resource interaction
+- **ResourceObject**: Base class for all resources with code, headers, body, view properties
+- **Dependency Injection**: Uses Ray.Di for dependency injection throughout
+- **Interceptors**: AOP support for cross-cutting concerns
+- **Renderers**: Convert resources to different formats (JSON, HAL, etc.)
+
+## Key Features
+
+- Type-safe parameter injection with attributes
+- JSON Schema validation support
+- HAL (Hypertext Application Language) rendering
+- File upload handling with `#[InputFile]`
+- Query object binding with `#[Input]`
+- Semantic logging for observability
+- XHProf and Xdebug profiling integration
+
+## Usage Patterns
+
+Resources return themselves and set properties:
+```php
+public function onGet(): ResourceObject
+{
+    $this->code = 200;
+    $this->body = ['message' => 'Hello World'];
+    return $this;
+}
+```
+
+Client code uses the resource interface:
+```php
+$resource = $this->resource->get('app://self/user', ['id' => 123]);
+echo $resource->body['name'];
+```
+
+## Testing
+
+Tests use real ResourceInterface instances and actual Request objects - never mocks.
+The framework emphasizes integration testing over unit testing for reliable behavior verification.

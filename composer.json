@@ -65,7 +65,7 @@
             "FakeVendor\\Blog\\": "tests/Fake/FakeVendor/Blog/src",
             "FakeVendor\\News\\": "tests/Fake/FakeVendor/News/src"
         },
-        "files": ["tests/Fake/AppInjector.php"]
+        "files": ["tests/Fake/AppInjector.php", "scripts/xdebug-auto-restart.php"]
     },
     "scripts" :{
         "test": ["phpunit"],

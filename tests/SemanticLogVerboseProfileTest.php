@@ -6,6 +6,7 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\ResourceNotFoundException;
 use BEAR\Resource\Fake\SemanticLogger\Module\TestModule;
+use BEAR\Resource\SemanticLog\Profile\Profile;
 use BEAR\Resource\SemanticLog\Profile\Verbose\CompleteContext;
 use BEAR\Resource\SemanticLog\Profile\Verbose\ContextFactory;
 use BEAR\Resource\SemanticLog\Profile\Verbose\ErrorContext;
@@ -78,16 +79,19 @@ final class SemanticLogVerboseProfileTest extends TestCase
 
         $this->assertSame(200, $completeContext->code);
         $this->assertIsString($completeContext->uri);
-        $this->assertObjectHasProperty('xhprofFile', $completeContext);
-        $this->assertObjectHasProperty('xdebugTraceFile', $completeContext);
+        $this->assertObjectHasProperty('profile', $completeContext);
+
+        // Test profiling structure exists
+        $this->assertInstanceOf(Profile::class, $completeContext->profile);
 
         // Test profiling files (may be null if extensions not available)
         if (! function_exists('xhprof_disable')) {
             return;
         }
 
+        $xhprofFile = $completeContext->profile->xhprof?->file;
         $this->assertTrue(
-            $completeContext->xhprofFile === null || is_file($completeContext->xhprofFile),
+            $xhprofFile === null || is_file($xhprofFile),
         );
     }
 
@@ -103,8 +107,8 @@ final class SemanticLogVerboseProfileTest extends TestCase
 
         $this->assertSame('test-error', $errorContext->exceptionId);
         $this->assertStringContainsString('Test exception', $errorContext->exceptionAsString);
-        $this->assertObjectHasProperty('xhprofFile', $errorContext);
-        $this->assertObjectHasProperty('xdebugTraceFile', $errorContext);
+        $this->assertObjectHasProperty('profile', $errorContext);
+        $this->assertInstanceOf(Profile::class, $errorContext->profile);
     }
 
     public function testXhprofIntegrationWhenAvailable(): void
@@ -139,16 +143,17 @@ final class SemanticLogVerboseProfileTest extends TestCase
         $this->assertStringContainsString('"method": "GET"', $jsonString);
         $this->assertStringContainsString('"id": "xhprof-test"', $jsonString);
         $this->assertStringNotContainsString('"xhdebugId":', $jsonString); // Should NOT be exposed
-        $this->assertStringContainsString('"xhprofFile":', $jsonString);
+        $this->assertStringContainsString('"file":', $jsonString);
 
         // Verify XHProf file was created if profiling was enabled
-        if ($completeContext->xhprofFile !== null && file_exists($completeContext->xhprofFile)) {
-            $this->assertIsString($completeContext->xhprofFile);
-            $this->assertStringContainsString('xhprof_', $completeContext->xhprofFile);
-            $this->assertGreaterThan(0, filesize($completeContext->xhprofFile));
+        $xhprofFile = $completeContext->profile->xhprof?->file;
+        if ($xhprofFile !== null && file_exists($xhprofFile)) {
+            $this->assertIsString($xhprofFile);
+            $this->assertStringContainsString('xhprof_', $xhprofFile);
+            $this->assertGreaterThan(0, filesize($xhprofFile));
 
             // Clean up
-            unlink($completeContext->xhprofFile);
+            unlink($xhprofFile);
         }
 
         $this->assertTrue(true, 'XHProf integration test completed');
@@ -186,20 +191,21 @@ final class SemanticLogVerboseProfileTest extends TestCase
         $this->assertStringContainsString('"method": "GET"', $jsonString);
         $this->assertStringContainsString('"id": "xdebug-test"', $jsonString);
         $this->assertStringNotContainsString('"xhdebugId":', $jsonString); // Should NOT be exposed
-        $this->assertStringContainsString('"xdebugTraceFile":', $jsonString);
+        $this->assertStringContainsString('"profile":', $jsonString);
 
         // Verify Xdebug trace file was created if tracing was enabled
-        if ($completeContext->xdebugTraceFile !== null && file_exists($completeContext->xdebugTraceFile)) {
-            $this->assertIsString($completeContext->xdebugTraceFile);
+        $xdebugFile = $completeContext->profile->xdebug?->file;
+        if ($xdebugFile !== null && file_exists($xdebugFile)) {
+            $this->assertIsString($xdebugFile);
             // Xdebug can create either .xt (uncompressed) or .xt.gz (compressed) files
             $this->assertTrue(
-                str_ends_with($completeContext->xdebugTraceFile, '.xt') ||
-                str_ends_with($completeContext->xdebugTraceFile, '.xt.gz'),
+                str_ends_with($xdebugFile, '.xt') ||
+                str_ends_with($xdebugFile, '.xt.gz'),
                 'Xdebug trace file should end with .xt or .xt.gz',
             );
 
             // Clean up
-            unlink($completeContext->xdebugTraceFile);
+            unlink($xdebugFile);
         }
 
         $this->assertTrue(true, 'Xdebug integration test completed');

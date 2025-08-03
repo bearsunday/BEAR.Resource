@@ -49,13 +49,36 @@
       "type": "string",
       "description": "The rendered view as string"
     },
-    "xhprof_file": {
-      "type": ["string", "null"],
-      "description": "Path to XHProf profiling data file (optional)"
-    },
-    "xdebug_trace_file": {
-      "type": ["string", "null"],
-      "description": "Path to Xdebug trace file for detailed execution flow (optional)"
+    "profile": {
+      "type": "object",
+      "description": "Profile information containing XHProf, Xdebug, and PHP profiling data",
+      "properties": {
+        "xhprof": {
+          "oneOf": [
+            {"type": "object"},
+            {"type": "array"}
+          ],
+          "description": "XHProf profiling data object with file property, or empty array if not available"
+        },
+        "xdebug": {
+          "oneOf": [
+            {"type": "object"},
+            {"type": "array"}
+          ],
+          "description": "Xdebug trace data object with file property, or empty array if not available"
+        },
+        "php": {
+          "type": "object",
+          "description": "PHP profiling data with filtered backtrace focusing on user code",
+          "properties": {
+            "backtrace": {
+              "type": "array",
+              "description": "Filtered PHP backtrace focusing on user code"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
     }
   },
   "required": ["uri", "code"],

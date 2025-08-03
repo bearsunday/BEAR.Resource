@@ -1,0 +1,512 @@
+# BEAR.Resource - Complete Documentation
+
+BEAR.Resource is a PHP hypermedia framework that implements REST resource-oriented architecture (ROA) with "object as a service" patterns. It enables objects to behave as REST resources with client-server architecture, uniform interfaces, statelessness, and hypermedia connectivity.
+
+## Core Architecture
+
+### Resource Object Pattern
+Every resource extends `ResourceObject` and implements HTTP methods as PHP methods:
+
+```php
+class Author extends ResourceObject
+{
+    public $code = 200;
+    public $headers = ['Content-Type' => 'application/json'];
+    public $body = ['id' => 1, 'name' => 'koriym'];
+
+    public function onGet(int $id): static
+    {
+        // Handle GET request
+        return $this;
+    }
+
+    public function onPost(string $name): static
+    {
+        $this->code = 201; // Created
+        return $this;
+    }
+
+    public function onPut(int $id, string $name): static
+    {
+        $this->code = 204; // No Content
+        return $this;
+    }
+
+    public function onDelete(int $id): static
+    {
+        $this->code = 204; // No Content
+        return $this;
+    }
+}
+```
+
+### URI Scheme Mapping
+Resources are accessed via URI schemes that map to PSR-4 classes:
+- `app://self/user/123` → `App\Resource\User` class
+- `http://api.example.com/user/123` → External HTTP resource
+- `page://self/user` → Page resource
+
+### Resource Properties
+All resources have four core properties:
+- `$code`: HTTP status code (200, 201, 404, etc.)
+- `$headers`: Array of HTTP headers
+- `$body`: Resource data/payload
+- `$view`: Rendered representation
+
+## Dependency Injection System
+
+Uses Ray.Di for comprehensive dependency injection:
+
+```php
+use BEAR\Resource\ResourceInterface;
+
+$resource = (new Injector(new ResourceModule('MyApp')))->getInstance(ResourceInterface::class);
+```
+
+### Method Parameter Injection
+Resource methods support automatic parameter injection:
+
+```php
+public function onGet(int $id, UserRepository $repo, LoggerInterface $logger): ResourceObject
+{
+    $user = $repo->findById($id);
+    $logger->info("User {$id} retrieved", ['user' => $user]);
+    $this->body = $user;
+    return $this;
+}
+```
+
+## Request Patterns
+
+### Eager Request (Immediate Execution)
+```php
+$user = $resource->get('app://self/user', ['id' => 1]);
+// Alternative syntaxes:
+$user = $resource->get->uri('app://self/user')->withQuery(['id' => 1])->eager->request();
+$user = $resource->get->uri('app://self/user')(['id' => 1]);
+$user = $resource->uri('app://self/user')(['id' => 1]); // GET is default
+```
+
+### Lazy Request (Deferred Execution)
+```php
+$userRequest = $resource->get->uri('app://self/user')->withQuery(['id' => 1]);
+// Executed when accessed:
+echo "User: {$userRequest}"; // Triggers execution and rendering
+// Or invoke with different parameters:
+$user1 = $userRequest();
+$user2 = $userRequest(['id' => 2]);
+```
+
+## Hypermedia & HATEOAS
+
+### Link Annotations
+Resources define hyperlinks using `#[Link]` attributes:
+
+```php
+#[Link(rel: 'blog', href: 'app://self/blog?author_id={id}')]
+#[Link(rel: 'profile', href: 'app://self/user/profile?user_id={id}')]
+public function onGet(int $id): static
+{
+    // Link templates use current resource values
+    $this->body = ['id' => $id, 'name' => 'John'];
+    return $this;
+}
+```
+
+### Link Navigation
+
+**linkSelf**: Replace current resource with linked resource
+```php
+$blog = $resource->get->uri('app://self/user')->withQuery(['id' => 1])
+    ->linkSelf('blog')->eager->request();
+```
+
+**linkNew**: Add linked resource to current response
+```php
+$user = $resource->get->uri('app://self/user')->withQuery(['id' => 1])
+    ->linkNew('blog')->eager->request();
+$blog = $user['blog']; // Linked resource available
+```
+
+**linkCrawl**: Build complex resource graphs
+```php
+// Author → Posts → Meta + Tags → Tag Names
+#[Link(crawl: 'post-tree', rel: 'post', href: 'app://self/post?author_id={id}')]
+public function onGet($id) {} // Author
+
+#[Link(crawl: 'post-tree', rel: 'meta', href: 'app://self/meta?post_id={id}')]
+#[Link(crawl: 'post-tree', rel: 'tag', href: 'app://self/tag?post_id={id}')]
+public function onGet($author_id) {} // Post
+
+$graph = $resource->get->uri('app://self/author')->linkCrawl('post-tree')->eager->request();
+```
+
+### HATEOAS Workflow
+```php
+// Order resource with payment link
+#[Link(rel: 'payment', href: 'app://self/payment{?order_id,amount}', method: 'put')]
+public function onPost($drink) {} // Order
+
+// Client follows hyperlink for state transition
+$order = $resource->post('app://self/order', ['drink' => 'latte']);
+$payment = $resource->href('payment', ['amount' => '4.00']); // Follow hyperlink
+```
+
+## Parameter Binding
+
+### Web Context Parameters
+Bind HTTP context values to method parameters:
+
+```php
+use Ray\WebContextParam\Annotation\QueryParam;
+use Ray\WebContextParam\Annotation\CookieParam;
+use Ray\WebContextParam\Annotation\FormParam;
+use Ray\WebContextParam\Annotation\ServerParam;
+
+public function onGet(
+    #[QueryParam('user_id')] string $userId,    // $_GET['user_id']
+    #[CookieParam('token')] string $token,      // $_COOKIE['token']
+    #[FormParam('data')] string $data,          // $_POST['data']
+    #[ServerParam('HTTP_HOST')] string $host    // $_SERVER['HTTP_HOST']
+): ResourceObject {}
+```
+
+### Resource Parameters
+Bind another resource's state to parameters:
+
+```php
+use BEAR\Resource\Annotation\ResourceParam;
+
+/**
+ * @ResourceParam(param="userName", uri="app://self/login#nickname")
+ */
+public function onGet(string $userName): ResourceObject
+{
+    // $userName contains the 'nickname' property from app://self/login resource
+}
+```
+
+## Input Handling (Ray.InputQuery Integration)
+
+### Input Objects
+Convert flat query data to structured, type-safe objects:
+
+```php
+use Ray\InputQuery\Attribute\Input;
+
+class ArticleInput
+{
+    public function __construct(
+        public readonly string $title,
+        public readonly string $content,
+        public readonly AuthorInput $author
+    ) {}
+}
+
+class ArticleResource extends ResourceObject
+{
+    public function onPost(#[Input] ArticleInput $article): static
+    {
+        $this->body = [
+            'title' => $article->title,
+            'author_name' => $article->author->name
+        ];
+        return $this;
+    }
+}
+```
+
+### File Upload Processing
+Type-safe file upload with validation:
+
+```php
+use Ray\InputQuery\Attribute\InputFile;
+use Koriym\FileUpload\FileUpload;
+use Koriym\FileUpload\ErrorFileUpload;
+
+public function onPost(
+    #[InputFile(
+        maxSize: 1024 * 1024, // 1MB
+        allowedTypes: ['image/jpeg', 'image/png'],
+        allowedExtensions: ['jpg', 'png']
+    )]
+    FileUpload|ErrorFileUpload $image,
+    string $title = 'Default'
+): static {
+    if ($image instanceof ErrorFileUpload) {
+        $this->code = 400;
+        $this->body = ['error' => $image->message];
+        return $this;
+    }
+
+    $filename = uniqid() . '_' . $image->name;
+    $image->move('/uploads/' . $filename);
+    
+    $this->body = [
+        'filename' => $image->name,
+        'size' => $image->size,
+        'type' => $image->type
+    ];
+    return $this;
+}
+```
+
+## Resource Embedding
+
+Embed external resources using `#[Embed]`:
+
+```php
+class News extends ResourceObject
+{
+    #[Embed(rel: 'weather', src: 'app://self/weather/today')]
+    #[Embed(rel: 'stocks', src: 'app://self/stocks/quotes')]
+    public function onGet(): static
+    {
+        $this->body = [
+            'headline' => 'Breaking News',
+            'content' => 'Article content...'
+        ];
+        return $this;
+    }
+}
+```
+
+## Representation & Rendering
+
+### JSON Rendering
+```php
+$modules = [new ResourceModule('MyApp'), new JsonModule()];
+$resource = (new Injector($modules))->getInstance(ResourceInterface::class);
+$user = $resource->get('app://self/user', ['id' => 1]);
+echo $user; // JSON output
+```
+
+### HAL (Hypertext Application Language) Rendering
+```php
+$modules = [new ResourceModule('MyApp'), new HalModule()];
+$resource = (new Injector($modules))->getInstance(ResourceInterface::class);
+echo $resource->get('app://self/news'); 
+// HAL format with _links and _embedded sections
+```
+
+### Custom Renderers
+```php
+class User extends ResourceObject
+{
+    public function __construct()
+    {
+        $this->setRenderer(new class implements RenderInterface {
+            public function render(ResourceObject $ro): string
+            {
+                $ro->headers['content-type'] = 'application/xml';
+                $ro->view = $this->toXml($ro->body);
+                return $ro->view;
+            }
+        });
+    }
+}
+```
+
+## Transfer & Output
+
+Transfer resource state to client:
+
+```php
+$user = $resource->get('app://self/user', ['id' => 1]);
+$user->transfer(new class implements TransferInterface {
+    public function __invoke(ResourceObject $ro, array $server): void
+    {
+        foreach ($ro->headers as $label => $value) {
+            header("{$label}: {$value}", false);
+        }
+        http_response_code($ro->code);
+        echo $ro->view;
+    }
+});
+```
+
+## Module System
+
+### Core Modules
+- `ResourceModule`: Basic resource functionality
+- `JsonModule`: JSON representation
+- `HalModule`: HAL representation  
+- `HttpClientModule`: HTTP resource client
+- `EmbedResourceModule`: Resource embedding
+
+### Module Configuration
+```php
+class AppModule extends AbstractModule
+{
+    protected function configure(): void
+    {
+        $this->install(new ResourceModule('MyApp'));
+        $this->install(new JsonModule());
+        $this->install(new HalModule());
+    }
+}
+```
+
+## Semantic Logging Integration
+
+BEAR.Resource includes comprehensive semantic logging for observability:
+
+### Semantic Logger Components
+- `SemanticLogger`: Main logging interface with structured JSON output
+- `SemanticInvoker`: Wraps resource invocation with automatic logging
+- `OpenContext`: Request initiation context
+- `CompleteContext`: Request completion with profiling data
+- `ErrorContext`: Exception and error contexts
+
+### Profile Integration
+- **XHProf**: Lightweight performance profiling
+- **Xdebug**: Detailed function call tracing
+- Automatic profile file generation and linking
+
+### Structured Log Output
+```json
+{
+    "schemaUrl": "https://koriym.github.io/Koriym.SemanticLogger/schemas/semantic-log.json",
+    "open": {
+        "id": "bear_resource_request_1",
+        "type": "bear_resource_request",
+        "context": {
+            "method": "GET",
+            "uri": "app://self/user?id=123"
+        }
+    },
+    "close": {
+        "id": "bear_resource_complete_1", 
+        "type": "bear_resource_complete",
+        "context": {
+            "code": 200,
+            "body": {"id": 123, "name": "John"},
+            "xhprofFile": "/tmp/profile_123.xhprof",
+            "xdebugTraceFile": "/tmp/trace_123.xt"
+        }
+    }
+}
+```
+
+## Performance Optimization
+
+### Resource Client Serialization
+Cache compiled resource clients for significant performance gains:
+
+```php
+// Build and cache
+$resource = (new Injector(new ResourceModule('MyApp')))->getInstance(ResourceInterface::class);
+file_put_contents('resource.cache', serialize($resource));
+
+// Load from cache
+$resource = unserialize(file_get_contents('resource.cache'));
+$user = $resource->get('app://self/user', ['id' => 1]);
+```
+
+### Lazy Loading Benefits
+- Assign request objects to templates instead of executed results
+- Execution deferred until actually needed
+- Better memory usage and performance
+
+## Testing Patterns
+
+### Integration Testing Approach
+BEAR.Resource emphasizes integration testing over unit testing:
+
+```php
+class UserResourceTest extends TestCase
+{
+    private ResourceInterface $resource;
+
+    protected function setUp(): void
+    {
+        $this->resource = (new Injector(new TestModule()))->getInstance(ResourceInterface::class);
+    }
+
+    public function testGetUser(): void
+    {
+        $user = $this->resource->get('app://self/user', ['id' => 1]);
+        
+        $this->assertSame(200, $user->code);
+        $this->assertSame('John', $user->body['name']);
+    }
+
+    public function testFileUpload(): void
+    {
+        $upload = FileUpload::fromFile(__DIR__ . '/fixtures/test.jpg');
+        $result = $this->resource->post('app://self/upload', ['image' => $upload]);
+        
+        $this->assertSame(200, $result->code);
+        $this->assertTrue($result->body['success']);
+    }
+}
+```
+
+### Key Testing Principles
+- Use real ResourceInterface instances, never mocks
+- Use actual Request/Uri objects for contexts
+- Use real Exception instances for error scenarios
+- Leverage existing fake resources in tests/Fake/ directory
+- Test integration behavior, not isolated units
+
+## Error Handling
+
+### Exception Types
+- `ResourceNotFoundException`: Resource class not found
+- `MethodException`: HTTP method not supported
+- `BadRequestException`: Invalid request parameters
+- `ParameterException`: Parameter binding failures
+
+### Error Resource Pattern
+```php
+public function onGet(int $id): static
+{
+    try {
+        $user = $this->userRepo->findById($id);
+        $this->body = $user;
+    } catch (UserNotFoundException $e) {
+        $this->code = 404;
+        $this->body = ['error' => 'User not found', 'id' => $id];
+    }
+    return $this;
+}
+```
+
+## Advanced Features
+
+### JSON Schema Validation
+Validate resource schemas automatically:
+
+```php
+use BEAR\Resource\JsonSchema\Annotation\JsonSchema;
+
+class User extends ResourceObject
+{
+    #[JsonSchema('user.json')]
+    public function onGet(): static
+    {
+        // Response automatically validated against JSON schema
+    }
+}
+```
+
+### Options Method Support
+Automatic OPTIONS method handling for CORS:
+
+```php
+$modules = [
+    new ResourceModule('MyApp'),
+    new OptionsMethodModule(),
+    new OptionsMethodHeaderModule()
+];
+```
+
+### URI Template Support
+Advanced URI templating following RFC 6570:
+
+```php
+#[Link(rel: 'search', href: 'app://self/search{?q,page,limit}')]
+#[Link(rel: 'user', href: 'app://self/user/{id}{/profile*}')]
+```
+
+This comprehensive documentation covers BEAR.Resource's complete feature set for building robust, hypermedia-driven REST APIs with strong typing, dependency injection, and comprehensive observability.

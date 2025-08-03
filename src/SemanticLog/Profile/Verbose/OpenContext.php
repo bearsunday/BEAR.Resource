@@ -5,25 +5,17 @@ declare(strict_types=1);
 namespace BEAR\Resource\SemanticLog\Profile\Verbose;
 
 use BEAR\Resource\AbstractRequest;
+use BEAR\Resource\SemanticLog\Profile\PhpProfile;
+use BEAR\Resource\SemanticLog\Profile\Profile;
+use BEAR\Resource\SemanticLog\Profile\XdebugTrace;
+use BEAR\Resource\SemanticLog\Profile\XHProfResult;
 use JsonSerializable;
 use Koriym\SemanticLogger\AbstractContext;
 use Override;
 
-use function extension_loaded;
-use function function_exists;
-use function ini_get;
-use function rtrim;
 use function spl_object_hash;
 use function strtoupper;
-use function sys_get_temp_dir;
 use function uniqid;
-use function xdebug_start_trace;
-use function xdebug_stop_trace;
-use function xhprof_enable;
-
-use const XHPROF_FLAGS_CPU;
-use const XHPROF_FLAGS_MEMORY;
-use const XHPROF_FLAGS_NO_BUILTINS;
 
 final class OpenContext extends AbstractContext implements JsonSerializable
 {
@@ -35,6 +27,7 @@ final class OpenContext extends AbstractContext implements JsonSerializable
 
     public readonly string $method;
     public readonly string $uri;
+    public readonly Profile $profile;
 
     /** @var array<string, string|null> */
     private static array $xdebugIdMap = [];
@@ -44,31 +37,20 @@ final class OpenContext extends AbstractContext implements JsonSerializable
         $this->method = strtoupper($request->method);
         $this->uri = $request->toUri();
 
-        // if xhprof is enabled, start profiling
-        if (function_exists('xhprof_enable')) {
-            /** @psalm-suppress UndefinedConstant, MixedArgument */
-            xhprof_enable(XHPROF_FLAGS_NO_BUILTINS | XHPROF_FLAGS_CPU | XHPROF_FLAGS_MEMORY);
-        }
+        // Start profiling and capture initial profile data
+        $xhprofResult = XHProfResult::start();
+        $xdebugTrace = XdebugTrace::start();
+        $phpProfile = PhpProfile::capture();
+
+        $this->profile = new Profile(
+            xhprof: $xhprofResult,
+            xdebug: $xdebugTrace,
+            php: $phpProfile,
+        );
 
         // Always generate an ID for profiling context, regardless of Xdebug availability
         $xdebugId = uniqid('profile_', true);
         self::$xdebugIdMap[spl_object_hash($this)] = $xdebugId;
-
-        if (! extension_loaded('xdebug') || ! function_exists('xdebug_start_trace')) {
-            return; // @codeCoverageIgnore
-        }
-
-        // Stop any existing trace first to ensure clean start
-        @xdebug_stop_trace();
-
-        // Use full path for trace file to ensure consistency with xhprofFile
-        $outputDir = ini_get('xdebug.output_dir');
-        if ($outputDir === false) {
-            $outputDir = sys_get_temp_dir(); // @codeCoverageIgnore
-        }
-
-        $traceFilePrefix = rtrim($outputDir, '/') . '/' . $xdebugId;
-        @xdebug_start_trace($traceFilePrefix);
     }
 
     public static function create(AbstractRequest $request): self
@@ -88,6 +70,7 @@ final class OpenContext extends AbstractContext implements JsonSerializable
         return [
             'method' => $this->method,
             'uri' => $this->uri,
+            'profile' => $this->profile,
         ];
     }
 }

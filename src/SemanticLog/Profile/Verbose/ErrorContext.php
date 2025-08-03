@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace BEAR\Resource\SemanticLog\Profile\Verbose;
 
+use BEAR\Resource\SemanticLog\Profile\PhpProfile;
+use BEAR\Resource\SemanticLog\Profile\Profile;
 use JsonSerializable;
 use Koriym\SemanticLogger\AbstractContext;
 use Override;
@@ -11,17 +13,6 @@ use Throwable;
 
 use function crc32;
 use function dechex;
-use function file_exists;
-use function file_put_contents;
-use function function_exists;
-use function is_string;
-use function serialize;
-use function sprintf;
-use function str_replace;
-use function sys_get_temp_dir;
-use function uniqid;
-use function xdebug_stop_trace;
-use function xhprof_disable;
 
 final class ErrorContext extends AbstractContext implements JsonSerializable
 {
@@ -33,8 +24,7 @@ final class ErrorContext extends AbstractContext implements JsonSerializable
 
     public readonly string $exceptionId;
     public readonly string $exceptionAsString;
-    public ?string $xhprofFile;
-    public ?string $xdebugTraceFile;
+    public readonly Profile $profile;
 
     public function __construct(
         Throwable $exception,
@@ -44,42 +34,23 @@ final class ErrorContext extends AbstractContext implements JsonSerializable
         $this->exceptionAsString = (string) $exception;
         $this->exceptionId = $exceptionId !== '' ? $exceptionId : $this->createExceptionId();
 
-        // Initialize profiling files
-        $this->xhprofFile = null;
-        $this->xdebugTraceFile = null;
-
         if ($openContext === null) {
+            // Create empty profile if no open context provided
+            $this->profile = new Profile();
+
             return;
         }
 
-        // Stop profiling and save files
-        if (function_exists('xhprof_disable')) {
-            $xhprofData = xhprof_disable();
-            $filename = sprintf(
-                '%s/xhprof_%s_%s.xhprof',
-                sys_get_temp_dir(),
-                str_replace(['/', ':', '?'], '_', $openContext->uri),
-                uniqid('', true),
-            );
+        // Stop profiling through the openContext's profile objects
+        $xhprofResult = $openContext->profile->xhprof?->stop($openContext->uri);
+        $xdebugTrace = $openContext->profile->xdebug?->stop();
+        $phpProfile = PhpProfile::capture();
 
-            if (file_put_contents($filename, serialize($xhprofData)) !== false) {
-                $this->xhprofFile = $filename;
-            }
-        }
-
-        // Handle Xdebug trace
-        $xdebugId = $openContext->getXdebugId();
-        if ($xdebugId === null || ! function_exists('xdebug_stop_trace')) {
-            return; // @codeCoverageIgnore
-        }
-
-        /** @var string|null $traceFile */
-        $traceFile = @xdebug_stop_trace(); // @phpstan-ignore-line
-        if (! is_string($traceFile) || ! file_exists($traceFile)) {
-            return;
-        }
-
-        $this->xdebugTraceFile = $traceFile; // @codeCoverageIgnore
+        $this->profile = new Profile(
+            xhprof: $xhprofResult,
+            xdebug: $xdebugTrace,
+            php: $phpProfile,
+        );
     }
 
     public static function create(
@@ -102,20 +73,10 @@ final class ErrorContext extends AbstractContext implements JsonSerializable
     #[Override]
     public function jsonSerialize(): array
     {
-        $data = [
+        return [
             'exceptionId' => $this->exceptionId,
             'exceptionAsString' => $this->exceptionAsString,
+            'profile' => $this->profile,
         ];
-
-        // Only include profiling files if they exist
-        if ($this->xhprofFile !== null) {
-            $data['xhprofFile'] = $this->xhprofFile;
-        }
-
-        if ($this->xdebugTraceFile !== null) {
-            $data['xdebugTraceFile'] = $this->xdebugTraceFile; // @codeCoverageIgnore
-        }
-
-        return $data;
     }
 }

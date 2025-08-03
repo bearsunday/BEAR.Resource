@@ -1,0 +1,33 @@
+{
+    "schemaUrl": "https://koriym.github.io/Koriym.SemanticLogger/schemas/semantic-log.json",
+    "open": {
+        "id": "bear_resource_request_1",
+        "type": "bear_resource_request",
+        "$schema": "https://bearsunday.github.io/BEAR.Resource/schemas/open-context.json",
+        "context": {
+            "method": "GET",
+            "uri": "app://self/simple?id=test-123"
+        }
+    },
+    "close": {
+        "id": "bear_resource_complete_1",
+        "type": "bear_resource_complete",
+        "$schema": "https://bearsunday.github.io/BEAR.Resource/schemas/complete-context.json",
+        "context": {
+            "uri": "app://self/simple?id=test-123",
+            "code": 200,
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "body": {
+                "id": "test-123",
+                "message": "Hello from Simple",
+                "timestamp": 1754130153
+            },
+            "view": "{\n    \"id\": \"test-123\",\n    \"message\": \"Hello from Simple\",\n    \"timestamp\": 1754130153\n}\n"
+        },
+        "openId": "bear_resource_request_1"
+    },
+    "events": [],
+    "links": []
+}
