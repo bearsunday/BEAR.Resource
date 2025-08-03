@@ -5,10 +5,6 @@ declare(strict_types=1);
 use Koriym\Attributes\AttributeReader;
 use Ray\ServiceLocator\ServiceLocator;
 
-// Load Xdebug auto-restart utility
-require_once dirname(__DIR__) . '/scripts/xdebug-auto-restart.php';
-//enable_xdebug(['trace']);
-
 require dirname(__DIR__) . '/vendor/autoload.php';
 array_map('unlink', (array) glob(__DIR__ . '/tmp/*.php')); // @phpstan-ignore-line
 array_map('unlink', (array) glob(__DIR__ . '/Module/tmp/{*.txt,*.php}', GLOB_BRACE));  // @phpstan-ignore-line
