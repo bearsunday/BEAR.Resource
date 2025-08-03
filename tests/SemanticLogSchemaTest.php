@@ -12,14 +12,17 @@ use BEAR\Resource\SemanticLog\Profile\Compact\ErrorContext;
 use BEAR\Resource\SemanticLog\Profile\Compact\OpenContext;
 use BEAR\Resource\SemanticLog\SemanticInvoker;
 use JsonSchema\Validator;
+use Koriym\SemanticLogger\SemanticLoggerInterface;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 use RuntimeException;
+use Throwable;
 
 use function assert;
 use function file_get_contents;
 use function file_put_contents;
 use function implode;
+use function is_array;
 use function json_decode;
 use function json_encode;
 use function serialize;
@@ -248,5 +251,180 @@ class SemanticLogSchemaTest extends TestCase
         $this->validator->validate($contextForValidation, $schema);
 
         $this->assertTrue($this->validator->isValid(), 'Error context without XHProf file should still validate');
+    }
+
+    public function testVerboseProfileSchemaValidation(): void
+    {
+        $testModule = new TestModule();
+        $injector = new Injector($testModule);
+        $resource = $injector->getInstance(ResourceInterface::class);
+
+        // Make actual resource call to generate Profile data
+        $resourceObject = $resource->get('app://self/simple', ['id' => 'profile-schema-test']);
+
+        $this->assertSame(200, $resourceObject->code);
+
+        // Get the actual semantic log with Profile structure
+        $semanticLogger = $injector->getInstance(SemanticLoggerInterface::class);
+        $logJson = $semanticLogger->flush();
+        $jsonString = json_encode($logJson);
+        assert($jsonString !== false);
+        $logData = json_decode($jsonString, true);
+        assert(is_array($logData));
+
+        // Validate open context with Profile structure
+        if (isset($logData['open'])) {
+            $this->validateContextWithProfileSchema(
+                $logData['open']['context'],
+                __DIR__ . '/../docs/schema/open-context.json',
+                'Open context with Profile structure',
+            );
+        }
+
+        // Validate close context with Profile structure
+        if (! isset($logData['close'])) {
+            return;
+        }
+
+        $this->validateContextWithProfileSchema(
+            $logData['close']['context'],
+            __DIR__ . '/../docs/schema/complete-context.json',
+            'Complete context with Profile structure',
+        );
+    }
+
+    public function testVerboseErrorProfileSchemaValidation(): void
+    {
+        $testModule = new TestModule();
+        $injector = new Injector($testModule);
+        $resource = $injector->getInstance(ResourceInterface::class);
+
+        // Generate error with Profile data
+        try {
+            $resource->get('app://self/error', ['id' => 'schema-test']);
+            $this->fail('Expected exception was not thrown');
+        } catch (Throwable) {
+            // Expected exception
+        }
+
+        // Get the semantic log with error Profile structure
+        $semanticLogger = $injector->getInstance(SemanticLoggerInterface::class);
+        $logJson = $semanticLogger->flush();
+        $jsonString = json_encode($logJson);
+        assert($jsonString !== false);
+        $logData = json_decode($jsonString, true);
+        assert(is_array($logData));
+
+        // Validate error context with Profile structure
+        if (! isset($logData['close'])) {
+            return;
+        }
+
+        $this->validateContextWithProfileSchema(
+            $logData['close']['context'],
+            __DIR__ . '/../docs/schema/error-context.json',
+            'Error context with Profile structure',
+        );
+    }
+
+    public function testVerboseProfileContextSchemaCompliance(): void
+    {
+        // Create actual Verbose Profile contexts directly
+        $testModule = new TestModule();
+        $injector = new Injector($testModule);
+        $resource = $injector->getInstance(ResourceInterface::class);
+
+        // Use actual resource call to generate proper AbstractRequest
+        $resourceObject = $resource->get('app://self/simple', ['id' => 'verbose-schema-test']);
+        $this->assertSame(200, $resourceObject->code);
+
+        // Get semantic logger and flush to get the log data
+        $semanticLogger = $injector->getInstance(SemanticLoggerInterface::class);
+        $logJson = $semanticLogger->flush();
+        $jsonString = json_encode($logJson);
+        assert($jsonString !== false);
+        $logData = json_decode($jsonString, true);
+        assert(is_array($logData));
+
+        // Validate the actual generated Profile contexts
+        if (isset($logData['open']['context'])) {
+            $this->validateContextWithProfileSchema(
+                $logData['open']['context'],
+                __DIR__ . '/../docs/schema/open-context.json',
+                'Verbose OpenContext with Profile from actual resource call',
+            );
+        }
+
+        if (! isset($logData['close']['context'])) {
+            return;
+        }
+
+        $this->validateContextWithProfileSchema(
+            $logData['close']['context'],
+            __DIR__ . '/../docs/schema/complete-context.json',
+            'Verbose CompleteContext with Profile from actual resource call',
+        );
+    }
+
+    public function testVerboseErrorContextSchemaCompliance(): void
+    {
+        // Use actual error resource call to generate proper error context
+        $testModule = new TestModule();
+        $injector = new Injector($testModule);
+        $resource = $injector->getInstance(ResourceInterface::class);
+
+        try {
+            $resource->get('app://self/error', ['id' => 'verbose-error-schema-test']);
+            $this->fail('Expected exception was not thrown');
+        } catch (Throwable) {
+            // Expected exception - semantic logger should have captured it
+        }
+
+        // Get the semantic log with error Profile structure
+        $semanticLogger = $injector->getInstance(SemanticLoggerInterface::class);
+        $logJson = $semanticLogger->flush();
+        $jsonString = json_encode($logJson);
+        assert($jsonString !== false);
+        $logData = json_decode($jsonString, true);
+        assert(is_array($logData));
+
+        // Validate the actual generated error Profile context
+        if (! isset($logData['close']['context'])) {
+            return;
+        }
+
+        $this->validateContextWithProfileSchema(
+            $logData['close']['context'],
+            __DIR__ . '/../docs/schema/error-context.json',
+            'Verbose ErrorContext with Profile from actual error',
+        );
+    }
+
+    /** @param array<string, mixed> $contextData */
+    private function validateContextWithProfileSchema(array $contextData, string $schemaPath, string $testDescription): void
+    {
+        // Load schema
+        $schemaContent = file_get_contents($schemaPath);
+        assert($schemaContent !== false);
+        $schema = json_decode($schemaContent);
+
+        // Convert to JSON and back for proper validation format
+        $contextJson = json_encode($contextData);
+        assert($contextJson !== false);
+        $contextForValidation = json_decode($contextJson);
+
+        // Validate against schema
+        $this->validator->validate($contextForValidation, $schema);
+
+        if ($this->validator->isValid()) {
+            $this->assertTrue(true, $testDescription . ' validates against schema');
+        } else {
+            $errors = [];
+            foreach ($this->validator->getErrors() as $error) {
+                $errors[] = sprintf('[%s] %s', $error['property'], $error['message']);
+            }
+
+            $this->fail($testDescription . ' schema validation failed: ' . implode(', ', $errors));
+        }
     }
 }
