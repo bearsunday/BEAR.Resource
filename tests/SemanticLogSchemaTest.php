@@ -12,12 +12,9 @@ use BEAR\Resource\SemanticLog\Profile\Compact\ErrorContext;
 use BEAR\Resource\SemanticLog\Profile\Compact\OpenContext;
 use BEAR\Resource\SemanticLog\SemanticInvoker;
 use JsonSchema\Validator;
-use Koriym\SemanticLogger\SemanticLogger;
 use PHPUnit\Framework\TestCase;
-use Ray\Di\AbstractModule;
 use Ray\Di\Injector;
 use RuntimeException;
-use Override;
 
 use function assert;
 use function file_get_contents;
@@ -56,7 +53,7 @@ class SemanticLogSchemaTest extends TestCase
         $resourceInstance = $resource->newInstance('app://self/simple');
         $request = new Request($invoker, $resourceInstance, 'GET', ['id' => 'factory-test']);
         $openContext = $factory->createOpenContext($request);
-        
+
         $this->assertInstanceOf(OpenContext::class, $openContext);
         $this->assertSame('GET', $openContext->method);
         $this->assertSame('app://self/simple?id=factory-test', $openContext->uri);
@@ -64,7 +61,7 @@ class SemanticLogSchemaTest extends TestCase
         // Test createCompleteContext
         $resourceObject = $resource->get('app://self/simple', ['id' => 'factory-test']);
         $completeContext = $factory->createCompleteContext($resourceObject, $openContext);
-        
+
         $this->assertInstanceOf(CompleteContext::class, $completeContext);
         $this->assertSame(200, $completeContext->code);
         $this->assertSame('app://self/simple?id=factory-test', $completeContext->uri);
@@ -72,7 +69,7 @@ class SemanticLogSchemaTest extends TestCase
         // Test createErrorContext
         $exception = new RuntimeException('Factory test error');
         $errorContext = $factory->createErrorContext($exception, 'factory-error-id', $openContext);
-        
+
         $this->assertInstanceOf(ErrorContext::class, $errorContext);
         $this->assertSame('factory-error-id', $errorContext->exceptionId);
         $this->assertStringContainsString('Factory test error', $errorContext->exceptionAsString);
@@ -81,12 +78,12 @@ class SemanticLogSchemaTest extends TestCase
         $errorContextWithoutOpen = $factory->createErrorContext($exception, 'factory-error-2');
         $this->assertInstanceOf(ErrorContext::class, $errorContextWithoutOpen);
         $this->assertSame('factory-error-2', $errorContextWithoutOpen->exceptionId);
-        
+
         // Test auto-generated exception ID (missing coverage)
         $autoIdErrorContext = $factory->createErrorContext($exception, '');
         $this->assertInstanceOf(ErrorContext::class, $autoIdErrorContext);
         $this->assertStringStartsWith('e-bear-resource-', $autoIdErrorContext->exceptionId);
-        
+
         // Test static create method for ErrorContext
         $staticErrorContext = ErrorContext::create($exception, 'static-error');
         $this->assertInstanceOf(ErrorContext::class, $staticErrorContext);
@@ -101,13 +98,13 @@ class SemanticLogSchemaTest extends TestCase
 
         $resource = $injector->getInstance(ResourceInterface::class);
         $invoker = $injector->getInstance(InvokerInterface::class);
-        
+
         // Verify that SemanticInvoker is bound correctly
-        $this->assertInstanceOf(\BEAR\Resource\SemanticLog\SemanticInvoker::class, $invoker);
-        
+        $this->assertInstanceOf(SemanticInvoker::class, $invoker);
+
         // SemanticInvoker automatically handles logging
         $resourceObject = $resource->get('app://self/simple', ['id' => 'test']);
-        
+
         // Verify the resource call worked (SemanticInvoker handled logging internally)
         $this->assertSame(200, $resourceObject->code);
         $this->assertStringContainsString('simple', (string) $resourceObject->uri);

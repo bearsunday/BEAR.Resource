@@ -79,7 +79,7 @@ protected function configure(): void
             Queries::fromDir('/path/to/queryInterface'),
             [
                 new DbQueryConfig('/path/to/sql'),
-                new WebQueryConfig('/path/to/web_query.json', ['domain' => 'api.exmaple.com'])
+                new WebQueryConfig('/path/to/web_query.json', ['domain' => 'api.example.com'])
             ],
         ),
     );
@@ -187,7 +187,7 @@ interface TodoItemInterface
 ### Web API
 
 * メソッドの引数が `uri`で指定されたURI templateにバインドされ、Web APIリクエストオブジェクトが生成されます。
-* 認証のためのヘッダーなどのカスタムはGuzzleの`ClinetInterface`をバインドして行います。
+* 認証のためのヘッダーなどのカスタムはGuzzleの`ClientInterface`をバインドして行います。
 
 ```php
 $this->bind(ClientInterface::class)->toProvider(YourGuzzleClientProvider::class);

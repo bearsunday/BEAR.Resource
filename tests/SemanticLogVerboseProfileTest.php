@@ -59,7 +59,7 @@ final class SemanticLogVerboseProfileTest extends TestCase
 
         $this->assertSame('GET', $openContext->method);
         $this->assertSame('app://self/simple?id=test', $openContext->uri);
-        
+
         // XdebugId should always be available (used as profiling session ID)
         $xdebugId = $openContext->getXdebugId();
         $this->assertIsString($xdebugId);
