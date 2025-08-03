@@ -69,7 +69,7 @@ final class ErrorContext extends AbstractContext implements JsonSerializable
 
         // Handle Xdebug trace
         $xdebugId = $openContext->getXdebugId();
-        if ($xdebugId === null) {
+        if ($xdebugId === null || ! function_exists('xdebug_stop_trace')) {
             return; // @codeCoverageIgnore
         }
 
