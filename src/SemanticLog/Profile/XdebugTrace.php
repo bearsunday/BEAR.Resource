@@ -22,6 +22,8 @@ use function xdebug_get_tracefile_name;
 use function xdebug_start_trace;
 use function xdebug_stop_trace;
 
+use const E_NOTICE;
+
 final class XdebugTrace implements JsonSerializable
 {
     private ?string $traceId = null;
@@ -74,23 +76,34 @@ final class XdebugTrace implements JsonSerializable
 
     public function stop(): self
     {
-        if ($this->traceId === null || ! function_exists('xdebug_stop_trace')) {
+        if (! $this->canStopTrace()) {
             return new self(); // @codeCoverageIgnore
+        }
+
+        return $this->performStopTrace(); // @codeCoverageIgnore
+    }
+
+    private function canStopTrace(): bool
+    {
+        if ($this->traceId === null || ! function_exists('xdebug_stop_trace')) {
+            return false; // @codeCoverageIgnore
         }
 
         // Check if Xdebug trace functionality is properly configured
         $envMode = getenv('XDEBUG_MODE');
         $iniMode = ini_get('xdebug.mode');
         $xdebugMode = $envMode !== false ? $envMode : ($iniMode !== false ? $iniMode : '');
-        if (! str_contains($xdebugMode, 'trace')) {
-            return new self(); // @codeCoverageIgnore
-        }
 
+        return str_contains($xdebugMode, 'trace'); // @codeCoverageIgnore
+    }
+
+    private function performStopTrace(): self
+    {
         // Try to stop trace and get the trace file path
         // Suppress "Function trace was not started" error for graceful handling
         set_error_handler(static function (int $errno, string $errstr): bool {
-            // Ignore specific xdebug trace errors
-            return str_contains($errstr, 'Function trace was not started');
+            // Ignore specific xdebug trace errors (only handle E_NOTICE)
+            return $errno === E_NOTICE && str_contains($errstr, 'Function trace was not started');
         });
 
         try {
