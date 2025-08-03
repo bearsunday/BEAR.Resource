@@ -5,6 +5,9 @@
     "array", "string", "int", "float", "bool", "iterable", "callable", "void", "object",
     "Attribute", "ReflectionAttribute", "Stringable",
     "BEAR\\Resource\\HalLink", "BEAR\\Resource\\NullReverseLink", "BEAR\\Resource\\ReverseLinkInterface", "BEAR\\Resource\\Module\\AnnotationModule",
-    "JSONSchemaFaker\\Faker"
+    "JSONSchemaFaker\\Faker",
+    "xdebug_start_trace", "xdebug_stop_trace",
+    "xhprof_enable", "xhprof_disable",
+    "XHPROF_FLAGS_CPU", "XHPROF_FLAGS_MEMORY", "XHPROF_FLAGS_NO_BUILTINS"
   ]
 }
