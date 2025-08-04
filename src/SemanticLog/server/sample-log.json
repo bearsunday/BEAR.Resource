@@ -1,0 +1,31 @@
+{
+  "type": "open",
+  "timestamp": "2025-08-04T05:15:38.000000Z",
+  "request": {
+    "method": "GET",
+    "uri": "app://self/bird/canary",
+    "query": [],
+    "headers": []
+  },
+  "profile": {
+    "xhprof": {
+      "enable": true,
+      "flags": 0,
+      "options": []
+    },
+    "xdebug": {
+      "enable": true,
+      "trace_format": 0,
+      "collect_params": 1,
+      "collect_return": 1,
+      "collect_assignments": 0
+    },
+    "memory_usage": 2097152,
+    "peak_memory": 2097152
+  },
+  "context": {
+    "environment": "development",
+    "process_id": 95491,
+    "request_id": "689041fa896c4"
+  }
+}

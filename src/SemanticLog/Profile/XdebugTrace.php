@@ -12,6 +12,7 @@ use function file_exists;
 use function function_exists;
 use function getenv;
 use function ini_get;
+use function is_string;
 use function restore_error_handler;
 use function rtrim;
 use function set_error_handler;
@@ -47,15 +48,10 @@ final class XdebugTrace implements JsonSerializable
             return new self(); // @codeCoverageIgnore
         }
 
-        // Check if trace is already running (due to xdebug.start_with_request=yes)
-        $existingTrace = null;
-        if (function_exists('xdebug_get_tracefile_name')) {
-            $existingTrace = xdebug_get_tracefile_name(); // @codeCoverageIgnore
-        }
-
-        if ($existingTrace !== null) {
-            // Trace already started by xdebug.start_with_request, use existing file
-            return new self($existingTrace); // @codeCoverageIgnore
+        // Always start our own trace to ensure we have control over the file format
+        // Stop any existing trace first to ensure we get a fresh start
+        if (function_exists('xdebug_stop_trace')) {
+            @xdebug_stop_trace(); // @codeCoverageIgnore - suppress errors if not running
         }
 
         $instance = new self();
@@ -85,7 +81,7 @@ final class XdebugTrace implements JsonSerializable
 
     private function canStopTrace(): bool
     {
-        if ($this->traceId === null || ! function_exists('xdebug_stop_trace')) {
+        if (! function_exists('xdebug_stop_trace')) {
             return false; // @codeCoverageIgnore
         }
 
@@ -94,11 +90,21 @@ final class XdebugTrace implements JsonSerializable
         $iniMode = ini_get('xdebug.mode');
         $xdebugMode = $envMode !== false ? $envMode : ($iniMode !== false ? $iniMode : '');
 
-        return str_contains($xdebugMode, 'trace'); // @codeCoverageIgnore
+        if (! str_contains($xdebugMode, 'trace')) {
+            return false; // @codeCoverageIgnore
+        }
+
+        // Can stop if we started the trace ourselves, OR if there's an existing trace running
+        return $this->traceId !== null || function_exists('xdebug_get_tracefile_name');
     }
 
     private function performStopTrace(): self
     {
+        // If we already have a file (from existing trace), preserve it
+        if ($this->file !== null) {
+            return new self($this->file); // @codeCoverageIgnore
+        }
+
         // Try to stop trace and get the trace file path
         // Suppress "Function trace was not started" error for graceful handling
         set_error_handler(static function (int $errno, string $errstr): bool {
@@ -107,14 +113,14 @@ final class XdebugTrace implements JsonSerializable
         });
 
         try {
-            xdebug_stop_trace(); // @codeCoverageIgnore - returns void
-            // Try to get the trace file name if available
+            // Get the trace file name BEFORE stopping the trace
             $traceFile = function_exists('xdebug_get_tracefile_name') ? xdebug_get_tracefile_name() : false; // @codeCoverageIgnore
+            xdebug_stop_trace(); // @codeCoverageIgnore - returns void
         } finally {
             restore_error_handler();
         }
 
-        if ($traceFile === false || ! file_exists($traceFile)) {
+        if ($traceFile === false || ! is_string($traceFile) || ! file_exists($traceFile)) {
             return new self(); // @codeCoverageIgnore
         }
 

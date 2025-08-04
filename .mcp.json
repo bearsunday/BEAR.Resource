@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "semantic-profiler": {
+      "command": "/opt/homebrew/Cellar/php@8.3/8.3.22/bin/php",
+      "args": ["src/SemanticLog/server/bin/server.php", "/tmp"]
+    }
+  }
+}
