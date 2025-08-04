@@ -730,6 +730,14 @@ __BEAR.Sunday__ is a Resource Oriented Framework. In BEAR.Sunday on top of the w
 
 Please check out [BEAR.Sunday web site](http://bearsunday.github.io/).
 
+## Semantic Logging
+
+BEAR.Resource includes a comprehensive semantic logging system that provides structured, JSON-based logging with complete profiling capabilities for debugging and performance analysis.
+
+👉 **[View Semantic Logging Documentation](src/SemanticLog/README.md)**
+
+Multi-level profiling (Compact/Verbose/Dev) with XHProf, Xdebug, and PHP backtrace integration. Includes MCP integration for AI-assisted debugging and JSON Schema validation for structured log format.
+
 ## See Also
 
  * [BEAR.QueryRepository](https://github.com/bearsunday/BEAR.QueryRepository) - Segregates reads and writes into two separate repository.
