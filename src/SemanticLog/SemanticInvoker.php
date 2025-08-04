@@ -12,6 +12,15 @@ use Override;
 use Ray\Di\Di\Named;
 use Throwable;
 
+/**
+ * SemanticInvoker for BEAR.Resource with structured logging
+ *
+ * Wraps resource requests with semantic logging using open/close lifecycle.
+ * Currently accumulates logs via SemanticLogger, retrieved only via flush() in tests.
+ *
+ * TODO: Consider adding immediate log persistence when close() is called
+ * for MCP server integration and AI-assisted debugging.
+ */
 final class SemanticInvoker implements InvokerInterface
 {
     public function __construct(
