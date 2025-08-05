@@ -12,7 +12,9 @@ use Koriym\SemanticLogger\AbstractContext;
 use Override;
 
 use function spl_object_hash;
+use function strtolower;
 use function strtoupper;
+use function ucfirst;
 use function uniqid;
 
 final class OpenContext extends AbstractContext implements JsonSerializable
@@ -25,6 +27,8 @@ final class OpenContext extends AbstractContext implements JsonSerializable
 
     public readonly string $method;
     public readonly string $uri;
+    /** @var array{string, string} */
+    public readonly array $call;
 
     /** @var array<string, string|null> */
     private static array $xdebugIdMap = [];
@@ -33,6 +37,10 @@ final class OpenContext extends AbstractContext implements JsonSerializable
     {
         $this->method = strtoupper($request->method);
         $this->uri = $request->toUri();
+        $this->call = [
+            $request->resourceObject::class,
+            'on' . ucfirst(strtolower($request->method))
+        ];
 
         // Start profiling (but don't capture data yet - that's for close)
         XHProfResult::start();
@@ -60,6 +68,7 @@ final class OpenContext extends AbstractContext implements JsonSerializable
         return [
             'method' => $this->method,
             'uri' => $this->uri,
+            'call' => $this->call,
         ];
     }
 }
