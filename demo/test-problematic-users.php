@@ -37,5 +37,7 @@ echo "Check /tmp for semantic log files!\n";
 $files = glob('/tmp/semantic-dev-*.json');
 if ($files) {
     $latest = array_pop($files);
+    $promptFile = str_replace('.json', '-prompt.md', $latest);
     echo "Latest log file: $latest\n";
+    echo "Analysis prompt file: $promptFile\n";
 }

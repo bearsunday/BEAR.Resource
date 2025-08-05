@@ -14,10 +14,12 @@ use function file_put_contents;
 use function getmypid;
 use function json_encode;
 use function sprintf;
+use function str_replace;
 use function sys_get_temp_dir;
 use function uniqid;
 
 use const JSON_PRETTY_PRINT;
+use const JSON_UNESCAPED_SLASHES;
 use const LOCK_EX;
 
 /**
@@ -56,13 +58,18 @@ final class DevLogPersister
 
     private function saveToFile(LogJson $logData): void
     {
-        $jsonContent = json_encode($logData, JSON_PRETTY_PRINT);
+        $jsonContent = json_encode($logData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         if ($jsonContent === false) {
             return; // Skip if JSON encoding fails
         }
 
         $filename = $this->generateFilename();
         file_put_contents($filename, $jsonContent, LOCK_EX);
+
+        // Save analysis prompt alongside JSON for AI-native processing
+        $promptFilename = str_replace('.json', '-prompt.md', $filename);
+        $analysisPrompt = $this->getAnalysisPrompt() . "\n\n```json\n" . $jsonContent . "\n```";
+        file_put_contents($promptFilename, $analysisPrompt, LOCK_EX);
     }
 
     /**
@@ -81,5 +88,19 @@ final class DevLogPersister
             $processId !== false ? $processId : 'unknown',
             $uniqueId,
         );
+    }
+
+    /**
+     * Generate analysis prompt for AI-native semantic web processing
+     */
+    private function getAnalysisPrompt(): string
+    {
+        return <<<'PROMPT'
+This is a BEAR.Resource application profiling log. Analyze YOUR APPLICATION CODE performance, not the framework itself.
+
+Focus on business logic within resource methods and application-specific code. Ignore framework overhead and profiling overhead. 
+
+If no performance issues are found in the application code, simply say "Application code performance is good."
+PROMPT;
     }
 }

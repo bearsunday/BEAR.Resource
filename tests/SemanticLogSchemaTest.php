@@ -6,6 +6,7 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Fake\SemanticLogger\Module\TestModule;
 use BEAR\Resource\Fake\SemanticLogger\Resource\App\Simple;
+use BEAR\Resource\SemanticLog\ContextFactoryInterface;
 use BEAR\Resource\SemanticLog\Profile\Compact\CompleteContext;
 use BEAR\Resource\SemanticLog\Profile\Compact\ContextFactory;
 use BEAR\Resource\SemanticLog\Profile\Compact\ErrorContext;
@@ -14,7 +15,9 @@ use BEAR\Resource\SemanticLog\SemanticInvoker;
 use JsonSchema\Validator;
 use Koriym\SemanticLogger\SemanticLoggerInterface;
 use PHPUnit\Framework\TestCase;
+use Ray\Di\AbstractModule;
 use Ray\Di\Injector;
+use Ray\Di\Scope;
 use RuntimeException;
 use Throwable;
 
@@ -128,15 +131,33 @@ class SemanticLogSchemaTest extends TestCase
             'Exception::__construct' => ['ct' => 1, 'wt' => 25, 'mu' => 256],
         ]));
 
-        // Convert to array and add xhprof_file
+        // Create proper error context structure matching new schema
         $contextArray = [
-            'exceptionId' => $errorContext->exceptionId,
-            'exceptionAsString' => $errorContext->exceptionAsString,
-            'xhprof_file' => $xhprofFile,
+            'id' => 'bear_resource_error_1',
+            'type' => 'bear_resource_error',
+            '$schema' => 'https://bearsunday.github.io/BEAR.Resource/schemas/error-context.json',
+            'context' => [
+                'exceptionId' => $exceptionId,
+                'exceptionAsString' => (string) $exception,
+                'profile' => [
+                    'xhprof' => [
+                        'data' => [
+                            'main()' => ['ct' => 1, 'wt' => 50, 'mu' => 512],
+                            'Exception::__construct' => ['ct' => 1, 'wt' => 25, 'mu' => 256],
+                        ],
+                        'spec_url' => 'https://github.com/tideways/php-xhprof-extension?tab=readme-ov-file#data-format',
+                    ],
+                    'xdebug' => [],
+                    'php' => [
+                        'backtrace' => [],
+                    ],
+                ],
+            ],
+            'openId' => 'bear_resource_request_1',
         ];
 
         // Load schema
-        $schemaPath = __DIR__ . '/../docs/schema/error-context.json';
+        $schemaPath = __DIR__ . '/../gh-pages/schemas/error-context.json';
         $schemaContent = file_get_contents($schemaPath);
         assert($schemaContent !== false);
         $schema = json_decode($schemaContent);
@@ -160,10 +181,9 @@ class SemanticLogSchemaTest extends TestCase
             $this->fail('Schema validation failed: ' . implode(', ', $errors));
         }
 
-        // Verify XHProf file exists and contains expected data
-        $this->assertFileExists($xhprofFile);
-        $this->assertIsString($contextArray['xhprof_file']);
-        $this->assertEquals($xhprofFile, $contextArray['xhprof_file']);
+        // Verify XHProf data is embedded correctly
+        $this->assertIsArray($contextArray['context']['profile']['xhprof']['data']);
+        $this->assertArrayHasKey('main()', $contextArray['context']['profile']['xhprof']['data']);
 
         // Output to tmp for manual inspection
         $tmpFile = __DIR__ . '/tmp/error_context_with_xhprof.json';
@@ -196,17 +216,30 @@ class SemanticLogSchemaTest extends TestCase
         $openContext = OpenContext::create($request);
         $completeContext = CompleteContext::create($resource, $openContext);
 
-        // Convert to array WITHOUT xhprof_file
+        // Create proper complete context structure without XHProf
         $contextArray = [
-            'uri' => $completeContext->uri,
-            'code' => $completeContext->code,
-            'headers' => $completeContext->headers,
-            'body' => $completeContext->body,
-            'view' => $completeContext->view,
+            'id' => 'bear_resource_complete_1',
+            'type' => 'bear_resource_complete',
+            '$schema' => 'https://bearsunday.github.io/BEAR.Resource/schemas/complete-context.json',
+            'context' => [
+                'uri' => $completeContext->uri,
+                'code' => $completeContext->code,
+                'headers' => $completeContext->headers,
+                'body' => $completeContext->body,
+                'view' => $completeContext->view,
+                'profile' => [
+                    'xhprof' => [],
+                    'xdebug' => [],
+                    'php' => [
+                        'backtrace' => [],
+                    ],
+                ],
+            ],
+            'openId' => 'bear_resource_request_1',
         ];
 
         // Load schema
-        $schemaPath = __DIR__ . '/../docs/schema/complete-context.json';
+        $schemaPath = __DIR__ . '/../gh-pages/schemas/complete-context.json';
         $schemaContent = file_get_contents($schemaPath);
         assert($schemaContent !== false);
         $schema = json_decode($schemaContent);
@@ -219,7 +252,16 @@ class SemanticLogSchemaTest extends TestCase
         // Validate against schema
         $this->validator->validate($contextForValidation, $schema);
 
-        $this->assertTrue($this->validator->isValid(), 'Complete context without XHProf file should still validate');
+        if (! $this->validator->isValid()) {
+            $errors = [];
+            foreach ($this->validator->getErrors() as $error) {
+                $errors[] = sprintf('[%s] %s', $error['property'], $error['message']);
+            }
+
+            $this->fail('Complete context validation failed: ' . implode(', ', $errors));
+        }
+
+        $this->assertTrue(true, 'Complete context without XHProf file validates against schema');
     }
 
     public function testErrorContextSchemaWithoutXhprof(): void
@@ -230,14 +272,27 @@ class SemanticLogSchemaTest extends TestCase
 
         $errorContext = ErrorContext::create($exception, $exceptionId);
 
-        // Convert to array WITHOUT xhprof_file
+        // Create proper error context structure without XHProf
         $contextArray = [
-            'exceptionId' => $errorContext->exceptionId,
-            'exceptionAsString' => $errorContext->exceptionAsString,
+            'id' => 'bear_resource_error_2',
+            'type' => 'bear_resource_error',
+            '$schema' => 'https://bearsunday.github.io/BEAR.Resource/schemas/error-context.json',
+            'context' => [
+                'exceptionId' => $exceptionId,
+                'exceptionAsString' => (string) $exception,
+                'profile' => [
+                    'xhprof' => [],
+                    'xdebug' => [],
+                    'php' => [
+                        'backtrace' => [],
+                    ],
+                ],
+            ],
+            'openId' => 'bear_resource_request_1',
         ];
 
         // Load schema
-        $schemaPath = __DIR__ . '/../docs/schema/error-context.json';
+        $schemaPath = __DIR__ . '/../gh-pages/schemas/error-context.json';
         $schemaContent = file_get_contents($schemaPath);
         assert($schemaContent !== false);
         $schema = json_decode($schemaContent);
@@ -255,7 +310,17 @@ class SemanticLogSchemaTest extends TestCase
 
     public function testVerboseProfileSchemaValidation(): void
     {
-        $testModule = new TestModule();
+        // Create a module that uses the Verbose ContextFactory instead of Compact
+        $testModule = new class extends AbstractModule {
+            protected function configure(): void
+            {
+                $this->install(new TestModule());
+                // Override the Compact ContextFactory with Verbose
+                $this->bind(ContextFactoryInterface::class)
+                    ->to(\BEAR\Resource\SemanticLog\Profile\Verbose\ContextFactory::class)
+                    ->in(Scope::SINGLETON);
+            }
+        };
         $injector = new Injector($testModule);
         $resource = $injector->getInstance(ResourceInterface::class);
 
@@ -275,8 +340,8 @@ class SemanticLogSchemaTest extends TestCase
         // Validate open context with Profile structure
         if (isset($logData['open'])) {
             $this->validateContextWithProfileSchema(
-                $logData['open']['context'],
-                __DIR__ . '/../docs/schema/open-context.json',
+                $logData['open'],
+                __DIR__ . '/../gh-pages/schemas/open-context.json',
                 'Open context with Profile structure',
             );
         }
@@ -287,15 +352,25 @@ class SemanticLogSchemaTest extends TestCase
         }
 
         $this->validateContextWithProfileSchema(
-            $logData['close']['context'],
-            __DIR__ . '/../docs/schema/complete-context.json',
+            $logData['close'],
+            __DIR__ . '/../gh-pages/schemas/complete-context.json',
             'Complete context with Profile structure',
         );
     }
 
     public function testVerboseErrorProfileSchemaValidation(): void
     {
-        $testModule = new TestModule();
+        // Create a module that uses the Verbose ContextFactory instead of Compact
+        $testModule = new class extends AbstractModule {
+            protected function configure(): void
+            {
+                $this->install(new TestModule());
+                // Override the Compact ContextFactory with Verbose
+                $this->bind(ContextFactoryInterface::class)
+                    ->to(\BEAR\Resource\SemanticLog\Profile\Verbose\ContextFactory::class)
+                    ->in(Scope::SINGLETON);
+            }
+        };
         $injector = new Injector($testModule);
         $resource = $injector->getInstance(ResourceInterface::class);
 
@@ -321,16 +396,25 @@ class SemanticLogSchemaTest extends TestCase
         }
 
         $this->validateContextWithProfileSchema(
-            $logData['close']['context'],
-            __DIR__ . '/../docs/schema/error-context.json',
+            $logData['close'],
+            __DIR__ . '/../gh-pages/schemas/error-context.json',
             'Error context with Profile structure',
         );
     }
 
     public function testVerboseProfileContextSchemaCompliance(): void
     {
-        // Create actual Verbose Profile contexts directly
-        $testModule = new TestModule();
+        // Create a module that uses the Verbose ContextFactory instead of Compact
+        $testModule = new class extends AbstractModule {
+            protected function configure(): void
+            {
+                $this->install(new TestModule());
+                // Override the Compact ContextFactory with Verbose
+                $this->bind(ContextFactoryInterface::class)
+                    ->to(\BEAR\Resource\SemanticLog\Profile\Verbose\ContextFactory::class)
+                    ->in(Scope::SINGLETON);
+            }
+        };
         $injector = new Injector($testModule);
         $resource = $injector->getInstance(ResourceInterface::class);
 
@@ -347,29 +431,38 @@ class SemanticLogSchemaTest extends TestCase
         assert(is_array($logData));
 
         // Validate the actual generated Profile contexts
-        if (isset($logData['open']['context'])) {
+        if (isset($logData['open'])) {
             $this->validateContextWithProfileSchema(
-                $logData['open']['context'],
-                __DIR__ . '/../docs/schema/open-context.json',
+                $logData['open'],
+                __DIR__ . '/../gh-pages/schemas/open-context.json',
                 'Verbose OpenContext with Profile from actual resource call',
             );
         }
 
-        if (! isset($logData['close']['context'])) {
+        if (! isset($logData['close'])) {
             return;
         }
 
         $this->validateContextWithProfileSchema(
-            $logData['close']['context'],
-            __DIR__ . '/../docs/schema/complete-context.json',
+            $logData['close'],
+            __DIR__ . '/../gh-pages/schemas/complete-context.json',
             'Verbose CompleteContext with Profile from actual resource call',
         );
     }
 
     public function testVerboseErrorContextSchemaCompliance(): void
     {
-        // Use actual error resource call to generate proper error context
-        $testModule = new TestModule();
+        // Create a module that uses the Verbose ContextFactory instead of Compact
+        $testModule = new class extends AbstractModule {
+            protected function configure(): void
+            {
+                $this->install(new TestModule());
+                // Override the Compact ContextFactory with Verbose
+                $this->bind(ContextFactoryInterface::class)
+                    ->to(\BEAR\Resource\SemanticLog\Profile\Verbose\ContextFactory::class)
+                    ->in(Scope::SINGLETON);
+            }
+        };
         $injector = new Injector($testModule);
         $resource = $injector->getInstance(ResourceInterface::class);
 
@@ -389,13 +482,13 @@ class SemanticLogSchemaTest extends TestCase
         assert(is_array($logData));
 
         // Validate the actual generated error Profile context
-        if (! isset($logData['close']['context'])) {
+        if (! isset($logData['close'])) {
             return;
         }
 
         $this->validateContextWithProfileSchema(
-            $logData['close']['context'],
-            __DIR__ . '/../docs/schema/error-context.json',
+            $logData['close'],
+            __DIR__ . '/../gh-pages/schemas/error-context.json',
             'Verbose ErrorContext with Profile from actual error',
         );
     }

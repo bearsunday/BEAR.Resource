@@ -7,6 +7,8 @@ namespace BEAR\Resource\SemanticLog\Profile\Verbose;
 use BEAR\Resource\ResourceObject;
 use BEAR\Resource\SemanticLog\Profile\PhpProfile;
 use BEAR\Resource\SemanticLog\Profile\Profile;
+use BEAR\Resource\SemanticLog\Profile\XdebugTrace;
+use BEAR\Resource\SemanticLog\Profile\XHProfResult;
 use BEAR\Resource\Types;
 use JsonSerializable;
 use Koriym\SemanticLogger\AbstractContext;
@@ -50,8 +52,9 @@ final class CompleteContext extends AbstractContext implements JsonSerializable
         $this->view = $resource->view ?? '';
 
         // Stop profiling and capture final profile data
-        $xhprofResult = $openContext->profile->xhprof?->stop($this->uri);
-        $xdebugTrace = $openContext->profile->xdebug?->stop();
+        // Note: start() was called in OpenContext, now we stop and capture data
+        $xhprofResult = (new XHProfResult())->stop($this->uri);
+        $xdebugTrace = (new XdebugTrace())->stop();
         $phpProfile = PhpProfile::capture();
 
         $this->profile = new Profile(

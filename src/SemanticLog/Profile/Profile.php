@@ -20,20 +20,10 @@ final class Profile implements JsonSerializable
     #[Override]
     public function jsonSerialize(): array
     {
-        $data = [];
-
-        if ($this->xhprof !== null) {
-            $data['xhprof'] = $this->xhprof;
-        }
-
-        if ($this->xdebug !== null) {
-            $data['xdebug'] = $this->xdebug;
-        }
-
-        if ($this->php !== null) {
-            $data['php'] = $this->php;
-        }
-
-        return $data;
+        return [
+            'xhprof' => $this->xhprof ?? [],
+            'xdebug' => $this->xdebug ?? [],
+            'php' => $this->php ?? ['backtrace' => []],
+        ];
     }
 }

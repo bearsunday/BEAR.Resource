@@ -7,13 +7,7 @@ namespace BEAR\Resource\SemanticLog\Profile;
 use JsonSerializable;
 use Override;
 
-use function file_put_contents;
 use function function_exists;
-use function serialize;
-use function sprintf;
-use function str_replace;
-use function sys_get_temp_dir;
-use function uniqid;
 use function xhprof_disable;
 use function xhprof_enable;
 
@@ -23,10 +17,9 @@ use const XHPROF_FLAGS_NO_BUILTINS;
 
 final class XHProfResult implements JsonSerializable
 {
-    private ?string $profileId = null;
-
+    /** @param array<string, mixed>|null $data */
     public function __construct(
-        public readonly ?string $file = null,
+        public readonly ?array $data = null,
     ) {
     }
 
@@ -39,41 +32,36 @@ final class XHProfResult implements JsonSerializable
         /** @psalm-suppress UndefinedConstant, MixedArgument */
         xhprof_enable(XHPROF_FLAGS_NO_BUILTINS | XHPROF_FLAGS_CPU | XHPROF_FLAGS_MEMORY);
 
-        $instance = new self();
-        $instance->profileId = uniqid('xhprof_', true);
-
-        return $instance;
+        return new self();
     }
 
     public function stop(string $uri): self
     {
-        if ($this->profileId === null || ! function_exists('xhprof_disable')) {
+        if (! function_exists('xhprof_disable')) {
             return new self(); // @codeCoverageIgnore
         }
 
+        /** @var array<string, array<string, int>>|false $xhprofData */
         $xhprofData = xhprof_disable();
-        $filename = sprintf(
-            '%s/xhprof_%s_%s.xhprof',
-            sys_get_temp_dir(),
-            str_replace(['/', ':', '?'], '_', $uri),
-            $this->profileId,
-        );
 
-        if (file_put_contents($filename, serialize($xhprofData)) === false) {
-            return new self(); // @codeCoverageIgnore
+        if ($xhprofData === false || $xhprofData === []) {
+            return new self();
         }
 
-        return new self($filename);
+        return new self($xhprofData);
     }
 
     /** @return array<string, mixed> */
     #[Override]
     public function jsonSerialize(): array
     {
-        if ($this->file === null) {
+        if ($this->data === null) {
             return [];
         }
 
-        return ['file' => $this->file];
+        return [
+            'data' => $this->data,
+            'spec_url' => 'https://github.com/tideways/php-xhprof-extension?tab=readme-ov-file#data-format',
+        ];
     }
 }

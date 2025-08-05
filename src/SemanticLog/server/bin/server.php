@@ -1,14 +1,14 @@
 #!/usr/bin/env php
 <?php
 
-declare(strict_types=1);
-
 /**
  * Semantic Profiler MCP Server
  *
  * AI-powered performance analysis through structured semantic profiling.
  * Fulfilling the vision of Semantic Web - machines understanding meaning.
  */
+
+declare(strict_types=1);
 
 $logDirectory = $argv[1] ?? null;
 
@@ -123,12 +123,13 @@ function handleToolCall(array $params, string $logFile): array
 
     if ($toolName === 'getSemanticProfile') {
         $logData = getLog($logFile);
+        $analysisPrompt = getAnalysisPrompt();
 
         return [
             'content' => [
                 [
                     'type' => 'text',
-                    'text' => json_encode($logData, JSON_PRETTY_PRINT),
+                    'text' => $analysisPrompt . "\n\n```json\n" . json_encode($logData, JSON_PRETTY_PRINT) . "\n```",
                 ],
             ],
             'isError' => false,
@@ -184,7 +185,8 @@ function semanticProfileAndAnalyze(array $args): array
 
     // Execute the PHP script with profiling using php-dev.ini
     $env = "XDEBUG_MODE=$xdebugMode XDEBUG_CONFIG='compression_level=0'";
-    $command = "$env php -c php-dev.ini " . escapeshellarg($script) . ' 2>&1';
+    $phpDevIni = __DIR__ . '/php-dev.ini';
+    $command = "$env php -c " . escapeshellarg($phpDevIni) . ' ' . escapeshellarg($script) . ' 2>&1';
 
     $output = shell_exec($command);
 
@@ -211,16 +213,31 @@ function semanticProfileAndAnalyze(array $args): array
     usort($newLogFiles, static fn ($a, $b) => filemtime($b) <=> filemtime($a));
     $executionLog = $newLogFiles[0];
 
-    // Load and return the log data
+    // Load and return the log data with analysis prompt
     $logData = getLog($executionLog);
+    $analysisPrompt = getAnalysisPrompt();
 
     return [
         'content' => [
             [
                 'type' => 'text',
-                'text' => "Script executed successfully.\nLog file: $executionLog\n\nSemantic Log Data:\n" . json_encode($logData, JSON_PRETTY_PRINT),
+                'text' => "Script executed successfully.\nLog file: $executionLog\n\n" . $analysisPrompt . "\n\n```json\n" . json_encode($logData, JSON_PRETTY_PRINT) . "\n```",
             ],
         ],
         'isError' => false,
     ];
+}
+
+/**
+ * Generate analysis prompt for AI-native semantic web processing
+ */
+function getAnalysisPrompt(): string
+{
+    return <<<'PROMPT'
+This is a BEAR.Resource application profiling log. Analyze YOUR APPLICATION CODE performance, not the framework itself.
+
+Focus on business logic within resource methods and application-specific code. Ignore framework overhead and profiling overhead. 
+
+If no performance issues are found in the application code, simply say "Application code performance is good."
+PROMPT;
 }

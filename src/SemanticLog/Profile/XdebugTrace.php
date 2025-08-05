@@ -9,6 +9,7 @@ use Override;
 
 use function extension_loaded;
 use function file_exists;
+use function file_get_contents;
 use function function_exists;
 use function getenv;
 use function ini_get;
@@ -19,6 +20,7 @@ use function set_error_handler;
 use function str_contains;
 use function sys_get_temp_dir;
 use function uniqid;
+use function unlink;
 use function xdebug_get_tracefile_name;
 use function xdebug_start_trace;
 use function xdebug_stop_trace;
@@ -30,7 +32,7 @@ final class XdebugTrace implements JsonSerializable
     private ?string $traceId = null;
 
     public function __construct(
-        public readonly ?string $file = null,
+        public readonly ?string $content = null,
     ) {
     }
 
@@ -100,9 +102,9 @@ final class XdebugTrace implements JsonSerializable
 
     private function performStopTrace(): self
     {
-        // If we already have a file (from existing trace), preserve it
-        if ($this->file !== null) {
-            return new self($this->file); // @codeCoverageIgnore
+        // If we already have content (from existing trace), preserve it
+        if ($this->content !== null) {
+            return new self($this->content); // @codeCoverageIgnore
         }
 
         // Try to stop trace and get the trace file path
@@ -124,17 +126,26 @@ final class XdebugTrace implements JsonSerializable
             return new self(); // @codeCoverageIgnore
         }
 
-        return new self($traceFile);
+        // Read trace content and delete file for self-contained implementation
+        $content = file_get_contents($traceFile);
+        if ($content !== false) {
+            @unlink($traceFile); // Clean up trace file
+        }
+
+        return new self($content !== false ? $content : null);
     }
 
     /** @return array<string, mixed> */
     #[Override]
     public function jsonSerialize(): array
     {
-        if ($this->file === null) {
+        if ($this->content === null) {
             return [];
         }
 
-        return ['file' => $this->file];
+        return [
+            'data' => $this->content,
+            'spec_url' => 'https://xdebug.org/docs/trace#Output-Formats',
+        ];
     }
 }
