@@ -236,8 +236,16 @@ function getAnalysisPrompt(): string
     return <<<'PROMPT'
 This is a BEAR.Resource application profiling log. Analyze YOUR APPLICATION CODE performance, not the framework itself.
 
-Focus on business logic within resource methods and application-specific code. Ignore framework overhead and profiling overhead. 
+The log contains schemaUrl fields. If necessary, refer to these schemas to understand the semantic meaning of the data structures.
 
-If no performance issues are found in the application code, simply say "Application code performance is good."
+Focus on business logic within resource methods and application-specific code. Ignore framework overhead and profiling overhead.
+
+If no performance issues are found, provide:
+- What the code is doing (business purpose)
+- How it's implemented (technical approach)
+- Implementation assessment (is this approach appropriate for the task?)
+- Any architectural observations or suggestions for production readiness
+
+Use the semantic profiling data to provide deep insights about code quality and appropriateness, not just performance metrics.
 PROMPT;
 }
