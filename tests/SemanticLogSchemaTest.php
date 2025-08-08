@@ -135,7 +135,7 @@ class SemanticLogSchemaTest extends TestCase
         $contextArray = [
             'id' => 'bear_resource_error_1',
             'type' => 'bear_resource_error',
-            '$schema' => 'https://bearsunday.github.io/BEAR.Resource/schemas/error-context.json',
+            'schemaUrl' => 'https://bearsunday.github.io/BEAR.Resource/schemas/error-context.json',
             'context' => [
                 'exceptionId' => $exceptionId,
                 'exceptionAsString' => (string) $exception,
@@ -220,7 +220,7 @@ class SemanticLogSchemaTest extends TestCase
         $contextArray = [
             'id' => 'bear_resource_complete_1',
             'type' => 'bear_resource_complete',
-            '$schema' => 'https://bearsunday.github.io/BEAR.Resource/schemas/complete-context.json',
+            'schemaUrl' => 'https://bearsunday.github.io/BEAR.Resource/schemas/complete-context.json',
             'context' => [
                 'uri' => $completeContext->uri,
                 'code' => $completeContext->code,
@@ -276,7 +276,7 @@ class SemanticLogSchemaTest extends TestCase
         $contextArray = [
             'id' => 'bear_resource_error_2',
             'type' => 'bear_resource_error',
-            '$schema' => 'https://bearsunday.github.io/BEAR.Resource/schemas/error-context.json',
+            'schemaUrl' => 'https://bearsunday.github.io/BEAR.Resource/schemas/error-context.json',
             'context' => [
                 'exceptionId' => $exceptionId,
                 'exceptionAsString' => (string) $exception,
