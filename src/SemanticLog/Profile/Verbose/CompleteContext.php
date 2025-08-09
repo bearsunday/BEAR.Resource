@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace BEAR\Resource\SemanticLog\Profile\Verbose;
 
 use BEAR\Resource\ResourceObject;
-use BEAR\Resource\SemanticLog\Profile\PhpProfile;
-use BEAR\Resource\SemanticLog\Profile\Profile;
-use BEAR\Resource\SemanticLog\Profile\XdebugTrace;
-use BEAR\Resource\SemanticLog\Profile\XHProfResult;
 use BEAR\Resource\Types;
 use JsonSerializable;
 use Koriym\SemanticLogger\AbstractContext;
+use Koriym\SemanticLogger\Profiler\PhpProfile;
+use Koriym\SemanticLogger\Profiler\Profile;
+use Koriym\SemanticLogger\Profiler\XdebugTrace;
+use Koriym\SemanticLogger\Profiler\XHProfResult;
 use Override;
 
 /**
@@ -62,6 +62,9 @@ final class CompleteContext extends AbstractContext implements JsonSerializable
             xdebug: $xdebugTrace,
             php: $phpProfile,
         );
+
+        // OpenContext is used for profiling coordination but not stored
+        unset($openContext);
     }
 
     public static function create(ResourceObject $resource, OpenContext $openContext): self

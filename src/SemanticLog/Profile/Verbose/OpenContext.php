@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace BEAR\Resource\SemanticLog\Profile\Verbose;
 
 use BEAR\Resource\AbstractRequest;
-use BEAR\Resource\SemanticLog\Profile\XdebugTrace;
-use BEAR\Resource\SemanticLog\Profile\XHProfResult;
 use JsonSerializable;
 use Koriym\SemanticLogger\AbstractContext;
+use Koriym\SemanticLogger\Profiler\XdebugTrace;
+use Koriym\SemanticLogger\Profiler\XHProfResult;
 use Override;
 
 use function spl_object_hash;
@@ -27,6 +27,7 @@ final class OpenContext extends AbstractContext implements JsonSerializable
 
     public readonly string $method;
     public readonly string $uri;
+
     /** @var array{string, string} */
     public readonly array $call;
 
@@ -39,7 +40,7 @@ final class OpenContext extends AbstractContext implements JsonSerializable
         $this->uri = $request->toUri();
         $this->call = [
             $request->resourceObject::class,
-            'on' . ucfirst(strtolower($request->method))
+            'on' . ucfirst(strtolower($request->method)),
         ];
 
         // Start profiling (but don't capture data yet - that's for close)

@@ -27,7 +27,7 @@
         "symfony/polyfill-php83": "^v1.32",
         "ray/input-query": "^1.0",
         "koriym/file-upload": "^0.2.0",
-        "koriym/semantic-logger": "^0.1"
+        "koriym/semantic-logger": "^0.2"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.6.29",
@@ -79,7 +79,8 @@
         "metrics": ["phpmetrics --report-html=build/metrics --exclude=Exception --log-junit=build/junit.xml --junit=build/junit.xml src"],
         "phpmd": ["phpmd --exclude src/Annotation src text ./phpmd.xml"],
         "build": ["@cs", "@sa", "@pcov", "@metrics"],
-        "baseline": ["phpstan analyse -c phpstan.neon --generate-baseline", "psalm --set-baseline=psalm-baseline.xml"]
+        "baseline": ["phpstan analyse -c phpstan.neon --generate-baseline", "psalm --set-baseline=psalm-baseline.xml"],
+        "mcp-test": ["XDEBUG_MODE=trace php -c vendor/koriym/semantic-logger/bin/php-dev.ini demo/test-problematic-users.php"]
     },
     "config": {
         "sort-packages": true,

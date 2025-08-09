@@ -6,13 +6,13 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\ResourceNotFoundException;
 use BEAR\Resource\Fake\SemanticLogger\Module\TestModule;
-use BEAR\Resource\SemanticLog\Profile\Profile;
 use BEAR\Resource\SemanticLog\Profile\Verbose\CompleteContext;
 use BEAR\Resource\SemanticLog\Profile\Verbose\ContextFactory;
 use BEAR\Resource\SemanticLog\Profile\Verbose\ErrorContext;
 use BEAR\Resource\SemanticLog\Profile\Verbose\OpenContext;
 use BEAR\Resource\SemanticLog\SemanticInvoker;
 use DomainException;
+use Koriym\SemanticLogger\Profiler\Profile;
 use Koriym\SemanticLogger\SemanticLoggerInterface;
 use Override;
 use PHPUnit\Framework\TestCase;

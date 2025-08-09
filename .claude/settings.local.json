@@ -42,7 +42,8 @@
       "Bash(git reset:*)",
       "Bash(XDEBUG_MODE=trace composer test)",
       "Bash(XDEBUG_MODE=trace php --ri xdebug)",
-      "Bash(XDEBUG_MODE=trace php -r \"echo ''xdebug.compression_level: '' . ini_get(''xdebug.compression_level'') . PHP_EOL;\")"
+      "Bash(XDEBUG_MODE=trace php -r \"echo ''xdebug.compression_level: '' . ini_get(''xdebug.compression_level'') . PHP_EOL;\")",
+      "Bash(gh pr view:*)"
     ],
     "deny": []
   }

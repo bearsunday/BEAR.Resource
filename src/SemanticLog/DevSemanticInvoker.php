@@ -7,6 +7,7 @@ namespace BEAR\Resource\SemanticLog;
 use BEAR\Resource\AbstractRequest;
 use BEAR\Resource\InvokerInterface;
 use BEAR\Resource\ResourceObject;
+use Koriym\SemanticLogger\DevLogger;
 use Koriym\SemanticLogger\SemanticLoggerInterface;
 use Override;
 use Ray\Di\Di\Named;
@@ -16,7 +17,7 @@ use Throwable;
  * Development semantic invoker with log persistence for MCP integration
  *
  * Orchestrates semantic logging with immediate file persistence for AI-assisted debugging.
- * Follows single responsibility principle by delegating persistence to DevLogPersister.
+ * Follows single responsibility principle by delegating persistence to vendor DevLogger.
  */
 final class DevSemanticInvoker implements InvokerInterface
 {
@@ -25,7 +26,7 @@ final class DevSemanticInvoker implements InvokerInterface
         private InvokerInterface $invoker,
         private SemanticLoggerInterface $logger,
         private ContextFactoryInterface $factory,
-        private DevLogPersister $persister,
+        private DevLogger $devLogger,
     ) {
     }
 
@@ -41,7 +42,7 @@ final class DevSemanticInvoker implements InvokerInterface
             $this->logger->close($closeContext, $openId);
 
             // Persist logs after successful completion
-            $this->persister->persistLogs($this->logger);
+            $this->devLogger->log($this->logger);
 
             return $result;
         } catch (Throwable $e) {
@@ -49,7 +50,7 @@ final class DevSemanticInvoker implements InvokerInterface
             $this->logger->close($errorContext, $openId);
 
             // Persist logs after error handling
-            $this->persister->persistLogs($this->logger);
+            $this->devLogger->log($this->logger);
 
             throw $e;
         }

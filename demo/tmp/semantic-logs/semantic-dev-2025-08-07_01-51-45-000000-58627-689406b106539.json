@@ -1,0 +1,109 @@
+{
+    "schemaUrl": "https://koriym.github.io/Koriym.SemanticLogger/schemas/semantic-log.json",
+    "open": {
+        "id": "bear_resource_request_1",
+        "type": "bear_resource_request",
+        "$schema": "https://bearsunday.github.io/BEAR.Resource/schemas/open-context.json",
+        "context": {
+            "method": "GET",
+            "uri": "app://self/user?id=1",
+            "call": [
+                "MyVendor\\Demo\\Resource\\App\\User",
+                "onGet"
+            ]
+        }
+    },
+    "close": {
+        "id": "bear_resource_complete_1",
+        "type": "bear_resource_complete",
+        "$schema": "https://bearsunday.github.io/BEAR.Resource/schemas/complete-context.json",
+        "context": {
+            "uri": "app://self/user?id=1",
+            "code": 200,
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "body": {
+                "name": "Aramis",
+                "age": 16,
+                "blog_id": 1
+            },
+            "view": "{\n    \"name\": \"Aramis\",\n    \"age\": 16,\n    \"blog_id\": 1\n}\n",
+            "profile": {
+                "xhprof": {
+                    "file": "/var/folders/bc/r8s1n7x93md3t_r6mqpy9xj40000gn/T/xhprof_2025-08-07_01-51-45_cd038181b60fc5804c4f09a19ca3d84d.json",
+                    "functions_count": 43,
+                    "total_wall_time": 72136
+                },
+                "xdebug": {
+                    "file": "/tmp/profile_689406b1029909.84205069",
+                    "file_size": 142391,
+                    "compressed": false
+                },
+                "php": {
+                    "backtrace": [
+                        {
+                            "function": "collectBacktrace",
+                            "file": "/Users/akihito/git/Koriym.SemanticLogger/src/Profiler/PhpProfile.php",
+                            "line": 30,
+                            "class": "Koriym\\SemanticLogger\\Profiler\\PhpProfile",
+                            "type": "::"
+                        },
+                        {
+                            "function": "capture",
+                            "file": "/Users/akihito/git/BEAR.Resource/src/SemanticLog/Profile/Verbose/CompleteContext.php",
+                            "line": 58,
+                            "class": "Koriym\\SemanticLogger\\Profiler\\PhpProfile",
+                            "type": "::"
+                        },
+                        {
+                            "function": "__construct",
+                            "file": "/Users/akihito/git/BEAR.Resource/src/SemanticLog/Profile/Verbose/CompleteContext.php",
+                            "line": 72,
+                            "class": "BEAR\\Resource\\SemanticLog\\Profile\\Verbose\\CompleteContext",
+                            "type": "->"
+                        },
+                        {
+                            "function": "create",
+                            "file": "/Users/akihito/git/BEAR.Resource/src/SemanticLog/Profile/Verbose/ContextFactory.php",
+                            "line": 26,
+                            "class": "BEAR\\Resource\\SemanticLog\\Profile\\Verbose\\CompleteContext",
+                            "type": "::"
+                        },
+                        {
+                            "function": "createCompleteContext",
+                            "file": "/Users/akihito/git/BEAR.Resource/src/SemanticLog/DevSemanticInvoker.php",
+                            "line": 41,
+                            "class": "BEAR\\Resource\\SemanticLog\\Profile\\Verbose\\ContextFactory",
+                            "type": "->"
+                        },
+                        {
+                            "function": "invoke",
+                            "file": "/Users/akihito/git/BEAR.Resource/src/AbstractRequest.php",
+                            "line": 135,
+                            "class": "BEAR\\Resource\\SemanticLog\\DevSemanticInvoker",
+                            "type": "->"
+                        },
+                        {
+                            "function": "__invoke",
+                            "file": "/Users/akihito/git/BEAR.Resource/src/Resource.php",
+                            "line": 114,
+                            "class": "BEAR\\Resource\\AbstractRequest",
+                            "type": "->"
+                        },
+                        {
+                            "function": "get",
+                            "file": "/Users/akihito/git/BEAR.Resource/demo/6.semantic-log.php",
+                            "line": 49,
+                            "class": "BEAR\\Resource\\Resource",
+                            "type": "->"
+                        }
+                    ]
+                }
+            }
+        },
+        "openId": "bear_resource_request_1"
+    },
+    "events": [],
+    "links": []
+}

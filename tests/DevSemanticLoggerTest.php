@@ -117,4 +117,29 @@ final class DevSemanticLoggerTest extends TestCase
         // Error context should have exception information
         $this->assertArrayHasKey('exceptionAsString', $context);
     }
+
+    public function testDevLoggerModuleWithDefaultDirectory(): void
+    {
+        // Test constructor without parameters (uses sys_get_temp_dir())
+        $module = new DevSemanticLoggerModule();
+        $module->install(new TestModule());
+
+        $injector = new Injector($module);
+        $resource = $injector->getInstance(ResourceInterface::class);
+
+        // Make resource call
+        $resourceObject = $resource->get('app://self/simple', ['id' => 'default-dir-test']);
+        $this->assertSame(200, $resourceObject->code);
+
+        // Verify log files are created in default temp directory
+        $defaultTempDir = sys_get_temp_dir();
+        $logFiles = glob($defaultTempDir . '/semantic-dev-*.json');
+        $this->assertNotFalse($logFiles);
+        $this->assertGreaterThan(0, count($logFiles));
+
+        // Clean up
+        foreach ($logFiles as $file) {
+            unlink($file);
+        }
+    }
 }

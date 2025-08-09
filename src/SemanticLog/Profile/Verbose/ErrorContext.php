@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace BEAR\Resource\SemanticLog\Profile\Verbose;
 
-use BEAR\Resource\SemanticLog\Profile\PhpProfile;
-use BEAR\Resource\SemanticLog\Profile\Profile;
-use BEAR\Resource\SemanticLog\Profile\XdebugTrace;
-use BEAR\Resource\SemanticLog\Profile\XHProfResult;
 use JsonSerializable;
 use Koriym\SemanticLogger\AbstractContext;
+use Koriym\SemanticLogger\Profiler\PhpProfile;
+use Koriym\SemanticLogger\Profiler\Profile;
+use Koriym\SemanticLogger\Profiler\XdebugTrace;
+use Koriym\SemanticLogger\Profiler\XHProfResult;
 use Override;
 use Throwable;
 

@@ -7,9 +7,9 @@ namespace BEAR\Resource\SemanticLog\Module;
 use BEAR\Resource\Invoker;
 use BEAR\Resource\InvokerInterface;
 use BEAR\Resource\SemanticLog\ContextFactoryInterface;
-use BEAR\Resource\SemanticLog\DevLogPersister;
 use BEAR\Resource\SemanticLog\DevSemanticInvoker;
 use BEAR\Resource\SemanticLog\Profile\Verbose\ContextFactory;
+use Koriym\SemanticLogger\DevLogger;
 use Koriym\SemanticLogger\SemanticLogger;
 use Koriym\SemanticLogger\SemanticLoggerInterface;
 use Override;
@@ -47,9 +47,8 @@ final class DevSemanticLoggerModule extends AbstractModule
         // Semantic logger
         $this->bind(SemanticLoggerInterface::class)->to(SemanticLogger::class)->in(Scope::SINGLETON);
 
-        // Dev log persister with configurable directory
-        $this->bind(DevLogPersister::class)->to(DevLogPersister::class)->in(Scope::SINGLETON);
-        $this->bind()->annotatedWith('dev_log_directory')->toInstance($this->logDirectory);
+        // Dev logger with configurable directory
+        $this->bind(DevLogger::class)->toInstance(new DevLogger($this->logDirectory))->in(Scope::SINGLETON);
 
         // Bind the original invoker with annotation so our dev invoker can inject it
         $this->bind(InvokerInterface::class)->annotatedWith('original')->to(Invoker::class);
