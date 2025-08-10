@@ -7,11 +7,8 @@ namespace BEAR\Resource\SemanticLog\Profile\Verbose;
 use BEAR\Resource\AbstractRequest;
 use JsonSerializable;
 use Koriym\SemanticLogger\AbstractContext;
-use Koriym\SemanticLogger\Profiler\XdebugTrace;
-use Koriym\SemanticLogger\Profiler\XHProfResult;
 use Override;
 
-use function spl_object_hash;
 use function strtolower;
 use function strtoupper;
 use function ucfirst;
@@ -31,9 +28,6 @@ final class OpenContext extends AbstractContext implements JsonSerializable
     /** @var array{string, string} */
     public readonly array $call;
 
-    /** @var array<string, string|null> */
-    private static array $xdebugIdMap = [];
-
     public function __construct(AbstractRequest $request)
     {
         $this->method = strtoupper($request->method);
@@ -43,13 +37,7 @@ final class OpenContext extends AbstractContext implements JsonSerializable
             'on' . ucfirst(strtolower($request->method)),
         ];
 
-        // Start profiling (but don't capture data yet - that's for close)
-        XHProfResult::start();
-        XdebugTrace::start();
-
-        // Generate an ID for profiling context
-        $xdebugId = uniqid('profile_', true);
-        self::$xdebugIdMap[spl_object_hash($this)] = $xdebugId;
+        // Start XdebugTrace for profiling (handled internally)
     }
 
     public static function create(AbstractRequest $request): self
@@ -57,9 +45,9 @@ final class OpenContext extends AbstractContext implements JsonSerializable
         return new self($request);
     }
 
-    public function getXdebugId(): ?string
+    public function getXdebugId(): string
     {
-        return self::$xdebugIdMap[spl_object_hash($this)] ?? null;
+        return uniqid('profile_', true);
     }
 
     /** @return array<string, mixed> */
