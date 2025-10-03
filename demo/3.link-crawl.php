@@ -34,7 +34,7 @@ namespace MyVendor\Demo\Resource\App {
         /**
          * @Link(crawl="tree", rel="post", href="app://self/post?author_id={id}")
          */
-        public function onGet(int $id = null) : ResourceObject
+        public function onGet(?int $id = null) : ResourceObject
         {
             $this->body = $id === null ? $this->users : $this->users[$id];
 

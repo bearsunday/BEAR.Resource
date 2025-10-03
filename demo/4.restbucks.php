@@ -30,7 +30,7 @@ class Menu extends ResourceObject
     /**
      * @Link(rel="order", href="app://self/Order?drink={drink}")
      */
-    public function onGet(string $drink = null) : ResourceObject
+    public function onGet(?string $drink = null) : ResourceObject
     {
         if ($drink === null) {
             $this->body = $this->menu;

@@ -48,11 +48,31 @@ $resource = (new Injector($module, __DIR__ . '/tmp'))->getInstance(ResourceInter
 // GET request with profiling
 $user = $resource->get('app://self/user', ['id' => '1']);
 
-// POST request with profiling  
+// POST request with profiling
 $newUser = $resource->post('app://self/user', ['name' => 'D\'Artagnan', 'age' => 18]);
 
-// Display generated semantic log files
-$logFiles = glob(__DIR__ . '/tmp/semantic-logs/*.json');
-foreach ($logFiles as $file) {
-    echo basename($file) . PHP_EOL;
+// Display and manage semantic log files for MCP server compatibility
+$logFiles = glob(__DIR__ . '/tmp/semantic-logs/semantic-dev-*.json');
+if ($logFiles) {
+    // Sort by modification time, get the latest
+    usort($logFiles, static fn(string $a, string $b): int => filemtime($b) <=> filemtime($a));
+    $latestFile = $logFiles[0];
+    
+    // Create MCP-compatible symlink/copy
+    $mcpLogFile = __DIR__ . '/tmp/semantic-logs/semantic-log-latest.json';
+    if (file_exists($mcpLogFile)) {
+        unlink($mcpLogFile);
+    }
+    copy($latestFile, $mcpLogFile);
+    
+    echo "Latest log: " . basename($latestFile) . PHP_EOL;
+    echo "MCP-ready: semantic-log-latest.json" . PHP_EOL;
+    
+    // Clean up older log files (keep only the latest)
+    array_shift($logFiles); // Remove the latest from cleanup list
+    foreach ($logFiles as $file) {
+        unlink($file);
+    }
+    
+    echo "Cleaned up " . count($logFiles) . " older log files." . PHP_EOL;
 }
