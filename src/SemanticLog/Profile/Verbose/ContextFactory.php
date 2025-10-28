@@ -29,6 +29,7 @@ final class ContextFactory implements ContextFactoryInterface
     #[Override]
     public function createErrorContext(Throwable $exception, string $exceptionId = '', AbstractContext|null $openContext = null): ErrorContext
     {
-        return ErrorContext::create($exception, $exceptionId);
+        /** @var OpenContext|null $openContext */
+        return ErrorContext::create($exception, $exceptionId, $openContext);
     }
 }

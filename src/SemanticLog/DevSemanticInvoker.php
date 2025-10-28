@@ -13,6 +13,8 @@ use Override;
 use Ray\Di\Di\Named;
 use Throwable;
 
+use function spl_object_hash;
+
 /**
  * Development semantic invoker with log persistence for MCP integration
  *
@@ -39,20 +41,28 @@ final class DevSemanticInvoker implements InvokerInterface
         try {
             $result = $this->invoker->invoke($request);
             $closeContext = $this->factory->createCompleteContext($result, $openContext);
-            $this->logger->close($closeContext, $openId);
 
-            // Persist logs after successful completion
-            $this->devLogger->log($this->logger);
+            try {
+                $this->logger->close($closeContext, $openId);
+            } catch (Throwable) {
+                // Protect original result from being masked by close() failure
+            }
 
             return $result;
         } catch (Throwable $e) {
-            $errorContext = $this->factory->createErrorContext($e);
-            $this->logger->close($errorContext, $openId);
+            $exceptionId = 'e-' . spl_object_hash($e);
+            $errorContext = $this->factory->createErrorContext($e, $exceptionId, $openContext);
 
-            // Persist logs after error handling
-            $this->devLogger->log($this->logger);
+            try {
+                $this->logger->close($errorContext, $openId);
+            } catch (Throwable) {
+                // Protect original exception from being masked by close() failure
+            }
 
             throw $e;
+        } finally {
+            // Persist logs once, regardless of success or failure
+            $this->devLogger->log($this->logger);
         }
     }
 }
