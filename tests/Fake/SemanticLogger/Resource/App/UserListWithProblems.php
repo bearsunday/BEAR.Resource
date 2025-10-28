@@ -1,0 +1,131 @@
+<?php
+
+declare(strict_types=1);
+
+namespace BEAR\Resource\Fake\SemanticLogger\Resource\App;
+
+use BEAR\Resource\ResourceObject;
+
+/**
+ * User list resource with intentional performance problems
+ * 
+ * This resource contains typical performance issues:
+ * - N+1 query problem
+ * - Slow external API calls  
+ * - Inefficient data processing
+ */
+final class UserListWithProblems extends ResourceObject
+{
+    public function onGet(int $page = 1): ResourceObject
+    {
+        // Simulate database connection delay
+        usleep(5000); // 5ms
+        
+        // Get users (first query)
+        $users = $this->getUsersFromDatabase($page);
+        
+        // N+1 problem: get profile for each user individually
+        foreach ($users as &$user) {
+            usleep(3000); // 3ms per query - simulate slow DB
+            $user['profile'] = $this->getUserProfile($user['id']);
+            
+            // Additional N+1: get user permissions
+            usleep(2000); // 2ms per query
+            $user['permissions'] = $this->getUserPermissions($user['id']);
+            
+            // Expensive operation in loop
+            $user['processed_data'] = $this->expensiveDataProcessing($user);
+        }
+        
+        // Slow external API call
+        $externalData = $this->getExternalData();
+        
+        // Inefficient array processing
+        $processedUsers = $this->inefficientProcessing($users);
+        
+        $this->body = [
+            'users' => $processedUsers,
+            'external_data' => $externalData,
+            'page' => $page,
+            'total' => count($processedUsers)
+        ];
+        
+        return $this;
+    }
+    
+    private function getUsersFromDatabase(int $page): array
+    {
+        // Simulate getting 20 users
+        $users = [];
+        for ($i = 1; $i <= 20; $i++) {
+            $users[] = [
+                'id' => $i,
+                'name' => "User {$i}",
+                'email' => "user{$i}@example.com"
+            ];
+        }
+        return $users;
+    }
+    
+    private function getUserProfile(int $userId): array
+    {
+        // Simulate individual database query
+        return [
+            'bio' => "Bio for user {$userId}",
+            'avatar' => "avatar{$userId}.jpg",
+            'created_at' => '2023-01-01'
+        ];
+    }
+    
+    private function getUserPermissions(int $userId): array
+    {
+        // Simulate another individual database query
+        return [
+            'can_edit' => $userId % 2 === 0,
+            'can_delete' => $userId > 10,
+            'role' => $userId > 15 ? 'admin' : 'user'
+        ];
+    }
+    
+    private function expensiveDataProcessing(array $user): array
+    {
+        // Simulate expensive CPU work
+        usleep(1000); // 1ms per user
+        
+        return [
+            'computed_field' => md5($user['name'] . $user['email']),
+            'score' => strlen($user['name']) * 10,
+            'category' => $user['id'] % 3 === 0 ? 'premium' : 'regular'
+        ];
+    }
+    
+    private function getExternalData(): array
+    {
+        // Simulate slow external API call
+        usleep(100000); // 100ms - very slow!
+        
+        return [
+            'api_version' => '1.0',
+            'server_time' => time(),
+            'status' => 'ok'
+        ];
+    }
+    
+    private function inefficientProcessing(array $users): array
+    {
+        // Simulate inefficient array operations
+        $processed = [];
+        
+        foreach ($users as $user) {
+            // Multiple loops over same data - inefficient!
+            usleep(500); // 0.5ms per user
+            
+            $processed[] = array_merge($user, [
+                'full_name' => $user['name'] . ' (' . $user['email'] . ')',
+                'user_hash' => hash('sha256', serialize($user))
+            ]);
+        }
+        
+        return $processed;
+    }
+}
