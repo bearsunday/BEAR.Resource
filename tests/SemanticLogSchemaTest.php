@@ -157,7 +157,7 @@ class SemanticLogSchemaTest extends TestCase
         ];
 
         // Load schema
-        $schemaPath = 'http://bearsunday.github.io/BEAR.Resource/schemas/error-context.json';
+        $schemaPath = 'https://bearsunday.github.io/BEAR.Resource/schemas/error-context.json';
         $schemaContent = file_get_contents($schemaPath);
         assert($schemaContent !== false);
         $schema = json_decode($schemaContent);
@@ -239,7 +239,7 @@ class SemanticLogSchemaTest extends TestCase
         ];
 
         // Load schema
-        $schemaPath = 'http://bearsunday.github.io/BEAR.Resource/schemas/complete-context.json';
+        $schemaPath = 'https://bearsunday.github.io/BEAR.Resource/schemas/complete-context.json';
         $schemaContent = file_get_contents($schemaPath);
         assert($schemaContent !== false);
         $schema = json_decode($schemaContent);
@@ -292,7 +292,7 @@ class SemanticLogSchemaTest extends TestCase
         ];
 
         // Load schema
-        $schemaPath = 'http://bearsunday.github.io/BEAR.Resource/schemas/error-context.json';
+        $schemaPath = 'https://bearsunday.github.io/BEAR.Resource/schemas/error-context.json';
         $schemaContent = file_get_contents($schemaPath);
         assert($schemaContent !== false);
         $schema = json_decode($schemaContent);
@@ -341,7 +341,7 @@ class SemanticLogSchemaTest extends TestCase
         if (isset($logData['open'])) {
             $this->validateContextWithProfileSchema(
                 $logData['open'],
-                'http://bearsunday.github.io/BEAR.Resource/schemas/open-context.json',
+                'https://bearsunday.github.io/BEAR.Resource/schemas/open-context.json',
                 'Open context with Profile structure',
             );
         }
@@ -353,7 +353,7 @@ class SemanticLogSchemaTest extends TestCase
 
         $this->validateContextWithProfileSchema(
             $logData['close'],
-            'http://bearsunday.github.io/BEAR.Resource/schemas/complete-context.json',
+            'https://bearsunday.github.io/BEAR.Resource/schemas/complete-context.json',
             'Complete context with Profile structure',
         );
     }
@@ -397,7 +397,7 @@ class SemanticLogSchemaTest extends TestCase
 
         $this->validateContextWithProfileSchema(
             $logData['close'],
-            'http://bearsunday.github.io/BEAR.Resource/schemas/error-context.json',
+            'https://bearsunday.github.io/BEAR.Resource/schemas/error-context.json',
             'Error context with Profile structure',
         );
     }
@@ -434,7 +434,7 @@ class SemanticLogSchemaTest extends TestCase
         if (isset($logData['open'])) {
             $this->validateContextWithProfileSchema(
                 $logData['open'],
-                'http://bearsunday.github.io/BEAR.Resource/schemas/open-context.json',
+                'https://bearsunday.github.io/BEAR.Resource/schemas/open-context.json',
                 'Verbose OpenContext with Profile from actual resource call',
             );
         }
@@ -445,7 +445,7 @@ class SemanticLogSchemaTest extends TestCase
 
         $this->validateContextWithProfileSchema(
             $logData['close'],
-            'http://bearsunday.github.io/BEAR.Resource/schemas/complete-context.json',
+            'https://bearsunday.github.io/BEAR.Resource/schemas/complete-context.json',
             'Verbose CompleteContext with Profile from actual resource call',
         );
     }
@@ -488,7 +488,7 @@ class SemanticLogSchemaTest extends TestCase
 
         $this->validateContextWithProfileSchema(
             $logData['close'],
-            'http://bearsunday.github.io/BEAR.Resource/schemas/error-context.json',
+            'https://bearsunday.github.io/BEAR.Resource/schemas/error-context.json',
             'Verbose ErrorContext with Profile from actual error',
         );
     }
