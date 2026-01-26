@@ -95,7 +95,15 @@ final readonly class HalRenderer implements RenderInterface
 
             // @codeCoverageIgnoreEnd
             unset($ro->body[$key]);
-            $view = $this->render($embeded());
+            $embeddedRo = $embeded();
+            $isHalCached = is_string($embeddedRo->view)
+                && ($embeddedRo->headers['Content-Type'] ?? '') === 'application/hal+json';
+            if ($isHalCached) {
+                $ro->body['_embedded'][$key] = json_decode($embeddedRo->view, null, 512, JSON_THROW_ON_ERROR);
+                continue;
+            }
+
+            $view = $this->render($embeddedRo);
             $ro->body['_embedded'][$key] = json_decode($view, null, 512, JSON_THROW_ON_ERROR);
         }
     }
