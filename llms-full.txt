@@ -1,582 +1,722 @@
-# BEAR.Resource - Complete Documentation
+# BEAR.Resource
 
-BEAR.Resource is a PHP hypermedia framework that implements REST resource-oriented architecture (ROA) with "object as a service" patterns. It enables objects to behave as REST resources with client-server architecture, uniform interfaces, statelessness, and hypermedia connectivity.
+> Hypermedia framework for object as a service.
 
-## Core Architecture
+BEAR.Resource maps resource URIs to PHP resource objects. Resource methods such as `onGet()`, `onPost()`, `onPut()`, and `onDelete()` mutate the resource state and return `static`.
 
-### Resource Object Pattern
-Every resource extends `ResourceObject` and implements HTTP methods as PHP methods:
+```bash
+composer require bear/resource
+```
 
 ```php
-class Author extends ResourceObject
-{
-    public $code = 200;
-    public $headers = ['Content-Type' => 'application/json'];
-    public $body = ['id' => 1, 'name' => 'koriym'];
+use BEAR\Resource\Annotation\Link;
+use BEAR\Resource\ResourceObject;
 
+final class User extends ResourceObject
+{
+    #[Link(rel: 'profile', href: 'app://self/profile?user_id={id}')]
     public function onGet(int $id): static
     {
-        // Handle GET request
+        $this->body = ['id' => $id, 'name' => 'koriym'];
+
+        return $this;
+    }
+}
+```
+
+Resource clients are obtained from Ray.Di. In the 1.x package, `ResourceInterface` is bound to the legacy mutable `Resource` client for compatibility. `ResourceClient` is the stateless coroutine-safe client and is available for modules that explicitly bind to it.
+
+```php
+use BEAR\Resource\Module\ResourceModule;
+use BEAR\Resource\ResourceInterface;
+use Ray\Di\Injector;
+
+$resource = (new Injector(new ResourceModule('MyVendor\Sandbox')))
+    ->getInstance(ResourceInterface::class);
+
+$user = $resource->get('app://self/user', ['id' => 1]);
+```
+
+## Documentation
+
+- [README](https://github.com/bearsunday/BEAR.Resource/blob/1.x/README.md): User guide with resource object, request, hypermedia, input, file upload, HAL, and OPTIONS examples.
+- [Japanese README](https://github.com/bearsunday/BEAR.Resource/blob/1.x/README.ja.md): Japanese user guide.
+- [CHANGELOG](https://github.com/bearsunday/BEAR.Resource/blob/1.x/CHANGELOG.md): Release history.
+- [Composer Package](https://packagist.org/packages/bear/resource): Package metadata and installation details.
+
+## Source Map
+
+- [ResourceInterface](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/ResourceInterface.php): Main resource client contract for eager and lazy requests.
+- [Resource](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/Resource.php): Default 1.x mutable fluent client, kept for compatibility.
+- [ResourceClient](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/ResourceClient.php): Stateless coroutine-safe client.
+- [ResourceObject](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/ResourceObject.php): Base resource object with code, headers, body, view, rendering, array access, and transfer behavior.
+- [Request](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/Request.php): Lazy/eager request object.
+- [NamedParamMetas](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/NamedParamMetas.php): Parameter metadata builder for input, file upload, resource, web context, DI, and query parameters.
+- [Linker](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/Linker.php): Hypermedia link execution for `linkSelf`, `linkNew`, and crawl.
+- [LinkCrawler](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/LinkCrawler.php): Batch crawl/data-loader link traversal.
+- [JsonSchemaModule](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/JsonSchema/Module/JsonSchemaModule.php): JSON Schema validation module. Failures throw `JsonSchemaRequestException` (request input) or `JsonSchemaResponseException` (response body); both extend `JsonSchemaException` whose `getErrors()` returns a structured `JsonSchemaErrors` collection of typed `JsonSchemaError` / `ConstraintViolation` DTOs.
+
+## Modules
+
+- [ResourceModule](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/Module/ResourceModule.php): Installs resource client, embedding, and HTTP client support.
+- [ResourceClientModule](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/Module/ResourceClientModule.php): Core bindings for invoker, linker, factory, renderers, input query, and data loader.
+- [HalModule](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/Module/HalModule.php): HAL representation support.
+- [OptionsMethodModule](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/Module/OptionsMethodModule.php): OPTIONS response support.
+- [OptionsMethodHeaderModule](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/Module/OptionsMethodHeaderModule.php): OPTIONS header/body renderer bindings.
+- [HttpClientModule](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/Module/HttpClientModule.php): HTTP resource adapter support.
+
+## Related Projects
+
+- [BEAR.Async](https://github.com/bearsunday/BEAR.Async): Async/coroutine integration for BEAR.Resource, including modules that can bind the stateless `ResourceClient`.
+
+## Attributes
+
+- [Link](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/Annotation/Link.php): Hypermedia link metadata.
+- [Embed](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/Annotation/Embed.php): Eager resource embedding metadata.
+- [ResourceParam](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/Annotation/ResourceParam.php): Inject values from another resource.
+- [JsonSchema](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/JsonSchema/Annotation/JsonSchema.php): JSON Schema validation metadata in the `BEAR\Resource\Annotation` namespace.
+- [Web Context Params](https://github.com/bearsunday/BEAR.Resource/tree/1.x/src-web-context/Annotation): `#[QueryParam]`, `#[CookieParam]`, `#[FormParam]`, `#[FilesParam]`, `#[ServerParam]`, and `#[EnvParam]`.
+
+## Development
+
+- [Composer Scripts](https://github.com/bearsunday/BEAR.Resource/blob/1.x/composer.json): `composer test`, `composer tests`, `composer cs`, `composer cs-fix`, `composer sa`, `composer coverage`, and `composer pcov`.
+- [PHPStan Config](https://github.com/bearsunday/BEAR.Resource/blob/1.x/phpstan.neon): PHPStan maximum-level static analysis.
+- [Psalm Config](https://github.com/bearsunday/BEAR.Resource/blob/1.x/psalm.xml): Psalm static analysis configuration.
+- [PHPUnit Config](https://github.com/bearsunday/BEAR.Resource/blob/1.x/phpunit.xml.dist): PHPUnit test and coverage configuration.
+
+## Published Schemas
+
+- [Options Response Schema](schemas/options-response.json): JSON Schema for OPTIONS resource descriptions.
+- [ALPS Schema](schemas/alps.json): ALPS document schema.
+- [Semantic Log Schema](schemas/semantic-log.json): Published semantic log schema asset.
+
+## Optional
+
+- [GitHub Actions](https://github.com/bearsunday/BEAR.Resource/tree/1.x/.github/workflows): CI, coding standards, and static analysis workflows.
+- [Tests](https://github.com/bearsunday/BEAR.Resource/tree/1.x/tests): Integration-focused test suite and fake resources.
+
+## Full Documentation
+
+### Package Requirements
+
+BEAR.Resource is a PHP library package named `bear/resource`.
+
+```json
+{
+  "name": "bear/resource",
+  "description": "Hypermedia framework for object as a service",
+  "require": {
+    "php": "^8.2",
+    "ext-filter": "*",
+    "ext-curl": "*",
+    "ext-fileinfo": "*",
+    "justinrainbow/json-schema": "^5.3 || ^6.0",
+    "koriym/http-constants": "^1.1",
+    "koriym/hal": "^1.1",
+    "phpdocumentor/reflection-docblock": "^6.0",
+    "psr/log": "^1.1 || ^2.0 || ^3.0",
+    "ray/aop": "^2.18.0",
+    "ray/di": "^2.18.0",
+    "ray/input-query": "^1.1",
+    "rize/uri-template": "^0.4",
+    "koriym/file-upload": "^1.0"
+  }
+}
+```
+
+Development tooling uses PHPUnit 11, PHP_CodeSniffer, PHPStan, Psalm, PHPMD, and bamarni/composer-bin-plugin. Static analysis tools are kept in `vendor-bin/tools`.
+
+### Source Layout
+
+```text
+src/
+  Annotation/
+  DataLoader/
+  Exception/
+  JsonSchema/
+    Annotation/
+    Exception/
+    Interceptor/
+    Module/
+  Module/
+src-web-context/
+  Annotation/
+src-files/
+  uri_template.php
+tests/
+  Fake/
+gh-pages/
+  llms.txt
+  llms-full.txt
+  schemas/
+```
+
+The `gh-pages` directory is a separate repository used for public documentation and schema assets. Do not include `gh-pages` changes in the main repository index.
+
+### Request Lifecycle
+
+Resource requests follow this conceptual flow.
+
+```text
+ResourceInterface::get(uri, query)
+  -> newRequest(Method::GET, uri, query)
+  -> Factory::newInstance(uri)
+  -> SchemeCollectionInterface::getAdapter(uri)
+  -> AppAdapter or HttpAdapter
+  -> Request::__invoke()
+  -> InvokerInterface
+  -> PhpClassInvoker
+  -> NamedParamMetas and NamedParameter
+  -> ResourceObject::onGet(), onPost(), onPut(), onDelete(), onPatch(), onOptions(), or onHead()
+  -> optional Linker / LinkCrawler
+  -> ResourceObject
+```
+
+`ResourceObject` instances carry resource state through public properties:
+
+```php
+public int $code = 200;
+public array $headers = [];
+public array $body = [];
+public string $view = '';
+```
+
+Resource methods should mutate these properties and return `$this` with return type `static`.
+
+### URI Schemes
+
+The default scheme provider maps these URI schemes:
+
+```text
+page://self/... -> AppAdapter for page resources
+app://self/...  -> AppAdapter for application resources
+http://self/... -> HttpAdapter for HTTP resources
+```
+
+Imported applications can add host-specific `page` and `app` adapters through `ImportAppModule`.
+
+### Resource Clients
+
+`ResourceInterface` provides eager and lazy access.
+
+```php
+$user = $resource->get('app://self/user', ['id' => 1]);
+```
+
+```php
+$request = $resource->newRequest(Method::GET, 'app://self/user', ['id' => 1]);
+$user = $request();
+```
+
+In the 1.x default module, `ResourceInterface` is bound to `Resource`, the mutable fluent client. It supports the legacy DSL:
+
+```php
+$user = $resource
+    ->get
+    ->uri('app://self/user')
+    ->withQuery(['id' => 1])
+    ->eager
+    ->request();
+```
+
+`ResourceClient` is stateless and coroutine-safe, but is not the 1.x default binding. Async or coroutine-aware modules can override `ResourceInterface` to bind to `ResourceClient`.
+
+BEAR.Async provides the companion async/coroutine integration for this package. See [bearsunday/BEAR.Async](https://github.com/bearsunday/BEAR.Async).
+
+### Resource Object Pattern
+
+Every application resource extends `ResourceObject`.
+
+```php
+namespace MyVendor\Sandbox\Resource\App;
+
+use BEAR\Resource\Annotation\Link;
+use BEAR\Resource\ResourceObject;
+
+final class Author extends ResourceObject
+{
+    #[Link(rel: 'posts', href: 'app://self/posts?author_id={id}')]
+    public function onGet(int $id): static
+    {
+        $this->code = 200;
+        $this->headers['content-type'] = 'application/json';
+        $this->body = [
+            'id' => $id,
+            'name' => 'koriym',
+        ];
+
         return $this;
     }
 
     public function onPost(string $name): static
     {
-        $this->code = 201; // Created
-        return $this;
-    }
+        $this->code = 201;
+        $this->body = ['name' => $name];
 
-    public function onPut(int $id, string $name): static
-    {
-        $this->code = 204; // No Content
-        return $this;
-    }
-
-    public function onDelete(int $id): static
-    {
-        $this->code = 204; // No Content
         return $this;
     }
 }
 ```
 
-### URI Scheme Mapping
-Resources are accessed via URI schemes that map to PSR-4 classes:
-- `app://self/user/123` → `App\Resource\User` class
-- `http://api.example.com/user/123` → External HTTP resource
-- `page://self/user` → Page resource
+### Parameter Resolution
 
-### Resource Properties
-All resources have four core properties:
-- `$code`: HTTP status code (200, 201, 404, etc.)
-- `$headers`: Array of HTTP headers
-- `$body`: Resource data/payload
-- `$view`: Rendered representation
+Parameters are resolved by `NamedParamMetas` and `NamedParameter`. The effective resolution model is:
 
-## Dependency Injection System
+1. `#[Input]` attributes from Ray.InputQuery convert flat input into typed objects.
+2. `#[InputFile]` attributes convert file upload payloads into upload objects.
+3. `#[ResourceParam]` attributes inject values from another resource.
+4. Web context attributes read superglobal values.
+5. Class type hints are resolved through Ray.Di.
+6. Query parameters are matched by parameter name.
+7. Default parameter values are used when no input is supplied.
 
-Uses Ray.Di for comprehensive dependency injection:
+### Ray.InputQuery Objects
 
-```php
-use BEAR\Resource\ResourceInterface;
-
-$resource = (new Injector(new ResourceModule('MyApp')))->getInstance(ResourceInterface::class);
-```
-
-### Method Parameter Injection
-Resource methods support automatic parameter injection:
-
-```php
-public function onGet(int $id, UserRepository $repo, LoggerInterface $logger): ResourceObject
-{
-    $user = $repo->findById($id);
-    $logger->info("User {$id} retrieved", ['user' => $user]);
-    $this->body = $user;
-    return $this;
-}
-```
-
-## Request Patterns
-
-### Eager Request (Immediate Execution)
-```php
-$user = $resource->get('app://self/user', ['id' => 1]);
-// Alternative syntaxes:
-$user = $resource->get->uri('app://self/user')->withQuery(['id' => 1])->eager->request();
-$user = $resource->get->uri('app://self/user')(['id' => 1]);
-$user = $resource->uri('app://self/user')(['id' => 1]); // GET is default
-```
-
-### Lazy Request (Deferred Execution)
-```php
-$userRequest = $resource->get->uri('app://self/user')->withQuery(['id' => 1]);
-// Executed when accessed:
-echo "User: {$userRequest}"; // Triggers execution and rendering
-// Or invoke with different parameters:
-$user1 = $userRequest();
-$user2 = $userRequest(['id' => 2]);
-```
-
-## Hypermedia & HATEOAS
-
-### Link Annotations
-Resources define hyperlinks using `#[Link]` attributes:
-
-```php
-#[Link(rel: 'blog', href: 'app://self/blog?author_id={id}')]
-#[Link(rel: 'profile', href: 'app://self/user/profile?user_id={id}')]
-public function onGet(int $id): static
-{
-    // Link templates use current resource values
-    $this->body = ['id' => $id, 'name' => 'John'];
-    return $this;
-}
-```
-
-### Link Navigation
-
-**linkSelf**: Replace current resource with linked resource
-```php
-$blog = $resource->get->uri('app://self/user')->withQuery(['id' => 1])
-    ->linkSelf('blog')->eager->request();
-```
-
-**linkNew**: Add linked resource to current response
-```php
-$user = $resource->get->uri('app://self/user')->withQuery(['id' => 1])
-    ->linkNew('blog')->eager->request();
-$blog = $user['blog']; // Linked resource available
-```
-
-**linkCrawl**: Build complex resource graphs
-```php
-// Author → Posts → Meta + Tags → Tag Names
-#[Link(crawl: 'post-tree', rel: 'post', href: 'app://self/post?author_id={id}')]
-public function onGet($id) {} // Author
-
-#[Link(crawl: 'post-tree', rel: 'meta', href: 'app://self/meta?post_id={id}')]
-#[Link(crawl: 'post-tree', rel: 'tag', href: 'app://self/tag?post_id={id}')]
-public function onGet($author_id) {} // Post
-
-$graph = $resource->get->uri('app://self/author')->linkCrawl('post-tree')->eager->request();
-```
-
-### HATEOAS Workflow
-```php
-// Order resource with payment link
-#[Link(rel: 'payment', href: 'app://self/payment{?order_id,amount}', method: 'put')]
-public function onPost($drink) {} // Order
-
-// Client follows hyperlink for state transition
-$order = $resource->post('app://self/order', ['drink' => 'latte']);
-$payment = $resource->href('payment', ['amount' => '4.00']); // Follow hyperlink
-```
-
-## Parameter Binding
-
-### Web Context Parameters
-Bind HTTP context values to method parameters:
-
-```php
-use Ray\WebContextParam\Annotation\QueryParam;
-use Ray\WebContextParam\Annotation\CookieParam;
-use Ray\WebContextParam\Annotation\FormParam;
-use Ray\WebContextParam\Annotation\ServerParam;
-
-public function onGet(
-    #[QueryParam('user_id')] string $userId,    // $_GET['user_id']
-    #[CookieParam('token')] string $token,      // $_COOKIE['token']
-    #[FormParam('data')] string $data,          // $_POST['data']
-    #[ServerParam('HTTP_HOST')] string $host    // $_SERVER['HTTP_HOST']
-): ResourceObject {}
-```
-
-### Resource Parameters
-Bind another resource's state to parameters:
-
-```php
-use BEAR\Resource\Annotation\ResourceParam;
-
-/**
- * @ResourceParam(param="userName", uri="app://self/login#nickname")
- */
-public function onGet(string $userName): ResourceObject
-{
-    // $userName contains the 'nickname' property from app://self/login resource
-}
-```
-
-## Input Handling (Ray.InputQuery Integration)
-
-### Input Objects
-Convert flat query data to structured, type-safe objects:
+`#[Input]` converts nested request data into typed DTOs.
 
 ```php
 use Ray\InputQuery\Attribute\Input;
 
-class ArticleInput
+final readonly class AuthorInput
 {
     public function __construct(
-        public readonly string $title,
-        public readonly string $content,
-        public readonly AuthorInput $author
-    ) {}
+        public string $name,
+    ) {
+    }
 }
 
-class ArticleResource extends ResourceObject
+final readonly class ArticleInput
 {
-    public function onPost(#[Input] ArticleInput $article): static
-    {
-        $this->body = [
-            'title' => $article->title,
-            'author_name' => $article->author->name
-        ];
-        return $this;
+    public function __construct(
+        public string $title,
+        public AuthorInput $author,
+    ) {
     }
 }
-```
 
-### File Upload Processing
-Type-safe file upload with validation:
-
-```php
-use Ray\InputQuery\Attribute\InputFile;
-use Koriym\FileUpload\FileUpload;
-use Koriym\FileUpload\ErrorFileUpload;
-
-public function onPost(
-    #[InputFile(
-        maxSize: 1024 * 1024, // 1MB
-        allowedTypes: ['image/jpeg', 'image/png'],
-        allowedExtensions: ['jpg', 'png']
-    )]
-    FileUpload|ErrorFileUpload $image,
-    string $title = 'Default'
-): static {
-    if ($image instanceof ErrorFileUpload) {
-        $this->code = 400;
-        $this->body = ['error' => $image->message];
-        return $this;
-    }
-
-    $filename = uniqid() . '_' . $image->name;
-    $image->move('/uploads/' . $filename);
-    
+public function onPost(#[Input] ArticleInput $article): static
+{
     $this->body = [
-        'filename' => $image->name,
-        'size' => $image->size,
-        'type' => $image->type
+        'title' => $article->title,
+        'author' => $article->author->name,
     ];
+
     return $this;
 }
 ```
 
-## Resource Embedding
+### File Uploads
 
-Embed external resources using `#[Embed]`:
+`#[InputFile]` maps upload fields to typed file upload objects. File handling uses `koriym/file-upload`.
 
 ```php
-class News extends ResourceObject
+use Koriym\FileUpload\ErrorFileUpload;
+use Koriym\FileUpload\FileUpload;
+use Ray\InputQuery\Attribute\InputFile;
+
+public function onPost(
+    #[InputFile(
+        maxSize: 2 * 1024 * 1024,
+        allowedTypes: ['image/jpeg', 'image/png'],
+        allowedExtensions: ['jpg', 'jpeg', 'png'],
+    )]
+    FileUpload|ErrorFileUpload $image,
+): static {
+    if ($image instanceof ErrorFileUpload) {
+        $this->code = 400;
+        $this->body = ['error' => $image->message];
+
+        return $this;
+    }
+
+    $this->body = [
+        'name' => $image->name,
+        'size' => $image->size,
+        'type' => $image->type,
+    ];
+
+    return $this;
+}
+```
+
+### Web Context Parameters
+
+Web context attributes live under `Ray\WebContextParam\Annotation`.
+
+```php
+use Ray\WebContextParam\Annotation\CookieParam;
+use Ray\WebContextParam\Annotation\QueryParam;
+use Ray\WebContextParam\Annotation\ServerParam;
+
+public function onGet(
+    #[QueryParam('id')] int $id,
+    #[CookieParam('token')] string $token,
+    #[ServerParam('HTTP_HOST')] string $host,
+): static {
+    $this->body = [
+        'id' => $id,
+        'token' => $token,
+        'host' => $host,
+    ];
+
+    return $this;
+}
+```
+
+Available attributes are `QueryParam`, `CookieParam`, `FormParam`, `FilesParam`, `ServerParam`, and `EnvParam`.
+
+### Resource Parameters
+
+`#[ResourceParam]` injects values from another resource response.
+
+```php
+use BEAR\Resource\Annotation\ResourceParam;
+
+public function onGet(
+    #[ResourceParam(uri: 'app://self/login', param: 'nickname')]
+    string $userName,
+): static {
+    $this->body = ['userName' => $userName];
+
+    return $this;
+}
+```
+
+### Hypermedia Links
+
+`#[Link]` defines relationships from a resource method to another resource.
+
+```php
+use BEAR\Resource\Annotation\Link;
+
+#[Link(rel: 'blog', href: 'app://self/blog?author_id={id}')]
+public function onGet(int $id): static
+{
+    $this->body = ['id' => $id, 'name' => 'koriym'];
+
+    return $this;
+}
+```
+
+`linkSelf` replaces the current resource with the linked resource.
+
+```php
+$blog = $resource
+    ->get
+    ->uri('app://self/user')
+    ->withQuery(['id' => 1])
+    ->linkSelf('blog')
+    ->eager
+    ->request();
+```
+
+`linkNew` adds the linked resource under the relation key.
+
+```php
+$user = $resource
+    ->get
+    ->uri('app://self/user')
+    ->withQuery(['id' => 1])
+    ->linkNew('blog')
+    ->eager
+    ->request();
+
+$blog = $user['blog'];
+```
+
+`linkCrawl` follows a named crawl graph across lists and nested resources.
+
+```php
+#[Link(crawl: 'post-tree', rel: 'post', href: 'app://self/post?author_id={id}')]
+public function onGet(int $id): static
+{
+    return $this;
+}
+
+$graph = $resource
+    ->get
+    ->uri('app://self/author')
+    ->linkCrawl('post-tree')
+    ->eager
+    ->request();
+```
+
+### Resource Embedding
+
+`#[Embed]` eagerly embeds resource state.
+
+```php
+use BEAR\Resource\Annotation\Embed;
+
+final class News extends ResourceObject
 {
     #[Embed(rel: 'weather', src: 'app://self/weather/today')]
-    #[Embed(rel: 'stocks', src: 'app://self/stocks/quotes')]
     public function onGet(): static
     {
-        $this->body = [
-            'headline' => 'Breaking News',
-            'content' => 'Article content...'
-        ];
+        $this->body = ['headline' => 'Breaking News'];
+
         return $this;
     }
 }
 ```
 
-## Representation & Rendering
+### Rendering
 
-### JSON Rendering
+`ResourceObject` renders itself through a `RenderInterface` implementation. The default core binding uses `PrettyJsonRenderer`. `HalModule` enables HAL rendering through `HalRenderer` and `HalLinker`.
+
 ```php
-$modules = [new ResourceModule('MyApp'), new JsonModule()];
-$resource = (new Injector($modules))->getInstance(ResourceInterface::class);
-$user = $resource->get('app://self/user', ['id' => 1]);
-echo $user; // JSON output
+use BEAR\Resource\Module\HalModule;
+use BEAR\Resource\Module\ResourceModule;
+use BEAR\Resource\ResourceInterface;
+use Ray\Di\Injector;
+
+$module = new HalModule(new ResourceModule('MyVendor\Sandbox'));
+$resource = (new Injector($module))->getInstance(ResourceInterface::class);
+
+echo $resource->get('app://self/news');
 ```
 
-### HAL (Hypertext Application Language) Rendering
-```php
-$modules = [new ResourceModule('MyApp'), new HalModule()];
-$resource = (new Injector($modules))->getInstance(ResourceInterface::class);
-echo $resource->get('app://self/news'); 
-// HAL format with _links and _embedded sections
-```
+There is no current `JsonModule` class in this package. Use the default JSON renderer bindings or `HalModule` for HAL output.
 
-### Custom Renderers
+### JSON Schema Validation
+
+JSON Schema validation is provided by `src/JsonSchema`. The attribute class is physically in `src/JsonSchema/Annotation/JsonSchema.php`, but its namespace is `BEAR\Resource\Annotation`.
+
 ```php
-class User extends ResourceObject
+use BEAR\Resource\Annotation\JsonSchema;
+
+#[JsonSchema(schema: 'user.json')]
+public function onGet(int $id): static
 {
-    public function __construct()
-    {
-        $this->setRenderer(new class implements RenderInterface {
-            public function render(ResourceObject $ro): string
-            {
-                $ro->headers['content-type'] = 'application/xml';
-                $ro->view = $this->toXml($ro->body);
-                return $ro->view;
-            }
-        });
-    }
+    $this->body = ['id' => $id];
+
+    return $this;
 }
 ```
 
-## Transfer & Output
-
-Transfer resource state to client:
+`JsonSchemaModule` installs the interceptor and handlers.
 
 ```php
-$user = $resource->get('app://self/user', ['id' => 1]);
-$user->transfer(new class implements TransferInterface {
-    public function __invoke(ResourceObject $ro, array $server): void
-    {
-        foreach ($ro->headers as $label => $value) {
-            header("{$label}: {$value}", false);
-        }
-        http_response_code($ro->code);
-        echo $ro->view;
-    }
-});
+use BEAR\Resource\Module\JsonSchemaModule;
+use BEAR\Resource\Module\ResourceModule;
+
+$module = new JsonSchemaModule(
+    jsonSchemaDir: __DIR__ . '/var/json_schema',
+    jsonValidateDir: __DIR__ . '/var/json_validate',
+    module: new ResourceModule('MyVendor\Sandbox'),
+);
 ```
 
-## Module System
+The attribute supports:
 
-### Core Modules
-- `ResourceModule`: Basic resource functionality
-- `JsonModule`: JSON representation
-- `HalModule`: HAL representation  
-- `HttpClientModule`: HTTP resource client
-- `EmbedResourceModule`: Resource embedding
-
-### Module Configuration
 ```php
-class AppModule extends AbstractModule
-{
-    protected function configure(): void
-    {
-        $this->install(new ResourceModule('MyApp'));
-        $this->install(new JsonModule());
-        $this->install(new HalModule());
-    }
+public function __construct(
+    public string $schema = '',
+    public string $key = '',
+    public string $params = '',
+    public string $target = 'body',
+) {
 }
 ```
 
-## Semantic Logging Integration
+The `params` schema validates input DTO arguments. Response validation targets the configured response body or key.
 
-BEAR.Resource includes comprehensive semantic logging for observability:
+#### Validation failures
 
-### Semantic Logger Components
-- `SemanticLogger`: Main logging interface with structured JSON output
-- `SemanticInvoker`: Wraps resource invocation with automatic logging
-- `OpenContext`: Request initiation context
-- `CompleteContext`: Request completion with profiling data
-- `ErrorContext`: Exception and error contexts
+Validation failures throw subclasses of `BEAR\Resource\Exception\JsonSchemaException` so `catch` arms can discriminate the source:
 
-### Profile Integration
-- **XHProf**: Lightweight performance profiling
-- **Xdebug**: Detailed function call tracing
-- Automatic profile file generation and linking
+```php
+try {
+    $resource->get('app://self/user', ['id' => 'not-an-int']);
+} catch (JsonSchemaRequestException $e) {   // request validation failed (4xx)
+} catch (JsonSchemaResponseException $e) {  // response validation failed (5xx)
+}
+```
 
-### Structured Log Output
+`JsonSchemaException` is non-final; both subclasses live in `src/JsonSchema/Exception/`. Each constructor's `@param` is narrowed to a code range alias declared in `BEAR\Resource\Types`:
+
+- `JsonSchemaRequestException` → `ClientErrorCode = int<400, 499>`, defaults to `Code::BAD_REQUEST`
+- `JsonSchemaResponseException` → `ServerErrorCode = int<500, 599>`, defaults to `Code::ERROR`
+
+The exception class does not pin a specific HTTP-style code; it just constrains the range. The precise value is the caller's policy.
+
+#### Structured errors
+
+`JsonSchemaException::getErrors()` returns a `BEAR\Resource\JsonSchema\JsonSchemaErrors` collection — `Countable`, `IteratorAggregate`, plus named accessors:
+
+```php
+$errors = $e->getErrors();
+$errors->hasErrors();                            // bool
+$errors->first();                                // ?JsonSchemaError
+$errors->byProperty();                           // array<string, list<JsonSchemaError>>
+$errors->format("[{property}] {message}\n");     // concatenated string
+foreach ($errors as $error) {
+    $error->property;                            // 'age'
+    $error->pointer;                             // '/age'
+    $error->message;                              // schema's errorMessage if any, else validator's raw
+    $error->rawMessage;                          // validator's original (English, stable)
+    $error->isCustomMessage;                     // true when message != rawMessage
+    $error->constraint->name;                    // 'minimum'
+    $error->constraint->params;                  // ['minimum' => 20]
+    $error->render('age must be >= {minimum}');  // '{key}' placeholder interpolation
+}
+```
+
+When a schema declares `errorMessage` (ajv-errors style), the mapper resolves it via JSON Pointer navigation (supports nested objects and arrays) and renders it into `$error->message`. Originals stay on `$error->rawMessage`.
+
+Custom handlers receive the concrete subtype:
+
+- `JsonSchemaRequestExceptionHandlerInterface::handleRequestException(... JsonSchemaException $e ...)` — actually receives `JsonSchemaRequestException`
+- `JsonSchemaExceptionHandlerInterface::handle(... JsonSchemaException $e ...)` — actually receives `JsonSchemaResponseException`
+
+Runtime parameter types stay on the parent for BC; the PHPDoc `@param` is narrowed to the concrete subtype.
+
+### OPTIONS Support
+
+OPTIONS method support is provided by `OptionsMethodModule`, `OptionsMethodHeaderModule`, `OptionsMethods`, `OptionsMethodRequest`, and `OptionsRenderer`.
+
+```php
+use BEAR\Resource\Module\OptionsMethodHeaderModule;
+use BEAR\Resource\Module\ResourceModule;
+
+$module = new OptionsMethodHeaderModule(
+    new ResourceModule('MyVendor\Sandbox'),
+);
+
+$options = $resource->options('app://self/user');
+```
+
+The published schema for OPTIONS responses is `schemas/options-response.json`.
+
+### HTTP Resources
+
+`HttpClientModule` binds support for HTTP resource access. `HttpAdapter` delegates to `HttpRequestInterface`, and the default HTTP request implementation is cURL-based.
+
+```php
+$remote = $resource->get('http://self/api/user', ['id' => 1]);
+```
+
+### Data Loading and Crawl
+
+`DataLoader` groups crawl requests to reduce duplicate resource calls. `LinkCrawler` uses it for list bodies and nested crawl traversal.
+
+```php
+use BEAR\Resource\DataLoader\DataLoader;
+
+// DataLoader is bound by ResourceClientModule and used by LinkCrawler.
+```
+
+### Development Commands
+
+Use PHP 8.5 on this machine with `sphp85` before running Composer scripts.
+
+```bash
+composer test
+composer tests
+composer cs
+composer cs-fix
+composer sa
+composer coverage
+composer pcov
+```
+
+`composer tests` runs coding standards, PHPUnit, Psalm, and PHPStan.
+
 ```json
 {
-    "schemaUrl": "https://koriym.github.io/Koriym.SemanticLogger/schemas/semantic-log.json",
-    "open": {
-        "id": "bear_resource_request_1",
-        "type": "bear_resource_request",
-        "context": {
-            "method": "GET",
-            "uri": "app://self/user?id=123"
-        }
-    },
-    "close": {
-        "id": "bear_resource_complete_1", 
-        "type": "bear_resource_complete",
-        "context": {
-            "code": 200,
-            "body": {"id": 123, "name": "John"},
-            "xhprofFile": "/tmp/profile_123.xhprof",
-            "xdebugTraceFile": "/tmp/trace_123.xt"
-        }
-    }
+  "scripts": {
+    "test": ["phpunit"],
+    "tests": ["@cs", "@test", "@sa"],
+    "coverage": ["XDEBUG_MODE=coverage php -dmemory_limit=-1 -dpcov.enabled=0 ./vendor/bin/phpunit --coverage-text --show-uncovered-for-coverage-text --coverage-html=build/coverage --coverage-xml=build/coverage-xml --coverage-clover=coverage.xml --path-coverage"],
+    "pcov": ["php -dpcov.enabled=1 ./vendor/bin/phpunit --coverage-text --coverage-html=build/coverage-pcov --coverage-clover=coverage-pcov.xml"],
+    "cs": ["phpcs --standard=phpcs.xml src tests"],
+    "cs-fix": ["phpcbf src tests"],
+    "sa": ["psalm --memory-limit=-1 --monochrome --show-info=true", "phpstan --memory-limit=-1 analyse -c phpstan.neon"]
+  }
 }
 ```
 
-## Namespace Code Classification
+`composer coverage` uses Xdebug path coverage and reports branch coverage. `composer pcov` uses PCOV for faster line coverage. PCOV does not provide branch/path coverage.
 
-### Framework vs Application Code
+### Static Analysis
 
-When analyzing profiling data or semantic logs, distinguish code types by namespace patterns:
+Psalm is configured by `psalm.xml` at error level 1. The current Psalm config suppresses Psalm 7 beta security-analysis advisory annotation issues that are not part of the normal static-analysis gate.
 
-**Framework/Library Code (NOT application code):**
-- `BEAR\*` - BEAR.Resource framework components
-- `Koriym\*` - Koriym library components  
-- `Ray\*` - Ray.Di dependency injection framework
-- `Doctrine\*` - Doctrine components
-- `Composer\*` - Composer autoloader
-- `vendor\*` path - Third-party vendor libraries
+PHPStan uses `phpstan.neon` at maximum analysis level. Both Psalm and PHPStan are run by `composer sa` with `--memory-limit=-1`.
 
-**Application Code:**
-- `App\*` - Primary application namespace
-- `FakeVendor\*` - Test/demo application namespace
-- Any custom namespace outside vendor directory
+### Coverage Expectations
 
-**Examples:**
-```
-Framework: BEAR\Resource\Invoker::invoke
-Framework: Ray\Di\Container::getInstance  
-Framework: Koriym\SemanticLogger\SemanticLogger::open
-Application: App\Resource\User::onGet
-Application: FakeVendor\Sandbox\Resource\App\Bird\Canary::onGet
+The test suite is configured to keep line and branch coverage at 100 percent when run with Xdebug path coverage.
+
+```text
+Lines:    100.00%
+Branches: 100.00%
 ```
 
-When providing performance analysis, focus on application code performance issues. Framework overhead is expected and should be excluded from optimization recommendations unless specifically requested.
+Path coverage is also reported but is a separate metric from branch coverage.
 
-## Performance Optimization
+### Testing Guidelines
 
-### Resource Client Serialization
-Cache compiled resource clients for significant performance gains:
+Tests should use real `ResourceInterface` calls and real fake resources. Do not create mock objects for resource behavior.
 
 ```php
-// Build and cache
-$resource = (new Injector(new ResourceModule('MyApp')))->getInstance(ResourceInterface::class);
-file_put_contents('resource.cache', serialize($resource));
+use BEAR\Resource\Module\ResourceModule;
+use BEAR\Resource\ResourceInterface;
+use PHPUnit\Framework\TestCase;
+use Ray\Di\Injector;
 
-// Load from cache
-$resource = unserialize(file_get_contents('resource.cache'));
-$user = $resource->get('app://self/user', ['id' => 1]);
-```
-
-### Lazy Loading Benefits
-- Assign request objects to templates instead of executed results
-- Execution deferred until actually needed
-- Better memory usage and performance
-
-## Testing Patterns
-
-### Integration Testing Approach
-BEAR.Resource emphasizes integration testing over unit testing:
-
-```php
-class UserResourceTest extends TestCase
+final class UserResourceTest extends TestCase
 {
     private ResourceInterface $resource;
 
     protected function setUp(): void
     {
-        $this->resource = (new Injector(new TestModule()))->getInstance(ResourceInterface::class);
+        $this->resource = (new Injector(new ResourceModule('FakeVendor\Sandbox')))
+            ->getInstance(ResourceInterface::class);
     }
 
     public function testGetUser(): void
     {
         $user = $this->resource->get('app://self/user', ['id' => 1]);
-        
+
         $this->assertSame(200, $user->code);
-        $this->assertSame('John', $user->body['name']);
-    }
-
-    public function testFileUpload(): void
-    {
-        $upload = FileUpload::fromFile(__DIR__ . '/fixtures/test.jpg');
-        $result = $this->resource->post('app://self/upload', ['image' => $upload]);
-        
-        $this->assertSame(200, $result->code);
-        $this->assertTrue($result->body['success']);
     }
 }
 ```
 
-### Key Testing Principles
-- Use real ResourceInterface instances, never mocks
-- Use actual Request/Uri objects for contexts
-- Use real Exception instances for error scenarios
-- Leverage existing fake resources in tests/Fake/ directory
-- Test integration behavior, not isolated units
+Test fixtures live under `tests/Fake`. Existing fake namespaces include `FakeVendor\Sandbox`, `FakeVendor\Blog`, and `FakeVendor\News`.
 
-## Error Handling
+### Current State Notes
 
-### Exception Types
-- `ResourceNotFoundException`: Resource class not found
-- `MethodException`: HTTP method not supported
-- `BadRequestException`: Invalid request parameters
-- `ParameterException`: Parameter binding failures
+These notes prevent common stale assumptions:
 
-### Error Resource Pattern
-```php
-public function onGet(int $id): static
-{
-    try {
-        $user = $this->userRepo->findById($id);
-        $this->body = $user;
-    } catch (UserNotFoundException $e) {
-        $this->code = 404;
-        $this->body = ['error' => 'User not found', 'id' => $id];
-    }
-    return $this;
-}
+- The current source tree has no `src/SemanticLog` directory.
+- The current source tree has no `JsonModule` class.
+- The `JsonSchema` attribute namespace is `BEAR\Resource\Annotation\JsonSchema`.
+- `JsonSchemaException` is non-final; `JsonSchemaRequestException` and `JsonSchemaResponseException` extend it.
+- `JsonSchemaException::getErrors()` returns a `JsonSchemaErrors` collection, not an array.
+- `ResourceInterface` defaults to `Resource` in 1.x, not `ResourceClient`.
+- Resource methods should return `static`, not `ResourceObject`.
+- Doctrine annotations have been removed from the current code path; PHP 8 attributes are the current API.
+
+### Published Schema Assets
+
+The `gh-pages/schemas` directory contains public JSON Schema and prompt assets:
+
+```text
+schemas/alps.json
+schemas/complete-context-prompt.txt
+schemas/complete-context.json
+schemas/error-context.json
+schemas/open-context-prompt.txt
+schemas/open-context.json
+schemas/options-response.json
+schemas/profile-prompt.txt
+schemas/profile.json
+schemas/semantic-log-prompt.txt
+schemas/semantic-log.json
+schemas/semantic-profiling-analysis-prompt.txt
+schemas/semantic-tags.json
 ```
 
-## Advanced Features
-
-### JSON Schema Validation
-Validate resource schemas automatically:
-
-```php
-use BEAR\Resource\JsonSchema\Annotation\JsonSchema;
-
-class User extends ResourceObject
-{
-    #[JsonSchema('user.json')]
-    public function onGet(): static
-    {
-        // Response automatically validated against JSON schema
-    }
-}
-```
-
-### Options Method Support
-Automatic OPTIONS method handling for CORS:
-
-```php
-$modules = [
-    new ResourceModule('MyApp'),
-    new OptionsMethodModule(),
-    new OptionsMethodHeaderModule()
-];
-```
-
-### URI Template Support
-Advanced URI templating following RFC 6570:
-
-```php
-#[Link(rel: 'search', href: 'app://self/search{?q,page,limit}')]
-#[Link(rel: 'user', href: 'app://self/user/{id}{/profile*}')]
-```
-
-## Common Log Patterns
-
-When analyzing semantic profiling logs, these patterns help distinguish between development overhead and actual application performance issues:
-
-### Development Profiling Pattern
-**Indicators:**
-- Generated by: `BEAR\Resource\SemanticLog\DevSemanticInvoker`
-- Profile data: `xhprof`, `xdebug`, and/or `php` sections contain detailed profiling information
-- Trace content: Shows extensive framework initialization and dependency injection overhead
-
-**Interpretation:**
-This is a development environment log with comprehensive profiling enabled. Performance metrics include framework overhead from:
-- Dependency injection container operations  
-- Development-specific interceptors and observers
-- XHProf function call profiling (wall time, memory usage, call counts)
-- Xdebug execution trace collection
-- PHP backtrace generation and analysis
-- Schema validation and semantic logging overhead
-
-**Analysis Focus:**
-Focus on application-specific bottlenecks. **Do NOT recommend disabling profiling in development** - this is intentional development tooling that should remain enabled during development for comprehensive analysis. However, these profiling tools (XHProf, Xdebug) should be disabled in production for performance reasons. Look for:
-- N+1 query patterns in database calls
-- Inefficient algorithms in business logic
-- Resource-specific performance issues
-- Actual application bottlenecks excluding framework overhead
-
-### Standard Production Pattern  
-**Indicators:**
-- Generated by: `BEAR\Resource\Invoker`
-- Profile data: Empty arrays `[]` or minimal profiling information
-- Trace content: Minimal or absent
-
-**Interpretation:**
-This represents standard production request processing without development overhead. In production environments, XHProf and Xdebug are typically disabled for performance reasons, resulting in empty profile arrays. Performance metrics reflect actual application performance without development tooling overhead.
-
-**Analysis Focus:**
-Direct performance analysis of application code without development tooling interference. When profile data is empty in production logs, this is expected and correct behavior.
-
----
-
-This comprehensive documentation covers BEAR.Resource's complete feature set for building robust, hypermedia-driven REST APIs with strong typing, dependency injection, and comprehensive observability.
+These are published assets under the `gh-pages` repository. Their presence does not imply that a corresponding `src/SemanticLog` implementation exists in the current BEAR.Resource package.

@@ -1,71 +1,96 @@
 # BEAR.Resource
 
-BEAR.Resource is a PHP hypermedia framework that implements REST resource-oriented architecture (ROA).
+> Hypermedia framework for object as a service.
 
-## Core Concepts
+BEAR.Resource maps resource URIs to PHP resource objects. Resource methods such as `onGet()`, `onPost()`, `onPut()`, and `onDelete()` mutate the resource state and return `static`.
 
-**Resource Objects**: All application resources extend `ResourceObject` and implement HTTP methods:
-- `onGet()` - Handle GET requests
-- `onPost()` - Handle POST requests  
-- `onPut()` - Handle PUT requests
-- `onDelete()` - Handle DELETE requests
+```bash
+composer require bear/resource
+```
 
-**URI-based Resource Access**: Resources are accessed using URI schemes:
-- `app://self/user/123` - Application resource
-- `http://api.example.com/user/123` - HTTP resource
-- `page://self/user` - Page resource
-
-**Method Parameters**: Resource methods use dependency injection for parameters:
 ```php
-public function onGet(int $id, UserRepository $repo): ResourceObject
+use BEAR\Resource\Annotation\Link;
+use BEAR\Resource\ResourceObject;
+
+final class User extends ResourceObject
 {
-    $this->body = $repo->findById($id);
-    return $this;
+    #[Link(rel: 'profile', href: 'app://self/profile?user_id={id}')]
+    public function onGet(int $id): static
+    {
+        $this->body = ['id' => $id, 'name' => 'koriym'];
+
+        return $this;
+    }
 }
 ```
 
-**Hypermedia**: Resources can be linked using `@Link` annotations:
+Resource clients are obtained from Ray.Di. In the 1.x package, `ResourceInterface` is bound to the legacy mutable `Resource` client for compatibility. `ResourceClient` is the stateless coroutine-safe client and is available for modules that explicitly bind to it.
+
 ```php
-#[Link(rel: 'profile', href: 'app://self/user/profile?id={id}')]
+use BEAR\Resource\Module\ResourceModule;
+use BEAR\Resource\ResourceInterface;
+use Ray\Di\Injector;
+
+$resource = (new Injector(new ResourceModule('MyVendor\Sandbox')))
+    ->getInstance(ResourceInterface::class);
+
+$user = $resource->get('app://self/user', ['id' => 1]);
 ```
 
-## Framework Architecture
+## Documentation
 
-- **ResourceInterface**: Main client interface for resource interaction
-- **ResourceObject**: Base class for all resources with code, headers, body, view properties
-- **Dependency Injection**: Uses Ray.Di for dependency injection throughout
-- **Interceptors**: AOP support for cross-cutting concerns
-- **Renderers**: Convert resources to different formats (JSON, HAL, etc.)
+- [README](https://github.com/bearsunday/BEAR.Resource/blob/1.x/README.md): User guide with resource object, request, hypermedia, input, file upload, HAL, and OPTIONS examples.
+- [Japanese README](https://github.com/bearsunday/BEAR.Resource/blob/1.x/README.ja.md): Japanese user guide.
+- [CHANGELOG](https://github.com/bearsunday/BEAR.Resource/blob/1.x/CHANGELOG.md): Release history.
+- [Composer Package](https://packagist.org/packages/bear/resource): Package metadata and installation details.
 
-## Key Features
+## Source Map
 
-- Type-safe parameter injection with attributes
-- JSON Schema validation support
-- HAL (Hypertext Application Language) rendering
-- File upload handling with `#[InputFile]`
-- Query object binding with `#[Input]`
-- Semantic logging for observability
-- XHProf and Xdebug profiling integration
+- [ResourceInterface](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/ResourceInterface.php): Main resource client contract for eager and lazy requests.
+- [Resource](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/Resource.php): Default 1.x mutable fluent client, kept for compatibility.
+- [ResourceClient](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/ResourceClient.php): Stateless coroutine-safe client.
+- [ResourceObject](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/ResourceObject.php): Base resource object with code, headers, body, view, rendering, array access, and transfer behavior.
+- [Request](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/Request.php): Lazy/eager request object.
+- [NamedParamMetas](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/NamedParamMetas.php): Parameter metadata builder for input, file upload, resource, web context, DI, and query parameters.
+- [Linker](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/Linker.php): Hypermedia link execution for `linkSelf`, `linkNew`, and crawl.
+- [LinkCrawler](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/LinkCrawler.php): Batch crawl/data-loader link traversal.
+- [JsonSchemaModule](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/JsonSchema/Module/JsonSchemaModule.php): JSON Schema validation module. Failures throw `JsonSchemaRequestException` (request input) or `JsonSchemaResponseException` (response body); both extend `JsonSchemaException` whose `getErrors()` returns a structured `JsonSchemaErrors` collection of typed `JsonSchemaError` / `ConstraintViolation` DTOs.
 
-## Usage Patterns
+## Modules
 
-Resources return themselves and set properties:
-```php
-public function onGet(): ResourceObject
-{
-    $this->code = 200;
-    $this->body = ['message' => 'Hello World'];
-    return $this;
-}
-```
+- [ResourceModule](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/Module/ResourceModule.php): Installs resource client, embedding, and HTTP client support.
+- [ResourceClientModule](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/Module/ResourceClientModule.php): Core bindings for invoker, linker, factory, renderers, input query, and data loader.
+- [HalModule](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/Module/HalModule.php): HAL representation support.
+- [OptionsMethodModule](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/Module/OptionsMethodModule.php): OPTIONS response support.
+- [OptionsMethodHeaderModule](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/Module/OptionsMethodHeaderModule.php): OPTIONS header/body renderer bindings.
+- [HttpClientModule](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/Module/HttpClientModule.php): HTTP resource adapter support.
 
-Client code uses the resource interface:
-```php
-$resource = $this->resource->get('app://self/user', ['id' => 123]);
-echo $resource->body['name'];
-```
+## Related Projects
 
-## Testing
+- [BEAR.Async](https://github.com/bearsunday/BEAR.Async): Async/coroutine integration for BEAR.Resource, including modules that can bind the stateless `ResourceClient`.
 
-Tests use real ResourceInterface instances and actual Request objects - never mocks.
-The framework emphasizes integration testing over unit testing for reliable behavior verification.
+## Attributes
+
+- [Link](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/Annotation/Link.php): Hypermedia link metadata.
+- [Embed](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/Annotation/Embed.php): Eager resource embedding metadata.
+- [ResourceParam](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/Annotation/ResourceParam.php): Inject values from another resource.
+- [JsonSchema](https://github.com/bearsunday/BEAR.Resource/blob/1.x/src/JsonSchema/Annotation/JsonSchema.php): JSON Schema validation metadata in the `BEAR\Resource\Annotation` namespace.
+- [Web Context Params](https://github.com/bearsunday/BEAR.Resource/tree/1.x/src-web-context/Annotation): `#[QueryParam]`, `#[CookieParam]`, `#[FormParam]`, `#[FilesParam]`, `#[ServerParam]`, and `#[EnvParam]`.
+
+## Development
+
+- [Composer Scripts](https://github.com/bearsunday/BEAR.Resource/blob/1.x/composer.json): `composer test`, `composer tests`, `composer cs`, `composer cs-fix`, `composer sa`, `composer coverage`, and `composer pcov`.
+- [PHPStan Config](https://github.com/bearsunday/BEAR.Resource/blob/1.x/phpstan.neon): PHPStan maximum-level static analysis.
+- [Psalm Config](https://github.com/bearsunday/BEAR.Resource/blob/1.x/psalm.xml): Psalm static analysis configuration.
+- [PHPUnit Config](https://github.com/bearsunday/BEAR.Resource/blob/1.x/phpunit.xml.dist): PHPUnit test and coverage configuration.
+
+## Published Schemas
+
+- [Options Response Schema](schemas/options-response.json): JSON Schema for OPTIONS resource descriptions.
+- [ALPS Schema](schemas/alps.json): ALPS document schema.
+- [Semantic Log Schema](schemas/semantic-log.json): Published semantic log schema asset.
+
+## Optional
+
+- [GitHub Actions](https://github.com/bearsunday/BEAR.Resource/tree/1.x/.github/workflows): CI, coding standards, and static analysis workflows.
+- [Tests](https://github.com/bearsunday/BEAR.Resource/tree/1.x/tests): Integration-focused test suite and fake resources.
