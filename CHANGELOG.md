@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.34.1] - 2026-09-11
+
+### Fixed
+- Bind `HttpResourceObject` explicitly in `HttpClientModule`; `HttpAdapter::get()`
+  resolves it by class, which required just-in-time binding and failed under
+  `CompiledInjector` (#379)
+
 ## [1.34.0] - 2026-08-29
 
 ### Fixed
