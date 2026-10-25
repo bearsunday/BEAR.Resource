@@ -68,6 +68,7 @@ final class Request extends AbstractRequest
     public function withQuery(array $query): RequestInterface
     {
         $this->query = $query;
+        $this->result = null;
 
         return $this;
     }
@@ -79,6 +80,7 @@ final class Request extends AbstractRequest
     public function addQuery(array $query): RequestInterface
     {
         $this->query = array_merge($this->query, $query);
+        $this->result = null;
 
         return $this;
     }
@@ -112,6 +114,7 @@ final class Request extends AbstractRequest
     public function linkSelf(string $linkKey): RequestInterface
     {
         $this->links[] = new LinkType($linkKey, LinkType::SELF_LINK);
+        $this->result = null;
 
         return $this;
     }
@@ -123,6 +126,7 @@ final class Request extends AbstractRequest
     public function linkNew(string $linkKey): RequestInterface
     {
         $this->links[] = new LinkType($linkKey, LinkType::NEW_LINK);
+        $this->result = null;
 
         return $this;
     }
@@ -134,6 +138,7 @@ final class Request extends AbstractRequest
     public function linkCrawl(string $linkKey): RequestInterface
     {
         $this->links[] = new LinkType($linkKey, LinkType::CRAWL_LINK);
+        $this->result = null;
 
         return $this;
     }
