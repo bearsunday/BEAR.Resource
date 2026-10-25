@@ -54,6 +54,17 @@ class AttributeTest extends TestCase
         $this->assertSame('2021/7/23', $ro->body['event']);
     }
 
+    public function testLinkSelfAfterAReadFollowsTheLinkOnTheNextRead(): void
+    {
+        $request = $this->resource->newRequest(Method::GET, 'app://self/news', ['date' => '2021/7/23']);
+        assert($request instanceof Request);
+        $this->assertArrayNotHasKey('event', $request->body);
+
+        $request->linkSelf('event');
+
+        $this->assertSame('2021/7/23', $request->body['event']);
+    }
+
     public function testResourceParam(): void
     {
         $ro = $this->resource->get('app://self/greeting');

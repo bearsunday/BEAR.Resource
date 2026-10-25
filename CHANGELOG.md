@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- A request read once and then changed with `withQuery()`, `addQuery()`, `__invoke()` with a query,
+  or `linkSelf()` / `linkNew()` / `linkCrawl()` now executes again on the next read instead of
+  returning the stale result (#381)
+
 ## [1.34.1] - 2026-09-11
 
 ### Fixed

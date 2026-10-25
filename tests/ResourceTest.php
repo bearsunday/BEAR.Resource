@@ -182,6 +182,28 @@ class ResourceTest extends TestCase
         );
     }
 
+    public function testLinkNewAfterAReadFollowsTheLinkOnTheNextRead(): void
+    {
+        $request = $this->resource->newRequest(Method::GET, 'app://self/author', ['id' => 1]);
+        assert($request instanceof Request);
+        $this->assertArrayNotHasKey('blog', $request->body);
+
+        $request->linkNew('blog');
+
+        $this->assertSame(['id' => 12, 'name' => 'Aramis blog'], $request->body['blog']);
+    }
+
+    public function testLinkCrawlAfterAReadFollowsTheLinkOnTheNextRead(): void
+    {
+        $request = $this->resource->newRequest(Method::GET, 'app://self/blog', ['id' => 11]);
+        assert($request instanceof Request);
+        $this->assertArrayNotHasKey('post', $request->body);
+
+        $request->linkCrawl('tree');
+
+        $this->assertArrayHasKey('post', $request->body);
+    }
+
     /** @return array<string, array<mixed>|int|string> */
     public function testLinkCrawl(): array
     {
