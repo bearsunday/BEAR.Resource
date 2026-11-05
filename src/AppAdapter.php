@@ -22,6 +22,8 @@ final readonly class AppAdapter implements AdapterInterface
     /**
      * @param InjectorInterface $injector  Application dependency injector
      * @param string            $namespace Resource adapter namespace
+     *
+     * @psalm-pure
      */
     public function __construct(
         private InjectorInterface $injector,
@@ -35,6 +37,8 @@ final readonly class AppAdapter implements AdapterInterface
      *
      * @throws ResourceNotFoundException
      * @throws Unbound
+     *
+     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function get(AbstractUri $uri): ResourceObject
@@ -59,7 +63,7 @@ final readonly class AppAdapter implements AdapterInterface
     /**
      * @return ResourceNotFoundException|Unbound
      *
-     * @psalm-capabilities read-props
+     * @psalm-capabilities pure
      */
     private function getNotFound(AbstractUri $uri, Unbound $e, string $class): Throwable
     {

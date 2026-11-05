@@ -38,7 +38,11 @@ final class AppIterator implements Iterator
     /** @var list<string> */
     private array $keys = [];
 
-    /** @throws ResourceDirException */
+    /**
+     * @throws ResourceDirException
+     *
+     * @psalm-capabilities write-this-props|write-props|read-globals|write-globals|io|time
+     */
     public function __construct(string $resourceDir)
     {
         if (! file_exists($resourceDir)) {
@@ -67,7 +71,7 @@ final class AppIterator implements Iterator
     /**
      * {@inheritDoc}
      *
-     * @psalm-capabilities read-props|write-this-props|write-refs
+     * @psalm-capabilities read-props|write-this-props
      */
     #[Override]
     public function next(): void
@@ -100,7 +104,7 @@ final class AppIterator implements Iterator
     /**
      * {@inheritDoc}
      *
-     * @psalm-capabilities read-props|write-this-props|write-refs
+     * @psalm-capabilities read-props|write-this-props
      */
     #[Override]
     public function rewind(): void
@@ -112,6 +116,8 @@ final class AppIterator implements Iterator
      * @param Iterator<SplFileInfo> $iterator
      *
      * @return MetaMap
+     *
+     * @psalm-impure
      */
     private function getMetaCollection(Iterator $iterator): array
     {
@@ -133,6 +139,7 @@ final class AppIterator implements Iterator
         return $metaCollection;
     }
 
+    /** @psalm-capabilities io */
     private function isNotPhp(SplFileInfo $item): bool
     {
         $isPhp = $item->isFile()
@@ -142,7 +149,11 @@ final class AppIterator implements Iterator
         return ! $isPhp;
     }
 
-    /** @return ResourceClassName|'' */
+    /**
+     * @return ResourceClassName|''
+     *
+     * @psalm-impure
+     */
     private function getResourceClassName(SplFileInfo $file): string
     {
         $pathName = $file->getPathname();

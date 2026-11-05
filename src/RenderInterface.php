@@ -13,6 +13,8 @@ interface RenderInterface
      * Render
      *
      * @return string
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     public function render(ResourceObject $ro);
 }

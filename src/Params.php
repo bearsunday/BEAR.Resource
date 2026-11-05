@@ -10,6 +10,8 @@ final class Params
     /**
      * @param list<string> $required
      * @param list<string> $optional
+     *
+     * @psalm-pure
      */
     public function __construct(
         public string $method,

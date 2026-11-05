@@ -26,6 +26,8 @@ interface HttpRequestInterface
      *     - headers: An array of response headers.
      *     - body: The parsed response body.
      *     - view: The raw response body.
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     public function request(string $method, string $uri, array $query): array;
 }

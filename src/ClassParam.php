@@ -32,7 +32,7 @@ final readonly class ClassParam implements ParamInterface
     private bool $isDefaultAvailable;
     private mixed $defaultValue; // @phpstan-ignore-line
 
-    /** @psalm-capabilities read-props */
+    /** @psalm-pure */
     public function __construct(
         ReflectionNamedType $type,
         ReflectionParameter $parameter,
@@ -48,6 +48,8 @@ final readonly class ClassParam implements ParamInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-impure
      */
     #[Override]
     public function __invoke(string $varName, array $query, InjectorInterface $injector)
@@ -114,6 +116,8 @@ final readonly class ClassParam implements ParamInterface
      * @param class-string $type
      *
      * @psalm-suppress MixedArgument
+     *
+     * @psalm-impure
      */
     private function enum(string $type, mixed $props, string $varName): mixed
     {

@@ -23,7 +23,7 @@ final class JsonSchemaRequestException extends JsonSchemaException
     /**
      * @param ClientErrorCode $code
      *
-     * @psalm-capabilities read-props
+     * @psalm-pure
      */
     public function __construct(string $message, int $code = Code::BAD_REQUEST, JsonSchemaErrors|null $errors = null)
     {

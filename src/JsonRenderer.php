@@ -18,6 +18,7 @@ final class JsonRenderer implements RenderInterface
      * {@inheritDoc}
      *
      * @psalm-taint-escape html
+     * @psalm-capabilities read-props|write-props|read-globals|io
      */
     #[Override]
     public function render(ResourceObject $ro)

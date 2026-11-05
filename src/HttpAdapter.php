@@ -9,6 +9,7 @@ use Ray\Di\InjectorInterface;
 
 final readonly class HttpAdapter implements AdapterInterface
 {
+    /** @psalm-pure */
     public function __construct(
         private InjectorInterface $injector,
     ) {
@@ -16,6 +17,8 @@ final readonly class HttpAdapter implements AdapterInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function get(AbstractUri $uri): ResourceObject

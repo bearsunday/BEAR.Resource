@@ -60,14 +60,14 @@ final class NullRequest implements RequestInterface
         return $this;
     }
 
-    /** @psalm-capabilities read-props */
+    /** @psalm-capabilities pure */
     #[Override]
     public function toUri(): string
     {
         return (string) new NullUri();
     }
 
-    /** @psalm-capabilities read-props */
+    /** @psalm-capabilities pure */
     #[Override]
     public function toUriWithMethod(): string
     {

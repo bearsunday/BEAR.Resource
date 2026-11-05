@@ -51,6 +51,7 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
 {
     private const HEADER_ETAG = 'ETag';
 
+    /** @psalm-pure */
     public function __construct(
         #[Named('json_schema_dir')]
         private string $schemaDir,
@@ -65,6 +66,8 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function invoke(MethodInvocation $invocation): ResourceObject
@@ -92,6 +95,7 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
      *
      * MethodInvocation<T> generic cannot be specified without breaking interface compatibility
      *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      * @phpstan-ignore-next-line missingType.generics
      */
     private function validateRequest(MethodInvocation $invocation, JsonSchema $jsonSchema, array $arguments): void
@@ -108,6 +112,7 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
         }
     }
 
+    /** @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time */
     private function validateResponse(ResourceObject $ro, JsonSchema $jsonSchema): void
     {
         $schemaFile = $this->getSchemaFile($jsonSchema, $ro);
@@ -124,6 +129,7 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
         }
     }
 
+    /** @psalm-impure */
     private function validateRo(ResourceObject $ro, string $schemaFile, JsonSchema $jsonSchema): void
     {
         $viewJson = $jsonSchema->target === 'view' ? (string) $ro : json_encode($ro, JSON_THROW_ON_ERROR);
@@ -159,7 +165,11 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
         return $json->{$jsonSchema->key};
     }
 
-    /** @param array<mixed>|stdClass $target */
+    /**
+     * @param array<mixed>|stdClass $target
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
+     */
     private function validateAsRequest(array|stdClass $target, string $schemaFile): void
     {
         $validator = $this->validate($target, $schemaFile);
@@ -172,7 +182,11 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
         throw new JsonSchemaRequestException($msg, Code::BAD_REQUEST, $errors);
     }
 
-    /** @param array<mixed>|stdClass $target */
+    /**
+     * @param array<mixed>|stdClass $target
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
+     */
     private function validateAsResponse(array|stdClass $target, string $schemaFile): void
     {
         $validator = $this->validate($target, $schemaFile);
@@ -185,7 +199,11 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
         throw new JsonSchemaResponseException($msg, Code::ERROR, $errors);
     }
 
-    /** @param array<mixed>|stdClass $target */
+    /**
+     * @param array<mixed>|stdClass $target
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
+     */
     private function validate(array|stdClass $target, string $schemaFile): Validator
     {
         $validator = new Validator();
@@ -196,7 +214,11 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
         return $validator;
     }
 
-    /** @return Body */
+    /**
+     * @return Body
+     *
+     * @psalm-impure
+     */
     private function deepArray(object $values): array
     {
         $result = [];
@@ -210,7 +232,11 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
         return $result;
     }
 
-    /** @return array{string, JsonSchemaErrors} */
+    /**
+     * @return array{string, JsonSchemaErrors}
+     *
+     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
+     */
     private function buildValidationFailure(Validator $validator, string $schemaFile): array
     {
         /** @var JsonSchemaValidatorErrors $rawErrors */
@@ -237,6 +263,8 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
      * non-object decode result (boolean schema, unreadable file, malformed
      * JSON) is treated as "no schema-aware messages available" — the
      * mapper just falls back to the validator's raw message.
+     *
+     * @psalm-capabilities io
      */
     private function schema(string $schemaFile): stdClass|null
     {
@@ -249,6 +277,7 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
         return $schema instanceof stdClass ? $schema : null;
     }
 
+    /** @psalm-capabilities read-props|io */
     private function getSchemaFile(JsonSchema $jsonSchema, ResourceObject $ro): string
     {
         if (! $jsonSchema->schema) {
@@ -276,6 +305,7 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
         return (string) $parent->getFileName();
     }
 
+    /** @psalm-capabilities io */
     private function validateFileExists(string $schemaFile): void
     {
         if (! file_exists($schemaFile) || is_dir($schemaFile)) {
@@ -287,6 +317,8 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
      * @param MethodInvocation<object> $invocation
      *
      * @return Query
+     *
+     * @psalm-capabilities write-props|read-globals|write-globals|io|time
      */
     private function getNamedArguments(MethodInvocation $invocation): array
     {

@@ -11,7 +11,7 @@ use RuntimeException;
  */
 final class RowMustContainKeyInDataLoaderException extends RuntimeException implements ExceptionInterface
 {
-    /** @psalm-capabilities read-props */
+    /** @psalm-pure */
     public function __construct(string $key)
     {
         parent::__construct($key);

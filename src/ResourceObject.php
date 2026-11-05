@@ -68,6 +68,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      * Return object hash if representation renderer is not set.
      *
      * @return string
+     *
+     * @psalm-impure
      */
     #[Override]
     public function __toString()
@@ -84,7 +86,11 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         return $view;
     }
 
-    /** @return list<string> */
+    /**
+     * @return list<string>
+     *
+     * @psalm-impure
+     */
     public function __sleep()
     {
         if (is_array($this->body)) {
@@ -189,6 +195,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
 
     /**
      * Get the number of public properties in the ArrayObject
+     *
+     * @psalm-impure
      */
     #[Override]
     public function count(): int
@@ -256,6 +264,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-impure
      */
     public function toString(): string
     {
@@ -290,6 +300,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-impure
      */
     #[Override]
     public function transfer(TransferInterface $responder, array $server)
@@ -307,6 +319,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      * {@inheritDoc}
      *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName) Underscore prefix indicates internal API method
+     * @psalm-impure
      */
     #[Override]
     public function _invokeRequest(InvokerInterface $invoker, AbstractRequest $request): ResourceObject

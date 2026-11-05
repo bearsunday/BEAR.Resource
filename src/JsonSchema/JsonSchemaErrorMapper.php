@@ -23,7 +23,7 @@ final class JsonSchemaErrorMapper
 
     private SchemaErrorMessageResolver $resolver;
 
-    /** @psalm-capabilities read-props */
+    /** @psalm-pure */
     public function __construct(SchemaErrorMessageResolver|null $resolver = null)
     {
         $this->resolver = $resolver ?? new SchemaErrorMessageResolver();

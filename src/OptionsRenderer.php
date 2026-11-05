@@ -30,7 +30,10 @@ use const PHP_EOL;
  */
 final readonly class OptionsRenderer implements RenderInterface
 {
-    /** @SuppressWarnings(PHPMD.BooleanArgumentFlag) $optionsBody is configuration flag, not behavior control */
+    /**
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag) $optionsBody is configuration flag, not behavior control
+     * @psalm-pure
+     */
     public function __construct(
         private OptionsMethods $optionsMethod,
         #[OptionsBody]
@@ -40,6 +43,8 @@ final readonly class OptionsRenderer implements RenderInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function render(ResourceObject $ro)
@@ -82,6 +87,8 @@ final readonly class OptionsRenderer implements RenderInterface
      * @param list<string> $allows
      *
      * @return OptionsEntityBody
+     *
+     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
      */
     private function getEntityBody(ResourceObject $ro, array $allows): array
     {

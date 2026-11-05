@@ -22,23 +22,33 @@ use function count;
  */
 final readonly class JsonSchemaErrors implements Countable, IteratorAggregate
 {
-    /** @param list<JsonSchemaError> $errors */
+    /**
+     * @param list<JsonSchemaError> $errors
+     *
+     * @psalm-pure
+     */
     public function __construct(
         private array $errors,
     ) {
     }
 
+    /** @psalm-capabilities read-props */
     public function hasErrors(): bool
     {
         return $this->errors !== [];
     }
 
+    /** @psalm-capabilities read-props */
     public function count(): int
     {
         return count($this->errors);
     }
 
-    /** @return Generator<int, JsonSchemaError> */
+    /**
+     * @return Generator<int, JsonSchemaError>
+     *
+     * @psalm-capabilities pure
+     */
     public function getIterator(): Generator
     {
         return (function (): Generator {
@@ -46,7 +56,11 @@ final readonly class JsonSchemaErrors implements Countable, IteratorAggregate
         })();
     }
 
-    /** First error if any, null on an empty collection. */
+    /**
+     * First error if any, null on an empty collection.
+     *
+     * @psalm-capabilities read-props
+     */
     public function first(): JsonSchemaError|null
     {
         return $this->errors[0] ?? null;
@@ -58,6 +72,8 @@ final readonly class JsonSchemaErrors implements Countable, IteratorAggregate
      * re-render a form with per-field error annotations.
      *
      * @return array<string, list<JsonSchemaError>>
+     *
+     * @psalm-capabilities read-props
      */
     public function byProperty(): array
     {
@@ -80,6 +96,8 @@ final readonly class JsonSchemaErrors implements Countable, IteratorAggregate
      * line, `"<li>{message}</li>"` for an HTML list.
      *
      * Returns an empty string when there are no errors.
+     *
+     * @psalm-capabilities read-props
      */
     public function format(string $template = "{message}\n"): string
     {

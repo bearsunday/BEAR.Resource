@@ -13,13 +13,18 @@ use Ray\Di\AbstractModule;
  */
 final class ResourceObjectModule extends AbstractModule
 {
-    /** @param iterable<class-string<ResourceObject>> $resourceObjects */
+    /**
+     * @param iterable<class-string<ResourceObject>> $resourceObjects
+     *
+     * @psalm-impure
+     */
     public function __construct(
         private readonly iterable $resourceObjects,
     ) {
         parent::__construct();
     }
 
+    /** @psalm-impure */
     #[Override]
     protected function configure(): void
     {

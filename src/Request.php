@@ -42,6 +42,7 @@ final class Request extends AbstractRequest
     /**
      * @psalm-suppress ImplementedReturnTypeMismatch
      * @psalm-suppress PossiblyUnusedReturnValue - Return value used implicitly via magic property access
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function __get(string $name): mixed
@@ -64,7 +65,7 @@ final class Request extends AbstractRequest
      *
      * @param Query $query
      *
-     * @psalm-capabilities read-props|write-this-props|write-refs
+     * @psalm-capabilities read-props|write-this-props
      */
     #[Override]
     public function withQuery(array $query): RequestInterface
@@ -78,7 +79,7 @@ final class Request extends AbstractRequest
     /**
      * {@inheritDoc}
      *
-     * @psalm-capabilities read-props|write-this-props|write-refs
+     * @psalm-capabilities read-props|write-this-props
      */
     #[Override]
     public function addQuery(array $query): RequestInterface
@@ -91,6 +92,8 @@ final class Request extends AbstractRequest
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props|write-props
      */
     #[Override]
     public function toUriWithMethod(): string
@@ -102,6 +105,8 @@ final class Request extends AbstractRequest
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props|write-props
      */
     #[Override]
     public function toUri(): string
@@ -114,7 +119,7 @@ final class Request extends AbstractRequest
     /**
      * {@inheritDoc}
      *
-     * @psalm-capabilities read-props|write-this-props|write-refs
+     * @psalm-capabilities read-props|write-this-props
      */
     #[Override]
     public function linkSelf(string $linkKey): RequestInterface
@@ -128,7 +133,7 @@ final class Request extends AbstractRequest
     /**
      * {@inheritDoc}
      *
-     * @psalm-capabilities read-props|write-this-props|write-refs
+     * @psalm-capabilities read-props|write-this-props
      */
     #[Override]
     public function linkNew(string $linkKey): RequestInterface
@@ -142,7 +147,7 @@ final class Request extends AbstractRequest
     /**
      * {@inheritDoc}
      *
-     * @psalm-capabilities read-props|write-this-props|write-refs
+     * @psalm-capabilities read-props|write-this-props
      */
     #[Override]
     public function linkCrawl(string $linkKey): RequestInterface

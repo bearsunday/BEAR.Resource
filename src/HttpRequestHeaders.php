@@ -7,7 +7,11 @@ namespace BEAR\Resource;
 /** @psalm-immutable */
 final class HttpRequestHeaders
 {
-    /** @param list<string> $headers */
+    /**
+     * @param list<string> $headers
+     *
+     * @psalm-pure
+     */
     public function __construct(
         public array $headers = [],
     ) {

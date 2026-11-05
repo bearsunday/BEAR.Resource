@@ -5,6 +5,7 @@ namespace BEAR\Resource;
 
 final readonly class Invoker implements InvokerInterface
 {
+    /** @psalm-pure */
     public function __construct(
         private PhpClassInvoker $classInvoker
     ) {
@@ -14,6 +15,8 @@ final readonly class Invoker implements InvokerInterface
      * {@inheritdoc}
      *
      * @psalm-suppress PossiblyUnusedReturnValue
+     *
+     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
      */
     #[\Override]
     public function invoke(AbstractRequest $request): ResourceObject

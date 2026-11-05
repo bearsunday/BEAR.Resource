@@ -51,6 +51,7 @@ final readonly class HttpRequestCurl implements HttpRequestInterface
     private const CONNECT_TIMEOUT_SECONDS = 5;
     private const REQUEST_TIMEOUT_SECONDS = 30;
 
+    /** @psalm-pure */
     public function __construct(
         private HttpRequestHeaders $requestHeaders,
     ) {
@@ -59,6 +60,7 @@ final readonly class HttpRequestCurl implements HttpRequestInterface
     /**
      * @inheritDoc
      * @psalm-taint-sink ssrf $uri
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function request(string $method, string $uri, array $query): array
@@ -86,7 +88,10 @@ final readonly class HttpRequestCurl implements HttpRequestInterface
         ];
     }
 
-    /** @psalm-taint-sink ssrf $uri */
+    /**
+     * @psalm-taint-sink ssrf $uri
+     * @psalm-impure
+     */
     private function initializeCurl(string $method, string $uri, string $body): CurlHandle
     {
         $curl = curl_init();

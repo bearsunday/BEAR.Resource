@@ -19,6 +19,8 @@ interface JsonSchemaExceptionHandlerInterface
      * @param JsonSchemaResponseException $e
      *
      * @return void
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     public function handle(ResourceObject $ro, JsonSchemaException $e, string $schemaFile);
 }

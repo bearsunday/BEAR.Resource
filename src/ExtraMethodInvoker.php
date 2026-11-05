@@ -9,12 +9,14 @@ use Ray\Di\Di\Named;
 
 final readonly class ExtraMethodInvoker
 {
+    /** @psalm-pure */
     public function __construct(
         #[Named('options')]
         private RenderInterface $optionsRenderer,
     ) {
     }
 
+    /** @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time */
     public function __invoke(AbstractRequest $request, InvokerInterface $invoker): ResourceObject
     {
         if ($request->method === Method::OPTIONS) {

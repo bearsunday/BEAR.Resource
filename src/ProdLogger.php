@@ -12,11 +12,13 @@ use function sprintf;
 
 final readonly class ProdLogger implements LoggerInterface
 {
+    /** @psalm-pure */
     public function __construct(
         private PsrLoggerInterface $logger,
     ) {
     }
 
+    /** @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time */
     #[Override]
     public function __invoke(ResourceObject $ro): void
     {

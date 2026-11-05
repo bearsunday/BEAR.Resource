@@ -17,10 +17,6 @@
         </ignoreFiles>
     </projectFiles>
     <issueHandlers>
-        <!-- Interfaces are DI extension points implemented by applications and other packages.
-             A purity contract on them would bind every implementation, so they stay unannotated. -->
-        <MissingAbstractPureAnnotation errorLevel="suppress" />
-        <MissingInterfaceImmutableAnnotation errorLevel="suppress" />
         <MissingOverrideAttribute errorLevel="suppress" />
         <PossiblyUnusedProperty errorLevel="suppress" />
         <UnusedClass errorLevel="suppress" />

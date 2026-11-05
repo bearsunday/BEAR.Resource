@@ -26,7 +26,11 @@ use function is_array;
  */
 final readonly class InputFormsParam implements ParamInterface
 {
-    /** @param array<ReflectionAttribute<InputFile>> $inputFileAttributes */
+    /**
+     * @param array<ReflectionAttribute<InputFile>> $inputFileAttributes
+     *
+     * @psalm-pure
+     */
     public function __construct(
         private FileUploadFactoryInterface $factory,
         private ReflectionParameter $parameter,
@@ -44,6 +48,8 @@ final readonly class InputFormsParam implements ParamInterface
      * @return array<AbstractFileUpload>
      *
      * @psalm-taint-source input
+     *
+     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function __invoke(string $varName, array $query, InjectorInterface $injector): array

@@ -27,7 +27,7 @@ final class Embed
     /**
      * @param array{rel?: string, src?: string} $values
      *
-     * @psalm-capabilities read-props
+     * @psalm-pure
      */
     public function __construct(array $values = [], string $rel = '', string $src = '')
     {

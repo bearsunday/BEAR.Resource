@@ -16,7 +16,11 @@ use Ray\Di\ProviderInterface;
 /** @implements ProviderInterface<SchemeCollection> */
 final readonly class ImportSchemeCollectionProvider implements ProviderInterface
 {
-    /** @param ImportApp[] $importAppConfig */
+    /**
+     * @param ImportApp[] $importAppConfig
+     *
+     * @psalm-pure
+     */
     public function __construct(
         #[AppName]
         private string $appName,
@@ -28,6 +32,8 @@ final readonly class ImportSchemeCollectionProvider implements ProviderInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props|write-props
      */
     #[Override]
     public function get(): SchemeCollection

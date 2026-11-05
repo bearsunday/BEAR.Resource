@@ -10,6 +10,8 @@ final class Options
     /**
      * @param list<string>  $allow
      * @param array<Params> $params
+     *
+     * @psalm-pure
      */
     public function __construct(
         public array $allow,

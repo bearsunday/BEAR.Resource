@@ -12,13 +12,18 @@ use function parse_url;
 /** @psalm-import-type Query from Types */
 final readonly class UriFactory
 {
+    /** @psalm-pure */
     public function __construct(
         #[ContextScheme]
         private string $schemaHost = 'page://self',
     ) {
     }
 
-    /** @param Query $query */
+    /**
+     * @param Query $query
+     *
+     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
+     */
     public function __invoke(string $uri, array $query = []): Uri
     {
         $parsedUrl = (array) parse_url($uri);

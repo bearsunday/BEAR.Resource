@@ -13,6 +13,7 @@ use Attribute;
 #[Attribute(Attribute::TARGET_METHOD)]
 final class JsonSchema
 {
+    /** @psalm-pure */
     public function __construct(
         public string $schema = '',
         /** Json schema body key name */

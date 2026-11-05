@@ -23,7 +23,11 @@ use function uri_template;
 /** @psalm-import-type Body from Types */
 final class Linker implements LinkerInterface
 {
-    /** @param ProviderInterface<LinkCrawlerInterface> $linkCrawlerProvider */
+    /**
+     * @param ProviderInterface<LinkCrawlerInterface> $linkCrawlerProvider
+     *
+     * @psalm-pure
+     */
     public function __construct(
         private readonly InvokerInterface $invoker,
         private readonly FactoryInterface $factory,
@@ -32,6 +36,7 @@ final class Linker implements LinkerInterface
     ) {
     }
 
+    /** @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time */
     #[Override]
     public function invoke(AbstractRequest $request)
     {
@@ -43,6 +48,8 @@ final class Linker implements LinkerInterface
     /**
      * @throws LinkQueryException
      * @throws LinkRelException
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     private function invokeRecursive(AbstractRequest $request, LinkCrawlerInterface $linkCrawler): ResourceObject
     {
@@ -61,7 +68,11 @@ final class Linker implements LinkerInterface
         return $current;
     }
 
-    /** @param Body $nextResource */
+    /**
+     * @param Body $nextResource
+     *
+     * @psalm-capabilities read-props|write-props
+     */
     private function nextLink(LinkType $link, ResourceObject $ro, array $nextResource): ResourceObject
     {
         $nextBody = $nextResource;
@@ -89,6 +100,8 @@ final class Linker implements LinkerInterface
      * @throws MethodException
      * @throws LinkRelException
      * @throws Exception\LinkQueryException
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     private function annotationLink(LinkType $link, ResourceObject $current, AbstractRequest $request, LinkCrawlerInterface $linkCrawler): ResourceObject
     {
@@ -108,6 +121,8 @@ final class Linker implements LinkerInterface
      * Get Link annotations from a ResourceObject method using PHP 8 attributes
      *
      * @return list<Link>
+     *
+     * @psalm-capabilities write-props|read-globals|write-globals|io|time
      */
     private function getLinkAnnotations(ResourceObject $ro, string $method): array
     {
@@ -130,6 +145,8 @@ final class Linker implements LinkerInterface
      * @throws MethodException
      * @throws Exception\LinkQueryException
      * @throws Exception\LinkRelException
+     *
+     * @psalm-impure
      */
     private function annotationRel(array $annotations, LinkType $link, ResourceObject $current): ResourceObject
     {
@@ -153,6 +170,8 @@ final class Linker implements LinkerInterface
      * Link annotation crawl - delegate to LinkCrawlerInterface
      *
      * @param list<Link> $annotations
+     *
+     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
      */
     private function annotationCrawl(array $annotations, LinkType $link, ResourceObject $current, LinkCrawlerInterface $linkCrawler): ResourceObject
     {

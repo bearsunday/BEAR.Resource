@@ -20,7 +20,11 @@ final class ImportAppModule extends AbstractModule
      */
     private array $importAppConfig = [];
 
-    /** @param array<ImportApp> $importApps */
+    /**
+     * @param array<ImportApp> $importApps
+     *
+     * @psalm-impure
+     */
     public function __construct(array $importApps, string $defaultContextName = '')
     {
         foreach ($importApps as $importApp) {
@@ -37,6 +41,8 @@ final class ImportAppModule extends AbstractModule
      * {@inheritDoc}
      *
      * @throws NotFound
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     protected function configure(): void

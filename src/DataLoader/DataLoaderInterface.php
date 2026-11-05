@@ -36,6 +36,8 @@ interface DataLoaderInterface
      * @param DataLoaderQueries $queries Query parameters extracted from URIs
      *
      * @return DataLoaderRows Rows that contain the query key columns for matching
+     *
+     * @psalm-impure
      */
     public function __invoke(array $queries): array;
 }

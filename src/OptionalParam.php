@@ -14,7 +14,11 @@ use function strtolower;
 /** @template T */
 final class OptionalParam implements ParamInterface
 {
-    /** @param T $defaultValue */
+    /**
+     * @param T $defaultValue
+     *
+     * @psalm-pure
+     */
     public function __construct(
         private $defaultValue,
     ) {

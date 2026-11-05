@@ -6,5 +6,6 @@ namespace BEAR\Resource;
 
 interface LoggerInterface
 {
+    /** @psalm-impure */
     public function __invoke(ResourceObject $ro): void;
 }

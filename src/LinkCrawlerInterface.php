@@ -25,11 +25,15 @@ interface LinkCrawlerInterface
      * @param array<array-key, array<string, mixed>> $bodyList    Reference to body items to be updated with linked data
      *
      * @param-out array<array-key, array<string, mixed>> $bodyList
+     *
+     * @psalm-impure
      */
     public function crawl(array $annotations, LinkType $link, array &$bodyList): void;
 
     /**
      * Determine if the value is a list (multiple rows) or a single row
+     *
+     * @psalm-capabilities read-props
      */
     public function isList(mixed $value): bool;
 }

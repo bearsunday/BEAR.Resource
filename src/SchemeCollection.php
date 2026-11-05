@@ -20,7 +20,7 @@ final class SchemeCollection implements SchemeCollectionInterface
     /**
      * {@inheritDoc}
      *
-     * @psalm-capabilities read-props|write-this-props|write-refs
+     * @psalm-capabilities read-props|write-this-props
      */
     #[Override]
     public function scheme(string $scheme): SchemeCollectionInterface
@@ -33,7 +33,7 @@ final class SchemeCollection implements SchemeCollectionInterface
     /**
      * {@inheritDoc}
      *
-     * @psalm-capabilities read-props|write-this-props|write-refs
+     * @psalm-capabilities read-props|write-this-props
      */
     #[Override]
     public function host(string $host): SchemeCollectionInterface
@@ -46,7 +46,7 @@ final class SchemeCollection implements SchemeCollectionInterface
     /**
      * {@inheritDoc}
      *
-     * @psalm-capabilities read-props|write-this-props|write-refs
+     * @psalm-capabilities read-props|write-this-props
      */
     #[Override]
     public function toAdapter(AdapterInterface $adapter): SchemeCollectionInterface

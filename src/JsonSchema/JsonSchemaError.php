@@ -29,6 +29,7 @@ final readonly class JsonSchemaError
      */
     public bool $isCustomMessage;
 
+    /** @psalm-pure */
     public function __construct(
         public string $property,
         public string $pointer,
@@ -51,6 +52,8 @@ final readonly class JsonSchemaError
      *
      * Unknown placeholders are left in place. Mirrors be-framework's
      * `#[Message]` `{key}` syntax and value-stringification rules.
+     *
+     * @psalm-capabilities read-props
      */
     public function render(string $template): string
     {

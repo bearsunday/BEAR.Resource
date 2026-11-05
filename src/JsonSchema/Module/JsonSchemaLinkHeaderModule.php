@@ -14,7 +14,11 @@ use const FILTER_VALIDATE_URL;
 
 final class JsonSchemaLinkHeaderModule extends AbstractModule
 {
-    /** @param string $jsonSchemaHost Json-schema host name ex) https://example.com/schema/ */
+    /**
+     * @param string $jsonSchemaHost Json-schema host name ex) https://example.com/schema/
+     *
+     * @psalm-impure
+     */
     public function __construct(
         private readonly string $jsonSchemaHost,
         AbstractModule|null $module = null,
@@ -28,6 +32,8 @@ final class JsonSchemaLinkHeaderModule extends AbstractModule
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     protected function configure(): void

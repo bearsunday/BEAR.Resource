@@ -22,6 +22,8 @@ final class JsonSchemaExceptionFakeHandler implements JsonSchemaExceptionHandler
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function handle(ResourceObject $ro, JsonSchemaException $e, string $schemaFile)
@@ -32,7 +34,11 @@ final class JsonSchemaExceptionFakeHandler implements JsonSchemaExceptionHandler
         $ro->view = null;
     }
 
-    /** @return Body */
+    /**
+     * @return Body
+     *
+     * @psalm-impure
+     */
     private function fakeResponse(string $schemaFile): array
     {
         if (! class_exists(Faker::class)) {

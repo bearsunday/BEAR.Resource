@@ -21,6 +21,8 @@ interface JsonSchemaRequestExceptionHandlerInterface
      * @param JsonSchemaRequestException $e
      *
      * @return void
+     *
+     * @psalm-impure
      */
     public function handleRequestException(
         array $arguments,

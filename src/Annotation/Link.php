@@ -80,7 +80,7 @@ final class Link implements JsonSerializable
     /**
      * @param array{rel?: string, href?: string, method?: string, title?: string, crawl?: string, dataLoader?: class-string<DataLoaderInterface>|null} $values
      *
-     * @psalm-capabilities read-props
+     * @psalm-pure
      */
     public function __construct(
         array $values = [],

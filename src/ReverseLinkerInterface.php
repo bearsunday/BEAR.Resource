@@ -10,6 +10,8 @@ interface ReverseLinkerInterface
     /**
      * @param Query $query
      * Return reverse URI
+     *
+     * @psalm-impure
      */
     public function __invoke(string $uri, array $query): string;
 }

@@ -43,13 +43,18 @@ final readonly class OptionsMethods
         FilesParam::class => 'files',
     ];
 
+    /** @psalm-pure */
     public function __construct(
         #[Named('json_schema_dir')]
         private string $schemaDir = '',
     ) {
     }
 
-    /** @return OptionsMethodsResponse */
+    /**
+     * @return OptionsMethodsResponse
+     *
+     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
+     */
     public function __invoke(ResourceObject $ro, string $requestMethod): array
     {
         $method = new ReflectionMethod($ro::class, 'on' . $requestMethod);
@@ -76,6 +81,8 @@ final readonly class OptionsMethods
      * @return (Embed|Link)[][]
      * @psalm-return array{links?: non-empty-list<Link>, embed?: non-empty-list<Embed>}
      * @phpstan-return (Embed|Link)[][]
+     *
+     * @psalm-capabilities write-props|read-globals|write-globals|io|time
      */
     private function getMethodExtras(ReflectionMethod $method): array
     {
@@ -96,7 +103,11 @@ final readonly class OptionsMethods
         return $extras;
     }
 
-    /** @return InsMap */
+    /**
+     * @return InsMap
+     *
+     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
+     */
     private function getInMap(ReflectionMethod $method): array
     {
         $ins = [];
@@ -104,7 +115,11 @@ final readonly class OptionsMethods
         return $this->getInsFromParameterAttributes($method, $ins);
     }
 
-    /** @return Body */
+    /**
+     * @return Body
+     *
+     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
+     */
     private function getJsonSchema(ReflectionMethod $method): array
     {
         $schema = $method->getAnnotation(JsonSchema::class);
@@ -126,6 +141,8 @@ final readonly class OptionsMethods
      * @return InsMap
      *
      * @psalm-suppress InvalidArrayOffset, MixedAssignment, MixedReturnTypeCoercion
+     *
+     * @psalm-capabilities write-props|read-globals|write-globals|io|time
      */
     public function getInsFromParameterAttributes(ReflectionMethod $method, array $ins): array
     {

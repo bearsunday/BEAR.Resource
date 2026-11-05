@@ -20,6 +20,8 @@ final class OptionsMethodDocBolck
      * Return docBloc and parameter metas of method
      *
      * @return OptionsDocBlock
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     public function __invoke(ReflectionMethod $method): array
     {
@@ -35,6 +37,8 @@ final class OptionsMethodDocBolck
     /**
      * @return (string|string[])[][]
      * @psalm-return OptionsDocBlock
+     *
+     * @psalm-impure
      */
     private function docBlock(string $docComment): array
     {
@@ -63,6 +67,8 @@ final class OptionsMethodDocBolck
      * @param DocBlockParams $params
      *
      * @return DocBlockParams
+     *
+     * @psalm-capabilities write-this-props|write-props|read-globals|write-globals|write-refs|io|time
      */
     private function docBlogTags(array $tags, array $params): array
     {

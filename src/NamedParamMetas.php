@@ -25,7 +25,11 @@ use ReflectionParameter;
  */
 final readonly class NamedParamMetas implements NamedParamMetasInterface
 {
-    /** @param InputQueryInterface<object> $inputQuery */
+    /**
+     * @param InputQueryInterface<object> $inputQuery
+     *
+     * @psalm-pure
+     */
     public function __construct(
         private InputQueryInterface $inputQuery,
         private FileUploadFactoryInterface $factory,
@@ -34,6 +38,8 @@ final readonly class NamedParamMetas implements NamedParamMetasInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function __invoke(callable $callable): array
@@ -51,6 +57,8 @@ final readonly class NamedParamMetas implements NamedParamMetasInterface
      *
      * @psalm-suppress TooManyTemplateParams $refAttribute
      * @psalm-suppress PossiblyInvalidArrayAssignment
+     *
+     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
      */
     private function getAttributeParamMetas(ReflectionMethod $method): array
     {
@@ -115,7 +123,7 @@ final readonly class NamedParamMetas implements NamedParamMetasInterface
      * @param array<ReflectionAttribute<InputFile>> $inputFileAttributes
      * @param ParamMap                              $names
      *
-     * @psalm-capabilities read-props|write-this-props|write-refs
+     * @psalm-capabilities read-props|write-refs
      */
     private function setInputFileParam(ReflectionParameter $parameter, array $inputFileAttributes, array &$names): void
     {
@@ -133,7 +141,7 @@ final readonly class NamedParamMetas implements NamedParamMetasInterface
     /**
      * @psalm-return DefaultParam<mixed>|NoDefaultParam
      *
-     * @psalm-capabilities pure
+     * @psalm-pure
      */
     private function getDefault(ReflectionParameter $parameter): DefaultParam|NoDefaultParam
     {
@@ -161,7 +169,7 @@ final readonly class NamedParamMetas implements NamedParamMetasInterface
      * @return ClassParam|OptionalParam|RequiredParam
      * @psalm-return ClassParam|OptionalParam<mixed>|RequiredParam
      *
-     * @psalm-capabilities pure
+     * @psalm-pure
      */
     private function getParam(ReflectionParameter $parameter): ParamInterface
     {

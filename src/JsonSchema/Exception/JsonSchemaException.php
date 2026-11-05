@@ -12,7 +12,7 @@ class JsonSchemaException extends LogicException implements ExceptionInterface
     /** @psalm-suppress UnusedProperty Read by the public getErrors() API, which only callers outside src use */
     private readonly JsonSchemaErrors $errors;
 
-    /** @psalm-capabilities read-props */
+    /** @psalm-pure */
     public function __construct(
         string $message,
         int $code = 0,
@@ -23,6 +23,7 @@ class JsonSchemaException extends LogicException implements ExceptionInterface
         $this->errors = $errors ?? new JsonSchemaErrors([]);
     }
 
+    /** @psalm-capabilities read-props */
     public function getErrors(): JsonSchemaErrors
     {
         return $this->errors;

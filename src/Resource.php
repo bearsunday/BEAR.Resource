@@ -38,6 +38,8 @@ final class Resource implements ResourceInterface
      * @param AnchorInterface  $anchor  Resource anchor
      * @param LinkerInterface  $linker  Resource linker
      * @param UriFactory       $uri     URI factory
+     *
+     * @psalm-pure
      */
     public function __construct(
         private readonly FactoryInterface $factory,
@@ -51,7 +53,7 @@ final class Resource implements ResourceInterface
     /**
      * Set HTTP method for fluent interface
      *
-     * @psalm-capabilities read-props|write-this-props|write-refs
+     * @psalm-capabilities read-props|write-this-props
      */
     public function __get(string $name): self
     {
@@ -62,6 +64,8 @@ final class Resource implements ResourceInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function newInstance($uri): ResourceObject
@@ -86,6 +90,8 @@ final class Resource implements ResourceInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function uri($uri): RequestInterface
@@ -101,6 +107,8 @@ final class Resource implements ResourceInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function newRequest(Method $method, string $uri, array $query = []): RequestInterface
@@ -118,6 +126,7 @@ final class Resource implements ResourceInterface
      *
      * @psalm-suppress NoInterfaceProperties
      * @psalm-suppress MixedMethodCall
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function crawl(string $uri, string $linkKey, array $query = []): ResourceObject
@@ -136,6 +145,7 @@ final class Resource implements ResourceInterface
      *
      * @psalm-suppress NoInterfaceProperties
      * @psalm-suppress MixedMethodCall
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function href(string $rel, array $query = [], ResourceObject|null $ro = null): ResourceObject
@@ -155,6 +165,8 @@ final class Resource implements ResourceInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function get(string $uri, array $query = []): ResourceObject
@@ -164,6 +176,8 @@ final class Resource implements ResourceInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function post(string $uri, array $query = []): ResourceObject
@@ -173,6 +187,8 @@ final class Resource implements ResourceInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function put(string $uri, array $query = []): ResourceObject
@@ -182,6 +198,8 @@ final class Resource implements ResourceInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function patch(string $uri, array $query = []): ResourceObject
@@ -191,6 +209,8 @@ final class Resource implements ResourceInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function delete(string $uri, array $query = []): ResourceObject
@@ -200,6 +220,8 @@ final class Resource implements ResourceInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function options(string $uri, array $query = []): ResourceObject
@@ -209,6 +231,8 @@ final class Resource implements ResourceInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function head(string $uri, array $query = []): ResourceObject
@@ -216,6 +240,7 @@ final class Resource implements ResourceInterface
         return $this->methodUri(Method::HEAD, $uri)($query);
     }
 
+    /** @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time */
     private function methodUri(Method $method, string $uri): RequestInterface
     {
         $this->method = $method->value;

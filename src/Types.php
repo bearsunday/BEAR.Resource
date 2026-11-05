@@ -155,7 +155,10 @@ use ReflectionParameter;
  */
 final class Types
 {
-    /** @codeCoverageIgnore */
+    /**
+     * @codeCoverageIgnore
+     * @psalm-pure
+     */
     private function __construct()
     {
     }

@@ -26,6 +26,8 @@ final class Uri extends AbstractUri
      * @throws UriException
      *
      * @psalm-taint-source input $query
+     *
+     * @psalm-impure
      */
     public function __construct(
         string $uri,
@@ -60,7 +62,7 @@ final class Uri extends AbstractUri
     /**
      * @throws UriException
      *
-     * @psalm-capabilities pure
+     * @psalm-pure
      */
     private function validate(string $uri): void
     {

@@ -11,11 +11,15 @@ interface ResourceInterface
      * Return new resource object instance
      *
      * @param AbstractUri|string $uri
+     *
+     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
      */
     public function newInstance($uri): ResourceObject;
 
     /**
      * Set resource object
+     *
+     * @psalm-capabilities read-props
      */
     public function object(ResourceObject $ro): RequestInterface;
 
@@ -23,6 +27,8 @@ interface ResourceInterface
      * Set URI
      *
      * @param AbstractUri|string $uri
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     public function uri($uri): RequestInterface;
 
@@ -30,6 +36,8 @@ interface ResourceInterface
      * Create a request atomically (coroutine-safe)
      *
      * @param Query $query
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     public function newRequest(Method $method, string $uri, array $query = []): RequestInterface;
 
@@ -37,6 +45,8 @@ interface ResourceInterface
      * Execute a GET request with link crawl
      *
      * @param Query $query
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     public function crawl(string $uri, string $linkKey, array $query = []): ResourceObject;
 
@@ -44,6 +54,8 @@ interface ResourceInterface
      * Hyper reference (Hypertext As The Engine Of Application State)
      *
      * @param Query $query
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     public function href(string $rel, array $query = [], ResourceObject|null $ro = null): ResourceObject;
 
@@ -51,6 +63,8 @@ interface ResourceInterface
      * Invoke GET request
      *
      * @param Query $query
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     public function get(string $uri, array $query = []): ResourceObject;
 
@@ -58,6 +72,8 @@ interface ResourceInterface
      * Invoke POST request
      *
      * @param Query $query
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     public function post(string $uri, array $query = []): ResourceObject;
 
@@ -65,6 +81,8 @@ interface ResourceInterface
      * Invoke PUT request
      *
      * @param Query $query
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     public function put(string $uri, array $query = []): ResourceObject;
 
@@ -72,6 +90,8 @@ interface ResourceInterface
      * Invoke PATCH request
      *
      * @param Query $query
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     public function patch(string $uri, array $query = []): ResourceObject;
 
@@ -79,6 +99,8 @@ interface ResourceInterface
      * Invoke DELETE request
      *
      * @param Query $query
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     public function delete(string $uri, array $query = []): ResourceObject;
 
@@ -86,6 +108,8 @@ interface ResourceInterface
      * Invoke HEAD request
      *
      * @param Query $query
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     public function head(string $uri, array $query = []): ResourceObject;
 
@@ -93,6 +117,8 @@ interface ResourceInterface
      * Invoke OPTIONS request
      *
      * @param Query $query
+     *
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     public function options(string $uri, array $query = []): ResourceObject;
 }

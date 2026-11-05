@@ -18,7 +18,11 @@ use function class_exists;
 /** @psalm-import-type Query from Types */
 final readonly class InputParam implements ParamInterface
 {
-    /** @param InputQueryInterface<object> $inputQuery */
+    /**
+     * @param InputQueryInterface<object> $inputQuery
+     *
+     * @psalm-pure
+     */
     public function __construct(
         private InputQueryInterface $inputQuery,
         private ReflectionParameter $parameter,
@@ -31,6 +35,8 @@ final readonly class InputParam implements ParamInterface
      * @throws InvalidArgumentException When input query rejects request parameters or a required built-in parameter is missing.
      *
      * @psalm-taint-source input
+     *
+     * @psalm-impure
      */
     #[Override]
     public function __invoke(string $varName, array $query, InjectorInterface $injector)

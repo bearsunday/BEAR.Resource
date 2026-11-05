@@ -13,6 +13,8 @@ interface ParamInterface
      * @param Query $query
      *
      * @return mixed
+     *
+     * @psalm-impure
      */
     public function __invoke(string $varName, array $query, InjectorInterface $injector);
 }
