@@ -48,8 +48,6 @@ final readonly class ClassParam implements ParamInterface
 
     /**
      * {@inheritDoc}
-     *
-     * @psalm-impure
      */
     #[Override]
     public function __invoke(string $varName, array $query, InjectorInterface $injector)
@@ -116,8 +114,6 @@ final readonly class ClassParam implements ParamInterface
      * @param class-string $type
      *
      * @psalm-suppress MixedArgument
-     *
-     * @psalm-impure
      */
     private function enum(string $type, mixed $props, string $varName): mixed
     {

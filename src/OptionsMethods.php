@@ -50,11 +50,7 @@ final readonly class OptionsMethods
     ) {
     }
 
-    /**
-     * @return OptionsMethodsResponse
-     *
-     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
-     */
+    /** @return OptionsMethodsResponse */
     public function __invoke(ResourceObject $ro, string $requestMethod): array
     {
         $method = new ReflectionMethod($ro::class, 'on' . $requestMethod);
@@ -81,8 +77,6 @@ final readonly class OptionsMethods
      * @return (Embed|Link)[][]
      * @psalm-return array{links?: non-empty-list<Link>, embed?: non-empty-list<Embed>}
      * @phpstan-return (Embed|Link)[][]
-     *
-     * @psalm-capabilities write-props|read-globals|write-globals|io|time
      */
     private function getMethodExtras(ReflectionMethod $method): array
     {
@@ -103,11 +97,7 @@ final readonly class OptionsMethods
         return $extras;
     }
 
-    /**
-     * @return InsMap
-     *
-     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
-     */
+    /** @return InsMap */
     private function getInMap(ReflectionMethod $method): array
     {
         $ins = [];
@@ -115,11 +105,7 @@ final readonly class OptionsMethods
         return $this->getInsFromParameterAttributes($method, $ins);
     }
 
-    /**
-     * @return Body
-     *
-     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
-     */
+    /** @return Body */
     private function getJsonSchema(ReflectionMethod $method): array
     {
         $schema = $method->getAnnotation(JsonSchema::class);
@@ -141,8 +127,6 @@ final readonly class OptionsMethods
      * @return InsMap
      *
      * @psalm-suppress InvalidArrayOffset, MixedAssignment, MixedReturnTypeCoercion
-     *
-     * @psalm-capabilities write-props|read-globals|write-globals|io|time
      */
     public function getInsFromParameterAttributes(ReflectionMethod $method, array $ins): array
     {

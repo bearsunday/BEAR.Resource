@@ -12,8 +12,6 @@ interface InvokeRequestInterface
      * @return ResourceObject The resulting resource object returned from the request invocation.
      *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName) Underscore prefix indicates internal API method
-     *
-     * @psalm-impure
      */
     public function _invokeRequest(InvokerInterface $invoker, AbstractRequest $request): ResourceObject;
 }

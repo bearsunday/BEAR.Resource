@@ -38,11 +38,7 @@ final class AppIterator implements Iterator
     /** @var list<string> */
     private array $keys = [];
 
-    /**
-     * @throws ResourceDirException
-     *
-     * @psalm-capabilities write-this-props|write-props|read-globals|write-globals|io|time
-     */
+    /** @throws ResourceDirException */
     public function __construct(string $resourceDir)
     {
         if (! file_exists($resourceDir)) {
@@ -116,8 +112,6 @@ final class AppIterator implements Iterator
      * @param Iterator<SplFileInfo> $iterator
      *
      * @return MetaMap
-     *
-     * @psalm-impure
      */
     private function getMetaCollection(Iterator $iterator): array
     {
@@ -149,11 +143,7 @@ final class AppIterator implements Iterator
         return ! $isPhp;
     }
 
-    /**
-     * @return ResourceClassName|''
-     *
-     * @psalm-impure
-     */
+    /** @return ResourceClassName|'' */
     private function getResourceClassName(SplFileInfo $file): string
     {
         $pathName = $file->getPathname();

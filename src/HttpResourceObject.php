@@ -31,10 +31,7 @@ final class HttpResourceObject extends ResourceObject implements InvokeRequestIn
     ) {
     }
 
-    /**
-     * @SuppressWarnings(PHPMD.CamelCaseMethodName) Underscore prefix indicates internal API method
-     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
-     */
+    /** @SuppressWarnings(PHPMD.CamelCaseMethodName) Underscore prefix indicates internal API method */
     #[Override]
     public function _invokeRequest(InvokerInterface $invoker, AbstractRequest $request): ResourceObject
     {
@@ -43,7 +40,6 @@ final class HttpResourceObject extends ResourceObject implements InvokeRequestIn
         return $this->request($request);
     }
 
-    /** @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time */
     public function request(AbstractRequest $request): ResourceObject
     {
         $uri = $request->resourceObject->uri;

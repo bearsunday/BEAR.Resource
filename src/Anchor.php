@@ -25,8 +25,6 @@ final class Anchor implements AnchorInterface
      * {@inheritDoc}
      *
      * @throws LinkException
-     *
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function href(string $rel, AbstractRequest $request, array $query): array
@@ -55,8 +53,6 @@ final class Anchor implements AnchorInterface
      * @param Query $query
      *
      * @return MethodUri
-     *
-     * @psalm-impure
      */
     private function getMethodUri(AbstractRequest $request, array $query, LinkAnnotation $annotation): array
     {

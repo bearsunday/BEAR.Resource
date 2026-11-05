@@ -35,8 +35,6 @@ final readonly class InputParam implements ParamInterface
      * @throws InvalidArgumentException When input query rejects request parameters or a required built-in parameter is missing.
      *
      * @psalm-taint-source input
-     *
-     * @psalm-impure
      */
     #[Override]
     public function __invoke(string $varName, array $query, InjectorInterface $injector)

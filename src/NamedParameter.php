@@ -22,8 +22,6 @@ final readonly class NamedParameter implements NamedParameterInterface
      * {@inheritDoc}
      *
      * @throws ParameterException Thrown when the query parameter is invalid.
-     *
-     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function getParameters(callable $callable, array $query): array

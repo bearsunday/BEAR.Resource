@@ -40,8 +40,6 @@ final readonly class EmbedInterceptor implements EmbedInterceptorInterface
      * {@inheritDoc}
      *
      * @throws EmbedException
-     *
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function invoke(MethodInvocation $invocation)
@@ -60,8 +58,6 @@ final readonly class EmbedInterceptor implements EmbedInterceptorInterface
      * @param Query               $query
      *
      * @throws EmbedException
-     *
-     * @psalm-impure
      */
     private function embedResource(array $embeds, ResourceObject $ro, array $query): void
     {
@@ -121,8 +117,6 @@ final readonly class EmbedInterceptor implements EmbedInterceptorInterface
      * @param MethodInvocation<object> $invocation
      *
      * @return Query
-     *
-     * @psalm-capabilities write-props|read-globals|write-globals|io|time
      */
     private function getArgsByInvocation(MethodInvocation $invocation): array
     {
@@ -137,7 +131,6 @@ final readonly class EmbedInterceptor implements EmbedInterceptorInterface
         return $namedParameters;
     }
 
-    /** @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time */
     public function linkSelf(Request $request, ResourceObject $ro): void
     {
         $result = $request();

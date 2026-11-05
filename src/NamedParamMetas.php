@@ -38,8 +38,6 @@ final readonly class NamedParamMetas implements NamedParamMetasInterface
 
     /**
      * {@inheritDoc}
-     *
-     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function __invoke(callable $callable): array
@@ -57,8 +55,6 @@ final readonly class NamedParamMetas implements NamedParamMetasInterface
      *
      * @psalm-suppress TooManyTemplateParams $refAttribute
      * @psalm-suppress PossiblyInvalidArrayAssignment
-     *
-     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
      */
     private function getAttributeParamMetas(ReflectionMethod $method): array
     {

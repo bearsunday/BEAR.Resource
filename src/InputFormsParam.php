@@ -48,8 +48,6 @@ final readonly class InputFormsParam implements ParamInterface
      * @return array<AbstractFileUpload>
      *
      * @psalm-taint-source input
-     *
-     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function __invoke(string $varName, array $query, InjectorInterface $injector): array

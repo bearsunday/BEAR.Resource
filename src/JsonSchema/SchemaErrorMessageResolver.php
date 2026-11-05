@@ -20,11 +20,11 @@ use function str_replace;
  * objects/arrays resolve correctly.
  *
  * Known limitations (documented; deferred to future PRs):
- * - `$ref` is not followed when navigating the schema tree.
- * - `allOf` / `oneOf` / `anyOf` combinators are not merged.
- * - `patternProperties` cannot be reached by Pointer alone.
- * - `additionalProperties` schemas (keys not declared under `properties`)
- * are not resolved — Pointer ends at a node the walker can't enter.
+ *  - `$ref` is not followed when navigating the schema tree.
+ *  - `allOf` / `oneOf` / `anyOf` combinators are not merged.
+ *  - `patternProperties` cannot be reached by Pointer alone.
+ *  - `additionalProperties` schemas (keys not declared under `properties`)
+ *    are not resolved — Pointer ends at a node the walker can't enter.
  *
  * @internal
  * @psalm-immutable

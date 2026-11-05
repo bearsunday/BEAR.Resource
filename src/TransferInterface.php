@@ -14,8 +14,6 @@ interface TransferInterface
      * @param Query          $server $_SERVER value
      *
      * @return void
-     *
-     * @psalm-impure
      */
     public function __invoke(ResourceObject $ro, array $server);
 }

@@ -24,11 +24,7 @@ use Ray\Di\AbstractModule;
  */
 final class ResourceModule extends AbstractModule
 {
-    /**
-     * @param string $appName Application name ex) 'Vendor\Project'
-     *
-     * @psalm-impure
-     */
+    /** @param string $appName Application name ex) 'Vendor\Project' */
     public function __construct(
         private readonly string $appName = '',
     ) {
@@ -37,8 +33,6 @@ final class ResourceModule extends AbstractModule
 
     /**
      * {@inheritDoc}
-     *
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     protected function configure(): void

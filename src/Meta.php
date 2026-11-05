@@ -36,11 +36,7 @@ final class Meta
     /** @var PackageMetadata */
     public $extras = [];
 
-    /**
-     * @param ResourceClassName $class
-     *
-     * @psalm-capabilities write-this-props|write-props|read-globals|write-globals|io|time
-     */
+    /** @param ResourceClassName $class */
     public function __construct(string $class)
     {
         $this->uri = $this->getUri($class);
@@ -70,8 +66,6 @@ final class Meta
      * Return available resource request method
      *
      * @param ResourceClassName $class
-     *
-     * @psalm-impure
      */
     private function getOptions(string $class): Options
     {
@@ -112,11 +106,7 @@ final class Meta
         return $allows;
     }
 
-    /**
-     * @param ResourceClassName $class
-     *
-     * @psalm-capabilities write-props|read-globals|write-globals|io|time
-     */
+    /** @param ResourceClassName $class */
     private function getParams(string $class, string $method): Params
     {
         $refMethod = new ReflectionMethod($class, 'on' . $method);

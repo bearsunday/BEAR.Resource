@@ -17,6 +17,10 @@
         </ignoreFiles>
     </projectFiles>
     <issueHandlers>
+        <!-- Interfaces are DI extension points implemented by applications and other packages,
+             so only query methods carry a purity contract. -->
+        <MissingAbstractPureAnnotation errorLevel="suppress" />
+        <MissingInterfaceImmutableAnnotation errorLevel="suppress" />
         <MissingOverrideAttribute errorLevel="suppress" />
         <PossiblyUnusedProperty errorLevel="suppress" />
         <UnusedClass errorLevel="suppress" />

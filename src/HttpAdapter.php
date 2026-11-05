@@ -17,8 +17,6 @@ final readonly class HttpAdapter implements AdapterInterface
 
     /**
      * {@inheritDoc}
-     *
-     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function get(AbstractUri $uri): ResourceObject

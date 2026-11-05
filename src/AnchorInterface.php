@@ -18,8 +18,6 @@ interface AnchorInterface
      * @param Query           $query   Resource parameters
      *
      * @return MethodUri [$method, $uri]
-     *
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     public function href(string $rel, AbstractRequest $request, array $query);
 }

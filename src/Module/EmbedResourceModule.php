@@ -17,8 +17,6 @@ final class EmbedResourceModule extends AbstractModule
 {
     /**
      * {@inheritDoc}
-     *
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     protected function configure(): void

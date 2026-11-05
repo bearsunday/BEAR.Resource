@@ -25,8 +25,6 @@ interface LinkCrawlerInterface
      * @param array<array-key, array<string, mixed>> $bodyList    Reference to body items to be updated with linked data
      *
      * @param-out array<array-key, array<string, mixed>> $bodyList
-     *
-     * @psalm-impure
      */
     public function crawl(array $annotations, LinkType $link, array &$bodyList): void;
 

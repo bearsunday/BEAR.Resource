@@ -66,8 +66,6 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
 
     /**
      * {@inheritDoc}
-     *
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function invoke(MethodInvocation $invocation): ResourceObject
@@ -95,7 +93,6 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
      *
      * MethodInvocation<T> generic cannot be specified without breaking interface compatibility
      *
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      * @phpstan-ignore-next-line missingType.generics
      */
     private function validateRequest(MethodInvocation $invocation, JsonSchema $jsonSchema, array $arguments): void
@@ -112,7 +109,6 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
         }
     }
 
-    /** @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time */
     private function validateResponse(ResourceObject $ro, JsonSchema $jsonSchema): void
     {
         $schemaFile = $this->getSchemaFile($jsonSchema, $ro);
@@ -129,7 +125,6 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
         }
     }
 
-    /** @psalm-impure */
     private function validateRo(ResourceObject $ro, string $schemaFile, JsonSchema $jsonSchema): void
     {
         $viewJson = $jsonSchema->target === 'view' ? (string) $ro : json_encode($ro, JSON_THROW_ON_ERROR);
@@ -165,11 +160,7 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
         return $json->{$jsonSchema->key};
     }
 
-    /**
-     * @param array<mixed>|stdClass $target
-     *
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
-     */
+    /** @param array<mixed>|stdClass $target */
     private function validateAsRequest(array|stdClass $target, string $schemaFile): void
     {
         $validator = $this->validate($target, $schemaFile);
@@ -182,11 +173,7 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
         throw new JsonSchemaRequestException($msg, Code::BAD_REQUEST, $errors);
     }
 
-    /**
-     * @param array<mixed>|stdClass $target
-     *
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
-     */
+    /** @param array<mixed>|stdClass $target */
     private function validateAsResponse(array|stdClass $target, string $schemaFile): void
     {
         $validator = $this->validate($target, $schemaFile);
@@ -199,11 +186,7 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
         throw new JsonSchemaResponseException($msg, Code::ERROR, $errors);
     }
 
-    /**
-     * @param array<mixed>|stdClass $target
-     *
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
-     */
+    /** @param array<mixed>|stdClass $target */
     private function validate(array|stdClass $target, string $schemaFile): Validator
     {
         $validator = new Validator();
@@ -214,11 +197,7 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
         return $validator;
     }
 
-    /**
-     * @return Body
-     *
-     * @psalm-impure
-     */
+    /** @return Body */
     private function deepArray(object $values): array
     {
         $result = [];
@@ -232,11 +211,7 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
         return $result;
     }
 
-    /**
-     * @return array{string, JsonSchemaErrors}
-     *
-     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
-     */
+    /** @return array{string, JsonSchemaErrors} */
     private function buildValidationFailure(Validator $validator, string $schemaFile): array
     {
         /** @var JsonSchemaValidatorErrors $rawErrors */
@@ -317,8 +292,6 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
      * @param MethodInvocation<object> $invocation
      *
      * @return Query
-     *
-     * @psalm-capabilities write-props|read-globals|write-globals|io|time
      */
     private function getNamedArguments(MethodInvocation $invocation): array
     {

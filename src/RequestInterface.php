@@ -15,8 +15,6 @@ interface RequestInterface
      * InvokerInterface resource request
      *
      * @param Query $query
-     *
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     public function __invoke(array|null $query = null): ResourceObject;
 
@@ -24,8 +22,6 @@ interface RequestInterface
      * Set query
      *
      * @param Query $query
-     *
-     * @psalm-capabilities read-props|write-this-props
      */
     public function withQuery(array $query): self;
 
@@ -33,8 +29,6 @@ interface RequestInterface
      * Merge query
      *
      * @param Query $query
-     *
-     * @psalm-capabilities read-props|write-this-props
      */
     public function addQuery(array $query): self;
 
@@ -54,36 +48,24 @@ interface RequestInterface
 
     /**
      * Return request hash
-     *
-     * @psalm-capabilities read-props|io
      */
     public function hash(): string;
 
-    /**
-     * @return AbstractRequest|ResourceObject
-     *
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
-     */
+    /** @return AbstractRequest|ResourceObject */
     public function request();
 
     /**
      * Replace linked resource
-     *
-     * @psalm-capabilities read-props|write-this-props
      */
     public function linkSelf(string $linkKey): self;
 
     /**
      * Add linked resource
-     *
-     * @psalm-capabilities read-props|write-this-props
      */
     public function linkNew(string $linkKey): self;
 
     /**
      * Crawl resource with link key
-     *
-     * @psalm-capabilities read-props|write-this-props
      */
     public function linkCrawl(string $linkKey): self;
 }

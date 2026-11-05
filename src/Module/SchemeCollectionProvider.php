@@ -25,8 +25,6 @@ final readonly class SchemeCollectionProvider implements ProviderInterface
 
     /**
      * Return instance
-     *
-     * @psalm-capabilities read-props|write-props
      */
     #[Override]
     public function get(): SchemeCollection

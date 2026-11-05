@@ -19,7 +19,6 @@ final readonly class DevLogger implements LoggerInterface
     ) {
     }
 
-    /** @psalm-impure */
     #[Override]
     public function __invoke(ResourceObject $ro): void
     {

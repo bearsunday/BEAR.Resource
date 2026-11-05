@@ -60,7 +60,6 @@ final readonly class HttpRequestCurl implements HttpRequestInterface
     /**
      * @inheritDoc
      * @psalm-taint-sink ssrf $uri
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function request(string $method, string $uri, array $query): array
@@ -88,10 +87,7 @@ final readonly class HttpRequestCurl implements HttpRequestInterface
         ];
     }
 
-    /**
-     * @psalm-taint-sink ssrf $uri
-     * @psalm-impure
-     */
+    /** @psalm-taint-sink ssrf $uri */
     private function initializeCurl(string $method, string $uri, string $body): CurlHandle
     {
         $curl = curl_init();

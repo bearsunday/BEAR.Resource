@@ -43,7 +43,6 @@ final class LinkCrawler implements LinkCrawlerInterface
     ) {
     }
 
-    /** @psalm-impure */
     #[Override]
     public function crawl(array $annotations, LinkType $link, array &$bodyList): void
     {
@@ -64,8 +63,6 @@ final class LinkCrawler implements LinkCrawlerInterface
      * @param array<string, mixed> $body
      *
      * @param-out array<string, mixed> $body
-     *
-     * @psalm-impure
      */
     private function crawlBody(array $annotations, LinkType $link, array &$body): void
     {
@@ -113,8 +110,6 @@ final class LinkCrawler implements LinkCrawlerInterface
      * @param array<string, mixed> $body
      *
      * @param-out array<string, mixed> $body
-     *
-     * @psalm-impure
      */
     private function processNestedCrawl(
         ResourceObject $ro,
@@ -166,8 +161,6 @@ final class LinkCrawler implements LinkCrawlerInterface
      * Get Link annotations from a ResourceObject method using PHP 8 attributes
      *
      * @return list<Link>
-     *
-     * @psalm-capabilities write-props|read-globals|write-globals|io|time
      */
     private function getLinkAnnotations(ResourceObject $ro, string $method): array
     {

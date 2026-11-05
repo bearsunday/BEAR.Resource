@@ -51,8 +51,6 @@ final class DataLoader
      * @param-out QueryList $bodyList
      *
      * @psalm-suppress ReferenceConstraintViolation
-     *
-     * @psalm-impure
      */
     public function load(array $annotations, LinkType $link, array &$bodyList): void
     {
@@ -75,8 +73,6 @@ final class DataLoader
      * @param-out QueryList $bodyList
      *
      * @psalm-suppress ReferenceConstraintViolation
-     *
-     * @psalm-impure
      */
     private function processDataLoader(Link $annotation, array &$bodyList): void
     {
@@ -122,8 +118,6 @@ final class DataLoader
      * Extract key parameter names from URI template
      *
      * @return list<string> Parameter names that will be used for matching
-     *
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     private function extractKeysFromTemplate(string $template): array
     {
@@ -157,8 +151,6 @@ final class DataLoader
      * Extract keys from param={var} format
      *
      * @return list<string>
-     *
-     * @psalm-impure
      */
     private function extractEqualsFormatKeys(string $template): array
     {
@@ -189,8 +181,6 @@ final class DataLoader
      * Parse query string from URI
      *
      * @return array<string, string>
-     *
-     * @psalm-impure
      */
     private function parseQuery(string $uri): array
     {
@@ -249,8 +239,6 @@ final class DataLoader
      * Get or create a DataLoader instance
      *
      * @param class-string<DataLoaderInterface> $class
-     *
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     private function getDataLoader(string $class): DataLoaderInterface
     {

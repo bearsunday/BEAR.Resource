@@ -20,8 +20,6 @@ final class JsonSchemaModule extends AbstractModule
     /**
      * @param string $jsonSchemaDir   Json-schema json file directory
      * @param string $jsonValidateDir Json-schema validator json file directory
-     *
-     * @psalm-impure
      */
     public function __construct(
         private readonly string $jsonSchemaDir = '',
@@ -33,8 +31,6 @@ final class JsonSchemaModule extends AbstractModule
 
     /**
      * {@inheritDoc}
-     *
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     protected function configure(): void

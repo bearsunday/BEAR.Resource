@@ -32,8 +32,6 @@ final readonly class ImportSchemeCollectionProvider implements ProviderInterface
 
     /**
      * {@inheritDoc}
-     *
-     * @psalm-capabilities read-props|write-props
      */
     #[Override]
     public function get(): SchemeCollection

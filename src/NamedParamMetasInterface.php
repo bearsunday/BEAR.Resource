@@ -6,10 +6,6 @@ namespace BEAR\Resource;
 
 interface NamedParamMetasInterface
 {
-    /**
-     * @return array<string, ParamInterface>
-     *
-     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
-     */
+    /** @return array<string, ParamInterface> */
     public function __invoke(callable $callable): array;
 }

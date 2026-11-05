@@ -37,8 +37,6 @@ final readonly class AppAdapter implements AdapterInterface
      *
      * @throws ResourceNotFoundException
      * @throws Unbound
-     *
-     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function get(AbstractUri $uri): ResourceObject

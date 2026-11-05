@@ -14,8 +14,6 @@ interface AcceptTransferInterface
      * @param Query             $server    $_SERVER
      *
      * @return void
-     *
-     * @psalm-impure
      */
     public function transfer(TransferInterface $responder, array $server);
 }

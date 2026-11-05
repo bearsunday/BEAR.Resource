@@ -64,8 +64,8 @@ final class JsonSchemaErrorMapper
 
     /**
      * Accepts both upstream shapes:
-     * - 5.x: `constraint` is a string keyword; params are flattened onto the parent row (`minimum`, `maxLength`, etc.)
-     * - 6.x: `constraint` is `array{name: string, params: array<string, mixed>}`
+     *  - 5.x: `constraint` is a string keyword; params are flattened onto the parent row (`minimum`, `maxLength`, etc.)
+     *  - 6.x: `constraint` is `array{name: string, params: array<string, mixed>}`
      *
      * @param JsonSchemaValidatorError $error
      *

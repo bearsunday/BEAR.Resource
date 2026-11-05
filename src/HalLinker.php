@@ -24,11 +24,7 @@ final readonly class HalLinker
     ) {
     }
 
-    /**
-     * @param Query $query
-     *
-     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
-     */
+    /** @param Query $query */
     public function getReverseLink(string $uri, array $query): string
     {
         return ($this->link)($uri, $query);
@@ -37,8 +33,6 @@ final readonly class HalLinker
     /**
      * @param Body         $body
      * @param list<object> $methodAnnotations
-     *
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     public function addHalLink(array $body, array $methodAnnotations, Hal $hal): Hal
     {
@@ -57,8 +51,6 @@ final readonly class HalLinker
     /**
      * @param Body                   $body
      * @param non-empty-list<object> $methodAnnotations
-     *
-     * @psalm-impure
      */
     private function linkAnnotation(array $body, array $methodAnnotations, Hal $hal): Hal
     {
@@ -104,8 +96,6 @@ final readonly class HalLinker
      * @param array{_links: HalLinks} $body
      *
      * User can set `_links` array as a `Links` annotation
-     *
-     * @psalm-capabilities write-props|read-globals|write-globals|io|time
      */
     private function bodyLink(array $body, Hal $hal): Hal
     {

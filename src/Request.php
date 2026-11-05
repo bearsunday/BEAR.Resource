@@ -42,7 +42,6 @@ final class Request extends AbstractRequest
     /**
      * @psalm-suppress ImplementedReturnTypeMismatch
      * @psalm-suppress PossiblyUnusedReturnValue - Return value used implicitly via magic property access
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function __get(string $name): mixed

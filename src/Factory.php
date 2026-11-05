@@ -35,8 +35,6 @@ final class Factory implements FactoryInterface
      * {@inheritDoc}
      *
      * @throws UriException
-     *
-     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function newInstance($uri): ResourceObject

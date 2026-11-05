@@ -22,8 +22,6 @@ final readonly class PhpClassInvoker implements InvokerInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @psalm-impure
      */
     #[\Override]
     public function invoke(AbstractRequest $request): ResourceObject

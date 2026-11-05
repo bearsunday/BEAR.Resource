@@ -43,7 +43,6 @@ final readonly class HalRenderer implements RenderInterface
      * {@inheritDoc}
      *
      * @psalm-taint-escape html
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function render(ResourceObject $ro)
@@ -58,8 +57,6 @@ final readonly class HalRenderer implements RenderInterface
      * {@inheritDoc}
      *
      * @throws RuntimeException
-     *
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     public function renderHal(ResourceObject $ro): void
     {
@@ -74,7 +71,6 @@ final readonly class HalRenderer implements RenderInterface
         $ro->headers['Content-Type'] = 'application/hal+json';
     }
 
-    /** @psalm-impure */
     private function valuateElements(ResourceObject $ro): void
     {
         assert(is_array($ro->body));
@@ -129,8 +125,6 @@ final readonly class HalRenderer implements RenderInterface
     /**
      * @param Body          $body
      * @param array<object> $annotations
-     *
-     * @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time
      */
     private function getHal(AbstractUri $uri, array $body, array $annotations): Hal
     {
@@ -142,11 +136,7 @@ final readonly class HalRenderer implements RenderInterface
         return $this->linker->addHalLink($body, array_values($annotations), $hal);
     }
 
-    /**
-     * @return ResourceObjectBody
-     *
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
-     */
+    /** @return ResourceObjectBody */
     private function valuate(ResourceObject $ro): array
     {
         if (is_scalar($ro->body)) {
@@ -168,7 +158,6 @@ final readonly class HalRenderer implements RenderInterface
         return [$ro, $ro->body];
     }
 
-    /** @psalm-impure */
     private function updateHeaders(ResourceObject $ro): void
     {
         $ro->headers['Content-Type'] = 'application/hal+json';

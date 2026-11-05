@@ -92,10 +92,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
         $this->method = $method;
     }
 
-    /**
-     * @psalm-suppress UnevaluatedCode
-     * @psalm-impure
-     */
+    /** @psalm-suppress UnevaluatedCode */
     #[Override]
     public function __toString(): string
     {
@@ -115,8 +112,6 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      * {@inheritDoc}
      *
      * @param Query $query
-     *
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function __invoke(array|null $query = null): ResourceObject
@@ -140,8 +135,6 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      * @return mixed
      *
      * @noinspection MagicMethodsValidityInspection
-     *
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     public function __get(string $name)
     {
@@ -186,8 +179,6 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
 
     /**
      * {@inheritDoc}
-     *
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function request()
@@ -209,8 +200,6 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      * @return mixed
      *
      * @throws OutOfBoundsException
-     *
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     #[ReturnTypeWillChange]
@@ -227,8 +216,6 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
 
     /**
      * {@inheritDoc}
-     *
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     #[ReturnTypeWillChange]
@@ -245,8 +232,6 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      *
      * @psalm-return ArrayIterator<array-key, mixed>
      * @phpstan-return ArrayIterator<string, mixed>
-     *
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     public function getIterator(): ArrayIterator
@@ -294,11 +279,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
         unset($data);
     }
 
-    /**
-     * Lazy evaluation with memoization - delegates to __invoke() on first call
-     *
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
-     */
+    /** Lazy evaluation with memoization - delegates to __invoke() on first call */
     private function invoke(): ResourceObject
     {
         if ($this->result === null) {
@@ -309,7 +290,6 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
         return $this->result;
     }
 
-    /** @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time */
     #[Override]
     public function jsonSerialize(): mixed
     {

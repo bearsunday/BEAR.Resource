@@ -16,7 +16,6 @@ final readonly class ExtraMethodInvoker
     ) {
     }
 
-    /** @psalm-capabilities read-props|write-props|read-globals|write-globals|io|time */
     public function __invoke(AbstractRequest $request, InvokerInterface $invoker): ResourceObject
     {
         if ($request->method === Method::OPTIONS) {

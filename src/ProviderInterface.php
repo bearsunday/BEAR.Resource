@@ -8,8 +8,6 @@ interface ProviderInterface
 {
     /**
      * Return new resource object
-     *
-     * @psalm-pure
      */
     public function get(AbstractUri $uri): ResourceObject;
 }

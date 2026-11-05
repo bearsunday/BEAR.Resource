@@ -76,8 +76,6 @@ final class ResourceClientModule extends AbstractModule
      * {@inheritDoc}
      *
      * @throws NotFound
-     *
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     #[Override]
     protected function configure(): void
@@ -107,10 +105,7 @@ final class ResourceClientModule extends AbstractModule
         $this->bind(DataLoader::class);
     }
 
-    /**
-     * @psalm-suppress DeprecatedClass
-     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
-     */
+    /** @psalm-suppress DeprecatedClass */
     private function configureDeprecatedBindings(): void
     {
         $this->bind(HalLink::class);
