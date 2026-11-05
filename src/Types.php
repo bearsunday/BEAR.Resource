@@ -150,6 +150,8 @@ use ReflectionParameter;
  * @psalm-type ServerErrorCode = int<500, 599>
  *
  * @phpcs:enable
+ *
+ * @psalm-immutable
  */
 final class Types
 {

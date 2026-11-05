@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+/** @psalm-immutable */
 final class ImportApp
 {
     public function __construct(

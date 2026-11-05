@@ -115,6 +115,7 @@ final readonly class HalRenderer implements RenderInterface
         }
     }
 
+    /** @psalm-capabilities read-props */
     private function isDifferentSchema(ResourceObject $parentRo, ResourceObject $childRo): bool
     {
         return $parentRo->uri->scheme . $parentRo->uri->host !== $childRo->uri->scheme . $childRo->uri->host;

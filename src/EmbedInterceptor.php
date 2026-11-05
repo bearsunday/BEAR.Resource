@@ -87,6 +87,7 @@ final readonly class EmbedInterceptor implements EmbedInterceptorInterface
         }
     }
 
+    /** @psalm-capabilities read-props */
     private function getFullUri(string $uri, ResourceObject $ro): string
     {
         if ($uri[0] === '/') {

@@ -2,6 +2,7 @@
 <psalm
     phpVersion="8.2"
     errorLevel="1"
+    suggestPurityAnnotations="true"
     runTaintAnalysis="false"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
@@ -16,11 +17,11 @@
         </ignoreFiles>
     </projectFiles>
     <issueHandlers>
+        <!-- Interfaces are DI extension points implemented by applications and other packages.
+             A purity contract on them would bind every implementation, so they stay unannotated. -->
         <MissingAbstractPureAnnotation errorLevel="suppress" />
-        <MissingImmutableAnnotation errorLevel="suppress" />
         <MissingInterfaceImmutableAnnotation errorLevel="suppress" />
         <MissingOverrideAttribute errorLevel="suppress" />
-        <MissingPureAnnotation errorLevel="suppress" />
         <PossiblyUnusedProperty errorLevel="suppress" />
         <UnusedClass errorLevel="suppress" />
         <UnusedMethod errorLevel="suppress" />

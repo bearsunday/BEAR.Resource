@@ -20,19 +20,22 @@ use function str_replace;
  * objects/arrays resolve correctly.
  *
  * Known limitations (documented; deferred to future PRs):
- *  - `$ref` is not followed when navigating the schema tree.
- *  - `allOf` / `oneOf` / `anyOf` combinators are not merged.
- *  - `patternProperties` cannot be reached by Pointer alone.
- *  - `additionalProperties` schemas (keys not declared under `properties`)
- *    are not resolved — Pointer ends at a node the walker can't enter.
+ * - `$ref` is not followed when navigating the schema tree.
+ * - `allOf` / `oneOf` / `anyOf` combinators are not merged.
+ * - `patternProperties` cannot be reached by Pointer alone.
+ * - `additionalProperties` schemas (keys not declared under `properties`)
+ * are not resolved — Pointer ends at a node the walker can't enter.
  *
  * @internal
+ * @psalm-immutable
  */
 final class SchemaErrorMessageResolver
 {
     /**
      * Returns the raw template string declared in the schema, or null when
      * the schema does not override this constraint's message.
+     *
+     * @psalm-capabilities read-props
      */
     public function resolve(stdClass|null $schema, JsonSchemaError $error): string|null
     {
@@ -52,6 +55,7 @@ final class SchemaErrorMessageResolver
         return $this->constraintMessage($node, $error->constraint->name);
     }
 
+    /** @psalm-capabilities read-props */
     private function requiredMessage(stdClass $schema, string $property): string|null
     {
         if (! property_exists($schema, 'errorMessage') || ! $schema->errorMessage instanceof stdClass) {
@@ -79,6 +83,7 @@ final class SchemaErrorMessageResolver
         return is_string($message) ? $message : null;
     }
 
+    /** @psalm-pure */
     private function constraintMessage(stdClass $propertyNode, string $constraint): string|null
     {
         if (! property_exists($propertyNode, 'errorMessage')) {
@@ -104,6 +109,8 @@ final class SchemaErrorMessageResolver
     /**
      * Walk a JSON Pointer through the schema, descending via `properties`
      * for string segments and via `items` for numeric (array-index) segments.
+     *
+     * @psalm-capabilities read-props
      */
     private function navigateByPointer(stdClass $schema, string $pointer): stdClass|null
     {
@@ -127,7 +134,11 @@ final class SchemaErrorMessageResolver
         return $node;
     }
 
-    /** Numeric pointer segment: descend through the parent's `items` schema (single or tuple). */
+    /**
+     * Numeric pointer segment: descend through the parent's `items` schema (single or tuple).
+     *
+     * @psalm-pure
+     */
     private function descendArray(stdClass $node, string $index): stdClass|null
     {
         if (! property_exists($node, 'items')) {
@@ -150,7 +161,11 @@ final class SchemaErrorMessageResolver
         return null;
     }
 
-    /** String pointer segment: descend through the parent's `properties.<segment>` schema. */
+    /**
+     * String pointer segment: descend through the parent's `properties.<segment>` schema.
+     *
+     * @psalm-pure
+     */
     private function descendObject(stdClass $node, string $segment): stdClass|null
     {
         if (! property_exists($node, 'properties')) {

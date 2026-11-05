@@ -12,6 +12,8 @@ final class NoDefaultParam implements ParamInterface
 {
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities pure
      */
     #[Override]
     public function __invoke(string $varName, array $query, InjectorInterface $injector): never

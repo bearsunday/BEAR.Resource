@@ -22,6 +22,8 @@ final class OptionalParam implements ParamInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props
      */
     #[Override]
     public function __invoke(string $varName, array $query, InjectorInterface $injector)

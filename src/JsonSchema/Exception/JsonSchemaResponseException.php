@@ -20,7 +20,11 @@ use BEAR\Resource\Types;
  */
 final class JsonSchemaResponseException extends JsonSchemaException
 {
-    /** @param ServerErrorCode $code */
+    /**
+     * @param ServerErrorCode $code
+     *
+     * @psalm-capabilities read-props
+     */
     public function __construct(string $message, int $code = Code::ERROR, JsonSchemaErrors|null $errors = null)
     {
         parent::__construct($message, $code, $errors);

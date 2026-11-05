@@ -145,6 +145,8 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      * {@inheritDoc}
      *
      * @throws OutOfBoundsException
+     *
+     * @psalm-pure
      */
     #[Override]
     #[ReturnTypeWillChange]
@@ -161,6 +163,8 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      * @return never
      *
      * @throws OutOfBoundsException
+     *
+     * @psalm-pure
      */
     #[Override]
     #[ReturnTypeWillChange]
@@ -224,7 +228,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     /**
      * Invoke resource request then return resource body iterator
      *
-     * @psalm-return ArrayIterator
+     * @psalm-return ArrayIterator<array-key, mixed>
      * @phpstan-return ArrayIterator<string, mixed>
      */
     #[Override]
@@ -251,6 +255,8 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      * @return never
      *
      * @noinspection MagicMethodsValidityInspection
+     *
+     * @psalm-pure
      */
     public function __serialize()
     {
@@ -261,6 +267,8 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      * @param Body $data
      *
      * @codeCoverageIgnore
+     *
+     * @psalm-capabilities read-props
      */
     public function __unserialize(array $data): void
     {
@@ -288,7 +296,10 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      * @return never
      *
      * @codeCoverageIgnore
+     *
      * @psalm-suppress MethodSignatureMustProvideReturnType - method not supported
+     *
+     * @psalm-capabilities read-props
      */
     #[Override]
     public function serialize()
@@ -300,7 +311,10 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      * @param string $data
      *
      * @codeCoverageIgnore
+     *
      * @psalm-suppress MethodSignatureMustProvideReturnType - method not supported
+     *
+     * @psalm-capabilities read-props
      */
     #[Override]
     public function unserialize($data)

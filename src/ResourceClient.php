@@ -73,6 +73,8 @@ final class ResourceClient implements ResourceInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props
      */
     #[Override]
     public function object(ResourceObject $ro): RequestInterface

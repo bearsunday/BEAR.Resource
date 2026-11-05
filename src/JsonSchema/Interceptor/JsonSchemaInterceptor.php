@@ -134,6 +134,7 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
         $this->validateAsResponse($target, $schemaFile);
     }
 
+    /** @psalm-capabilities read-props */
     private function isCachedRenderedBodyResponse(ResourceObject $ro, JsonSchema $jsonSchema): bool
     {
         if ($jsonSchema->target !== 'body' || ! isset($ro->headers[self::HEADER_ETAG]) || ! is_string($ro->view)) {
@@ -144,6 +145,7 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
         return $ro->body === null;
     }
 
+    /** @psalm-pure */
     private function getTarget(object $json, JsonSchema $jsonSchema): mixed
     {
         if ($jsonSchema->key === '') {
@@ -265,6 +267,7 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
         return $schemaFile;
     }
 
+    /** @psalm-capabilities pure */
     private function getParentClassName(ResourceObject $ro): string
     {
         $parent = (new ReflectionClass($ro))->getParentClass();

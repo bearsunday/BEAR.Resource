@@ -8,7 +8,11 @@ use Override;
 
 final class NullResponder implements TransferInterface
 {
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props
+     */
     #[Override]
     public function __invoke(ResourceObject $ro, array $server)
     {

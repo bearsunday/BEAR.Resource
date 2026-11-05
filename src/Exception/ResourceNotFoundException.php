@@ -9,6 +9,7 @@ use Throwable;
 
 final class ResourceNotFoundException extends BadRequestException
 {
+    /** @psalm-capabilities read-props */
     public function __construct(string $message = '', int $code = Code::NOT_FOUND, Throwable|null $previous = null)
     {
         parent::__construct($message, $code, $previous);

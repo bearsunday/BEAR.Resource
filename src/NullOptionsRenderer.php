@@ -11,6 +11,8 @@ final class NullOptionsRenderer implements RenderInterface
 {
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities pure
      */
     #[Override]
     public function render(ResourceObject $ro): never

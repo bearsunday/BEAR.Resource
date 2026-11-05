@@ -116,7 +116,11 @@ final readonly class HttpRequestCurl implements HttpRequestInterface
         return $curl;
     }
 
-    /** @return HttpHeaders */
+    /**
+     * @return HttpHeaders
+     *
+     * @psalm-pure
+     */
     private function parseResponseHeaders(string $responseHeaders): array
     {
         $responseHeadersArray = [];
@@ -139,6 +143,8 @@ final readonly class HttpRequestCurl implements HttpRequestInterface
      * @return HttpBody
      *
      * @psalm-taint-source input
+     *
+     * @psalm-capabilities pure
      */
     private function parseBody(CurlHandle $curl, string $view): array
     {

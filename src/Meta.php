@@ -43,6 +43,7 @@ final class Meta
         $this->options = $this->getOptions($class);
     }
 
+    /** @psalm-capabilities read-props|write-this-props|write-refs */
     private function getUri(string $class): string
     {
         /** @var list<string> $classPath */
@@ -87,6 +88,8 @@ final class Meta
      *
      * @return string[]
      * @psalm-return list<string>
+     *
+     * @psalm-capabilities read-props
      */
     private function getAllows(array $methods): array
     {

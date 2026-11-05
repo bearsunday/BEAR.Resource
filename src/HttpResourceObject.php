@@ -53,6 +53,7 @@ final class HttpResourceObject extends ResourceObject implements InvokeRequestIn
         return $this;
     }
 
+    /** @psalm-capabilities read-props */
     public function __toString(): string
     {
         return $this->view;

@@ -59,6 +59,8 @@ final readonly class OptionsRenderer implements RenderInterface
      *
      * @return string[]
      * @psalm-return list<string>
+     *
+     * @psalm-capabilities read-props
      */
     private function getAllows(array $methods): array
     {

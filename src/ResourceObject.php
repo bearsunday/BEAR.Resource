@@ -107,6 +107,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      * @param int|string $offset offset
      *
      * @return mixed
+     *
+     * @psalm-impure
      */
     #[Override]
     #[ReturnTypeWillChange]
@@ -126,6 +128,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      * @param mixed          $value  value
      *
      * @return void
+     *
+     * @psalm-impure
      */
     #[Override]
     #[ReturnTypeWillChange]
@@ -154,6 +158,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      * @param array-key $offset offset
      *
      * @return bool
+     *
+     * @psalm-impure
      */
     #[Override]
     #[ReturnTypeWillChange]
@@ -170,6 +176,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      * Set the value at the specified index
      *
      * @param int|string $offset offset
+     *
+     * @psalm-impure
      */
     #[Override]
     #[ReturnTypeWillChange]
@@ -194,6 +202,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
 
     /**
      * Sort the entries by key
+     *
+     * @psalm-impure
      */
     public function ksort(): void
     {
@@ -206,6 +216,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
 
     /**
      * Sort the entries by key
+     *
+     * @psalm-impure
      */
     public function asort(): void
     {
@@ -220,6 +232,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      * @return ArrayIterator<int|string, mixed>
      * @psalm-return ArrayIterator<empty, empty>|ArrayIterator<int|string, mixed>
      * @phpstan-return ArrayIterator<int|string, mixed>
+     *
+     * @psalm-impure
      */
     #[Override]
     public function getIterator(): ArrayIterator
@@ -227,7 +241,11 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         return is_array($this->body) ? new ArrayIterator($this->body) : new ArrayIterator([]);
     }
 
-    /** @return self */
+    /**
+     * @return self
+     *
+     * @psalm-impure
+     */
     #[Inject(optional: true)]
     public function setRenderer(RenderInterface $renderer)
     {
@@ -252,7 +270,11 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         return $this->renderer->render($this);
     }
 
-    /** @return Body */
+    /**
+     * @return Body
+     *
+     * @psalm-impure
+     */
     #[Override]
     public function jsonSerialize(): array
     {
@@ -275,6 +297,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         $responder($this, $server);
     }
 
+    /** @psalm-impure */
     public function __clone()
     {
         $this->uri = clone $this->uri;

@@ -50,6 +50,8 @@ final class Resource implements ResourceInterface
 
     /**
      * Set HTTP method for fluent interface
+     *
+     * @psalm-capabilities read-props|write-this-props|write-refs
      */
     public function __get(string $name): self
     {
@@ -73,6 +75,8 @@ final class Resource implements ResourceInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props
      */
     #[Override]
     public function object(ResourceObject $ro): RequestInterface

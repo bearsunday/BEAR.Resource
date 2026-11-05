@@ -69,7 +69,11 @@ final readonly class JsonSchemaError
         return $template;
     }
 
-    /** Mirrors Be\Framework\SemanticVariable\ValidationMessageHandler::interpolateTemplate(). */
+    /**
+     * Mirrors Be\Framework\SemanticVariable\ValidationMessageHandler::interpolateTemplate().
+     *
+     * @psalm-capabilities pure
+     */
     private function stringify(mixed $value): string
     {
         if (is_string($value)) {

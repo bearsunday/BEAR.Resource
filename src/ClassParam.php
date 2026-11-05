@@ -32,6 +32,7 @@ final readonly class ClassParam implements ParamInterface
     private bool $isDefaultAvailable;
     private mixed $defaultValue; // @phpstan-ignore-line
 
+    /** @psalm-capabilities read-props */
     public function __construct(
         ReflectionNamedType $type,
         ReflectionParameter $parameter,
@@ -87,7 +88,11 @@ final readonly class ClassParam implements ParamInterface
         return $obj;
     }
 
-    /** @param Query $query */
+    /**
+     * @param Query $query
+     *
+     * @psalm-capabilities pure
+     */
     private function getProps(string $varName, array $query, InjectorInterface $injector): mixed
     {
         if (isset($query[$varName])) {

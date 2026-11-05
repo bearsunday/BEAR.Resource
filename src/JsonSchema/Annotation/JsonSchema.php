@@ -6,7 +6,10 @@ namespace BEAR\Resource\Annotation;
 
 use Attribute;
 
-/** @codeCoverageIgnore */
+/**
+ * @codeCoverageIgnore
+ * @psalm-immutable
+ */
 #[Attribute(Attribute::TARGET_METHOD)]
 final class JsonSchema
 {

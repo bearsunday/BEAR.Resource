@@ -9,8 +9,10 @@ use LogicException;
 
 class JsonSchemaException extends LogicException implements ExceptionInterface
 {
+    /** @psalm-suppress UnusedProperty Read by the public getErrors() API, which only callers outside src use */
     private readonly JsonSchemaErrors $errors;
 
+    /** @psalm-capabilities read-props */
     public function __construct(
         string $message,
         int $code = 0,

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+/** @psalm-immutable */
 final class LinkType
 {
     public const SELF_LINK = 'self';
