@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BEAR\Resource\Renderer;
 
+use BEAR\Resource\AbstractRequest;
 use BEAR\Resource\FakeChild;
 use BEAR\Resource\FakeHal;
 use BEAR\Resource\FakeHalLinkAttr;
@@ -12,6 +13,7 @@ use BEAR\Resource\FakeRo;
 use BEAR\Resource\HalLinker;
 use BEAR\Resource\HalRenderer;
 use BEAR\Resource\InvokerFactory;
+use BEAR\Resource\InvokerInterface;
 use BEAR\Resource\NullReverseLinker;
 use BEAR\Resource\Request;
 use BEAR\Resource\ResourceObject;
@@ -268,6 +270,36 @@ EOT;
             ['tree' => 3],
             $this->ro->body['_embedded']['different'],
         );
+    }
+
+    public function testDifferentSchemaEmbedDoesNotRunARequestThatAlreadyRan(): void
+    {
+        $invoker = new class ((new InvokerFactory())()) implements InvokerInterface {
+            public int $runs = 0;
+
+            public function __construct(private InvokerInterface $invoker)
+            {
+            }
+
+            public function invoke(AbstractRequest $request): ResourceObject
+            {
+                $this->runs++;
+
+                return $this->invoker->invoke($request);
+            }
+        };
+        $child = new FakeChild();
+        $child->uri = new Uri('page://self/bear/resource/fakechild');
+        $request = new Request($invoker, $child);
+        $this->ro->body = ['different' => $request];
+
+        // Runs the request before rendering, as a cache dependency scan does
+        (string) $request;
+        (new HalRenderer(new HalLinker(new NullReverseLinker())))->renderHal($this->ro);
+
+        $this->assertSame(1, $invoker->runs);
+        $this->assertIsArray($this->ro->body);
+        $this->assertSame(['tree' => 3], $this->ro->body['_embedded']['different']);
     }
 
     private function resourceWithEmbeddedBody(mixed $embedded): ResourceObject

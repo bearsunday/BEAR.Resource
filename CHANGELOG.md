@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A request read once and then changed with `withQuery()`, `addQuery()`, `__invoke()` with a query,
   or `linkSelf()` / `linkNew()` / `linkCrawl()` now executes again on the next read instead of
   returning the stale result (#381)
+- An embedded request of a different scheme (an `app://` request in a `page://` body) that has
+  already run is no longer run again when `HalRenderer` renders its parent
 
 ## [1.34.1] - 2026-09-11
 

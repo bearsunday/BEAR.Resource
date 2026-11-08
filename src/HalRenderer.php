@@ -102,7 +102,7 @@ final readonly class HalRenderer implements RenderInterface
 
             assert(is_array($ro->body['_embedded']));
             if ($this->isDifferentSchema($ro, $embeded->resourceObject)) {
-                $ro->body['_embedded'][$key] = $embeded()->body;
+                $ro->body['_embedded'][$key] = $embeded->body;
                 unset($ro->body[$key]);
 
                 continue;
