@@ -7,9 +7,9 @@ namespace BEAR\Resource;
 use ArrayAccess;
 use ArrayIterator;
 use BEAR\Resource\Exception\OutOfBoundsException;
+use BEAR\Resource\Exception\RequestNotSerializableException;
 use IteratorAggregate;
 use JsonSerializable;
-use LogicException;
 use Override;
 use ReturnTypeWillChange;
 use Serializable;
@@ -254,7 +254,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      */
     public function __serialize()
     {
-        throw new LogicException(__METHOD__ . ' not supported');
+        throw new RequestNotSerializableException(__METHOD__ . ' not supported');
     }
 
     /**

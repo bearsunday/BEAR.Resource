@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\OutOfBoundsException;
+use BEAR\Resource\Exception\RequestNotSerializableException;
 use BEAR\Resource\Renderer\FakeErrorRenderer;
 use BEAR\Resource\Renderer\FakeTestRenderer;
 use FakeVendor\Sandbox\Resource\App\User\Entry;
-use LogicException;
 use OutOfRangeException;
 use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\TestCase;
@@ -324,7 +324,7 @@ class RequestTest extends TestCase
 
     public function testSerialize(): void
     {
-        $this->expectException(LogicException::class);
+        $this->expectException(RequestNotSerializableException::class);
         serialize($this->request);
     }
 
