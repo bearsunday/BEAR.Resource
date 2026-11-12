@@ -160,8 +160,7 @@ EOT;
 
         (string) $ro;
 
-        $this->assertIsArray($ro->body['_embedded']);
-        $this->assertArrayHasKey('two', $ro->body['_embedded']);
+        $this->assertArrayHasKey('two', self::embedded($ro));
     }
 
     public function testEmbeddedRequestWithInvalidEmbeddedValue(): void
@@ -170,8 +169,17 @@ EOT;
 
         (string) $ro;
 
-        $this->assertIsArray($ro->body['_embedded']);
-        $this->assertArrayHasKey('two', $ro->body['_embedded']);
+        $this->assertArrayHasKey('two', self::embedded($ro));
+    }
+
+    public function testRenderingLeavesTheBodyTheResourceReturned(): void
+    {
+        $ro = $this->resourceWithEmbeddedBody([]);
+        $returned = $ro->body;
+
+        (string) $ro;
+
+        $this->assertSame($returned, $ro->body);
     }
 
     public function testNonArrayBody(): void
@@ -244,12 +252,7 @@ EOT;
         $halRenderer = new HalRenderer(new HalLinker(new NullReverseLinker()));
         $halRenderer->renderHal($this->ro);
 
-        $this->assertIsArray($this->ro->body);
-        $this->assertArrayHasKey('_embedded', $this->ro->body);
-        $this->assertSame(
-            ['name' => 'stubbed'],
-            (array) $this->ro->body['_embedded']['stub'],
-        );
+        $this->assertSame(['name' => 'stubbed'], self::embedded($this->ro)['stub']);
     }
 
     public function testDifferentSchemaEmbedSkipsRendererPrePass(): void
@@ -264,12 +267,7 @@ EOT;
         $halRenderer = new HalRenderer(new HalLinker(new NullReverseLinker()));
         $halRenderer->renderHal($this->ro);
 
-        $this->assertIsArray($this->ro->body);
-        $this->assertArrayHasKey('_embedded', $this->ro->body);
-        $this->assertSame(
-            ['tree' => 3],
-            $this->ro->body['_embedded']['different'],
-        );
+        $this->assertSame(['tree' => 3], self::embedded($this->ro)['different']);
     }
 
     public function testDifferentSchemaEmbedDoesNotRunARequestThatAlreadyRan(): void
@@ -298,8 +296,7 @@ EOT;
         (new HalRenderer(new HalLinker(new NullReverseLinker())))->renderHal($this->ro);
 
         $this->assertSame(1, $invoker->runs);
-        $this->assertIsArray($this->ro->body);
-        $this->assertSame(['tree' => 3], $this->ro->body['_embedded']['different']);
+        $this->assertSame(['tree' => 3], self::embedded($this->ro)['different']);
     }
 
     private function resourceWithEmbeddedBody(mixed $embedded): ResourceObject
@@ -319,6 +316,15 @@ EOT;
         $ro->setRenderer(new HalRenderer(new HalLinker(new NullReverseLinker())));
 
         return $ro;
+    }
+
+    /** @return array<array-key, mixed> the _embedded of the rendered view */
+    private static function embedded(ResourceObject $ro): array
+    {
+        /** @var array{_embedded: array<array-key, mixed>} $hal */
+        $hal = json_decode((string) $ro->view, true, 512, JSON_THROW_ON_ERROR);
+
+        return $hal['_embedded'];
     }
 
     /** @return array<string, array<string, string>> */

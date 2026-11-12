@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **Behaviour change**: `HalRenderer` no longer rewrites the body of the resource it renders. The
+  body keeps the embedded requests the resource returned; `_embedded` is in the view only.
+
 ### Fixed
 - A request read once and then changed with `withQuery()`, `addQuery()`, `__invoke()` with a query,
   or `linkSelf()` / `linkNew()` / `linkCrawl()` now executes again on the next read instead of

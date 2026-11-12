@@ -59,7 +59,7 @@ final readonly class HalRenderer implements RenderInterface
      */
     public function renderHal(ResourceObject $ro): void
     {
-        [$ro, $body] = $this->valuate($ro);
+        $body = $this->valuate($ro);
         $method = 'on' . ucfirst($ro->uri->method);
         $hasMethod = method_exists($ro, $method);
         $annotations = $hasMethod ? (new ReflectionMethod($ro, $method))->getAnnotations() : [];
@@ -70,14 +70,17 @@ final readonly class HalRenderer implements RenderInterface
         $ro->headers['Content-Type'] = 'application/hal+json';
     }
 
-    private function valuateElements(ResourceObject $ro): void
+    /**
+     * @param array<array-key, mixed> $body
+     *
+     * @return array<array-key, mixed>
+     */
+    private function valuateElements(ResourceObject $ro, array $body): array
     {
-        assert(is_array($ro->body));
-
         // Batch decorators (e.g. BEAR.Async's AsyncRequest) flush the whole
         // pending batch on the first __toString(), so siblings must already
         // have HalRenderer set or they fall back to JsonRenderer and lose _links.
-        foreach ($ro->body as $maybeRequest) {
+        foreach ($body as $maybeRequest) {
             if (! ($maybeRequest instanceof AbstractRequest)) {
                 continue;
             }
@@ -90,29 +93,30 @@ final readonly class HalRenderer implements RenderInterface
         }
 
         /** @var mixed $embeded */
-        foreach ($ro->body as $key => &$embeded) {
+        foreach ($body as $key => $embeded) {
             if (! ($embeded instanceof AbstractRequest)) {
                 continue;
             }
 
-            $isNotArray = ! isset($ro->body['_embedded']) || ! is_array($ro->body['_embedded']);
-            if ($isNotArray) {
-                $ro->body['_embedded'] = [];
+            if (! isset($body['_embedded']) || ! is_array($body['_embedded'])) {
+                $body['_embedded'] = [];
             }
 
-            assert(is_array($ro->body['_embedded']));
+            unset($body[$key]);
             if ($this->isDifferentSchema($ro, $embeded->resourceObject)) {
-                $ro->body['_embedded'][$key] = $embeded->body;
-                unset($ro->body[$key]);
+                /** @psalm-suppress MixedAssignment */
+                $body['_embedded'][$key] = $embeded->body;
 
                 continue;
             }
 
-            unset($ro->body[$key]);
             // Use (string) so lazy decorators can short-circuit __invoke().
             $view = (string) $embeded;
-            $ro->body['_embedded'][$key] = json_decode($view, null, 512, JSON_THROW_ON_ERROR);
+            /** @psalm-suppress MixedAssignment */
+            $body['_embedded'][$key] = json_decode($view, null, 512, JSON_THROW_ON_ERROR);
         }
+
+        return $body;
     }
 
     private function isDifferentSchema(ResourceObject $parentRo, ResourceObject $childRo): bool
@@ -134,26 +138,26 @@ final readonly class HalRenderer implements RenderInterface
         return $this->linker->addHalLink($body, array_values($annotations), $hal);
     }
 
-    /** @return ResourceObjectBody */
+    /** @return array<array-key, mixed> the body to render; the resource keeps the one it returned */
     private function valuate(ResourceObject $ro): array
     {
-        if (is_scalar($ro->body)) {
-            $ro->body = ['value' => $ro->body];
+        /** @var mixed $body */
+        $body = $ro->body;
+        if (is_scalar($body)) {
+            $body = ['value' => $body];
         }
 
-        if ($ro->body === null) {
-            $ro->body = [];
+        if ($body === null) {
+            $body = [];
         }
 
-        if (is_object($ro->body)) {
-            $ro->body = (array) $ro->body;
+        if (is_object($body)) {
+            $body = (array) $body;
         }
 
-        // evaluate all request in body.
-        $this->valuateElements($ro);
-        assert(is_array($ro->body));
+        assert(is_array($body));
 
-        return [$ro, $ro->body];
+        return $this->valuateElements($ro, $body);
     }
 
     private function updateHeaders(ResourceObject $ro): void
