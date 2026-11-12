@@ -100,17 +100,8 @@ final readonly class HalRenderer implements RenderInterface
             }
 
             unset($body[$key]);
-            if ($this->isDifferentSchema($ro, $embeded->resourceObject)) {
-                /** @psalm-suppress MixedAssignment */
-                $results[$key] = $embeded->body;
-
-                continue;
-            }
-
-            // Use (string) so lazy decorators can short-circuit __invoke().
-            $view = (string) $embeded;
             /** @psalm-suppress MixedAssignment */
-            $results[$key] = json_decode($view, null, 512, JSON_THROW_ON_ERROR);
+            $results[$key] = $this->embed($ro, $embeded);
         }
 
         if ($results === []) {
@@ -122,6 +113,17 @@ final readonly class HalRenderer implements RenderInterface
         $body['_embedded'] = array_replace($existing, $results);
 
         return $body;
+    }
+
+    /** What stands for the request under _embedded: its body across schemes, its rendered HAL within one */
+    private function embed(ResourceObject $ro, AbstractRequest $request): mixed
+    {
+        if ($this->isDifferentSchema($ro, $request->resourceObject)) {
+            return $request->body;
+        }
+
+        // Use (string) so lazy decorators can short-circuit __invoke().
+        return json_decode((string) $request, null, 512, JSON_THROW_ON_ERROR);
     }
 
     private function isDifferentSchema(ResourceObject $parentRo, ResourceObject $childRo): bool
