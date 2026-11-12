@@ -166,6 +166,27 @@ EOT;
         $this->assertSame(['kept', 'two'], array_keys(self::embedded($ro)));
     }
 
+    public function testEmbeddedRequestReplacesTheExistingEntryOfItsKey(): void
+    {
+        $ro = $this->resourceWithEmbeddedBody(['two' => 'existing', 'kept' => 1]);
+
+        (string) $ro;
+
+        $embedded = self::embedded($ro);
+        $this->assertSame(['two', 'kept'], array_keys($embedded));
+        $this->assertIsArray($embedded['two']);
+    }
+
+    public function testEmbeddedRequestKeepsItsIntegerKey(): void
+    {
+        $ro = $this->resourceWithEmbeddedBody(['kept' => 1]);
+        $ro->body = ['_embedded' => ['kept' => 1], 5 => $ro->body['two']];
+
+        (string) $ro;
+
+        $this->assertSame(['kept', 5], array_keys(self::embedded($ro)));
+    }
+
     public function testEmbeddedRequestWithInvalidEmbeddedValue(): void
     {
         $ro = $this->resourceWithEmbeddedBody('invalid');
