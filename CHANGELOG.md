@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   returning the stale result (#381)
 - An embedded request of a different scheme (an `app://` request in a `page://` body) that has
   already been read is no longer run again when `HalRenderer` renders its parent
+- Serializing a resource no longer runs again an embedded request that has already been read; the
+  stored body holds the result the view was rendered from
 
 ## [1.34.1] - 2026-09-11
 

@@ -94,7 +94,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
                     continue;
                 }
 
-                $item = ($item)();
+                // The result a request already has is the one the view was rendered from
+                $item = $item instanceof AbstractRequest ? $item->jsonSerialize() : ($item)();
             }
         }
 
