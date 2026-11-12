@@ -108,14 +108,12 @@ final readonly class HalRenderer implements RenderInterface
             return $body;
         }
 
-        // A request may sit under the _embedded key itself, so the results are merged once every request is out of the body
         $existing = isset($body['_embedded']) && is_array($body['_embedded']) ? $body['_embedded'] : [];
         $body['_embedded'] = array_replace($existing, $results);
 
         return $body;
     }
 
-    /** What stands for the request under _embedded: its body across schemes, its rendered HAL within one */
     private function embed(ResourceObject $ro, AbstractRequest $request): mixed
     {
         if ($this->isDifferentSchema($ro, $request->resourceObject)) {
@@ -145,7 +143,7 @@ final readonly class HalRenderer implements RenderInterface
         return $this->linker->addHalLink($body, array_values($annotations), $hal);
     }
 
-    /** @return array<array-key, mixed> the body to render; the resource keeps the one it returned */
+    /** @return array<array-key, mixed> */
     private function valuate(ResourceObject $ro): array
     {
         /** @var mixed $body */
