@@ -282,6 +282,21 @@ array (
  ...
 ```
 
+### URIのリンク
+
+`toUri()` はリクエストのリンクを `#_link=` フラグメントとして書き出し、`uri()` / `newRequest()` はそれを読み戻します。
+
+```php
+$request = $resource
+    ->get
+    ->uri('app://self/user')
+    ->withQuery(['id' => 0])
+    ->linkSelf('blog');
+$uri = $request->toUri(); // app://self/user?id=0#_link=self:blog
+
+$blog = $resource->get->uri($uri)->eager->request(); // blogリンクを辿る
+```
+
 ### HATEOAS アプリケーション状態のエンジンとしてのハイパーメディア
 
 リソースはクライアントの次の動作をハイパーリンクにして、クライアントはそのリンクを辿りアプリケーションの状態を変更します。

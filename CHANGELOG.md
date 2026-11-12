@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- `Request::toUri()` writes the links of a request as a `#_link=` fragment
+  (`app://self/user?id=1#_link=self:blog,new:profile`), and `uri()` / `newRequest()` read them
+  back. Code that rebuilds a request from `toUri()` and adds the links again must stop adding them.
+
 ### Fixed
 - `HalRenderer` no longer rewrites the body of the resource it renders: `_embedded` is built for
   the view only, and the body keeps the embedded requests the resource returned

@@ -4,11 +4,21 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+use BEAR\Resource\Exception\UriException;
 use Override;
 
 use function array_merge;
 use function assert;
+use function explode;
+use function in_array;
 use function is_string;
+use function parse_url;
+use function rawurldecode;
+use function str_starts_with;
+use function strlen;
+use function substr;
+
+use const PHP_URL_FRAGMENT;
 
 /**
  * Resource client with mutable state - supports fluent interface
@@ -90,7 +100,8 @@ final class Resource implements ResourceInterface
         $this->method = 'get';
         $ro = $this->newInstance($uri);
         $ro->uri->method = $method;
-        $this->request = new Request($this->invoker, $ro, Method::from($ro->uri->method), $ro->uri->query, [], $this->linker);
+        $links = is_string($uri) ? $this->links($uri) : [];
+        $this->request = new Request($this->invoker, $ro, Method::from($ro->uri->method), $ro->uri->query, $links, $this->linker);
 
         return $this->request;
     }
@@ -104,7 +115,7 @@ final class Resource implements ResourceInterface
         $ro = $this->newInstance($uri);
         $ro->uri->method = $method->value;
         $ro->uri->query = array_merge($ro->uri->query, $query);
-        $this->request = new Request($this->invoker, $ro, $method, $ro->uri->query, [], $this->linker);
+        $this->request = new Request($this->invoker, $ro, $method, $ro->uri->query, $this->links($uri), $this->linker);
 
         return $this->request;
     }
@@ -217,5 +228,30 @@ final class Resource implements ResourceInterface
         $this->method = $method->value;
 
         return $this->uri($uri);
+    }
+
+    /**
+     * @return list<LinkType>
+     *
+     * @throws UriException
+     */
+    private function links(string $uri): array
+    {
+        $fragment = (string) parse_url($uri, PHP_URL_FRAGMENT);
+        if (! str_starts_with($fragment, '_link=')) {
+            return [];
+        }
+
+        $links = [];
+        foreach (explode(',', substr($fragment, strlen('_link='))) as $link) {
+            [$type, $key] = explode(':', $link, 2) + [1 => ''];
+            if (! in_array($type, [LinkType::SELF_LINK, LinkType::NEW_LINK, LinkType::CRAWL_LINK], true)) {
+                throw new UriException($uri, 500);
+            }
+
+            $links[] = new LinkType(rawurldecode($key), $type);
+        }
+
+        return $links;
     }
 }

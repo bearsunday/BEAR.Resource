@@ -6,6 +6,7 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\BadRequestException;
 use BEAR\Resource\Exception\MethodNotAllowedException;
+use BEAR\Resource\Exception\UriException;
 use BEAR\Resource\Module\HalModule;
 use BEAR\Resource\Module\ResourceModule;
 use FakeVendor\Sandbox\Resource\App\Blog;
@@ -180,6 +181,45 @@ class ResourceTest extends TestCase
             ],
             $ro->body,
         );
+    }
+
+    public function testRequestRebuiltFromItsUriFollowsTheSameLinks(): void
+    {
+        $request = $this->resource->newRequest(Method::GET, 'app://self/author', ['id' => 1])->linkSelf('blog');
+        $uri = $request->toUri();
+        $this->assertSame('app://self/author?id=1#_link=self:blog', $uri);
+
+        $rebuilt = $this->resource->uri($uri);
+
+        $this->assertSame($uri, $rebuilt->toUri());
+        $this->assertSame(['id' => 12, 'name' => 'Aramis blog'], $rebuilt()->body);
+    }
+
+    public function testNewRequestReadsEveryLinkInTheUriInOrder(): void
+    {
+        $request = $this->resource->newRequest(Method::GET, 'app://self/author#_link=new:blog,self:blog', ['id' => 1]);
+        assert($request instanceof Request);
+
+        $this->assertEquals([new LinkType('blog', LinkType::NEW_LINK), new LinkType('blog', LinkType::SELF_LINK)], $request->links);
+        $this->assertSame('app://self/author?id=1#_link=new:blog,self:blog', $request->toUri());
+    }
+
+    public function testLinkKeyWithDelimitersSurvivesTheUri(): void
+    {
+        $request = $this->resource->uri('app://self/author')->linkCrawl('post tree,self:x#y');
+        assert($request instanceof Request);
+
+        $rebuilt = $this->resource->uri($request->toUri());
+        assert($rebuilt instanceof Request);
+
+        $this->assertEquals($request->links, $rebuilt->links);
+    }
+
+    public function testUnknownLinkTypeInUri(): void
+    {
+        $this->expectException(UriException::class);
+
+        $this->resource->uri('app://self/author?id=1#_link=next:blog');
     }
 
     public function testLinkNewAfterAReadFollowsTheLinkOnTheNextRead(): void

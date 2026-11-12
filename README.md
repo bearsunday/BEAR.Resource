@@ -283,6 +283,21 @@ array (
  ...
 ```
 
+### Links in the URI
+
+`toUri()` writes the links of a request as a `#_link=` fragment, and `uri()` / `newRequest()` read them back.
+
+```php
+$request = $resource
+    ->get
+    ->uri('app://self/user')
+    ->withQuery(['id' => 0])
+    ->linkSelf('blog');
+$uri = $request->toUri(); // app://self/user?id=0#_link=self:blog
+
+$blog = $resource->get->uri($uri)->eager->request(); // follows the blog link
+```
+
 ### HATEOAS Hypermedia as the Engine of Application State
 
 The resource client next then takes the next behavior as hyperlink and carrying on from that link changes the application state.

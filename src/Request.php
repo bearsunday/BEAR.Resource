@@ -8,7 +8,9 @@ use OutOfRangeException;
 use Override;
 
 use function array_merge;
+use function implode;
 use function in_array;
+use function rawurlencode;
 
 /**
  * @property $this $lazy
@@ -103,8 +105,17 @@ final class Request extends AbstractRequest
     public function toUri(): string
     {
         $this->resourceObject->uri->query = $this->query;
+        $uri = (string) $this->resourceObject->uri;
+        if ($this->links === []) {
+            return $uri;
+        }
 
-        return (string) $this->resourceObject->uri;
+        $links = [];
+        foreach ($this->links as $link) {
+            $links[] = $link->type . ':' . rawurlencode($link->key);
+        }
+
+        return $uri . '#_link=' . implode(',', $links);
     }
 
     /**
