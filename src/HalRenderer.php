@@ -9,6 +9,7 @@ use Override;
 use Ray\Aop\ReflectionMethod;
 use RuntimeException;
 
+use function array_replace;
 use function array_values;
 use function assert;
 use function http_build_query;
@@ -29,7 +30,6 @@ use const PHP_URL_QUERY;
 /**
  * @psalm-import-type Body from Types
  * @psalm-import-type Query from Types
- * @psalm-import-type ResourceObjectBody from Types
  */
 final readonly class HalRenderer implements RenderInterface
 {
@@ -92,20 +92,17 @@ final readonly class HalRenderer implements RenderInterface
             $maybeRequest->resourceObject->setRenderer($this);
         }
 
+        $results = [];
         /** @var mixed $embeded */
         foreach ($body as $key => $embeded) {
             if (! ($embeded instanceof AbstractRequest)) {
                 continue;
             }
 
-            if (! isset($body['_embedded']) || ! is_array($body['_embedded'])) {
-                $body['_embedded'] = [];
-            }
-
             unset($body[$key]);
             if ($this->isDifferentSchema($ro, $embeded->resourceObject)) {
                 /** @psalm-suppress MixedAssignment */
-                $body['_embedded'][$key] = $embeded->body;
+                $results[$key] = $embeded->body;
 
                 continue;
             }
@@ -113,8 +110,16 @@ final readonly class HalRenderer implements RenderInterface
             // Use (string) so lazy decorators can short-circuit __invoke().
             $view = (string) $embeded;
             /** @psalm-suppress MixedAssignment */
-            $body['_embedded'][$key] = json_decode($view, null, 512, JSON_THROW_ON_ERROR);
+            $results[$key] = json_decode($view, null, 512, JSON_THROW_ON_ERROR);
         }
+
+        if ($results === []) {
+            return $body;
+        }
+
+        // A request may sit under the _embedded key itself, so the results are merged once every request is out of the body
+        $existing = isset($body['_embedded']) && is_array($body['_embedded']) ? $body['_embedded'] : [];
+        $body['_embedded'] = array_replace($existing, $results);
 
         return $body;
     }

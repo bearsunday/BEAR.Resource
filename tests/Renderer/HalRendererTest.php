@@ -18,8 +18,11 @@ use BEAR\Resource\NullReverseLinker;
 use BEAR\Resource\Request;
 use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Uri;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
+use function array_keys;
 use function json_decode;
 
 use const JSON_THROW_ON_ERROR;
@@ -156,11 +159,11 @@ EOT;
 
     public function testEmbeddedRequestWithExistingEmbeddedArray(): void
     {
-        $ro = $this->resourceWithEmbeddedBody([]);
+        $ro = $this->resourceWithEmbeddedBody(['kept' => 1]);
 
         (string) $ro;
 
-        $this->assertArrayHasKey('two', self::embedded($ro));
+        $this->assertSame(['kept', 'two'], array_keys(self::embedded($ro)));
     }
 
     public function testEmbeddedRequestWithInvalidEmbeddedValue(): void
@@ -172,6 +175,18 @@ EOT;
         $this->assertArrayHasKey('two', self::embedded($ro));
     }
 
+    public function testARequestUnderTheEmbeddedKeyIsEmbeddedBesideTheOthers(): void
+    {
+        $ro = $this->resourceWithEmbeddedBody([]);
+        $two = $ro->body['two'];
+        $this->assertInstanceOf(Request::class, $two);
+        $ro->body = ['two' => $two, '_embedded' => clone $two];
+
+        (string) $ro;
+
+        $this->assertSame(['two', '_embedded'], array_keys(self::embedded($ro)));
+    }
+
     public function testRenderingLeavesTheBodyTheResourceReturned(): void
     {
         $ro = $this->resourceWithEmbeddedBody([]);
@@ -180,6 +195,25 @@ EOT;
         (string) $ro;
 
         $this->assertSame($returned, $ro->body);
+    }
+
+    /** @return iterable<string, array{mixed}> */
+    public static function bodiesThatAreNotArrays(): iterable
+    {
+        yield 'a scalar' => ['1'];
+        yield 'null' => [null];
+        yield 'an object' => [new stdClass()];
+    }
+
+    #[DataProvider('bodiesThatAreNotArrays')]
+    public function testRenderingLeavesABodyThatIsNotAnArray(mixed $body): void
+    {
+        $ro = $this->ro->onGet();
+        $ro->body = $body;
+
+        (string) $ro;
+
+        $this->assertSame($body, $ro->body);
     }
 
     public function testNonArrayBody(): void
@@ -268,6 +302,7 @@ EOT;
         $halRenderer->renderHal($this->ro);
 
         $this->assertSame(['tree' => 3], self::embedded($this->ro)['different']);
+        $this->assertStringNotContainsString('_links', (string) $child, 'the child of another scheme keeps its own renderer');
     }
 
     public function testDifferentSchemaEmbedDoesNotRunARequestThatAlreadyRan(): void
