@@ -14,8 +14,10 @@ use FakeVendor\Sandbox\Resource\App\Href\Hasembed;
 use FakeVendor\Sandbox\Resource\App\Href\Origin;
 use FakeVendor\Sandbox\Resource\App\Href\Target;
 use FakeVendor\Sandbox\Resource\Page\Index;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\TestCase;
+use Ray\Di\AbstractModule;
 use Ray\Di\Injector;
 use Ray\Di\NullModule;
 use Ray\Di\ProviderInterface;
@@ -215,11 +217,38 @@ class ResourceTest extends TestCase
         $this->assertEquals($request->links, $rebuilt->links);
     }
 
-    public function testUnknownLinkTypeInUri(): void
+    /** @return array<string, array{string}> */
+    public static function malformedLinkProvider(): array
+    {
+        return [
+            'unknown type' => ['app://self/author?id=1#_link=next:blog'],
+            'no key' => ['app://self/author?id=1#_link=self'],
+        ];
+    }
+
+    #[DataProvider('malformedLinkProvider')]
+    public function testMalformedLinkInUri(string $uri): void
     {
         $this->expectException(UriException::class);
 
-        $this->resource->uri('app://self/author?id=1#_link=next:blog');
+        $this->resource->uri($uri);
+    }
+
+    public function testResourceClientReadsLinksInUri(): void
+    {
+        $module = new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox'));
+        $module->override(new class extends AbstractModule {
+            protected function configure(): void
+            {
+                $this->bind(ResourceInterface::class)->to(ResourceClient::class);
+            }
+        });
+        $client = (new Injector($module, __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
+        $this->assertInstanceOf(ResourceClient::class, $client);
+
+        $ro = $client->uri('app://self/author?id=1#_link=self:blog')();
+
+        $this->assertSame(['id' => 12, 'name' => 'Aramis blog'], $ro->body);
     }
 
     public function testLinkNewAfterAReadFollowsTheLinkOnTheNextRead(): void

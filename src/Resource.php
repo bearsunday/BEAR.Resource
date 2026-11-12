@@ -244,8 +244,8 @@ final class Resource implements ResourceInterface
 
         $links = [];
         foreach (explode(',', substr($fragment, strlen('_link='))) as $link) {
-            [$type, $key] = explode(':', $link, 2) + [1 => ''];
-            if (! in_array($type, [LinkType::SELF_LINK, LinkType::NEW_LINK, LinkType::CRAWL_LINK], true)) {
+            [$type, $key] = explode(':', $link, 2) + [1 => null];
+            if ($key === null || ! in_array($type, [LinkType::SELF_LINK, LinkType::NEW_LINK, LinkType::CRAWL_LINK], true)) {
                 throw new UriException($uri, 500);
             }
 
