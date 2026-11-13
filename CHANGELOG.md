@@ -12,8 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (`app://self/user?id=1#link=self:blog,new:profile`), and `uri()` / `newRequest()` read them
   back (#390). Code that rebuilds a request from `toUri()` and adds the links again must stop adding them.
 - **Behaviour change**: a request URI whose fragment is anything other than `#link=type:rel,...`
-  throws `UriException`; it was dropped. `toUri()` throws for a rel outside `[A-Za-z0-9_-]`, and a
-  `#[ResourceParam]` URI whose fragment holds `=` (a link, not a body key) throws `UriException`.
+  throws `UriException`; it was dropped. `toUri()` throws for a rel outside `[A-Za-z0-9_-]`. A
+  `#[ResourceParam]` URI, or a `#[Link]` href followed by `linkSelf()` / `linkNew()` / `linkCrawl()`,
+  whose fragment holds `=` (a link) throws `UriException`.
 
 ## [1.34.2] - 2026-11-13
 

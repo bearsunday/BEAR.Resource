@@ -238,6 +238,33 @@ class ResourceTest extends TestCase
         $this->resource->uri($uri);
     }
 
+    /** @return array<string, array{string}> */
+    public static function hrefWithALinkProvider(): array
+    {
+        return [
+            'linkSelf' => [LinkType::SELF_LINK],
+            'linkCrawl' => [LinkType::CRAWL_LINK],
+        ];
+    }
+
+    #[DataProvider('hrefWithALinkProvider')]
+    public function testALinkInTheFragmentOfAFollowedHrefIsNotSupported(string $type): void
+    {
+        $request = $this->resource->uri('app://self/link/href-fragment');
+        $type === LinkType::SELF_LINK ? $request->linkSelf('linked') : $request->linkCrawl('linked');
+
+        $this->expectException(UriException::class);
+
+        $request();
+    }
+
+    public function testAFollowedHrefIgnoresAFragmentWithoutALink(): void
+    {
+        $ro = $this->resource->uri('app://self/link/href-fragment')->linkSelf('anchored')();
+
+        $this->assertSame($this->resource->get('app://self/author', ['id' => 1])->body, $ro->body);
+    }
+
     public function testResourceClientReadsLinksInUri(): void
     {
         $module = new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox'));

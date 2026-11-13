@@ -6,6 +6,7 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\Link;
 use BEAR\Resource\DataLoader\DataLoader;
+use BEAR\Resource\Exception\UriException;
 use Override;
 use ReflectionMethod;
 
@@ -18,8 +19,13 @@ use function assert;
 use function count;
 use function is_array;
 use function is_numeric;
+use function parse_url;
+use function sprintf;
+use function str_contains;
 use function ucfirst;
 use function uri_template;
+
+use const PHP_URL_FRAGMENT;
 
 /**
  * Sequential link crawler
@@ -76,6 +82,11 @@ final class LinkCrawler implements LinkCrawlerInterface
             }
 
             $uri = uri_template($annotation->href, $body);
+            // The link is followed to the resource its href names; links in the fragment are not followed
+            if (str_contains((string) parse_url($uri, PHP_URL_FRAGMENT), '=')) {
+                throw new UriException(sprintf('%s: a link in the fragment of a #[Link] href is not followed', $uri), 500);
+            }
+
             $rel = $this->factory->newInstance($uri);
             $query = (new Uri($uri))->query;
             $request = new Request($this->invoker, $rel, Method::GET, $query);
