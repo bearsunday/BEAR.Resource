@@ -8,7 +8,6 @@ use Override;
 use Ray\Di\Di\Set;
 use Ray\Di\ProviderInterface;
 
-use function array_merge;
 use function assert;
 use function is_string;
 
@@ -50,12 +49,7 @@ final class ResourceClient implements ResourceInterface
      */
     public function __get(string $name): Resource
     {
-        // Create a new mutable Resource instance for fluent interface
-        $linker = $this->linkerProvider->get();
-        $resource = new Resource($this->factory, $this->invoker, $this->anchor, $linker, $this->uri);
-
-        // Set the method and return for chaining
-        return $resource->__get($name);
+        return $this->resource()->__get($name);
     }
 
     /**
@@ -95,12 +89,7 @@ final class ResourceClient implements ResourceInterface
     #[Override]
     public function newRequest(Method $method, string $uri, array $query = []): RequestInterface
     {
-        $linker = $this->linkerProvider->get();
-        $ro = $this->newInstance($uri);
-        $ro->uri->method = $method->value;
-        $ro->uri->query = array_merge($ro->uri->query, $query);
-
-        return new Request($this->invoker, $ro, $method, $ro->uri->query, [], $linker);
+        return $this->resource()->newRequest($method, $uri, $query);
     }
 
     /**
@@ -203,5 +192,11 @@ final class ResourceClient implements ResourceInterface
     public function head(string $uri, array $query = []): ResourceObject
     {
         return $this->newRequest(Method::HEAD, $uri)($query);
+    }
+
+    /** A Resource per call keeps this client stateless */
+    private function resource(): Resource
+    {
+        return new Resource($this->factory, $this->invoker, $this->anchor, $this->linkerProvider->get(), $this->uri);
     }
 }

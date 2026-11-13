@@ -283,6 +283,23 @@ array (
  ...
 ```
 
+### Links in the URI
+
+`toUri()` writes the links of a request as a `#link=` fragment, and `uri()`, `newRequest()` and `get()` read them back.
+
+```php
+$request = $resource
+    ->get
+    ->uri('app://self/user')
+    ->withQuery(['id' => 0])
+    ->linkSelf('blog');
+$uri = $request->toUri(); // app://self/user?id=0#link=self:blog
+
+$blog = $resource->get('app://self/user#link=self:blog', ['id' => $id]); // follows the blog link
+```
+
+Several links are joined with commas and followed in order: `#link=self:blog,crawl:post-tree` is `->linkSelf('blog')->linkCrawl('post-tree')`. A rel is made of `A-Z a-z 0-9 _ -`; `toUri()` throws `UriException` for any other rel. `link` is the only name a fragment takes: a request URI with any other fragment throws `UriException`. The fragment of a `#[ResourceParam]` URI names a key of the body and is not part of the request; one with `=` (a link) throws `UriException`. `linkSelf()`, `linkNew()` and `linkCrawl()` follow a `#[Link]` href to the resource it names: a fragment without `=` is ignored, and one with `=` (a link) throws `UriException`.
+
 ### HATEOAS Hypermedia as the Engine of Application State
 
 The resource client next then takes the next behavior as hyperlink and carrying on from that link changes the application state.

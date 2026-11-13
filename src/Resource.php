@@ -4,11 +4,18 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+use BEAR\Resource\Exception\UriException;
 use Override;
 
 use function array_merge;
 use function assert;
 use function is_string;
+use function parse_url;
+use function preg_match;
+use function preg_match_all;
+
+use const PHP_URL_FRAGMENT;
+use const PREG_SET_ORDER;
 
 /**
  * Resource client with mutable state - supports fluent interface
@@ -90,7 +97,8 @@ final class Resource implements ResourceInterface
         $this->method = 'get';
         $ro = $this->newInstance($uri);
         $ro->uri->method = $method;
-        $this->request = new Request($this->invoker, $ro, Method::from($ro->uri->method), $ro->uri->query, [], $this->linker);
+        $links = is_string($uri) ? $this->links($uri) : [];
+        $this->request = new Request($this->invoker, $ro, Method::from($ro->uri->method), $ro->uri->query, $links, $this->linker);
 
         return $this->request;
     }
@@ -104,7 +112,7 @@ final class Resource implements ResourceInterface
         $ro = $this->newInstance($uri);
         $ro->uri->method = $method->value;
         $ro->uri->query = array_merge($ro->uri->query, $query);
-        $this->request = new Request($this->invoker, $ro, $method, $ro->uri->query, [], $this->linker);
+        $this->request = new Request($this->invoker, $ro, $method, $ro->uri->query, $this->links($uri), $this->linker);
 
         return $this->request;
     }
@@ -217,5 +225,31 @@ final class Resource implements ResourceInterface
         $this->method = $method->value;
 
         return $this->uri($uri);
+    }
+
+    /**
+     * @return list<LinkType>
+     *
+     * @throws UriException
+     */
+    private function links(string $uri): array
+    {
+        $fragment = (string) parse_url($uri, PHP_URL_FRAGMENT);
+        if ($fragment === '') {
+            return [];
+        }
+
+        $link = '(self|new|crawl):([A-Za-z0-9_-]+)';
+        if (preg_match("/\\Alink={$link}(,{$link})*\\z/", $fragment) !== 1) {
+            throw new UriException($uri, 500);
+        }
+
+        preg_match_all("/{$link}/", $fragment, $matches, PREG_SET_ORDER);
+        $links = [];
+        foreach ($matches as [, $type, $rel]) {
+            $links[] = new LinkType($rel, $type);
+        }
+
+        return $links;
     }
 }

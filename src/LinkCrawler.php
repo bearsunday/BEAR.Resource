@@ -6,6 +6,7 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\Link;
 use BEAR\Resource\DataLoader\DataLoader;
+use BEAR\Resource\Exception\UriException;
 use Override;
 use ReflectionMethod;
 
@@ -18,8 +19,13 @@ use function assert;
 use function count;
 use function is_array;
 use function is_numeric;
+use function parse_url;
+use function sprintf;
+use function str_contains;
 use function ucfirst;
 use function uri_template;
+
+use const PHP_URL_FRAGMENT;
 
 /**
  * Sequential link crawler
@@ -45,8 +51,10 @@ final class LinkCrawler implements LinkCrawlerInterface
     #[Override]
     public function crawl(array $annotations, LinkType $link, array &$bodyList): void
     {
-        // Process DataLoader-enabled links first
         /** @var list<array<string, mixed>> $bodyList */
+        self::rejectLinks($annotations, $link, $bodyList);
+
+        // Process DataLoader-enabled links first
         $this->dataLoader?->load($annotations, $link, $bodyList);
 
         // Process non-DataLoader links
@@ -100,6 +108,30 @@ final class LinkCrawler implements LinkCrawlerInterface
             }
 
             $this->processNestedCrawl($ro, $request->method->value, $link, $annotation->rel, $body);
+        }
+    }
+
+    /**
+     * A crawl follows each href to the resource it names: a fragment holding `=`, the form of a link, is rejected
+     *
+     * @param list<Link>                 $annotations
+     * @param list<array<string, mixed>> $bodyList
+     *
+     * @throws UriException
+     */
+    private static function rejectLinks(array $annotations, LinkType $link, array $bodyList): void
+    {
+        foreach ($annotations as $annotation) {
+            if ($annotation->crawl !== $link->key) {
+                continue;
+            }
+
+            foreach ($bodyList as $body) {
+                $href = uri_template($annotation->href, $body);
+                if (str_contains((string) parse_url($href, PHP_URL_FRAGMENT), '=')) {
+                    throw new UriException(sprintf('%s: a link in the fragment of a #[Link] href is not followed', $href), 500);
+                }
+            }
         }
     }
 
