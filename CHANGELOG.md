@@ -12,16 +12,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (`app://self/user?id=1#_link=self:blog,new:profile`), and `uri()` / `newRequest()` read them
   back. Code that rebuilds a request from `toUri()` and adds the links again must stop adding them.
 
+## [1.34.2] - 2026-11-13
+
 ### Fixed
-- `HalRenderer` no longer rewrites the body of the resource it renders: `_embedded` is built for
-  the view only, and the body keeps the embedded requests the resource returned
 - A request read once and then changed with `withQuery()`, `addQuery()`, `__invoke()` with a query,
   or `linkSelf()` / `linkNew()` / `linkCrawl()` now executes again on the next read instead of
-  returning the stale result (#381)
+  returning the stale result (#381, #382)
+- `HalRenderer` no longer rewrites the body of the resource it renders: `_embedded` is built for
+  the view only, and the body keeps the embedded requests the resource returned. Code that read
+  `$ro->body['_embedded']` after rendering should read the view instead (#386)
 - An embedded request of a different scheme (an `app://` request in a `page://` body) that has
-  already been read is no longer run again when `HalRenderer` renders its parent
+  already been read is no longer run again when `HalRenderer` renders its parent (#386)
 - Serializing a resource no longer runs again an embedded request that has already been read; the
-  stored body holds the result the view was rendered from
+  stored body holds the result the view was rendered from (#386)
 
 ## [1.34.1] - 2026-09-11
 
