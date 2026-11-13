@@ -155,8 +155,8 @@ class FileUploadIntegrationTest extends TestCase
         $file2 = FileUpload::create([
             'name' => 'test.png',
             'type' => 'image/png',
-            'size' => 1024,
-            'tmp_name' => '/tmp/test',
+            'size' => filesize(__DIR__ . '/Fake/app.png'),
+            'tmp_name' => __DIR__ . '/Fake/app.png',
             'error' => UPLOAD_ERR_OK,
         ]);
 
