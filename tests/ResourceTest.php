@@ -265,6 +265,14 @@ class ResourceTest extends TestCase
         $this->assertSame($this->resource->get('app://self/author', ['id' => 1])->body, $ro->body);
     }
 
+    public function testAnEmbedFollowsTheLinksInItsSrc(): void
+    {
+        $embedded = $this->resource->get('app://self/link/embed-linked', ['id' => 1])->body['blog'];
+        $this->assertInstanceOf(Request::class, $embedded);
+
+        $this->assertSame(['id' => 12, 'name' => 'Aramis blog'], $embedded()->body);
+    }
+
     public function testResourceClientReadsLinksInUri(): void
     {
         $module = new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox'));

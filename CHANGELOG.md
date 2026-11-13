@@ -10,9 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - `Request::toUri()` writes the links of a request as a `#link=` fragment
   (`app://self/user?id=1#link=self:blog,new:profile`), and `uri()` / `newRequest()` read them
-  back (#390). Code that rebuilds a request from `toUri()` and adds the links again must stop adding them.
+  back (#390), so an `#[Embed]` src can carry links too. Code that rebuilds a request from `toUri()` and adds the links again must stop adding them.
 - **Behaviour change**: a request URI whose fragment is anything other than `#link=type:rel,...`
-  throws `UriException`; it was dropped. `toUri()` throws for a rel outside `[A-Za-z0-9_-]`. A
+  throws `UriException`; it was dropped. This includes the `Location` header of a `201` that
+  BEAR.Package reads back. `toUri()` throws for a rel outside `[A-Za-z0-9_-]`. A
   `#[ResourceParam]` URI, or a `#[Link]` href followed by `linkSelf()` / `linkNew()` / `linkCrawl()`,
   whose fragment holds `=` (a link) throws `UriException`.
 

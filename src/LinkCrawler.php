@@ -51,6 +51,13 @@ final class LinkCrawler implements LinkCrawlerInterface
     #[Override]
     public function crawl(array $annotations, LinkType $link, array &$bodyList): void
     {
+        // A crawl follows each href to the resource it names; links in the fragment are not followed
+        foreach ($annotations as $annotation) {
+            if ($annotation->crawl === $link->key && str_contains((string) parse_url($annotation->href, PHP_URL_FRAGMENT), '=')) {
+                throw new UriException(sprintf('%s: a link in the fragment of a #[Link] href is not followed', $annotation->href), 500);
+            }
+        }
+
         // Process DataLoader-enabled links first
         /** @var list<array<string, mixed>> $bodyList */
         $this->dataLoader?->load($annotations, $link, $bodyList);
@@ -82,11 +89,6 @@ final class LinkCrawler implements LinkCrawlerInterface
             }
 
             $uri = uri_template($annotation->href, $body);
-            // The link is followed to the resource its href names; links in the fragment are not followed
-            if (str_contains((string) parse_url($uri, PHP_URL_FRAGMENT), '=')) {
-                throw new UriException(sprintf('%s: a link in the fragment of a #[Link] href is not followed', $uri), 500);
-            }
-
             $rel = $this->factory->newInstance($uri);
             $query = (new Uri($uri))->query;
             $request = new Request($this->invoker, $rel, Method::GET, $query);
