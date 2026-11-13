@@ -298,7 +298,7 @@ $uri = $request->toUri(); // app://self/user?id=0#link=self:blog
 $blog = $resource->get('app://self/user#link=self:blog', ['id' => $id]); // follows the blog link
 ```
 
-Several links are joined with commas and followed in order: `#link=self:blog,crawl:post-tree` is `->linkSelf('blog')->linkCrawl('post-tree')`. A rel is made of `A-Z a-z 0-9 _ -`; `toUri()` throws `UriException` for any other rel. `link` is the only name a fragment takes: a request URI with any other fragment throws `UriException`. The fragment of a `#[ResourceParam]` URI names a key of the body and is not part of the request.
+Several links are joined with commas and followed in order: `#link=self:blog,crawl:post-tree` is `->linkSelf('blog')->linkCrawl('post-tree')`. A rel is made of `A-Z a-z 0-9 _ -`; `toUri()` throws `UriException` for any other rel. `link` is the only name a fragment takes: a request URI with any other fragment throws `UriException`. The fragment of a `#[ResourceParam]` URI names a key of the body and is not part of the request; one with `=` (a link) throws `UriException`.
 
 ### HATEOAS Hypermedia as the Engine of Application State
 
