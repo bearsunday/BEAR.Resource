@@ -33,7 +33,7 @@ interface RequestInterface
     public function addQuery(array $query): self;
 
     /**
-     * To Request URI string, links as a `#_link=` fragment
+     * To Request URI string, links as a `#link=type:rel,...` fragment
      */
     public function toUri(): string;
 

@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+use BEAR\Resource\Exception\UriException;
 use OutOfRangeException;
 use Override;
 
 use function array_merge;
 use function implode;
 use function in_array;
-use function rawurlencode;
+use function preg_match;
+use function sprintf;
 
 /**
  * @property $this $lazy
@@ -112,10 +114,15 @@ final class Request extends AbstractRequest
 
         $links = [];
         foreach ($this->links as $link) {
-            $links[] = $link->type . ':' . rawurlencode($link->key);
+            // Resource::links() reads back only this alphabet
+            if (preg_match('/\A[A-Za-z0-9_-]+\z/', $link->key) !== 1) {
+                throw new UriException(sprintf("%s: link rel '%s' is outside [A-Za-z0-9_-]", $uri, $link->key), 500);
+            }
+
+            $links[] = $link->type . ':' . $link->key;
         }
 
-        return $uri . '#_link=' . implode(',', $links);
+        return $uri . '#link=' . implode(',', $links);
     }
 
     /**

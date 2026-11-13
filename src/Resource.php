@@ -9,16 +9,13 @@ use Override;
 
 use function array_merge;
 use function assert;
-use function explode;
-use function in_array;
 use function is_string;
 use function parse_url;
-use function rawurldecode;
-use function str_starts_with;
-use function strlen;
-use function substr;
+use function preg_match;
+use function preg_match_all;
 
 use const PHP_URL_FRAGMENT;
+use const PREG_SET_ORDER;
 
 /**
  * Resource client with mutable state - supports fluent interface
@@ -238,18 +235,19 @@ final class Resource implements ResourceInterface
     private function links(string $uri): array
     {
         $fragment = (string) parse_url($uri, PHP_URL_FRAGMENT);
-        if (! str_starts_with($fragment, '_link=')) {
+        if ($fragment === '') {
             return [];
         }
 
-        $links = [];
-        foreach (explode(',', substr($fragment, strlen('_link='))) as $link) {
-            [$type, $key] = explode(':', $link, 2) + [1 => null];
-            if ($key === null || ! in_array($type, [LinkType::SELF_LINK, LinkType::NEW_LINK, LinkType::CRAWL_LINK], true)) {
-                throw new UriException($uri, 500);
-            }
+        $link = '(self|new|crawl):([A-Za-z0-9_-]+)';
+        if (preg_match("/\\Alink={$link}(,{$link})*\\z/", $fragment) !== 1) {
+            throw new UriException($uri, 500);
+        }
 
-            $links[] = new LinkType(rawurldecode($key), $type);
+        preg_match_all("/{$link}/", $fragment, $matches, PREG_SET_ORDER);
+        $links = [];
+        foreach ($matches as [, $type, $rel]) {
+            $links[] = new LinkType($rel, $type);
         }
 
         return $links;

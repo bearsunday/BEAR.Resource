@@ -8,9 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
-- `Request::toUri()` writes the links of a request as a `#_link=` fragment
-  (`app://self/user?id=1#_link=self:blog,new:profile`), and `uri()` / `newRequest()` read them
-  back. Code that rebuilds a request from `toUri()` and adds the links again must stop adding them.
+- `Request::toUri()` writes the links of a request as a `#link=` fragment
+  (`app://self/user?id=1#link=self:blog,new:profile`), and `uri()` / `newRequest()` read them
+  back (#390). Code that rebuilds a request from `toUri()` and adds the links again must stop adding them.
+- **Behaviour change**: a request URI whose fragment is anything other than `#link=type:rel,...`
+  throws `UriException`; it was dropped. `toUri()` throws for a rel outside `[A-Za-z0-9_-]`.
 
 ## [1.34.2] - 2026-11-13
 

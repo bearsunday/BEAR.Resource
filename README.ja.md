@@ -284,7 +284,7 @@ array (
 
 ### URIのリンク
 
-`toUri()` はリクエストのリンクを `#_link=` フラグメントとして書き出し、`uri()` / `newRequest()` はそれを読み戻します。
+`toUri()` はリクエストのリンクを `#link=` フラグメントとして書き出し、`uri()` / `newRequest()` / `get()` はそれを読み戻します。
 
 ```php
 $request = $resource
@@ -292,10 +292,12 @@ $request = $resource
     ->uri('app://self/user')
     ->withQuery(['id' => 0])
     ->linkSelf('blog');
-$uri = $request->toUri(); // app://self/user?id=0#_link=self:blog
+$uri = $request->toUri(); // app://self/user?id=0#link=self:blog
 
-$blog = $resource->get->uri($uri)->eager->request(); // blogリンクを辿る
+$blog = $resource->get('app://self/user#link=self:blog', ['id' => $id]); // blogリンクを辿る
 ```
+
+複数のリンクはカンマでつなぎ、順に辿ります。`#link=self:blog,crawl:post-tree` は `->linkSelf('blog')->linkCrawl('post-tree')` と同じです。rel に使える文字は `A-Z a-z 0-9 _ -` で、それ以外の rel は `toUri()` が `UriException` を投げます。フラグメントの名前は `link` だけで、リクエストの URI にそれ以外のフラグメントがあれば `UriException` になります。`#[ResourceParam]` の URI のフラグメントは body のキーを指し、リクエストには含めません。
 
 ### HATEOAS アプリケーション状態のエンジンとしてのハイパーメディア
 

@@ -189,7 +189,7 @@ class ResourceTest extends TestCase
     {
         $request = $this->resource->newRequest(Method::GET, 'app://self/author', ['id' => 1])->linkSelf('blog');
         $uri = $request->toUri();
-        $this->assertSame('app://self/author?id=1#_link=self:blog', $uri);
+        $this->assertSame('app://self/author?id=1#link=self:blog', $uri);
 
         $rebuilt = $this->resource->uri($uri);
 
@@ -199,35 +199,39 @@ class ResourceTest extends TestCase
 
     public function testNewRequestReadsEveryLinkInTheUriInOrder(): void
     {
-        $request = $this->resource->newRequest(Method::GET, 'app://self/author#_link=new:blog,self:blog', ['id' => 1]);
+        $request = $this->resource->newRequest(Method::GET, 'app://self/author#link=new:blog,self:blog', ['id' => 1]);
         assert($request instanceof Request);
 
         $this->assertEquals([new LinkType('blog', LinkType::NEW_LINK), new LinkType('blog', LinkType::SELF_LINK)], $request->links);
-        $this->assertSame('app://self/author?id=1#_link=new:blog,self:blog', $request->toUri());
+        $this->assertSame('app://self/author?id=1#link=new:blog,self:blog', $request->toUri());
     }
 
-    public function testLinkKeyWithDelimitersSurvivesTheUri(): void
+    public function testALinkRelThatCannotBeReadBackIsNotWritten(): void
     {
-        $request = $this->resource->uri('app://self/author')->linkCrawl('post tree,self:x#y');
-        assert($request instanceof Request);
+        $request = $this->resource->uri('app://self/author')->linkCrawl('post tree');
 
-        $rebuilt = $this->resource->uri($request->toUri());
-        assert($rebuilt instanceof Request);
+        $this->expectException(UriException::class);
 
-        $this->assertEquals($request->links, $rebuilt->links);
+        $request->toUri();
     }
 
     /** @return array<string, array{string}> */
     public static function malformedLinkProvider(): array
     {
         return [
-            'unknown type' => ['app://self/author?id=1#_link=next:blog'],
-            'no key' => ['app://self/author?id=1#_link=self'],
+            'unknown type' => ['app://self/author?id=1#link=next:blog'],
+            'no rel' => ['app://self/author?id=1#link=self'],
+            'empty rel' => ['app://self/author?id=1#link=self:'],
+            'rel outside the alphabet' => ['app://self/author?id=1#link=self:post%20tree'],
+            'empty list' => ['app://self/author?id=1#link='],
+            'trailing comma' => ['app://self/author?id=1#link=self:blog,'],
+            'another name' => ['app://self/author?id=1#key=title'],
+            'a bare fragment' => ['app://self/author?id=1#title'],
         ];
     }
 
     #[DataProvider('malformedLinkProvider')]
-    public function testMalformedLinkInUri(string $uri): void
+    public function testMalformedFragmentInUri(string $uri): void
     {
         $this->expectException(UriException::class);
 
@@ -246,7 +250,7 @@ class ResourceTest extends TestCase
         $client = (new Injector($module, __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
         $this->assertInstanceOf(ResourceClient::class, $client);
 
-        $ro = $client->uri('app://self/author?id=1#_link=self:blog')();
+        $ro = $client->uri('app://self/author?id=1#link=self:blog')();
 
         $this->assertSame(['id' => 12, 'name' => 'Aramis blog'], $ro->body);
     }

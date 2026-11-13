@@ -8,10 +8,8 @@ use BEAR\Resource\Annotation\ResourceParam;
 use Override;
 use Ray\Di\InjectorInterface;
 
-use function parse_url;
+use function explode;
 use function uri_template;
-
-use const PHP_URL_FRAGMENT;
 
 final readonly class AssistedResourceParam implements ParamInterface
 {
@@ -29,9 +27,10 @@ final readonly class AssistedResourceParam implements ParamInterface
         unset($varName);
         $resource = $injector->getInstance(ResourceInterface::class);
         $uri = $this->resourceParam->templated === true ? uri_template($this->resourceParam->uri, $query) : $this->resourceParam->uri;
-        $resourceResult = $resource->newRequest(Method::GET, $uri)();
-        $fragment = (string) parse_url($uri, PHP_URL_FRAGMENT);
+        // The fragment names a key of the body, not a part of the request
+        [$requestUri, $key] = explode('#', $uri, 2) + [1 => ''];
+        $resourceResult = $resource->newRequest(Method::GET, $requestUri)();
 
-        return $resourceResult[$fragment];
+        return $resourceResult[$key];
     }
 }
