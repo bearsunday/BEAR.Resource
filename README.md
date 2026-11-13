@@ -285,7 +285,7 @@ array (
 
 ### Links in the URI
 
-`toUri()` writes the links of a request as a `#_link=` fragment, and `uri()` / `newRequest()` read them back.
+`toUri()` writes the links of a request as a `#_link=` fragment, and `uri()`, `newRequest()` and `get()` read them back.
 
 ```php
 $request = $resource
@@ -295,8 +295,10 @@ $request = $resource
     ->linkSelf('blog');
 $uri = $request->toUri(); // app://self/user?id=0#_link=self:blog
 
-$blog = $resource->get->uri($uri)->eager->request(); // follows the blog link
+$blog = $resource->get('app://self/user#_link=self:blog', ['id' => $id]); // follows the blog link
 ```
+
+Several links are joined with commas and followed in order: `#_link=self:blog,crawl:post-tree` is `->linkSelf('blog')->linkCrawl('post-tree')`.
 
 ### HATEOAS Hypermedia as the Engine of Application State
 
