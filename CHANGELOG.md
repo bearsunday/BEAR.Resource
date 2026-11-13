@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Request::toUri()` writes the links of a request as a `#link=` fragment
   (`app://self/user?id=1#link=self:blog,new:profile`), and `uri()` / `newRequest()` read them
   back (#390), so an `#[Embed]` src can carry links too. Code that rebuilds a request from `toUri()` and adds the links again must stop adding them.
-- Conflicts with bear/async 0.5.0 and earlier and bear/query-repository 1.20.2, which add the links of a
+- Conflicts with bear/async 0.4.0 and 0.5.0 and bear/query-repository 1.20.2, which add the links of a
   request again after rebuilding it from `toUri()` and would follow each link twice; update them together.
 - **Behaviour change**: a request URI whose fragment is anything other than `#link=type:rel,...`
   throws `UriException`; it was dropped. This includes the `Location` header of a `201` that
