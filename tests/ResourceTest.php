@@ -238,20 +238,21 @@ class ResourceTest extends TestCase
         $this->resource->uri($uri);
     }
 
-    /** @return array<string, array{string}> */
+    /** @return array<string, array{string, string}> */
     public static function hrefWithALinkProvider(): array
     {
         return [
-            'linkSelf' => [LinkType::SELF_LINK],
-            'linkCrawl' => [LinkType::CRAWL_LINK],
+            'linkSelf' => [LinkType::SELF_LINK, 'linked'],
+            'linkCrawl' => [LinkType::CRAWL_LINK, 'linked'],
+            'linkCrawl, the fragment from the template' => [LinkType::CRAWL_LINK, 'expanded'],
         ];
     }
 
     #[DataProvider('hrefWithALinkProvider')]
-    public function testALinkInTheFragmentOfAFollowedHrefIsNotSupported(string $type): void
+    public function testALinkInTheFragmentOfAFollowedHrefIsNotSupported(string $type, string $rel): void
     {
         $request = $this->resource->uri('app://self/link/href-fragment');
-        $type === LinkType::SELF_LINK ? $request->linkSelf('linked') : $request->linkCrawl('linked');
+        $type === LinkType::SELF_LINK ? $request->linkSelf($rel) : $request->linkCrawl($rel);
 
         $this->expectException(UriException::class);
 
