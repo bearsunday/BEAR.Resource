@@ -15,6 +15,7 @@ use const PHP_URL_FRAGMENT;
 
 final readonly class AssistedResourceParam implements ParamInterface
 {
+    /** @psalm-pure */
     public function __construct(
         private ResourceParam $resourceParam,
     ) {

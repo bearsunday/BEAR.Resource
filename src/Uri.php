@@ -57,7 +57,11 @@ final class Uri extends AbstractUri
         $this->query = $query + $parseQuery; // @phpstan-ignore-line
     }
 
-    /** @throws UriException */
+    /**
+     * @throws UriException
+     *
+     * @psalm-pure
+     */
     private function validate(string $uri): void
     {
         if (filter_var($uri, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED)) {

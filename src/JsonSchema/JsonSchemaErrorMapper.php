@@ -14,6 +14,7 @@ use function is_string;
 /**
  * @internal
  * @psalm-import-type JsonSchemaValidatorError from Types
+ * @psalm-immutable
  */
 final class JsonSchemaErrorMapper
 {
@@ -22,6 +23,7 @@ final class JsonSchemaErrorMapper
 
     private SchemaErrorMessageResolver $resolver;
 
+    /** @psalm-pure */
     public function __construct(SchemaErrorMessageResolver|null $resolver = null)
     {
         $this->resolver = $resolver ?? new SchemaErrorMessageResolver();
@@ -33,6 +35,8 @@ final class JsonSchemaErrorMapper
      * @param JsonSchemaValidatorError $error
      *
      * @psalm-suppress MixedAssignment Upstream validator returns mixed-typed row values; each field is narrowed below.
+     *
+     * @psalm-capabilities read-props
      */
     public function toJsonSchemaError(array $error, stdClass|null $schema = null): JsonSchemaError
     {
@@ -66,6 +70,8 @@ final class JsonSchemaErrorMapper
      * @param JsonSchemaValidatorError $error
      *
      * @psalm-suppress MixedAssignment Upstream constraint is mixed; each field is narrowed below.
+     *
+     * @psalm-capabilities read-props
      */
     private function toConstraintViolation(array $error): ConstraintViolation
     {
@@ -98,6 +104,8 @@ final class JsonSchemaErrorMapper
      * @return array<string, mixed>
      *
      * @psalm-suppress MixedAssignment Upstream row values are mixed; we pass them through as-is.
+     *
+     * @psalm-pure
      */
     private function flattenedParams(array $error): array
     {
@@ -113,6 +121,7 @@ final class JsonSchemaErrorMapper
         return $params;
     }
 
+    /** @psalm-pure */
     private function property(string $property, ConstraintViolation $constraint): string
     {
         if ($constraint->name !== 'required') {

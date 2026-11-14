@@ -23,7 +23,11 @@ use function uri_template;
 /** @psalm-import-type Body from Types */
 final class Linker implements LinkerInterface
 {
-    /** @param ProviderInterface<LinkCrawlerInterface> $linkCrawlerProvider */
+    /**
+     * @param ProviderInterface<LinkCrawlerInterface> $linkCrawlerProvider
+     *
+     * @psalm-pure
+     */
     public function __construct(
         private readonly InvokerInterface $invoker,
         private readonly FactoryInterface $factory,
@@ -61,7 +65,11 @@ final class Linker implements LinkerInterface
         return $current;
     }
 
-    /** @param Body $nextResource */
+    /**
+     * @param Body $nextResource
+     *
+     * @psalm-capabilities read-props|write-props
+     */
     private function nextLink(LinkType $link, ResourceObject $ro, array $nextResource): ResourceObject
     {
         $nextBody = $nextResource;

@@ -12,6 +12,7 @@ use function is_string;
 
 final class Factory implements FactoryInterface
 {
+    /** @psalm-pure */
     public function __construct(
         private SchemeCollectionInterface $scheme,
         private readonly UriFactory $uri,
@@ -22,6 +23,7 @@ final class Factory implements FactoryInterface
      * Set scheme collection
      *
      * @codeCoverageIgnore
+     * @psalm-capabilities read-props|write-this-props
      */
     #[Inject(optional: true)]
     public function setSchemeCollection(SchemeCollectionInterface $scheme): void

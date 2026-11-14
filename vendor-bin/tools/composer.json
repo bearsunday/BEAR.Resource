@@ -7,7 +7,7 @@
         "phpmd/phpmd": "^2.9",
         "phpstan/phpstan": "^2.1",
         "squizlabs/php_codesniffer": "^4.0",
-        "vimeo/psalm": "^7.0@beta"
+        "vimeo/psalm": "^7.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Psalm purity annotations, including on `RequestInterface::toUri()` / `toUriWithMethod()`,
+  `LinkCrawlerInterface::isList()` and `SchemeCollectionInterface::getAdapter()`. Under Psalm 7, a class that implements
+  these methods needs a matching `@psalm-capabilities` annotation.
+
 ### Security
 - Requires koriym/file-upload 1.0.1 or later, which checks an upload's MIME type against its content
   ([GHSA-9343-66h6-6cjr](https://github.com/koriym/Koriym.FileUpload/security/advisories/GHSA-9343-66h6-6cjr)).

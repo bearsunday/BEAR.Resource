@@ -51,6 +51,7 @@ final readonly class HttpRequestCurl implements HttpRequestInterface
     private const CONNECT_TIMEOUT_SECONDS = 5;
     private const REQUEST_TIMEOUT_SECONDS = 30;
 
+    /** @psalm-pure */
     public function __construct(
         private HttpRequestHeaders $requestHeaders,
     ) {
@@ -116,7 +117,11 @@ final readonly class HttpRequestCurl implements HttpRequestInterface
         return $curl;
     }
 
-    /** @return HttpHeaders */
+    /**
+     * @return HttpHeaders
+     *
+     * @psalm-pure
+     */
     private function parseResponseHeaders(string $responseHeaders): array
     {
         $responseHeadersArray = [];
@@ -139,6 +144,8 @@ final readonly class HttpRequestCurl implements HttpRequestInterface
      * @return HttpBody
      *
      * @psalm-taint-source input
+     *
+     * @psalm-capabilities pure
      */
     private function parseBody(CurlHandle $curl, string $view): array
     {

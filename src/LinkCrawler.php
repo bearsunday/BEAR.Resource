@@ -35,6 +35,7 @@ final class LinkCrawler implements LinkCrawlerInterface
     /** @var array<string, array<mixed>|null> */
     private array $cache = [];
 
+    /** @psalm-pure */
     public function __construct(
         private readonly InvokerInterface $invoker,
         private readonly FactoryInterface $factory,
@@ -178,6 +179,8 @@ final class LinkCrawler implements LinkCrawlerInterface
      *
      * List: [['id' => 1], ['id' => 2]] - crawl processes each row
      * Single row: ['id' => 1, 'name' => 'foo'] - crawl wraps in array, processes, unwraps
+     *
+     * @psalm-capabilities read-props
      */
     #[Override]
     public function isList(mixed $value): bool
@@ -201,6 +204,8 @@ final class LinkCrawler implements LinkCrawlerInterface
      *
      * @param list<array-key> $keys
      * @psalm-param BodyList   $list
+     *
+     * @psalm-pure
      */
     private function isMultiColumnMultiRowList(array $keys, array $list): bool
     {
@@ -223,6 +228,8 @@ final class LinkCrawler implements LinkCrawlerInterface
      * Example: [0 => ['id' => 1], 1 => ['id' => 2]]
      *
      * @param array<mixed> $value
+     *
+     * @psalm-capabilities pure
      */
     private function isMultiColumnList(array $value, mixed $firstRow): bool
     {
@@ -237,6 +244,8 @@ final class LinkCrawler implements LinkCrawlerInterface
      * @param array<mixed>    $value
      * @param list<array-key> $keys
      * @param array<mixed>    $list
+     *
+     * @psalm-pure
      */
     private function isSingleColumnList(array $value, array $keys, array $list): bool
     {

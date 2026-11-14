@@ -6,6 +6,7 @@ namespace BEAR\Resource;
 
 final class ImportApp
 {
+    /** @psalm-pure */
     public function __construct(
         public string $host,
         public string $appName,

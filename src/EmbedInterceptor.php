@@ -25,7 +25,11 @@ final readonly class EmbedInterceptor implements EmbedInterceptorInterface
 {
     private const SELF_LINK = '_self';
 
-    /** @param ProviderInterface<ResourceInterface> $resourceProvider */
+    /**
+     * @param ProviderInterface<ResourceInterface> $resourceProvider
+     *
+     * @psalm-pure
+     */
     public function __construct(
         #[Set(ResourceInterface::class)]
         private ProviderInterface $resourceProvider,
@@ -87,6 +91,7 @@ final readonly class EmbedInterceptor implements EmbedInterceptorInterface
         }
     }
 
+    /** @psalm-capabilities read-props */
     private function getFullUri(string $uri, ResourceObject $ro): string
     {
         if ($uri[0] === '/') {
@@ -96,6 +101,7 @@ final readonly class EmbedInterceptor implements EmbedInterceptorInterface
         return $uri;
     }
 
+    /** @psalm-capabilities read-props|write-props */
     public function prepareBody(ResourceObject $ro, Embed $embed): void
     {
         if ($ro->body === null) {

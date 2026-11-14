@@ -15,6 +15,8 @@ final readonly class ConstraintViolation
     /**
      * @param ConstraintName|string $name   Constraint keyword (typed as literal-union for known JSON Schema keywords; runtime stays string for forward compatibility)
      * @param array<string, mixed>  $params
+     *
+     * @psalm-pure
      */
     public function __construct(
         public string $name,

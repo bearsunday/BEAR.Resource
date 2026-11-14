@@ -49,6 +49,8 @@ final class JsonSchemaExceptionFakeHandler implements JsonSchemaExceptionHandler
      * @param Body $values
      *
      * @return Body
+     *
+     * @psalm-capabilities read-props
      */
     private function deepArray(array|stdClass $values): array
     {

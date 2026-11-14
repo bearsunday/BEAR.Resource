@@ -14,7 +14,11 @@ use function strtolower;
 /** @template T */
 final class OptionalParam implements ParamInterface
 {
-    /** @param T $defaultValue */
+    /**
+     * @param T $defaultValue
+     *
+     * @psalm-pure
+     */
     public function __construct(
         private $defaultValue,
     ) {
@@ -22,6 +26,8 @@ final class OptionalParam implements ParamInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props
      */
     #[Override]
     public function __invoke(string $varName, array $query, InjectorInterface $injector)

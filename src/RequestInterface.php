@@ -34,11 +34,15 @@ interface RequestInterface
 
     /**
      * To Request URI string
+     *
+     * @psalm-capabilities read-props|write-props
      */
     public function toUri(): string;
 
     /**
      * To Request URI string with request method
+     *
+     * @psalm-capabilities read-props|write-props
      */
     public function toUriWithMethod(): string;
 

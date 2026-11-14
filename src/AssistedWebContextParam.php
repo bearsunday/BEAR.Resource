@@ -24,6 +24,7 @@ final class AssistedWebContextParam implements ParamInterface
      */
     private static array $globals = [];
 
+    /** @psalm-pure */
     public function __construct(
         private readonly AbstractWebContextParam $webContextParam,
         private readonly ParamInterface $defaultParam,
@@ -48,7 +49,11 @@ final class AssistedWebContextParam implements ParamInterface
         return $phpWebContext[$this->webContextParam->key] ?? ($this->defaultParam)($varName, $query, $injector);
     }
 
-    /** @param SuperGlobalsMap $globals */
+    /**
+     * @param SuperGlobalsMap $globals
+     *
+     * @psalm-capabilities write-globals
+     */
     public static function setSuperGlobalsOnlyForTestingPurpose(array $globals): void
     {
         self::$globals = $globals;

@@ -10,7 +10,11 @@ use Ray\Di\InjectorInterface;
 /** @template T */
 final readonly class DefaultParam implements ParamInterface
 {
-    /** @param T $defaultValue */
+    /**
+     * @param T $defaultValue
+     *
+     * @psalm-pure
+     */
     public function __construct(
         private mixed $defaultValue,
     ) {
@@ -18,6 +22,8 @@ final readonly class DefaultParam implements ParamInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props
      */
     #[Override]
     public function __invoke(string $varName, array $query, InjectorInterface $injector)

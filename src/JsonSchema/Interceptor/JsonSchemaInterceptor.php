@@ -51,6 +51,7 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
 {
     private const HEADER_ETAG = 'ETag';
 
+    /** @psalm-pure */
     public function __construct(
         #[Named('json_schema_dir')]
         private string $schemaDir,
@@ -134,6 +135,7 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
         $this->validateAsResponse($target, $schemaFile);
     }
 
+    /** @psalm-capabilities read-props */
     private function isCachedRenderedBodyResponse(ResourceObject $ro, JsonSchema $jsonSchema): bool
     {
         if ($jsonSchema->target !== 'body' || ! isset($ro->headers[self::HEADER_ETAG]) || ! is_string($ro->view)) {
@@ -144,6 +146,7 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
         return $ro->body === null;
     }
 
+    /** @psalm-capabilities read-props */
     private function getTarget(object $json, JsonSchema $jsonSchema): mixed
     {
         if ($jsonSchema->key === '') {
@@ -235,6 +238,8 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
      * non-object decode result (boolean schema, unreadable file, malformed
      * JSON) is treated as "no schema-aware messages available" — the
      * mapper just falls back to the validator's raw message.
+     *
+     * @psalm-capabilities io
      */
     private function schema(string $schemaFile): stdClass|null
     {
@@ -247,6 +252,7 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
         return $schema instanceof stdClass ? $schema : null;
     }
 
+    /** @psalm-capabilities read-props|io */
     private function getSchemaFile(JsonSchema $jsonSchema, ResourceObject $ro): string
     {
         if (! $jsonSchema->schema) {
@@ -265,6 +271,7 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
         return $schemaFile;
     }
 
+    /** @psalm-capabilities pure */
     private function getParentClassName(ResourceObject $ro): string
     {
         $parent = (new ReflectionClass($ro))->getParentClass();
@@ -273,6 +280,7 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
         return (string) $parent->getFileName();
     }
 
+    /** @psalm-capabilities io */
     private function validateFileExists(string $schemaFile): void
     {
         if (! file_exists($schemaFile) || is_dir($schemaFile)) {

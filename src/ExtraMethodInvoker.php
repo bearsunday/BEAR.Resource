@@ -9,6 +9,7 @@ use Ray\Di\Di\Named;
 
 final readonly class ExtraMethodInvoker
 {
+    /** @psalm-pure */
     public function __construct(
         #[Named('options')]
         private RenderInterface $optionsRenderer,

@@ -87,7 +87,11 @@ final readonly class ClassParam implements ParamInterface
         return $obj;
     }
 
-    /** @param Query $query */
+    /**
+     * @param Query $query
+     *
+     * @psalm-capabilities pure
+     */
     private function getProps(string $varName, array $query, InjectorInterface $injector): mixed
     {
         if (isset($query[$varName])) {

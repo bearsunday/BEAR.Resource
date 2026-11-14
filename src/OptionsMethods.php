@@ -43,6 +43,7 @@ final readonly class OptionsMethods
         FilesParam::class => 'files',
     ];
 
+    /** @psalm-pure */
     public function __construct(
         #[Named('json_schema_dir')]
         private string $schemaDir = '',

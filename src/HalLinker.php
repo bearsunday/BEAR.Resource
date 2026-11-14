@@ -18,6 +18,7 @@ use function uri_template;
  */
 final readonly class HalLinker
 {
+    /** @psalm-pure */
     public function __construct(
         private ReverseLinkerInterface $link,
     ) {
@@ -72,7 +73,11 @@ final readonly class HalLinker
         return $hal;
     }
 
-    /** @return array{method?: non-empty-string, title?: non-empty-string} */
+    /**
+     * @return array{method?: non-empty-string, title?: non-empty-string}
+     *
+     * @psalm-capabilities read-props
+     */
     private function linkAttributes(Link $annotation): array
     {
         $attr = [];

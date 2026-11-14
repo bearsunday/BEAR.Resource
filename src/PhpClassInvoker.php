@@ -12,6 +12,7 @@ use function ucfirst;
 /** @psalm-import-type Query from Types */
 final readonly class PhpClassInvoker implements InvokerInterface
 {
+    /** @psalm-pure */
     public function __construct(
         private NamedParameterInterface $params,
         private ExtraMethodInvoker $extraMethod,

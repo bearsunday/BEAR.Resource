@@ -63,6 +63,8 @@ final class Request extends AbstractRequest
      * {@inheritDoc}
      *
      * @param Query $query
+     *
+     * @psalm-capabilities read-props|write-this-props
      */
     #[Override]
     public function withQuery(array $query): RequestInterface
@@ -75,6 +77,8 @@ final class Request extends AbstractRequest
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props|write-this-props
      */
     #[Override]
     public function addQuery(array $query): RequestInterface
@@ -87,6 +91,8 @@ final class Request extends AbstractRequest
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props|write-props
      */
     #[Override]
     public function toUriWithMethod(): string
@@ -98,6 +104,8 @@ final class Request extends AbstractRequest
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props|write-props
      */
     #[Override]
     public function toUri(): string
@@ -109,6 +117,8 @@ final class Request extends AbstractRequest
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props|write-this-props
      */
     #[Override]
     public function linkSelf(string $linkKey): RequestInterface
@@ -121,6 +131,8 @@ final class Request extends AbstractRequest
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props|write-this-props
      */
     #[Override]
     public function linkNew(string $linkKey): RequestInterface
@@ -133,6 +145,8 @@ final class Request extends AbstractRequest
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props|write-this-props
      */
     #[Override]
     public function linkCrawl(string $linkKey): RequestInterface

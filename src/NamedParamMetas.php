@@ -25,7 +25,11 @@ use ReflectionParameter;
  */
 final readonly class NamedParamMetas implements NamedParamMetasInterface
 {
-    /** @param InputQueryInterface<object> $inputQuery */
+    /**
+     * @param InputQueryInterface<object> $inputQuery
+     *
+     * @psalm-pure
+     */
     public function __construct(
         private InputQueryInterface $inputQuery,
         private FileUploadFactoryInterface $factory,
@@ -114,6 +118,8 @@ final readonly class NamedParamMetas implements NamedParamMetasInterface
     /**
      * @param array<ReflectionAttribute<InputFile>> $inputFileAttributes
      * @param ParamMap                              $names
+     *
+     * @psalm-capabilities read-props|write-refs
      */
     private function setInputFileParam(ReflectionParameter $parameter, array $inputFileAttributes, array &$names): void
     {

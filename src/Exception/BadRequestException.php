@@ -10,6 +10,7 @@ use Throwable;
 
 class BadRequestException extends BadMethodCallException implements ExceptionInterface
 {
+    /** @psalm-pure */
     public function __construct(string $message = '', int $code = Code::BAD_REQUEST, Throwable|null $previous = null)
     {
         parent::__construct($message, $code, $previous);

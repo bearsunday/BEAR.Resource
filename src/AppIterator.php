@@ -55,6 +55,8 @@ final class AppIterator implements Iterator
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props
      */
     #[Override]
     public function current(): Meta
@@ -64,6 +66,8 @@ final class AppIterator implements Iterator
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props|write-this-props
      */
     #[Override]
     public function next(): void
@@ -73,6 +77,8 @@ final class AppIterator implements Iterator
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props
      */
     #[Override]
     public function key(): string
@@ -82,6 +88,8 @@ final class AppIterator implements Iterator
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props
      */
     #[Override]
     public function valid(): bool
@@ -91,6 +99,8 @@ final class AppIterator implements Iterator
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props|write-this-props
      */
     #[Override]
     public function rewind(): void
@@ -123,6 +133,7 @@ final class AppIterator implements Iterator
         return $metaCollection;
     }
 
+    /** @psalm-capabilities io */
     private function isNotPhp(SplFileInfo $item): bool
     {
         $isPhp = $item->isFile()
@@ -148,6 +159,8 @@ final class AppIterator implements Iterator
      * @param ClassNameList $newClasses
      *
      * @return ResourceClassName|''
+     *
+     * @psalm-capabilities read-props
      */
     private function getName(array $newClasses): string
     {

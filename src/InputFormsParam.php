@@ -26,7 +26,11 @@ use function is_array;
  */
 final readonly class InputFormsParam implements ParamInterface
 {
-    /** @param array<ReflectionAttribute<InputFile>> $inputFileAttributes */
+    /**
+     * @param array<ReflectionAttribute<InputFile>> $inputFileAttributes
+     *
+     * @psalm-pure
+     */
     public function __construct(
         private FileUploadFactoryInterface $factory,
         private ReflectionParameter $parameter,
@@ -63,6 +67,8 @@ final readonly class InputFormsParam implements ParamInterface
      * @return array<AbstractFileUpload>
      *
      * @throws InvalidArgumentException When array contains invalid file objects.
+     *
+     * @psalm-capabilities pure
      */
     private function getUserFileUploads(string $varName, array $query): array
     {

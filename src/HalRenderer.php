@@ -33,6 +33,7 @@ use const PHP_URL_QUERY;
  */
 final readonly class HalRenderer implements RenderInterface
 {
+    /** @psalm-pure */
     public function __construct(
         private HalLinker $linker,
     ) {
@@ -124,6 +125,7 @@ final readonly class HalRenderer implements RenderInterface
         return json_decode((string) $request, null, 512, JSON_THROW_ON_ERROR);
     }
 
+    /** @psalm-capabilities read-props */
     private function isDifferentSchema(ResourceObject $parentRo, ResourceObject $childRo): bool
     {
         return $parentRo->uri->scheme . $parentRo->uri->host !== $childRo->uri->scheme . $childRo->uri->host;

@@ -8,6 +8,7 @@ namespace BEAR\Resource;
  * Resource object code
  *
  * @psalm-import-type StatusMessageMap from Types
+ * @psalm-capabilities read-props
  */
 final class Code
 {

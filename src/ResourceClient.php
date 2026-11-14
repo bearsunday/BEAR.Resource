@@ -34,6 +34,8 @@ final class ResourceClient implements ResourceInterface
      * @param AnchorInterface                    $anchor         Resource anchor
      * @param ProviderInterface<LinkerInterface> $linkerProvider Resource linker provider
      * @param UriFactory                         $uri            URI factory
+     *
+     * @psalm-pure
      */
     public function __construct(
         private readonly FactoryInterface $factory,
@@ -73,6 +75,8 @@ final class ResourceClient implements ResourceInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props
      */
     #[Override]
     public function object(ResourceObject $ro): RequestInterface

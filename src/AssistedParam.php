@@ -13,6 +13,7 @@ final class AssistedParam implements ParamInterface
      * {@inheritDoc}
      *
      * @codeCoverageIgnore
+     * @psalm-capabilities read-props
      */
     #[Override]
     public function __invoke(string $varName, array $query, InjectorInterface $injector): void

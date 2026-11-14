@@ -59,6 +59,8 @@ final class Link implements JsonSerializable
     /**
      * @return string[]
      * @psalm-return array{rel: string, href: string, method: string, title?: string}
+     *
+     * @psalm-capabilities read-props
      */
     #[Override]
     public function jsonSerialize(): array
@@ -75,7 +77,11 @@ final class Link implements JsonSerializable
         return $json;
     }
 
-    /** @param array{rel?: string, href?: string, method?: string, title?: string, crawl?: string, dataLoader?: class-string<DataLoaderInterface>|null} $values */
+    /**
+     * @param array{rel?: string, href?: string, method?: string, title?: string, crawl?: string, dataLoader?: class-string<DataLoaderInterface>|null} $values
+     *
+     * @psalm-pure
+     */
     public function __construct(
         array $values = [],
         string $rel = '',

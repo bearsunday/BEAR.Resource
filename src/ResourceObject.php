@@ -68,6 +68,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      * Return object hash if representation renderer is not set.
      *
      * @return string
+     *
+     * @psalm-impure
      */
     #[Override]
     public function __toString()
@@ -84,7 +86,11 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         return $view;
     }
 
-    /** @return list<string> */
+    /**
+     * @return list<string>
+     *
+     * @psalm-impure
+     */
     public function __sleep()
     {
         if (is_array($this->body)) {
@@ -116,6 +122,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      * @param int|string $offset offset
      *
      * @return mixed
+     *
+     * @psalm-impure
      */
     #[Override]
     #[ReturnTypeWillChange]
@@ -135,6 +143,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      * @param mixed          $value  value
      *
      * @return void
+     *
+     * @psalm-impure
      */
     #[Override]
     #[ReturnTypeWillChange]
@@ -163,6 +173,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      * @param array-key $offset offset
      *
      * @return bool
+     *
+     * @psalm-impure
      */
     #[Override]
     #[ReturnTypeWillChange]
@@ -179,6 +191,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      * Set the value at the specified index
      *
      * @param int|string $offset offset
+     *
+     * @psalm-impure
      */
     #[Override]
     #[ReturnTypeWillChange]
@@ -190,6 +204,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
 
     /**
      * Get the number of public properties in the ArrayObject
+     *
+     * @psalm-impure
      */
     #[Override]
     public function count(): int
@@ -203,6 +219,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
 
     /**
      * Sort the entries by key
+     *
+     * @psalm-impure
      */
     public function ksort(): void
     {
@@ -215,6 +233,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
 
     /**
      * Sort the entries by key
+     *
+     * @psalm-impure
      */
     public function asort(): void
     {
@@ -229,6 +249,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      * @return ArrayIterator<int|string, mixed>
      * @psalm-return ArrayIterator<empty, empty>|ArrayIterator<int|string, mixed>
      * @phpstan-return ArrayIterator<int|string, mixed>
+     *
+     * @psalm-impure
      */
     #[Override]
     public function getIterator(): ArrayIterator
@@ -236,7 +258,11 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         return is_array($this->body) ? new ArrayIterator($this->body) : new ArrayIterator([]);
     }
 
-    /** @return self */
+    /**
+     * @return self
+     *
+     * @psalm-impure
+     */
     #[Inject(optional: true)]
     public function setRenderer(RenderInterface $renderer)
     {
@@ -247,6 +273,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-impure
      */
     public function toString(): string
     {
@@ -261,7 +289,11 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         return $this->renderer->render($this);
     }
 
-    /** @return Body */
+    /**
+     * @return Body
+     *
+     * @psalm-impure
+     */
     #[Override]
     public function jsonSerialize(): array
     {
@@ -277,6 +309,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-impure
      */
     #[Override]
     public function transfer(TransferInterface $responder, array $server)
@@ -284,6 +318,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         $responder($this, $server);
     }
 
+    /** @psalm-impure */
     public function __clone()
     {
         $this->uri = clone $this->uri;
@@ -293,6 +328,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      * {@inheritDoc}
      *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName) Underscore prefix indicates internal API method
+     * @psalm-impure
      */
     #[Override]
     public function _invokeRequest(InvokerInterface $invoker, AbstractRequest $request): ResourceObject
