@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Requires koriym/file-upload 1.0.1 or later, which checks an upload's MIME type against its content
   ([GHSA-9343-66h6-6cjr](https://github.com/koriym/Koriym.FileUpload/security/advisories/GHSA-9343-66h6-6cjr)).
 
+### Fixed
+- Module composition no longer fails under `composer dump-autoload --classmap-authoritative`, which broke in 1.34.0 (#380)
+
+### Removed
+- The misspelled `JsonSchemalModule`, which has failed to load since `JsonSchemaModule` became final in 1.16.0. Use `JsonSchemaModule`.
+
 ## [1.34.2] - 2026-11-13
 
 ### Fixed
