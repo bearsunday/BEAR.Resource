@@ -134,11 +134,7 @@ final readonly class NamedParamMetas implements NamedParamMetasInterface
         $names[$parameter->name] = new InputFormParam($this->factory, $parameter, $inputFileAttributes);
     }
 
-    /**
-     * @psalm-return DefaultParam<mixed>|NoDefaultParam
-     *
-     * @psalm-pure
-     */
+    /** @psalm-return DefaultParam<mixed>|NoDefaultParam */
     private function getDefault(ReflectionParameter $parameter): DefaultParam|NoDefaultParam
     {
         return $parameter->isDefaultValueAvailable() === true ? new DefaultParam($parameter->getDefaultValue()) : new NoDefaultParam();
@@ -149,8 +145,6 @@ final readonly class NamedParamMetas implements NamedParamMetasInterface
      * @param ReflectionParameterMap $valueParams
      *
      * @return ParamMap
-     *
-     * @psalm-capabilities read-props
      */
     private function getNames(array $names, array $valueParams): array
     {
@@ -164,8 +158,6 @@ final readonly class NamedParamMetas implements NamedParamMetasInterface
     /**
      * @return ClassParam|OptionalParam|RequiredParam
      * @psalm-return ClassParam|OptionalParam<mixed>|RequiredParam
-     *
-     * @psalm-pure
      */
     private function getParam(ReflectionParameter $parameter): ParamInterface
     {

@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Psalm purity and immutability annotations on value objects and on `RequestInterface::toUri()` / `toUriWithMethod()`,
+- Psalm purity annotations, including on `RequestInterface::toUri()` / `toUriWithMethod()`,
   `LinkCrawlerInterface::isList()` and `SchemeCollectionInterface::getAdapter()`. Under Psalm 7, a class that implements
   these methods needs a matching `@psalm-capabilities` annotation.
 

@@ -52,8 +52,6 @@ final readonly class JsonSchemaError
      *
      * Unknown placeholders are left in place. Mirrors be-framework's
      * `#[Message]` `{key}` syntax and value-stringification rules.
-     *
-     * @psalm-capabilities read-props
      */
     public function render(string $template): string
     {
@@ -74,8 +72,6 @@ final readonly class JsonSchemaError
 
     /**
      * Mirrors Be\Framework\SemanticVariable\ValidationMessageHandler::interpolateTemplate().
-     *
-     * @psalm-capabilities pure
      */
     private function stringify(mixed $value): string
     {

@@ -2,7 +2,6 @@
 <psalm
     phpVersion="8.2"
     errorLevel="1"
-    suggestPurityAnnotations="true"
     runTaintAnalysis="false"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"

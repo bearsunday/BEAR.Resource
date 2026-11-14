@@ -146,7 +146,7 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
         return $ro->body === null;
     }
 
-    /** @psalm-pure */
+    /** @psalm-capabilities read-props */
     private function getTarget(object $json, JsonSchema $jsonSchema): mixed
     {
         if ($jsonSchema->key === '') {

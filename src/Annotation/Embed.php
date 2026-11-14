@@ -6,7 +6,6 @@ namespace BEAR\Resource\Annotation;
 
 use Attribute;
 
-/** @psalm-immutable */
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 final class Embed
 {

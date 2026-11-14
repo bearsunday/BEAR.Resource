@@ -32,7 +32,6 @@ final readonly class ClassParam implements ParamInterface
     private bool $isDefaultAvailable;
     private mixed $defaultValue; // @phpstan-ignore-line
 
-    /** @psalm-pure */
     public function __construct(
         ReflectionNamedType $type,
         ReflectionParameter $parameter,

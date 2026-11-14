@@ -20,8 +20,6 @@ final class PrettyJsonRenderer implements RenderInterface
 {
     /**
      * {@inheritDoc}
-     *
-     * @psalm-capabilities read-props|write-props|read-globals|io
      */
     #[Override]
     public function render(ResourceObject $ro)
