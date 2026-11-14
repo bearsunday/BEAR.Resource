@@ -77,6 +77,50 @@ class ResourceObjectTest extends TestCase
         $this->assertSame(null, $wakeup->body['req']->body); // @phpstan-ignore-line
     }
 
+    public function testSleepStoresTheResultARequestAlreadyHas(): void
+    {
+        $invoker = new class ((new InvokerFactory())()) implements InvokerInterface {
+            public int $runs = 0;
+
+            public function __construct(private InvokerInterface $invoker)
+            {
+            }
+
+            public function invoke(AbstractRequest $request): ResourceObject
+            {
+                $this->runs++;
+
+                return $this->invoker->invoke($request);
+            }
+        };
+        $child = new FakeChild();
+        $child->uri = new Uri('app://self/bear/resource/fakechild');
+        $request = new Request($invoker, $child);
+        $ro = new FakeResource();
+        assert(is_array($ro->body));
+        $ro->body['req'] = $request;
+        (string) $request;
+
+        $wakeup = unserialize(serialize($ro));
+
+        $this->assertSame(1, $invoker->runs);
+        $this->assertSame(['tree' => 3], $wakeup->body['req']->body); // @phpstan-ignore-line
+        $this->assertNotSame($ro->body['req'], $request->jsonSerialize(), 'the request keeps its own result');
+    }
+
+    public function testSleepRunsARequestThatSerializesToSomethingElse(): void
+    {
+        $child = new FakeChild();
+        $child->uri = new Uri('app://self/bear/resource/fakechild');
+        $ro = new FakeResource();
+        assert(is_array($ro->body));
+        $ro->body['req'] = new FakeDecodedRequest($child);
+
+        $wakeup = unserialize(serialize($ro));
+
+        $this->assertInstanceOf(FakeChild::class, $wakeup->body['req']); // @phpstan-ignore-line
+    }
+
     public function testIlligalAccessExceptionInOffsetExists(): void
     {
         $ro = new FakeResource();

@@ -100,7 +100,16 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
                     continue;
                 }
 
-                $item = ($item)();
+                if (! ($item instanceof Request)) {
+                    $item = ($item)();
+
+                    continue;
+                }
+
+                // The result a Request already has is the one the view was rendered from; a copy leaves it as the request holds it
+                $result = $item->jsonSerialize();
+                assert($result instanceof self);
+                $item = clone $result;
             }
         }
 

@@ -7,10 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+- Requires koriym/file-upload 1.0.1 or later, which checks an upload's MIME type against its content
+  ([GHSA-9343-66h6-6cjr](https://github.com/koriym/Koriym.FileUpload/security/advisories/GHSA-9343-66h6-6cjr)).
+
+### Fixed
+- Module composition no longer fails under `composer dump-autoload --classmap-authoritative`, which broke in 1.34.0 (#380)
+
+### Removed
+- The misspelled `JsonSchemalModule`, which has failed to load since `JsonSchemaModule` became final in 1.16.0. Use `JsonSchemaModule`.
+
+## [1.34.2] - 2026-11-13
+
 ### Fixed
 - A request read once and then changed with `withQuery()`, `addQuery()`, `__invoke()` with a query,
   or `linkSelf()` / `linkNew()` / `linkCrawl()` now executes again on the next read instead of
-  returning the stale result (#381)
+  returning the stale result (#381, #382)
+- `HalRenderer` no longer rewrites the body of the resource it renders: `_embedded` is built for
+  the view only, and the body keeps the embedded requests the resource returned. Code that read
+  `$ro->body['_embedded']` after rendering should read the view instead (#386)
+- An embedded request of a different scheme (an `app://` request in a `page://` body) that has
+  already been read is no longer run again when `HalRenderer` renders its parent (#386)
+- Serializing a resource no longer runs again an embedded request that has already been read; the
+  stored body holds the result the view was rendered from (#386)
 
 ## [1.34.1] - 2026-09-11
 
