@@ -245,7 +245,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     /**
      * {@inheritDoc}
      *
-     * @psalm-capabilities read-props|io
+     * @psalm-capabilities read-props|write-props|io
      */
     #[Override]
     public function hash(): string
