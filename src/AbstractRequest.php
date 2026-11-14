@@ -68,7 +68,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     public $in = 'lazy';
 
     /**
-     * Request Result
+     * Request Result, memoized by the first read; reset whenever the query or links change
      *
      * @var ?ResourceObject
      */
@@ -116,6 +116,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     {
         if (is_array($query)) {
             $this->query = array_merge($this->query, $query);
+            $this->result = null;
         }
 
         $this->resourceObject->uri->query = $this->query;

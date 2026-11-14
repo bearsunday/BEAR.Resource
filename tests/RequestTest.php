@@ -260,6 +260,36 @@ class RequestTest extends TestCase
         $this->assertSame('get test://self/path/to/resource?a=bear&b=25&c=kuma', $actual);
     }
 
+    public function testWithQueryAfterAReadReExecutesWithTheNewQuery(): void
+    {
+        $request = new Request($this->invoker, $this->nop, Method::GET, ['a' => 'koriym', 'b' => 25]);
+        $this->assertSame(['koriym', 25], $request->body);
+
+        $request->withQuery(['a' => 'bear', 'b' => 1]);
+
+        $this->assertSame(['bear', 1], $request->body);
+    }
+
+    public function testAddQueryAfterAReadReExecutesWithTheMergedQuery(): void
+    {
+        $request = new Request($this->invoker, $this->nop, Method::GET, ['a' => 'koriym', 'b' => 25]);
+        $this->assertSame(['koriym', 25], $request->body);
+
+        $request->addQuery(['b' => 30]);
+
+        $this->assertSame(['koriym', 30], $request->body);
+    }
+
+    public function testInvokeWithQueryAfterAReadIsSeenByTheNextRead(): void
+    {
+        $request = new Request($this->invoker, $this->nop, Method::GET, ['a' => 'koriym', 'b' => 25]);
+        $this->assertSame(['koriym', 25], $request->body);
+
+        $request(['b' => 30]);
+
+        $this->assertSame(['koriym', 30], $request->body);
+    }
+
     public function testInvalidMethod(): void
     {
         $this->expectException(ValueError::class);
