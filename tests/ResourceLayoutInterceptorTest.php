@@ -7,6 +7,7 @@ namespace BEAR\Resource;
 use BEAR\Resource\Exception\ResourceLayoutException;
 use BEAR\Resource\Interceptor\FakeResourceLayoutInterceptor;
 use BEAR\Resource\Module\ResourceModule;
+use FakeVendor\Sandbox\Resource\Page\Layout\Content;
 use FakeVendor\Sandbox\Resource\Page\Layout\Footer;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\AbstractModule;
@@ -33,6 +34,15 @@ class ResourceLayoutInterceptorTest extends TestCase
         $header = $ro->body['header'];
         assert($header instanceof Request);
         $this->assertSame('page://self/layout/header', $header->toUri());
+    }
+
+    public function testPositionalArgumentsExpandTheTemplate(): void
+    {
+        $ro = $this->resource->newInstance('page://self/layout/content');
+        assert($ro instanceof Content);
+        $ro->onGet('1', 'en');
+
+        $this->assertSame('page://self/layout/footer?id=1&lang=en', $ro->body['footerInOnGet']);
     }
 
     public function testPartRunsOnceWhenRenderedAndSerialized(): void

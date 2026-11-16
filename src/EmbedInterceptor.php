@@ -12,7 +12,9 @@ use Override;
 use Ray\Aop\MethodInvocation;
 use Ray\Di\Di\Set;
 use Ray\Di\ProviderInterface;
+use ReflectionAttribute;
 
+use function array_map;
 use function array_shift;
 use function assert;
 use function is_array;
@@ -46,28 +48,27 @@ final readonly class EmbedInterceptor implements EmbedInterceptorInterface
     {
         $ro = $invocation->getThis();
         assert($ro instanceof ResourceObject);
-        $query = $this->getArgsByInvocation($invocation);
-        $embeds = $invocation->getMethod()->getAnnotations();
-        $this->embedResource($embeds, $ro, $query);
+        $embeds = array_map(
+            static fn (ReflectionAttribute $attribute): Embed => $attribute->newInstance(),
+            $invocation->getMethod()->getAttributes(Embed::class),
+        );
+        $this->embedResource($embeds, $ro, $invocation);
 
         return $invocation->proceed();
     }
 
     /**
-     * @param array<Embed|object> $embeds
-     * @param Query               $query
+     * @param list<Embed>              $embeds
+     * @param MethodInvocation<object> $invocation the src templates are expanded with its arguments
      *
      * @throws EmbedException
      */
-    private function embedResource(array $embeds, ResourceObject $ro, array $query): void
+    public function embedResource(array $embeds, ResourceObject $ro, MethodInvocation $invocation): void
     {
+        $query = $this->getArgsByInvocation($invocation);
         $resource = $this->resourceProvider->get();
 
         foreach ($embeds as $embed) {
-            if (! $embed instanceof Embed) {
-                continue;
-            }
-
             try {
                 $templateUri = $this->getFullUri($embed->src, $ro);
                 $uri = uri_template($templateUri, $query);
