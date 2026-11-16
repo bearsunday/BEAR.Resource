@@ -323,7 +323,7 @@ HATEOAS について詳しくは[How to GET a Cup of Coffee](http://www.infoq.co
 
 ### プリフェッチリンク
 
-`rel: 'prefetch'` を宣言した GET のリンクは、`onGet()` が 200 を返したとき RFC 8288 の `Link` ヘッダーにも出力されます。CDN のエッジはこれを読んで自分のキャッシュを温められます。
+`rel: 'prefetch'` のリンクは、`onGet()` が 200 を返すとき `Link` ヘッダーにも出力されます。CDN のエッジがキャッシュを温めるのに使えます。
 
 ```php
 #[Link(rel: 'prefetch', href: '/article/{next_id}')]
@@ -334,7 +334,7 @@ public function onGet(int $id): static
 Link: </article/43>; rel="prefetch"
 ```
 
-テンプレートの変数が body にないか、null か空文字のリンクと、展開した href が `/` 1 つで始まるパスでも `http(s)://` の URL でもないリンクは出力しません。宣言順に最大 5 件まで出力します。
+出力するのは、変数がすべて body にあり、href が `/` で始まるパスか `http(s)://` の URL になるリンクだけで、最大 5 件です。
 
 ### リソース表現
 

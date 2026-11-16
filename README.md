@@ -325,7 +325,7 @@ You can checkout more on HATEOAS at [How to GET a Cup of Coffee](http://www.info
 
 ### Prefetch link
 
-A GET link declared with `rel: 'prefetch'` is also output as an RFC 8288 `Link` header of a 200 `onGet()` response, so a CDN edge can warm its cache.
+A link declared with `rel: 'prefetch'` is also output as a `Link` header when `onGet()` returns 200, so a CDN edge can warm its cache.
 
 ```php
 #[Link(rel: 'prefetch', href: '/article/{next_id}')]
@@ -336,7 +336,7 @@ public function onGet(int $id): static
 Link: </article/43>; rel="prefetch"
 ```
 
-A link is skipped when a template variable is missing, null or an empty string in the body, or when its expanded href is neither a path starting with a single `/` nor an `http(s)://` URL. Up to five links are output in declaration order.
+A link is output only when all its template variables are in the body and its href expands to a path starting with `/` or an `http(s)://` URL. Up to five links are output.
 
 Bind parameters
 You can bind method parameters to an “external value”. The external value might be a web context or any other resource state.
