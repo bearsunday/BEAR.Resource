@@ -737,7 +737,9 @@ class Article extends ResourceObject
 }
 ```
 
-A resource has one layout; a class with two layout attributes throws `ResourceLayoutException`. To share parts between layouts, compose the arrays in code instead of stacking attributes:
+The template prints the parts it finds in the body; it does not fetch them.
+
+A resource has one layout; a GET request to a class with two layout attributes throws `ResourceLayoutException`. To share parts between layouts, compose the arrays in code instead of stacking attributes:
 
 ```php
 public function embed(): array
