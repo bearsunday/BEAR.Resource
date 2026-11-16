@@ -87,7 +87,6 @@ final readonly class HttpRequestCurl implements HttpRequestInterface
         ];
     }
 
-    /** @psalm-taint-sink ssrf $uri */
     private function initializeCurl(string $method, string $uri, string $body): CurlHandle
     {
         $curl = curl_init();
