@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A class attribute extending `AbstractResourceLayout` declares the resource's layout in its `EMBED` constant: the parts,
   such as a header and a footer, that `onGet()` finds at the top level of the body as `#[Embed]` puts them. A resource
   has one layout, placed through the now public `EmbedInterceptor::embedResource()`. A rel that both the layout and a
-  method `#[Embed]` declare throws `ResourceLayoutException`; set the rel in `onGet()` to replace a part.
+  method `#[Embed]` declare throws `ResourceLayoutException`.
 
 ### Changed
 - Requires ray/aop 2.19.1 and ray/di 2.19.0 or later.

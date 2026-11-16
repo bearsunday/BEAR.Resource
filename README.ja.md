@@ -542,7 +542,7 @@ final class CollectionPage extends AbstractResourceLayout
 }
 ```
 
-レイアウトとメソッドの `#[Embed]` が同じ rel を宣言すると、`ResourceLayoutException` になります。パーツを差し替えたいときは、`onGet()` でその rel を設定します。PHP のクラス属性は継承されないので、レイアウトもサブクラスには引き継がれません。
+レイアウトとメソッドの `#[Embed]` が同じ rel を宣言すると、`ResourceLayoutException` になります。PHP のクラス属性は継承されないので、レイアウトもサブクラスには引き継がれません。
 
 ### HAL (Hypertext Application Language)
 

@@ -752,7 +752,7 @@ final class CollectionPage extends AbstractResourceLayout
 }
 ```
 
-A rel that both the layout and a method `#[Embed]` declare throws `ResourceLayoutException`. To replace a part, set its rel in `onGet()`. A subclass does not inherit the layout, since PHP does not inherit class attributes.
+A rel that both the layout and a method `#[Embed]` declare throws `ResourceLayoutException`. A subclass does not inherit the layout, since PHP does not inherit class attributes.
 
 ### HAL (Hypertext Application Language)
 

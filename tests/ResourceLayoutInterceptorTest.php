@@ -58,7 +58,7 @@ class ResourceLayoutInterceptorTest extends TestCase
     public function testARelBothTheLayoutAndAMethodEmbedDeclareIsRejected(): void
     {
         $this->expectException(ResourceLayoutException::class);
-        $this->expectExceptionMessage('FakeVendor\Sandbox\Resource\Page\Layout\Both declares rel "footer" in both its layout and a method #[Embed]; set it in onGet() to replace the part.');
+        $this->expectExceptionMessage('FakeVendor\Sandbox\Resource\Page\Layout\Both declares rel "footer" in both its layout and a method #[Embed].');
 
         $this->resource->get('page://self/layout/both', ['id' => '1']);
     }
