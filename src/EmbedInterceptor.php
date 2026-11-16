@@ -46,25 +46,27 @@ final readonly class EmbedInterceptor implements EmbedInterceptorInterface
     #[Override]
     public function invoke(MethodInvocation $invocation)
     {
-        $ro = $invocation->getThis();
-        assert($ro instanceof ResourceObject);
         $embeds = array_map(
             static fn (ReflectionAttribute $attribute): Embed => $attribute->newInstance(),
             $invocation->getMethod()->getAttributes(Embed::class),
         );
-        $this->embedResource($embeds, $ro, $invocation);
+        $this->embedResource($embeds, $invocation);
 
         return $invocation->proceed();
     }
 
     /**
+     * Puts the embeds in the body of the invoked resource, overwriting a rel already there.
+     *
      * @param list<Embed>              $embeds
      * @param MethodInvocation<object> $invocation the src templates are expanded with its arguments
      *
      * @throws EmbedException
      */
-    public function embedResource(array $embeds, ResourceObject $ro, MethodInvocation $invocation): void
+    public function embedResource(array $embeds, MethodInvocation $invocation): void
     {
+        $ro = $invocation->getThis();
+        assert($ro instanceof ResourceObject);
         $query = $this->getArgsByInvocation($invocation);
         $resource = $this->resourceProvider->get();
 
