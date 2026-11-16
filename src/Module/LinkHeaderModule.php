@@ -12,6 +12,8 @@ use Ray\Di\AbstractModule;
 
 /**
  * Outputs the #[Link(rel: 'prefetch')] links of onGet() as a Link header
+ *
+ * @internal
  */
 final class LinkHeaderModule extends AbstractModule
 {

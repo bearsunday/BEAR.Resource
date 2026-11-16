@@ -24,6 +24,7 @@ use function str_starts_with;
 /**
  * Appends the GET #[Link(rel: 'prefetch')] links of a 200 response to the RFC 8288 Link header
  *
+ * @internal
  * @psalm-import-type Body from Types
  */
 final readonly class LinkHeaderInterceptor implements MethodInterceptor
