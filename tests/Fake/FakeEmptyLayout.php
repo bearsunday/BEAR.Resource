@@ -10,8 +10,6 @@ use BEAR\Resource\Annotation\AbstractResourceLayout;
 #[Attribute(Attribute::TARGET_CLASS)]
 final class FakeEmptyLayout extends AbstractResourceLayout
 {
-    public function embed(): array
-    {
-        return [];
-    }
+    /** @var array<string, string> */
+    public const EMBED = [];
 }

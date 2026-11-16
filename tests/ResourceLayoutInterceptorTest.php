@@ -88,6 +88,14 @@ class ResourceLayoutInterceptorTest extends TestCase
         $this->resource->get('page://self/layout/two-layouts');
     }
 
+    public function testLayoutWithoutItsOwnEmbedIsRejected(): void
+    {
+        $this->expectException(ResourceLayoutException::class);
+        $this->expectExceptionMessage('BEAR\Resource\FakeUndeclaredLayout does not declare EMBED.');
+
+        $this->resource->get('page://self/layout/undeclared');
+    }
+
     public function testInterceptorIsSwappable(): void
     {
         $module = new ResourceModule('FakeVendor\Sandbox');

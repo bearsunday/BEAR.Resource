@@ -505,7 +505,7 @@ class News extends ResourceObject
 
 ### リソースレイアウト
 
-`AbstractResourceLayout` を継承したクラス属性で、リソースのレイアウトを宣言します。レイアウトとは、ヘッダーやフッターのように body の最上位に置く部品のことです。部品は `#[Embed]` と同じように `onGet()` の実行前に body に置かれ、各 `src` は `onGet()` の引数で展開されます。
+`AbstractResourceLayout` を継承したクラス属性の `EMBED` 定数で、リソースのレイアウトを宣言します。レイアウトとは、ヘッダーやフッターのように body の最上位に置く部品のことです。部品は `#[Embed]` と同じように `onGet()` の実行前に body に置かれ、各 `src` は `onGet()` の引数で展開されます。
 
 ```php
 use Attribute;
@@ -515,10 +515,8 @@ use BEAR\Resource\ResourceObject;
 #[Attribute(Attribute::TARGET_CLASS)]
 final class ContentPage extends AbstractResourceLayout
 {
-    public function embed(): array
-    {
-        return ['footer' => 'page://self/footer{?id}'];
-    }
+    /** @var array<string, string> */
+    public const EMBED = ['footer' => 'page://self/footer{?id}'];
 }
 
 #[ContentPage]
@@ -533,12 +531,14 @@ class Article extends ResourceObject
 
 テンプレートは body にある部品を出力するだけで、部品を自分で取得しません。
 
-1 つのリソースが持てるレイアウトは 1 つです。レイアウトの属性を 2 つ付けたクラスに GET リクエストすると、`ResourceLayoutException` が投げられます。複数のレイアウトで部品を共有するときは、属性を重ねずに、コードで配列を組み合わせます。
+1 つのリソースが持てるレイアウトは 1 つです。レイアウトの属性を 2 つ付けたクラスや、自分の `EMBED` を宣言していないレイアウトを付けたクラスに GET リクエストすると、`ResourceLayoutException` が投げられます。複数のレイアウトで部品を共有するときは、属性を重ねずに、定数を組み合わせます。
 
 ```php
-public function embed(): array
+#[Attribute(Attribute::TARGET_CLASS)]
+final class CollectionPage extends AbstractResourceLayout
 {
-    return [...(new ContentPage())->embed(), 'search' => 'page://self/search{?q}'];
+    /** @var array<string, string> */
+    public const EMBED = [...ContentPage::EMBED, 'search' => 'page://self/search{?q}'];
 }
 ```
 

@@ -11,9 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Psalm purity annotations, including on `RequestInterface::toUri()` / `toUriWithMethod()`,
   `LinkCrawlerInterface::isList()` and `SchemeCollectionInterface::getAdapter()`. Under Psalm 7, a class that implements
   these methods needs a matching `@psalm-capabilities` annotation.
-- A class attribute extending `AbstractResourceLayout` declares the resource's layout: the parts, such as a header and
-  a footer, that `onGet()` finds at the top level of the body as `#[Embed]` puts them. A resource has one layout, placed
-  through the now public `EmbedInterceptor::embedResource()`, which overwrites a rel already in the body.
+- A class attribute extending `AbstractResourceLayout` declares the resource's layout in its `EMBED` constant: the parts,
+  such as a header and a footer, that `onGet()` finds at the top level of the body as `#[Embed]` puts them. A resource
+  has one layout, placed through the now public `EmbedInterceptor::embedResource()`, which overwrites a rel already in the body.
 
 ### Changed
 - Requires ray/aop 2.19.1 and ray/di 2.19.0 or later.

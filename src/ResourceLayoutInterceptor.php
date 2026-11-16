@@ -13,6 +13,7 @@ use Ray\Aop\MethodInvocation;
 use Ray\Aop\WeavedInterface;
 use ReflectionAttribute;
 use ReflectionClass;
+use ReflectionClassConstant;
 
 use function array_key_exists;
 use function assert;
@@ -52,7 +53,9 @@ final readonly class ResourceLayoutInterceptor implements ResourceLayoutIntercep
 
         $embeds = [];
         foreach ($layouts as $layout) {
-            foreach ($layout->newInstance()->embed() as $rel => $src) {
+            /** @var class-string<AbstractResourceLayout> $layoutClass */
+            $layoutClass = $layout->getName();
+            foreach ($this->getParts($layoutClass) as $rel => $src) {
                 if (is_array($ro->body) && array_key_exists($rel, $ro->body)) {
                     continue;
                 }
@@ -64,5 +67,25 @@ final readonly class ResourceLayoutInterceptor implements ResourceLayoutIntercep
         $this->embedInterceptor->embedResource($embeds, $invocation);
 
         return $invocation->proceed();
+    }
+
+    /**
+     * @param class-string<AbstractResourceLayout> $layout
+     *
+     * @return array<string, string>
+     *
+     * @throws ResourceLayoutException
+     */
+    private function getParts(string $layout): array
+    {
+        $parts = new ReflectionClassConstant($layout, 'EMBED');
+        if ($parts->getDeclaringClass()->name === AbstractResourceLayout::class) {
+            throw new ResourceLayoutException(sprintf('%s does not declare EMBED.', $layout));
+        }
+
+        /** @var array<string, string> $embed */
+        $embed = $parts->getValue();
+
+        return $embed;
     }
 }

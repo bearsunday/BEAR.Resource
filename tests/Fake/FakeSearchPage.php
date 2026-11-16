@@ -10,8 +10,6 @@ use BEAR\Resource\Annotation\AbstractResourceLayout;
 #[Attribute(Attribute::TARGET_CLASS)]
 final class FakeSearchPage extends AbstractResourceLayout
 {
-    public function embed(): array
-    {
-        return ['search' => 'page://self/layout/header'];
-    }
+    /** @var array<string, string> */
+    public const EMBED = [...FakeContentPage::EMBED, 'search' => 'page://self/layout/header'];
 }
