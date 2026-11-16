@@ -713,6 +713,32 @@ class News extends ResourceObject
 
 `weather` resource ie embedded like as `headline` or `sports` in this `News` resource.
 
+### Embedding by page kind
+
+Parts shared by a kind of page, such as a header and a footer, can be declared once in a class attribute that extends `AbstractEmbedPage`. Each `src` is expanded with the `onGet()` arguments, and the parts are in the body before `onGet()` runs, as `#[Embed]` puts them.
+
+```php
+#[Attribute(Attribute::TARGET_CLASS)]
+final class ContentPage extends AbstractEmbedPage
+{
+    public function embed(): array
+    {
+        return ['footer' => 'page://self/footer{?id}'];
+    }
+}
+
+#[ContentPage]
+class Article extends ResourceObject
+{
+    public function onGet(string $id): static
+    {
+        return $this;
+    }
+}
+```
+
+A rel that the body already has, for example from a method `#[Embed]`, is kept.
+
 ### HAL (Hypertext Application Language)
 
 `HAL Module` changes resource representation as [HAL](http://stateless.co/hal_specification.html).
