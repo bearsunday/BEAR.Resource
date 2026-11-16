@@ -12,6 +12,7 @@ use Rize\UriTemplate\Node\Expression;
 use Rize\UriTemplate\Node\Variable;
 use Rize\UriTemplate\Parser;
 
+use function assert;
 use function count;
 use function implode;
 use function is_array;
@@ -35,16 +36,23 @@ final readonly class PrefetchLinkHeaderInterceptor implements MethodInterceptor
 
     /**
      * {@inheritDoc}
+     *
+     * An onGet() that returns its body instead of the ResourceObject is expanded with the returned value.
      */
     #[Override]
     public function invoke(MethodInvocation $invocation): mixed
     {
-        $ro = $invocation->proceed();
-        if (! $ro instanceof ResourceObject || $ro->code !== 200) {
-            return $ro;
+        /** @psalm-suppress MixedAssignment */
+        $result = $invocation->proceed();
+        $ro = $result instanceof ResourceObject ? $result : $invocation->getThis();
+        assert($ro instanceof ResourceObject);
+        if ($ro->code !== 200) {
+            return $result;
         }
 
-        $body = is_array($ro->body) ? $ro->body : [];
+        /** @psalm-suppress MixedAssignment */
+        $body = $result instanceof ResourceObject ? $ro->body : $result;
+        $body = is_array($body) ? $body : [];
         $links = [];
         foreach ($invocation->getMethod()->getAttributes(Link::class) as $attribute) {
             $link = $attribute->newInstance();
@@ -68,7 +76,7 @@ final readonly class PrefetchLinkHeaderInterceptor implements MethodInterceptor
             $ro->headers['Link'] = isset($ro->headers['Link']) ? $ro->headers['Link'] . ', ' . $link : $link;
         }
 
-        return $ro;
+        return $result;
     }
 
     /**

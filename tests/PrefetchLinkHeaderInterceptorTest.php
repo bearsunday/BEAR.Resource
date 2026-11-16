@@ -12,6 +12,7 @@ use Ray\Di\Injector;
 
 class PrefetchLinkHeaderInterceptorTest extends TestCase
 {
+    private Injector $injector;
     private FakePrefetch $ro;
 
     protected function setUp(): void
@@ -19,7 +20,8 @@ class PrefetchLinkHeaderInterceptorTest extends TestCase
         $fakeDir = __DIR__ . '/Fake';
         $module = new JsonSchemaModule($fakeDir . '/json_schema', $fakeDir . '/json_validate', new ResourceModule('FakeVendor\Sandbox'));
         $module = new JsonSchemaLinkHeaderModule('http://example.com/schema/', $module);
-        $this->ro = (new Injector($module, __DIR__ . '/tmp'))->getInstance(FakePrefetch::class);
+        $this->injector = new Injector($module, __DIR__ . '/tmp');
+        $this->ro = $this->injector->getInstance(FakePrefetch::class);
     }
 
     public function testDeclaredGetLinksAreAppendedUpToTheLimit(): void
@@ -37,5 +39,13 @@ class PrefetchLinkHeaderInterceptorTest extends TestCase
         $ro = $this->ro->onGet(404);
 
         $this->assertArrayNotHasKey('Link', $ro->headers);
+    }
+
+    public function testAReturnedBodyExpandsTheLink(): void
+    {
+        $ro = $this->injector->getInstance(FakePrefetchBody::class);
+
+        $this->assertSame(['next' => 2], $ro->onGet());
+        $this->assertSame('</article/2>; rel="prefetch"', $ro->headers['Link']);
     }
 }
