@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace FakeVendor\Sandbox\Resource\Page\EmbedPage;
+namespace FakeVendor\Sandbox\Resource\Page\Layout;
 
 use BEAR\Resource\Annotation\Embed;
 use BEAR\Resource\FakeContentPage;

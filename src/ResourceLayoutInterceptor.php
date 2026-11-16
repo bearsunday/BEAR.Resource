@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Annotation\AbstractEmbedPage;
+use BEAR\Resource\Annotation\AbstractResourceLayout;
 use BEAR\Resource\Exception\BadRequestException;
 use BEAR\Resource\Exception\EmbedException;
 use BEAR\Resource\Exception\LinkException;
+use BEAR\Resource\Exception\ResourceLayoutException;
 use Override;
 use Ray\Aop\MethodInvocation;
 use Ray\Aop\WeavedInterface;
@@ -18,11 +19,13 @@ use ReflectionClass;
 
 use function array_key_exists;
 use function assert;
+use function count;
 use function is_array;
+use function sprintf;
 use function uri_template;
 
 /** A rel already in the body, such as one from a method #[Embed] (which runs first), is kept. */
-final readonly class EmbedPageInterceptor implements EmbedPageInterceptorInterface
+final readonly class ResourceLayoutInterceptor implements ResourceLayoutInterceptorInterface
 {
     /** @param ProviderInterface<ResourceInterface> $resourceProvider */
     public function __construct(
@@ -35,6 +38,7 @@ final readonly class EmbedPageInterceptor implements EmbedPageInterceptorInterfa
      * {@inheritDoc}
      *
      * @throws EmbedException
+     * @throws ResourceLayoutException
      */
     #[Override]
     public function invoke(MethodInvocation $invocation)
@@ -50,8 +54,13 @@ final readonly class EmbedPageInterceptor implements EmbedPageInterceptorInterfa
 
         /** @var array<string, mixed> $query */
         $query = $invocation->getNamedArguments()->getArrayCopy();
-        foreach ($class->getAttributes(AbstractEmbedPage::class, ReflectionAttribute::IS_INSTANCEOF) as $attribute) {
-            foreach ($attribute->newInstance()->embed() as $rel => $src) {
+        $layouts = $class->getAttributes(AbstractResourceLayout::class, ReflectionAttribute::IS_INSTANCEOF);
+        if (count($layouts) > 1) {
+            throw new ResourceLayoutException(sprintf('%s has more than one layout.', $class->name));
+        }
+
+        foreach ($layouts as $layout) {
+            foreach ($layout->newInstance()->embed() as $rel => $src) {
                 $this->embed($ro, $rel, $src, $query);
             }
         }

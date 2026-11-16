@@ -713,13 +713,13 @@ class News extends ResourceObject
 
 `weather` resource ie embedded like as `headline` or `sports` in this `News` resource.
 
-### Embedding by page kind
+### Resource layout
 
-Parts shared by a kind of page, such as a header and a footer, can be declared once in a class attribute that extends `AbstractEmbedPage`. Each `src` is expanded with the `onGet()` arguments, and the parts are in the body before `onGet()` runs, as `#[Embed]` puts them.
+A class attribute that extends `AbstractResourceLayout` declares the resource's layout: the parts at the top level of the body, such as a header and a footer. They are in the body before `onGet()` runs, as `#[Embed]` puts them, and each `src` is expanded with the `onGet()` arguments.
 
 ```php
 #[Attribute(Attribute::TARGET_CLASS)]
-final class ContentPage extends AbstractEmbedPage
+final class ContentPage extends AbstractResourceLayout
 {
     public function embed(): array
     {
@@ -734,6 +734,15 @@ class Article extends ResourceObject
     {
         return $this;
     }
+}
+```
+
+A resource has one layout; a class with two layout attributes throws `ResourceLayoutException`. To share parts between layouts, compose the arrays in code instead of stacking attributes:
+
+```php
+public function embed(): array
+{
+    return [...(new ContentPage())->embed(), 'search' => 'page://self/search{?q}'];
 }
 ```
 

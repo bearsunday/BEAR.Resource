@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace BEAR\Resource\Interceptor;
 
-use BEAR\Resource\EmbedPageInterceptorInterface;
+use BEAR\Resource\ResourceLayoutInterceptorInterface;
 use Ray\Aop\MethodInvocation;
 
-final class FakeEmbedPageInterceptor implements EmbedPageInterceptorInterface
+final class FakeResourceLayoutInterceptor implements ResourceLayoutInterceptorInterface
 {
     public function invoke(MethodInvocation $invocation)
     {
