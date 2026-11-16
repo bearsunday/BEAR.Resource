@@ -118,7 +118,8 @@ final readonly class JsonSchemaInterceptor implements JsonSchemaInterceptorInter
             }
 
             if (is_string($this->schemaHost)) {
-                $ro->headers['Link'] = sprintf('<%s%s>; rel="describedby"', $this->schemaHost, $jsonSchema->schema);
+                $link = sprintf('<%s%s>; rel="describedby"', $this->schemaHost, $jsonSchema->schema);
+                $ro->headers['Link'] = isset($ro->headers['Link']) ? $ro->headers['Link'] . ', ' . $link : $link;
             }
         } catch (JsonSchemaResponseException $e) {
             $this->handler->handle($ro, $e, $schemaFile);

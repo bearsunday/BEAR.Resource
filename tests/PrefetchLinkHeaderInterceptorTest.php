@@ -1,0 +1,42 @@
+<?php
+
+declare(strict_types=1);
+
+namespace BEAR\Resource;
+
+use BEAR\Resource\Module\JsonSchemaLinkHeaderModule;
+use BEAR\Resource\Module\JsonSchemaModule;
+use BEAR\Resource\Module\PrefetchLinkHeaderModule;
+use BEAR\Resource\Module\ResourceModule;
+use PHPUnit\Framework\TestCase;
+use Ray\Di\Injector;
+
+class PrefetchLinkHeaderInterceptorTest extends TestCase
+{
+    private FakePrefetch $ro;
+
+    protected function setUp(): void
+    {
+        $fakeDir = __DIR__ . '/Fake';
+        $module = new JsonSchemaModule($fakeDir . '/json_schema', $fakeDir . '/json_validate', new ResourceModule('FakeVendor\Sandbox'));
+        $module = new PrefetchLinkHeaderModule(new JsonSchemaLinkHeaderModule('http://example.com/schema/', $module));
+        $this->ro = (new Injector($module, __DIR__ . '/tmp'))->getInstance(FakePrefetch::class);
+    }
+
+    public function testDeclaredGetLinksAreAppendedUpToTheLimit(): void
+    {
+        $ro = $this->ro->onGet();
+
+        $this->assertSame(
+            '</user/20>; rel="prefetch", <https://example.com/p2>; rel="prefetch", </p3>; rel="prefetch", </p4>; rel="prefetch", </p5>; rel="prefetch", <http://example.com/schema/user.json>; rel="describedby"',
+            $ro->headers['Link'],
+        );
+    }
+
+    public function testNoHeaderUnlessCode200(): void
+    {
+        $ro = $this->ro->onGet(404);
+
+        $this->assertArrayNotHasKey('Link', $ro->headers);
+    }
+}
