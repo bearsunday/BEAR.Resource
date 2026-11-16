@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   these methods needs a matching `@psalm-capabilities` annotation.
 - A class attribute extending `AbstractResourceLayout` declares the resource's layout in its `EMBED` constant: the parts,
   such as a header and a footer, that `onGet()` finds at the top level of the body as `#[Embed]` puts them. A resource
-  has one layout, placed through the now public `EmbedInterceptor::embedResource()`, which overwrites a rel already in the body.
+  has one layout, placed through the now public `EmbedInterceptor::embedResource()`; a method `#[Embed]` of the same rel wins.
 
 ### Changed
 - Requires ray/aop 2.19.1 and ray/di 2.19.0 or later.
