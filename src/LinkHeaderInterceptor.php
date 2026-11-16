@@ -108,11 +108,11 @@ final readonly class LinkHeaderInterceptor implements MethodInterceptor
         $href = $this->linker->expandHref($link, $body);
         $isPath = str_starts_with($href, '/') && ! str_starts_with($href, '//');
 
-        return $isPath || preg_match('#^https?://#', $href) === 1 ? $href : null;
+        return $isPath || preg_match('#^https?://#i', $href) === 1 ? $href : null;
     }
 
     /**
-     * Whether every template variable has a value in the body: not missing, null or ''
+     * Whether every template variable expands to a value: not missing, null, '', [] or false
      *
      * @param Body $body
      */
@@ -126,7 +126,7 @@ final readonly class LinkHeaderInterceptor implements MethodInterceptor
             /** @var list<Variable> $variables */
             $variables = $node->getVariables();
             foreach ($variables as $variable) {
-                if (! isset($body[$variable->name]) || $body[$variable->name] === '') {
+                if (in_array($body[$variable->name] ?? null, [null, '', [], false], true)) {
                     return false;
                 }
             }

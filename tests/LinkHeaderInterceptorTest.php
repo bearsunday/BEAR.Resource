@@ -40,7 +40,7 @@ class LinkHeaderInterceptorTest extends TestCase
         $ro = $this->injector->getInstance(FakePaging::class)->onGet();
 
         $this->assertSame(
-            '<https://example.com/articles>; rel="canonical", </articles?page=1>; rel="first", </articles?page=2>; rel="next", </articles?page=9>; rel="last"',
+            '<HTTPS://example.com/articles>; rel="canonical", </articles?page=1>; rel="first", </articles?page=2>; rel="next", </articles?page=9>; rel="last"',
             $ro->headers['Link'],
         );
     }
@@ -56,8 +56,22 @@ class LinkHeaderInterceptorTest extends TestCase
     {
         $ro = $this->injector->getInstance(FakePrefetchBody::class);
 
-        $this->assertSame(['next' => 2, 'host' => '//evil.example/x', 'empty' => ''], $ro->onGet());
-        $this->assertSame('</article/2>; rel="prefetch"', $ro->headers['Link'], 'a protocol-relative href and an empty variable are skipped');
+        $this->assertSame(['next' => 2, 'host' => '//evil.example/x', 'empty' => '', 'list' => [], 'flag' => false], $ro->onGet());
+        $this->assertSame('</article/2>; rel="prefetch"', $ro->headers['Link'], 'a protocol-relative href and a variable that expands to nothing are skipped');
+    }
+
+    public function testLinksAreAppendedToTheLinkHeaderOnGetSets(): void
+    {
+        $ro = $this->injector->getInstance(FakeOwnLink::class)->onGet();
+
+        $this->assertSame('</own>; rel="own", </next>; rel="next"', $ro->headers['Link']);
+    }
+
+    public function testOnlyOnGetIsIntercepted(): void
+    {
+        $ro = $this->injector->getInstance(FakeOwnLink::class)->onPost();
+
+        $this->assertArrayNotHasKey('Link', $ro->headers);
     }
 
     public function testAMethodWithoutALinkHeaderRelIsNotIntercepted(): void
