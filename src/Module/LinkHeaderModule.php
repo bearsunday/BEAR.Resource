@@ -11,7 +11,7 @@ use Override;
 use Ray\Di\AbstractModule;
 
 /**
- * Outputs the #[Link(rel: 'prefetch')] links of onGet() as a Link header
+ * Outputs the #[Link] links of onGet() whose rel is in LinkHeaderInterceptor::RELS as a Link header
  *
  * @internal
  */

@@ -25,12 +25,22 @@ class LinkHeaderInterceptorTest extends TestCase
         $this->ro = $this->injector->getInstance(FakePrefetch::class);
     }
 
-    public function testDeclaredGetLinksAreAppendedUpToTheLimit(): void
+    public function testOnlyPrefetchLinksAreLimited(): void
     {
         $ro = $this->ro->onGet();
 
         $this->assertSame(
-            '</user/20>; rel="prefetch", <https://example.com/p2>; rel="prefetch", </p3>; rel="prefetch", </p4>; rel="prefetch", </p5>; rel="prefetch", <http://example.com/schema/user.json>; rel="describedby"',
+            '</user/20>; rel="prefetch", </next>; rel="next", <https://example.com/p2>; rel="prefetch", </p3>; rel="prefetch", </p4>; rel="prefetch", </p5>; rel="prefetch", </last>; rel="last", <http://example.com/schema/user.json>; rel="describedby"',
+            $ro->headers['Link'],
+        );
+    }
+
+    public function testPagingAndCanonicalLinksAreAppended(): void
+    {
+        $ro = $this->injector->getInstance(FakePaging::class)->onGet();
+
+        $this->assertSame(
+            '<https://example.com/articles>; rel="canonical", </articles?page=1>; rel="first", </articles?page=2>; rel="next", </articles?page=9>; rel="last"',
             $ro->headers['Link'],
         );
     }
@@ -50,7 +60,7 @@ class LinkHeaderInterceptorTest extends TestCase
         $this->assertSame('</article/2>; rel="prefetch"', $ro->headers['Link'], 'a protocol-relative href and an empty variable are skipped');
     }
 
-    public function testAMethodWithoutAPrefetchLinkIsNotIntercepted(): void
+    public function testAMethodWithoutALinkHeaderRelIsNotIntercepted(): void
     {
         $ro = $this->injector->getInstance(FakeHalLinkAttr::class);
 

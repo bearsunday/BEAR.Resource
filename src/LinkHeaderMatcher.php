@@ -10,8 +10,10 @@ use Ray\Aop\AbstractMatcher;
 use ReflectionClass;
 use ReflectionMethod;
 
+use function in_array;
+
 /**
- * Matches a method that declares #[Link(rel: 'prefetch')]
+ * Matches a method that declares a #[Link] whose rel is in LinkHeaderInterceptor::RELS
  *
  * @internal
  */
@@ -35,7 +37,7 @@ final class LinkHeaderMatcher extends AbstractMatcher
     public function matchesMethod(ReflectionMethod $method, array $arguments): bool
     {
         foreach ($method->getAttributes(Link::class) as $attribute) {
-            if ($attribute->newInstance()->rel === 'prefetch') {
+            if (in_array($attribute->newInstance()->rel, LinkHeaderInterceptor::RELS, true)) {
                 return true;
             }
         }

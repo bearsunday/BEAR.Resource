@@ -16,11 +16,13 @@ class FakePrefetch extends ResourceObject
     #[Link(rel: 'prefetch', href: '/edit', method: 'put')]
     #[Link(rel: 'prefetch', href: 'app://self/user')]
     #[Link(rel: 'next', href: '/next')]
+    #[Link(rel: 'profile', href: '/profile')]
     #[Link(rel: 'prefetch', href: 'https://example.com/p2')]
     #[Link(rel: 'prefetch', href: '/p3')]
     #[Link(rel: 'prefetch', href: '/p4')]
     #[Link(rel: 'prefetch', href: '/p5')]
     #[Link(rel: 'prefetch', href: '/p6')]
+    #[Link(rel: 'last', href: '/last')]
     public function onGet(int $code = 200): static
     {
         $this->code = $code;

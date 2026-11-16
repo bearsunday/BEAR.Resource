@@ -14,22 +14,25 @@ use Rize\UriTemplate\Node\Variable;
 use Rize\UriTemplate\Parser;
 
 use function assert;
-use function count;
 use function implode;
+use function in_array;
 use function is_array;
 use function preg_match;
 use function sprintf;
 use function str_starts_with;
 
 /**
- * Appends the GET #[Link(rel: 'prefetch')] links of a 200 response to the RFC 8288 Link header
+ * Appends the GET #[Link] links of a 200 response whose rel is in RELS to the RFC 8288 Link header
  *
  * @internal
  * @psalm-import-type Body from Types
  */
 final readonly class LinkHeaderInterceptor implements MethodInterceptor
 {
-    private const LIMIT = 5;
+    public const RELS = ['prefetch', 'canonical', 'next', 'prev', 'first', 'last'];
+
+    /** A client fetches every prefetch link, so a response declares this many at most */
+    private const PREFETCH_LIMIT = 5;
 
     public function __construct(
         private HalLinker $linker,
@@ -69,29 +72,36 @@ final readonly class LinkHeaderInterceptor implements MethodInterceptor
     private function links(array $attributes, array $body): string
     {
         $links = [];
+        $prefetchLeft = self::PREFETCH_LIMIT;
         foreach ($attributes as $attribute) {
-            $href = $this->href($attribute->newInstance(), $body);
+            $link = $attribute->newInstance();
+            $href = $this->href($link, $body);
             if ($href === null) {
                 continue;
             }
 
-            $links[] = sprintf('<%s>; rel="prefetch"', $href);
-            if (count($links) === self::LIMIT) {
-                break;
+            if ($link->rel === 'prefetch') {
+                if ($prefetchLeft === 0) {
+                    continue;
+                }
+
+                $prefetchLeft--;
             }
+
+            $links[] = sprintf('<%s>; rel="%s"', $href, $link->rel);
         }
 
         return implode(', ', $links);
     }
 
     /**
-     * The href an edge can fetch, or null for a link it must not
+     * The href a client can fetch, or null for a link that is not output
      *
      * @param Body $body
      */
     private function href(Link $link, array $body): string|null
     {
-        if ($link->rel !== 'prefetch' || $link->method !== Link::DEFAULT_METHOD || ! $this->isDefined($link->href, $body)) {
+        if (! in_array($link->rel, self::RELS, true) || $link->method !== Link::DEFAULT_METHOD || ! $this->isDefined($link->href, $body)) {
             return null;
         }
 
