@@ -73,6 +73,13 @@ class ResourceLayoutInterceptorTest extends TestCase
         ], $uris);
     }
 
+    public function testEmptyLayoutLeavesTheBodyAlone(): void
+    {
+        $ro = $this->resource->get('page://self/layout/bare');
+
+        $this->assertNull($ro->body);
+    }
+
     public function testMoreThanOneLayoutIsRejected(): void
     {
         $this->expectException(ResourceLayoutException::class);

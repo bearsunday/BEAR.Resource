@@ -508,6 +508,10 @@ class News extends ResourceObject
 `AbstractResourceLayout` を継承したクラス属性で、リソースのレイアウトを宣言します。レイアウトとは、ヘッダーやフッターのように body の最上位に置く部品のことです。部品は `#[Embed]` と同じように `onGet()` の実行前に body に置かれ、各 `src` は `onGet()` の引数で展開されます。
 
 ```php
+use Attribute;
+use BEAR\Resource\Annotation\AbstractResourceLayout;
+use BEAR\Resource\ResourceObject;
+
 #[Attribute(Attribute::TARGET_CLASS)]
 final class ContentPage extends AbstractResourceLayout
 {
@@ -538,7 +542,7 @@ public function embed(): array
 }
 ```
 
-メソッドの `#[Embed]` などで body にすでにある rel は、そのまま残ります。
+メソッドの `#[Embed]` などで body にすでにある rel は、そのまま残ります。PHP のクラス属性は継承されないので、レイアウトもサブクラスには引き継がれません。
 
 ### HAL (Hypertext Application Language)
 

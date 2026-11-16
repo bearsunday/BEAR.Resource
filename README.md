@@ -718,6 +718,10 @@ class News extends ResourceObject
 A class attribute that extends `AbstractResourceLayout` declares the resource's layout: the parts at the top level of the body, such as a header and a footer. They are in the body before `onGet()` runs, as `#[Embed]` puts them, and each `src` is expanded with the `onGet()` arguments.
 
 ```php
+use Attribute;
+use BEAR\Resource\Annotation\AbstractResourceLayout;
+use BEAR\Resource\ResourceObject;
+
 #[Attribute(Attribute::TARGET_CLASS)]
 final class ContentPage extends AbstractResourceLayout
 {
@@ -748,7 +752,7 @@ public function embed(): array
 }
 ```
 
-A rel that the body already has, for example from a method `#[Embed]`, is kept.
+A rel that the body already has, for example from a method `#[Embed]`, is kept. A subclass does not inherit the layout, since PHP does not inherit class attributes.
 
 ### HAL (Hypertext Application Language)
 

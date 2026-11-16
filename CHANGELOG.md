@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A class attribute extending `AbstractResourceLayout` declares the resource's layout: the parts, such as a header and
   a footer, that `onGet()` finds at the top level of the body as `#[Embed]` puts them. A resource has one layout.
 
+### Changed
+- Requires ray/aop 2.19.1 and ray/di 2.19.0 or later.
+
 ### Security
 - Requires koriym/file-upload 1.0.1 or later, which checks an upload's MIME type against its content
   ([GHSA-9343-66h6-6cjr](https://github.com/koriym/Koriym.FileUpload/security/advisories/GHSA-9343-66h6-6cjr)).

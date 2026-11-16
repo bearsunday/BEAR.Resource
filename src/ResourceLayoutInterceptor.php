@@ -61,7 +61,9 @@ final readonly class ResourceLayoutInterceptor implements ResourceLayoutIntercep
             }
         }
 
-        $this->embedInterceptor->embedResource($embeds, $ro, $invocation);
+        if ($embeds !== []) {
+            $this->embedInterceptor->embedResource($embeds, $ro, $invocation);
+        }
 
         return $invocation->proceed();
     }
