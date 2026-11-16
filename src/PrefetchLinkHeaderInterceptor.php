@@ -12,7 +12,6 @@ use Rize\UriTemplate\Node\Expression;
 use Rize\UriTemplate\Node\Variable;
 use Rize\UriTemplate\Parser;
 
-use function assert;
 use function count;
 use function implode;
 use function is_array;
@@ -38,11 +37,10 @@ final readonly class PrefetchLinkHeaderInterceptor implements MethodInterceptor
      * {@inheritDoc}
      */
     #[Override]
-    public function invoke(MethodInvocation $invocation): ResourceObject
+    public function invoke(MethodInvocation $invocation): mixed
     {
         $ro = $invocation->proceed();
-        assert($ro instanceof ResourceObject);
-        if ($ro->code !== 200) {
+        if (! $ro instanceof ResourceObject || $ro->code !== 200) {
             return $ro;
         }
 

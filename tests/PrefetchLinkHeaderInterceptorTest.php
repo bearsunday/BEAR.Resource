@@ -6,7 +6,6 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Module\JsonSchemaLinkHeaderModule;
 use BEAR\Resource\Module\JsonSchemaModule;
-use BEAR\Resource\Module\PrefetchLinkHeaderModule;
 use BEAR\Resource\Module\ResourceModule;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
@@ -19,7 +18,7 @@ class PrefetchLinkHeaderInterceptorTest extends TestCase
     {
         $fakeDir = __DIR__ . '/Fake';
         $module = new JsonSchemaModule($fakeDir . '/json_schema', $fakeDir . '/json_validate', new ResourceModule('FakeVendor\Sandbox'));
-        $module = new PrefetchLinkHeaderModule(new JsonSchemaLinkHeaderModule('http://example.com/schema/', $module));
+        $module = new JsonSchemaLinkHeaderModule('http://example.com/schema/', $module);
         $this->ro = (new Injector($module, __DIR__ . '/tmp'))->getInstance(FakePrefetch::class);
     }
 

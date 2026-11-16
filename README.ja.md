@@ -321,6 +321,21 @@ public function onPost($drink)
 支払と注文の関係が変更されてもクライアントコードに変更はありません。
 HATEOAS について詳しくは[How to GET a Cup of Coffee](http://www.infoq.com/articles/webber-rest-workflow)をご覧ください。
 
+### プリフェッチリンク
+
+`rel: 'prefetch'` を宣言した GET のリンクは、`onGet()` が 200 を返したとき RFC 8288 の `Link` ヘッダーにも出力されます。CDN のエッジはこれを読んで自分のキャッシュを温められます。
+
+```php
+#[Link(rel: 'prefetch', href: '/article/{next_id}')]
+public function onGet(int $id): static
+```
+
+```
+Link: </article/43>; rel="prefetch"
+```
+
+テンプレートの変数が body にないか null のリンクと、展開した href が `/` でも `http(s)://` でも始まらないリンクは出力しません。宣言順に最大 5 件まで出力します。
+
 ### リソース表現
 
 リソースはそれぞれ表現のためのリソースレンダラーを持っています。
