@@ -9,6 +9,7 @@ use BEAR\Resource\Module\JsonSchemaModule;
 use BEAR\Resource\Module\ResourceModule;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
+use ReflectionClass;
 
 class PrefetchLinkHeaderInterceptorTest extends TestCase
 {
@@ -47,5 +48,17 @@ class PrefetchLinkHeaderInterceptorTest extends TestCase
 
         $this->assertSame(['next' => 2, 'host' => '//evil.example/x', 'empty' => ''], $ro->onGet());
         $this->assertSame('</article/2>; rel="prefetch"', $ro->headers['Link'], 'a protocol-relative href and an empty variable are skipped');
+    }
+
+    public function testAMethodWithoutAPrefetchLinkIsNotIntercepted(): void
+    {
+        $ro = $this->injector->getInstance(FakeHalLinkAttr::class);
+
+        $this->assertSame(FakeHalLinkAttr::class, $ro::class);
+    }
+
+    public function testTheMatcherMatchesNoClass(): void
+    {
+        $this->assertFalse((new PrefetchLinkMatcher())->matchesClass(new ReflectionClass(FakePrefetch::class), []));
     }
 }

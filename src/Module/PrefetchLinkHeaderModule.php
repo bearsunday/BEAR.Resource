@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace BEAR\Resource\Module;
 
-use BEAR\Resource\Annotation\Link;
 use BEAR\Resource\PrefetchLinkHeaderInterceptor;
+use BEAR\Resource\PrefetchLinkMatcher;
 use BEAR\Resource\ResourceObject;
 use Override;
 use Ray\Di\AbstractModule;
@@ -26,7 +26,7 @@ final class PrefetchLinkHeaderModule extends AbstractModule
             $this->matcher->subclassesOf(ResourceObject::class),
             $this->matcher->logicalAnd(
                 $this->matcher->startsWith('onGet'),
-                $this->matcher->annotatedWith(Link::class),
+                new PrefetchLinkMatcher(),
             ),
             [PrefetchLinkHeaderInterceptor::class],
         );
