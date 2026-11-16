@@ -22,7 +22,7 @@ use function in_array;
 use function sprintf;
 
 /**
- * A method #[Embed] of the same rel wins over a part, whichever of the two interceptors runs first.
+ * A rel both a part and a method #[Embed] declare is an error; onGet() replaces a part by setting its rel.
  *
  * @psalm-import-type LayoutEmbedMap from Types
  */
@@ -65,7 +65,7 @@ final readonly class ResourceLayoutInterceptor implements ResourceLayoutIntercep
             $layoutClass = $layout->getName();
             foreach ($this->getParts($layoutClass) as $rel => $src) {
                 if (in_array($rel, $methodRels, true)) {
-                    continue;
+                    throw new ResourceLayoutException(sprintf('%s declares rel "%s" in both its layout and a method #[Embed]; set it in onGet() to replace the part.', $class->name, $rel));
                 }
 
                 $embeds[] = new Embed(rel: $rel, src: $src);

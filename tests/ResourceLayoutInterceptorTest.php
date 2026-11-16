@@ -55,22 +55,12 @@ class ResourceLayoutInterceptorTest extends TestCase
         $this->assertSame(1, Footer::$count);
     }
 
-    public function testMethodEmbedOverridesPartOfSameRel(): void
+    public function testARelBothTheLayoutAndAMethodEmbedDeclareIsRejected(): void
     {
-        $ro = $this->resource->get('page://self/layout/both', ['id' => '1']);
+        $this->expectException(ResourceLayoutException::class);
+        $this->expectExceptionMessage('FakeVendor\Sandbox\Resource\Page\Layout\Both declares rel "footer" in both its layout and a method #[Embed]; set it in onGet() to replace the part.');
 
-        $uris = [];
-        foreach (['header', 'footer', 'bird'] as $rel) {
-            $request = $ro->body[$rel];
-            assert($request instanceof Request);
-            $uris[$rel] = $request->toUri();
-        }
-
-        $this->assertSame([
-            'header' => 'page://self/layout/header',
-            'footer' => 'app://self/bird/canary',
-            'bird' => 'app://self/bird/sparrow?id=1',
-        ], $uris);
+        $this->resource->get('page://self/layout/both', ['id' => '1']);
     }
 
     public function testEmptyLayoutLeavesTheBodyAlone(): void
