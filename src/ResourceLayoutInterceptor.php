@@ -15,14 +15,14 @@ use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionClassConstant;
 
-use function array_key_exists;
+use function array_map;
 use function assert;
 use function count;
-use function is_array;
+use function in_array;
 use function sprintf;
 
 /**
- * A rel already in the body, such as one from a method #[Embed] (which runs first), is kept.
+ * A method #[Embed] of the same rel wins over a part, whichever of the two interceptors runs first.
  *
  * @psalm-import-type LayoutEmbedMap from Types
  */
@@ -56,11 +56,15 @@ final readonly class ResourceLayoutInterceptor implements ResourceLayoutIntercep
         }
 
         $embeds = [];
+        $methodRels = array_map(
+            static fn (ReflectionAttribute $embed): string => $embed->newInstance()->rel,
+            $invocation->getMethod()->getAttributes(Embed::class),
+        );
         foreach ($layouts as $layout) {
             /** @var class-string<AbstractResourceLayout> $layoutClass */
             $layoutClass = $layout->getName();
             foreach ($this->getParts($layoutClass) as $rel => $src) {
-                if (is_array($ro->body) && array_key_exists($rel, $ro->body)) {
+                if (in_array($rel, $methodRels, true)) {
                     continue;
                 }
 

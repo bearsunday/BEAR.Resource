@@ -542,7 +542,7 @@ final class CollectionPage extends AbstractResourceLayout
 }
 ```
 
-メソッドの `#[Embed]` などで body にすでにある rel は、そのまま残ります。PHP のクラス属性は継承されないので、レイアウトもサブクラスには引き継がれません。
+レイアウトのパーツと同じ rel をメソッドの `#[Embed]` も宣言していれば、インターセプターの順番に関わらず、メソッドの `#[Embed]` が優先されます。PHP のクラス属性は継承されないので、レイアウトもサブクラスには引き継がれません。
 
 ### HAL (Hypertext Application Language)
 

@@ -752,7 +752,7 @@ final class CollectionPage extends AbstractResourceLayout
 }
 ```
 
-A rel that the body already has, for example from a method `#[Embed]`, is kept. A subclass does not inherit the layout, since PHP does not inherit class attributes.
+A method `#[Embed]` of the same rel wins over the layout's part, whichever interceptor runs first. A subclass does not inherit the layout, since PHP does not inherit class attributes.
 
 ### HAL (Hypertext Application Language)
 
