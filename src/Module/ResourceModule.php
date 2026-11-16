@@ -20,6 +20,7 @@ use Ray\Di\AbstractModule;
  * ResourceClientModule
  * AnnotationModule
  * EmbedResourceModule
+ * ResourceLayoutModule
  * HttpClientModule
  */
 final class ResourceModule extends AbstractModule
@@ -39,6 +40,7 @@ final class ResourceModule extends AbstractModule
     {
         $this->install(new ResourceClientModule());
         $this->install(new EmbedResourceModule());
+        $this->install(new ResourceLayoutModule());
         $this->install(new HttpClientModule());
         $this->bind()->annotatedWith(AppName::class)->toInstance($this->appName);
     }

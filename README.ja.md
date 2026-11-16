@@ -503,6 +503,47 @@ class News extends ResourceObject
 
 このNewsリソースでは`headline`と`sports`と同様に`weather`というリソースのリクエストを埋め込みます。
 
+### リソースレイアウト
+
+`AbstractResourceLayout` を継承したクラス属性の `EMBED` 定数で、リソースのレイアウトを宣言します。レイアウトとは、ヘッダーやフッターのように body の最上位に置く部品のことです。部品は `#[Embed]` と同じように `onGet()` の実行前に body に置かれ、各 `src` は `onGet()` の引数で展開されます。
+
+```php
+use Attribute;
+use BEAR\Resource\Annotation\AbstractResourceLayout;
+use BEAR\Resource\ResourceObject;
+
+#[Attribute(Attribute::TARGET_CLASS)]
+final class ContentPage extends AbstractResourceLayout
+{
+    /** @var array<string, string> */
+    public const EMBED = ['footer' => 'page://self/footer{?id}'];
+}
+
+#[ContentPage]
+class Article extends ResourceObject
+{
+    public function onGet(string $id): static
+    {
+        return $this;
+    }
+}
+```
+
+テンプレートは body にある部品を出力するだけで、部品を自分で取得しません。
+
+1 つのリソースが持てるレイアウトは 1 つです。レイアウトの属性を 2 つ付けたクラスや、自分の `EMBED` を宣言していないレイアウトを付けたクラスに GET リクエストすると、`ResourceLayoutException` が投げられます。複数のレイアウトで部品を共有するときは、属性を重ねずに、定数を組み合わせます。
+
+```php
+#[Attribute(Attribute::TARGET_CLASS)]
+final class CollectionPage extends AbstractResourceLayout
+{
+    /** @var array<string, string> */
+    public const EMBED = [...ContentPage::EMBED, 'search' => 'page://self/search{?q}'];
+}
+```
+
+レイアウトとメソッドの `#[Embed]` が同じ rel を宣言すると、`ResourceLayoutException` になります。PHP のクラス属性は継承されないので、レイアウトもサブクラスには引き継がれません。
+
 ### HAL (Hypertext Application Language)
 
 HAL Moduleを使うとリソース表現が[HAL](http://stateless.co/hal_specification.html)になります。リソースに埋め込まれたリクエストはHALでも埋め込みリソースとして評価されます。

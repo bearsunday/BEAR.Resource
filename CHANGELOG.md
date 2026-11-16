@@ -11,6 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Psalm purity annotations, including on `RequestInterface::toUri()` / `toUriWithMethod()`,
   `LinkCrawlerInterface::isList()` and `SchemeCollectionInterface::getAdapter()`. Under Psalm 7, a class that implements
   these methods needs a matching `@psalm-capabilities` annotation.
+- A class attribute extending `AbstractResourceLayout` declares the resource's layout in its `EMBED` constant: the parts,
+  such as a header and a footer, that `onGet()` finds at the top level of the body as `#[Embed]` puts them. A resource
+  has one layout, placed through the now public `EmbedInterceptor::embedResource()`. A rel that both the layout and a
+  method `#[Embed]` declare throws `ResourceLayoutException`.
+
+### Changed
+- Requires ray/aop 2.19.1 and ray/di 2.19.0 or later.
 
 ### Security
 - Requires koriym/file-upload 1.0.1 or later, which checks an upload's MIME type against its content

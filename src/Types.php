@@ -109,6 +109,7 @@ use ReflectionParameter;
  * @psalm-type MethodAnnotations = array<string, Annotations>
  * @psalm-type WebContextParam = class-string
  * @psalm-type InsMap = array<string, string>
+ * @psalm-type LayoutEmbedMap = array<string, string>
  *
  * Parameter/Injection Types
  * @psalm-type ParamMap = array<string, ParamInterface>
