@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace BEAR\Resource\Module;
 
-use BEAR\Resource\PrefetchLinkHeaderInterceptor;
-use BEAR\Resource\PrefetchLinkMatcher;
+use BEAR\Resource\LinkHeaderInterceptor;
+use BEAR\Resource\LinkHeaderMatcher;
 use BEAR\Resource\ResourceObject;
 use Override;
 use Ray\Di\AbstractModule;
@@ -13,7 +13,7 @@ use Ray\Di\AbstractModule;
 /**
  * Outputs the #[Link(rel: 'prefetch')] links of onGet() as a Link header
  */
-final class PrefetchLinkHeaderModule extends AbstractModule
+final class LinkHeaderModule extends AbstractModule
 {
     /**
      * {@inheritDoc}
@@ -21,14 +21,14 @@ final class PrefetchLinkHeaderModule extends AbstractModule
     #[Override]
     protected function configure(): void
     {
-        $this->bind(PrefetchLinkHeaderInterceptor::class);
+        $this->bind(LinkHeaderInterceptor::class);
         $this->bindInterceptor(
             $this->matcher->subclassesOf(ResourceObject::class),
             $this->matcher->logicalAnd(
                 $this->matcher->startsWith('onGet'),
-                new PrefetchLinkMatcher(),
+                new LinkHeaderMatcher(),
             ),
-            [PrefetchLinkHeaderInterceptor::class],
+            [LinkHeaderInterceptor::class],
         );
     }
 }

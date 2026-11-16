@@ -21,7 +21,7 @@ use Ray\Di\AbstractModule;
  * AnnotationModule
  * EmbedResourceModule
  * ResourceLayoutModule
- * PrefetchLinkHeaderModule
+ * LinkHeaderModule
  * HttpClientModule
  */
 final class ResourceModule extends AbstractModule
@@ -42,7 +42,7 @@ final class ResourceModule extends AbstractModule
         $this->install(new ResourceClientModule());
         $this->install(new EmbedResourceModule());
         $this->install(new ResourceLayoutModule());
-        $this->install(new PrefetchLinkHeaderModule());
+        $this->install(new LinkHeaderModule());
         $this->install(new HttpClientModule());
         $this->bind()->annotatedWith(AppName::class)->toInstance($this->appName);
     }

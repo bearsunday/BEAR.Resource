@@ -26,7 +26,7 @@ use function str_starts_with;
  *
  * @psalm-import-type Body from Types
  */
-final readonly class PrefetchLinkHeaderInterceptor implements MethodInterceptor
+final readonly class LinkHeaderInterceptor implements MethodInterceptor
 {
     private const LIMIT = 5;
 

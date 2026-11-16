@@ -15,7 +15,7 @@ use ReflectionMethod;
  *
  * @internal
  */
-final class PrefetchLinkMatcher extends AbstractMatcher
+final class LinkHeaderMatcher extends AbstractMatcher
 {
     /**
      * {@inheritDoc}

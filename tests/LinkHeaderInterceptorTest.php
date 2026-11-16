@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 use ReflectionClass;
 
-class PrefetchLinkHeaderInterceptorTest extends TestCase
+class LinkHeaderInterceptorTest extends TestCase
 {
     private Injector $injector;
     private FakePrefetch $ro;
@@ -59,6 +59,6 @@ class PrefetchLinkHeaderInterceptorTest extends TestCase
 
     public function testTheMatcherMatchesNoClass(): void
     {
-        $this->assertFalse((new PrefetchLinkMatcher())->matchesClass(new ReflectionClass(FakePrefetch::class), []));
+        $this->assertFalse((new LinkHeaderMatcher())->matchesClass(new ReflectionClass(FakePrefetch::class), []));
     }
 }
