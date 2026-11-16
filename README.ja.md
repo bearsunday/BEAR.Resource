@@ -321,6 +321,22 @@ public function onPost($drink)
 支払と注文の関係が変更されてもクライアントコードに変更はありません。
 HATEOAS について詳しくは[How to GET a Cup of Coffee](http://www.infoq.com/articles/webber-rest-workflow)をご覧ください。
 
+### Link ヘッダー
+
+rel が `prefetch`・`canonical`・`next`・`prev`・`first`・`last` のリンクは、`onGet()` が 200 を返すとき `Link` ヘッダーにも出力されます。`prefetch` は CDN のエッジがキャッシュを温めるのに、`next` は API のクライアントがページをたどるのに使えます。
+
+```php
+#[Link(rel: 'next', href: '/articles?page={next}')]
+#[Link(rel: 'prefetch', href: '/article/{top_id}')]
+public function onGet(int $page = 1): static
+```
+
+```
+Link: </articles?page=2>; rel="next", </article/43>; rel="prefetch"
+```
+
+出力するのは、変数がすべて body にあり、href が `/` で始まるパスか `http(s)://` の URL になるリンクだけです。`prefetch` は最大 5 件です。
+
 ### リソース表現
 
 リソースはそれぞれ表現のためのリソースレンダラーを持っています。

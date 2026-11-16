@@ -323,6 +323,22 @@ The payment method is provided by the order resource with the hyperlink.
 There is no change in client code even though the relationship between the order and payment is changed,
 You can checkout more on HATEOAS at [How to GET a Cup of Coffee](http://www.infoq.com/articles/webber-rest-workflow).
 
+### Link header
+
+A link declared with the rel `prefetch`, `canonical`, `next`, `prev`, `first` or `last` is also output as a `Link` header when `onGet()` returns 200. A CDN edge can warm its cache with `prefetch`, and an API client can page with `next`.
+
+```php
+#[Link(rel: 'next', href: '/articles?page={next}')]
+#[Link(rel: 'prefetch', href: '/article/{top_id}')]
+public function onGet(int $page = 1): static
+```
+
+```
+Link: </articles?page=2>; rel="next", </article/43>; rel="prefetch"
+```
+
+A link is output only when all its template variables are in the body and its href expands to a path starting with `/` or an `http(s)://` URL. Up to five `prefetch` links are output.
+
 Bind parameters
 You can bind method parameters to an “external value”. The external value might be a web context or any other resource state.
 

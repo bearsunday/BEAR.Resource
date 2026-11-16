@@ -31,6 +31,16 @@ final readonly class HalLinker
     }
 
     /**
+     * Expand the link href with the body (RFC 6570) and return the reverse link
+     *
+     * @param Body $body
+     */
+    public function expandHref(Link $link, array $body): string
+    {
+        return $this->getReverseLink(uri_template($link->href, $body), []);
+    }
+
+    /**
      * @param Body         $body
      * @param list<object> $methodAnnotations
      */
@@ -59,8 +69,7 @@ final readonly class HalLinker
                 continue;
             }
 
-            $uri = uri_template($annotation->href, $body);
-            $reverseUri = $this->getReverseLink($uri, []);
+            $reverseUri = $this->expandHref($annotation, $body);
 
             if (isset($body['_links']) && is_array($body['_links']) && isset($body['_links'][$annotation->rel])) {
                 // skip if already difined links in ResourceObject
