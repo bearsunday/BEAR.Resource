@@ -45,7 +45,7 @@ class PrefetchLinkHeaderInterceptorTest extends TestCase
     {
         $ro = $this->injector->getInstance(FakePrefetchBody::class);
 
-        $this->assertSame(['next' => 2], $ro->onGet());
-        $this->assertSame('</article/2>; rel="prefetch"', $ro->headers['Link']);
+        $this->assertSame(['next' => 2, 'host' => '//evil.example/x', 'empty' => ''], $ro->onGet());
+        $this->assertSame('</article/2>; rel="prefetch"', $ro->headers['Link'], 'a protocol-relative href and an empty variable are skipped');
     }
 }

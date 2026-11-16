@@ -336,7 +336,7 @@ public function onGet(int $id): static
 Link: </article/43>; rel="prefetch"
 ```
 
-A link is skipped when a template variable is missing or null in the body, or when its expanded href starts with neither `/` nor `http(s)://`. Up to five links are output in declaration order.
+A link is skipped when a template variable is missing, null or empty in the body, or when its expanded href is neither a path starting with a single `/` nor an `http(s)://` URL. Up to five links are output in declaration order.
 
 Bind parameters
 You can bind method parameters to an “external value”. The external value might be a web context or any other resource state.

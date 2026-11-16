@@ -8,6 +8,7 @@ use BEAR\Resource\Annotation\Link;
 use Override;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
+use ReflectionAttribute;
 use Rize\UriTemplate\Node\Expression;
 use Rize\UriTemplate\Node\Variable;
 use Rize\UriTemplate\Parser;
@@ -52,16 +53,24 @@ final readonly class PrefetchLinkHeaderInterceptor implements MethodInterceptor
 
         /** @psalm-suppress MixedAssignment */
         $body = $result instanceof ResourceObject ? $ro->body : $result;
-        $body = is_array($body) ? $body : [];
-        $links = [];
-        foreach ($invocation->getMethod()->getAttributes(Link::class) as $attribute) {
-            $link = $attribute->newInstance();
-            if ($link->rel !== 'prefetch' || $link->method !== Link::DEFAULT_METHOD || ! $this->isDefined($link->href, $body)) {
-                continue;
-            }
+        $links = $this->links($invocation->getMethod()->getAttributes(Link::class), is_array($body) ? $body : []);
+        if ($links !== '') {
+            $ro->headers['Link'] = isset($ro->headers['Link']) ? $ro->headers['Link'] . ', ' . $links : $links;
+        }
 
-            $href = $this->linker->expandHref($link, $body);
-            if (! str_starts_with($href, '/') && ! preg_match('#^https?://#', $href)) {
+        return $result;
+    }
+
+    /**
+     * @param list<ReflectionAttribute<Link>> $attributes
+     * @param Body                            $body
+     */
+    private function links(array $attributes, array $body): string
+    {
+        $links = [];
+        foreach ($attributes as $attribute) {
+            $href = $this->href($attribute->newInstance(), $body);
+            if ($href === null) {
                 continue;
             }
 
@@ -71,16 +80,28 @@ final readonly class PrefetchLinkHeaderInterceptor implements MethodInterceptor
             }
         }
 
-        if ($links !== []) {
-            $link = implode(', ', $links);
-            $ro->headers['Link'] = isset($ro->headers['Link']) ? $ro->headers['Link'] . ', ' . $link : $link;
-        }
-
-        return $result;
+        return implode(', ', $links);
     }
 
     /**
-     * Whether every template variable is set and not null in the body
+     * The href an edge can fetch, or null for a link it must not
+     *
+     * @param Body $body
+     */
+    private function href(Link $link, array $body): string|null
+    {
+        if ($link->rel !== 'prefetch' || $link->method !== Link::DEFAULT_METHOD || ! $this->isDefined($link->href, $body)) {
+            return null;
+        }
+
+        $href = $this->linker->expandHref($link, $body);
+        $isPath = str_starts_with($href, '/') && ! str_starts_with($href, '//');
+
+        return $isPath || preg_match('#^https?://#', $href) === 1 ? $href : null;
+    }
+
+    /**
+     * Whether every template variable has a value in the body: not missing, null or ''
      *
      * @param Body $body
      */
@@ -94,7 +115,7 @@ final readonly class PrefetchLinkHeaderInterceptor implements MethodInterceptor
             /** @var list<Variable> $variables */
             $variables = $node->getVariables();
             foreach ($variables as $variable) {
-                if (! isset($body[$variable->name])) {
+                if (! isset($body[$variable->name]) || $body[$variable->name] === '') {
                     return false;
                 }
             }

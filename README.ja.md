@@ -334,7 +334,7 @@ public function onGet(int $id): static
 Link: </article/43>; rel="prefetch"
 ```
 
-テンプレートの変数が body にないか null のリンクと、展開した href が `/` でも `http(s)://` でも始まらないリンクは出力しません。宣言順に最大 5 件まで出力します。
+テンプレートの変数が body にないか、null か空文字のリンクと、展開した href が `/` 1 つで始まるパスでも `http(s)://` の URL でもないリンクは出力しません。宣言順に最大 5 件まで出力します。
 
 ### リソース表現
 
