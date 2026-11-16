@@ -14,6 +14,8 @@ interface RequestInterface
     /**
      * InvokerInterface resource request
      *
+     * A repeated call runs on the same ResourceObject, which keeps its code and headers from the previous run.
+     *
      * @param Query $query
      */
     public function __invoke(array|null $query = null): ResourceObject;
