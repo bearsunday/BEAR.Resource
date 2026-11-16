@@ -21,7 +21,11 @@ use function count;
 use function is_array;
 use function sprintf;
 
-/** A rel already in the body, such as one from a method #[Embed] (which runs first), is kept. */
+/**
+ * A rel already in the body, such as one from a method #[Embed] (which runs first), is kept.
+ *
+ * @psalm-import-type LayoutEmbedMap from Types
+ */
 final readonly class ResourceLayoutInterceptor implements ResourceLayoutInterceptorInterface
 {
     public function __construct(
@@ -72,7 +76,7 @@ final readonly class ResourceLayoutInterceptor implements ResourceLayoutIntercep
     /**
      * @param class-string<AbstractResourceLayout> $layout
      *
-     * @return array<string, string>
+     * @return LayoutEmbedMap
      *
      * @throws ResourceLayoutException
      */
@@ -83,7 +87,7 @@ final readonly class ResourceLayoutInterceptor implements ResourceLayoutIntercep
             throw new ResourceLayoutException(sprintf('%s does not declare EMBED.', $layout));
         }
 
-        /** @var array<string, string> $embed */
+        /** @var LayoutEmbedMap $embed */
         $embed = $parts->getValue();
 
         return $embed;
