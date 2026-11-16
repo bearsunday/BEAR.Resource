@@ -9,8 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.35.0] - 2026-11-17
 
-## [1.35.0] - 2026-11-17
-
 ### Added
 - Psalm purity annotations, including on `RequestInterface::toUri()` / `toUriWithMethod()`,
   `LinkCrawlerInterface::isList()` and `SchemeCollectionInterface::getAdapter()`. Under Psalm 7, a class that implements
