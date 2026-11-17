@@ -21,8 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   throws `LinkHrefException` where the link is read: HAL `_links`, OPTIONS, the `Link` header, and `linkSelf()` /
   `linkNew()` / `linkCrawl()` / `href()`. Remove the fragment from the href. A fragment that a variable expands to is
   dropped; an `#[Embed]` src may carry `#link=`.
-- Requires `ray/aop` 2.20.0 and `ray/di` 2.22.1 or later: `ray/aop` weaves without constructing the method attributes,
-  so a resource whose `#[Link]` href has a fragment does not stop the injector.
+- Requires `ray/aop` 2.20.3 and `ray/di` 2.22.1 or later.
 - The implementation classes that applications reach only through the library's modules and interfaces are marked
   `@internal`. Interfaces, attributes, modules and exceptions stay public.
 
