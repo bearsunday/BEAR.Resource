@@ -35,8 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   as named arguments, as attributes do: `new Link(rel: 'blog', href: '...')`. Their properties are now natively typed.
 
 ### Fixed
-- A `#[Link]` href (HAL `_links`, the `Link` header) passes its expanded query to `ReverseLinkerInterface`, as the self
-  link and `Location` do. A route such as `/blog/{id}` reverse-links `/blog{?id}` to `/blog/1`; it gave `/blog/{id}`.
+- A `#[Link]` href is reverse-routed with its query: `/blog{?id}` becomes `/blog/1` for a route `/blog/{id}`.
 
 ## [1.35.0] - 2026-11-17
 
