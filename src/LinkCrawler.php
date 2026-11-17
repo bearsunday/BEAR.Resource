@@ -85,6 +85,8 @@ final class LinkCrawler implements LinkCrawlerInterface
             }
 
             $uri = uri_template($annotation->href, $body);
+            // An earlier rel of this crawl may have changed a value the href expands
+            $this->rejectLink($uri);
             $rel = $this->factory->newInstance($uri);
             $query = (new Uri($uri))->query;
             $request = new Request($this->invoker, $rel, Method::GET, $query);
@@ -113,7 +115,7 @@ final class LinkCrawler implements LinkCrawlerInterface
     }
 
     /**
-     * A crawl follows each href to the resource it names: a fragment holding `=`, the form of a link, is rejected
+     * Rejects, before the DataLoader or a request runs, each crawl href that already expands to a link
      *
      * @param list<Link>                 $annotations
      * @param list<array<string, mixed>> $bodyList
@@ -128,11 +130,20 @@ final class LinkCrawler implements LinkCrawlerInterface
             }
 
             foreach ($bodyList as $body) {
-                $href = uri_template($annotation->href, $body);
-                if (str_contains((string) parse_url($href, PHP_URL_FRAGMENT), '=')) {
-                    throw new UriException(sprintf('%s: a link in the fragment of a #[Link] href is not followed', $href), 500);
-                }
+                $this->rejectLink(uri_template($annotation->href, $body));
             }
+        }
+    }
+
+    /**
+     * A crawl follows an href to the resource it names: a fragment holding `=`, the form of a link, is rejected
+     *
+     * @throws UriException
+     */
+    private function rejectLink(string $href): void
+    {
+        if (str_contains((string) parse_url($href, PHP_URL_FRAGMENT), '=')) {
+            throw new UriException(sprintf('%s: a link in the fragment of a #[Link] href is not followed', $href), 500);
         }
     }
 

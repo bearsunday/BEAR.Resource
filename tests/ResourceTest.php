@@ -245,6 +245,7 @@ class ResourceTest extends TestCase
             'linkSelf' => [LinkType::SELF_LINK, 'linked'],
             'linkCrawl' => [LinkType::CRAWL_LINK, 'linked'],
             'linkCrawl, the fragment from the template' => [LinkType::CRAWL_LINK, 'expanded'],
+            'linkCrawl, the fragment from an earlier rel of the crawl' => [LinkType::CRAWL_LINK, 'rewritten'],
         ];
     }
 
