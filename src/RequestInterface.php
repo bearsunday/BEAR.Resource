@@ -38,14 +38,11 @@ interface RequestInterface
      * To Request URI string, links as a `#link=type:rel,...` fragment
      *
      * @see https://bearsunday.github.io/manuals/1.0/en/resource_link.html#links-in-the-uri
-     * @psalm-capabilities read-props|write-props
      */
     public function toUri(): string;
 
     /**
      * To Request URI string with request method
-     *
-     * @psalm-capabilities read-props|write-props
      */
     public function toUriWithMethod(): string;
 

@@ -23,7 +23,7 @@ final class JsonSchemaResponseException extends JsonSchemaException
     /**
      * @param ServerErrorCode $code
      *
-     * @psalm-pure
+     * @psalm-capabilities pure
      */
     public function __construct(string $message, int $code = Code::ERROR, JsonSchemaErrors|null $errors = null)
     {

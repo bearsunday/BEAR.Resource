@@ -60,7 +60,7 @@ final class Uri extends AbstractUri
     /**
      * @throws UriException
      *
-     * @psalm-pure
+     * @psalm-capabilities pure
      */
     private function validate(string $uri): void
     {

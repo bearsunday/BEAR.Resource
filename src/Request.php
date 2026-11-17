@@ -95,8 +95,6 @@ final class Request extends AbstractRequest
 
     /**
      * {@inheritDoc}
-     *
-     * @psalm-capabilities read-props|write-props
      */
     #[Override]
     public function toUriWithMethod(): string
@@ -108,8 +106,6 @@ final class Request extends AbstractRequest
 
     /**
      * {@inheritDoc}
-     *
-     * @psalm-capabilities read-props|write-props
      */
     #[Override]
     public function toUri(): string
