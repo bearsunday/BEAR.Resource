@@ -7,41 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.36.0] - 2026-11-18
+
 ### Added
-- `HalLinker::link()` returns the href and title a rel has in HAL `_links`, and `ResourceLinks` hands them to a
-  template as read-only `_link.<rel>.href` / `_link.<rel>.title`; an undeclared rel throws `LinkException`.
+- `HalLinker::link()` returns a rel's href and title as HAL `_links` has them, and `ResourceLinks` gives a template
+  read-only `_link.<rel>.href` / `_link.<rel>.title`.
 
 ### Changed
-- `Request::toUri()` writes the links of a request as a `#link=` fragment
-  (`app://self/user?id=1#link=self:blog,new:profile`), and `uri()` / `newRequest()` read them
-  back (#390), so an `#[Embed]` src can carry links too. Code that rebuilds a request from `toUri()` and adds the links again must stop adding them.
-- Conflicts with bear/async 0.4.x and 0.5.x and bear/query-repository 1.20.2 and later 1.20.x, which add the links of a
-  request again after rebuilding it from `toUri()` and would follow each link twice; update them together.
-- **Behaviour change**: a request URI whose fragment is anything other than `#link=type:rel,...`
-  throws `UriException`; it was dropped. This includes the `Location` header of a `201` that
-  BEAR.Package reads back. `toUri()` throws for a rel outside `[A-Za-z0-9_-]`. A
-  `#[ResourceParam]` URI whose fragment holds `=` (a link) throws `UriException`.
-- **Behaviour change**: a `#[Link]` href has no fragment. One that declares a fragment (`#top`, `#link=...`, `{#var}`)
-  throws `LinkHrefException` where the link is read: HAL `_links`, OPTIONS, the `Link` header, and `linkSelf()` /
-  `linkNew()` / `linkCrawl()` / `href()`. Remove the fragment from the href. A fragment that a variable expands to is
-  dropped; an `#[Embed]` src may carry `#link=`.
+- A request carries its links in its URI as a `#link=type:rel,...` fragment: `toUri()` writes it and `uri()` /
+  `newRequest()` read it back. Code that rebuilds a request from `toUri()` must not add the links again.
+- Conflicts with bear/async before 0.6.0 and bear/query-repository 1.20.2 to 1.20.x; update them together, e.g.
+  `composer update bear/resource bear/query-repository bear/async -W`.
+- **Behaviour change**: a request URI with any other fragment throws `UriException`.
+- **Behaviour change**: a `#[Link]` href with a fragment throws `LinkHrefException`; remove the fragment.
 - Requires `ray/aop` 2.20.3 and `ray/di` 2.22.1 or later.
-- The implementation classes that applications reach only through the library's modules and interfaces are marked
-  `@internal`. Interfaces, attributes, modules and exceptions stay public.
+- Implementation classes are marked `@internal`; interfaces, attributes, modules and exceptions stay public.
 
 ### Deprecated
-- `AppIterator`, `AssistedParam`, `ProviderInterface` and `Exception\HrefNotFoundException`, which the library no
-  longer uses, move to `src-deprecated/`. They keep their names and still autoload; stop depending on them.
+- `AppIterator`, `AssistedParam`, `ProviderInterface` and `Exception\HrefNotFoundException` move to
+  `src-deprecated/` and still autoload.
 
 ### Removed
-- The `array $values` first parameter of the `#[Link]`, `#[Embed]` and `#[ResourceParam]` constructors. Pass the values
-  as named arguments, as attributes do: `new Link(rel: 'blog', href: '...')`. Their properties are now natively typed.
+- The `array $values` first parameter of the `#[Link]`, `#[Embed]` and `#[ResourceParam]` constructors; pass named
+  arguments.
 - The deprecated `ParameterHandler` and `ParameterHandlerInterface`, which could not be used.
 
 ### Fixed
-- PHPStan no longer reports purity errors in subclasses of `AbstractRequest` and the resource exceptions.
-
-### Fixed
+- Psalm 6 reads the `StatusMessageMap` type of `Code::$statusText` again.
+- Interfaces and extendable classes carry no purity annotation, so PHPStan reports no purity errors in their
+  subclasses and implementations need no `@psalm-capabilities`.
 - A `#[Link]` href is reverse-routed with its query: `/blog{?id}` becomes `/blog/1` for a route `/blog/{id}`.
 
 ## [1.35.0] - 2026-11-17
