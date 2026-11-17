@@ -46,8 +46,7 @@
         },
         "files": [
             "src-files/uri_template.php"
-        ],
-        "exclude-from-classmap": ["/src-deprecated/"]
+        ]
     },
     "autoload-dev": {
         "psr-4": {
