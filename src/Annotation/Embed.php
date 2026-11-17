@@ -6,31 +6,24 @@ namespace BEAR\Resource\Annotation;
 
 use Attribute;
 
+/**
+ * Puts a request for another resource in the body before the method runs
+ *
+ * @see https://bearsunday.github.io/manuals/1.0/en/resource_link.html#internal-links
+ * @see \BEAR\Resource\EmbedInterceptor
+ */
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 final class Embed
 {
     /**
-     * Relation
-     *
-     * @var string
-     */
-    public $rel;
-
-    /**
-     * Embed resource uri
-     *
-     * @var string
-     */
-    public $src;
-
-    /**
-     * @param array{rel?: string, src?: string} $values
+     * @param string $rel Body key that holds the embedded request; `_self` merges the embedded body into this body
+     * @param string $src URI template expanded with the method arguments; a path starting with `/` keeps this resource's scheme and host
      *
      * @psalm-pure
      */
-    public function __construct(array $values = [], string $rel = '', string $src = '')
-    {
-        $this->rel = $values['rel'] ?? $rel;
-        $this->src = $values['src'] ?? $src;
+    public function __construct(
+        public string $rel = '',
+        public string $src = '',
+    ) {
     }
 }

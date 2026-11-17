@@ -22,6 +22,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `href()` follows the same rule, and still requests a `#[Link]` href whose fragment holds no `=`, such as `#top`,
   without the fragment.
 
+### Removed
+- The `array $values` first parameter of the `#[Link]`, `#[Embed]` and `#[ResourceParam]` constructors. Pass the values
+  as named arguments, as attributes do: `new Link(rel: 'blog', href: '...')`. Their properties are now natively typed.
+
 ## [1.35.0] - 2026-11-17
 
 ### Added

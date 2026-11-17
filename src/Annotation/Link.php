@@ -9,52 +9,32 @@ use BEAR\Resource\DataLoader\DataLoaderInterface;
 use JsonSerializable;
 use Override;
 
+/**
+ * A hyperlink to another resource, which linkSelf(), linkNew(), linkCrawl() and href() follow
+ *
+ * @see https://bearsunday.github.io/manuals/1.0/en/resource_link.html#out-bound-links
+ */
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 final class Link implements JsonSerializable
 {
     public const DEFAULT_METHOD = 'get';
 
     /**
-     * Relation to the target resource of the link
+     * @param string                                 $href       URI template (RFC 6570)
+     * @param string                                 $crawl      Crawl name that linkCrawl() follows
+     * @param class-string<DataLoaderInterface>|null $dataLoader Loads this rel for all rows of the crawl in one call
      *
-     * @var string
+     * @psalm-pure
      */
-    public $rel;
-
-    /**
-     * A URI template, as defined by RFC 6570
-     *
-     * @var string
-     */
-    public $href;
-
-    /**
-     * A method for the Link
-     *
-     * @var string
-     */
-    public $method;
-
-    /**
-     * A title for the link
-     *
-     * @var string
-     */
-    public $title;
-
-    /**
-     * Crawl tag ID for crawl request
-     *
-     * @var string
-     */
-    public $crawl;
-
-    /**
-     * DataLoader class for bulk processing
-     *
-     * @var class-string<DataLoaderInterface>|null
-     */
-    public $dataLoader;
+    public function __construct(
+        public string $rel = '',
+        public string $href = '',
+        public string $method = self::DEFAULT_METHOD,
+        public string $title = '',
+        public string $crawl = '',
+        public string|null $dataLoader = null,
+    ) {
+    }
 
     /**
      * @return string[]
@@ -75,29 +55,5 @@ final class Link implements JsonSerializable
         }
 
         return $json;
-    }
-
-    /**
-     * @param array{rel?: string, href?: string, method?: string, title?: string, crawl?: string, dataLoader?: class-string<DataLoaderInterface>|null} $values
-     *
-     * @psalm-pure
-     */
-    public function __construct(
-        array $values = [],
-        string $rel = '',
-        string $href = '',
-        string $method = self::DEFAULT_METHOD,
-        string $title = '',
-        string $crawl = '',
-        string|null $dataLoader = null,
-    ) {
-        $this->rel = $values['rel'] ?? $rel;
-        $this->href = $values['href'] ?? $href;
-        $this->method = $values['method'] ?? $method;
-        $this->title = $values['title'] ?? $title;
-        $this->crawl = $values['crawl'] ?? $crawl;
-        /** @var class-string<DataLoaderInterface>|null $resolvedDataLoader */
-        $resolvedDataLoader = $values['dataLoader'] ?? $dataLoader;
-        $this->dataLoader = $resolvedDataLoader;
     }
 }
