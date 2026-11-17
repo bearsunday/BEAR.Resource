@@ -6,7 +6,6 @@
     "Attribute", "ReflectionAttribute", "Stringable",
     "Doctrine\\Common\\Annotations\\AnnotationReader", "Doctrine\\Common\\Annotations\\Reader",
     "Koriym\\Attributes\\AttributeReader", "Koriym\\Attributes\\DualReader",
-    "BEAR\\Resource\\VoidParameterHandler",
     "JSONSchemaFaker\\Faker"
   ]
 }
