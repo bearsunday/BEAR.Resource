@@ -8,7 +8,11 @@ use BEAR\Resource\Annotation\Link;
 use Nocarrier\Hal;
 
 use function is_array;
+use function parse_str;
+use function parse_url;
 use function uri_template;
+
+use const PHP_URL_QUERY;
 
 /**
  * @psalm-import-type Query from Types
@@ -33,11 +37,17 @@ final readonly class HalLinker
     /**
      * Expand the link href with the body (RFC 6570) and return the reverse link
      *
+     * The expanded query is passed to the reverse linker, as for the self link and `Location`.
+     *
      * @param Body $body
      */
     public function expandHref(Link $link, array $body): string
     {
-        return $this->getReverseLink(uri_template($link->href, $body), []);
+        $uri = uri_template($link->href, $body);
+        parse_str((string) parse_url($uri, PHP_URL_QUERY), $query);
+        /** @var Query $query */
+
+        return $this->getReverseLink($uri, $query);
     }
 
     /**

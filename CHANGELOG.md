@@ -37,6 +37,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - PHPStan no longer reports purity errors in subclasses of `AbstractRequest` and the resource exceptions.
 
+### Fixed
+- A `#[Link]` href is reverse-routed with its query: `/blog{?id}` becomes `/blog/1` for a route `/blog/{id}`.
+
 ## [1.35.0] - 2026-11-17
 
 ### Added
