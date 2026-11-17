@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+use BEAR\Resource\Exception\LinkHrefException;
 use BEAR\Resource\Fake\InputResourceBuiltinType;
 use BEAR\Resource\Fake\InputResourceNoConstructor;
 use BEAR\Resource\Fake\InputResourceWithDefaults;
@@ -13,6 +14,7 @@ use BEAR\Resource\Fake\UserResource;
 use FakeVendor\Sandbox\Resource\App\DocInvalidFile;
 use FakeVendor\Sandbox\Resource\App\DocPhp7;
 use FakeVendor\Sandbox\Resource\App\DocUser;
+use FakeVendor\Sandbox\Resource\App\Link\HrefDeclaredFragment;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\TestCase;
@@ -503,5 +505,15 @@ class OptionsTest extends TestCase
             ],
             $actual,
         );
+    }
+
+    public function testALinkThatDeclaresAFragmentThrows(): void
+    {
+        $request = new Request($this->invoker, new HrefDeclaredFragment(), Method::OPTIONS);
+
+        $this->expectException(LinkHrefException::class);
+        $this->expectExceptionMessage('/author?id=1#top: a #[Link] href cannot have a fragment');
+
+        $this->invoker->invoke($request);
     }
 }

@@ -239,33 +239,31 @@ class ResourceTest extends TestCase
         $this->resource->uri($uri);
     }
 
-    /** @return array<string, array{string, string}> */
-    public static function hrefWithALinkProvider(): array
+    /** @return array<string, array{string}> */
+    public static function expandedFragmentProvider(): array
     {
         return [
-            'linkSelf' => [LinkType::SELF_LINK, 'linked'],
-            'linkCrawl' => [LinkType::CRAWL_LINK, 'linked'],
-            'linkCrawl, the fragment from the template' => [LinkType::CRAWL_LINK, 'expanded'],
-            'linkCrawl, the fragment from an earlier rel of the crawl' => [LinkType::CRAWL_LINK, 'rewritten'],
+            'linkSelf' => ['linkSelf'],
+            'linkCrawl' => ['linkCrawl'],
+            'href' => ['href'],
         ];
     }
 
-    #[DataProvider('hrefWithALinkProvider')]
-    public function testALinkInTheFragmentOfAFollowedHrefIsNotSupported(string $type, string $rel): void
+    /** The fragment holds a link, which is not followed */
+    #[DataProvider('expandedFragmentProvider')]
+    public function testAFollowedHrefDropsTheFragmentAVariableExpandsTo(string $path): void
     {
-        $request = $this->resource->uri('app://self/link/href-fragment');
-        $type === LinkType::SELF_LINK ? $request->linkSelf($rel) : $request->linkCrawl($rel);
+        $ro = match ($path) {
+            'linkSelf' => $this->resource->uri('app://self/link/href-fragment')->linkSelf('expanded')(),
+            'linkCrawl' => $this->resource->uri('app://self/link/href-fragment')->linkCrawl('expanded')(),
+            default => $this->resource->href('expanded', [], $this->resource->get('app://self/link/href-fragment')),
+        };
+        assert(is_array($ro->body));
 
-        $this->expectException(UriException::class);
-
-        $request();
-    }
-
-    public function testAFollowedHrefIgnoresAFragmentWithoutALink(): void
-    {
-        $ro = $this->resource->uri('app://self/link/href-fragment')->linkSelf('anchored')();
-
-        $this->assertSame($this->resource->get('app://self/author', ['id' => 1])->body, $ro->body);
+        $this->assertSame(
+            $this->resource->get('app://self/author', ['id' => 1])->body,
+            $path === 'linkCrawl' ? $ro->body['author'] : $ro->body,
+        );
     }
 
     public function testACrawlHrefExpandsTheValueAnEarlierRelWrites(): void
@@ -274,40 +272,6 @@ class ResourceTest extends TestCase
         assert(is_array($ro->body));
 
         $this->assertSame($this->resource->get('app://self/author', ['id' => 1])->body, $ro->body[0]['author']);
-    }
-
-    /** @return array<string, array{class-string<ResourceInterface>}> */
-    public static function resourceClassProvider(): array
-    {
-        return [
-            'Resource' => [Resource::class],
-            'ResourceClient' => [ResourceClient::class],
-        ];
-    }
-
-    /** @param class-string<ResourceInterface> $class */
-    #[DataProvider('resourceClassProvider')]
-    public function testHrefIgnoresAFragmentWithoutALink(string $class): void
-    {
-        $resource = $class === ResourceClient::class ? $this->resourceClient() : $this->resource;
-        $this->assertInstanceOf($class, $resource);
-
-        $ro = $resource->href('anchored', [], $resource->get('app://self/link/href-fragment'));
-
-        $this->assertSame($resource->get('app://self/author', ['id' => 1])->body, $ro->body);
-    }
-
-    /** @param class-string<ResourceInterface> $class */
-    #[DataProvider('resourceClassProvider')]
-    public function testALinkInTheFragmentOfAnHrefIsNotSupported(string $class): void
-    {
-        $resource = $class === ResourceClient::class ? $this->resourceClient() : $this->resource;
-        $this->assertInstanceOf($class, $resource);
-        $ro = $resource->get('app://self/link/href-fragment');
-
-        $this->expectException(UriException::class);
-
-        $resource->href('linked', [], $ro);
     }
 
     public function testAnEmbedFollowsTheLinksInItsSrc(): void

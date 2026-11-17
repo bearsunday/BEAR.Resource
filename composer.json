@@ -20,8 +20,8 @@
         "koriym/hal": "^1.1",
         "phpdocumentor/reflection-docblock": "^6.0",
         "psr/log": "^1.1 || ^2.0 || ^3.0",
-        "ray/aop": "^2.19.1",
-        "ray/di": "^2.19.0",
+        "ray/aop": "^2.20.0",
+        "ray/di": "^2.22.1",
         "rize/uri-template": "^0.4.1",
         "ray/input-query": "^1.1",
         "koriym/file-upload": "^1.0.1"
