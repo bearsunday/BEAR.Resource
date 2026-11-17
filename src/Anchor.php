@@ -6,7 +6,6 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\Link as LinkAnnotation;
 use BEAR\Resource\Exception\LinkException;
-use BEAR\Resource\Exception\LinkHrefException;
 use Override;
 use Ray\Aop\ReflectionMethod;
 
@@ -26,7 +25,6 @@ final class Anchor implements AnchorInterface
      * {@inheritDoc}
      *
      * @throws LinkException
-     * @throws LinkHrefException
      */
     #[Override]
     public function href(string $rel, AbstractRequest $request, array $query): array
