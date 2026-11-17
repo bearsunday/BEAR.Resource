@@ -9,6 +9,7 @@ use BEAR\Resource\Types;
 /**
  * Base of a class attribute declaring the resource's layout; each layout declares its own EMBED.
  *
+ * @see \BEAR\Resource\ResourceLayoutInterceptor
  * @psalm-import-type LayoutEmbedMap from Types
  */
 abstract class AbstractResourceLayout
