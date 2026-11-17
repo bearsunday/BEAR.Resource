@@ -55,7 +55,7 @@ interface RequestInterface
     public function request();
 
     /**
-     * Replace linked resource
+     * Follow the link; the request returns the linked resource object, and a following link is read from it
      */
     public function linkSelf(string $linkKey): self;
 

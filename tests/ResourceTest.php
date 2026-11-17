@@ -13,6 +13,7 @@ use FakeVendor\Sandbox\Resource\App\Blog;
 use FakeVendor\Sandbox\Resource\App\Href\Hasembed;
 use FakeVendor\Sandbox\Resource\App\Href\Origin;
 use FakeVendor\Sandbox\Resource\App\Href\Target;
+use FakeVendor\Sandbox\Resource\App\Link\Jump\First;
 use FakeVendor\Sandbox\Resource\Page\Index;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Depends;
@@ -287,6 +288,15 @@ class ResourceTest extends TestCase
         $ro = $this->resourceClient()->uri('app://self/author?id=1#link=self:blog')();
 
         $this->assertSame(['id' => 12, 'name' => 'Aramis blog'], $ro->body);
+    }
+
+    public function testASelfLinkInTheUriReturnsTheSameResourceAsLinkSelf(): void
+    {
+        $linkSelf = $this->resource->uri('app://self/link/jump/start')->withQuery(['id' => 1])->linkSelf('first')();
+        $this->assertInstanceOf(First::class, $linkSelf);
+
+        $this->assertEquals($linkSelf, $this->resource->uri('app://self/link/jump/start?id=1#link=self:first')());
+        $this->assertEquals($linkSelf, $this->resource->get('app://self/link/jump/start?id=1#link=self:first'));
     }
 
     private function resourceClient(): ResourceClient

@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `composer update bear/resource bear/query-repository bear/async -W`.
 - **Behaviour change**: a request URI with any other fragment throws `UriException`.
 - **Behaviour change**: a `#[Link]` href with a fragment throws `LinkHrefException`; remove the fragment.
+- **Behaviour change**: `linkSelf()` and `#link=self:<rel>` return the linked resource object, and a following link
+  is read from it.
 - Requires `ray/aop` 2.20.3 and `ray/di` 2.22.1 or later.
 - Implementation classes are marked `@internal`; interfaces, attributes, modules and exceptions stay public.
 
