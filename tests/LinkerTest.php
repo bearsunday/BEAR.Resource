@@ -12,6 +12,7 @@ use FakeVendor\Sandbox\Resource\App\Blog;
 use FakeVendor\Sandbox\Resource\App\Link\HrefDeclaredFragment;
 use FakeVendor\Sandbox\Resource\App\Link\Jump\First;
 use FakeVendor\Sandbox\Resource\App\Link\Jump\Second;
+use FakeVendor\Sandbox\Resource\App\Link\Jump\Soft400;
 use FakeVendor\Sandbox\Resource\App\Link\Jump\Soft404;
 use FakeVendor\Sandbox\Resource\App\Link\Jump\Soft500;
 use FakeVendor\Sandbox\Resource\App\Link\Jump\Start;
@@ -474,6 +475,12 @@ class LinkerTest extends TestCase
     public static function selfLinkToAnErrorProvider(): array
     {
         return [
+            '400, then self' => [
+                [new LinkType('soft400', LinkType::SELF_LINK), new LinkType('second', LinkType::SELF_LINK)],
+                Soft400::class,
+                Code::BAD_REQUEST,
+                ['id' => 1, 'name' => 'soft400'],
+            ],
             '404, then self' => [
                 [new LinkType('soft404', LinkType::SELF_LINK), new LinkType('second', LinkType::SELF_LINK)],
                 Soft404::class,

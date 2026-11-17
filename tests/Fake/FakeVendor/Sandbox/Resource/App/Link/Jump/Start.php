@@ -11,6 +11,7 @@ class Start extends ResourceObject
 {
     #[Link(rel: 'first', href: 'app://self/link/jump/first?id={id}', crawl: 'tree')]
     #[Link(rel: 'soft404', href: 'app://self/link/jump/soft404?id={id}')]
+    #[Link(rel: 'soft400', href: 'app://self/link/jump/soft400?id={id}')]
     #[Link(rel: 'soft500', href: 'app://self/link/jump/soft500?id={id}')]
     public function onGet(int $id): static
     {
