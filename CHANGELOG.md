@@ -34,6 +34,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The `array $values` first parameter of the `#[Link]`, `#[Embed]` and `#[ResourceParam]` constructors. Pass the values
   as named arguments, as attributes do: `new Link(rel: 'blog', href: '...')`. Their properties are now natively typed.
 
+### Fixed
+- A `Stringable` query value, such as an ID value object, is written as its string in the URI string, `toUri()` and
+  the HAL `self` link; its key was dropped (#388).
+
 ## [1.35.0] - 2026-11-17
 
 ### Added

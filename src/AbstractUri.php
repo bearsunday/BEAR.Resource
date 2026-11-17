@@ -8,6 +8,7 @@ use Override;
 use Stringable;
 
 use function http_build_query;
+use function is_array;
 
 /** @psalm-import-type Query from Types */
 abstract class AbstractUri implements Stringable
@@ -41,6 +42,30 @@ abstract class AbstractUri implements Stringable
     #[Override]
     public function __toString()
     {
-        return "{$this->scheme}://{$this->host}{$this->path}" . ($this->query ? '?' . http_build_query($this->query) : '');
+        return "{$this->scheme}://{$this->host}{$this->path}" . ($this->query ? '?' . http_build_query($this->stringValues($this->query)) : '');
+    }
+
+    /**
+     * http_build_query() writes an object as its public properties, which a Stringable value object usually has none of
+     *
+     * @param array<array-key, mixed> $query
+     *
+     * @return array<array-key, mixed>
+     *
+     * @psalm-capabilities read-props
+     */
+    private function stringValues(array $query): array
+    {
+        /** @var mixed $value */
+        foreach ($query as $key => $value) {
+            if ($value instanceof Stringable) {
+                /** @psalm-suppress ImpureMethodCall A query value object's __toString() reads its own value */
+                $query[$key] = (string) $value;
+            } elseif (is_array($value)) {
+                $query[$key] = $this->stringValues($value);
+            }
+        }
+
+        return $query;
     }
 }

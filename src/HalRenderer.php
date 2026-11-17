@@ -12,7 +12,6 @@ use RuntimeException;
 use function array_replace;
 use function array_values;
 use function assert;
-use function http_build_query;
 use function is_array;
 use function is_object;
 use function is_scalar;
@@ -137,7 +136,7 @@ final readonly class HalRenderer implements RenderInterface
      */
     private function getHal(AbstractUri $uri, array $body, array $annotations): Hal
     {
-        $query = $uri->query ? '?' . http_build_query($uri->query) : '';
+        $query = $uri->query ? '?' . (string) parse_url((string) $uri, PHP_URL_QUERY) : '';
         $path = $uri->path . $query;
         $selfLink = $this->linker->getReverseLink($path, $uri->query);
         $hal = new Hal($selfLink, $body);

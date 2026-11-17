@@ -23,6 +23,7 @@ use FakeVendor\Sandbox\Resource\App\Link\HrefDeclaredFragment;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
+use Stringable;
 
 use function array_keys;
 use function json_decode;
@@ -90,6 +91,24 @@ EOT;
 
 EOT;
         $this->assertJsonStringEqualsJsonString($expected, $data);
+    }
+
+    public function testTheSelfLinkKeepsAStringableQueryValue(): void
+    {
+        $id = new class ('x') implements Stringable {
+            public function __construct(private string $value)
+            {
+            }
+
+            public function __toString(): string
+            {
+                return $this->value;
+            }
+        };
+        $this->ro->uri = new Uri('app://self/dummy', ['id' => $id]);
+        $hal = json_decode((string) $this->ro->onGet(), true, 512, JSON_THROW_ON_ERROR);
+
+        $this->assertSame('/dummy?id=x', $hal['_links']['self']['href']);
     }
 
     public function testHeader(): void
