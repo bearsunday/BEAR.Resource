@@ -15,46 +15,21 @@ final class Link implements JsonSerializable
     public const DEFAULT_METHOD = 'get';
 
     /**
-     * Relation to the target resource of the link
+     * @param string                                 $href       URI template (RFC 6570)
+     * @param string                                 $crawl      Crawl name that linkCrawl() follows
+     * @param class-string<DataLoaderInterface>|null $dataLoader
      *
-     * @var string
+     * @psalm-pure
      */
-    public $rel;
-
-    /**
-     * A URI template, as defined by RFC 6570
-     *
-     * @var string
-     */
-    public $href;
-
-    /**
-     * A method for the Link
-     *
-     * @var string
-     */
-    public $method;
-
-    /**
-     * A title for the link
-     *
-     * @var string
-     */
-    public $title;
-
-    /**
-     * Crawl tag ID for crawl request
-     *
-     * @var string
-     */
-    public $crawl;
-
-    /**
-     * DataLoader class for bulk processing
-     *
-     * @var class-string<DataLoaderInterface>|null
-     */
-    public $dataLoader;
+    public function __construct(
+        public string $rel = '',
+        public string $href = '',
+        public string $method = self::DEFAULT_METHOD,
+        public string $title = '',
+        public string $crawl = '',
+        public string|null $dataLoader = null,
+    ) {
+    }
 
     /**
      * @return string[]
@@ -75,26 +50,5 @@ final class Link implements JsonSerializable
         }
 
         return $json;
-    }
-
-    /**
-     * @param class-string<DataLoaderInterface>|null $dataLoader
-     *
-     * @psalm-pure
-     */
-    public function __construct(
-        string $rel = '',
-        string $href = '',
-        string $method = self::DEFAULT_METHOD,
-        string $title = '',
-        string $crawl = '',
-        string|null $dataLoader = null,
-    ) {
-        $this->rel = $rel;
-        $this->href = $href;
-        $this->method = $method;
-        $this->title = $title;
-        $this->crawl = $crawl;
-        $this->dataLoader = $dataLoader;
     }
 }

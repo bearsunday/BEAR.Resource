@@ -45,8 +45,7 @@ final class Anchor implements AnchorInterface
     /** @psalm-capabilities read-props */
     private function isValidLinkAnnotation(object $annotation, string $rel): bool
     {
-        /** @psalm-suppress RedundantConditionGivenDocblockType */
-        return $annotation instanceof LinkAnnotation && $annotation->rel !== null && $annotation->rel === $rel;
+        return $annotation instanceof LinkAnnotation && $annotation->rel === $rel;
     }
 
     /**
