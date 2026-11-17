@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\ParameterException;
+use BEAR\Resource\Exception\UriException;
 use BEAR\Resource\Module\ResourceModule;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
@@ -41,5 +42,11 @@ class ResourceParamHandlerTest extends TestCase
     {
         $instance = $this->resource->get('app://self/rparam/greeting', ['name' => 'IGNORED']);
         $this->assertSame('LOGINID', $instance['name']);
+    }
+
+    public function testALinkInTheFragmentIsNotSupported(): void
+    {
+        $this->expectException(UriException::class);
+        $this->resource->get('app://self/rparam/linked');
     }
 }

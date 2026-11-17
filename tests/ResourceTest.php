@@ -6,6 +6,7 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\BadRequestException;
 use BEAR\Resource\Exception\MethodNotAllowedException;
+use BEAR\Resource\Exception\UriException;
 use BEAR\Resource\Module\HalModule;
 use BEAR\Resource\Module\ResourceModule;
 use FakeVendor\Sandbox\Resource\App\Blog;
@@ -13,13 +14,16 @@ use FakeVendor\Sandbox\Resource\App\Href\Hasembed;
 use FakeVendor\Sandbox\Resource\App\Href\Origin;
 use FakeVendor\Sandbox\Resource\App\Href\Target;
 use FakeVendor\Sandbox\Resource\Page\Index;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\TestCase;
+use Ray\Di\AbstractModule;
 use Ray\Di\Injector;
 use Ray\Di\NullModule;
 use Ray\Di\ProviderInterface;
 
 use function assert;
+use function is_array;
 use function serialize;
 use function unserialize;
 
@@ -180,6 +184,160 @@ class ResourceTest extends TestCase
             ],
             $ro->body,
         );
+    }
+
+    public function testRequestRebuiltFromItsUriFollowsTheSameLinks(): void
+    {
+        $request = $this->resource->newRequest(Method::GET, 'app://self/author', ['id' => 1])->linkSelf('blog');
+        $uri = $request->toUri();
+        $this->assertSame('app://self/author?id=1#link=self:blog', $uri);
+
+        $rebuilt = $this->resource->uri($uri);
+
+        $this->assertSame($uri, $rebuilt->toUri());
+        $this->assertSame(['id' => 12, 'name' => 'Aramis blog'], $rebuilt()->body);
+    }
+
+    public function testNewRequestReadsEveryLinkInTheUriInOrder(): void
+    {
+        $request = $this->resource->newRequest(Method::GET, 'app://self/author#link=new:blog,self:blog', ['id' => 1]);
+        assert($request instanceof Request);
+
+        $this->assertEquals([new LinkType('blog', LinkType::NEW_LINK), new LinkType('blog', LinkType::SELF_LINK)], $request->links);
+        $this->assertSame('app://self/author?id=1#link=new:blog,self:blog', $request->toUri());
+    }
+
+    public function testALinkRelThatCannotBeReadBackIsNotWritten(): void
+    {
+        $request = $this->resource->uri('app://self/author')->linkCrawl('post tree');
+
+        $this->expectException(UriException::class);
+
+        $request->toUri();
+    }
+
+    /** @return array<string, array{string}> */
+    public static function malformedLinkProvider(): array
+    {
+        return [
+            'unknown type' => ['app://self/author?id=1#link=next:blog'],
+            'no rel' => ['app://self/author?id=1#link=self'],
+            'empty rel' => ['app://self/author?id=1#link=self:'],
+            'rel outside the alphabet' => ['app://self/author?id=1#link=self:post%20tree'],
+            'empty list' => ['app://self/author?id=1#link='],
+            'trailing comma' => ['app://self/author?id=1#link=self:blog,'],
+            'another name' => ['app://self/author?id=1#key=title'],
+            'a bare fragment' => ['app://self/author?id=1#title'],
+        ];
+    }
+
+    #[DataProvider('malformedLinkProvider')]
+    public function testMalformedFragmentInUri(string $uri): void
+    {
+        $this->expectException(UriException::class);
+
+        $this->resource->uri($uri);
+    }
+
+    /** @return array<string, array{string, string}> */
+    public static function hrefWithALinkProvider(): array
+    {
+        return [
+            'linkSelf' => [LinkType::SELF_LINK, 'linked'],
+            'linkCrawl' => [LinkType::CRAWL_LINK, 'linked'],
+            'linkCrawl, the fragment from the template' => [LinkType::CRAWL_LINK, 'expanded'],
+            'linkCrawl, the fragment from an earlier rel of the crawl' => [LinkType::CRAWL_LINK, 'rewritten'],
+        ];
+    }
+
+    #[DataProvider('hrefWithALinkProvider')]
+    public function testALinkInTheFragmentOfAFollowedHrefIsNotSupported(string $type, string $rel): void
+    {
+        $request = $this->resource->uri('app://self/link/href-fragment');
+        $type === LinkType::SELF_LINK ? $request->linkSelf($rel) : $request->linkCrawl($rel);
+
+        $this->expectException(UriException::class);
+
+        $request();
+    }
+
+    public function testAFollowedHrefIgnoresAFragmentWithoutALink(): void
+    {
+        $ro = $this->resource->uri('app://self/link/href-fragment')->linkSelf('anchored')();
+
+        $this->assertSame($this->resource->get('app://self/author', ['id' => 1])->body, $ro->body);
+    }
+
+    public function testACrawlHrefExpandsTheValueAnEarlierRelWrites(): void
+    {
+        $ro = $this->resource->uri('app://self/link/replaced-row')->linkCrawl('replaced')();
+        assert(is_array($ro->body));
+
+        $this->assertSame($this->resource->get('app://self/author', ['id' => 1])->body, $ro->body[0]['author']);
+    }
+
+    /** @return array<string, array{class-string<ResourceInterface>}> */
+    public static function resourceClassProvider(): array
+    {
+        return [
+            'Resource' => [Resource::class],
+            'ResourceClient' => [ResourceClient::class],
+        ];
+    }
+
+    /** @param class-string<ResourceInterface> $class */
+    #[DataProvider('resourceClassProvider')]
+    public function testHrefIgnoresAFragmentWithoutALink(string $class): void
+    {
+        $resource = $class === ResourceClient::class ? $this->resourceClient() : $this->resource;
+        $this->assertInstanceOf($class, $resource);
+
+        $ro = $resource->href('anchored', [], $resource->get('app://self/link/href-fragment'));
+
+        $this->assertSame($resource->get('app://self/author', ['id' => 1])->body, $ro->body);
+    }
+
+    /** @param class-string<ResourceInterface> $class */
+    #[DataProvider('resourceClassProvider')]
+    public function testALinkInTheFragmentOfAnHrefIsNotSupported(string $class): void
+    {
+        $resource = $class === ResourceClient::class ? $this->resourceClient() : $this->resource;
+        $this->assertInstanceOf($class, $resource);
+        $ro = $resource->get('app://self/link/href-fragment');
+
+        $this->expectException(UriException::class);
+
+        $resource->href('linked', [], $ro);
+    }
+
+    public function testAnEmbedFollowsTheLinksInItsSrc(): void
+    {
+        $embedded = $this->resource->get('app://self/link/embed-linked', ['id' => 1])->body['blog'];
+        $this->assertInstanceOf(Request::class, $embedded);
+
+        $this->assertSame(['id' => 12, 'name' => 'Aramis blog'], $embedded()->body);
+    }
+
+    public function testResourceClientReadsLinksInUri(): void
+    {
+        $ro = $this->resourceClient()->uri('app://self/author?id=1#link=self:blog')();
+
+        $this->assertSame(['id' => 12, 'name' => 'Aramis blog'], $ro->body);
+    }
+
+    private function resourceClient(): ResourceClient
+    {
+        $module = new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox'));
+        $module->override(new class extends AbstractModule {
+            protected function configure(): void
+            {
+                $this->bind(ResourceInterface::class)->to(ResourceClient::class);
+            }
+        });
+        $client = (new Injector($module, __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
+        assert($client instanceof ResourceClient);
+
+        return $client;
     }
 
     public function testLinkNewAfterAReadFollowsTheLinkOnTheNextRead(): void

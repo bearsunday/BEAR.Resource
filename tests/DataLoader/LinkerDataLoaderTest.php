@@ -6,6 +6,7 @@ namespace BEAR\Resource\DataLoader;
 
 use BEAR\Resource\Annotation\Link;
 use BEAR\Resource\AppAdapter;
+use BEAR\Resource\Exception\UriException;
 use BEAR\Resource\Factory;
 use BEAR\Resource\FactoryInterface;
 use BEAR\Resource\FakeRo;
@@ -22,6 +23,7 @@ use BEAR\Resource\SchemeCollection;
 use BEAR\Resource\UriFactory;
 use FakeVendor\Sandbox\DataLoader\LikeDataLoader;
 use FakeVendor\Sandbox\Resource\App\Batch\Article;
+use FakeVendor\Sandbox\Resource\App\Batch\LinkedComment;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 use Ray\Di\ProviderInterface;
@@ -106,6 +108,24 @@ class LinkerDataLoaderTest extends TestCase
 
         // DataLoader should be called only once (not 3 times for 3 comments)
         $this->assertSame(1, LikeDataLoader::$callCount);
+    }
+
+    public function testALinkInTheFragmentOfADataLoaderHrefIsNotSupported(): void
+    {
+        $request = new Request(
+            (new InvokerFactory())(),
+            (new FakeRo())(new LinkedComment()),
+            Method::GET,
+            [],
+            [new LinkType('comment-tree', LinkType::CRAWL_LINK)],
+        );
+
+        try {
+            $this->linker->invoke($request);
+            $this->fail('UriException expected');
+        } catch (UriException) {
+            $this->assertSame(0, LikeDataLoader::$callCount, 'the loader does not run');
+        }
     }
 
     public function testDataLoaderCrawlWithoutFactory(): void

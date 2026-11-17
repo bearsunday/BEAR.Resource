@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- `Request::toUri()` writes the links of a request as a `#link=` fragment
+  (`app://self/user?id=1#link=self:blog,new:profile`), and `uri()` / `newRequest()` read them
+  back (#390), so an `#[Embed]` src can carry links too. Code that rebuilds a request from `toUri()` and adds the links again must stop adding them.
+- Conflicts with bear/async 0.4.x and 0.5.x and bear/query-repository 1.20.2 and later 1.20.x, which add the links of a
+  request again after rebuilding it from `toUri()` and would follow each link twice; update them together.
+- **Behaviour change**: a request URI whose fragment is anything other than `#link=type:rel,...`
+  throws `UriException`; it was dropped. This includes the `Location` header of a `201` that
+  BEAR.Package reads back. `toUri()` throws for a rel outside `[A-Za-z0-9_-]`. A
+  `#[ResourceParam]` URI, or a `#[Link]` href followed by `linkSelf()` / `linkNew()` / `linkCrawl()`,
+  whose fragment holds `=` (a link) throws `UriException`; a `linkCrawl()` rel served by a DataLoader reads only
+  the query and ignores a fragment its variables expand to, while a link written in its href throws even with no rows.
+  `href()` follows the same rule, and still requests a `#[Link]` href whose fragment holds no `=`, such as `#top`,
+  without the fragment.
+
 ### Removed
 - The `array $values` first parameter of the `#[Link]`, `#[Embed]` and `#[ResourceParam]` constructors. Pass the values
   as named arguments, as attributes do: `new Link(rel: 'blog', href: '...')`. Their properties are now natively typed.

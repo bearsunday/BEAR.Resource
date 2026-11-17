@@ -35,7 +35,7 @@ interface RequestInterface
     public function addQuery(array $query): self;
 
     /**
-     * To Request URI string
+     * To Request URI string, links as a `#link=type:rel,...` fragment
      *
      * @psalm-capabilities read-props|write-props
      */

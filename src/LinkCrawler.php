@@ -6,6 +6,7 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\Link;
 use BEAR\Resource\DataLoader\DataLoader;
+use BEAR\Resource\Exception\UriException;
 use Override;
 use ReflectionMethod;
 
@@ -18,8 +19,14 @@ use function assert;
 use function count;
 use function is_array;
 use function is_numeric;
+use function parse_url;
+use function preg_replace;
+use function sprintf;
+use function str_contains;
 use function ucfirst;
 use function uri_template;
+
+use const PHP_URL_FRAGMENT;
 
 /**
  * Sequential link crawler
@@ -46,6 +53,8 @@ final class LinkCrawler implements LinkCrawlerInterface
     #[Override]
     public function crawl(array $annotations, LinkType $link, array &$bodyList): void
     {
+        $this->rejectLinks($annotations, $link);
+
         // Process DataLoader-enabled links first
         /** @var list<array<string, mixed>> $bodyList */
         $this->dataLoader?->load($annotations, $link, $bodyList);
@@ -77,6 +86,11 @@ final class LinkCrawler implements LinkCrawlerInterface
             }
 
             $uri = uri_template($annotation->href, $body);
+            // The href expands the row as earlier rels of this crawl leave it, so the fragment is known only now
+            if ($this->hasLink($uri)) {
+                throw new UriException(sprintf('%s: a link in the fragment of a #[Link] href is not followed', $uri), 500);
+            }
+
             $rel = $this->factory->newInstance($uri);
             $query = (new Uri($uri))->query;
             $request = new Request($this->invoker, $rel, Method::GET, $query);
@@ -102,6 +116,33 @@ final class LinkCrawler implements LinkCrawlerInterface
 
             $this->processNestedCrawl($ro, $request->method->value, $link, $annotation->rel, $body);
         }
+    }
+
+    /**
+     * Rejects, before the DataLoader or a request runs, a crawl href whose literal fragment holds a link
+     *
+     * A fragment that a variable expands to is checked by crawlBody() before its request; the DataLoader reads only the query.
+     *
+     * @param list<Link> $annotations
+     *
+     * @throws UriException
+     */
+    private function rejectLinks(array $annotations, LinkType $link): void
+    {
+        foreach ($annotations as $annotation) {
+            $literal = (string) preg_replace('/\{[^}]*\}/', '', $annotation->href);
+            if ($annotation->crawl === $link->key && $this->hasLink($literal)) {
+                throw new UriException(sprintf('%s: a link in the fragment of a #[Link] href is not followed', $annotation->href), 500);
+            }
+        }
+    }
+
+    /**
+     * A crawl follows an href to the resource it names: a fragment holding `=`, the form of a link, is not followed
+     */
+    private function hasLink(string $uri): bool
+    {
+        return str_contains((string) parse_url($uri, PHP_URL_FRAGMENT), '=');
     }
 
     /**
