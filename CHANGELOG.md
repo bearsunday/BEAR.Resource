@@ -35,9 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   as named arguments, as attributes do: `new Link(rel: 'blog', href: '...')`. Their properties are now natively typed.
 
 ### Fixed
-- PHPStan no longer reports purity errors in subclasses of `AbstractRequest`, `BadRequestException` and
-  `JsonSchemaException`, which inherited the `@psalm-pure` added in 1.35.0. Interfaces and the methods of extendable
-  classes carry no purity annotation, so Psalm 7 no longer requires one on their implementations and overrides either.
+- PHPStan no longer reports purity errors in subclasses of `AbstractRequest` and the resource exceptions.
 
 ## [1.35.0] - 2026-11-17
 
