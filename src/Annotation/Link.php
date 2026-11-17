@@ -9,6 +9,11 @@ use BEAR\Resource\DataLoader\DataLoaderInterface;
 use JsonSerializable;
 use Override;
 
+/**
+ * A hyperlink to another resource, which linkSelf(), linkNew(), linkCrawl() and href() follow
+ *
+ * @see https://bearsunday.github.io/manuals/1.0/en/resource_link.html#out-bound-links
+ */
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 final class Link implements JsonSerializable
 {
@@ -17,7 +22,7 @@ final class Link implements JsonSerializable
     /**
      * @param string                                 $href       URI template (RFC 6570)
      * @param string                                 $crawl      Crawl name that linkCrawl() follows
-     * @param class-string<DataLoaderInterface>|null $dataLoader Loads this rel for every row of the crawl in one call, in place of a request per row
+     * @param class-string<DataLoaderInterface>|null $dataLoader Loads this rel for all rows of the crawl in one call
      *
      * @psalm-pure
      */
