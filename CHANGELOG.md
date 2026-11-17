@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `linkNew()` / `linkCrawl()` / `href()`, which also throw before the request for an href that expands to one (a
   `linkCrawl()` rel served by a DataLoader reads only the query). Remove the fragment from the href; an `#[Embed]` src
   may carry `#link=`.
+- Requires `ray/aop` 2.20.0 or later, which weaves without constructing the method attributes, so a resource whose
+  `#[Link]` href has a fragment does not stop the injector.
 
 ### Removed
 - The `array $values` first parameter of the `#[Link]`, `#[Embed]` and `#[ResourceParam]` constructors. Pass the values
