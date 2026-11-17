@@ -24,6 +24,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Requires `ray/aop` 2.20.0 and `ray/di` 2.22.1 or later: `ray/aop` weaves without constructing the method attributes,
   so a resource whose `#[Link]` href has a fragment does not stop the injector.
 
+### Deprecated
+- `AppIterator`, `AssistedParam`, `ProviderInterface` and `Exception\HrefNotFoundException`, which the library no
+  longer uses, move to `src-deprecated/`. They keep their names and still autoload; stop depending on them.
+
 ### Removed
 - The `array $values` first parameter of the `#[Link]`, `#[Embed]` and `#[ResourceParam]` constructors. Pass the values
   as named arguments, as attributes do: `new Link(rel: 'blog', href: '...')`. Their properties are now natively typed.
