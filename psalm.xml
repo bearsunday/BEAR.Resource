@@ -19,9 +19,7 @@
         </ignoreFiles>
     </projectFiles>
     <issueHandlers>
-        <!-- Interfaces and the methods of extendable classes are extension points for applications and other packages,
-             so they carry no purity contract: Psalm 7 holds overrides to it and PHPStan inherits @psalm-pure.
-             Their constructors that need one use @psalm-capabilities, which PHPStan ignores and Psalm does not inherit. -->
+        <!-- Interfaces and extendable classes are extension points: they carry no purity contract. -->
         <MissingAbstractPureAnnotation errorLevel="suppress" />
         <MissingInterfaceImmutableAnnotation errorLevel="suppress" />
         <MissingOverrideAttribute errorLevel="suppress" />
