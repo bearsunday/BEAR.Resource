@@ -9,6 +9,10 @@ use BEAR\Resource\Exception\LinkQueryException;
 use BEAR\Resource\Exception\LinkRelException;
 use FakeVendor\Sandbox\Resource\App\Author;
 use FakeVendor\Sandbox\Resource\App\Blog;
+use FakeVendor\Sandbox\Resource\App\Link\Carry\A;
+use FakeVendor\Sandbox\Resource\App\Link\Carry\B;
+use FakeVendor\Sandbox\Resource\App\Link\Carry\C;
+use FakeVendor\Sandbox\Resource\App\Link\Carry\Stop;
 use FakeVendor\Sandbox\Resource\App\Link\HrefDeclaredFragment;
 use FakeVendor\Sandbox\Resource\App\Link\Jump\First;
 use FakeVendor\Sandbox\Resource\App\Link\Jump\Second;
@@ -544,6 +548,54 @@ class LinkerTest extends TestCase
             $this->assertSame('start view', $result->view);
             $this->assertSame(['id' => 1, 'name' => 'start', 'first' => $first], $result->body);
         }
+    }
+
+    public function testASelfLinkChainCarriesTheSurrogateKeyOfEveryResourceItPasses(): void
+    {
+        $result = $this->linker->invoke($this->carryRequest([
+            new LinkType('b', LinkType::SELF_LINK),
+            new LinkType('c', LinkType::SELF_LINK),
+        ]));
+
+        $this->assertInstanceOf(C::class, $result);
+        $this->assertSame(['Surrogate-Key' => 'a c'], $result->headers);
+    }
+
+    public function testASelfLinkGivesTheSurrogateKeyToALinkedResourceWithoutOne(): void
+    {
+        $result = $this->linker->invoke($this->carryRequest([new LinkType('b', LinkType::SELF_LINK)]));
+
+        $this->assertInstanceOf(B::class, $result);
+        $this->assertSame(['Surrogate-Key' => 'a'], $result->headers);
+    }
+
+    public function testTheResourceASelfLinkStopsAtHasTheSurrogateKeyItCameThrough(): void
+    {
+        $result = $this->linker->invoke($this->carryRequest([new LinkType('stop', LinkType::SELF_LINK)]));
+
+        $this->assertInstanceOf(Stop::class, $result);
+        $this->assertSame(Code::NOT_FOUND, $result->code);
+        $this->assertSame(['Surrogate-Key' => 'a stop'], $result->headers);
+    }
+
+    public function testNewAndCrawlKeepTheSurrogateKeyOfTheCurrentResource(): void
+    {
+        foreach ([LinkType::NEW_LINK => 'b', LinkType::CRAWL_LINK => 'tree'] as $type => $key) {
+            $result = $this->linker->invoke($this->carryRequest([new LinkType($key, $type)]));
+
+            $this->assertInstanceOf(A::class, $result);
+            $this->assertSame(['Surrogate-Key' => 'a'], $result->headers);
+            $this->assertSame(['name' => 'a', 'b' => ['name' => 'b']], $result->body);
+        }
+    }
+
+    /** @param list<LinkType> $links */
+    private function carryRequest(array $links): Request
+    {
+        $a = new A();
+        $a->uri = new Uri('app://self/link/carry/a');
+
+        return new Request($this->invoker, $a, Method::GET, [], $links);
     }
 
     /** @param list<LinkType> $links */
