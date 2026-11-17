@@ -624,6 +624,27 @@ HAL Moduleを使うとリソース表現が[HAL](http://stateless.co/hal_specifi
 }
 
 ```
+
+`HalLinker::link()` は rel の href と title を、HAL の `_links` と同じ値で返します。テンプレートで `<a href>` を組み立てるときに使います。body の `_links[rel]` があれば、メソッドが宣言していない rel でもそれを先に使い、なければ `#[Link]` を使います。どちらにもない rel は `LinkException` になります。body にない変数は RFC 6570 のとおり省かれます。title は body のリンクを使うときは body の `_links[rel]['title']`、そうでなければ `#[Link]` の title です。どちらにもなければ `''` で、HAL では `title` が省かれます。
+
+```php
+// onGet に #[Link(rel: 'next', href: '/posts{?page}', title: 'Next page')]、body は ['page' => 2]
+$halLinker->link($ro, 'next'); // ['href' => '/posts?page=2', 'title' => 'Next page']。page がなければ href は "/posts"
+```
+
+`ResourceLinks` はそのリンクを rel ごとにテンプレートへ渡します。読み取り専用で、リソースがリンクしていない rel を読むと `LinkException` になります。
+
+```php
+$link = new ResourceLinks($ro, $halLinker);
+$link['next']; // ['href' => '/posts?page=2', 'title' => 'Next page']
+```
+
+```twig
+<a href="{{ _link.next.href }}" title="{{ _link.next.title }}">Next</a>
+```
+
+`isset()` はどの rel でも true です。そのため `_link.prev is defined` や `_link.prev ?? ''` も rel を読み、宣言のない rel では例外になります。`#[Link]` の rel は常にあります。応答によって body の `_links` に足したり足さなかったりするリンクは、body で確かめます（Twig では `_ro.body._links.next is defined`）。この判定が見るのは body が足したリンクだけで、`#[Link]` でだけ宣言した rel では false になります。
+
 ## リソース表現
 
 `ResourceObject` を文字列評価するとリソース表現（リプレゼンテーション）が取得できます。

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `HalLinker::link()` returns the href and title a rel has in HAL `_links`, and `ResourceLinks` hands them to a
+  template as read-only `_link.<rel>.href` / `_link.<rel>.title`; an undeclared rel throws `LinkException`.
+
 ### Changed
 - `Request::toUri()` writes the links of a request as a `#link=` fragment
   (`app://self/user?id=1#link=self:blog,new:profile`), and `uri()` / `newRequest()` read them
