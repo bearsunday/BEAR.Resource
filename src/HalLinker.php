@@ -56,10 +56,10 @@ final readonly class HalLinker
     }
 
     /**
-     * Return the href and title of the rel link, the strings HAL `_links` carries
+     * Return the href and title of the rel link, the strings HAL `_links` carries for an array body
      *
-     * A body `_links[rel]` with a string href comes first, even for a rel the method does not declare, and then the
-     * method's `#[Link]`. The title is '' when the link has none, where HAL leaves it out.
+     * Only an array body is read. Its `_links[rel]` with a string href comes first, even for a rel the method does not
+     * declare, and then the method's `#[Link]`. The title is '' when the link has none, where HAL leaves it out.
      *
      * @return array{href: string, title: string}
      *

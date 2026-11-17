@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+use ArrayObject;
 use BEAR\Resource\Annotation\Link;
 use BEAR\Resource\Exception\LinkException;
 use BEAR\Resource\Module\EmbedResourceModule;
 use BEAR\Resource\Module\HalModule;
 use BEAR\Resource\Module\ResourceModule;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Ray\Aop\WeavedInterface;
 use Ray\Di\Injector;
@@ -110,6 +112,52 @@ class HalLinkerTest extends TestCase
 
         $this->assertSame(['href' => '/author/1', 'title' => ''], $this->linker->link($ro, 'author'));
         $this->assertSame(['href' => '/author/1'], $this->halLink($ro, $this->linker, 'author'));
+    }
+
+    #[DataProvider('hrefsThatAreNotStrings')]
+    public function testABodyLinkWithoutAStringHrefTakesTheDeclaredLink(mixed $href): void
+    {
+        $ro = $this->fakeHalHref(['page' => 2, '_links' => ['next' => ['href' => $href, 'title' => 'Override']]]);
+
+        $this->assertSame(['href' => '/r/posts?page=2', 'title' => 'Next page'], $this->linker->link($ro, 'next'));
+    }
+
+    /** @return iterable<string, array{mixed}> */
+    public static function hrefsThatAreNotStrings(): iterable
+    {
+        yield 'an int' => [1];
+        yield 'an array' => [['/override']];
+    }
+
+    #[DataProvider('titlesThatAreNotStrings')]
+    public function testABodyTitleThatIsNotAStringIsEmpty(mixed $title): void
+    {
+        $ro = $this->fakeHalHref(['_links' => ['next' => ['href' => '/override', 'title' => $title]]]);
+
+        $this->assertSame(['href' => '/override', 'title' => ''], $this->linker->link($ro, 'next'));
+    }
+
+    /** @return iterable<string, array{mixed}> */
+    public static function titlesThatAreNotStrings(): iterable
+    {
+        yield 'an int' => [1];
+        yield 'null' => [null];
+    }
+
+    #[DataProvider('bodiesThatAreNotArrays')]
+    public function testABodyThatIsNotAnArrayExpandsNoVariable(object $body): void
+    {
+        $ro = $this->fakeHalHref([]);
+        $ro->body = $body;
+
+        $this->assertSame(['href' => '/r/posts', 'title' => 'Next page'], $this->linker->link($ro, 'next'));
+    }
+
+    /** @return iterable<string, array{object}> */
+    public static function bodiesThatAreNotArrays(): iterable
+    {
+        yield 'an object' => [(object) ['page' => 2]];
+        yield 'an ArrayObject' => [new ArrayObject(['page' => 2])];
     }
 
     public function testAnUndeclaredRelThrows(): void
