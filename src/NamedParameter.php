@@ -11,6 +11,7 @@ use Ray\Di\InjectorInterface;
 
 final readonly class NamedParameter implements NamedParameterInterface
 {
+    /** @psalm-pure */
     public function __construct(
         private NamedParamMetasInterface $paramMetas,
         private InjectorInterface $injector,

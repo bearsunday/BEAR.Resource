@@ -109,6 +109,7 @@ use ReflectionParameter;
  * @psalm-type MethodAnnotations = array<string, Annotations>
  * @psalm-type WebContextParam = class-string
  * @psalm-type InsMap = array<string, string>
+ * @psalm-type LayoutEmbedMap = array<string, string>
  *
  * Parameter/Injection Types
  * @psalm-type ParamMap = array<string, ParamInterface>
@@ -150,10 +151,15 @@ use ReflectionParameter;
  * @psalm-type ServerErrorCode = int<500, 599>
  *
  * @phpcs:enable
+ *
+ * @psalm-immutable
  */
 final class Types
 {
-    /** @codeCoverageIgnore */
+    /**
+     * @codeCoverageIgnore
+     * @psalm-pure
+     */
     private function __construct()
     {
     }

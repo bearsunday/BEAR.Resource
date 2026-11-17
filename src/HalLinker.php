@@ -18,6 +18,7 @@ use function uri_template;
  */
 final readonly class HalLinker
 {
+    /** @psalm-pure */
     public function __construct(
         private ReverseLinkerInterface $link,
     ) {
@@ -27,6 +28,16 @@ final readonly class HalLinker
     public function getReverseLink(string $uri, array $query): string
     {
         return ($this->link)($uri, $query);
+    }
+
+    /**
+     * Expand the link href with the body (RFC 6570) and return the reverse link
+     *
+     * @param Body $body
+     */
+    public function expandHref(Link $link, array $body): string
+    {
+        return $this->getReverseLink(uri_template($link->href, $body), []);
     }
 
     /**
@@ -58,8 +69,7 @@ final readonly class HalLinker
                 continue;
             }
 
-            $uri = uri_template($annotation->href, $body);
-            $reverseUri = $this->getReverseLink($uri, []);
+            $reverseUri = $this->expandHref($annotation, $body);
 
             if (isset($body['_links']) && is_array($body['_links']) && isset($body['_links'][$annotation->rel])) {
                 // skip if already difined links in ResourceObject
@@ -72,7 +82,11 @@ final readonly class HalLinker
         return $hal;
     }
 
-    /** @return array{method?: non-empty-string, title?: non-empty-string} */
+    /**
+     * @return array{method?: non-empty-string, title?: non-empty-string}
+     *
+     * @psalm-capabilities read-props
+     */
     private function linkAttributes(Link $annotation): array
     {
         $attr = [];

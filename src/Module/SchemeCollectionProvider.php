@@ -15,6 +15,7 @@ use Ray\Di\ProviderInterface;
 /** @implements ProviderInterface<SchemeCollection> */
 final readonly class SchemeCollectionProvider implements ProviderInterface
 {
+    /** @psalm-pure */
     public function __construct(
         #[AppName]
         private string $appName,

@@ -36,6 +36,7 @@ final class DataLoader
     /** @var array<class-string<DataLoaderInterface>, DataLoaderInterface> */
     private array $cache = [];
 
+    /** @psalm-pure */
     public function __construct(
         private readonly InjectorInterface $injector,
     ) {
@@ -127,6 +128,8 @@ final class DataLoader
      * Extract keys from {?var1,var2} or {&var} format
      *
      * @return list<string>
+     *
+     * @psalm-capabilities pure
      */
     private function extractQueryExpansionKeys(string $template): array
     {
@@ -197,6 +200,8 @@ final class DataLoader
      *
      * @param array<string, mixed> $row
      * @param list<string>         $keys
+     *
+     * @psalm-capabilities pure
      */
     private function buildGroupKey(array $row, array $keys): string
     {
@@ -217,6 +222,8 @@ final class DataLoader
      *
      * @param array<string, string> $query
      * @param list<string>          $keys
+     *
+     * @psalm-pure
      */
     private function buildGroupKeyFromQuery(array $query, array $keys): string
     {

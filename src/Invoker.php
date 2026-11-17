@@ -5,6 +5,7 @@ namespace BEAR\Resource;
 
 final readonly class Invoker implements InvokerInterface
 {
+    /** @psalm-pure */
     public function __construct(
         private PhpClassInvoker $classInvoker
     ) {

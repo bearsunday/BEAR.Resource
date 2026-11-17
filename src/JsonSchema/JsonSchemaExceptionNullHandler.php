@@ -11,6 +11,8 @@ final class JsonSchemaExceptionNullHandler implements JsonSchemaExceptionHandler
 {
     /**
      * {@inheritDoc}
+     *
+     * @psalm-pure
      */
     #[Override]
     public function handle(ResourceObject $ro, JsonSchemaException $e, string $schemaFile): never

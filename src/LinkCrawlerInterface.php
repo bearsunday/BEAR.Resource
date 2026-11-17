@@ -30,6 +30,8 @@ interface LinkCrawlerInterface
 
     /**
      * Determine if the value is a list (multiple rows) or a single row
+     *
+     * @psalm-capabilities read-props
      */
     public function isList(mixed $value): bool;
 }

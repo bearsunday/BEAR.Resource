@@ -20,11 +20,11 @@
         "koriym/hal": "^1.1",
         "phpdocumentor/reflection-docblock": "^6.0",
         "psr/log": "^1.1 || ^2.0 || ^3.0",
-        "ray/aop": "^2.18.0",
-        "ray/di": "^2.18.0",
+        "ray/aop": "^2.19.1",
+        "ray/di": "^2.19.0",
         "rize/uri-template": "^0.4.1",
         "ray/input-query": "^1.1",
-        "koriym/file-upload": "^1.0"
+        "koriym/file-upload": "^1.0.1"
     },
     "conflict": {
         "bear/async": ">=0.4.0 <=0.5.0",
@@ -34,7 +34,7 @@
         "phpunit/phpunit": "^11.0",
         "bear/devtools": "^1.0",
         "koriym/json-schema-faker": "^0.3.1",
-        "ray/compiler": "^1.12",
+        "ray/compiler": "^1.13",
         "koriym/php-server": "^1.0",
         "webmozart/assert": "^2.0",
         "bamarni/composer-bin-plugin": "^1.4"

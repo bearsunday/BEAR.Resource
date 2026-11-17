@@ -9,7 +9,11 @@ use Override;
 /** @psalm-import-type Query from Types */
 final class NullReverseLinker implements ReverseLinkerInterface
 {
-    /** @param Query $query */
+    /**
+     * @param Query $query
+     *
+     * @psalm-pure
+     */
     #[Override]
     public function __invoke(string $uri, array $query): string
     {

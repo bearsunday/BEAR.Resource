@@ -45,6 +45,8 @@ final class Resource implements ResourceInterface
      * @param AnchorInterface  $anchor  Resource anchor
      * @param LinkerInterface  $linker  Resource linker
      * @param UriFactory       $uri     URI factory
+     *
+     * @psalm-pure
      */
     public function __construct(
         private readonly FactoryInterface $factory,
@@ -57,6 +59,8 @@ final class Resource implements ResourceInterface
 
     /**
      * Set HTTP method for fluent interface
+     *
+     * @psalm-capabilities read-props|write-this-props
      */
     public function __get(string $name): self
     {
@@ -80,6 +84,8 @@ final class Resource implements ResourceInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-capabilities read-props
      */
     #[Override]
     public function object(ResourceObject $ro): RequestInterface

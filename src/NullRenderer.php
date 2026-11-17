@@ -8,6 +8,7 @@ use Override;
 
 final class NullRenderer implements RenderInterface
 {
+    /** @psalm-pure */
     #[Override]
     public function render(ResourceObject $ro): string
     {

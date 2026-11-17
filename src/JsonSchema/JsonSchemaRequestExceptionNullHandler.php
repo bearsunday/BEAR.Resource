@@ -11,6 +11,8 @@ final class JsonSchemaRequestExceptionNullHandler implements JsonSchemaRequestEx
 {
     /**
      * {@inheritDoc}
+     *
+     * @psalm-pure
      */
     #[Override]
     public function handleRequestException(

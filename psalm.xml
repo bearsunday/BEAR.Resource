@@ -1,8 +1,11 @@
 <?xml version="1.0"?>
+<!-- psalm-baseline.xml holds only the resource URI reaching CURLOPT_URL in HttpRequestCurl: the application writes
+     that URI, and SchemeCollection hands HttpAdapter only http/https URIs unless the application maps another scheme to it. -->
 <psalm
     phpVersion="8.2"
     errorLevel="1"
-    runTaintAnalysis="false"
+    runTaintAnalysis="true"
+    errorBaseline="psalm-baseline.xml"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
@@ -16,11 +19,11 @@
         </ignoreFiles>
     </projectFiles>
     <issueHandlers>
+        <!-- Interfaces are DI extension points implemented by applications and other packages,
+             so only query methods carry a purity contract. -->
         <MissingAbstractPureAnnotation errorLevel="suppress" />
-        <MissingImmutableAnnotation errorLevel="suppress" />
         <MissingInterfaceImmutableAnnotation errorLevel="suppress" />
         <MissingOverrideAttribute errorLevel="suppress" />
-        <MissingPureAnnotation errorLevel="suppress" />
         <PossiblyUnusedProperty errorLevel="suppress" />
         <UnusedClass errorLevel="suppress" />
         <UnusedMethod errorLevel="suppress" />

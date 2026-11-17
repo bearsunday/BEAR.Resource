@@ -16,6 +16,7 @@ use function uri_template;
 
 final readonly class AssistedResourceParam implements ParamInterface
 {
+    /** @psalm-pure */
     public function __construct(
         private ResourceParam $resourceParam,
     ) {

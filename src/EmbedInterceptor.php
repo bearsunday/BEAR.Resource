@@ -12,7 +12,9 @@ use Override;
 use Ray\Aop\MethodInvocation;
 use Ray\Di\Di\Set;
 use Ray\Di\ProviderInterface;
+use ReflectionAttribute;
 
+use function array_map;
 use function array_shift;
 use function assert;
 use function is_array;
@@ -25,7 +27,11 @@ final readonly class EmbedInterceptor implements EmbedInterceptorInterface
 {
     private const SELF_LINK = '_self';
 
-    /** @param ProviderInterface<ResourceInterface> $resourceProvider */
+    /**
+     * @param ProviderInterface<ResourceInterface> $resourceProvider
+     *
+     * @psalm-pure
+     */
     public function __construct(
         #[Set(ResourceInterface::class)]
         private ProviderInterface $resourceProvider,
@@ -40,30 +46,31 @@ final readonly class EmbedInterceptor implements EmbedInterceptorInterface
     #[Override]
     public function invoke(MethodInvocation $invocation)
     {
-        $ro = $invocation->getThis();
-        assert($ro instanceof ResourceObject);
-        $query = $this->getArgsByInvocation($invocation);
-        $embeds = $invocation->getMethod()->getAnnotations();
-        $this->embedResource($embeds, $ro, $query);
+        $embeds = array_map(
+            static fn (ReflectionAttribute $attribute): Embed => $attribute->newInstance(),
+            $invocation->getMethod()->getAttributes(Embed::class),
+        );
+        $this->embedResource($embeds, $invocation);
 
         return $invocation->proceed();
     }
 
     /**
-     * @param array<Embed|object> $embeds
-     * @param Query               $query
+     * Puts the embeds in the body of the invoked resource, overwriting a rel already there.
+     *
+     * @param list<Embed>              $embeds
+     * @param MethodInvocation<object> $invocation the src templates are expanded with its arguments
      *
      * @throws EmbedException
      */
-    private function embedResource(array $embeds, ResourceObject $ro, array $query): void
+    public function embedResource(array $embeds, MethodInvocation $invocation): void
     {
+        $ro = $invocation->getThis();
+        assert($ro instanceof ResourceObject);
+        $query = $this->getArgsByInvocation($invocation);
         $resource = $this->resourceProvider->get();
 
         foreach ($embeds as $embed) {
-            if (! $embed instanceof Embed) {
-                continue;
-            }
-
             try {
                 $templateUri = $this->getFullUri($embed->src, $ro);
                 $uri = uri_template($templateUri, $query);
@@ -87,6 +94,7 @@ final readonly class EmbedInterceptor implements EmbedInterceptorInterface
         }
     }
 
+    /** @psalm-capabilities read-props */
     private function getFullUri(string $uri, ResourceObject $ro): string
     {
         if ($uri[0] === '/') {
@@ -96,6 +104,7 @@ final readonly class EmbedInterceptor implements EmbedInterceptorInterface
         return $uri;
     }
 
+    /** @psalm-capabilities read-props|write-props */
     public function prepareBody(ResourceObject $ro, Embed $embed): void
     {
         if ($ro->body === null) {

@@ -19,6 +19,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `#[ResourceParam]` URI, or a `#[Link]` href followed by `linkSelf()` / `linkNew()` / `linkCrawl()`,
   whose fragment holds `=` (a link) throws `UriException`.
 
+## [1.35.0] - 2026-11-17
+
+### Added
+- Psalm purity annotations, including on `RequestInterface::toUri()` / `toUriWithMethod()`,
+  `LinkCrawlerInterface::isList()` and `SchemeCollectionInterface::getAdapter()`. Under Psalm 7, a class that implements
+  these methods needs a matching `@psalm-capabilities` annotation.
+- A class attribute extending `AbstractResourceLayout` declares the resource's layout in its `EMBED` constant: the parts,
+  such as a header and a footer, that `onGet()` finds at the top level of the body as `#[Embed]` puts them. A resource
+  has one layout, placed through the now public `EmbedInterceptor::embedResource()`. A rel that both the layout and a
+  method `#[Embed]` declare throws `ResourceLayoutException`.
+- A GET `#[Link]` declared on `onGet()` with the rel `prefetch`, `canonical`, `next`, `prev`, `first` or `last` is also
+  output as an RFC 8288 `Link` header of a 200 response, such as `</article/43>; rel="prefetch"` (#377).
+  `JsonSchemaLinkHeaderModule` now appends its `describedby` link to an existing `Link` header.
+
+### Changed
+- Requires ray/aop 2.19.1 and ray/di 2.19.0 or later.
+
+### Security
+- Requires koriym/file-upload 1.0.1 or later, which checks an upload's MIME type against its content
+  ([GHSA-9343-66h6-6cjr](https://github.com/koriym/Koriym.FileUpload/security/advisories/GHSA-9343-66h6-6cjr)).
+
+### Fixed
+- Module composition no longer fails under `composer dump-autoload --classmap-authoritative`, which broke in 1.34.0 (#380)
+
+### Removed
+- The misspelled `JsonSchemalModule`, which has failed to load since `JsonSchemaModule` became final in 1.16.0. Use `JsonSchemaModule`.
+
 ## [1.34.2] - 2026-11-13
 
 ### Fixed

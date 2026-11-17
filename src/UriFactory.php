@@ -12,6 +12,7 @@ use function parse_url;
 /** @psalm-import-type Query from Types */
 final readonly class UriFactory
 {
+    /** @psalm-pure */
     public function __construct(
         #[ContextScheme]
         private string $schemaHost = 'page://self',

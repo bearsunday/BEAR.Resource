@@ -42,6 +42,7 @@ final class Anchor implements AnchorInterface
         throw new LinkException("rel:{$rel} class:" . $request->resourceObject::class, 500);
     }
 
+    /** @psalm-capabilities read-props */
     private function isValidLinkAnnotation(object $annotation, string $rel): bool
     {
         /** @psalm-suppress RedundantConditionGivenDocblockType */

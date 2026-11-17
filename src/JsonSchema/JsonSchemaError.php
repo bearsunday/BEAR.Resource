@@ -29,6 +29,7 @@ final readonly class JsonSchemaError
      */
     public bool $isCustomMessage;
 
+    /** @psalm-pure */
     public function __construct(
         public string $property,
         public string $pointer,
@@ -69,7 +70,9 @@ final readonly class JsonSchemaError
         return $template;
     }
 
-    /** Mirrors Be\Framework\SemanticVariable\ValidationMessageHandler::interpolateTemplate(). */
+    /**
+     * Mirrors Be\Framework\SemanticVariable\ValidationMessageHandler::interpolateTemplate().
+     */
     private function stringify(mixed $value): string
     {
         if (is_string($value)) {

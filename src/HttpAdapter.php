@@ -9,6 +9,7 @@ use Ray\Di\InjectorInterface;
 
 final readonly class HttpAdapter implements AdapterInterface
 {
+    /** @psalm-pure */
     public function __construct(
         private InjectorInterface $injector,
     ) {

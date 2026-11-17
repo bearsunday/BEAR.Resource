@@ -23,7 +23,11 @@ use function array_key_exists;
  */
 final readonly class InputFormParam implements ParamInterface
 {
-    /** @param array<ReflectionAttribute<InputFile>> $inputFileAttributes */
+    /**
+     * @param array<ReflectionAttribute<InputFile>> $inputFileAttributes
+     *
+     * @psalm-pure
+     */
     public function __construct(
         private FileUploadFactoryInterface $factory,
         private ReflectionParameter $parameter,

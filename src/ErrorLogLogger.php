@@ -11,6 +11,7 @@ use function sprintf;
 
 final class ErrorLogLogger implements LoggerInterface
 {
+    /** @psalm-capabilities read-props|io */
     #[Override]
     public function __invoke(ResourceObject $ro): void
     {

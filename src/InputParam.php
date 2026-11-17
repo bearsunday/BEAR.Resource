@@ -18,7 +18,11 @@ use function class_exists;
 /** @psalm-import-type Query from Types */
 final readonly class InputParam implements ParamInterface
 {
-    /** @param InputQueryInterface<object> $inputQuery */
+    /**
+     * @param InputQueryInterface<object> $inputQuery
+     *
+     * @psalm-pure
+     */
     public function __construct(
         private InputQueryInterface $inputQuery,
         private ReflectionParameter $parameter,

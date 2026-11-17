@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="7.0.2@5cd5e2ffff7497643dd51da31ae85bb5bc593090">
+  <file src="src/HttpRequestCurl.php">
+    <TaintedFile>
+      <code><![CDATA[curl_setopt($curl, CURLOPT_URL, $uri)]]></code>
+    </TaintedFile>
+    <TaintedSSRF>
+      <code><![CDATA[curl_setopt($curl, CURLOPT_URL, $uri)]]></code>
+    </TaintedSSRF>
+  </file>
+</files>

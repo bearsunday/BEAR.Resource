@@ -30,7 +30,10 @@ use const PHP_EOL;
  */
 final readonly class OptionsRenderer implements RenderInterface
 {
-    /** @SuppressWarnings(PHPMD.BooleanArgumentFlag) $optionsBody is configuration flag, not behavior control */
+    /**
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag) $optionsBody is configuration flag, not behavior control
+     * @psalm-pure
+     */
     public function __construct(
         private OptionsMethods $optionsMethod,
         #[OptionsBody]
@@ -59,6 +62,8 @@ final readonly class OptionsRenderer implements RenderInterface
      *
      * @return string[]
      * @psalm-return list<string>
+     *
+     * @psalm-capabilities read-props
      */
     private function getAllows(array $methods): array
     {

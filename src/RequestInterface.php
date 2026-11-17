@@ -14,6 +14,8 @@ interface RequestInterface
     /**
      * InvokerInterface resource request
      *
+     * A repeated call runs on the same ResourceObject, which keeps its code and headers from the previous run.
+     *
      * @param Query $query
      */
     public function __invoke(array|null $query = null): ResourceObject;
@@ -34,11 +36,15 @@ interface RequestInterface
 
     /**
      * To Request URI string, links as a `#link=type:rel,...` fragment
+     *
+     * @psalm-capabilities read-props|write-props
      */
     public function toUri(): string;
 
     /**
      * To Request URI string with request method
+     *
+     * @psalm-capabilities read-props|write-props
      */
     public function toUriWithMethod(): string;
 

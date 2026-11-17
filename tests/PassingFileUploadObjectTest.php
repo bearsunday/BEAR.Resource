@@ -139,8 +139,8 @@ class PassingFileUploadObjectTest extends TestCase
             'files' => [
                 'name' => ['test1.svg', 'test2.png'],
                 'type' => ['image/svg+xml', 'image/png'],
-                'size' => [filesize(__DIR__ . '/Fake/app.svg'), 1024],
-                'tmp_name' => [__DIR__ . '/Fake/app.svg', '/tmp/test'],
+                'size' => [filesize(__DIR__ . '/Fake/app.svg'), filesize(__DIR__ . '/Fake/app.png')],
+                'tmp_name' => [__DIR__ . '/Fake/app.svg', __DIR__ . '/Fake/app.png'],
                 'error' => [UPLOAD_ERR_OK, UPLOAD_ERR_OK],
             ],
         ];

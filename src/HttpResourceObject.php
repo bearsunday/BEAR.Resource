@@ -25,6 +25,7 @@ use function strtoupper;
  */
 final class HttpResourceObject extends ResourceObject implements InvokeRequestInterface
 {
+    /** @psalm-pure */
     public function __construct(
         private readonly HttpRequestInterface $httpRequest,
     ) {
@@ -53,6 +54,7 @@ final class HttpResourceObject extends ResourceObject implements InvokeRequestIn
         return $this;
     }
 
+    /** @psalm-capabilities read-props */
     public function __toString(): string
     {
         return $this->view;

@@ -12,6 +12,7 @@ use function sprintf;
 
 final readonly class ProdLogger implements LoggerInterface
 {
+    /** @psalm-pure */
     public function __construct(
         private PsrLoggerInterface $logger,
     ) {

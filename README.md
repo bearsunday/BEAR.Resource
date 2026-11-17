@@ -340,6 +340,22 @@ The payment method is provided by the order resource with the hyperlink.
 There is no change in client code even though the relationship between the order and payment is changed,
 You can checkout more on HATEOAS at [How to GET a Cup of Coffee](http://www.infoq.com/articles/webber-rest-workflow).
 
+### Link header
+
+A link declared with the rel `prefetch`, `canonical`, `next`, `prev`, `first` or `last` is also output as a `Link` header when `onGet()` returns 200. A CDN edge can warm its cache with `prefetch`, and an API client can page with `next`.
+
+```php
+#[Link(rel: 'next', href: '/articles?page={next}')]
+#[Link(rel: 'prefetch', href: '/article/{top_id}')]
+public function onGet(int $page = 1): static
+```
+
+```
+Link: </articles?page=2>; rel="next", </article/43>; rel="prefetch"
+```
+
+A link is output only when all its template variables are in the body and its href expands to a path starting with `/` or an `http(s)://` URL. Up to five `prefetch` links are output.
+
 Bind parameters
 You can bind method parameters to an “external value”. The external value might be a web context or any other resource state.
 
@@ -729,6 +745,47 @@ class News extends ResourceObject
 ```
 
 `weather` resource ie embedded like as `headline` or `sports` in this `News` resource.
+
+### Resource layout
+
+A class attribute that extends `AbstractResourceLayout` declares the resource's layout in its `EMBED` constant: the parts at the top level of the body, such as a header and a footer. They are in the body before `onGet()` runs, as `#[Embed]` puts them, and each `src` is expanded with the `onGet()` arguments.
+
+```php
+use Attribute;
+use BEAR\Resource\Annotation\AbstractResourceLayout;
+use BEAR\Resource\ResourceObject;
+
+#[Attribute(Attribute::TARGET_CLASS)]
+final class ContentPage extends AbstractResourceLayout
+{
+    /** @var array<string, string> */
+    public const EMBED = ['footer' => 'page://self/footer{?id}'];
+}
+
+#[ContentPage]
+class Article extends ResourceObject
+{
+    public function onGet(string $id): static
+    {
+        return $this;
+    }
+}
+```
+
+The template prints the parts it finds in the body; it does not fetch them.
+
+A resource has one layout; a GET request to a class with two layout attributes, or with a layout that does not declare its own `EMBED`, throws `ResourceLayoutException`. To share parts between layouts, compose the constants instead of stacking attributes:
+
+```php
+#[Attribute(Attribute::TARGET_CLASS)]
+final class CollectionPage extends AbstractResourceLayout
+{
+    /** @var array<string, string> */
+    public const EMBED = [...ContentPage::EMBED, 'search' => 'page://self/search{?q}'];
+}
+```
+
+A rel that both the layout and a method `#[Embed]` declare throws `ResourceLayoutException`. A subclass does not inherit the layout, since PHP does not inherit class attributes.
 
 ### HAL (Hypertext Application Language)
 
