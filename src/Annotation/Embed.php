@@ -23,14 +23,10 @@ final class Embed
      */
     public $src;
 
-    /**
-     * @param array{rel?: string, src?: string} $values
-     *
-     * @psalm-pure
-     */
-    public function __construct(array $values = [], string $rel = '', string $src = '')
+    /** @psalm-pure */
+    public function __construct(string $rel = '', string $src = '')
     {
-        $this->rel = $values['rel'] ?? $rel;
-        $this->src = $values['src'] ?? $src;
+        $this->rel = $rel;
+        $this->src = $src;
     }
 }

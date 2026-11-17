@@ -78,12 +78,11 @@ final class Link implements JsonSerializable
     }
 
     /**
-     * @param array{rel?: string, href?: string, method?: string, title?: string, crawl?: string, dataLoader?: class-string<DataLoaderInterface>|null} $values
+     * @param class-string<DataLoaderInterface>|null $dataLoader
      *
      * @psalm-pure
      */
     public function __construct(
-        array $values = [],
         string $rel = '',
         string $href = '',
         string $method = self::DEFAULT_METHOD,
@@ -91,13 +90,11 @@ final class Link implements JsonSerializable
         string $crawl = '',
         string|null $dataLoader = null,
     ) {
-        $this->rel = $values['rel'] ?? $rel;
-        $this->href = $values['href'] ?? $href;
-        $this->method = $values['method'] ?? $method;
-        $this->title = $values['title'] ?? $title;
-        $this->crawl = $values['crawl'] ?? $crawl;
-        /** @var class-string<DataLoaderInterface>|null $resolvedDataLoader */
-        $resolvedDataLoader = $values['dataLoader'] ?? $dataLoader;
-        $this->dataLoader = $resolvedDataLoader;
+        $this->rel = $rel;
+        $this->href = $href;
+        $this->method = $method;
+        $this->title = $title;
+        $this->crawl = $crawl;
+        $this->dataLoader = $dataLoader;
     }
 }
