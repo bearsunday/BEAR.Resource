@@ -189,7 +189,7 @@ $blog = $resource
 The result of the **app://self/user** resource request follows its **blog** link, and the request returns the **app://self/blog** resource object: its class, `uri`, `code`, headers, body and `view` are the blog resource's.
 Just like clicking a link on a web page, the next resource takes the place of the current one.
 
-In a chain such as `->linkSelf('blog')->linkSelf('author')` or `#link=self:blog,self:author`, the first rel is looked up in the `#[Link]`s of the requested method, and each later rel in those of the `onGet()` of the resource the previous self link returned; a following `linkNew` or `linkCrawl` adds to that resource.
+In a chain such as `->linkSelf('blog')->linkSelf('author')` or `#link=self:blog,self:author`, the first rel is looked up in the `#[Link]`s of the requested method, and each later rel in those of the `onGet()` of the resource the previous self link returned; a following `linkNew` or `linkCrawl` adds to that resource. When a linked resource returns a code of 400 or more, the chain stops there and that resource is returned.
 
 ### linkNew
 

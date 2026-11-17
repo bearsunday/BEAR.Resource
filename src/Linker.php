@@ -63,8 +63,12 @@ final class Linker implements LinkerInterface
         foreach ($request->links as $link) {
             $linked = $this->annotationLink($link, $current, $method, $linkCrawler);
             if ($link->type === LinkType::SELF_LINK) {
-                // The next link is read from the linked resource, which was requested with GET
                 $current = $linked;
+                if ($current->code >= Code::BAD_REQUEST) {
+                    return $current;
+                }
+
+                // The next link is read from the linked resource, which was requested with GET
                 $method = Method::GET;
 
                 continue;

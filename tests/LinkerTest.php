@@ -12,9 +12,12 @@ use FakeVendor\Sandbox\Resource\App\Blog;
 use FakeVendor\Sandbox\Resource\App\Link\HrefDeclaredFragment;
 use FakeVendor\Sandbox\Resource\App\Link\Jump\First;
 use FakeVendor\Sandbox\Resource\App\Link\Jump\Second;
+use FakeVendor\Sandbox\Resource\App\Link\Jump\Soft404;
+use FakeVendor\Sandbox\Resource\App\Link\Jump\Soft500;
 use FakeVendor\Sandbox\Resource\App\Link\Jump\Start;
 use FakeVendor\Sandbox\Resource\App\Link\Scalar\Name;
 use FakeVendor\Sandbox\Resource\App\Marshal\NullBody;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 use Ray\Di\ProviderInterface;
@@ -443,11 +446,68 @@ class LinkerTest extends TestCase
     public function testAResourceASelfLinkReturnsHasItsLinksReadFromOnGet(): void
     {
         $result = $this->linker->invoke($this->startRequest(Method::POST, [
-            new LinkType('first', LinkType::SELF_LINK),
+            new LinkType('posted', LinkType::SELF_LINK),
             new LinkType('second', LinkType::SELF_LINK),
         ]));
 
         $this->assertInstanceOf(Second::class, $result);
+    }
+
+    /** @return array<string, array{Method, string}> */
+    public static function relOfTheOtherMethodProvider(): array
+    {
+        return [
+            'POST, a rel only onGet() declares' => [Method::POST, 'first'],
+            'GET, a rel only onPost() declares' => [Method::GET, 'posted'],
+        ];
+    }
+
+    #[DataProvider('relOfTheOtherMethodProvider')]
+    public function testTheFirstRelIsReadFromTheRequestedMethod(Method $method, string $rel): void
+    {
+        $this->expectException(LinkRelException::class);
+
+        $this->linker->invoke($this->startRequest($method, [new LinkType($rel, LinkType::SELF_LINK)]));
+    }
+
+    /** @return array<string, array{list<LinkType>, class-string<ResourceObject>, int, array<string, int|string>}> */
+    public static function selfLinkToAnErrorProvider(): array
+    {
+        return [
+            '404, then self' => [
+                [new LinkType('soft404', LinkType::SELF_LINK), new LinkType('second', LinkType::SELF_LINK)],
+                Soft404::class,
+                Code::NOT_FOUND,
+                ['id' => 1, 'name' => 'soft404'],
+            ],
+            '404, then new' => [
+                [new LinkType('soft404', LinkType::SELF_LINK), new LinkType('second', LinkType::NEW_LINK)],
+                Soft404::class,
+                Code::NOT_FOUND,
+                ['id' => 1, 'name' => 'soft404'],
+            ],
+            '500, then self' => [
+                [new LinkType('soft500', LinkType::SELF_LINK), new LinkType('first', LinkType::SELF_LINK)],
+                Soft500::class,
+                Code::ERROR,
+                ['id' => 1, 'name' => 'soft500'],
+            ],
+        ];
+    }
+
+    /**
+     * @param list<LinkType>               $links
+     * @param class-string<ResourceObject> $class
+     * @param array<string, int|string>    $body
+     */
+    #[DataProvider('selfLinkToAnErrorProvider')]
+    public function testASelfLinkToAnErrorStopsTheChain(array $links, string $class, int $code, array $body): void
+    {
+        $result = $this->linker->invoke($this->startRequest(Method::GET, $links));
+
+        $this->assertInstanceOf($class, $result);
+        $this->assertSame($code, $result->code);
+        $this->assertSame($body, $result->body);
     }
 
     public function testNewAndCrawlAfterASelfLinkAddToTheLinkedResource(): void
