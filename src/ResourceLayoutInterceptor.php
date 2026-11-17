@@ -24,6 +24,7 @@ use function sprintf;
 /**
  * A rel both a part and a method #[Embed] declare is an error.
  *
+ * @internal
  * @psalm-import-type LayoutEmbedMap from Types
  */
 final readonly class ResourceLayoutInterceptor implements ResourceLayoutInterceptorInterface

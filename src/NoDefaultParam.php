@@ -8,6 +8,7 @@ use BEAR\Resource\Exception\ParameterException;
 use Override;
 use Ray\Di\InjectorInterface;
 
+/** @internal */
 final class NoDefaultParam implements ParamInterface
 {
     /**

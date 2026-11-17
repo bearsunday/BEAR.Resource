@@ -14,7 +14,10 @@ use stdClass;
 use function class_exists;
 use function is_object;
 
-/** @psalm-import-type Body from Types */
+/**
+ * @internal
+ * @psalm-import-type Body from Types
+ */
 final class JsonSchemaExceptionFakeHandler implements JsonSchemaExceptionHandlerInterface
 {
     final public const X_FAKE_JSON = 'X-Fake-JSON';

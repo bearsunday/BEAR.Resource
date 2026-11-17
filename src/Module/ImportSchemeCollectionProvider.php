@@ -13,7 +13,10 @@ use Override;
 use Ray\Di\InjectorInterface;
 use Ray\Di\ProviderInterface;
 
-/** @implements ProviderInterface<SchemeCollection> */
+/**
+ * @internal
+ * @implements ProviderInterface<SchemeCollection>
+ */
 final readonly class ImportSchemeCollectionProvider implements ProviderInterface
 {
     /**

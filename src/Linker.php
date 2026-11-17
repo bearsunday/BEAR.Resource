@@ -20,7 +20,10 @@ use function is_array;
 use function ucfirst;
 use function uri_template;
 
-/** @psalm-import-type Body from Types */
+/**
+ * @internal
+ * @psalm-import-type Body from Types
+ */
 final class Linker implements LinkerInterface
 {
     /**

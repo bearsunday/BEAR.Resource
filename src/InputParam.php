@@ -15,7 +15,10 @@ use function array_key_exists;
 use function assert;
 use function class_exists;
 
-/** @psalm-import-type Query from Types */
+/**
+ * @internal
+ * @psalm-import-type Query from Types
+ */
 final readonly class InputParam implements ParamInterface
 {
     /**

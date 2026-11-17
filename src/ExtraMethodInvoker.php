@@ -7,6 +7,7 @@ namespace BEAR\Resource;
 use BEAR\Resource\Exception\MethodNotAllowedException;
 use Ray\Di\Di\Named;
 
+/** @internal */
 final readonly class ExtraMethodInvoker
 {
     /** @psalm-pure */

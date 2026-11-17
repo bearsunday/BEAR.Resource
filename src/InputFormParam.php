@@ -18,6 +18,7 @@ use ReflectionParameter;
 use function array_key_exists;
 
 /**
+ * @internal
  * @psalm-import-type Query from Types
  * @psalm-import-type RequestQuery from Types
  */

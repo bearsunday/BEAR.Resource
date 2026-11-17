@@ -10,6 +10,7 @@ use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use function in_array;
 use function sprintf;
 
+/** @internal */
 final readonly class ProdLogger implements LoggerInterface
 {
     /** @psalm-pure */

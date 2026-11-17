@@ -9,6 +9,7 @@ use Override;
 use function strtoupper;
 
 /**
+ * @internal
  * @method HttpResourceObject get(AbstractUri|string $uri, Query $params = [])
  * @method HttpResourceObject head(AbstractUri|string $uri, Query $params = [])
  * @method HttpResourceObject put(AbstractUri|string $uri, Query $params = [])

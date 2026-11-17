@@ -16,6 +16,7 @@ use function ucfirst;
 use function uri_template;
 
 /**
+ * @internal
  * @psalm-import-type MethodUri from Types
  * @psalm-import-type Query from Types
  */

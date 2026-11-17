@@ -20,6 +20,7 @@ use function is_string;
 use function method_exists;
 
 /**
+ * @internal
  * @psalm-import-type OptionsResponse from Types
  * @psalm-import-type InsMap from Types
  * @psalm-import-type ParameterMetadata from Types

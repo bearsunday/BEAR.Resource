@@ -41,6 +41,7 @@ use const JSON_THROW_ON_ERROR;
 /**
  * Sends a HTTP request using cURL
  *
+ * @internal
  * @psalm-import-type Query from Types
  * @psalm-import-type HttpHeaders from Types
  * @psalm-import-type HttpBody from Types

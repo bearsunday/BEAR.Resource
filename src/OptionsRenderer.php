@@ -24,6 +24,7 @@ use const PHP_EOL;
  *
  * Set resource request information to `headers` and `view` in ResourceObject.
  *
+ * @internal
  * @see https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html
  * @see /docs/options/README.md
  * @psalm-import-type OptionsEntityBody from Types

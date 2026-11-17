@@ -11,6 +11,7 @@ use ReflectionMethod;
 use function is_string;
 
 /**
+ * @internal
  * @psalm-import-type OptionsDocBlock from Types
  * @psalm-import-type DocBlockParams from Types
  */
