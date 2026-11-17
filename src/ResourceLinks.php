@@ -11,7 +11,7 @@ use LogicException;
 /**
  * The resource's links by rel, read-only, as `HalLinker::link()` returns them
  *
- * Every rel reports as set, so reading a rel the resource does not link throws LinkException instead of reading as empty.
+ * Every rel reports as set; reading a rel the resource does not link throws LinkException.
  *
  * @implements ArrayAccess<string, array{href: string, title: string}>
  */
