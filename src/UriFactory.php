@@ -9,7 +9,10 @@ use BEAR\Resource\Annotation\ContextScheme;
 use function array_key_exists;
 use function parse_url;
 
-/** @psalm-import-type Query from Types */
+/**
+ * @internal
+ * @psalm-import-type Query from Types
+ */
 final readonly class UriFactory
 {
     /** @psalm-pure */

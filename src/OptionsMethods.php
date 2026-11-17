@@ -24,6 +24,7 @@ use function json_decode;
 use const JSON_THROW_ON_ERROR;
 
 /**
+ * @internal
  * @psalm-import-type Body from Types
  * @psalm-import-type InsMap from Types
  * @psalm-import-type OptionsMethodsResponse from Types

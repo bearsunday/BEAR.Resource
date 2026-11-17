@@ -7,6 +7,7 @@ namespace BEAR\Resource;
 use Override;
 use Ray\Di\InjectorInterface;
 
+/** @internal */
 final readonly class HttpAdapter implements AdapterInterface
 {
     /** @psalm-pure */

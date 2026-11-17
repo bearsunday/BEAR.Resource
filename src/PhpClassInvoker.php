@@ -9,7 +9,10 @@ use function call_user_func_array;
 use function is_callable;
 use function ucfirst;
 
-/** @psalm-import-type Query from Types */
+/**
+ * @internal
+ * @psalm-import-type Query from Types
+ */
 final readonly class PhpClassInvoker implements InvokerInterface
 {
     /** @psalm-pure */

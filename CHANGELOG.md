@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   dropped; an `#[Embed]` src may carry `#link=`.
 - Requires `ray/aop` 2.20.0 and `ray/di` 2.22.1 or later: `ray/aop` weaves without constructing the method attributes,
   so a resource whose `#[Link]` href has a fragment does not stop the injector.
+- The implementation classes that applications reach only through the library's modules and interfaces are marked
+  `@internal`. Interfaces, attributes, modules and exceptions stay public.
 
 ### Deprecated
 - `AppIterator`, `AssistedParam`, `ProviderInterface` and `Exception\HrefNotFoundException`, which the library no

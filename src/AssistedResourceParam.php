@@ -14,6 +14,7 @@ use function sprintf;
 use function str_contains;
 use function uri_template;
 
+/** @internal */
 final readonly class AssistedResourceParam implements ParamInterface
 {
     /** @psalm-pure */

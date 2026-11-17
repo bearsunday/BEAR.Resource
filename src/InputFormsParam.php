@@ -21,6 +21,7 @@ use function count;
 use function is_array;
 
 /**
+ * @internal
  * @psalm-import-type Query from Types
  * @psalm-import-type RequestQuery from Types
  */

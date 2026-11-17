@@ -10,6 +10,7 @@ use Ray\Di\Di\Inject;
 
 use function is_string;
 
+/** @internal */
 final class Factory implements FactoryInterface
 {
     /** @psalm-pure */

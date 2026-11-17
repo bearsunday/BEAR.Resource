@@ -3,6 +3,7 @@
 
 namespace BEAR\Resource;
 
+/** @internal */
 final readonly class Invoker implements InvokerInterface
 {
     /** @psalm-pure */

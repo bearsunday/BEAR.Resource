@@ -11,6 +11,7 @@ use Psr\Log\LogLevel;
 use function in_array;
 use function sprintf;
 
+/** @internal */
 final readonly class DevLogger implements LoggerInterface
 {
     /** @psalm-pure */

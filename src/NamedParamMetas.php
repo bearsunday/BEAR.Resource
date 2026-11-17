@@ -18,6 +18,7 @@ use ReflectionNamedType;
 use ReflectionParameter;
 
 /**
+ * @internal
  * @psalm-import-type ParamMap from Types
  * @psalm-import-type WebContextParamMap from Types
  * @psalm-import-type ReflectionParameterMap from Types

@@ -7,7 +7,10 @@ namespace BEAR\Resource;
 use Override;
 use Ray\Di\InjectorInterface;
 
-/** @template T */
+/**
+ * @internal
+ * @template T
+ */
 final readonly class DefaultParam implements ParamInterface
 {
     /**

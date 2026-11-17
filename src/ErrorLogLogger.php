@@ -9,6 +9,7 @@ use Override;
 use function error_log;
 use function sprintf;
 
+/** @internal */
 final class ErrorLogLogger implements LoggerInterface
 {
     /** @psalm-capabilities read-props|io */
