@@ -66,6 +66,7 @@ final class Linker implements LinkerInterface
         foreach ($request->links as $link) {
             $linked = $this->annotationLink($link, $current, $method, $linkCrawler);
             if ($link->type === LinkType::SELF_LINK) {
+                $linked = clone $linked;
                 $this->carrySurrogateKey($current, $linked);
                 $current = $linked;
                 if ($current->code >= Code::BAD_REQUEST) {
@@ -86,7 +87,6 @@ final class Linker implements LinkerInterface
         return $current;
     }
 
-    /** Prepends the Surrogate-Key of the resource a self link leaves to that of the resource it returns */
     private function carrySurrogateKey(ResourceObject $current, ResourceObject $linked): void
     {
         if (! isset($current->headers[self::SURROGATE_KEY])) {

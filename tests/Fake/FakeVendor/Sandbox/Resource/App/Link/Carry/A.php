@@ -11,6 +11,7 @@ class A extends ResourceObject
 {
     #[Link(rel: 'b', href: 'app://self/link/carry/b', crawl: 'tree')]
     #[Link(rel: 'stop', href: 'app://self/link/carry/stop')]
+    #[Link(rel: 'shared', href: 'app://self/link/carry/shared')]
     public function onGet(): static
     {
         $this->headers = ['Surrogate-Key' => 'a'];

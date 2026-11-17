@@ -12,6 +12,7 @@ use FakeVendor\Sandbox\Resource\App\Blog;
 use FakeVendor\Sandbox\Resource\App\Link\Carry\A;
 use FakeVendor\Sandbox\Resource\App\Link\Carry\B;
 use FakeVendor\Sandbox\Resource\App\Link\Carry\C;
+use FakeVendor\Sandbox\Resource\App\Link\Carry\Shared;
 use FakeVendor\Sandbox\Resource\App\Link\Carry\Stop;
 use FakeVendor\Sandbox\Resource\App\Link\HrefDeclaredFragment;
 use FakeVendor\Sandbox\Resource\App\Link\Jump\First;
@@ -576,6 +577,19 @@ class LinkerTest extends TestCase
         $this->assertInstanceOf(Stop::class, $result);
         $this->assertSame(Code::NOT_FOUND, $result->code);
         $this->assertSame(['Surrogate-Key' => 'a stop'], $result->headers);
+    }
+
+    public function testASelfLinkLeavesTheObjectTheLinkedResourceReturnsAsItIs(): void
+    {
+        Shared::$instance = null;
+        foreach ([1, 2, 3] as $run) {
+            $result = $this->linker->invoke($this->carryRequest([new LinkType('shared', LinkType::SELF_LINK)]));
+
+            $this->assertSame(['Surrogate-Key' => 'a shared'], $result->headers, "run {$run}");
+        }
+
+        $this->assertInstanceOf(Shared::class, Shared::$instance);
+        $this->assertSame(['Surrogate-Key' => 'shared'], Shared::$instance->headers);
     }
 
     public function testNewAndCrawlKeepTheSurrogateKeyOfTheCurrentResource(): void
