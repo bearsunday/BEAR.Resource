@@ -116,23 +116,13 @@ final class ResourceClient implements ResourceInterface
 
     /**
      * {@inheritDoc}
-     *
-     * @psalm-suppress NoInterfaceProperties
-     * @psalm-suppress MixedMethodCall
      */
     #[Override]
     public function href(string $rel, array $query = [], ResourceObject|null $ro = null): ResourceObject
     {
         assert($ro instanceof ResourceObject, 'ResourceObject is required for ResourceClient::href()');
-        $sourceRequest = new Request($this->invoker, $ro, Method::from($ro->uri->method), $ro->uri->query);
-        [$method, $uri] = $this->anchor->href($rel, $sourceRequest, $query);
-        /** @var Request $request */
-        $request = $this->newRequest(Method::from($method), $uri, $query);
-        $request->in = 'eager';
-        $result = $request->request();
-        assert($result instanceof ResourceObject);
 
-        return $result;
+        return $this->resource()->href($rel, $query, $ro);
     }
 
     /**

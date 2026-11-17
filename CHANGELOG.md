@@ -17,7 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   throws `UriException`; it was dropped. This includes the `Location` header of a `201` that
   BEAR.Package reads back. `toUri()` throws for a rel outside `[A-Za-z0-9_-]`. A
   `#[ResourceParam]` URI, or a `#[Link]` href followed by `linkSelf()` / `linkNew()` / `linkCrawl()`,
-  whose fragment holds `=` (a link) throws `UriException`.
+  whose fragment holds `=` (a link) throws `UriException`. `href()` follows the same rule, and still requests a
+  `#[Link]` href whose fragment holds no `=`, such as `#top`, without the fragment.
 
 ## [1.35.0] - 2026-11-17
 

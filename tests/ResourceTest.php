@@ -266,6 +266,40 @@ class ResourceTest extends TestCase
         $this->assertSame($this->resource->get('app://self/author', ['id' => 1])->body, $ro->body);
     }
 
+    /** @return array<string, array{class-string<ResourceInterface>}> */
+    public static function resourceClassProvider(): array
+    {
+        return [
+            'Resource' => [Resource::class],
+            'ResourceClient' => [ResourceClient::class],
+        ];
+    }
+
+    /** @param class-string<ResourceInterface> $class */
+    #[DataProvider('resourceClassProvider')]
+    public function testHrefIgnoresAFragmentWithoutALink(string $class): void
+    {
+        $resource = $class === ResourceClient::class ? $this->resourceClient() : $this->resource;
+        $this->assertInstanceOf($class, $resource);
+
+        $ro = $resource->href('anchored', [], $resource->get('app://self/link/href-fragment'));
+
+        $this->assertSame($resource->get('app://self/author', ['id' => 1])->body, $ro->body);
+    }
+
+    /** @param class-string<ResourceInterface> $class */
+    #[DataProvider('resourceClassProvider')]
+    public function testALinkInTheFragmentOfAnHrefIsNotSupported(string $class): void
+    {
+        $resource = $class === ResourceClient::class ? $this->resourceClient() : $this->resource;
+        $this->assertInstanceOf($class, $resource);
+        $ro = $resource->get('app://self/link/href-fragment');
+
+        $this->expectException(UriException::class);
+
+        $resource->href('linked', [], $ro);
+    }
+
     public function testAnEmbedFollowsTheLinksInItsSrc(): void
     {
         $embedded = $this->resource->get('app://self/link/embed-linked', ['id' => 1])->body['blog'];
@@ -276,6 +310,13 @@ class ResourceTest extends TestCase
 
     public function testResourceClientReadsLinksInUri(): void
     {
+        $ro = $this->resourceClient()->uri('app://self/author?id=1#link=self:blog')();
+
+        $this->assertSame(['id' => 12, 'name' => 'Aramis blog'], $ro->body);
+    }
+
+    private function resourceClient(): ResourceClient
+    {
         $module = new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox'));
         $module->override(new class extends AbstractModule {
             protected function configure(): void
@@ -284,11 +325,9 @@ class ResourceTest extends TestCase
             }
         });
         $client = (new Injector($module, __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
-        $this->assertInstanceOf(ResourceClient::class, $client);
+        assert($client instanceof ResourceClient);
 
-        $ro = $client->uri('app://self/author?id=1#link=self:blog')();
-
-        $this->assertSame(['id' => 12, 'name' => 'Aramis blog'], $ro->body);
+        return $client;
     }
 
     public function testLinkNewAfterAReadFollowsTheLinkOnTheNextRead(): void
