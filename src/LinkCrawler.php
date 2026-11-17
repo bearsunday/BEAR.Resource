@@ -53,7 +53,7 @@ final class LinkCrawler implements LinkCrawlerInterface
     public function crawl(array $annotations, LinkType $link, array &$bodyList): void
     {
         /** @var list<array<string, mixed>> $bodyList */
-        self::rejectLinks($annotations, $link, $bodyList);
+        $this->rejectLinks($annotations, $link, $bodyList);
 
         // Process DataLoader-enabled links first
         $this->dataLoader?->load($annotations, $link, $bodyList);
@@ -120,7 +120,7 @@ final class LinkCrawler implements LinkCrawlerInterface
      *
      * @throws UriException
      */
-    private static function rejectLinks(array $annotations, LinkType $link, array $bodyList): void
+    private function rejectLinks(array $annotations, LinkType $link, array $bodyList): void
     {
         foreach ($annotations as $annotation) {
             if ($annotation->crawl !== $link->key) {
