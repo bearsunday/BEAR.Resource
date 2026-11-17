@@ -24,6 +24,8 @@ final class Link implements JsonSerializable
 {
     public const DEFAULT_METHOD = 'get';
 
+    private const NON_FRAGMENT_EXPRESSION = '/\{(?!#)[^}]*\}/';
+
     /**
      * @param string                                 $href       URI template (RFC 6570) without a fragment
      * @param string                                 $crawl      Crawl name that linkCrawl() follows
@@ -39,8 +41,7 @@ final class Link implements JsonSerializable
         public string $crawl = '',
         public string|null $dataLoader = null,
     ) {
-        // A `#` outside the expressions, or the {#...} fragment operator, declares a fragment
-        if (str_contains((string) preg_replace('/\{(?!#)[^}]*\}/', '', $href), '#')) {
+        if (str_contains((string) preg_replace(self::NON_FRAGMENT_EXPRESSION, '', $href), '#')) {
             throw new LinkHrefException(sprintf('%s: a #[Link] href cannot have a fragment', $href), 500);
         }
     }
