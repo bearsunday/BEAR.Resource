@@ -17,7 +17,7 @@ final class Link implements JsonSerializable
     /**
      * @param string                                 $href       URI template (RFC 6570)
      * @param string                                 $crawl      Crawl name that linkCrawl() follows
-     * @param class-string<DataLoaderInterface>|null $dataLoader
+     * @param class-string<DataLoaderInterface>|null $dataLoader Loads this rel for every row of the crawl in one call, in place of a request per row
      *
      * @psalm-pure
      */
