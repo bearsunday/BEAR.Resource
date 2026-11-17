@@ -27,6 +27,7 @@ use function str_contains;
  * @psalm-import-type MetaMap from Types
  * @psalm-import-type ClassNameList from Types
  * @implements Iterator<string, Meta>
+ * @deprecated Not used by the library
  */
 final class AppIterator implements Iterator
 {

@@ -7,6 +7,7 @@ namespace BEAR\Resource;
 use Override;
 use Ray\Di\InjectorInterface;
 
+/** @deprecated Not used by the library */
 final class AssistedParam implements ParamInterface
 {
     /**
