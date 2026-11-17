@@ -23,6 +23,7 @@ use Ray\Di\NullModule;
 use Ray\Di\ProviderInterface;
 
 use function assert;
+use function is_array;
 use function serialize;
 use function unserialize;
 
@@ -265,6 +266,14 @@ class ResourceTest extends TestCase
         $ro = $this->resource->uri('app://self/link/href-fragment')->linkSelf('anchored')();
 
         $this->assertSame($this->resource->get('app://self/author', ['id' => 1])->body, $ro->body);
+    }
+
+    public function testACrawlHrefExpandsTheValueAnEarlierRelWrites(): void
+    {
+        $ro = $this->resource->uri('app://self/link/replaced-row')->linkCrawl('replaced')();
+        assert(is_array($ro->body));
+
+        $this->assertSame($this->resource->get('app://self/author', ['id' => 1])->body, $ro->body[0]['author']);
     }
 
     /** @return array<string, array{class-string<ResourceInterface>}> */

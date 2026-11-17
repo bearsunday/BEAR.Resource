@@ -20,6 +20,7 @@ use function count;
 use function is_array;
 use function is_numeric;
 use function parse_url;
+use function preg_replace;
 use function sprintf;
 use function str_contains;
 use function ucfirst;
@@ -52,10 +53,10 @@ final class LinkCrawler implements LinkCrawlerInterface
     #[Override]
     public function crawl(array $annotations, LinkType $link, array &$bodyList): void
     {
-        /** @var list<array<string, mixed>> $bodyList */
-        $this->rejectLinks($annotations, $link, $bodyList);
+        $this->rejectLinks($annotations, $link);
 
         // Process DataLoader-enabled links first
+        /** @var list<array<string, mixed>> $bodyList */
         $this->dataLoader?->load($annotations, $link, $bodyList);
 
         // Process non-DataLoader links
@@ -85,8 +86,11 @@ final class LinkCrawler implements LinkCrawlerInterface
             }
 
             $uri = uri_template($annotation->href, $body);
-            // An earlier rel of this crawl may have changed a value the href expands
-            $this->rejectLink($uri);
+            // The href expands the row as earlier rels of this crawl leave it, so the fragment is known only now
+            if ($this->hasLink($uri)) {
+                throw new UriException(sprintf('%s: a link in the fragment of a #[Link] href is not followed', $uri), 500);
+            }
+
             $rel = $this->factory->newInstance($uri);
             $query = (new Uri($uri))->query;
             $request = new Request($this->invoker, $rel, Method::GET, $query);
@@ -115,36 +119,30 @@ final class LinkCrawler implements LinkCrawlerInterface
     }
 
     /**
-     * Rejects, before the DataLoader or a request runs, each crawl href that already expands to a link
+     * Rejects, before the DataLoader or a request runs, a crawl href whose literal fragment holds a link
      *
-     * @param list<Link>                 $annotations
-     * @param list<array<string, mixed>> $bodyList
+     * A fragment that a variable expands to is checked by crawlBody() before its request; the DataLoader reads only the query.
+     *
+     * @param list<Link> $annotations
      *
      * @throws UriException
      */
-    private function rejectLinks(array $annotations, LinkType $link, array $bodyList): void
+    private function rejectLinks(array $annotations, LinkType $link): void
     {
         foreach ($annotations as $annotation) {
-            if ($annotation->crawl !== $link->key) {
-                continue;
-            }
-
-            foreach ($bodyList as $body) {
-                $this->rejectLink(uri_template($annotation->href, $body));
+            $literal = (string) preg_replace('/\{[^}]*\}/', '', $annotation->href);
+            if ($annotation->crawl === $link->key && $this->hasLink($literal)) {
+                throw new UriException(sprintf('%s: a link in the fragment of a #[Link] href is not followed', $annotation->href), 500);
             }
         }
     }
 
     /**
-     * A crawl follows an href to the resource it names: a fragment holding `=`, the form of a link, is rejected
-     *
-     * @throws UriException
+     * A crawl follows an href to the resource it names: a fragment holding `=`, the form of a link, is not followed
      */
-    private function rejectLink(string $href): void
+    private function hasLink(string $uri): bool
     {
-        if (str_contains((string) parse_url($href, PHP_URL_FRAGMENT), '=')) {
-            throw new UriException(sprintf('%s: a link in the fragment of a #[Link] href is not followed', $href), 500);
-        }
+        return str_contains((string) parse_url($uri, PHP_URL_FRAGMENT), '=');
     }
 
     /**
