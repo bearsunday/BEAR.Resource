@@ -10,6 +10,7 @@ use Attribute;
  * Puts a request for another resource in the body before the method runs
  *
  * @see https://bearsunday.github.io/manuals/1.0/en/resource_link.html#internal-links
+ * @see \BEAR\Resource\EmbedInterceptor
  */
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 final class Embed
