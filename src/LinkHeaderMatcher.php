@@ -30,11 +30,7 @@ final class LinkHeaderMatcher extends AbstractMatcher
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * The rel is read from the arguments: weaving does not construct the #[Link], whose href is checked where it is used.
-     */
+    /** {@inheritDoc} */
     #[Override]
     public function matchesMethod(ReflectionMethod $method, array $arguments): bool
     {

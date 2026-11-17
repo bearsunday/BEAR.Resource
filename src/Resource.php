@@ -155,7 +155,6 @@ final class Resource implements ResourceInterface
             ? new Request($this->invoker, $ro, Method::from($ro->uri->method), $ro->uri->query)
             : $this->request;
         [$method, $uri] = $this->anchor->href($rel, $sourceRequest, $query);
-        // A variable can expand to a fragment, which the request to the href does not read
         [$requestUri] = explode('#', $uri, 2);
         /** @var Request $request */
         $request = $this->newRequest(Method::from($method), $requestUri, $query);
