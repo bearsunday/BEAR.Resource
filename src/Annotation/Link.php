@@ -6,7 +6,7 @@ namespace BEAR\Resource\Annotation;
 
 use Attribute;
 use BEAR\Resource\DataLoader\DataLoaderInterface;
-use BEAR\Resource\Exception\UriException;
+use BEAR\Resource\Exception\LinkHrefException;
 use JsonSerializable;
 use Override;
 
@@ -29,7 +29,7 @@ final class Link implements JsonSerializable
      * @param string                                 $crawl      Crawl name that linkCrawl() follows
      * @param class-string<DataLoaderInterface>|null $dataLoader Loads this rel for all rows of the crawl in one call
      *
-     * @throws UriException
+     * @throws LinkHrefException
      */
     public function __construct(
         public string $rel = '',
@@ -41,7 +41,7 @@ final class Link implements JsonSerializable
     ) {
         // A `#` outside the expressions, or the {#...} fragment operator, declares a fragment
         if (str_contains((string) preg_replace('/\{(?!#)[^}]*\}/', '', $href), '#')) {
-            throw new UriException(sprintf('%s: a #[Link] href cannot have a fragment', $href), 500);
+            throw new LinkHrefException(sprintf('%s: a #[Link] href cannot have a fragment', $href), 500);
         }
     }
 

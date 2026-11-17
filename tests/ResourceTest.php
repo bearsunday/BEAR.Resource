@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\BadRequestException;
+use BEAR\Resource\Exception\LinkHrefException;
 use BEAR\Resource\Exception\MethodNotAllowedException;
 use BEAR\Resource\Exception\UriException;
 use BEAR\Resource\Module\HalModule;
@@ -261,7 +262,7 @@ class ResourceTest extends TestCase
             default => $request->linkCrawl($rel),
         };
 
-        $this->expectException(UriException::class);
+        $this->expectException(LinkHrefException::class);
         $this->expectExceptionMessage("app://self/link/never-requested{$fragment}: a #[Link] href cannot have a fragment");
 
         $request();
@@ -292,7 +293,7 @@ class ResourceTest extends TestCase
         $this->assertInstanceOf($class, $resource);
         $ro = $resource->get('app://self/link/href-fragment');
 
-        $this->expectException(UriException::class);
+        $this->expectException(LinkHrefException::class);
         $this->expectExceptionMessage('app://self/link/never-requested#link=self:blog: a #[Link] href cannot have a fragment');
 
         $resource->href('expanded', [], $ro);

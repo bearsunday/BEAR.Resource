@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BEAR\Resource\Annotation;
 
-use BEAR\Resource\Exception\UriException;
+use BEAR\Resource\Exception\LinkHrefException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -24,7 +24,7 @@ class LinkTest extends TestCase
     #[DataProvider('fragmentProvider')]
     public function testAnHrefDeclaresNoFragment(string $href): void
     {
-        $this->expectException(UriException::class);
+        $this->expectException(LinkHrefException::class);
         $this->expectExceptionMessage($href);
 
         new Link(rel: 'author', href: $href);

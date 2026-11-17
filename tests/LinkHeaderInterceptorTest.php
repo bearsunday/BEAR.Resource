@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\UriException;
+use BEAR\Resource\Exception\LinkHrefException;
 use BEAR\Resource\Module\JsonSchemaLinkHeaderModule;
 use BEAR\Resource\Module\JsonSchemaModule;
 use BEAR\Resource\Module\ResourceModule;
@@ -94,7 +94,7 @@ class LinkHeaderInterceptorTest extends TestCase
         $ro = $this->injector->getInstance(HrefDeclaredFragment::class);
         $this->assertInstanceOf(WeavedInterface::class, $ro);
 
-        $this->expectException(UriException::class);
+        $this->expectException(LinkHrefException::class);
         $this->expectExceptionMessage('/author?id=1#top: a #[Link] href cannot have a fragment');
 
         $ro->onGet();

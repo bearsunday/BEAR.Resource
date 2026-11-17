@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-use BEAR\Resource\Exception\UriException;
+use BEAR\Resource\Exception\LinkHrefException;
 use BEAR\Resource\Fake\InputResourceBuiltinType;
 use BEAR\Resource\Fake\InputResourceNoConstructor;
 use BEAR\Resource\Fake\InputResourceWithDefaults;
@@ -511,7 +511,7 @@ class OptionsTest extends TestCase
     {
         $request = new Request($this->invoker, new HrefDeclaredFragment(), Method::OPTIONS);
 
-        $this->expectException(UriException::class);
+        $this->expectException(LinkHrefException::class);
         $this->expectExceptionMessage('/author?id=1#top: a #[Link] href cannot have a fragment');
 
         $this->invoker->invoke($request);

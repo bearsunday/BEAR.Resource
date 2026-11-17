@@ -6,7 +6,7 @@ namespace BEAR\Resource\DataLoader;
 
 use BEAR\Resource\Annotation\Link;
 use BEAR\Resource\AppAdapter;
-use BEAR\Resource\Exception\UriException;
+use BEAR\Resource\Exception\LinkHrefException;
 use BEAR\Resource\Factory;
 use BEAR\Resource\FactoryInterface;
 use BEAR\Resource\FakeRo;
@@ -122,8 +122,8 @@ class LinkerDataLoaderTest extends TestCase
 
         try {
             $this->linker->invoke($request);
-            $this->fail('UriException expected');
-        } catch (UriException) {
+            $this->fail('LinkHrefException expected');
+        } catch (LinkHrefException) {
             $this->assertSame(0, LikeDataLoader::$callCount, 'the loader does not run');
         }
     }

@@ -6,7 +6,7 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\Link as LinkAnnotation;
 use BEAR\Resource\Exception\LinkException;
-use BEAR\Resource\Exception\UriException;
+use BEAR\Resource\Exception\LinkHrefException;
 use Override;
 use Ray\Aop\ReflectionMethod;
 
@@ -28,7 +28,7 @@ final class Anchor implements AnchorInterface
      * {@inheritDoc}
      *
      * @throws LinkException
-     * @throws UriException
+     * @throws LinkHrefException
      */
     #[Override]
     public function href(string $rel, AbstractRequest $request, array $query): array
@@ -57,7 +57,7 @@ final class Anchor implements AnchorInterface
      *
      * @return MethodUri
      *
-     * @throws UriException
+     * @throws LinkHrefException
      */
     private function getMethodUri(AbstractRequest $request, array $query, LinkAnnotation $annotation): array
     {
@@ -67,7 +67,7 @@ final class Anchor implements AnchorInterface
         $uri = uri_template($annotation->href, $query);
         // A variable can expand to a fragment, which a followed href does not have
         if (str_contains($uri, '#')) {
-            throw new UriException(sprintf('%s: a #[Link] href cannot have a fragment', $uri), 500);
+            throw new LinkHrefException(sprintf('%s: a #[Link] href cannot have a fragment', $uri), 500);
         }
 
         return [$annotation->method, $uri];

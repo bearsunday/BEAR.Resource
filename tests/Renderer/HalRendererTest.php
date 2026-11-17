@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace BEAR\Resource\Renderer;
 
 use BEAR\Resource\AbstractRequest;
-use BEAR\Resource\Exception\UriException;
+use BEAR\Resource\Exception\LinkHrefException;
 use BEAR\Resource\FakeChild;
 use BEAR\Resource\FakeHal;
 use BEAR\Resource\FakeHalLinkAttr;
@@ -424,7 +424,7 @@ EOT;
         $ro->uri = new Uri('app://self/link/href-declared-fragment');
         $ro->setRenderer(new HalRenderer(new HalLinker(new NullReverseLinker())));
 
-        $this->expectException(UriException::class);
+        $this->expectException(LinkHrefException::class);
         $this->expectExceptionMessage('/author?id=1#top: a #[Link] href cannot have a fragment');
 
         $ro->onGet()->toString();
