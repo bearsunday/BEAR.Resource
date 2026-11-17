@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BEAR\Resource\Renderer;
 
 use BEAR\Resource\AbstractRequest;
+use BEAR\Resource\Exception\UriException;
 use BEAR\Resource\FakeChild;
 use BEAR\Resource\FakeHal;
 use BEAR\Resource\FakeHalLinkAttr;
@@ -18,6 +19,7 @@ use BEAR\Resource\NullReverseLinker;
 use BEAR\Resource\Request;
 use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Uri;
+use FakeVendor\Sandbox\Resource\App\Link\HrefDeclaredFragment;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -414,5 +416,17 @@ EOT;
         $links = $this->renderLinkAttrLinks();
 
         $this->assertSame(['href' => '/profile'], $links['profile']);
+    }
+
+    public function testALinkThatDeclaresAFragmentThrows(): void
+    {
+        $ro = new HrefDeclaredFragment();
+        $ro->uri = new Uri('app://self/link/href-declared-fragment');
+        $ro->setRenderer(new HalRenderer(new HalLinker(new NullReverseLinker())));
+
+        $this->expectException(UriException::class);
+        $this->expectExceptionMessage('/author?id=1#top: a #[Link] href cannot have a fragment');
+
+        $ro->onGet()->toString();
     }
 }

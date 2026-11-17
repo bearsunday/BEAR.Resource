@@ -239,14 +239,6 @@ class ResourceTest extends TestCase
         $this->resource->uri($uri);
     }
 
-    public function testADeclaredFragmentThrowsWhenTheLinkIsRead(): void
-    {
-        $this->expectException(UriException::class);
-        $this->expectExceptionMessage('app://self/author?id=1#top: a #[Link] href cannot have a fragment');
-
-        $this->resource->uri('app://self/link/href-declared-fragment')->linkSelf('top')();
-    }
-
     /** @return array<string, array{string, string, string}> */
     public static function expandedFragmentProvider(): array
     {

@@ -18,9 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   BEAR.Package reads back. `toUri()` throws for a rel outside `[A-Za-z0-9_-]`. A
   `#[ResourceParam]` URI whose fragment holds `=` (a link) throws `UriException`.
 - **Behaviour change**: a `#[Link]` href has no fragment. One that declares a fragment (`#top`, `#link=...`, `{#var}`)
-  throws `UriException`, and `linkSelf()` / `linkNew()` / `linkCrawl()` / `href()` throw it before the request for an
-  href that expands to one (a `linkCrawl()` rel served by a DataLoader reads only the query); a fragment such as `#top`
-  was dropped. An `#[Embed]` src may carry `#link=`.
+  throws `UriException` where the link is read: HAL `_links`, OPTIONS, the `Link` header, and `linkSelf()` /
+  `linkNew()` / `linkCrawl()` / `href()`, which also throw before the request for an href that expands to one (a
+  `linkCrawl()` rel served by a DataLoader reads only the query). Remove the fragment from the href; an `#[Embed]` src
+  may carry `#link=`.
 
 ### Removed
 - The `array $values` first parameter of the `#[Link]`, `#[Embed]` and `#[ResourceParam]` constructors. Pass the values

@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
+use BEAR\Resource\Exception\UriException;
 use BEAR\Resource\Module\JsonSchemaLinkHeaderModule;
 use BEAR\Resource\Module\JsonSchemaModule;
 use BEAR\Resource\Module\ResourceModule;
+use FakeVendor\Sandbox\Resource\App\Link\HrefDeclaredFragment;
 use PHPUnit\Framework\TestCase;
+use Ray\Aop\WeavedInterface;
 use Ray\Di\Injector;
 use ReflectionClass;
 
@@ -84,5 +87,16 @@ class LinkHeaderInterceptorTest extends TestCase
     public function testTheMatcherMatchesNoClass(): void
     {
         $this->assertFalse((new LinkHeaderMatcher())->matchesClass(new ReflectionClass(FakePrefetch::class), []));
+    }
+
+    public function testAResourceWhoseLinkDeclaresAFragmentIsWovenAndThrowsWhenTheHeaderIsWritten(): void
+    {
+        $ro = $this->injector->getInstance(HrefDeclaredFragment::class);
+        $this->assertInstanceOf(WeavedInterface::class, $ro);
+
+        $this->expectException(UriException::class);
+        $this->expectExceptionMessage('/author?id=1#top: a #[Link] href cannot have a fragment');
+
+        $ro->onGet();
     }
 }

@@ -9,7 +9,7 @@ use BEAR\Resource\ResourceObject;
 
 class HrefDeclaredFragment extends ResourceObject
 {
-    #[Link(rel: 'top', href: 'app://self/author?id=1#top')]
+    #[Link('next', '/author?id=1#top')]
     public function onGet(): static
     {
         $this->body = ['id' => 1];

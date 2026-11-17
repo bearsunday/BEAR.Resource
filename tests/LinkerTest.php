@@ -6,8 +6,10 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\LinkQueryException;
 use BEAR\Resource\Exception\LinkRelException;
+use BEAR\Resource\Exception\UriException;
 use FakeVendor\Sandbox\Resource\App\Author;
 use FakeVendor\Sandbox\Resource\App\Blog;
+use FakeVendor\Sandbox\Resource\App\Link\HrefDeclaredFragment;
 use FakeVendor\Sandbox\Resource\App\Link\Scalar\Name;
 use FakeVendor\Sandbox\Resource\App\Marshal\NullBody;
 use PHPUnit\Framework\TestCase;
@@ -393,6 +395,22 @@ class LinkerTest extends TestCase
         );
 
         $this->assertSame([['id' => 1, 'linked' => true]], $result->body);
+    }
+
+    public function testLinkSelfToALinkThatDeclaresAFragmentThrows(): void
+    {
+        $request = new Request(
+            $this->invoker,
+            (new FakeRo())(new HrefDeclaredFragment()),
+            Method::GET,
+            [],
+            [new LinkType('next', LinkType::SELF_LINK)],
+        );
+
+        $this->expectException(UriException::class);
+        $this->expectExceptionMessage('/author?id=1#top: a #[Link] href cannot have a fragment');
+
+        $this->linker->invoke($request);
     }
 
     /** @param list<mixed> $args */
