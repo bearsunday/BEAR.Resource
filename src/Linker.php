@@ -17,13 +17,10 @@ use ReflectionMethod;
 use function array_map;
 use function assert;
 use function is_array;
-use function parse_url;
 use function sprintf;
 use function str_contains;
 use function ucfirst;
 use function uri_template;
-
-use const PHP_URL_FRAGMENT;
 
 /** @psalm-import-type Body from Types */
 final class Linker implements LinkerInterface
@@ -152,9 +149,9 @@ final class Linker implements LinkerInterface
             }
 
             $uri = uri_template($annotation->href, (array) $current->body);
-            // The link is followed to the resource its href names; links in the fragment are not followed
-            if (str_contains((string) parse_url($uri, PHP_URL_FRAGMENT), '=')) {
-                throw new UriException(sprintf('%s: a link in the fragment of a #[Link] href is not followed', $uri), 500);
+            // A variable can expand to a fragment, which a followed href does not have
+            if (str_contains($uri, '#')) {
+                throw new UriException(sprintf('%s: a #[Link] href cannot have a fragment', $uri), 500);
             }
 
             $rel = $this->factory->newInstance($uri);

@@ -10,7 +10,7 @@ class LinkValue extends ResourceObject
 {
     public function onGet(): static
     {
-        $this->body = ['link=self:blog'];
+        $this->body = ['#top'];
 
         return $this;
     }

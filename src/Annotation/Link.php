@@ -6,8 +6,13 @@ namespace BEAR\Resource\Annotation;
 
 use Attribute;
 use BEAR\Resource\DataLoader\DataLoaderInterface;
+use BEAR\Resource\Exception\UriException;
 use JsonSerializable;
 use Override;
+
+use function preg_replace;
+use function sprintf;
+use function str_contains;
 
 /**
  * A hyperlink to another resource, which linkSelf(), linkNew(), linkCrawl() and href() follow
@@ -20,11 +25,11 @@ final class Link implements JsonSerializable
     public const DEFAULT_METHOD = 'get';
 
     /**
-     * @param string                                 $href       URI template (RFC 6570)
+     * @param string                                 $href       URI template (RFC 6570) without a fragment
      * @param string                                 $crawl      Crawl name that linkCrawl() follows
      * @param class-string<DataLoaderInterface>|null $dataLoader Loads this rel for all rows of the crawl in one call
      *
-     * @psalm-pure
+     * @throws UriException
      */
     public function __construct(
         public string $rel = '',
@@ -34,6 +39,10 @@ final class Link implements JsonSerializable
         public string $crawl = '',
         public string|null $dataLoader = null,
     ) {
+        // A `#` outside the expressions, or the {#...} fragment operator, declares a fragment
+        if (str_contains((string) preg_replace('/\{(?!#)[^}]*\}/', '', $href), '#')) {
+            throw new UriException(sprintf('%s: a #[Link] href cannot have a fragment', $href), 500);
+        }
     }
 
     /**

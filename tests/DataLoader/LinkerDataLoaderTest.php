@@ -110,7 +110,7 @@ class LinkerDataLoaderTest extends TestCase
         $this->assertSame(1, LikeDataLoader::$callCount);
     }
 
-    public function testALinkInTheFragmentOfADataLoaderHrefIsNotSupported(): void
+    public function testADeclaredFragmentInADataLoaderHrefThrowsBeforeTheLoaderRuns(): void
     {
         $request = new Request(
             (new InvokerFactory())(),

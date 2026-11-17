@@ -9,13 +9,10 @@ use Override;
 
 use function array_merge;
 use function assert;
-use function explode;
 use function is_string;
 use function parse_url;
 use function preg_match;
 use function preg_match_all;
-use function sprintf;
-use function str_contains;
 
 use const PHP_URL_FRAGMENT;
 use const PREG_SET_ORDER;
@@ -157,14 +154,8 @@ final class Resource implements ResourceInterface
             ? new Request($this->invoker, $ro, Method::from($ro->uri->method), $ro->uri->query)
             : $this->request;
         [$method, $uri] = $this->anchor->href($rel, $sourceRequest, $query);
-        // The link is followed to the resource its href names; links in the fragment are not followed
-        [$requestUri, $fragment] = explode('#', $uri, 2) + [1 => ''];
-        if (str_contains($fragment, '=')) {
-            throw new UriException(sprintf('%s: a link in the fragment of a #[Link] href is not followed', $uri), 500);
-        }
-
         /** @var Request $request */
-        $request = $this->newRequest(Method::from($method), $requestUri, $query);
+        $request = $this->newRequest(Method::from($method), $uri, $query);
         $request->in = 'eager';
         $result = $request->request();
         assert($result instanceof ResourceObject);
