@@ -838,6 +838,26 @@ Result
 
  [A demo application code](https://github.com/koriym/BEAR.Resource/tree/develop/docs/sample/06.HAL) is available.
 
+`HalLinker::link()` returns the href and title of a rel, the same values HAL `_links` carries for an array body, for a template to build `<a href>` from. A body `_links[rel]` comes first, even for a rel the method does not declare, then the `#[Link]`; a rel in neither throws `LinkException`. A variable missing from the body is left out as RFC 6570 does. The title is the body link's title when the body link is used, otherwise the `#[Link]` title, and `''` when there is none, where HAL leaves `title` out.
+
+```php
+// #[Link(rel: 'next', href: '/posts{?page}', title: 'Next page')] on onGet, body ['page' => 2]
+$halLinker->link($ro, 'next'); // ['href' => '/posts?page=2', 'title' => 'Next page']; href "/posts" without page
+```
+
+`ResourceLinks` hands those links to a template by rel. It is read-only, and reading a rel the resource does not link throws `LinkException`.
+
+```php
+$link = new ResourceLinks($ro, $halLinker);
+$link['next']; // ['href' => '/posts?page=2', 'title' => 'Next page']
+```
+
+```twig
+<a href="{{ _link.next.href }}" title="{{ _link.next.title }}">Next</a>
+```
+
+`isset()` is true for every rel, so in Twig `_link.prev is defined` is true even for a rel the resource does not link. Reading the value of such a rel throws `LinkException`: `_link.prev.href`, `_link.prev ?? 'x'`, `_link.prev|default('x')` and `{% if _link.prev %}`. A `#[Link]` rel is always there; a link the body adds to `_links` only on some responses is tested on the body (`_ro.body._links.next is defined` in Twig), which sees only links the body adds and is false for a rel only `#[Link]` declares.
+
 ## Representation
 
 Cast `ResourceObject` to string to get the resource view.
