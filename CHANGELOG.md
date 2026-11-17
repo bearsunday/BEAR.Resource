@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- `linkSelf()` and `#link=self:<rel>` return the linked resource object, with its class, `uri`, `code`, headers and
+  `view`, and a following link is looked up on it. They returned the requested resource with only its body replaced.
+
 ## [1.36.0] - 2026-11-18
 
 ### Added

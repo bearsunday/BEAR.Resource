@@ -10,6 +10,9 @@ use BEAR\Resource\Exception\LinkRelException;
 use FakeVendor\Sandbox\Resource\App\Author;
 use FakeVendor\Sandbox\Resource\App\Blog;
 use FakeVendor\Sandbox\Resource\App\Link\HrefDeclaredFragment;
+use FakeVendor\Sandbox\Resource\App\Link\Jump\First;
+use FakeVendor\Sandbox\Resource\App\Link\Jump\Second;
+use FakeVendor\Sandbox\Resource\App\Link\Jump\Start;
 use FakeVendor\Sandbox\Resource\App\Link\Scalar\Name;
 use FakeVendor\Sandbox\Resource\App\Marshal\NullBody;
 use PHPUnit\Framework\TestCase;
@@ -411,6 +414,79 @@ class LinkerTest extends TestCase
         $this->expectExceptionMessage('/author?id=1#top: a #[Link] href cannot have a fragment');
 
         $this->linker->invoke($request);
+    }
+
+    public function testLinkSelfReturnsTheLinkedResource(): void
+    {
+        $result = $this->linker->invoke($this->startRequest(Method::GET, [new LinkType('first', LinkType::SELF_LINK)]));
+
+        $this->assertInstanceOf(First::class, $result);
+        $this->assertSame('app://self/link/jump/first?id=1', (string) $result->uri);
+        $this->assertSame(Code::ACCEPTED, $result->code);
+        $this->assertSame(['ETag' => 'first'], $result->headers);
+        $this->assertSame('first view', $result->view);
+        $this->assertSame(['id' => 1, 'name' => 'first'], $result->body);
+    }
+
+    public function testASelfLinkChainLooksUpEachRelOnTheResourceTheLastLinkReturned(): void
+    {
+        $result = $this->linker->invoke($this->startRequest(Method::GET, [
+            new LinkType('first', LinkType::SELF_LINK),
+            new LinkType('second', LinkType::SELF_LINK),
+        ]));
+
+        $this->assertInstanceOf(Second::class, $result);
+        $this->assertSame('second view', $result->view);
+        $this->assertSame(['id' => 1, 'name' => 'second'], $result->body);
+    }
+
+    public function testAResourceASelfLinkReturnsHasItsLinksReadFromOnGet(): void
+    {
+        $result = $this->linker->invoke($this->startRequest(Method::POST, [
+            new LinkType('first', LinkType::SELF_LINK),
+            new LinkType('second', LinkType::SELF_LINK),
+        ]));
+
+        $this->assertInstanceOf(Second::class, $result);
+    }
+
+    public function testNewAndCrawlAfterASelfLinkAddToTheLinkedResource(): void
+    {
+        $second = ['id' => 1, 'name' => 'second'];
+        foreach ([LinkType::NEW_LINK => 'second', LinkType::CRAWL_LINK => 'next'] as $type => $key) {
+            $result = $this->linker->invoke($this->startRequest(Method::GET, [
+                new LinkType('first', LinkType::SELF_LINK),
+                new LinkType($key, $type),
+            ]));
+
+            $this->assertInstanceOf(First::class, $result);
+            $this->assertSame('first view', $result->view);
+            $this->assertSame(['id' => 1, 'name' => 'first', 'second' => $second], $result->body);
+        }
+    }
+
+    public function testNewAndCrawlAddToTheRequestedResource(): void
+    {
+        $first = ['id' => 1, 'name' => 'first'];
+        foreach ([LinkType::NEW_LINK => 'first', LinkType::CRAWL_LINK => 'tree'] as $type => $key) {
+            $result = $this->linker->invoke($this->startRequest(Method::GET, [new LinkType($key, $type)]));
+
+            $this->assertInstanceOf(Start::class, $result);
+            $this->assertSame(Code::OK, $result->code);
+            $this->assertSame(['ETag' => 'start'], $result->headers);
+            $this->assertSame('start view', $result->view);
+            $this->assertSame(['id' => 1, 'name' => 'start', 'first' => $first], $result->body);
+        }
+    }
+
+    /** @param list<LinkType> $links */
+    private function startRequest(Method $method, array $links): Request
+    {
+        $start = new Start();
+        $start->uri = new Uri('app://self/link/jump/start');
+        $start->uri->method = $method->value;
+
+        return new Request($this->invoker, $start, $method, ['id' => 1], $links);
     }
 
     /** @param list<mixed> $args */

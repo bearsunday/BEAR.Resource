@@ -166,7 +166,7 @@ URIは [URIテンプレート](http://code.google.com/p/uri-templates/)([rfc6570
 
 ### selfリンク
 
-`linkSelf`はリンク先のリソースを取得します。
+`linkSelf`はリンクを辿り、リンク先のリソースオブジェクトを返します。
 
 ```php
 $blog = $resource
@@ -177,8 +177,10 @@ $blog = $resource
     ->eager
     ->request();
 ```
-**app://self/user** リソースをリクエストした結果で **blog** リンクを辿り **app://self/blog**リソースを取得します。
+**app://self/user** リソースをリクエストした結果で **blog** リンクを辿り、**app://self/blog** のリソースオブジェクトを返します。クラス、`uri`、`code`、ヘッダー、ボディ、`view` はすべて blog リソースのものです。
 Webページでリンクをクリックしたように次のリソースに入れ替わります。
+
+`->linkSelf('blog')->linkSelf('author')` や `#link=self:blog,self:author` のように続けると、最初の rel はリクエストしたメソッドの `#[Link]` から、後の rel は直前の self リンクが返したリソースの `onGet()` の `#[Link]` から探します。続く `linkNew` や `linkCrawl` もそのリソースに追加します。
 
 ### newリンク
 

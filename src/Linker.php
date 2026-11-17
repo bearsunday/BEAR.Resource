@@ -59,9 +59,19 @@ final class Linker implements LinkerInterface
             return $current;
         }
 
+        $method = $request->method;
         foreach ($request->links as $link) {
+            $linked = $this->annotationLink($link, $current, $method, $linkCrawler);
+            if ($link->type === LinkType::SELF_LINK) {
+                // The next link is read from the linked resource, which was requested with GET
+                $current = $linked;
+                $method = Method::GET;
+
+                continue;
+            }
+
             /** @var Body $nextBody */
-            $nextBody = $this->annotationLink($link, $current, $request, $linkCrawler)->body;
+            $nextBody = $linked->body;
             $current = $this->nextLink($link, $current, $nextBody);
         }
 
@@ -76,12 +86,6 @@ final class Linker implements LinkerInterface
     private function nextLink(LinkType $link, ResourceObject $ro, array $nextResource): ResourceObject
     {
         $nextBody = $nextResource;
-
-        if ($link->type === LinkType::SELF_LINK) {
-            $ro->body = $nextBody;
-
-            return $ro;
-        }
 
         if ($link->type === LinkType::NEW_LINK) {
             assert(is_array($ro->body) || $ro->body === null);
@@ -101,13 +105,13 @@ final class Linker implements LinkerInterface
      * @throws LinkRelException
      * @throws Exception\LinkQueryException
      */
-    private function annotationLink(LinkType $link, ResourceObject $current, AbstractRequest $request, LinkCrawlerInterface $linkCrawler): ResourceObject
+    private function annotationLink(LinkType $link, ResourceObject $current, Method $method, LinkCrawlerInterface $linkCrawler): ResourceObject
     {
         if (! is_array($current->body)) {
             throw new Exception\LinkQueryException('Only array is allowed for link in ' . $current::class, 500);
         }
 
-        $annotations = $this->getLinkAnnotations($current, $request->method->value);
+        $annotations = $this->getLinkAnnotations($current, $method->value);
         if ($link->type === LinkType::CRAWL_LINK) {
             return $this->annotationCrawl($annotations, $link, $current, $linkCrawler);
         }
