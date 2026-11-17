@@ -23,8 +23,6 @@ interface SchemeCollectionInterface
 
     /**
      * Return resource adapter
-     *
-     * @psalm-capabilities read-props
      */
     public function getAdapter(AbstractUri $uri): AdapterInterface;
 }

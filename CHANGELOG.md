@@ -35,6 +35,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   as named arguments, as attributes do: `new Link(rel: 'blog', href: '...')`. Their properties are now natively typed.
 - The deprecated `ParameterHandler` and `ParameterHandlerInterface`, which could not be used.
 
+### Fixed
+- PHPStan no longer reports purity errors in subclasses of `AbstractRequest` and the resource exceptions.
+
 ## [1.35.0] - 2026-11-17
 
 ### Added

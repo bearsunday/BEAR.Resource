@@ -58,11 +58,7 @@ final readonly class AppAdapter implements AdapterInterface
         return $instance;
     }
 
-    /**
-     * @return ResourceNotFoundException|Unbound
-     *
-     * @psalm-capabilities pure
-     */
+    /** @return ResourceNotFoundException|Unbound */
     private function getNotFound(AbstractUri $uri, Unbound $e, string $class): Throwable
     {
         $unboundClass = $e->getMessage();

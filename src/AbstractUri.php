@@ -35,8 +35,6 @@ abstract class AbstractUri implements Stringable
      * @return string
      *
      * @psalm-taint-specialize
-     *
-     * @psalm-capabilities read-props
      */
     #[Override]
     public function __toString()
