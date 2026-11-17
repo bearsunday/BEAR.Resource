@@ -6,7 +6,6 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\Link;
 use BEAR\Resource\DataLoader\DataLoader;
-use BEAR\Resource\Exception\LinkHrefException;
 use Override;
 use ReflectionMethod;
 
@@ -19,8 +18,6 @@ use function assert;
 use function count;
 use function is_array;
 use function is_numeric;
-use function sprintf;
-use function str_contains;
 use function ucfirst;
 use function uri_template;
 
@@ -65,8 +62,6 @@ final class LinkCrawler implements LinkCrawlerInterface
      * @param list<Link>           $annotations
      * @param array<string, mixed> $body
      *
-     * @throws LinkHrefException
-     *
      * @param-out array<string, mixed> $body
      */
     private function crawlBody(array $annotations, LinkType $link, array &$body): void
@@ -82,11 +77,6 @@ final class LinkCrawler implements LinkCrawlerInterface
             }
 
             $uri = uri_template($annotation->href, $body);
-            // A variable can expand to a fragment, which a followed href does not have
-            if (str_contains($uri, '#')) {
-                throw new LinkHrefException(sprintf('%s: a #[Link] href cannot have a fragment', $uri), 500);
-            }
-
             $rel = $this->factory->newInstance($uri);
             $query = (new Uri($uri))->query;
             $request = new Request($this->invoker, $rel, Method::GET, $query);

@@ -13,8 +13,6 @@ use Ray\Aop\ReflectionMethod;
 use function array_merge;
 use function assert;
 use function is_array;
-use function sprintf;
-use function str_contains;
 use function ucfirst;
 use function uri_template;
 
@@ -56,8 +54,6 @@ final class Anchor implements AnchorInterface
      * @param Query $query
      *
      * @return MethodUri
-     *
-     * @throws LinkHrefException
      */
     private function getMethodUri(AbstractRequest $request, array $query, LinkAnnotation $annotation): array
     {
@@ -65,10 +61,6 @@ final class Anchor implements AnchorInterface
         $body = $request->resourceObject->body;
         $query = is_array($body) ? array_merge($body, $query) : [];
         $uri = uri_template($annotation->href, $query);
-        // A variable can expand to a fragment, which a followed href does not have
-        if (str_contains($uri, '#')) {
-            throw new LinkHrefException(sprintf('%s: a #[Link] href cannot have a fragment', $uri), 500);
-        }
 
         return [$annotation->method, $uri];
     }

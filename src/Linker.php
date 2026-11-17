@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\Link;
-use BEAR\Resource\Exception\LinkHrefException;
 use BEAR\Resource\Exception\LinkQueryException;
 use BEAR\Resource\Exception\LinkRelException;
 use BEAR\Resource\Exception\MethodException;
@@ -18,8 +17,6 @@ use ReflectionMethod;
 use function array_map;
 use function assert;
 use function is_array;
-use function sprintf;
-use function str_contains;
 use function ucfirst;
 use function uri_template;
 
@@ -138,7 +135,6 @@ final class Linker implements LinkerInterface
      * @param list<Link> $annotations
      *
      * @throws UriException
-     * @throws LinkHrefException
      * @throws MethodException
      * @throws Exception\LinkQueryException
      * @throws Exception\LinkRelException
@@ -151,11 +147,6 @@ final class Linker implements LinkerInterface
             }
 
             $uri = uri_template($annotation->href, (array) $current->body);
-            // A variable can expand to a fragment, which a followed href does not have
-            if (str_contains($uri, '#')) {
-                throw new LinkHrefException(sprintf('%s: a #[Link] href cannot have a fragment', $uri), 500);
-            }
-
             $rel = $this->factory->newInstance($uri);
             $query = (new Uri($uri))->query;
             $request = new Request($this->invoker, $rel, Method::GET, $query);

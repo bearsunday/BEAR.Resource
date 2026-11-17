@@ -9,6 +9,7 @@ use Override;
 
 use function array_merge;
 use function assert;
+use function explode;
 use function is_string;
 use function parse_url;
 use function preg_match;
@@ -154,8 +155,10 @@ final class Resource implements ResourceInterface
             ? new Request($this->invoker, $ro, Method::from($ro->uri->method), $ro->uri->query)
             : $this->request;
         [$method, $uri] = $this->anchor->href($rel, $sourceRequest, $query);
+        // A variable can expand to a fragment, which the request to the href does not read
+        [$requestUri] = explode('#', $uri, 2);
         /** @var Request $request */
-        $request = $this->newRequest(Method::from($method), $uri, $query);
+        $request = $this->newRequest(Method::from($method), $requestUri, $query);
         $request->in = 'eager';
         $result = $request->request();
         assert($result instanceof ResourceObject);

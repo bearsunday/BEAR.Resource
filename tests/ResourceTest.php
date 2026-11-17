@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\BadRequestException;
-use BEAR\Resource\Exception\LinkHrefException;
 use BEAR\Resource\Exception\MethodNotAllowedException;
 use BEAR\Resource\Exception\UriException;
 use BEAR\Resource\Module\HalModule;
@@ -240,32 +239,31 @@ class ResourceTest extends TestCase
         $this->resource->uri($uri);
     }
 
-    /** @return array<string, array{string, string, string}> */
+    /** @return array<string, array{string}> */
     public static function expandedFragmentProvider(): array
     {
         return [
-            'linkSelf' => [LinkType::SELF_LINK, 'expanded', '#link=self:blog'],
-            'linkNew' => [LinkType::NEW_LINK, 'expanded', '#link=self:blog'],
-            'linkCrawl, the fragment from the row' => [LinkType::CRAWL_LINK, 'expanded', '#link=self:blog'],
-            'linkCrawl, the fragment from an earlier rel of the crawl' => [LinkType::CRAWL_LINK, 'rewritten', '#top'],
+            'linkSelf' => ['linkSelf'],
+            'linkCrawl' => ['linkCrawl'],
+            'href' => ['href'],
         ];
     }
 
-    /** The target names no resource: a request to it throws ResourceNotFoundException */
+    /** The fragment holds a link, which is not followed */
     #[DataProvider('expandedFragmentProvider')]
-    public function testAFollowedHrefExpandedToAFragmentIsNotRequested(string $type, string $rel, string $fragment): void
+    public function testAFollowedHrefDropsTheFragmentAVariableExpandsTo(string $path): void
     {
-        $request = $this->resource->uri('app://self/link/href-fragment');
-        $request = match ($type) {
-            LinkType::SELF_LINK => $request->linkSelf($rel),
-            LinkType::NEW_LINK => $request->linkNew($rel),
-            default => $request->linkCrawl($rel),
+        $ro = match ($path) {
+            'linkSelf' => $this->resource->uri('app://self/link/href-fragment')->linkSelf('expanded')(),
+            'linkCrawl' => $this->resource->uri('app://self/link/href-fragment')->linkCrawl('expanded')(),
+            default => $this->resource->href('expanded', [], $this->resource->get('app://self/link/href-fragment')),
         };
+        assert(is_array($ro->body));
 
-        $this->expectException(LinkHrefException::class);
-        $this->expectExceptionMessage("app://self/link/never-requested{$fragment}: a #[Link] href cannot have a fragment");
-
-        $request();
+        $this->assertSame(
+            $this->resource->get('app://self/author', ['id' => 1])->body,
+            $path === 'linkCrawl' ? $ro->body['author'] : $ro->body,
+        );
     }
 
     public function testACrawlHrefExpandsTheValueAnEarlierRelWrites(): void
@@ -274,29 +272,6 @@ class ResourceTest extends TestCase
         assert(is_array($ro->body));
 
         $this->assertSame($this->resource->get('app://self/author', ['id' => 1])->body, $ro->body[0]['author']);
-    }
-
-    /** @return array<string, array{class-string<ResourceInterface>}> */
-    public static function resourceClassProvider(): array
-    {
-        return [
-            'Resource' => [Resource::class],
-            'ResourceClient' => [ResourceClient::class],
-        ];
-    }
-
-    /** @param class-string<ResourceInterface> $class */
-    #[DataProvider('resourceClassProvider')]
-    public function testHrefExpandedToAFragmentIsNotRequested(string $class): void
-    {
-        $resource = $class === ResourceClient::class ? $this->resourceClient() : $this->resource;
-        $this->assertInstanceOf($class, $resource);
-        $ro = $resource->get('app://self/link/href-fragment');
-
-        $this->expectException(LinkHrefException::class);
-        $this->expectExceptionMessage('app://self/link/never-requested#link=self:blog: a #[Link] href cannot have a fragment');
-
-        $resource->href('expanded', [], $ro);
     }
 
     public function testAnEmbedFollowsTheLinksInItsSrc(): void

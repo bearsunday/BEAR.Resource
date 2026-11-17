@@ -19,11 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `#[ResourceParam]` URI whose fragment holds `=` (a link) throws `UriException`.
 - **Behaviour change**: a `#[Link]` href has no fragment. One that declares a fragment (`#top`, `#link=...`, `{#var}`)
   throws `LinkHrefException` where the link is read: HAL `_links`, OPTIONS, the `Link` header, and `linkSelf()` /
-  `linkNew()` / `linkCrawl()` / `href()`, which also throw before the request for an href that expands to one (a
-  `linkCrawl()` rel served by a DataLoader reads only the query). Remove the fragment from the href; an `#[Embed]` src
-  may carry `#link=`.
-- Requires `ray/aop` 2.20.0 or later, which weaves without constructing the method attributes, so a resource whose
-  `#[Link]` href has a fragment does not stop the injector.
+  `linkNew()` / `linkCrawl()` / `href()`. Remove the fragment from the href. A fragment that a variable expands to is
+  dropped; an `#[Embed]` src may carry `#link=`.
+- Requires `ray/aop` 2.20.0 and `ray/di` 2.22.1 or later: `ray/aop` weaves without constructing the method attributes,
+  so a resource whose `#[Link]` href has a fragment does not stop the injector.
 
 ### Removed
 - The `array $values` first parameter of the `#[Link]`, `#[Embed]` and `#[ResourceParam]` constructors. Pass the values
