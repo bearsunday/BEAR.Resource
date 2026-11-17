@@ -33,8 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - The `array $values` first parameter of the `#[Link]`, `#[Embed]` and `#[ResourceParam]` constructors. Pass the values
   as named arguments, as attributes do: `new Link(rel: 'blog', href: '...')`. Their properties are now natively typed.
-- The deprecated `ParameterHandler` and `ParameterHandlerInterface`. `ParameterHandler` could not be used: it
-  depended on the doctrine/annotations `Reader` and on a class that does not exist.
+- The deprecated `ParameterHandler` and `ParameterHandlerInterface`, which could not be used.
 
 ## [1.35.0] - 2026-11-17
 
