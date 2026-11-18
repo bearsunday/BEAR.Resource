@@ -38,10 +38,8 @@ class Author extends ResourceObject
         'name' => 'koriym'
     ];
 
-    /**
-     * @Link(rel="blog", href="app://self/blog/post?author_id={id}")
-     */
-    public function onGet(int $id) : ResourceObject
+    #[Link(rel: 'blog', href: 'app://self/blog/post?author_id={id}')]
+    public function onGet(int $id): static
     {
         return $this;
     }
@@ -148,15 +146,12 @@ $user2 = $user(['id' => 2);
 ## ハイパーメディア
 
 リソースは関連するリソースの [ハイパーリンク](http://en.wikipedia.org/wiki/Hyperlink)を持つ事ができます
-**@Link**アノテーションをメソッドにアノテートしてハイパーリンクを表します。
+メソッドに **#[Link]** 属性を付けてハイパーリンクを表します。
 
 ```php
-
 use BEAR\Resource\Annotation\Link;
 
-/**
- * @Link(rel="blog", href="app://self/blog?author_id={id}")
- */
+#[Link(rel: 'blog', href: 'app://self/blog?author_id={id}')]
 ```
 
 **rel** でリレーション名を **href** (hyper reference)でリンク先URIを指定します。
@@ -207,22 +202,18 @@ Webページで「新しいウインドウでリンクを表示」を行うよ�
 
 author, post, meta, tag, tag/name がそれぞれ関連づけられてあるリソースグラフを考えてみます。
 それぞれのリソースはハイパーリンクを持ちます。
-このリソースグラフに **post-tree** という名前を付け、それぞれのリソースの@Linkアノテーションでハイパーリファレンス **href** を指定します。
+このリソースグラフに **post-tree** という名前を付け、それぞれのリソースの `#[Link]` にクロール名とハイパーリファレンス **href** を指定します。
 
 authorリソースにはpostリソースへのハイパーリンクがあります。1:nの関係です。
 ```php
-/**
- * @Link(crawl="post-tree", rel="post", href="app://self/post?author_id={id}")
- */
+#[Link(crawl: 'post-tree', rel: 'post', href: 'app://self/post?author_id={id}')]
 public function onGet($id = null)
 ```
 
 postリソースにはmetaリソースとtagリソースのハイパーリンクがあります。1:nの関係です。
 ```php
-/**
- * @Link(crawl="post-tree", rel="meta", href="app://self/meta?post_id={id}")
- * @Link(crawl="post-tree", rel="tag",  href="app://self/tag?post_id={id}")
- */
+#[Link(crawl: 'post-tree', rel: 'meta', href: 'app://self/meta?post_id={id}')]
+#[Link(crawl: 'post-tree', rel: 'tag', href: 'app://self/tag?post_id={id}')]
 public function onGet($author_id)
 {
 ```
@@ -230,9 +221,7 @@ public function onGet($author_id)
 tagリソースはIDだけでそのIDに対応するtag/nameリソースへのハイパーリンクがあります。1:1の関係です。
 
 ```php
-/**
- * @Link(crawl="post-tree", rel="tag_name",  href="app://self/tag/name?tag_id={tag_id}")
- */
+#[Link(crawl: 'post-tree', rel: 'tag_name', href: 'app://self/tag/name?tag_id={tag_id}')]
 public function onGet($post_id)
 ```
 
@@ -247,7 +236,7 @@ $graph = $resource
   ->request();
 ```
 
-リソースクライアントは@Linkアノテーションに指定されたクロール名を発見するとその **rel** 名でリソースを接続してリソースグラフを作成します。
+リソースクライアントはクロール名を持つ `#[Link]` を辿り、その **rel** 名でリソースを接続してリソースグラフを作成します。
 
 ```
 var_export($graph->body);
@@ -286,20 +275,24 @@ array (
 
 ### URIのリンク
 
-`toUri()` はリクエストのリンクを `#link=` フラグメントとして書き出し、`uri()` / `newRequest()` / `get()` はそれを読み戻します。
+リクエストの URI は、リンクを `#link=` フラグメントに持てます。リンクは `type:rel`（type は `self`・`new`・`crawl`）で表し、複数のリンクはカンマでつないで順に辿ります。
 
 ```php
 $request = $resource
     ->get
     ->uri('app://self/user')
     ->withQuery(['id' => 0])
-    ->linkSelf('blog');
-$uri = $request->toUri(); // app://self/user?id=0#link=self:blog
+    ->linkSelf('blog')
+    ->linkCrawl('post-tree');
+echo $request->toUri(); // app://self/user?id=0#link=self:blog,crawl:post-tree
 
-$blog = $resource->get('app://self/user#link=self:blog', ['id' => $id]); // blogリンクを辿る
+$ro = $resource->get('app://self/user?id=0#link=self:blog,crawl:post-tree'); // 同じリクエスト
 ```
 
-複数のリンクはカンマでつなぎ、順に辿ります。`#link=self:blog,crawl:post-tree` は `->linkSelf('blog')->linkCrawl('post-tree')` と同じです。rel に使える文字は `A-Z a-z 0-9 _ -` で、それ以外の rel は `toUri()` が `UriException` を投げます。フラグメントの名前は `link` だけで、リクエストの URI にそれ以外のフラグメントがあれば `UriException` になります。`#[ResourceParam]` の URI のフラグメントは body のキーを指し、リクエストには含めません。`=` を含むフラグメント（リンク）は `UriException` になります。`#[Link]` の href はフラグメントを持てません。フラグメント（`#top`・`#link=...`・`{#var}`）を書いた href は、リンクを読む場所（HAL の `_links`・OPTIONS・`Link` ヘッダー・`linkSelf()`・`linkNew()`・`linkCrawl()`・`href()`）で `LinkHrefException` になります。href からフラグメントを外してください。変数の展開で生まれたフラグメントは捨てます。`#[Embed]` の src には `#link=` を書けます。埋め込まれたリクエストはそのリンクを辿ります。
+`toUri()` はリクエストをこの形で書き出し、`uri()`・`newRequest()`・`get()`・`#[Embed]` の src はそれを読み戻します。`#` の前のクエリーはリクエストしたリソースに渡ります。リンク先のクエリーは、`#[Link]` の href をリンク元の body で展開して作ります。
+
+- rel に使える文字は `A-Z a-z 0-9 _ -` です。それ以外の rel や、`#link=` 以外のフラグメントは `UriException` になります。
+- `#[Link]` の href はフラグメント（`#top`・`{#var}`）を持てません。リンクを読むときに `LinkHrefException` になります。
 
 ### HATEOAS アプリケーション状態のエンジンとしてのハイパーメディア
 
@@ -308,9 +301,7 @@ $blog = $resource->get('app://self/user#link=self:blog', ['id' => $id]); // blog
 
 Order リソース
 ```php
-/**
- * @Link(rel="payment", href="app://self/payment{?order_id, credit_card_number, expires, name, amount}", method="put")
- */
+#[Link(rel: 'payment', href: 'app://self/payment{?order_id, credit_card_number, expires, name, amount}', method: 'put')]
 public function onPost($drink)
 ```
 
@@ -518,18 +509,18 @@ try {
 
 ## 埋め込みリソース
 
-`@Embed`アノテーションを使って他のリソースを自身のリソースに埋め込む事が出来ます。`HTML`の`<img src="image_url">`や`<iframe src="content_url">`と同じ様に`src`で埋め込むリソースを指定します。
+`#[Embed]` 属性で他のリソースを自身のリソースに埋め込めます。`HTML`の`<img src="image_url">`や`<iframe src="content_url">`と同じ様に`src`で埋め込むリソースを指定します。
 
 ```php
 class News extends ResourceObject
 {
-    /**
-     * @Embed(rel="weather",src="app://self/weather/today")
-     */
-    public function onGet()
+    #[Embed(rel: 'weather', src: 'app://self/weather/today')]
+    public function onGet(): static
     {
-        $this['headline'] = "...";
-        $this['sports'] = "...";
+        $this->body = [
+            'headline' => '...',
+            'sports' => '...',
+        ];
         
         return $this;
     }
