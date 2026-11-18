@@ -290,6 +290,7 @@ $blog = $resource->get('app://self/user#link=self:blog', ['id' => $id]); // foll
 
 Several links are joined with commas and followed in order: `#link=self:blog,crawl:post-tree` is `->linkSelf('blog')->linkCrawl('post-tree')`.
 
+- The query before `#` goes to the requested resource. A link has no query of its own: the linked request's query comes from the `#[Link]` href, expanded with the body of the resource it links from (`app://self/blog?author_id={id}`).
 - A rel uses only `A-Z a-z 0-9 _ -`; `toUri()` throws `UriException` for any other rel.
 - `#link=` is the only fragment a request URI may have; any other fragment throws `UriException`.
 - An `#[Embed]` src may carry `#link=`; the embedded request follows those links.

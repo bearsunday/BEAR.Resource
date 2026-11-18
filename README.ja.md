@@ -290,6 +290,7 @@ $blog = $resource->get('app://self/user#link=self:blog', ['id' => $id]); // blog
 
 複数のリンクはカンマでつなぎ、順に辿ります。`#link=self:blog,crawl:post-tree` は `->linkSelf('blog')->linkCrawl('post-tree')` と同じです。
 
+- `#` の前のクエリーは、リクエストしたリソースに渡ります。リンク自体はクエリーを持ちません。リンク先のクエリーは、`#[Link]` の href をリンク元の body で展開して作ります（`app://self/blog?author_id={id}`）。
 - rel に使える文字は `A-Z a-z 0-9 _ -` です。それ以外の rel は `toUri()` が `UriException` を投げます。
 - リクエストの URI に書けるフラグメントは `#link=` だけです。それ以外のフラグメントは `UriException` になります。
 - `#[Embed]` の src には `#link=` を書けます。埋め込まれたリクエストはそのリンクを辿ります。
