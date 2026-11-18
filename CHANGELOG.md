@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.36.1] - 2026-11-18
+
+### Changed
+- No longer conflicts with bear/query-repository 1.20.2 to 1.20.x or bear/async before 0.6.0. bear/query-repository 1.20.2 follows the links of a donut hole embedded with links twice on a cache hit; use 1.20.1 or 1.21 for such a hole.
+
 ## [1.36.0] - 2026-11-18
 
 ### Added
