@@ -275,27 +275,24 @@ array (
 
 ### Links in the URI
 
-`toUri()` writes the links of a request as a `#link=` fragment, and `uri()`, `newRequest()` and `get()` read them back.
+A request URI can carry its links in a `#link=` fragment. Each link is `type:rel` (`self`, `new` or `crawl`); several links are joined with commas and followed in order.
 
 ```php
 $request = $resource
     ->get
     ->uri('app://self/user')
     ->withQuery(['id' => 0])
-    ->linkSelf('blog');
-$uri = $request->toUri(); // app://self/user?id=0#link=self:blog
+    ->linkSelf('blog')
+    ->linkCrawl('post-tree');
+echo $request->toUri(); // app://self/user?id=0#link=self:blog,crawl:post-tree
 
-$blog = $resource->get('app://self/user#link=self:blog', ['id' => $id]); // follows the blog link
+$ro = $resource->get('app://self/user?id=0#link=self:blog,crawl:post-tree'); // the same request
 ```
 
-Several links are joined with commas and followed in order: `#link=self:blog,crawl:post-tree` is `->linkSelf('blog')->linkCrawl('post-tree')`.
+`toUri()` writes a request in this form, and `uri()`, `newRequest()`, `get()` and an `#[Embed]` src read it back. The query before `#` goes to the requested resource; a linked resource gets its query from the `#[Link]` href, expanded with the body of the resource it links from.
 
-- The query before `#` goes to the requested resource. A link has no query of its own: the linked request's query comes from the `#[Link]` href, expanded with the body of the resource it links from (`app://self/blog?author_id={id}`).
-- A rel uses only `A-Z a-z 0-9 _ -`; `toUri()` throws `UriException` for any other rel.
-- `#link=` is the only fragment a request URI may have; any other fragment throws `UriException`.
-- An `#[Embed]` src may carry `#link=`; the embedded request follows those links.
-- In a `#[ResourceParam]` URI, the fragment names a key of the body (`#nickname`) and is not sent with the request; `#link=` there throws `UriException`.
-- A `#[Link]` href cannot have a fragment. An href with `#top`, `#link=...` or `{#var}` throws `LinkHrefException` when the link is read: HAL `_links`, OPTIONS, the `Link` header, `linkSelf()`, `linkNew()`, `linkCrawl()` and `href()`. A `#` that a variable expands to is dropped.
+- A rel uses only `A-Z a-z 0-9 _ -`. Any other rel, and any fragment other than `#link=`, throws `UriException`.
+- A `#[Link]` href cannot have a fragment (`#top`, `{#var}`); it throws `LinkHrefException` when the link is read.
 
 ### HATEOAS Hypermedia as the Engine of Application State
 
@@ -423,7 +420,7 @@ class News extends ResourceObject
     {
 ```
 
-In this example, the `nickname` key of the `app://self/login` body is bound to `$name`.
+In this example, the `nickname` key of the `app://self/login` body is bound to `$name`. The fragment names a body key, so `#link=` in a `#[ResourceParam]` URI throws `UriException`.
 
 ## Ray.InputQuery Integration
 

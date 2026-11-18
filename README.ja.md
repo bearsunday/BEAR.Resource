@@ -275,27 +275,24 @@ array (
 
 ### URIのリンク
 
-`toUri()` はリクエストのリンクを `#link=` フラグメントとして書き出し、`uri()` / `newRequest()` / `get()` はそれを読み戻します。
+リクエストの URI は、リンクを `#link=` フラグメントに持てます。リンクは `type:rel`（type は `self`・`new`・`crawl`）で表し、複数のリンクはカンマでつないで順に辿ります。
 
 ```php
 $request = $resource
     ->get
     ->uri('app://self/user')
     ->withQuery(['id' => 0])
-    ->linkSelf('blog');
-$uri = $request->toUri(); // app://self/user?id=0#link=self:blog
+    ->linkSelf('blog')
+    ->linkCrawl('post-tree');
+echo $request->toUri(); // app://self/user?id=0#link=self:blog,crawl:post-tree
 
-$blog = $resource->get('app://self/user#link=self:blog', ['id' => $id]); // blogリンクを辿る
+$ro = $resource->get('app://self/user?id=0#link=self:blog,crawl:post-tree'); // 同じリクエスト
 ```
 
-複数のリンクはカンマでつなぎ、順に辿ります。`#link=self:blog,crawl:post-tree` は `->linkSelf('blog')->linkCrawl('post-tree')` と同じです。
+`toUri()` はリクエストをこの形で書き出し、`uri()`・`newRequest()`・`get()`・`#[Embed]` の src はそれを読み戻します。`#` の前のクエリーはリクエストしたリソースに渡ります。リンク先のクエリーは、`#[Link]` の href をリンク元の body で展開して作ります。
 
-- `#` の前のクエリーは、リクエストしたリソースに渡ります。リンク自体はクエリーを持ちません。リンク先のクエリーは、`#[Link]` の href をリンク元の body で展開して作ります（`app://self/blog?author_id={id}`）。
-- rel に使える文字は `A-Z a-z 0-9 _ -` です。それ以外の rel は `toUri()` が `UriException` を投げます。
-- リクエストの URI に書けるフラグメントは `#link=` だけです。それ以外のフラグメントは `UriException` になります。
-- `#[Embed]` の src には `#link=` を書けます。埋め込まれたリクエストはそのリンクを辿ります。
-- `#[ResourceParam]` の URI のフラグメントは body のキー（`#nickname`）を指し、リクエストには含めません。ここに `#link=` を書くと `UriException` になります。
-- `#[Link]` の href はフラグメントを持てません。`#top`・`#link=...`・`{#var}` を書いた href は、リンクを読むとき（HAL の `_links`・OPTIONS・`Link` ヘッダー・`linkSelf()`・`linkNew()`・`linkCrawl()`・`href()`）に `LinkHrefException` になります。変数の展開で生まれた `#` は捨てます。
+- rel に使える文字は `A-Z a-z 0-9 _ -` です。それ以外の rel や、`#link=` 以外のフラグメントは `UriException` になります。
+- `#[Link]` の href はフラグメント（`#top`・`{#var}`）を持てません。リンクを読むときに `LinkHrefException` になります。
 
 ### HATEOAS アプリケーション状態のエンジンとしてのハイパーメディア
 
