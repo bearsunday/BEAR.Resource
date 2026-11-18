@@ -38,9 +38,7 @@ class Author extends ResourceObject
         'name' => 'koriym'
     ];
 
-    /**
-     * @Link(rel="blog", href="app://self/blog/post?author_id={id}")
-     */
+    #[Link(rel: 'blog', href: 'app://self/blog/post?author_id={id}')]
     public function onGet(int $id): static
     {
         return $this;
@@ -149,22 +147,12 @@ $user2 = $user(['id' => 2);
 ## Hypermedia
 
 A resource can contain [hyperlinks](http://en.wikipedia.org/wiki/Hyperlink) to other related resources.
-Hyperlinks are shown by methods marked with **#[Link]** attribute. (PHP8.x)
+Hyperlinks are declared with the **#[Link]** attribute on a method.
 
 ```php
 use BEAR\Resource\Annotation\Link;
-```
 
-```php
 #[Link(rel: 'blog', href: 'app://self/blog?author_id={id}')]
-```
-
-or annotated with `@Link` annotation. (PHP 7.x)
-
-```php
-/**
- * @Link(rel="blog", href="app://self/blog?author_id={id}")
- */
 ```
 
 The relation name is set by **rel** and link URI's are set by **href** (hyper reference).
@@ -213,19 +201,19 @@ In a web page this is like 'opening a page in a new window', while passing the c
 A crawl passes over a list of resources (array) in order retrieving their links, with this you can construct a more complictated resource graph. Just as a crawler crawls a web page, the resource client crawls hyperlinks and creates a resource graph.
 
 Let's think of author, post, meta, tag, tag/name and they are all connected together by a resource graph.
-Each resource has a hyperlink. In ths resource graph add the name **post-tree**, on each resource add the hyper-reference *href* in the @link annotation.
+Each resource has a hyperlink. Name this resource graph **post-tree** and give each `#[Link]` the crawl name and its *href*.
 
 In the author resource there is a hyperlink to the post resource. This is a 1:n relationship.
 
 ```php
-#[Link(rel: 'post-tree', href: 'app://self/post?author_id={id}')]
+#[Link(crawl: 'post-tree', rel: 'post', href: 'app://self/post?author_id={id}')]
 public function onGet($id = null)
 ```
 In the post resource there is a hyperlink to meta and tag resources. This is also a 1:n relationship.
 
 ```php
-#[Link(crawl='post-tree', rel: 'meta', href: 'app://self/meta?post_id={id}')]
-#[Link(crawl='post-tree', rel: 'tag', href: 'app://self/tag?post_id={id}')]
+#[Link(crawl: 'post-tree', rel: 'meta', href: 'app://self/meta?post_id={id}')]
+#[Link(crawl: 'post-tree', rel: 'tag', href: 'app://self/tag?post_id={id}')]
 public function onGet($author_id)
 {
 ```
@@ -233,7 +221,7 @@ public function onGet($author_id)
 There is a hyperlink in the tag resource with only an ID for the tag/name resource that corresponds to that ID. It is a 1:1 relationship.
 
 ```php
-#[Link(crawl='post-tree', rel: 'tag_name', href: 'app://self/tag/name?tag_id={tag_id}')]
+#[Link(crawl: 'post-tree', rel: 'tag_name', href: 'app://self/tag/name?tag_id={tag_id}')]
 public function onGet($post_id)
 ```
 
@@ -248,7 +236,7 @@ $graph = $resource
   ->request();
 ```
 
-The resource client looks for the crawl name annotated with @link using the **rel** name connects to the resource and creates a resource graph.
+The resource client follows the `#[Link]`s that have the crawl name, connects each linked resource under its **rel** name, and creates a resource graph.
 
 ```
 var_export($graph->body);
@@ -300,7 +288,13 @@ $uri = $request->toUri(); // app://self/user?id=0#link=self:blog
 $blog = $resource->get('app://self/user#link=self:blog', ['id' => $id]); // follows the blog link
 ```
 
-Several links are joined with commas and followed in order: `#link=self:blog,crawl:post-tree` is `->linkSelf('blog')->linkCrawl('post-tree')`. A rel is made of `A-Z a-z 0-9 _ -`; `toUri()` throws `UriException` for any other rel. `link` is the only name a fragment takes: a request URI with any other fragment throws `UriException`. The fragment of a `#[ResourceParam]` URI names a key of the body and is not part of the request; one with `=` (a link) throws `UriException`. A `#[Link]` href has no fragment: one that declares a fragment (`#top`, `#link=...`, `{#var}`) throws `LinkHrefException` where the link is read (HAL `_links`, OPTIONS, the `Link` header, and `linkSelf()`, `linkNew()`, `linkCrawl()` and `href()`). Remove the fragment from the href; a fragment that a variable expands to is dropped. An `#[Embed]` src may carry `#link=`, and the embedded request follows those links.
+Several links are joined with commas and followed in order: `#link=self:blog,crawl:post-tree` is `->linkSelf('blog')->linkCrawl('post-tree')`.
+
+- A rel uses only `A-Z a-z 0-9 _ -`; `toUri()` throws `UriException` for any other rel.
+- `#link=` is the only fragment a request URI may have; any other fragment throws `UriException`.
+- An `#[Embed]` src may carry `#link=`; the embedded request follows those links.
+- In a `#[ResourceParam]` URI, the fragment names a key of the body (`#nickname`) and is not sent with the request; `#link=` there throws `UriException`.
+- A `#[Link]` href cannot have a fragment. An href with `#top`, `#link=...` or `{#var}` throws `LinkHrefException` when the link is read: HAL `_links`, OPTIONS, the `Link` header, `linkSelf()`, `linkNew()`, `linkCrawl()` and `href()`. A `#` that a variable expands to is dropped.
 
 ### HATEOAS Hypermedia as the Engine of Application State
 
@@ -309,9 +303,7 @@ For example in an order resource by using **POST** the order is created, from th
 
 Order resource
 ```php
-/**
- * @Link(rel="payment", href="app://self/payment{?order_id, credit_card_number, expires, name, amount}", method="put")
- */
+#[Link(rel: 'payment', href: 'app://self/payment{?order_id, credit_card_number, expires, name, amount}', method: 'put')]
 public function onPost($drink)
 ```
 
@@ -418,21 +410,19 @@ This `bind parameter` is also very useful for testing.
 
 ### Resource Parameter
 
-We can bind the status of another resource to a parameter with the `@ResourceParam` annotation.
+We can bind the status of another resource to a parameter with the `#[ResourceParam]` attribute.
 
 ```php?start_inline
 use BEAR\Resource\Annotation\ResourceParam;
 
 class News extends ResourceObject
 {
-    /**
-     * @ResourceParam(param=“name”, uri="app://self//login#nickname")
-     */
-    public function onGet(string $name) : ResourceObject
+    #[ResourceParam(param: 'name', uri: 'app://self/login#nickname')]
+    public function onGet(string $name): static
     {
 ```
 
-In this example, the `nickname` property of `app://self//login` is bound to `$name`.
+In this example, the `nickname` key of the `app://self/login` body is bound to `$name`.
 
 ## Ray.InputQuery Integration
 
@@ -728,7 +718,7 @@ data.
 
 ## Embedding resources
 
-`@Embed` annotations makes easier to embed external resource to its own. Like `<img src="image_url">` or `<iframe src="content_url">` in HTML, Embedded resource is specified by `src` field.
+The `#[Embed]` attribute embeds another resource in this one. Like `<img src="image_url">` or `<iframe src="content_url">` in HTML, the embedded resource is specified by `src`.
 
 ```php
 class News extends ResourceObject
@@ -737,8 +727,8 @@ class News extends ResourceObject
     public function onGet(): static
     {
         $this->body = [
-            'headline' => "...",
-            'sports'] = "..."
+            'headline' => '...',
+            'sports' => '...',
         ];
         
         return $this;
@@ -924,11 +914,6 @@ $cachedResource = serialize($resource);
 $resource = unserialize($cachedResource);
 $news = $resource->get('app://self/news');
 ```
-
-## Annotation / Attribute
-
-BEAR.Resource can be used either with [doctrine/annotation](https://github.com/doctrine/annotations) in PHP 7/8 or with an [Attributes](https://www.php.net/manual/en/language.attributes.overview.php) in PHP8.
-See the annotation code examples in the older [README(v1.4)](https://github.com/bearsunday/BEAR.Resource/tree/1.14.9/README.md).
 
 ## Installation
 
