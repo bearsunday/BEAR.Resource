@@ -3,11 +3,11 @@
     "description": "Composer require checker tools for BEAR.Resource",
     "license": "MIT",
     "require-dev": {
-        "maglnet/composer-require-checker": "^4.7"
+        "maglnet/composer-require-checker": "^4.24"
     },
     "config": {
         "platform": {
-            "php": "8.1.0"
+            "php": "8.4.0"
         }
     }
 }
