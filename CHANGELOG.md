@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - A self or new link in a `#link=` fragment can carry a query, `type:rel?query`; it is overlaid on the body to expand the `#[Link]` href and added to the query of the linked request.
+- `LinkType::listFromUri()` reads the links of a URI's `#link=` fragment as `uri()` and `newRequest()` do, for a client that follows them itself.
 
 ### Changed
 - **Behaviour change**: a self or new link requests its href with the method its `#[Link]` declares, as `href()` does, and the next link is read from that method.
