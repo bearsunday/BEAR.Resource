@@ -11,12 +11,14 @@ use function array_merge;
 use function assert;
 use function explode;
 use function is_string;
+use function parse_str;
 use function parse_url;
 use function preg_match;
 use function preg_match_all;
 
 use const PHP_URL_FRAGMENT;
 use const PREG_SET_ORDER;
+use const PREG_UNMATCHED_AS_NULL;
 
 /**
  * Resource client with mutable state - supports fluent interface
@@ -236,6 +238,8 @@ final class Resource implements ResourceInterface
     }
 
     /**
+     * Reads `#link=type:rel[?query](,type:rel[?query])*`; the query is form-urlencoded as http_build_query() writes it
+     *
      * @return list<LinkType>
      *
      * @throws UriException
@@ -247,15 +251,27 @@ final class Resource implements ResourceInterface
             return [];
         }
 
-        $link = '(self|new|crawl):([A-Za-z0-9_-]+)';
+        $link = '(self|new|crawl):([A-Za-z0-9_-]+)(?:\?([A-Za-z0-9_.~%+=&-]+))?';
         if (preg_match("/\\Alink={$link}(,{$link})*\\z/", $fragment) !== 1) {
             throw new UriException($uri, 500);
         }
 
-        preg_match_all("/{$link}/", $fragment, $matches, PREG_SET_ORDER);
+        preg_match_all("/{$link}/", $fragment, $matches, PREG_SET_ORDER | PREG_UNMATCHED_AS_NULL);
         $links = [];
-        foreach ($matches as [, $type, $rel]) {
-            $links[] = new LinkType($rel, $type);
+        /** @var array{0: string, 1: string, 2: string, 3: string|null} $match */
+        foreach ($matches as $match) {
+            [, $type, $rel, $linkQuery] = $match;
+            $query = [];
+            if ($linkQuery !== null) {
+                if ($type === LinkType::CRAWL_LINK) {
+                    throw new UriException("{$uri}: a crawl link takes no query", 500);
+                }
+
+                parse_str($linkQuery, $query);
+            }
+
+            /** @psalm-suppress MixedArgumentTypeCoercion parse_str() outputs array<int|string, mixed> but Query is array<string, mixed> */
+            $links[] = new LinkType($rel, $type, $query);
         }
 
         return $links;

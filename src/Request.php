@@ -9,6 +9,7 @@ use OutOfRangeException;
 use Override;
 
 use function array_merge;
+use function http_build_query;
 use function implode;
 use function in_array;
 use function preg_match;
@@ -123,7 +124,7 @@ final class Request extends AbstractRequest
                 throw new UriException(sprintf("%s: link rel '%s' is outside [A-Za-z0-9_-]", $uri, $link->key), 500);
             }
 
-            $links[] = $link->type . ':' . $link->key;
+            $links[] = $link->type . ':' . $link->key . ($link->query === [] ? '' : '?' . http_build_query($link->query));
         }
 
         return $uri . '#link=' . implode(',', $links);

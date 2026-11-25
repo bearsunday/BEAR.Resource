@@ -14,6 +14,7 @@ use FakeVendor\Sandbox\Resource\App\Href\Hasembed;
 use FakeVendor\Sandbox\Resource\App\Href\Origin;
 use FakeVendor\Sandbox\Resource\App\Href\Target;
 use FakeVendor\Sandbox\Resource\App\Link\Jump\First;
+use FakeVendor\Sandbox\Resource\App\Link\Payment;
 use FakeVendor\Sandbox\Resource\Page\Index;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Depends;
@@ -227,6 +228,10 @@ class ResourceTest extends TestCase
             'rel outside the alphabet' => ['app://self/author?id=1#link=self:post%20tree'],
             'empty list' => ['app://self/author?id=1#link='],
             'trailing comma' => ['app://self/author?id=1#link=self:blog,'],
+            'an empty link query' => ['app://self/author?id=1#link=self:blog?'],
+            'a link query outside form-urlencoded' => ['app://self/author?id=1#link=self:blog?a=<b>'],
+            'a comma in a link query' => ['app://self/author?id=1#link=self:blog?a=1,2'],
+            'a crawl link with a query' => ['app://self/author?id=1#link=crawl:tree?a=1'],
             'another name' => ['app://self/author?id=1#key=title'],
             'a bare fragment' => ['app://self/author?id=1#title'],
         ];
@@ -297,6 +302,59 @@ class ResourceTest extends TestCase
 
         $this->assertEquals($linkSelf, $this->resource->uri('app://self/link/jump/start?id=1#link=self:first')());
         $this->assertEquals($linkSelf, $this->resource->get('app://self/link/jump/start?id=1#link=self:first'));
+    }
+
+    public function testASelfLinkInTheUriIsRequestedWithTheMethodItDeclaresAndItsQuery(): void
+    {
+        $ro = $this->resource->post('app://self/link/order?drink=latte#link=self:payment?card=1234');
+
+        $this->assertInstanceOf(Payment::class, $ro);
+        $this->assertSame(Code::CREATED, $ro->code);
+        $this->assertSame('put', $ro->uri->method);
+        $this->assertSame('app://self/link/payment?id=7&card=1234', (string) $ro->uri);
+        $this->assertSame(['id' => 7, 'card' => '1234'], $ro->body);
+    }
+
+    public function testASelfLinkInTheUriReturnsTheSameResourceAsHref(): void
+    {
+        $href = $this->resource->href('payment', ['card' => '1234'], $this->resource->post('app://self/link/order?drink=latte'));
+
+        $this->assertEquals($href, $this->resource->post('app://self/link/order?drink=latte#link=self:payment?card=1234'));
+    }
+
+    public function testALinkQueryTakesPrecedenceOverTheBody(): void
+    {
+        $ro = $this->resource->post('app://self/link/order?drink=latte#link=self:payment?id=9&card=1234');
+
+        $this->assertSame('app://self/link/payment?id=9&card=1234', (string) $ro->uri);
+        $this->assertSame(['id' => 9, 'card' => '1234'], $ro->body);
+    }
+
+    public function testANewLinkInTheUriIsRequestedWithTheMethodItDeclares(): void
+    {
+        $ro = $this->resource->post('app://self/link/order?drink=latte#link=new:payment?card=1234');
+
+        $this->assertSame(['id' => 7, 'drink' => 'latte', 'payment' => ['id' => 7, 'card' => '1234']], $ro->body);
+    }
+
+    public function testTheLinkAfterASelfLinkIsReadFromTheMethodItWasRequestedWith(): void
+    {
+        $ro = $this->resource->post('app://self/link/order?drink=latte#link=self:payment?card=1234,self:order');
+
+        $this->assertSame('get', $ro->uri->method);
+        $this->assertSame(['id' => 7, 'drink' => 'latte'], $ro->body);
+    }
+
+    public function testALinkQueryRoundTripsThroughTheUri(): void
+    {
+        $uri = 'app://self/link/order?drink=latte#link=self:payment?card=12%2C34+5';
+        $request = $this->resource->newRequest(Method::POST, $uri);
+        assert($request instanceof Request);
+
+        $this->assertEquals([new LinkType('payment', LinkType::SELF_LINK, ['card' => '12,34 5'])], $request->links);
+        $this->assertSame($uri, $request->toUri());
+        $this->assertSame($uri, $this->resource->newRequest(Method::POST, $request->toUri())->toUri());
+        $this->assertSame(['id' => 7, 'card' => '12,34 5'], $request()->body);
     }
 
     private function resourceClient(): ResourceClient

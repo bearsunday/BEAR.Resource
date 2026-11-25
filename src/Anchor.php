@@ -36,7 +36,7 @@ final class Anchor implements AnchorInterface
             if ($this->isValidLinkAnnotation($annotation, $rel)) {
                 assert($annotation instanceof LinkAnnotation);
 
-                return $this->getMethodUri($request, $query, $annotation);
+                return self::methodUri($annotation, $request->resourceObject->body, $query);
             }
         }
 
@@ -50,14 +50,16 @@ final class Anchor implements AnchorInterface
     }
 
     /**
+     * The method a link declares and its href expanded with the body overlaid by $query
+     *
+     * Resource::href() and a self/new link of the Linker both request the linked resource with these.
+     *
      * @param Query $query
      *
      * @return MethodUri
      */
-    private function getMethodUri(AbstractRequest $request, array $query, LinkAnnotation $annotation): array
+    public static function methodUri(LinkAnnotation $annotation, mixed $body, array $query): array
     {
-        /** @var array|mixed $body */
-        $body = $request->resourceObject->body;
         $query = is_array($body) ? array_merge($body, $query) : [];
         $uri = uri_template($annotation->href, $query);
 
