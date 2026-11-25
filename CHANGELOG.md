@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- A self or new link in a `#link=` fragment can carry a query, `type:rel?query`; it is overlaid on the body to expand the `#[Link]` href and added to the query of the linked request.
+
+### Changed
+- **Behaviour change**: a self or new link requests its href with the method its `#[Link]` declares, as `href()` does, and the next link is read from that method.
+- **Behaviour change**: in a request with links, a 303, or a 201 with a `Location`, is followed once with GET and the chain goes on from the located resource. A 303 without a `Location`, a `Location` that is not a path, or a second redirect throws `LinkException`.
+
 ## [1.36.1] - 2026-11-18
 
 ### Changed

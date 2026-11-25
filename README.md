@@ -177,7 +177,7 @@ $blog = $resource
 The result of the **app://self/user** resource request follows its **blog** link, and the request returns the **app://self/blog** resource object: its class, `uri`, `code`, headers, body and `view` are the blog resource's.
 Just like clicking a link on a web page, the next resource takes the place of the current one.
 
-In a chain such as `->linkSelf('blog')->linkSelf('author')` or `#link=self:blog,self:author`, the first rel is looked up in the `#[Link]`s of the requested method, and each later rel in those of the `onGet()` of the resource the previous self link returned; a following `linkNew` or `linkCrawl` adds to that resource. When the resource a self link returns has a code of 400 or more, the chain stops there and that resource is returned.
+In a chain such as `->linkSelf('blog')->linkSelf('author')` or `#link=self:blog,self:author`, the first rel is looked up in the `#[Link]`s of the requested method, and each later rel in those of the method the previous self link requested its resource with; a following `linkNew` or `linkCrawl` adds to that resource. A self or new link requests its href with the method the `#[Link]` declares, as `href()` does. When the resource a self link returns has a code of 400 or more, the chain stops there and that resource is returned.
 
 ### linkNew
 
@@ -275,7 +275,7 @@ array (
 
 ### Links in the URI
 
-A request URI can carry its links in a `#link=` fragment. Each link is `type:rel` (`self`, `new` or `crawl`); several links are joined with commas and followed in order.
+A request URI can carry its links in a `#link=` fragment. Each link is `type:rel` (`self`, `new` or `crawl`), and a self or new link can add a query as `type:rel?query`; several links are joined with commas and followed in order.
 
 ```php
 $request = $resource
@@ -287,11 +287,18 @@ $request = $resource
 echo $request->toUri(); // app://self/user?id=0#link=self:blog,crawl:post-tree
 
 $ro = $resource->get('app://self/user?id=0#link=self:blog,crawl:post-tree'); // the same request
+
+// GET the form, POST its `doOrder` link with drink=latte, follow the 201 Location, then the `goPayment` link
+$ro = $resource->get('app://self/order-form#link=self:doOrder?drink=latte,self:goPayment');
 ```
 
-`toUri()` writes a request in this form, and `uri()`, `newRequest()`, `get()` and an `#[Embed]` src read it back. The query before `#` goes to the requested resource; a linked resource gets its query from the `#[Link]` href, expanded with the body of the resource it links from.
+`toUri()` writes a request in this form, and `uri()`, `newRequest()`, `get()` and an `#[Embed]` src read it back. The query before `#` goes to the requested resource. A linked resource is requested with the method its `#[Link]` declares and the href expanded with the body of the resource it links from, overlaid by the link query; the link query is added to the expanded query.
+
+A 303, or a 201 with a `Location`, is answered by the resource its `Location` names: in a request with links, that resource is requested once with GET, the chain goes on from it, and the next rel is looked up in its `onGet()`. A `Location` is a path such as `/order?id=1`, resolved against the scheme and host of the response.
 
 - A rel uses only `A-Z a-z 0-9 _ -`. Any other rel, and any fragment other than `#link=`, throws `UriException`.
+- A link query is form-urlencoded as `http_build_query()` writes it, so a comma in a value is `%2C`. A crawl link with a query throws `UriException`.
+- A 303 without a `Location`, a `Location` that is not a path, and a located resource that redirects again throw `LinkException`.
 - A `#[Link]` href cannot have a fragment (`#top`, `{#var}`); it throws `LinkHrefException` when the link is read.
 
 ### HATEOAS Hypermedia as the Engine of Application State

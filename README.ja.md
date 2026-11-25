@@ -175,7 +175,7 @@ $blog = $resource
 **app://self/user** リソースをリクエストした結果で **blog** リンクを辿り、**app://self/blog** のリソースオブジェクトを返します。クラス、`uri`、`code`、ヘッダー、ボディ、`view` はすべて blog リソースのものです。
 Webページでリンクをクリックしたように次のリソースに入れ替わります。
 
-`->linkSelf('blog')->linkSelf('author')` や `#link=self:blog,self:author` のように続けると、最初の rel はリクエストしたメソッドの `#[Link]` から、後の rel は直前の self リンクが返したリソースの `onGet()` の `#[Link]` から探します。続く `linkNew` や `linkCrawl` もそのリソースに追加します。self リンクが返したリソースのコードが 400 以上のときは連鎖をそこで止め、そのリソースを返します。
+`->linkSelf('blog')->linkSelf('author')` や `#link=self:blog,self:author` のように続けると、最初の rel はリクエストしたメソッドの `#[Link]` から、後の rel は直前の self リンクがリソースをリクエストしたメソッドの `#[Link]` から探します。続く `linkNew` や `linkCrawl` もそのリソースに追加します。self リンクと new リンクは、`href()` と同じく `#[Link]` に宣言したメソッドでリクエストします。self リンクが返したリソースのコードが 400 以上のときは連鎖をそこで止め、そのリソースを返します。
 
 ### newリンク
 

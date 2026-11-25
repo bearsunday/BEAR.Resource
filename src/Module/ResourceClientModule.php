@@ -55,6 +55,7 @@ use Ray\InputQuery\InputQueryInterface;
  * FactoryInterface
  * SchemeCollectionInterface
  * AnchorInterface
+ * Anchor
  * NamedParameterInterface
  * RenderInterface
  * RenderInterface-options
@@ -83,6 +84,7 @@ final class ResourceClientModule extends AbstractModule
         $this->bind(FactoryInterface::class)->to(Factory::class);
         $this->bind(SchemeCollectionInterface::class)->toProvider(SchemeCollectionProvider::class);
         $this->bind(AnchorInterface::class)->to(Anchor::class);
+        $this->bind(Anchor::class);
         $this->bind(NamedParameterInterface::class)->to(NamedParameter::class);
         $this->bind(RenderInterface::class)->to(PrettyJsonRenderer::class)->in(Scope::SINGLETON);
         /** @psalm-suppress DeprecatedClass */

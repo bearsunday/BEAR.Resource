@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\BadRequestException;
+use BEAR\Resource\Exception\LinkException;
 use BEAR\Resource\Exception\MethodNotAllowedException;
 use BEAR\Resource\Exception\UriException;
 use BEAR\Resource\Module\HalModule;
@@ -14,6 +15,8 @@ use FakeVendor\Sandbox\Resource\App\Href\Hasembed;
 use FakeVendor\Sandbox\Resource\App\Href\Origin;
 use FakeVendor\Sandbox\Resource\App\Href\Target;
 use FakeVendor\Sandbox\Resource\App\Link\Jump\First;
+use FakeVendor\Sandbox\Resource\App\Link\Location\Form;
+use FakeVendor\Sandbox\Resource\App\Link\Location\Item;
 use FakeVendor\Sandbox\Resource\App\Link\Payment;
 use FakeVendor\Sandbox\Resource\Page\Index;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -73,7 +76,7 @@ class ResourceTest extends TestCase
 
             public function get(): LinkerInterface
             {
-                return new Linker($this->invoker, $this->factory, $this->linkCrawlerProvider);
+                return new Linker($this->invoker, $this->factory, $this->linkCrawlerProvider, new Anchor());
             }
         };
         $uri = new UriFactory('app://self');
@@ -355,6 +358,66 @@ class ResourceTest extends TestCase
         $this->assertSame($uri, $request->toUri());
         $this->assertSame($uri, $this->resource->newRequest(Method::POST, $request->toUri())->toUri());
         $this->assertSame(['id' => 7, 'card' => '12,34 5'], $request()->body);
+    }
+
+    /** @return array<string, array{string, string}> */
+    public static function locationProvider(): array
+    {
+        return [
+            'a 201 with a Location' => ['app://self/link/location/form#link=self:create?name=koriym', 'app://self/link/location/item?id=5'],
+            'a 303' => ['app://self/link/location/form#link=self:update?id=3', 'app://self/link/location/item?id=3'],
+        ];
+    }
+
+    #[DataProvider('locationProvider')]
+    public function testASelfLinkAnsweredWithALocationReturnsTheLocatedResource(string $uri, string $located): void
+    {
+        $ro = $this->resource->get($uri);
+
+        $this->assertInstanceOf(Item::class, $ro);
+        $this->assertSame(Code::OK, $ro->code);
+        $this->assertSame('get', $ro->uri->method);
+        $this->assertSame($located, (string) $ro->uri);
+    }
+
+    /** `form` is declared only on Item::onGet() */
+    public function testTheLinkAfterALocationIsReadFromTheLocatedResource(): void
+    {
+        $ro = $this->resource->get('app://self/link/location/form#link=self:create?name=koriym,self:form');
+
+        $this->assertInstanceOf(Form::class, $ro);
+    }
+
+    public function testARequestAnsweredWithALocationIsLocatedBeforeItsFirstLink(): void
+    {
+        $ro = $this->resource->post('app://self/link/location/item?name=koriym#link=self:form');
+
+        $this->assertInstanceOf(Form::class, $ro);
+    }
+
+    public function testANewLinkAnsweredWithALocationAddsTheLocatedBody(): void
+    {
+        $ro = $this->resource->get('app://self/link/location/form#link=new:create?name=koriym');
+
+        $this->assertSame(['id' => 7, 'create' => ['id' => 5]], $ro->body);
+    }
+
+    /** @return array<string, array{string}> */
+    public static function unfollowableLocationProvider(): array
+    {
+        return [
+            'a 303 without a Location' => ['app://self/link/location/form#link=self:noLocation'],
+            'a Location that is not a path' => ['app://self/link/location/form#link=self:leave'],
+            'a located resource that redirects again' => ['app://self/link/location/form#link=self:redirectTwice'],
+        ];
+    }
+
+    #[DataProvider('unfollowableLocationProvider')]
+    public function testALocationALinkCannotFollowThrows(string $uri): void
+    {
+        $this->expectException(LinkException::class);
+
+        $this->resource->get($uri);
     }
 
     private function resourceClient(): ResourceClient
@@ -677,7 +740,7 @@ class ResourceTest extends TestCase
                 return new LinkCrawler($this->invoker, $this->factory);
             }
         };
-        $linker = new Linker($invoker, $factory, $linkCrawlerProvider);
+        $linker = new Linker($invoker, $factory, $linkCrawlerProvider, new Anchor());
         $uri = new UriFactory('app://self');
 
         // Legacy Resource takes LinkerInterface directly (not provider)

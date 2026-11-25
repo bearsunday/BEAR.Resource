@@ -45,7 +45,7 @@ class ResourceFluentTest extends TestCase
                 return new LinkCrawler($this->invoker, $this->factory);
             }
         };
-        $linker = new Linker($invoker, $factory, $linkCrawlerProvider);
+        $linker = new Linker($invoker, $factory, $linkCrawlerProvider, new Anchor());
         $uri = new UriFactory('app://self');
 
         $this->resource = new Resource($factory, $invoker, new Anchor(), $linker, $uri);

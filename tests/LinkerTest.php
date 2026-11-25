@@ -56,6 +56,7 @@ class LinkerTest extends TestCase
             $this->invoker,
             $factory,
             $linkCrawlerProvider,
+            new Anchor(),
         );
     }
 

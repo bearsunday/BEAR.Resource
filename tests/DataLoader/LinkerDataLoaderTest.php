@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BEAR\Resource\DataLoader;
 
+use BEAR\Resource\Anchor;
 use BEAR\Resource\Annotation\Link;
 use BEAR\Resource\AppAdapter;
 use BEAR\Resource\Exception\LinkHrefException;
@@ -66,6 +67,7 @@ class LinkerDataLoaderTest extends TestCase
             $invoker,
             $factory,
             $linkCrawlerProvider,
+            new Anchor(),
         );
     }
 
@@ -156,6 +158,7 @@ class LinkerDataLoaderTest extends TestCase
             $invoker,
             $factory,
             $linkCrawlerProvider,
+            new Anchor(),
         );
 
         $this->request = new Request(
