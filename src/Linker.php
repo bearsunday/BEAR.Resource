@@ -15,6 +15,7 @@ use ReflectionMethod;
 
 use function array_map;
 use function array_merge;
+use function implode;
 use function is_array;
 use function preg_match;
 use function sprintf;
@@ -74,7 +75,7 @@ final class Linker implements LinkerInterface
                 continue;
             }
 
-            $linkedRequest = $this->annotationRel($annotations, $link, $current);
+            $linkedRequest = $this->annotationRel($annotations, $link, $current, $method);
             [$linked, $linkedMethod] = $this->located($this->invoker->invoke($linkedRequest), $linkedRequest->method);
             if ($link->type === LinkType::SELF_LINK) {
                 $current = $linked;
@@ -170,7 +171,7 @@ final class Linker implements LinkerInterface
      *
      * @throws LinkRelException
      */
-    private function annotationRel(array $annotations, LinkType $link, ResourceObject $current): Request
+    private function annotationRel(array $annotations, LinkType $link, ResourceObject $current, Method $from): Request
     {
         foreach ($annotations as $annotation) {
             if ($annotation->rel !== $link->key) {
@@ -185,7 +186,9 @@ final class Linker implements LinkerInterface
             return new Request($this->invoker, $ro, Method::from($method), $ro->uri->query);
         }
 
-        throw new LinkRelException("rel:{$link->key} class:" . $current::class, 500);
+        $declared = implode(',', array_map(static fn (Link $annotation): string => $annotation->rel, $annotations));
+
+        throw new LinkRelException(sprintf('rel:%s class:%s method:on%s declared:%s', $link->key, $current::class, ucfirst($from->value), $declared), 500);
     }
 
     /**
