@@ -287,21 +287,35 @@ $request = $resource
 echo $request->toUri(); // app://self/user?id=0#link=self:blog,crawl:post-tree
 
 $ro = $resource->get('app://self/user?id=0#link=self:blog,crawl:post-tree'); // the same request
-
-// GET the order, then its `payment` link with card=1234 added to the link's query
-$ro = $resource->get('app://self/order?id=1#link=self:payment?card=1234');
 ```
 
-The query before `#` goes to the first request, and a link's query to the request that link makes.
+The query before `#` goes to the first request. A link's href is expanded with the top-level values of the body the link is followed from, and a link query (`type:rel?query`) takes precedence over them; a name the template does not have is added to the query of the linked request.
 
-- A linked resource is requested with GET, whatever `method` its `#[Link]` declares.
-- The href template (`{?id}`) is expanded with the top-level values of the body the link is followed from; a link query value takes precedence over the body.
-- The id of one item in a list, or a value from an earlier step, does not come from the body; write it in the link query.
+```php
+class Order extends ResourceObject
+{
+    #[Link(rel: 'payment', href: 'app://self/payment{?id}')]
+    #[Link(rel: 'item', href: 'app://self/item{?id}')]
+    public function onGet(int $id): static
+    {
+        $this->body = ['id' => $id, 'items' => [['id' => 7], ['id' => 8]]];
+
+        return $this;
+    }
+}
+
+$resource->get('app://self/order?id=1#link=self:payment');           // GET app://self/payment?id=1
+$resource->get('app://self/order?id=1#link=self:payment?card=1234'); // GET app://self/payment?id=1&card=1234
+$resource->get('app://self/order?id=1#link=self:item?id=8');         // GET app://self/item?id=8
+```
+
+A value that is not at the top level, such as an `id` in `items`, is not used, so pick one item with a link query such as `self:item?id=8`. The href of the next link is expanded with the body of the resource just followed.
+
 - A rel uses only `A-Z a-z 0-9 _ -`. Any other rel, and any fragment other than `#link=`, throws `UriException`.
 - A link query is form-urlencoded as `http_build_query()` writes it, so a comma in a value is `%2C`. A crawl link with a query throws `UriException`.
 - A `#[Link]` href cannot have a fragment (`#top`, `{#var}`); it throws `LinkHrefException` when the link is read.
 
-A test that follows each link with the method its `#[Link]` declares, unsafe steps included, binds BEAR.DevTools' `DeclaredMethodLinker` for `LinkerInterface`.
+The resource client follows every link with GET, whatever `method` its `#[Link]` declares. To follow each link with its declared method, as a test of a workflow with unsafe steps does, bind BEAR.DevTools' `DeclaredMethodLinker` for `LinkerInterface`.
 
 ### HATEOAS Hypermedia as the Engine of Application State
 

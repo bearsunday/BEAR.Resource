@@ -287,21 +287,35 @@ $request = $resource
 echo $request->toUri(); // app://self/user?id=0#link=self:blog,crawl:post-tree
 
 $ro = $resource->get('app://self/user?id=0#link=self:blog,crawl:post-tree'); // 同じリクエスト
-
-// 注文を GET し、その payment リンクを card=1234 をリンクのクエリーに足して辿る
-$ro = $resource->get('app://self/order?id=1#link=self:payment?card=1234');
 ```
 
-`#` の前のクエリーは最初のリクエストに、リンクのクエリーはそのリンクのリクエストに渡ります。
+`#` の前のクエリーは最初のリクエストに渡ります。リンクの href は、リンク元の body の最上位の値で展開し、リンクのクエリー（`type:rel?query`）があればその値を優先します。テンプレートにない名前は、そのままリンク先のクエリーに加わります。
 
-- リンク先は、`#[Link]` の `method` によらず GET でリクエストします。
-- href のテンプレート（`{?id}` など）は、リンク元の body の最上位の値で展開します。同じ名前があれば、リンクのクエリーの値を使います。
-- 一覧の中の 1 件の ID や、前のステップの値は body から届きません。リンクのクエリーに書きます。
+```php
+class Order extends ResourceObject
+{
+    #[Link(rel: 'payment', href: 'app://self/payment{?id}')]
+    #[Link(rel: 'item', href: 'app://self/item{?id}')]
+    public function onGet(int $id): static
+    {
+        $this->body = ['id' => $id, 'items' => [['id' => 7], ['id' => 8]]];
+
+        return $this;
+    }
+}
+
+$resource->get('app://self/order?id=1#link=self:payment');           // GET app://self/payment?id=1
+$resource->get('app://self/order?id=1#link=self:payment?card=1234'); // GET app://self/payment?id=1&card=1234
+$resource->get('app://self/order?id=1#link=self:item?id=8');         // GET app://self/item?id=8
+```
+
+`items` の中の `id` のように最上位にない値は展開に使われないので、一覧から 1 件を選ぶときは `self:item?id=8` のようにリンクのクエリーで渡します。続くリンクの href は、直前に辿ったリソースの body で展開します。
+
 - rel に使える文字は `A-Z a-z 0-9 _ -` です。それ以外の rel や、`#link=` 以外のフラグメントは `UriException` になります。
 - リンクのクエリーは `http_build_query()` が書く form-urlencoded の形で、値の中のカンマは `%2C` です。crawl リンクにクエリーを付けると `UriException` になります。
 - `#[Link]` の href はフラグメント（`#top`・`{#var}`）を持てません。リンクを読むときに `LinkHrefException` になります。
 
-GET でない段も含めて、各 `#[Link]` に宣言したメソッドでリンクを辿るテストは、`LinkerInterface` に BEAR.DevTools の `DeclaredMethodLinker` を束縛します。
+リソースクライアントは、`#[Link]` の `method` によらず、どのリンクも GET で辿ります。宣言した `method` で辿るには（GET でない段を含むワークフローのテストなど）、`LinkerInterface` に BEAR.DevTools の `DeclaredMethodLinker` を束縛します。
 
 ### HATEOAS アプリケーション状態のエンジンとしてのハイパーメディア
 
