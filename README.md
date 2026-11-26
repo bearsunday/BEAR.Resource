@@ -292,7 +292,7 @@ $ro = $resource->get('app://self/user?id=0#link=self:blog,crawl:post-tree'); // 
 $ro = $resource->get('app://self/order-form#link=self:doOrder?drink=latte,self:goPayment');
 ```
 
-`toUri()` writes a request in this form, and `uri()`, `newRequest()`, `get()` and an `#[Embed]` src read it back. The query before `#` goes to the requested resource. A linked resource is requested with the method its `#[Link]` declares and the href expanded with the body of the resource it links from, overlaid by the link query; the link query is added to the expanded query.
+`toUri()` writes a request in this form, and `uri()`, `newRequest()`, `get()` and an `#[Embed]` src read it back. The query before `#` goes to the requested resource. A linked resource is requested with the method its `#[Link]` declares and the href expanded with the body of the resource it links from, overlaid by the link query; the link query is added to the expanded query. Only the top-level values of the body reach the href, not the id of one item in a list: to go on from what a request created or from one item, that item's resource declares its own links with an href such as `{?id}`.
 
 A 303, or a 201 with a `Location`, is answered by the resource its `Location` names: in a request with links, that resource is requested once with GET, the chain goes on from it, and the next rel is looked up in its `onGet()`. A `Location` is a path such as `/order?id=1`, resolved against the scheme and host of the response.
 
