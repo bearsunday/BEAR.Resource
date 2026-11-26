@@ -9,7 +9,7 @@ use BEAR\Resource\ResourceObject;
 
 class EmbedUnsafe extends ResourceObject
 {
-    #[Embed(rel: 'item', src: 'app://self/link/location/form#link=self:create?name=embedded')]
+    #[Embed(rel: 'item', src: 'app://self/link/location/guarded#link=self:doTouch')]
     public function onGet(): static
     {
         return $this;

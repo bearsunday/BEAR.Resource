@@ -296,8 +296,9 @@ class ResourceTest extends TestCase
         $embedded = $this->resource->get('app://self/link/location/embed-unsafe')->body['item'];
         $this->assertInstanceOf(Request::class, $embedded);
 
+        // Guarded::onPost throws LogicException, so a LinkException also says the POST was never requested
         $this->expectException(LinkException::class);
-        $this->expectExceptionMessage('rel:create of FakeVendor\Sandbox\Resource\App\Link\Location\Form');
+        $this->expectExceptionMessage('rel:doTouch of FakeVendor\Sandbox\Resource\App\Link\Location\Guarded');
 
         $embedded();
     }
