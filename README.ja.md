@@ -312,7 +312,7 @@ $resource->get('app://self/order?id=1#link=self:item?id=8');         // GET app:
 `items` の中の `id` のように最上位にない値は展開に使われないので、一覧から 1 件を選ぶときは `self:item?id=8` のようにリンクのクエリーで渡します。続くリンクの href は、直前に辿ったリソースの body で展開します。
 
 - rel に使える文字は `A-Z a-z 0-9 _ -` です。それ以外の rel や、`#link=` 以外のフラグメントは `UriException` になります。
-- リンクのクエリーは `http_build_query()` が書く form-urlencoded の形で、値の中のカンマは `%2C` です。crawl リンクにクエリーを付けると `UriException` になります。
+- リンクのクエリーは `'#link=self:search?' . http_build_query(['tags' => ['php', 'bear']])` のように書きます。crawl リンクにはクエリーを付けられません。
 - `#[Link]` の href はフラグメント（`#top`・`{#var}`）を持てません。リンクを読むときに `LinkHrefException` になります。
 
 リソースクライアントは、`#[Link]` の `method` によらず、どのリンクも GET で辿ります。宣言した `method` で辿るには（GET でない段を含むワークフローのテストなど）、`LinkerInterface` に BEAR.DevTools の `DeclaredMethodLinker` を束縛します。

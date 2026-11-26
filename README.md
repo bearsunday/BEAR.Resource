@@ -312,7 +312,7 @@ $resource->get('app://self/order?id=1#link=self:item?id=8');         // GET app:
 A value that is not at the top level, such as an `id` in `items`, is not used, so pick one item with a link query such as `self:item?id=8`. The href of the next link is expanded with the body of the resource just followed.
 
 - A rel uses only `A-Z a-z 0-9 _ -`. Any other rel, and any fragment other than `#link=`, throws `UriException`.
-- A link query is form-urlencoded as `http_build_query()` writes it, so a comma in a value is `%2C`. A crawl link with a query throws `UriException`.
+- A link query is written as `'#link=self:search?' . http_build_query(['tags' => ['php', 'bear']])`. A crawl link cannot take a query.
 - A `#[Link]` href cannot have a fragment (`#top`, `{#var}`); it throws `LinkHrefException` when the link is read.
 
 The resource client follows every link with GET, whatever `method` its `#[Link]` declares. To follow each link with its declared method, as a test of a workflow with unsafe steps does, bind BEAR.DevTools' `DeclaredMethodLinker` for `LinkerInterface`.
