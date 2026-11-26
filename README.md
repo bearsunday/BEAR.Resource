@@ -289,7 +289,7 @@ echo $request->toUri(); // app://self/user?id=0#link=self:blog,crawl:post-tree
 $ro = $resource->get('app://self/user?id=0#link=self:blog,crawl:post-tree'); // the same request
 ```
 
-The query before `#` goes to the first request. A link's href is expanded with the top-level values of the body the link is followed from, and a link query (`type:rel?query`) takes precedence over them; a name the template does not have is added to the query of the linked request.
+The query before `#` goes to the first request. A linked URI is the `#[Link]` href filled with values from the body of the resource the link is followed from; a link query adds values to its query or replaces them.
 
 ```php
 class Order extends ResourceObject
@@ -304,12 +304,12 @@ class Order extends ResourceObject
     }
 }
 
-$resource->get('app://self/order?id=1#link=self:payment');           // GET app://self/payment?id=1
-$resource->get('app://self/order?id=1#link=self:payment?card=1234'); // GET app://self/payment?id=1&card=1234
-$resource->get('app://self/order?id=1#link=self:item?id=8');         // GET app://self/item?id=8
+$resource->get('app://self/order?id=1#link=self:payment');           // GET app://self/payment?id=1 (id from the body)
+$resource->get('app://self/order?id=1#link=self:payment?card=1234'); // GET app://self/payment?id=1&card=1234 (card added)
+$resource->get('app://self/order?id=1#link=self:item?id=8');         // GET app://self/item?id=8 (id replaced with 8)
 ```
 
-A value that is not at the top level, such as an `id` in `items`, is not used, so pick one item with a link query such as `self:item?id=8`. The href of the next link is expanded with the body of the resource just followed.
+Only top-level body values such as `id` fill the href; values inside `items` are not used, so pick one item with a link query such as `self:item?id=8`. The href of the next link is filled from the body of the resource just followed.
 
 - A rel uses only `A-Z a-z 0-9 _ -`. Any other rel, and any fragment other than `#link=`, throws `UriException`.
 - A link query is written as `'#link=self:search?' . http_build_query(['tags' => ['php', 'bear']])`. A crawl link cannot take a query.

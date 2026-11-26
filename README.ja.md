@@ -289,7 +289,7 @@ echo $request->toUri(); // app://self/user?id=0#link=self:blog,crawl:post-tree
 $ro = $resource->get('app://self/user?id=0#link=self:blog,crawl:post-tree'); // 同じリクエスト
 ```
 
-`#` の前のクエリーは最初のリクエストに渡ります。リンクの href は、リンク元の body の最上位の値で展開し、リンクのクエリー（`type:rel?query`）があればその値を優先します。テンプレートにない名前は、そのままリンク先のクエリーに加わります。
+`#` の前のクエリーは最初のリクエストに渡ります。リンク先の URI は、`#[Link]` の href をリンク元の body の値で埋めて作ります。リンクのクエリーは、その URI のクエリーに値を足したり、上書きしたりします。
 
 ```php
 class Order extends ResourceObject
@@ -304,12 +304,12 @@ class Order extends ResourceObject
     }
 }
 
-$resource->get('app://self/order?id=1#link=self:payment');           // GET app://self/payment?id=1
-$resource->get('app://self/order?id=1#link=self:payment?card=1234'); // GET app://self/payment?id=1&card=1234
-$resource->get('app://self/order?id=1#link=self:item?id=8');         // GET app://self/item?id=8
+$resource->get('app://self/order?id=1#link=self:payment');           // GET app://self/payment?id=1（body の id で埋める）
+$resource->get('app://self/order?id=1#link=self:payment?card=1234'); // GET app://self/payment?id=1&card=1234（card を足す）
+$resource->get('app://self/order?id=1#link=self:item?id=8');         // GET app://self/item?id=8（id を 8 に上書き）
 ```
 
-`items` の中の `id` のように最上位にない値は展開に使われないので、一覧から 1 件を選ぶときは `self:item?id=8` のようにリンクのクエリーで渡します。続くリンクの href は、直前に辿ったリソースの body で展開します。
+body の値で埋まるのは `id` のような最上位の値だけです。`items` の中の値は使われないので、1 件を選ぶときは `self:item?id=8` のようにリンクのクエリーで渡します。続くリンクの href は、直前に辿ったリソースの body で埋めます。
 
 - rel に使える文字は `A-Z a-z 0-9 _ -` です。それ以外の rel や、`#link=` 以外のフラグメントは `UriException` になります。
 - リンクのクエリーは `'#link=self:search?' . http_build_query(['tags' => ['php', 'bear']])` のように書きます。crawl リンクにはクエリーを付けられません。
