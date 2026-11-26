@@ -275,7 +275,9 @@ array (
 
 ### Links in the URI
 
-A request URI, and an `#[Embed]` src, can carry links in a `#link=` fragment. Each link is `type:rel` (`self`, `new` or `crawl`), and a self or new link can add a query as `type:rel?query`; several links are joined with commas and followed in order.
+A request URI and an `#[Embed]` src can name the links to follow in a `#link=` fragment. For example, `#link=self:blog` follows the resource's `#[Link(rel: 'blog')]`.
+
+Each link is `type:rel` (`self`, `new` or `crawl`) and can add a query as `type:rel?query`; several links are joined with commas and followed in order.
 
 ```php
 $request = $resource
@@ -289,7 +291,7 @@ echo $request->toUri(); // app://self/user?id=0#link=self:blog,crawl:post-tree
 $ro = $resource->get('app://self/user?id=0#link=self:blog,crawl:post-tree'); // the same request
 ```
 
-The query before `#` goes to the first request. A linked URI is the `#[Link]` href filled with values from the body of the resource the link is followed from; a link query adds values to its query or replaces them.
+A linked URI is the `#[Link]` href filled with values from the body.
 
 ```php
 class Order extends ResourceObject
@@ -309,13 +311,12 @@ $resource->get('app://self/order?id=1#link=self:payment?card=1234'); // GET app:
 $resource->get('app://self/order?id=1#link=self:item?id=8');         // GET app://self/item?id=8 (id replaced with 8)
 ```
 
-Only top-level body values such as `id` fill the href; values inside `items` are not used, so pick one item with a link query such as `self:item?id=8`. In `#link=self:a,self:b`, `self:b` uses the `#[Link]` of the resource `self:a` reached, and its href is filled from that resource's body.
+Only top-level body values fill the href. To pick one item, pass it in a link query such as `self:item?id=8`.
 
-- A rel uses only `A-Z a-z 0-9 _ -`. Any other rel, and any fragment other than `#link=`, throws `UriException`.
+- A link is followed with GET, whatever `method` its `#[Link]` declares.
+- A rel uses only `A-Z a-z 0-9 _ -`.
 - A link query is written as `'#link=self:search?' . http_build_query(['tags' => ['php', 'bear']])`. A crawl link cannot take a query.
-- A `#[Link]` href cannot have a fragment (`#top`, `{#var}`); it throws `LinkHrefException` when the link is read.
-
-The resource client follows every link with GET, whatever `method` its `#[Link]` declares. To follow each link with its declared method, as a test of a workflow with unsafe steps does, bind BEAR.DevTools' `DeclaredMethodLinker` for `LinkerInterface`.
+- A `#[Link]` href cannot have a fragment (`#top`, `{#var}`).
 
 ### HATEOAS Hypermedia as the Engine of Application State
 
