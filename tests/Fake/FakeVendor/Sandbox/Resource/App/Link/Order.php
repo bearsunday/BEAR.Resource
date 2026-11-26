@@ -18,6 +18,7 @@ class Order extends ResourceObject
     }
 
     #[Link(rel: 'payment', href: 'app://self/link/payment{?id}', method: 'put')]
+    #[Link(rel: 'drink', href: 'app://self/link/drink/{drink}')]
     public function onPost(string $drink): static
     {
         $this->code = Code::CREATED;

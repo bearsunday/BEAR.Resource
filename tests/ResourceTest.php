@@ -372,6 +372,12 @@ class ResourceTest extends TestCase
         $this->assertSame(['id' => 9, 'card' => '1234'], $ro->body);
     }
 
+    public function testALinkQueryExpandsAPathVariableOfTheHref(): void
+    {
+        $this->assertSame(['name' => 'latte'], $this->resource->post('app://self/link/order?drink=latte#link=self:drink')->body);
+        $this->assertSame(['name' => 'mocha'], $this->resource->post('app://self/link/order?drink=latte#link=self:drink?drink=mocha')->body);
+    }
+
     public function testANewLinkInTheUriIsRequestedWithTheMethodItDeclares(): void
     {
         $ro = $this->resource->post('app://self/link/order?drink=latte#link=new:payment?card=1234');
@@ -405,6 +411,13 @@ class ResourceTest extends TestCase
             [new LinkType('create', LinkType::SELF_LINK, ['name' => 'a']), new LinkType('goForm', LinkType::SELF_LINK)],
             LinkType::listFromUri('/form#link=self:create?name=a,self:goForm'),
         );
+    }
+
+    public function testAUriThatCannotBeParsedIsRefusedNotReadAsHavingNoLinks(): void
+    {
+        $this->expectException(UriException::class);
+
+        LinkType::listFromUri('//host:x/form#link=self:x');
     }
 
     /** @return array<string, array{string, string}> */

@@ -45,8 +45,12 @@ final class LinkType
      */
     public static function listFromUri(string $uri): array
     {
-        $fragment = (string) parse_url($uri, PHP_URL_FRAGMENT);
-        if ($fragment === '') {
+        $fragment = parse_url($uri, PHP_URL_FRAGMENT);
+        if ($fragment === false) {
+            throw new UriException($uri, 500);
+        }
+
+        if ($fragment === null || $fragment === '') {
             return [];
         }
 
