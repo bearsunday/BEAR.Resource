@@ -9,6 +9,7 @@ use OutOfRangeException;
 use Override;
 
 use function array_merge;
+use function http_build_query;
 use function implode;
 use function in_array;
 use function preg_match;
@@ -118,12 +119,17 @@ final class Request extends AbstractRequest
 
         $links = [];
         foreach ($this->links as $link) {
-            // Resource::links() reads back only this alphabet
+            // LinkType::listFromUri() reads back only this alphabet
             if (preg_match('/\A[A-Za-z0-9_-]+\z/', $link->key) !== 1) {
                 throw new UriException(sprintf("%s: link rel '%s' is outside [A-Za-z0-9_-]", $uri, $link->key), 500);
             }
 
-            $links[] = $link->type . ':' . $link->key;
+            if ($link->type === LinkType::CRAWL_LINK && $link->query !== []) {
+                throw new UriException(sprintf('%s: a crawl link takes no query', $uri), 500);
+            }
+
+            $query = http_build_query($link->query, '', '&');
+            $links[] = $link->type . ':' . $link->key . ($query === '' ? '' : '?' . $query);
         }
 
         return $uri . '#link=' . implode(',', $links);

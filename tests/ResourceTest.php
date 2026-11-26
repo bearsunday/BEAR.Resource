@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\BadRequestException;
+use BEAR\Resource\Exception\LinkRelException;
 use BEAR\Resource\Exception\MethodNotAllowedException;
 use BEAR\Resource\Exception\UriException;
 use BEAR\Resource\Module\HalModule;
@@ -14,6 +15,7 @@ use FakeVendor\Sandbox\Resource\App\Href\Hasembed;
 use FakeVendor\Sandbox\Resource\App\Href\Origin;
 use FakeVendor\Sandbox\Resource\App\Href\Target;
 use FakeVendor\Sandbox\Resource\App\Link\Jump\First;
+use FakeVendor\Sandbox\Resource\App\Link\Payment;
 use FakeVendor\Sandbox\Resource\Page\Index;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Depends;
@@ -24,6 +26,8 @@ use Ray\Di\NullModule;
 use Ray\Di\ProviderInterface;
 
 use function assert;
+use function ini_get;
+use function ini_set;
 use function is_array;
 use function serialize;
 use function unserialize;
@@ -217,6 +221,31 @@ class ResourceTest extends TestCase
         $request->toUri();
     }
 
+    public function testACrawlLinkQueryIsNotWritten(): void
+    {
+        $request = $this->resource->newRequest(Method::GET, 'app://self/author', ['id' => 1]);
+        assert($request instanceof Request);
+        $request->links[] = new LinkType('tree', LinkType::CRAWL_LINK, ['id' => '7']);
+
+        $this->expectException(UriException::class);
+
+        $request->toUri();
+    }
+
+    public function testALinkQueryIsWrittenWithAmpersandsWhateverTheIniSays(): void
+    {
+        $request = $this->resource->newRequest(Method::GET, 'app://self/author#link=self:blog?a=1&b=2', ['id' => 1]);
+        $separator = (string) ini_get('arg_separator.output');
+        ini_set('arg_separator.output', '&amp;');
+        try {
+            $uri = $request->toUri();
+        } finally {
+            ini_set('arg_separator.output', $separator);
+        }
+
+        $this->assertSame('app://self/author?id=1#link=self:blog?a=1&b=2', $uri);
+    }
+
     /** @return array<string, array{string}> */
     public static function malformedLinkProvider(): array
     {
@@ -227,6 +256,10 @@ class ResourceTest extends TestCase
             'rel outside the alphabet' => ['app://self/author?id=1#link=self:post%20tree'],
             'empty list' => ['app://self/author?id=1#link='],
             'trailing comma' => ['app://self/author?id=1#link=self:blog,'],
+            'an empty link query' => ['app://self/author?id=1#link=self:blog?'],
+            'a link query outside form-urlencoded' => ['app://self/author?id=1#link=self:blog?a=<b>'],
+            'a comma in a link query' => ['app://self/author?id=1#link=self:blog?a=1,2'],
+            'a crawl link with a query' => ['app://self/author?id=1#link=crawl:tree?a=1'],
             'another name' => ['app://self/author?id=1#key=title'],
             'a bare fragment' => ['app://self/author?id=1#title'],
         ];
@@ -297,6 +330,91 @@ class ResourceTest extends TestCase
 
         $this->assertEquals($linkSelf, $this->resource->uri('app://self/link/jump/start?id=1#link=self:first')());
         $this->assertEquals($linkSelf, $this->resource->get('app://self/link/jump/start?id=1#link=self:first'));
+    }
+
+    public function testASelfLinkInTheUriIsRequestedWithGetAndItsQuery(): void
+    {
+        // The link declares PUT; a link is followed with GET
+        $ro = $this->resource->post('app://self/link/order?drink=latte#link=self:payment?card=1234');
+
+        $this->assertInstanceOf(Payment::class, $ro);
+        $this->assertSame(Code::OK, $ro->code);
+        $this->assertSame('get', $ro->uri->method);
+        $this->assertSame('app://self/link/payment?id=7&card=1234', (string) $ro->uri);
+        $this->assertSame(['id' => 7, 'card' => '1234'], $ro->body);
+    }
+
+    public function testALinkQueryTakesPrecedenceOverTheBody(): void
+    {
+        $ro = $this->resource->post('app://self/link/order?drink=latte#link=self:payment?id=9&card=1234');
+
+        $this->assertSame('app://self/link/payment?id=9&card=1234', (string) $ro->uri);
+        $this->assertSame(['id' => 9, 'card' => '1234'], $ro->body);
+    }
+
+    public function testAMissingRelNamesTheMethodItWasLookedUpInAndTheRelsDeclaredThere(): void
+    {
+        $this->expectException(LinkRelException::class);
+        $this->expectExceptionMessage('rel:nope class:FakeVendor\Sandbox\Resource\App\Link\Order method:onPost declared:payment,drink');
+
+        $this->resource->post('app://self/link/order?drink=latte#link=self:nope');
+    }
+
+    public function testHrefRequestsALinkDeclaredWithAnUpperCaseMethod(): void
+    {
+        $ro = $this->resource->href('cancel', [], $this->resource->get('app://self/link/order?id=7'));
+
+        $this->assertInstanceOf(Payment::class, $ro);
+        $this->assertSame('delete', $ro->uri->method);
+        $this->assertSame(['id' => 7, 'cancelled' => true], $ro->body);
+    }
+
+    public function testALinkQueryExpandsAPathVariableOfTheHref(): void
+    {
+        $this->assertSame(['name' => 'latte'], $this->resource->post('app://self/link/order?drink=latte#link=self:drink')->body);
+        $this->assertSame(['name' => 'mocha'], $this->resource->post('app://self/link/order?drink=latte#link=self:drink?drink=mocha')->body);
+    }
+
+    public function testANewLinkInTheUriAddsTheLinkedBodyWithItsQuery(): void
+    {
+        $ro = $this->resource->post('app://self/link/order?drink=latte#link=new:payment?card=1234');
+
+        $this->assertSame(['id' => 7, 'drink' => 'latte', 'payment' => ['id' => 7, 'card' => '1234']], $ro->body);
+    }
+
+    public function testTheLinkAfterASelfLinkIsReadFromOnGet(): void
+    {
+        $ro = $this->resource->post('app://self/link/order?drink=latte#link=self:payment?card=1234,self:order');
+
+        $this->assertSame('get', $ro->uri->method);
+        $this->assertSame(['id' => 7, 'drink' => 'latte'], $ro->body);
+    }
+
+    public function testALinkQueryRoundTripsThroughTheUri(): void
+    {
+        $uri = 'app://self/link/order?drink=latte#link=self:payment?card=12%2C34+5';
+        $request = $this->resource->newRequest(Method::POST, $uri);
+        assert($request instanceof Request);
+
+        $this->assertEquals([new LinkType('payment', LinkType::SELF_LINK, ['card' => '12,34 5'])], $request->links);
+        $this->assertSame($uri, $request->toUri());
+        $this->assertSame($uri, $this->resource->newRequest(Method::POST, $request->toUri())->toUri());
+        $this->assertSame(['id' => 7, 'card' => '12,34 5'], $request()->body);
+    }
+
+    public function testLinksAreReadFromARelativeUri(): void
+    {
+        $this->assertEquals(
+            [new LinkType('create', LinkType::SELF_LINK, ['name' => 'a']), new LinkType('goForm', LinkType::SELF_LINK)],
+            LinkType::listFromUri('/form#link=self:create?name=a,self:goForm'),
+        );
+    }
+
+    public function testAUriThatCannotBeParsedIsRefusedNotReadAsHavingNoLinks(): void
+    {
+        $this->expectException(UriException::class);
+
+        LinkType::listFromUri('//host:x/form#link=self:x');
     }
 
     private function resourceClient(): ResourceClient

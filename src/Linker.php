@@ -15,8 +15,11 @@ use Ray\Di\ProviderInterface;
 use ReflectionMethod;
 
 use function array_map;
+use function array_merge;
 use function assert;
+use function implode;
 use function is_array;
+use function sprintf;
 use function ucfirst;
 use function uri_template;
 
@@ -120,7 +123,7 @@ final class Linker implements LinkerInterface
             return $this->annotationCrawl($annotations, $link, $current, $linkCrawler);
         }
 
-        return $this->annotationRel($annotations, $link, $current);
+        return $this->annotationRel($annotations, $link, $current, $method);
     }
 
     /**
@@ -150,22 +153,25 @@ final class Linker implements LinkerInterface
      * @throws Exception\LinkQueryException
      * @throws Exception\LinkRelException
      */
-    private function annotationRel(array $annotations, LinkType $link, ResourceObject $current): ResourceObject
+    private function annotationRel(array $annotations, LinkType $link, ResourceObject $current, Method $method): ResourceObject
     {
         foreach ($annotations as $annotation) {
             if ($annotation->rel !== $link->key) {
                 continue;
             }
 
-            $uri = uri_template($annotation->href, (array) $current->body);
+            $uri = uri_template($annotation->href, array_merge((array) $current->body, $link->query));
             $rel = $this->factory->newInstance($uri);
-            $query = (new Uri($uri))->query;
+            $query = array_merge((new Uri($uri))->query, $link->query);
+            $rel->uri->query = $query;
             $request = new Request($this->invoker, $rel, Method::GET, $query);
 
             return $this->invoker->invoke($request);
         }
 
-        throw new LinkRelException("rel:{$link->key} class:" . $current::class, 500);
+        $declared = implode(',', array_map(static fn (Link $annotation): string => $annotation->rel, $annotations));
+
+        throw new LinkRelException(sprintf('rel:%s class:%s method:on%s declared:%s', $link->key, $current::class, ucfirst($method->value), $declared), 500);
     }
 
     /**

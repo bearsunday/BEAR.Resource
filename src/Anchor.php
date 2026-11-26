@@ -12,6 +12,7 @@ use Ray\Aop\ReflectionMethod;
 use function array_merge;
 use function assert;
 use function is_array;
+use function strtolower;
 use function ucfirst;
 use function uri_template;
 
@@ -61,6 +62,6 @@ final class Anchor implements AnchorInterface
         $query = is_array($body) ? array_merge($body, $query) : [];
         $uri = uri_template($annotation->href, $query);
 
-        return [$annotation->method, $uri];
+        return [strtolower($annotation->method), $uri];
     }
 }

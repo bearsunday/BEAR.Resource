@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.37.0] - 2026-11-26
+
+### Added
+- A self or new link in a `#link=` fragment can carry a query, `type:rel?query`; it is overlaid on the body to expand the `#[Link]` href and added to the query of the linked request.
+- `LinkType::listFromUri()` reads the links of a URI's `#link=` fragment as `uri()` and `newRequest()` do, for a client that follows them itself.
+
+### Changed
+- `LinkRelException` names the method a missing rel was looked up in and the rels declared there.
+
+### Fixed
+- `href()` reads a `#[Link]` method in any case: `method: 'POST'` no longer throws `ValueError`.
+
 ## [1.36.1] - 2026-11-18
 
 ### Changed

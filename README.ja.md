@@ -275,7 +275,9 @@ array (
 
 ### URIのリンク
 
-リクエストの URI は、リンクを `#link=` フラグメントに持てます。リンクは `type:rel`（type は `self`・`new`・`crawl`）で表し、複数のリンクはカンマでつないで順に辿ります。
+リクエストの URI と `#[Embed]` の src は、`#link=` フラグメントで辿るリンクを指定できます。例えば `#link=self:blog` は、リソースの `#[Link(rel: 'blog')]` を辿ります。
+
+リンクは `type:rel`（type は `self`・`new`・`crawl`）で表し、`type:rel?query` の形でクエリーを足せます。複数のリンクはカンマでつないで順に辿ります。
 
 ```php
 $request = $resource
@@ -289,10 +291,32 @@ echo $request->toUri(); // app://self/user?id=0#link=self:blog,crawl:post-tree
 $ro = $resource->get('app://self/user?id=0#link=self:blog,crawl:post-tree'); // 同じリクエスト
 ```
 
-`toUri()` はリクエストをこの形で書き出し、`uri()`・`newRequest()`・`get()`・`#[Embed]` の src はそれを読み戻します。`#` の前のクエリーはリクエストしたリソースに渡ります。リンク先のクエリーは、`#[Link]` の href をリンク元の body で展開して作ります。
+リンク先の URI は、`#[Link]` の href を body の値で埋めて作ります。
 
-- rel に使える文字は `A-Z a-z 0-9 _ -` です。それ以外の rel や、`#link=` 以外のフラグメントは `UriException` になります。
-- `#[Link]` の href はフラグメント（`#top`・`{#var}`）を持てません。リンクを読むときに `LinkHrefException` になります。
+```php
+class Order extends ResourceObject
+{
+    #[Link(rel: 'payment', href: 'app://self/payment{?id}')]
+    #[Link(rel: 'item', href: 'app://self/item{?id}')]
+    public function onGet(int $id): static
+    {
+        $this->body = ['id' => $id, 'items' => [['id' => 7], ['id' => 8]]];
+
+        return $this;
+    }
+}
+
+$resource->get('app://self/order?id=1#link=self:payment');           // GET app://self/payment?id=1（body の id で埋める）
+$resource->get('app://self/order?id=1#link=self:payment?card=1234'); // GET app://self/payment?id=1&card=1234（card を足す）
+$resource->get('app://self/order?id=1#link=self:item?id=8');         // GET app://self/item?id=8（id を 8 に上書き）
+```
+
+body の値で埋まるのは最上位の値だけです。1 件を選ぶときは `self:item?id=8` のようにリンクのクエリーで渡します。
+
+- リンクは `#[Link]` の `method` によらず GET で辿ります。
+- rel に使える文字は `A-Z a-z 0-9 _ -` です。
+- リンクのクエリーは `'#link=self:search?' . http_build_query(['tags' => ['php', 'bear']])` のように書きます。crawl リンクにはクエリーを付けられません。
+- `#[Link]` の href はフラグメント（`#top`・`{#var}`）を持てません。
 
 ### HATEOAS アプリケーション状態のエンジンとしてのハイパーメディア
 

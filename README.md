@@ -275,7 +275,9 @@ array (
 
 ### Links in the URI
 
-A request URI can carry its links in a `#link=` fragment. Each link is `type:rel` (`self`, `new` or `crawl`); several links are joined with commas and followed in order.
+A request URI and an `#[Embed]` src can name the links to follow in a `#link=` fragment. For example, `#link=self:blog` follows the resource's `#[Link(rel: 'blog')]`.
+
+Each link is `type:rel` (`self`, `new` or `crawl`) and can add a query as `type:rel?query`; several links are joined with commas and followed in order.
 
 ```php
 $request = $resource
@@ -289,10 +291,32 @@ echo $request->toUri(); // app://self/user?id=0#link=self:blog,crawl:post-tree
 $ro = $resource->get('app://self/user?id=0#link=self:blog,crawl:post-tree'); // the same request
 ```
 
-`toUri()` writes a request in this form, and `uri()`, `newRequest()`, `get()` and an `#[Embed]` src read it back. The query before `#` goes to the requested resource; a linked resource gets its query from the `#[Link]` href, expanded with the body of the resource it links from.
+A linked URI is the `#[Link]` href filled with values from the body.
 
-- A rel uses only `A-Z a-z 0-9 _ -`. Any other rel, and any fragment other than `#link=`, throws `UriException`.
-- A `#[Link]` href cannot have a fragment (`#top`, `{#var}`); it throws `LinkHrefException` when the link is read.
+```php
+class Order extends ResourceObject
+{
+    #[Link(rel: 'payment', href: 'app://self/payment{?id}')]
+    #[Link(rel: 'item', href: 'app://self/item{?id}')]
+    public function onGet(int $id): static
+    {
+        $this->body = ['id' => $id, 'items' => [['id' => 7], ['id' => 8]]];
+
+        return $this;
+    }
+}
+
+$resource->get('app://self/order?id=1#link=self:payment');           // GET app://self/payment?id=1 (id from the body)
+$resource->get('app://self/order?id=1#link=self:payment?card=1234'); // GET app://self/payment?id=1&card=1234 (card added)
+$resource->get('app://self/order?id=1#link=self:item?id=8');         // GET app://self/item?id=8 (id replaced with 8)
+```
+
+Only top-level body values fill the href. To pick one item, pass it in a link query such as `self:item?id=8`.
+
+- A link is followed with GET, whatever `method` its `#[Link]` declares.
+- A rel uses only `A-Z a-z 0-9 _ -`.
+- A link query is written as `'#link=self:search?' . http_build_query(['tags' => ['php', 'bear']])`. A crawl link cannot take a query.
+- A `#[Link]` href cannot have a fragment (`#top`, `{#var}`).
 
 ### HATEOAS Hypermedia as the Engine of Application State
 
