@@ -69,8 +69,6 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
 
     /**
      * Whether the links may only be read, as an #[Embed] src reads them: a link that is not GET throws LinkException
-     *
-     * @internal
      */
     public bool $safeLinksOnly = false;
 
