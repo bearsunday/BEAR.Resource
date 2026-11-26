@@ -177,7 +177,7 @@ $blog = $resource
 The result of the **app://self/user** resource request follows its **blog** link, and the request returns the **app://self/blog** resource object: its class, `uri`, `code`, headers, body and `view` are the blog resource's.
 Just like clicking a link on a web page, the next resource takes the place of the current one.
 
-In a chain such as `->linkSelf('blog')->linkSelf('author')` or `#link=self:blog,self:author`, the first rel is looked up in the `#[Link]`s of the requested method, and each later rel in those of the method the previous self link requested its resource with; a following `linkNew` or `linkCrawl` adds to that resource. A self or new link requests its href with the method the `#[Link]` declares, as `href()` does. When the resource a self link returns has a code of 400 or more, the chain stops there and that resource is returned.
+In a chain such as `->linkSelf('blog')->linkSelf('author')` or `#link=self:blog,self:author`, the first rel is looked up in the `#[Link]`s of the requested method, and each later rel in those of the `onGet()` of the resource the previous self link returned; a following `linkNew` or `linkCrawl` adds to that resource. When the resource a self link returns has a code of 400 or more, the chain stops there and that resource is returned.
 
 ### linkNew
 
@@ -294,7 +294,7 @@ $ro = $resource->get('app://self/order?id=1#link=self:payment?card=1234');
 
 `toUri()` writes a request in this form, and `uri()`, `newRequest()`, `get()` and an `#[Embed]` src read it back. The query before `#` goes to the requested resource. A linked resource is requested with GET, whatever method its `#[Link]` declares, and with the href expanded with the body of the resource it links from, overlaid by the link query; the link query is added to the expanded query. Body values fill only the template variables of the href (`{?id}`), from the top level of the body: an href without a template takes nothing from the body, and neither the id of one item in a list nor a value from an earlier step reaches it. To go on from one item, that item's resource declares its own links with an href such as `{?id}`.
 
-A test that follows the links with the method each `#[Link]` declares, unsafe steps included, binds BEAR.DevTools' linker for `LinkerInterface`; the resource client itself only reads.
+A test that follows the links with the method each `#[Link]` declares, unsafe steps included, binds BEAR.DevTools' `DeclaredMethodLinker` for `LinkerInterface`; the resource client itself only reads.
 
 - A rel uses only `A-Z a-z 0-9 _ -`. Any other rel, and any fragment other than `#link=`, throws `UriException`.
 - A link query is form-urlencoded as `http_build_query()` writes it, so a comma in a value is `%2C`. A crawl link with a query throws `UriException`.

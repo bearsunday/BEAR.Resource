@@ -10,6 +10,7 @@ use BEAR\Resource\ResourceObject;
 
 class Order extends ResourceObject
 {
+    #[Link(rel: 'cancel', href: 'app://self/link/payment{?id}', method: 'DELETE')]
     public function onGet(int $id): static
     {
         $this->body = ['id' => $id, 'drink' => 'latte'];

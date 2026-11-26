@@ -25,4 +25,11 @@ class Payment extends ResourceObject
 
         return $this;
     }
+
+    public function onDelete(int $id): static
+    {
+        $this->body = ['id' => $id, 'cancelled' => true];
+
+        return $this;
+    }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\BadRequestException;
+use BEAR\Resource\Exception\LinkRelException;
 use BEAR\Resource\Exception\MethodNotAllowedException;
 use BEAR\Resource\Exception\UriException;
 use BEAR\Resource\Module\HalModule;
@@ -75,7 +76,7 @@ class ResourceTest extends TestCase
 
             public function get(): LinkerInterface
             {
-                return new Linker($this->invoker, $this->factory, $this->linkCrawlerProvider, new Anchor());
+                return new Linker($this->invoker, $this->factory, $this->linkCrawlerProvider);
             }
         };
         $uri = new UriFactory('app://self');
@@ -333,7 +334,7 @@ class ResourceTest extends TestCase
 
     public function testASelfLinkInTheUriIsRequestedWithGetAndItsQuery(): void
     {
-        // The link declares PUT; a link is followed with GET, and BEAR.DevTools follows the declared method
+        // The link declares PUT; a link is followed with GET
         $ro = $this->resource->post('app://self/link/order?drink=latte#link=self:payment?card=1234');
 
         $this->assertInstanceOf(Payment::class, $ro);
@@ -349,6 +350,23 @@ class ResourceTest extends TestCase
 
         $this->assertSame('app://self/link/payment?id=9&card=1234', (string) $ro->uri);
         $this->assertSame(['id' => 9, 'card' => '1234'], $ro->body);
+    }
+
+    public function testAMissingRelNamesTheMethodItWasLookedUpInAndTheRelsDeclaredThere(): void
+    {
+        $this->expectException(LinkRelException::class);
+        $this->expectExceptionMessage('rel:nope class:FakeVendor\Sandbox\Resource\App\Link\Order method:onPost declared:payment,drink');
+
+        $this->resource->post('app://self/link/order?drink=latte#link=self:nope');
+    }
+
+    public function testHrefRequestsALinkDeclaredWithAnUpperCaseMethod(): void
+    {
+        $ro = $this->resource->href('cancel', [], $this->resource->get('app://self/link/order?id=7'));
+
+        $this->assertInstanceOf(Payment::class, $ro);
+        $this->assertSame('delete', $ro->uri->method);
+        $this->assertSame(['id' => 7, 'cancelled' => true], $ro->body);
     }
 
     public function testALinkQueryExpandsAPathVariableOfTheHref(): void
@@ -719,7 +737,7 @@ class ResourceTest extends TestCase
                 return new LinkCrawler($this->invoker, $this->factory);
             }
         };
-        $linker = new Linker($invoker, $factory, $linkCrawlerProvider, new Anchor());
+        $linker = new Linker($invoker, $factory, $linkCrawlerProvider);
         $uri = new UriFactory('app://self');
 
         // Legacy Resource takes LinkerInterface directly (not provider)

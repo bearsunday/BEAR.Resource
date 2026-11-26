@@ -7,6 +7,8 @@ namespace BEAR\Resource;
 use BEAR\Resource\Annotation\Link;
 use BEAR\Resource\Exception\LinkQueryException;
 use BEAR\Resource\Exception\LinkRelException;
+use BEAR\Resource\Exception\MethodException;
+use BEAR\Resource\Exception\UriException;
 use Override;
 use Ray\Di\Di\Set;
 use Ray\Di\ProviderInterface;
@@ -14,12 +16,17 @@ use ReflectionMethod;
 
 use function array_map;
 use function array_merge;
+use function assert;
 use function implode;
 use function is_array;
 use function sprintf;
 use function ucfirst;
+use function uri_template;
 
-/** @internal */
+/**
+ * @internal
+ * @psalm-import-type Body from Types
+ */
 final class Linker implements LinkerInterface
 {
     /**
@@ -32,7 +39,6 @@ final class Linker implements LinkerInterface
         private readonly FactoryInterface $factory,
         #[Set(LinkCrawlerInterface::class)]
         private readonly ProviderInterface $linkCrawlerProvider,
-        private readonly Anchor $anchor,
     ) {
     }
 
@@ -58,18 +64,7 @@ final class Linker implements LinkerInterface
 
         $method = $request->method;
         foreach ($request->links as $link) {
-            if (! is_array($current->body)) {
-                throw new LinkQueryException('Only array is allowed for link in ' . $current::class, 500);
-            }
-
-            $annotations = $this->getLinkAnnotations($current, $method->value);
-            if ($link->type === LinkType::CRAWL_LINK) {
-                $current = $this->annotationCrawl($annotations, $link, $current, $linkCrawler);
-
-                continue;
-            }
-
-            $linked = $this->invoker->invoke($this->annotationRel($annotations, $link, $current, $method));
+            $linked = $this->annotationLink($link, $current, $method, $linkCrawler);
             if ($link->type === LinkType::SELF_LINK) {
                 $current = $linked;
                 if ($current->code >= Code::BAD_REQUEST) {
@@ -82,11 +77,53 @@ final class Linker implements LinkerInterface
                 continue;
             }
 
-            // new
-            $current->body[$link->key] = $linked->body;
+            /** @var Body $nextBody */
+            $nextBody = $linked->body;
+            $current = $this->nextLink($link, $current, $nextBody);
         }
 
         return $current;
+    }
+
+    /**
+     * @param Body $nextResource
+     *
+     * @psalm-capabilities read-props|write-props
+     */
+    private function nextLink(LinkType $link, ResourceObject $ro, array $nextResource): ResourceObject
+    {
+        $nextBody = $nextResource;
+
+        if ($link->type === LinkType::NEW_LINK) {
+            assert(is_array($ro->body) || $ro->body === null);
+            $ro->body[$link->key] = $nextBody;
+
+            return $ro;
+        }
+
+        // crawl
+        return $ro;
+    }
+
+    /**
+     * Annotation link
+     *
+     * @throws MethodException
+     * @throws LinkRelException
+     * @throws Exception\LinkQueryException
+     */
+    private function annotationLink(LinkType $link, ResourceObject $current, Method $method, LinkCrawlerInterface $linkCrawler): ResourceObject
+    {
+        if (! is_array($current->body)) {
+            throw new Exception\LinkQueryException('Only array is allowed for link in ' . $current::class, 500);
+        }
+
+        $annotations = $this->getLinkAnnotations($current, $method->value);
+        if ($link->type === LinkType::CRAWL_LINK) {
+            return $this->annotationCrawl($annotations, $link, $current, $linkCrawler);
+        }
+
+        return $this->annotationRel($annotations, $link, $current, $method);
     }
 
     /**
@@ -107,32 +144,34 @@ final class Linker implements LinkerInterface
     }
 
     /**
-     * The GET request of a self or new link, whatever method its #[Link] declares
-     *
-     * The href is expanded with the body overlaid by the link query, and the link query is overlaid on the expanded
-     * query.
+     * Annotation link (new, self)
      *
      * @param list<Link> $annotations
      *
-     * @throws LinkRelException
+     * @throws UriException
+     * @throws MethodException
+     * @throws Exception\LinkQueryException
+     * @throws Exception\LinkRelException
      */
-    private function annotationRel(array $annotations, LinkType $link, ResourceObject $current, Method $from): Request
+    private function annotationRel(array $annotations, LinkType $link, ResourceObject $current, Method $method): ResourceObject
     {
         foreach ($annotations as $annotation) {
             if ($annotation->rel !== $link->key) {
                 continue;
             }
 
-            [, $uri] = $this->anchor->methodUri($annotation, $current->body, $link->query);
-            $ro = $this->factory->newInstance($uri);
-            $ro->uri->query = array_merge($ro->uri->query, $link->query);
+            $uri = uri_template($annotation->href, array_merge((array) $current->body, $link->query));
+            $rel = $this->factory->newInstance($uri);
+            $query = array_merge((new Uri($uri))->query, $link->query);
+            $rel->uri->query = $query;
+            $request = new Request($this->invoker, $rel, Method::GET, $query);
 
-            return new Request($this->invoker, $ro, Method::GET, $ro->uri->query);
+            return $this->invoker->invoke($request);
         }
 
         $declared = implode(',', array_map(static fn (Link $annotation): string => $annotation->rel, $annotations));
 
-        throw new LinkRelException(sprintf('rel:%s class:%s method:on%s declared:%s', $link->key, $current::class, ucfirst($from->value), $declared), 500);
+        throw new LinkRelException(sprintf('rel:%s class:%s method:on%s declared:%s', $link->key, $current::class, ucfirst($method->value), $declared), 500);
     }
 
     /**

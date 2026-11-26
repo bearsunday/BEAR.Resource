@@ -56,7 +56,6 @@ class LinkerTest extends TestCase
             $this->invoker,
             $factory,
             $linkCrawlerProvider,
-            new Anchor(),
         );
     }
 
@@ -358,6 +357,22 @@ class LinkerTest extends TestCase
             'child' => null,
         ];
         $this->assertSame($expected, $result->body);
+    }
+
+    public function testNewLinkWithNullBody(): void
+    {
+        $current = new class extends ResourceObject {
+        };
+        $current->uri = new Uri('app://self/null-body');
+        $current->body = null;
+
+        $result = $this->invokePrivate(
+            $this->linker,
+            'nextLink',
+            [new LinkType('item', LinkType::NEW_LINK), $current, ['id' => 1]],
+        );
+
+        $this->assertSame(['item' => ['id' => 1]], $result->body);
     }
 
     public function testAnnotationCrawlWithListBody(): void
