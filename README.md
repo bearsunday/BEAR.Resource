@@ -292,9 +292,9 @@ $ro = $resource->get('app://self/user?id=0#link=self:blog,crawl:post-tree'); // 
 $ro = $resource->get('app://self/order?id=1#link=self:payment?card=1234');
 ```
 
-`toUri()` writes a request in this form, and `uri()`, `newRequest()`, `get()` and an `#[Embed]` src read it back. The query before `#` goes to the requested resource. A linked resource is requested with GET, whatever method its `#[Link]` declares, and with the href expanded with the body of the resource it links from, overlaid by the link query; the link query is added to the expanded query. Body values fill only the template variables of the href (`{?id}`), from the top level of the body: an href without a template takes nothing from the body, and neither the id of one item in a list nor a value from an earlier step reaches it. To go on from one item, that item's resource declares its own links with an href such as `{?id}`.
+`toUri()` writes a request in this form, and `uri()`, `newRequest()`, `get()` and an `#[Embed]` src read it back. The query before `#` goes to the requested resource. A linked resource is requested with GET, whatever method its `#[Link]` declares, and with the href expanded with the body of the resource it links from, overlaid by the link query; the link query is also overlaid on the expanded query. Body values fill only the template variables of the href (`{?id}`), from the top level of the body: an href without a template takes nothing from the body, and neither the id of one item in a list nor a value from an earlier step reaches it. To go on from one item, that item's resource declares its own links with an href such as `{?id}`.
 
-A test that follows the links with the method each `#[Link]` declares, unsafe steps included, binds BEAR.DevTools' `DeclaredMethodLinker` for `LinkerInterface`; the resource client itself only reads.
+A test that follows the links with the method each `#[Link]` declares, unsafe steps included, binds BEAR.DevTools' `DeclaredMethodLinker` for `LinkerInterface`.
 
 - A rel uses only `A-Z a-z 0-9 _ -`. Any other rel, and any fragment other than `#link=`, throws `UriException`.
 - A link query is form-urlencoded as `http_build_query()` writes it, so a comma in a value is `%2C`. A crawl link with a query throws `UriException`.

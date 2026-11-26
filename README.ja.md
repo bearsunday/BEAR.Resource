@@ -294,7 +294,7 @@ $ro = $resource->get('app://self/order?id=1#link=self:payment?card=1234');
 
 `toUri()` はリクエストをこの形で書き出し、`uri()`・`newRequest()`・`get()`・`#[Embed]` の src はそれを読み戻します。`#` の前のクエリーはリクエストしたリソースに渡ります。リンク先のリソースは、`#[Link]` に宣言したメソッドによらず GET でリクエストします。href は、リンク元の body にリンクのクエリーを重ねた値で展開し、展開したクエリーにもリンクのクエリーを重ねます。body の値が入るのは href のテンプレートの変数（`{?id}` など）だけで、入るのは body の最上位の値です。テンプレートのない href には body の値は入らず、一覧の中の 1 件の ID や、前のステップの値も届きません。一覧の 1 件を辿るには、その 1 件のリソースが `{?id}` のような href で自分のリンクを宣言します。
 
-GET でない段も含めて、各 `#[Link]` に宣言したメソッドでリンクを辿るテストは、`LinkerInterface` に BEAR.DevTools の `DeclaredMethodLinker` を束縛します。リソースクライアント自身は読むだけです。
+GET でない段も含めて、各 `#[Link]` に宣言したメソッドでリンクを辿るテストは、`LinkerInterface` に BEAR.DevTools の `DeclaredMethodLinker` を束縛します。
 
 - rel に使える文字は `A-Z a-z 0-9 _ -` です。それ以外の rel や、`#link=` 以外のフラグメントは `UriException` になります。
 - リンクのクエリーは `http_build_query()` が書く form-urlencoded の形で、値の中のカンマは `%2C` です。crawl リンクにクエリーを付けると `UriException` になります。
