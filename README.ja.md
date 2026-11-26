@@ -275,7 +275,7 @@ array (
 
 ### URIのリンク
 
-リクエストの URI は、リンクを `#link=` フラグメントに持てます。リンクは `type:rel`（type は `self`・`new`・`crawl`）で表し、複数のリンクはカンマでつないで順に辿ります。
+リクエストの URI は、リンクを `#link=` フラグメントに持てます。リンクは `type:rel`（type は `self`・`new`・`crawl`）で表し、self リンクと new リンクは `type:rel?query` の形でクエリーを足せます。複数のリンクはカンマでつないで順に辿ります。
 
 ```php
 $request = $resource
@@ -287,11 +287,18 @@ $request = $resource
 echo $request->toUri(); // app://self/user?id=0#link=self:blog,crawl:post-tree
 
 $ro = $resource->get('app://self/user?id=0#link=self:blog,crawl:post-tree'); // 同じリクエスト
+
+// フォームを GET し、その doOrder リンクに drink=latte で POST し、201 の Location を辿り、さらに goPayment リンクを辿る
+$ro = $resource->get('app://self/order-form#link=self:doOrder?drink=latte,self:goPayment');
 ```
 
-`toUri()` はリクエストをこの形で書き出し、`uri()`・`newRequest()`・`get()`・`#[Embed]` の src はそれを読み戻します。`#` の前のクエリーはリクエストしたリソースに渡ります。リンク先のクエリーは、`#[Link]` の href をリンク元の body で展開して作ります。
+`toUri()` はリクエストをこの形で書き出し、`uri()`・`newRequest()`・`get()`・`#[Embed]` の src はそれを読み戻します。`#` の前のクエリーはリクエストしたリソースに渡ります。リンク先のリソースは、`#[Link]` に宣言したメソッドでリクエストします。href は、リンク元の body にリンクのクエリーを重ねた値で展開し、展開したクエリーにもリンクのクエリーを重ねます。
+
+303、または `Location` 付きの 201 には、その `Location` が指すリソースが答えます。リンクを持つリクエストでは、そのリソースを GET で 1 回だけリクエストし、連鎖をそこから続けます。次の rel はその `onGet()` から探します。`Location` は `/order?id=1` のようなパスで、応答のスキームとホストを前に付けて解決します。
 
 - rel に使える文字は `A-Z a-z 0-9 _ -` です。それ以外の rel や、`#link=` 以外のフラグメントは `UriException` になります。
+- リンクのクエリーは `http_build_query()` が書く form-urlencoded の形で、値の中のカンマは `%2C` です。crawl リンクにクエリーを付けると `UriException` になります。
+- `Location` のない 303、パスでない `Location`、辿った先がまたリダイレクトする場合は `LinkException` になります。
 - `#[Link]` の href はフラグメント（`#top`・`{#var}`）を持てません。リンクを読むときに `LinkHrefException` になります。
 
 ### HATEOAS アプリケーション状態のエンジンとしてのハイパーメディア

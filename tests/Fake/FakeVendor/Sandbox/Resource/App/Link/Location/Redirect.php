@@ -39,4 +39,12 @@ class Redirect extends ResourceObject
 
         return $this;
     }
+
+    public function onPatch(): static
+    {
+        $this->code = Code::SEE_OTHER;
+        $this->headers['location'] = '/link/location/item?id=4';
+
+        return $this;
+    }
 }

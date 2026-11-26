@@ -360,12 +360,22 @@ class ResourceTest extends TestCase
         $this->assertSame(['id' => 7, 'card' => '12,34 5'], $request()->body);
     }
 
+    public function testLinksAreReadFromARelativeUri(): void
+    {
+        $this->assertEquals(
+            [new LinkType('create', LinkType::SELF_LINK, ['name' => 'a']), new LinkType('goForm', LinkType::SELF_LINK)],
+            LinkType::listFromUri('/form#link=self:create?name=a,self:goForm'),
+        );
+    }
+
     /** @return array<string, array{string, string}> */
     public static function locationProvider(): array
     {
         return [
             'a 201 with a Location' => ['app://self/link/location/form#link=self:create?name=koriym', 'app://self/link/location/item?id=5'],
             'a 303' => ['app://self/link/location/form#link=self:update?id=3', 'app://self/link/location/item?id=3'],
+            'a Location header named in lower case' => ['app://self/link/location/form#link=self:lowerCaseLocation', 'app://self/link/location/item?id=4'],
+            'a method declared in upper case' => ['app://self/link/location/form#link=self:createInUpperCase?name=koriym', 'app://self/link/location/item?id=5'],
         ];
     }
 
@@ -408,6 +418,7 @@ class ResourceTest extends TestCase
         return [
             'a 303 without a Location' => ['app://self/link/location/form#link=self:noLocation'],
             'a Location that is not a path' => ['app://self/link/location/form#link=self:leave'],
+            'a network-path Location' => ['app://self/link/location/form#link=self:networkPath'],
             'a located resource that redirects again' => ['app://self/link/location/form#link=self:redirectTwice'],
         ];
     }

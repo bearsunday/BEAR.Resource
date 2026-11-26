@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Behaviour change**: a self or new link requests its href with the method its `#[Link]` declares, as `href()` does, and the next link is read from that method.
 - **Behaviour change**: in a request with links, a 303, or a 201 with a `Location`, is followed once with GET and the chain goes on from the located resource. A 303 without a `Location`, a `Location` that is not a path, or a second redirect throws `LinkException`.
 
+### Fixed
+- `href()` and a link read a `#[Link]` method in any case: `method: 'POST'` no longer throws `ValueError`.
+
 ## [1.36.1] - 2026-11-18
 
 ### Changed

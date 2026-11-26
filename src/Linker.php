@@ -18,6 +18,7 @@ use function array_merge;
 use function is_array;
 use function preg_match;
 use function sprintf;
+use function strtolower;
 use function ucfirst;
 
 /** @internal */
@@ -109,7 +110,7 @@ final class Linker implements LinkerInterface
             return [$response, $method];
         }
 
-        $location = $response->headers['Location'] ?? null;
+        $location = $this->location($response);
         if ($location === null || preg_match(self::LOCATION_PATH, $location) !== 1) {
             throw new LinkException(sprintf('%s answered %d with the Location %s; a link follows only a path', (string) $response->uri, $response->code, $location ?? '(none)'), 500);
         }
@@ -127,7 +128,19 @@ final class Linker implements LinkerInterface
     /** A 303, or a 201 that names the created resource in a Location */
     private function redirects(ResourceObject $ro): bool
     {
-        return $ro->code === Code::SEE_OTHER || ($ro->code === Code::CREATED && isset($ro->headers['Location']));
+        return $ro->code === Code::SEE_OTHER || ($ro->code === Code::CREATED && $this->location($ro) !== null);
+    }
+
+    /** The Location header of a response, whatever the case of its name, as HTTP reads it */
+    private function location(ResourceObject $ro): string|null
+    {
+        foreach ($ro->headers as $name => $value) {
+            if (strtolower($name) === 'location') {
+                return $value;
+            }
+        }
+
+        return null;
     }
 
     /**

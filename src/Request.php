@@ -119,12 +119,13 @@ final class Request extends AbstractRequest
 
         $links = [];
         foreach ($this->links as $link) {
-            // Resource::links() reads back only this alphabet
+            // LinkType::listFromUri() reads back only this alphabet
             if (preg_match('/\A[A-Za-z0-9_-]+\z/', $link->key) !== 1) {
                 throw new UriException(sprintf("%s: link rel '%s' is outside [A-Za-z0-9_-]", $uri, $link->key), 500);
             }
 
-            $links[] = $link->type . ':' . $link->key . ($link->query === [] ? '' : '?' . http_build_query($link->query));
+            $query = http_build_query($link->query);
+            $links[] = $link->type . ':' . $link->key . ($query === '' ? '' : '?' . $query);
         }
 
         return $uri . '#link=' . implode(',', $links);
