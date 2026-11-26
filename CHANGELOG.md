@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **Behaviour change**: a self or new link requests its href with the method its `#[Link]` declares, as `href()` does, and the next link is read from that method. An `#[Embed]` src only reads: a link in it whose `#[Link]` is not GET throws `LinkException`.
-- Another `EmbedInterceptorInterface` implementation must set `AbstractRequest::$safeLinksOnly` on each src request it builds, or a link in its src runs with the declared method; bear/async does so from bearsunday/BEAR.Async#34, not in 0.6.0.
+- Another `EmbedInterceptorInterface` implementation must set `AbstractRequest::$safeLinksOnly` on each src request it builds, or a link in its src runs with the declared method; bear/async 0.6.0 and earlier do not.
 - **Behaviour change**: in a request with links, a 303, or a 201 with a `Location`, is followed once with GET and the chain goes on from the located resource. A 303 without a `Location`, a `Location` that is not a path, or a second redirect throws `LinkException`.
 
 ### Fixed
