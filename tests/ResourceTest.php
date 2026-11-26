@@ -28,6 +28,8 @@ use Ray\Di\NullModule;
 use Ray\Di\ProviderInterface;
 
 use function assert;
+use function ini_get;
+use function ini_set;
 use function is_array;
 use function serialize;
 use function unserialize;
@@ -219,6 +221,31 @@ class ResourceTest extends TestCase
         $this->expectException(UriException::class);
 
         $request->toUri();
+    }
+
+    public function testACrawlLinkQueryIsNotWritten(): void
+    {
+        $request = $this->resource->newRequest(Method::GET, 'app://self/author', ['id' => 1]);
+        assert($request instanceof Request);
+        $request->links[] = new LinkType('tree', LinkType::CRAWL_LINK, ['id' => '7']);
+
+        $this->expectException(UriException::class);
+
+        $request->toUri();
+    }
+
+    public function testALinkQueryIsWrittenWithAmpersandsWhateverTheIniSays(): void
+    {
+        $request = $this->resource->newRequest(Method::GET, 'app://self/author#link=self:blog?a=1&b=2', ['id' => 1]);
+        $separator = (string) ini_get('arg_separator.output');
+        ini_set('arg_separator.output', '&amp;');
+        try {
+            $uri = $request->toUri();
+        } finally {
+            ini_set('arg_separator.output', $separator);
+        }
+
+        $this->assertSame('app://self/author?id=1#link=self:blog?a=1&b=2', $uri);
     }
 
     /** @return array<string, array{string}> */
