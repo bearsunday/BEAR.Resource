@@ -20,6 +20,7 @@ use function is_array;
 use function preg_match;
 use function sprintf;
 use function strtolower;
+use function strtoupper;
 use function ucfirst;
 
 /** @internal */
@@ -75,7 +76,7 @@ final class Linker implements LinkerInterface
                 continue;
             }
 
-            $linkedRequest = $this->annotationRel($annotations, $link, $current, $method);
+            $linkedRequest = $this->annotationRel($annotations, $link, $current, $method, $request->safeLinksOnly);
             [$linked, $linkedMethod] = $this->located($this->invoker->invoke($linkedRequest), $linkedRequest->method);
             if ($link->type === LinkType::SELF_LINK) {
                 $current = $linked;
@@ -168,10 +169,12 @@ final class Linker implements LinkerInterface
      * is overlaid on the expanded query.
      *
      * @param list<Link> $annotations
+     * @param bool       $safeOnly    whether only a GET link may be followed, as an embed only reads
      *
      * @throws LinkRelException
+     * @throws LinkException
      */
-    private function annotationRel(array $annotations, LinkType $link, ResourceObject $current, Method $from): Request
+    private function annotationRel(array $annotations, LinkType $link, ResourceObject $current, Method $from, bool $safeOnly): Request
     {
         foreach ($annotations as $annotation) {
             if ($annotation->rel !== $link->key) {
@@ -179,6 +182,10 @@ final class Linker implements LinkerInterface
             }
 
             [$method, $uri] = $this->anchor->methodUri($annotation, $current->body, $link->query);
+            if ($safeOnly && $method !== Method::GET->value) {
+                throw new LinkException(sprintf('rel:%s of %s is %s; an embed only reads, with GET', $link->key, $current::class, strtoupper($method)), 500);
+            }
+
             $ro = $this->factory->newInstance($uri);
             $ro->uri->method = $method;
             $ro->uri->query = array_merge($ro->uri->query, $link->query);

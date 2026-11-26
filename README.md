@@ -299,6 +299,7 @@ A 303, or a 201 with a `Location`, is answered by the resource its `Location` na
 - A rel uses only `A-Z a-z 0-9 _ -`. Any other rel, and any fragment other than `#link=`, throws `UriException`.
 - A link query is form-urlencoded as `http_build_query()` writes it, so a comma in a value is `%2C`. A crawl link with a query throws `UriException`.
 - A 303 without a `Location`, a `Location` that is not a path, and a located resource that redirects again throw `LinkException`.
+- An `#[Embed]` src only reads: a link in its `#link=` whose `#[Link]` is not GET throws `LinkException`.
 - A `#[Link]` href cannot have a fragment (`#top`, `{#var}`); it throws `LinkHrefException` when the link is read.
 
 ### HATEOAS Hypermedia as the Engine of Application State

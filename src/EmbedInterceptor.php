@@ -76,6 +76,7 @@ final readonly class EmbedInterceptor implements EmbedInterceptorInterface
                 $uri = uri_template($templateUri, $query);
                 $request = $resource->newRequest(Method::GET, $uri);
                 assert($request instanceof Request);
+                $request->safeLinksOnly = true;
                 $this->prepareBody($ro, $embed);
 
                 if ($embed->rel === self::SELF_LINK) {

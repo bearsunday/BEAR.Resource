@@ -291,6 +291,17 @@ class ResourceTest extends TestCase
         $this->assertSame(['id' => 12, 'name' => 'Aramis blog'], $embedded()->body);
     }
 
+    public function testAnEmbedRefusesALinkThatIsNotGet(): void
+    {
+        $embedded = $this->resource->get('app://self/link/location/embed-unsafe')->body['item'];
+        $this->assertInstanceOf(Request::class, $embedded);
+
+        $this->expectException(LinkException::class);
+        $this->expectExceptionMessage('rel:create of FakeVendor\Sandbox\Resource\App\Link\Location\Form');
+
+        $embedded();
+    }
+
     public function testResourceClientReadsLinksInUri(): void
     {
         $ro = $this->resourceClient()->uri('app://self/author?id=1#link=self:blog')();

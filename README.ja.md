@@ -299,6 +299,7 @@ $ro = $resource->get('app://self/order-form#link=self:doOrder?drink=latte,self:g
 - rel に使える文字は `A-Z a-z 0-9 _ -` です。それ以外の rel や、`#link=` 以外のフラグメントは `UriException` になります。
 - リンクのクエリーは `http_build_query()` が書く form-urlencoded の形で、値の中のカンマは `%2C` です。crawl リンクにクエリーを付けると `UriException` になります。
 - `Location` のない 303、パスでない `Location`、辿った先がまたリダイレクトする場合は `LinkException` になります。
+- `#[Embed]` の src は読み込むだけなので、src の `#link=` が GET でない `#[Link]` に当たると `LinkException` になります。
 - `#[Link]` の href はフラグメント（`#top`・`{#var}`）を持てません。リンクを読むときに `LinkHrefException` になります。
 
 ### HATEOAS アプリケーション状態のエンジンとしてのハイパーメディア
