@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\Link;
-use BEAR\Resource\Exception\LinkException;
 use BEAR\Resource\Exception\LinkQueryException;
 use BEAR\Resource\Exception\LinkRelException;
 use Override;
@@ -17,18 +16,12 @@ use function array_map;
 use function array_merge;
 use function implode;
 use function is_array;
-use function preg_match;
 use function sprintf;
-use function strtolower;
-use function strtoupper;
 use function ucfirst;
 
 /** @internal */
 final class Linker implements LinkerInterface
 {
-    /** A Location a link follows: a path, resolved against the scheme and host of the response */
-    private const LOCATION_PATH = '#\A/(?!/)#';
-
     /**
      * @param ProviderInterface<LinkCrawlerInterface> $linkCrawlerProvider
      *
@@ -52,18 +45,18 @@ final class Linker implements LinkerInterface
     }
 
     /**
-     * @throws LinkException
      * @throws LinkQueryException
      * @throws LinkRelException
      */
     private function invokeRecursive(AbstractRequest $request, LinkCrawlerInterface $linkCrawler): ResourceObject
     {
         $this->invoker->invoke($request);
-        [$current, $method] = $this->located(clone $request->resourceObject, $request->method);
+        $current = clone $request->resourceObject;
         if ($current->code >= Code::BAD_REQUEST) {
             return $current;
         }
 
+        $method = $request->method;
         foreach ($request->links as $link) {
             if (! is_array($current->body)) {
                 throw new LinkQueryException('Only array is allowed for link in ' . $current::class, 500);
@@ -76,16 +69,15 @@ final class Linker implements LinkerInterface
                 continue;
             }
 
-            $linkedRequest = $this->annotationRel($annotations, $link, $current, $method, $request->safeLinksOnly);
-            [$linked, $linkedMethod] = $this->located($this->invoker->invoke($linkedRequest), $linkedRequest->method);
+            $linked = $this->invoker->invoke($this->annotationRel($annotations, $link, $current, $method));
             if ($link->type === LinkType::SELF_LINK) {
                 $current = $linked;
                 if ($current->code >= Code::BAD_REQUEST) {
                     return $current;
                 }
 
-                // The next link is read from the method the linked resource was requested with
-                $method = $linkedMethod;
+                // The next link is read from the linked resource, which was requested with GET
+                $method = Method::GET;
 
                 continue;
             }
@@ -95,54 +87,6 @@ final class Linker implements LinkerInterface
         }
 
         return $current;
-    }
-
-    /**
-     * The resource that answers a response, and the method it was requested with
-     *
-     * A 303, or a 201 with a Location, is answered by the resource its Location names, requested once with GET.
-     *
-     * @return array{ResourceObject, Method}
-     *
-     * @throws LinkException
-     */
-    private function located(ResourceObject $response, Method $method): array
-    {
-        if (! $this->redirects($response)) {
-            return [$response, $method];
-        }
-
-        $location = $this->location($response);
-        if ($location === null || preg_match(self::LOCATION_PATH, $location) !== 1) {
-            throw new LinkException(sprintf('%s answered %d with the Location %s; a link follows only a path', (string) $response->uri, $response->code, $location ?? '(none)'), 500);
-        }
-
-        $ro = $this->factory->newInstance("{$response->uri->scheme}://{$response->uri->host}{$location}");
-        $ro->uri->method = Method::GET->value;
-        $located = $this->invoker->invoke(new Request($this->invoker, $ro, Method::GET, $ro->uri->query));
-        if ($this->redirects($located)) {
-            throw new LinkException(sprintf('%s, the Location of %s, redirects again; a link follows one Location', (string) $located->uri, (string) $response->uri), 500);
-        }
-
-        return [$located, Method::GET];
-    }
-
-    /** A 303, or a 201 that names the created resource in a Location */
-    private function redirects(ResourceObject $ro): bool
-    {
-        return $ro->code === Code::SEE_OTHER || ($ro->code === Code::CREATED && $this->location($ro) !== null);
-    }
-
-    /** The Location header of a response, whatever the case of its name, as HTTP reads it */
-    private function location(ResourceObject $ro): string|null
-    {
-        foreach ($ro->headers as $name => $value) {
-            if (strtolower($name) === 'location') {
-                return $value;
-            }
-        }
-
-        return null;
     }
 
     /**
@@ -163,34 +107,27 @@ final class Linker implements LinkerInterface
     }
 
     /**
-     * The request of a self or new link, made as Resource::href() makes it
+     * The GET request of a self or new link, whatever method its #[Link] declares
      *
-     * The method the link declares requests its href expanded with the body overlaid by the link query; the link query
-     * is overlaid on the expanded query.
+     * The href is expanded with the body overlaid by the link query, and the link query is overlaid on the expanded
+     * query.
      *
      * @param list<Link> $annotations
-     * @param bool       $safeOnly    whether only a GET link may be followed, as an embed only reads
      *
      * @throws LinkRelException
-     * @throws LinkException
      */
-    private function annotationRel(array $annotations, LinkType $link, ResourceObject $current, Method $from, bool $safeOnly): Request
+    private function annotationRel(array $annotations, LinkType $link, ResourceObject $current, Method $from): Request
     {
         foreach ($annotations as $annotation) {
             if ($annotation->rel !== $link->key) {
                 continue;
             }
 
-            [$method, $uri] = $this->anchor->methodUri($annotation, $current->body, $link->query);
-            if ($safeOnly && $method !== Method::GET->value) {
-                throw new LinkException(sprintf('rel:%s of %s is %s; an embed only reads, with GET', $link->key, $current::class, strtoupper($method)), 500);
-            }
-
+            [, $uri] = $this->anchor->methodUri($annotation, $current->body, $link->query);
             $ro = $this->factory->newInstance($uri);
-            $ro->uri->method = $method;
             $ro->uri->query = array_merge($ro->uri->query, $link->query);
 
-            return new Request($this->invoker, $ro, Method::from($method), $ro->uri->query);
+            return new Request($this->invoker, $ro, Method::GET, $ro->uri->query);
         }
 
         $declared = implode(',', array_map(static fn (Link $annotation): string => $annotation->rel, $annotations));

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\BadRequestException;
-use BEAR\Resource\Exception\LinkException;
 use BEAR\Resource\Exception\MethodNotAllowedException;
 use BEAR\Resource\Exception\UriException;
 use BEAR\Resource\Module\HalModule;
@@ -15,8 +14,6 @@ use FakeVendor\Sandbox\Resource\App\Href\Hasembed;
 use FakeVendor\Sandbox\Resource\App\Href\Origin;
 use FakeVendor\Sandbox\Resource\App\Href\Target;
 use FakeVendor\Sandbox\Resource\App\Link\Jump\First;
-use FakeVendor\Sandbox\Resource\App\Link\Location\Form;
-use FakeVendor\Sandbox\Resource\App\Link\Location\Item;
 use FakeVendor\Sandbox\Resource\App\Link\Payment;
 use FakeVendor\Sandbox\Resource\Page\Index;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -318,18 +315,6 @@ class ResourceTest extends TestCase
         $this->assertSame(['id' => 12, 'name' => 'Aramis blog'], $embedded()->body);
     }
 
-    public function testAnEmbedRefusesALinkThatIsNotGet(): void
-    {
-        $embedded = $this->resource->get('app://self/link/location/embed-unsafe')->body['item'];
-        $this->assertInstanceOf(Request::class, $embedded);
-
-        // Guarded::onPost throws LogicException, so a LinkException also says the POST was never requested
-        $this->expectException(LinkException::class);
-        $this->expectExceptionMessage('rel:doTouch of FakeVendor\Sandbox\Resource\App\Link\Location\Guarded');
-
-        $embedded();
-    }
-
     public function testResourceClientReadsLinksInUri(): void
     {
         $ro = $this->resourceClient()->uri('app://self/author?id=1#link=self:blog')();
@@ -346,22 +331,16 @@ class ResourceTest extends TestCase
         $this->assertEquals($linkSelf, $this->resource->get('app://self/link/jump/start?id=1#link=self:first'));
     }
 
-    public function testASelfLinkInTheUriIsRequestedWithTheMethodItDeclaresAndItsQuery(): void
+    public function testASelfLinkInTheUriIsRequestedWithGetAndItsQuery(): void
     {
+        // The link declares PUT; a link is followed with GET, and BEAR.DevTools follows the declared method
         $ro = $this->resource->post('app://self/link/order?drink=latte#link=self:payment?card=1234');
 
         $this->assertInstanceOf(Payment::class, $ro);
-        $this->assertSame(Code::CREATED, $ro->code);
-        $this->assertSame('put', $ro->uri->method);
+        $this->assertSame(Code::OK, $ro->code);
+        $this->assertSame('get', $ro->uri->method);
         $this->assertSame('app://self/link/payment?id=7&card=1234', (string) $ro->uri);
         $this->assertSame(['id' => 7, 'card' => '1234'], $ro->body);
-    }
-
-    public function testASelfLinkInTheUriReturnsTheSameResourceAsHref(): void
-    {
-        $href = $this->resource->href('payment', ['card' => '1234'], $this->resource->post('app://self/link/order?drink=latte'));
-
-        $this->assertEquals($href, $this->resource->post('app://self/link/order?drink=latte#link=self:payment?card=1234'));
     }
 
     public function testALinkQueryTakesPrecedenceOverTheBody(): void
@@ -378,14 +357,14 @@ class ResourceTest extends TestCase
         $this->assertSame(['name' => 'mocha'], $this->resource->post('app://self/link/order?drink=latte#link=self:drink?drink=mocha')->body);
     }
 
-    public function testANewLinkInTheUriIsRequestedWithTheMethodItDeclares(): void
+    public function testANewLinkInTheUriAddsTheLinkedBodyWithItsQuery(): void
     {
         $ro = $this->resource->post('app://self/link/order?drink=latte#link=new:payment?card=1234');
 
         $this->assertSame(['id' => 7, 'drink' => 'latte', 'payment' => ['id' => 7, 'card' => '1234']], $ro->body);
     }
 
-    public function testTheLinkAfterASelfLinkIsReadFromTheMethodItWasRequestedWith(): void
+    public function testTheLinkAfterASelfLinkIsReadFromOnGet(): void
     {
         $ro = $this->resource->post('app://self/link/order?drink=latte#link=self:payment?card=1234,self:order');
 
@@ -418,69 +397,6 @@ class ResourceTest extends TestCase
         $this->expectException(UriException::class);
 
         LinkType::listFromUri('//host:x/form#link=self:x');
-    }
-
-    /** @return array<string, array{string, string}> */
-    public static function locationProvider(): array
-    {
-        return [
-            'a 201 with a Location' => ['app://self/link/location/form#link=self:create?name=koriym', 'app://self/link/location/item?id=5'],
-            'a 303' => ['app://self/link/location/form#link=self:update?id=3', 'app://self/link/location/item?id=3'],
-            'a Location header named in lower case' => ['app://self/link/location/form#link=self:lowerCaseLocation', 'app://self/link/location/item?id=4'],
-            'a method declared in upper case' => ['app://self/link/location/form#link=self:createInUpperCase?name=koriym', 'app://self/link/location/item?id=5'],
-        ];
-    }
-
-    #[DataProvider('locationProvider')]
-    public function testASelfLinkAnsweredWithALocationReturnsTheLocatedResource(string $uri, string $located): void
-    {
-        $ro = $this->resource->get($uri);
-
-        $this->assertInstanceOf(Item::class, $ro);
-        $this->assertSame(Code::OK, $ro->code);
-        $this->assertSame('get', $ro->uri->method);
-        $this->assertSame($located, (string) $ro->uri);
-    }
-
-    /** `form` is declared only on Item::onGet() */
-    public function testTheLinkAfterALocationIsReadFromTheLocatedResource(): void
-    {
-        $ro = $this->resource->get('app://self/link/location/form#link=self:create?name=koriym,self:form');
-
-        $this->assertInstanceOf(Form::class, $ro);
-    }
-
-    public function testARequestAnsweredWithALocationIsLocatedBeforeItsFirstLink(): void
-    {
-        $ro = $this->resource->post('app://self/link/location/item?name=koriym#link=self:form');
-
-        $this->assertInstanceOf(Form::class, $ro);
-    }
-
-    public function testANewLinkAnsweredWithALocationAddsTheLocatedBody(): void
-    {
-        $ro = $this->resource->get('app://self/link/location/form#link=new:create?name=koriym');
-
-        $this->assertSame(['id' => 7, 'create' => ['id' => 5]], $ro->body);
-    }
-
-    /** @return array<string, array{string}> */
-    public static function unfollowableLocationProvider(): array
-    {
-        return [
-            'a 303 without a Location' => ['app://self/link/location/form#link=self:noLocation'],
-            'a Location that is not a path' => ['app://self/link/location/form#link=self:leave'],
-            'a network-path Location' => ['app://self/link/location/form#link=self:networkPath'],
-            'a located resource that redirects again' => ['app://self/link/location/form#link=self:redirectTwice'],
-        ];
-    }
-
-    #[DataProvider('unfollowableLocationProvider')]
-    public function testALocationALinkCannotFollowThrows(string $uri): void
-    {
-        $this->expectException(LinkException::class);
-
-        $this->resource->get($uri);
     }
 
     private function resourceClient(): ResourceClient

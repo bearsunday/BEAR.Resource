@@ -288,18 +288,16 @@ echo $request->toUri(); // app://self/user?id=0#link=self:blog,crawl:post-tree
 
 $ro = $resource->get('app://self/user?id=0#link=self:blog,crawl:post-tree'); // the same request
 
-// GET the form, POST its `doOrder` link with drink=latte, follow the 201 Location, then the `goPayment` link
-$ro = $resource->get('app://self/order-form#link=self:doOrder?drink=latte,self:goPayment');
+// GET the order, then its `payment` link with card=1234 added to the link's query
+$ro = $resource->get('app://self/order?id=1#link=self:payment?card=1234');
 ```
 
-`toUri()` writes a request in this form, and `uri()`, `newRequest()`, `get()` and an `#[Embed]` src read it back. The query before `#` goes to the requested resource. A linked resource is requested with the method its `#[Link]` declares and the href expanded with the body of the resource it links from, overlaid by the link query; the link query is added to the expanded query. Body values fill only the template variables of the href (`{?id}`), from the top level of the body: an href without a template takes nothing from the body, and neither the id of one item in a list nor a value from an earlier step reaches it. To go on from what a request created or from one item, that item's resource declares its own links with an href such as `{?id}`.
+`toUri()` writes a request in this form, and `uri()`, `newRequest()`, `get()` and an `#[Embed]` src read it back. The query before `#` goes to the requested resource. A linked resource is requested with GET, whatever method its `#[Link]` declares, and with the href expanded with the body of the resource it links from, overlaid by the link query; the link query is added to the expanded query. Body values fill only the template variables of the href (`{?id}`), from the top level of the body: an href without a template takes nothing from the body, and neither the id of one item in a list nor a value from an earlier step reaches it. To go on from one item, that item's resource declares its own links with an href such as `{?id}`.
 
-A 303, or a 201 with a `Location`, is answered by the resource its `Location` names: in a request with links, that resource is requested once with GET, the chain goes on from it, and the next rel is looked up in its `onGet()`. A `Location` is a path such as `/order?id=1`, resolved against the scheme and host of the response.
+A test that follows the links with the method each `#[Link]` declares, unsafe steps included, binds BEAR.DevTools' linker for `LinkerInterface`; the resource client itself only reads.
 
 - A rel uses only `A-Z a-z 0-9 _ -`. Any other rel, and any fragment other than `#link=`, throws `UriException`.
 - A link query is form-urlencoded as `http_build_query()` writes it, so a comma in a value is `%2C`. A crawl link with a query throws `UriException`.
-- A 303 without a `Location`, a `Location` that is not a path, and a located resource that redirects again throw `LinkException`.
-- An `#[Embed]` src only reads: a link in its `#link=` whose `#[Link]` is not GET throws `LinkException`.
 - A `#[Link]` href cannot have a fragment (`#top`, `{#var}`); it throws `LinkHrefException` when the link is read.
 
 ### HATEOAS Hypermedia as the Engine of Application State

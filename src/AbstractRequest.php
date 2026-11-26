@@ -68,11 +68,6 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     public $in = 'lazy';
 
     /**
-     * Whether the links may only be read, as an #[Embed] src reads them: a link that is not GET throws LinkException
-     */
-    public bool $safeLinksOnly = false;
-
-    /**
      * Request Result, memoized by the first read; reset whenever the query or links change
      *
      * @var ?ResourceObject

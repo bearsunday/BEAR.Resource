@@ -12,12 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `LinkType::listFromUri()` reads the links of a URI's `#link=` fragment as `uri()` and `newRequest()` do, for a client that follows them itself.
 
 ### Changed
-- **Behaviour change**: a self or new link requests its href with the method its `#[Link]` declares, as `href()` does, and the next link is read from that method. An `#[Embed]` src only reads: a link in it whose `#[Link]` is not GET throws `LinkException`.
-- Another `EmbedInterceptorInterface` implementation must set `AbstractRequest::$safeLinksOnly` on each src request it builds, or a link in its src runs with the declared method; bear/async 0.6.0 and earlier do not.
-- **Behaviour change**: in a request with links, a 303, or a 201 with a `Location`, is followed once with GET and the chain goes on from the located resource. A 303 without a `Location`, a `Location` that is not a path, or a second redirect throws `LinkException`.
+- `LinkRelException` names the method a missing rel was looked up in and the rels declared there.
 
 ### Fixed
-- `href()` and a link read a `#[Link]` method in any case: `method: 'POST'` no longer throws `ValueError`.
+- `href()` reads a `#[Link]` method in any case: `method: 'POST'` no longer throws `ValueError`.
 
 ## [1.36.1] - 2026-11-18
 
