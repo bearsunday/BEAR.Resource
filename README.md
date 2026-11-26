@@ -309,7 +309,7 @@ $resource->get('app://self/order?id=1#link=self:payment?card=1234'); // GET app:
 $resource->get('app://self/order?id=1#link=self:item?id=8');         // GET app://self/item?id=8 (id replaced with 8)
 ```
 
-Only top-level body values such as `id` fill the href; values inside `items` are not used, so pick one item with a link query such as `self:item?id=8`. The href of the next link is filled from the body of the resource just followed.
+Only top-level body values such as `id` fill the href; values inside `items` are not used, so pick one item with a link query such as `self:item?id=8`. In `#link=self:a,self:b`, `self:b` uses the `#[Link]` of the resource `self:a` reached, and its href is filled from that resource's body.
 
 - A rel uses only `A-Z a-z 0-9 _ -`. Any other rel, and any fragment other than `#link=`, throws `UriException`.
 - A link query is written as `'#link=self:search?' . http_build_query(['tags' => ['php', 'bear']])`. A crawl link cannot take a query.

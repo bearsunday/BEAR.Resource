@@ -309,7 +309,7 @@ $resource->get('app://self/order?id=1#link=self:payment?card=1234'); // GET app:
 $resource->get('app://self/order?id=1#link=self:item?id=8');         // GET app://self/item?id=8（id を 8 に上書き）
 ```
 
-body の値で埋まるのは `id` のような最上位の値だけです。`items` の中の値は使われないので、1 件を選ぶときは `self:item?id=8` のようにリンクのクエリーで渡します。続くリンクの href は、直前に辿ったリソースの body で埋めます。
+body の値で埋まるのは `id` のような最上位の値だけです。`items` の中の値は使われないので、1 件を選ぶときは `self:item?id=8` のようにリンクのクエリーで渡します。`#link=self:a,self:b` のように続けると、`self:b` には `self:a` で辿ったリソースの `#[Link]` を使い、その href をそのリソースの body で埋めます。
 
 - rel に使える文字は `A-Z a-z 0-9 _ -` です。それ以外の rel や、`#link=` 以外のフラグメントは `UriException` になります。
 - リンクのクエリーは `'#link=self:search?' . http_build_query(['tags' => ['php', 'bear']])` のように書きます。crawl リンクにはクエリーを付けられません。
