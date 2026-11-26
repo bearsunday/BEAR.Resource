@@ -128,7 +128,6 @@ final class Request extends AbstractRequest
                 throw new UriException(sprintf('%s: a crawl link takes no query', $uri), 500);
             }
 
-            // The separator is fixed: arg_separator.output may be '&amp;', which listFromUri() does not read
             $query = http_build_query($link->query, '', '&');
             $links[] = $link->type . ':' . $link->key . ($query === '' ? '' : '?' . $query);
         }
